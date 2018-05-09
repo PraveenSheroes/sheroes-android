@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -80,6 +79,38 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             }
         });
 
+    }
+
+    //synchronous call for updating both user summary and after that basic user information
+    public void updateCompleteProfileDetails(final PersonalBasicDetailsRequest personalBasicDetailsRequest, UserSummaryRequest userSummaryRequest) {
+
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
+
+                    @Override
+                    public void onNext(BoardingDataResponse boardingDataResponse) {
+                        getMvpView().stopProgressBar();
+                        getPersonalBasicDetails(personalBasicDetailsRequest);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     // Update User Basic Details
@@ -162,6 +193,5 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                 }
             }
         });
-
     }
 }

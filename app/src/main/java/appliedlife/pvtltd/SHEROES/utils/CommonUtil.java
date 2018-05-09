@@ -618,14 +618,6 @@ public class CommonUtil {
 
     }
 
-    public static void setImageSource(Context context, ImageView imageView, int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            imageView.setImageDrawable(context.getResources().getDrawable(id, context.getTheme()));
-        } else {
-            imageView.setImageDrawable(context.getResources().getDrawable(id));
-        }
-    }
-
     public static Bitmap drawableToBitmap (Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
             return ((BitmapDrawable)drawable).getBitmap();

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 
 /**
  * Created by Ravi on 01-05-2018.
@@ -22,11 +23,11 @@ import appliedlife.pvtltd.SHEROES.R;
 public class DashProgressBar extends View {
 
     private Paint progressPaint;
-    private int progress;
+    private float progress = 0.0f;
     private int barThickness;
     private Path path;
-    private PathEffect effects;
-
+    private int maxDash = 0;
+    private ProgressbarView mProgressBarListener;
 
     public DashProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,49 +35,59 @@ public class DashProgressBar extends View {
     }
 
     private void init(AttributeSet attrs) {
-        progressPaint = new Paint();
+        progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.DashProgressBar, 0, 0);
         try {
             setBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashProgressBar_barThickness, 4));
-
             path = new Path();
             path.reset();
 
-            //Dashed line effects - 120 solid line 10 space
-            effects = new DashPathEffect(new float[]{120, 10, 120, 10}, 0);
         } finally {
             typedArray.recycle();
         }
     }
 
+    public void setListener(ProgressbarView progressbarViewRenderingCompleted) {
+        this.mProgressBarListener = progressbarViewRenderingCompleted;
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         int halfHeight = getHeight() / 2;
-        int progressEndX = (int) (getWidth() * progress / 100f);
-
-        // draw the filled portion of the bar
-        progressPaint.reset();
-        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
+        float progressEndX = ((float) getWidth()) * (progress / (float)100);
         progressPaint.setStrokeWidth(barThickness);
-        int color = R.color.dark_green;
+
+        // draw the un-filled dashes
+        float dashWidth = (float) getWidth() / (float) 8; //todo - add to config file
+        float tempDashWidth = dashWidth - 10;
+        PathEffect effects = new DashPathEffect(new float[]{tempDashWidth, 10, tempDashWidth, 10}, 0);
+
+        int color = R.color.progress_unfilled;
+        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
+        progressPaint.setStyle(Paint.Style.STROKE);
         progressPaint.setPathEffect(effects);
 
-        // horizontal
-        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
         path.moveTo(0, halfHeight);
-        path.lineTo(progressEndX, halfHeight);
-        canvas.drawPath(path, progressPaint);
-
-        path.reset();
-        color = R.color.progress_unfilled;
-        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
-        progressPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        progressPaint.setPathEffect(effects);
-
-        path.moveTo(progressEndX, halfHeight);
         path.lineTo(getWidth(), halfHeight);
         canvas.drawPath(path, progressPaint);
+
+        // draw the filled portion of the bar
+        path.reset();
+        progressPaint.setStyle(Paint.Style.STROKE);
+        progressPaint.setStrokeWidth(barThickness);
+        color = R.color.dark_green;
+        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
+        progressPaint.setPathEffect(effects);
+        path.moveTo(0, halfHeight);
+        path.lineTo(progressEndX, halfHeight);
+
+        canvas.drawPath(path, progressPaint);
+
+       if(mProgressBarListener!=null) {
+            mProgressBarListener.onViewRendered(tempDashWidth);
+            mProgressBarListener = null;
+        }
 
     }
 
@@ -118,6 +129,13 @@ public class DashProgressBar extends View {
     public void setBarThickness(int barThickness) {
         this.barThickness = barThickness;
         postInvalidate();
-        invalidate();
+    }
+
+    public int getMaxDash() {
+        return maxDash;
+    }
+
+    public void setMaxDash(int maxDash) {
+        this.maxDash = maxDash;
     }
 }

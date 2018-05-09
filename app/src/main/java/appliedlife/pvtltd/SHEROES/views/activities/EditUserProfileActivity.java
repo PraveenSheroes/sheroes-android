@@ -144,13 +144,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     Toolbar mToolbar;
 
     @Bind(R.id.scroll_fragment_edit)
-    ScrollView scrollFragmentEdit;
+    ScrollView scrollView;
 
     @Bind(R.id.et_full_name_container)
     TextInputLayout fullNameContainer;
-
-    @Bind(R.id.et_about_me_container)
-    TextInputLayout bioContainer;
 
     @Bind(R.id.et_mobile_container)
     TextInputLayout mobileContainer;
@@ -163,6 +160,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Bind(R.id.tv_email_value)
     TextView emailAddress;
+
+    @Bind(R.id.about_me_label)
+    TextView aboutMeText;
 
     @Bind(R.id.bio_limit)
     public TextView bioMaxCharLimit;
@@ -187,9 +187,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgressBar;
-
-    @Bind(R.id.pb_image_loader)
-    ProgressBar imageLoader;
 
     @BindDimen(R.dimen.dp_size_80)
     int authorProfileSize;
@@ -312,17 +309,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     @Override
-    public void showProgressBar() {
-
-    }
-
-    @Override
-    public void hideProgressBar() {
-
-    }
-
-    @Override
     public void showError(int error) {
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -330,14 +318,13 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.mobile_response_err))) {
             mobileContainer.setError(message.toUpperCase());
             requestFocus(mobileContainer);
-            scrollFragmentEdit.scrollTo(0, (int) mobileNumber.getY());
-            mProgressBar.setVisibility(View.GONE);
+            scrollView.scrollTo(0,  mobileNumber.getScrollY());
         } else if(StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.city_error_response))) {
             location.setError(getString(R.string.city_error_msg));
             requestFocus(location);
-            scrollFragmentEdit.scrollTo(0, location.getScrollY());
-            mProgressBar.setVisibility(View.GONE);
+            scrollView.scrollTo(0, location.getScrollY());
         }
+        mProgressBar.setVisibility(View.GONE);
     }
 
     private void setDateTimeField() {
@@ -369,11 +356,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
         aboutMeValue = userSummary.getUserBO().getUserSummary();
         if (StringUtil.isNotNullOrEmptyString(aboutMeValue)) {
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                aboutMe.setText(Html.fromHtml(aboutMeValue)); // for 24 api and more
-            } else {
-                aboutMe.setText(Html.fromHtml(aboutMeValue));
-            }
+            aboutMe.setText(Html.fromHtml(aboutMeValue));
             int length = aboutMeValue.length();
             bioMaxCharLimit.setText(length + "/" + BIO_MAX_LIMIT);
         } else {
@@ -460,7 +443,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             }
 
         }
-        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -469,7 +451,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private void setResult() {
-        imageLoader.setVisibility(View.GONE);
         if (userDetailsResponse != null) {
             Intent intent = new Intent();
             UserSummary summary = userDetailsResponse.getUserSummary();
@@ -612,8 +593,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void requestForUpdateProfileImage() {
-        imageLoader.setVisibility(View.VISIBLE);
-        imageLoader.bringToFront();
         if (StringUtil.isNotNullOrEmptyString(mEncodeImageUrl)) {
             updateProfileData(mEncodeImageUrl);
             if (null != profileImageDialogFragment) {
@@ -680,12 +659,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void startProgressBar() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgressBar() {
-
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -708,54 +687,53 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
-        scrollFragmentEdit.scrollTo(0, view.getBottom());
+        scrollView.scrollTo(0, view.getBottom());
     }
 
     private boolean validateName() {
         if (!StringUtil.isNotNullOrEmptyString(name.getText().toString().trim())) {
-            fullNameContainer.setError("Please enter full name");
+            fullNameContainer.setError(getString(R.string.full_name_err_msg));
             requestFocus(name);
+            scrollView.scrollTo(0, fullNameContainer.getScrollY());
             return false;
         } else {
             fullNameContainer.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, fullNameContainer.getBottom());
         return true;
     }
 
     private boolean validateLocation() {
         if (!StringUtil.isNotNullOrEmptyString(location.getText().toString())) {
-            location.setError("Please enter Current location");
+            location.setError(getString(R.string.location_error_msg));
             requestFocus(location);
+            scrollView.scrollTo(0, location.getScrollY());
             return false;
         } else {
             location.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, location.getBottom());
         return true;
     }
 
     private boolean validateMobile() {
         if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
-            mobileContainer.setError("Please enter your mobile number");
+            mobileContainer.setError(getString(R.string.mobile_no_error_msg));
             requestFocus(mobileNumber);
+            scrollView.scrollTo(0, mobileNumber.getBottom());
             return false;
         } else {
             mobileContainer.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, mobileNumber.getBottom());
         return true;
     }
 
     private boolean validateBio() {
-        if (!StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString())) {
-            bioContainer.setError("Please write something about you");
-            requestFocus(aboutMe);
-            return false;
+        if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && aboutMe.getText().length() > 80) {
+            aboutMe.setError(null);
         } else {
-            bioContainer.setError(null);
+            aboutMe.setError(getString(R.string.bio_min_char_limit_msg));
+            scrollView.scrollTo(0, aboutMeText.getScrollY());
+            return false;
         }
-        scrollFragmentEdit.scrollTo(0, bioContainer.getBottom());
         return true;
     }
 
@@ -795,23 +773,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
-            //User Bio region
-            if(StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !aboutMeValue.equalsIgnoreCase(aboutMe.getText().toString())) {
-            UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
-            userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
-            userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-            userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
-            userSummaryRequest.setLastScreenName(AppConstants.STRING);
-            userSummaryRequest.setScreenName(AppConstants.STRING);
-            userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
-            userSummaryRequest.setType(AppConstants.SUMMARY);
-            userSummaryRequest.setSummary(aboutMe.getText().toString());
-            userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
-
-            editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
-            }
-            //end region
-
             String userFullName = name.getText().toString().trim();
 
             if (StringUtil.isNotNullOrEmptyString(userFullName)) {
@@ -819,7 +780,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     userFullName = CommonUtil.camelCaseString(userFullName);
                     String name[] = userFullName.split(AppConstants.SPACE);
                     String firstName = name[0];
-                    String lastName = userFullName.substring(firstName.length()+1, userFullName.length());
+                    String lastName = userFullName.substring(firstName.length() + 1, userFullName.length());
 
                     personalBasicDetailsRequest.setFirstName(firstName);
                     personalBasicDetailsRequest.setLastName(lastName);
@@ -846,7 +807,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 e.printStackTrace();
             }
 
-            if(relationshipStatus.getSelectedItemPosition()>0) {
+            if (relationshipStatus.getSelectedItemPosition() > 0) {
                 personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItem().toString());
             }
 
@@ -854,8 +815,26 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(noOfChildren.getText().toString()));
             }
 
-            editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
+            //User Bio alone if bio have been changed
+            if (aboutMeValue != null && StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !aboutMeValue.equalsIgnoreCase(aboutMe.getText().toString())) {
+                UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
+                userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
+                userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                userSummaryRequest.setLastScreenName(AppConstants.STRING);
+                userSummaryRequest.setScreenName(AppConstants.STRING);
+                userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
+                userSummaryRequest.setType(AppConstants.SUMMARY);
+                userSummaryRequest.setSummary(aboutMe.getText().toString());
+                userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
+
+                editProfilePresenter.updateCompleteProfileDetails(personalBasicDetailsRequest, userSummaryRequest);
+            } else {
+                editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
+            }
+
             ((SheroesApplication) getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_BASIC_DETAIl_PERSONAL, AppConstants.EMPTY_STRING);
+            //endregion
         }
     }
 
@@ -867,9 +846,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                 try {
                     //update the progressbar weight and filled , unfilled fields
-                    filledDetails = boardingDataResponse.getFeedDetails().getFilledProfileFields();
-                    unfilledDetails = boardingDataResponse.getFeedDetails().getUnfilledProfileFields();
-                    profileProgress = boardingDataResponse.getFeedDetails().getProfileCompletionWeight();
+                    filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
+                    unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
+                    profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
 
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
                     String userName = name.getText().toString().trim();
@@ -921,16 +900,17 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
 
-                        //update the progressbar weightage and filled , unfilled fields
-                        filledDetails = boardingDataResponse.getFeedDetails().getFilledProfileFields();
-                        unfilledDetails = boardingDataResponse.getFeedDetails().getUnfilledProfileFields();
-                        profileProgress = boardingDataResponse.getFeedDetails().getProfileCompletionWeight();
+                        //update the progressbar weight and filled , unfilled fields
+                        filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
+                        unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
+                        profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
 
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.set(userDetailsResponse);
+
                     } else {
                         String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
                         userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
@@ -940,7 +920,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 } catch (Exception e) {
                     LogUtils.info(TAG, e.getMessage());
                 }
-                setResult();
             }
         }
     }

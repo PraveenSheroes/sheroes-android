@@ -3,8 +3,6 @@ package appliedlife.pvtltd.SHEROES.models.entities.onboarding;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 
@@ -19,7 +17,7 @@ public class BoardingDataResponse extends BaseResponse {
 
     @SerializedName("docs")
     @Expose
-    private UserSolrObj feedDetails = null;
+    private UserSolrObj userSolrObj = null;
 
     public String getResponse() {
         return response;
@@ -29,12 +27,11 @@ public class BoardingDataResponse extends BaseResponse {
         this.response = response;
     }
 
-
-    public UserSolrObj getFeedDetails() {
-        return feedDetails;
+    public UserSolrObj getUserSolrObj() {
+        return userSolrObj;
     }
 
-    public void setFeedDetails(UserSolrObj feedDetails) {
-        this.feedDetails = feedDetails;
+    public void setUserSolrObj(UserSolrObj userSolrObj) {
+        this.userSolrObj = userSolrObj;
     }
 }

@@ -146,30 +146,34 @@
                 android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_16" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/et_about_me_container"
+            <TextView
+                android:id="@+id/about_me_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16"
-                android:theme="@style/MyTextInputLayout">
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_ABOUT_ME"
+                android:textColor="@color/gray_light"
+                android:textSize="@dimen/sp_size_16" />
 
-                <EditText
-                    android:id="@+id/et_about_me"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_ABOUT_ME"
-                    android:inputType="textMultiLine"
-                    android:lineSpacingExtra="@dimen/sp_size_7"
-                    android:maxLength="@integer/int_value_for_line_160"
-                    android:maxLines="@integer/int_value_for_line_4"
-                    android:minHeight="@dimen/dp_size_70"
-                    android:textColor="@color/text_color_contactdetails_page"
-                    android:textColorHint="@color/gray_light"
-                    android:textSize="@dimen/sp_size_16" />
-            </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/et_about_me"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:hint="@string/tell_us_something_about_yourself_min_80_chars"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="@dimen/sp_size_7"
+                android:maxLength="@integer/int_value_for_line_140"
+                android:maxLines="@integer/int_value_for_line_4"
+                android:minHeight="@dimen/dp_size_70"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textColorHint="@color/gray_light"
+                android:textSize="@dimen/sp_size_16" />
 
             <TextView
                 android:id="@+id/bio_limit"
