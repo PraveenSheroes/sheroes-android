@@ -243,30 +243,34 @@ public class ContestActivity extends BaseActivity implements IContestView {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     // Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
-                    mContest.submissionCount++;
-                    mContest.hasMyPost = true;
-                    mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
-                    mContestInfoFragment.setContest(mContest);
-                    mFeedFragment.refreshList();
-                    invalidateBottomBar(FRAGMENT_RESPONSES);
-                    Intent intent = new Intent();
-                    Parcelable parcelable = Parcels.wrap(mContest);
-                    intent.putExtra(Contest.CONTEST_OBJ, parcelable);
-                    setResult(RESULT_OK, intent);
-                    ChallengeGratificationActivity.navigateTo(this, mContest, getScreenName(), null, requestCode);
+                    if(null!=mContest) {
+                        mContest.submissionCount++;
+                        mContest.hasMyPost = true;
+                        mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
+                        mContestInfoFragment.setContest(mContest);
+                        mFeedFragment.refreshList();
+                        invalidateBottomBar(FRAGMENT_RESPONSES);
+                        Intent intent = new Intent();
+                        Parcelable parcelable = Parcels.wrap(mContest);
+                        intent.putExtra(Contest.CONTEST_OBJ, parcelable);
+                        setResult(RESULT_OK, intent);
+                        ChallengeGratificationActivity.navigateTo(this, mContest, getScreenName(), null, requestCode);
+                    }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_ADDRESS:
                     Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
-                    mContest.mWinnerAddress = "not empty";
-                    mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
-                    mContestInfoFragment.setContest(mContest);
-                    mFeedFragment.refreshList();
-                    invalidateBottomBar(FRAGMENT_WINNER);
-                    Intent intentContest = new Intent();
-                    Parcelable parcelableContest = Parcels.wrap(mContest);
-                    intentContest.putExtra(Contest.CONTEST_OBJ, parcelableContest);
-                    setResult(RESULT_OK, intentContest);
+                    if(null!=mContest) {
+                        mContest.mWinnerAddress = "not empty";
+                        mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
+                        mContestInfoFragment.setContest(mContest);
+                        mFeedFragment.refreshList();
+                        invalidateBottomBar(FRAGMENT_WINNER);
+                        Intent intentContest = new Intent();
+                        Parcelable parcelableContest = Parcels.wrap(mContest);
+                        intentContest.putExtra(Contest.CONTEST_OBJ, parcelableContest);
+                        setResult(RESULT_OK, intentContest);
+                    }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
