@@ -61,7 +61,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     private String mIntermediateFields[] = {"Location", "Mobile Number", "Bio"};
     private String mCompletedFields[] = {"Profile Pic", "DOB", "Relationship Status"};
     private UserSolrObj mUserSolrObj;
-    private ProfileLevelType profileLevelType;
+    private ProfileLevelType mProfileLevelType;
     //endregion
 
     //region enum
@@ -128,10 +128,10 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         }
 
         if (getArguments() != null && getArguments().getSerializable(PROFILE_LEVEL) != null) {
-            profileLevelType = (ProfileLevelType) getArguments().getSerializable(PROFILE_LEVEL);
+            mProfileLevelType = (ProfileLevelType) getArguments().getSerializable(PROFILE_LEVEL);
         } else {
             if (mUserSolrObj != null) {
-                profileLevelType = userLevel(mUserSolrObj);
+                mProfileLevelType = userLevel(mUserSolrObj);
             }
         }
 
@@ -140,14 +140,14 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
             dashProgressBar.setProgress(mUserSolrObj.getProfileCompletionWeight(), false);
 
             if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                dashProgressBar.setMaxDash(mConfiguration.get().configData.maxDash);
+                dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
             } else {
-                dashProgressBar.setMaxDash(MAX_DASH);
+                dashProgressBar.setTotalDash(MAX_DASH);
             }
 
             invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
 
-            invalidateUserDetails(profileLevelType);
+            invalidateUserDetails(mProfileLevelType);
 
             //Add analytics screen open Event
             if (getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {
@@ -175,12 +175,12 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     @OnClick(R.id.buttonPanel)
     public void nextClick() {
 
-        if (profileLevelType == ProfileLevelType.BEGINNER) {
-            profileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(profileLevelType);
-        } else if (profileLevelType == ProfileLevelType.INTERMEDIATE) {
-            profileLevelType = ProfileLevelType.ALLSTAR;
-            invalidateUserDetails(profileLevelType);
+        if (mProfileLevelType == ProfileLevelType.BEGINNER) {
+            mProfileLevelType = ProfileLevelType.INTERMEDIATE;
+            invalidateUserDetails(mProfileLevelType);
+        } else if (mProfileLevelType == ProfileLevelType.INTERMEDIATE) {
+            mProfileLevelType = ProfileLevelType.ALLSTAR;
+            invalidateUserDetails(mProfileLevelType);
         } else {
             dismiss();
         }

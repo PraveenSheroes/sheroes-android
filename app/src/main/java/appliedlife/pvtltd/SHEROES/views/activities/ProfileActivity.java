@@ -473,9 +473,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
                 dashProgressBar.setListener(this);
                 if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                    dashProgressBar.setMaxDash(mConfiguration.get().configData.maxDash);
+                    dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
                 } else {
-                    dashProgressBar.setMaxDash(MAX_DASH);
+                    dashProgressBar.setTotalDash(MAX_DASH);
                 }
 
                 dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);

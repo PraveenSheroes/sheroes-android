@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_20"
         android:layout_centerVertical="true"
-        app:barThickness="@dimen/dp_size_10" />
+        app:mBarThickness="@dimen/dp_size_10" />
 
     <TextView
         android:id="@+id/beginner"

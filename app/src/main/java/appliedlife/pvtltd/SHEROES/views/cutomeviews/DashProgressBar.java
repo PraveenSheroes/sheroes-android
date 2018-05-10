@@ -18,16 +18,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 
 /**
  * Created by Ravi on 01-05-2018.
- * This class render the dashed progress bar
+ * This class render the dashed mProgress bar
  */
 public class DashProgressBar extends View {
 
     private static final int SPACE_WIDTH = 10;
-    private Paint progressPaint;
-    private float progress = 0.0f;
-    private int barThickness;
-    private Path path;
-    private int maxDash = 0;
+    private float mProgress = 0.0f;
+    private int mBarThickness;
+    private int mTotalDash = 0;
+    private Path mPath;
+    private Paint mPaint;
     private ProgressbarView mProgressBarListener;
 
     public DashProgressBar(Context context, AttributeSet attrs) {
@@ -36,13 +36,13 @@ public class DashProgressBar extends View {
     }
 
     private void init(AttributeSet attrs) {
-        progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.DashProgressBar, 0, 0);
         try {
-            setBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashProgressBar_barThickness, 4));
-            path = new Path();
-            path.reset();
+            setmBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashProgressBar_barThickness, 4));
+            mPath = new Path();
+            mPath.reset();
 
         } finally {
             typedArray.recycle();
@@ -56,34 +56,34 @@ public class DashProgressBar extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         int halfHeight = getHeight() / 2;
-        float progressEndX = ((float) getWidth()) * (progress / (float) 100);
-        progressPaint.setStrokeWidth(barThickness);
+        float progressEndX = ((float) getWidth()) * (mProgress / (float) 100);
+        mPaint.setStrokeWidth(mBarThickness);
 
         // draw the un-filled dashes
-        float dashWidth = (float) getWidth() / (float) getMaxDash();
+        float dashWidth = (float) getWidth() / (float) getTotalDash();
         float dashWidthWithoutSpace = dashWidth - SPACE_WIDTH;
         PathEffect effects = new DashPathEffect(new float[]{dashWidthWithoutSpace, SPACE_WIDTH, dashWidthWithoutSpace, SPACE_WIDTH}, 0);
 
         int color = R.color.progress_unfilled;
-        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
-        progressPaint.setStyle(Paint.Style.STROKE);
-        progressPaint.setPathEffect(effects);
+        mPaint.setColor(ContextCompat.getColor(getContext(), color));
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setPathEffect(effects);
 
-        path.moveTo(0, halfHeight);
-        path.lineTo(getWidth(), halfHeight);
-        canvas.drawPath(path, progressPaint);
+        mPath.moveTo(0, halfHeight);
+        mPath.lineTo(getWidth(), halfHeight);
+        canvas.drawPath(mPath, mPaint);
 
         // draw the filled portion of the bar
-        path.reset();
-        progressPaint.setStyle(Paint.Style.STROKE);
-        progressPaint.setStrokeWidth(barThickness);
+        mPath.reset();
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(mBarThickness);
         color = R.color.dark_green;
-        progressPaint.setColor(ContextCompat.getColor(getContext(), color));
-        progressPaint.setPathEffect(effects);
-        path.moveTo(0, halfHeight);
-        path.lineTo(progressEndX, halfHeight);
+        mPaint.setColor(ContextCompat.getColor(getContext(), color));
+        mPaint.setPathEffect(effects);
+        mPath.moveTo(0, halfHeight);
+        mPath.lineTo(progressEndX, halfHeight);
 
-        canvas.drawPath(path, progressPaint);
+        canvas.drawPath(mPath, mPaint);
 
         if (mProgressBarListener != null) {
             mProgressBarListener.onViewRendered(dashWidthWithoutSpace);
@@ -104,7 +104,7 @@ public class DashProgressBar extends View {
 
             barAnimator.setDuration(700);
 
-            // reset progress without animating
+            // reset mProgress without animating
             setProgress(0, false);
 
             barAnimator.setInterpolator(new DecelerateInterpolator());
@@ -121,21 +121,21 @@ public class DashProgressBar extends View {
                 barAnimator.start();
             }
         } else {
-            this.progress = progress;
+            this.mProgress = progress;
             postInvalidate();
         }
     }
 
-    public void setBarThickness(int barThickness) {
-        this.barThickness = barThickness;
+    public void setmBarThickness(int mBarThickness) {
+        this.mBarThickness = mBarThickness;
         postInvalidate();
     }
 
-    public int getMaxDash() {
-        return maxDash;
+    public int getTotalDash() {
+        return mTotalDash;
     }
 
-    public void setMaxDash(int maxDash) {
-        this.maxDash = maxDash;
+    public void setTotalDash(int mTotalDash) {
+        this.mTotalDash = mTotalDash;
     }
 }

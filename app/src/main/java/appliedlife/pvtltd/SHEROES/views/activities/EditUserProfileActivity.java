@@ -9,7 +9,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -110,7 +109,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private DatePickerDialog fromDatePickerDialog;
     private int cityId;
     private File localImageSaveForChallenge;
-    private String aboutMeValue;
+    private String mAboutMe;
     private LoginResponse userDetailsResponse;
     private float profileProgress = -1;
     private String filledDetails ;
@@ -354,10 +353,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             location.setText(locationValue);
         }
 
-        aboutMeValue = userSummary.getUserBO().getUserSummary();
-        if (StringUtil.isNotNullOrEmptyString(aboutMeValue)) {
-            aboutMe.setText(Html.fromHtml(aboutMeValue));
-            int length = aboutMeValue.length();
+        mAboutMe = userSummary.getUserBO().getUserSummary();
+        if (StringUtil.isNotNullOrEmptyString(mAboutMe)) {
+            aboutMe.setText(Html.fromHtml(mAboutMe));
+            int length = mAboutMe.length();
             bioMaxCharLimit.setText(length + "/" + BIO_MAX_LIMIT);
         } else {
             bioMaxCharLimit.setText(0 + "/" + BIO_MAX_LIMIT);
@@ -814,7 +813,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             }
 
             //User Bio alone if bio have been changed
-            if (aboutMeValue != null && StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !aboutMeValue.equalsIgnoreCase(aboutMe.getText().toString())) {
+            if (mAboutMe != null && StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !mAboutMe.equalsIgnoreCase(aboutMe.getText().toString())) {
                 UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
                 userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
                 userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
