@@ -33,6 +33,7 @@ import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
+import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1045,6 +1046,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     showNetworkTimeoutDoalog(true, false, errorReason);
                     break;
                 case AppConstants.HTTP_401_UNAUTHORIZED:
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
+                    break;
+                case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                     break;
                 default: {
