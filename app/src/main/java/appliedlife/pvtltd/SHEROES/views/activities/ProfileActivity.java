@@ -441,7 +441,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             dialog.dismiss();
         }
 
-        if(mProfileProgressDialog !=null && mProfileProgressDialog.isVisible()) {
+        if (mProfileProgressDialog != null && mProfileProgressDialog.isVisible()) {
             mProfileProgressDialog.dismiss();
         }
         super.onStop();
@@ -739,7 +739,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (mUserSolarObject == null) return;
 
-        if(mProfileProgressDialog !=null && mProfileProgressDialog.isVisible()) {
+        if (mProfileProgressDialog != null && mProfileProgressDialog.isVisible()) {
             mProfileProgressDialog.dismiss();
         }
 
@@ -1579,7 +1579,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         setProfileNameData(boardingDataResponse.getResponse());
 
                         //update progress bar
-                        if(mUserSolarObject!=null) {
+                        if (mUserSolarObject != null) {
                             mUserSolarObject.setFilledProfileFields(boardingDataResponse.getUserSolrObj().getFilledProfileFields());
                             mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getUserSolrObj().getUnfilledProfileFields());
                             mUserSolarObject.setProfileCompletionWeight(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight());
@@ -1662,7 +1662,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             mUserSolarObject.setDescription(userBio);
         }
 
-        if(progressPercentage !=-1) {
+        if (progressPercentage != -1) {
             mUserSolarObject.setProfileCompletionWeight(progressPercentage);
             dashProgressBar.setProgress(progressPercentage, false);
 
@@ -1671,7 +1671,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             setProfileLevel();
         }
 
-        if(imageUrl!=null) {
+        if (imageUrl != null) {
             refreshImageView(imageUrl);
         }
     }
@@ -1926,8 +1926,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public void refreshPostCount(boolean isPostDeleted) {
         if (isPostDeleted) {
-            String postCount = userTotalPostCount.getText().toString();
-            int postNumbers = Integer.parseInt(postCount);
+            int postNumbers = mUserSolarObject.getSolrIgnoreNoOfMentorPosts();
             postNumbers = postNumbers > 0 ? postNumbers - 1 : 0;
             setUsersPostCount(postNumbers);
         }
