@@ -431,9 +431,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     userSummary.getUserBO().setEmailid(userDetails.getEmailid());
                 }
 
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getMaritalStatus())) {
-                    userSummary.getUserBO().setMaritalStatus(userDetails.getMaritalStatus());
-                }
+                String relationshipStatus = userDetails.getMaritalStatus();
+                relationshipStatus = relationshipStatus == null ? "" : relationshipStatus;
+                userSummary.getUserBO().setMaritalStatus(relationshipStatus);
 
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getMobile())) {
                     userSummary.setMobile(userDetails.getMobile());
@@ -449,14 +449,13 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
 
                 //Save image
-                userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
-                userDetailsResponse.getUserSummary().setPhotoUrl(userDetails.getPhotoUrlPath());
-                mUserPreference.get().getUserSummary().setPhotoUrl(userDetails.getPhotoUrlPath());
-                mUserPreference.set(userDetailsResponse);
+                userSummary.getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
+                userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
+                userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
 
                 loginResponse.setUserSummary(userSummary);
-                setUserDetails(userSummary);
                 mUserPreference.set(loginResponse);
+                setUserDetails(userSummary);
 
                 setProfileNameData(userDetails.getPhotoUrlPath());
             }
