@@ -533,8 +533,8 @@
     <string name="ID_SHARE_ON_WHATS_APP">Share</string>
 
     <!-- String related to tooltip -->
-    <string name="tool_tip_user_profile">Tap here to check out this user and follow her</string>
-    <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
+    <string name="tool_tip_user_profile">Find out more about this user</string>
+
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
     <string name="my_communities">My Communities</string>
@@ -564,7 +564,7 @@
     <string name="contact_list_friend">Contacts</string>
     <string name="contact_invite_friend">Invite</string>
     <string name="whats_app_not_installed">WhatsApp not Installed</string>
-    <string name="suggested_list_blank">No friends to follow. Invite your friends to SHEROES</string>
+    <string name="suggested_list_blank">Want to see which friends are on Sheroes?</string>
     <string name="contact_list_blank">Find friends from your contacts</string>
     <string name="invite_friend_request_to_join">Join me on the women-only SHEROES app. You can participate (even anonymously) in discussions on women-related topics and help other women in the Indian community to make progress in their lives.</string>
     <string name="invite_sync_contact">Allow us to sync your mobile contacts to make finding friends super easy!</string>
