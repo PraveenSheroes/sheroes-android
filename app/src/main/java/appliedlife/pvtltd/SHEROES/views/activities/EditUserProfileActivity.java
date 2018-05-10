@@ -149,8 +149,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Bind(R.id.et_full_name_container)
     TextInputLayout fullNameContainer;
 
-    @Bind(R.id.et_mobile_container)
-    TextInputLayout mobileContainer;
+    @Bind(R.id.input_mobile_holder)
+    TextInputLayout inputMobileNumberHolder;
 
     @Bind(R.id.et_about_me)
     EditText aboutMe;
@@ -320,8 +320,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Override
     public void errorMessage(String message) {
         if (StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.mobile_response_err))) {
-            mobileContainer.setError(message.toUpperCase());
-            requestFocus(mobileContainer);
+            inputMobileNumberHolder.setError(message.toUpperCase());
+            requestFocus(inputMobileNumberHolder);
             scrollView.scrollTo(0,  mobileNumber.getScrollY());
         } else if(StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.city_error_response))) {
             location.setError(getString(R.string.city_error_msg));
@@ -448,11 +448,18 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                 userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
 
+                //Save image
+                userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
+                userDetailsResponse.getUserSummary().setPhotoUrl(userDetails.getPhotoUrlPath());
+                mUserPreference.get().getUserSummary().setPhotoUrl(userDetails.getPhotoUrlPath());
+                mUserPreference.set(userDetailsResponse);
+
                 loginResponse.setUserSummary(userSummary);
                 setUserDetails(userSummary);
                 mUserPreference.set(loginResponse);
-            }
 
+                setProfileNameData(userDetails.getPhotoUrlPath());
+            }
         }
     }
 
@@ -731,14 +738,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         return true;
     }
 
-    private boolean validateMobile() {
+    private boolean validateMobileNumber() {
         if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
-            mobileContainer.setError(getString(R.string.mobile_no_error_msg));
+            inputMobileNumberHolder.setError(getString(R.string.mobile_no_error_msg));
             requestFocus(mobileNumber);
             scrollView.scrollTo(0, mobileNumber.getBottom());
             return false;
         } else {
-            mobileContainer.setError(null);
+            inputMobileNumberHolder.setError(null);
         }
         return true;
     }
@@ -757,7 +764,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateUserDetails() {
-        return validateName() && validateBio() && validateLocation() && validateMobile();
+        return validateName() && validateBio() && validateLocation() && validateMobileNumber();
     }
 
     private void setupToolbarItemsColor() {
