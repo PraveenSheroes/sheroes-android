@@ -166,7 +166,7 @@
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="bottom"
-                android:hint="@string/tell_us_something_about_yourself_min_80_chars"
+                android:hint="@string/tell_us_something_about_yourself_min_60_chars"
                 android:inputType="textMultiLine"
                 android:lineSpacingExtra="@dimen/sp_size_7"
                 android:maxLength="@integer/int_value_for_line_140"

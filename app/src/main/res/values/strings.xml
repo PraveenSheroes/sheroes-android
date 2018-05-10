@@ -626,8 +626,8 @@
     <string name="city_error_response">wrong id sent for city</string>
     <string name="mobile_response_err">mobile number already registered with us</string>
     <string name="add_more_to_bio">Add Bio (Complete your Bio)</string>
-    <string name="tell_us_something_about_yourself_min_80_chars">Tell us something about yourself (min. 80 chars)</string>
-    <string name="bio_min_char_limit_msg">Fill min. of 80 characters to proceed</string>
+    <string name="tell_us_something_about_yourself_min_60_chars">Tell us something about yourself (min. 60 chars)</string>
+    <string name="bio_min_char_limit_msg">Fill min. of 60 characters to proceed</string>
     <string name="mobile_no_error_msg">Please enter your mobile number</string>
     <string name="location_error_msg">Please enter Current location</string>
     <string name="full_name_err_msg">Please enter full name</string>
