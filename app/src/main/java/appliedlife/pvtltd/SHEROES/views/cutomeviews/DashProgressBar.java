@@ -40,7 +40,7 @@ public class DashProgressBar extends View {
 
         TypedArray typedArray = getContext().getTheme().obtainStyledAttributes(attrs, R.styleable.DashProgressBar, 0, 0);
         try {
-            setmBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashProgressBar_barThickness, 4));
+            setmBarThickness(typedArray.getDimensionPixelOffset(R.styleable.DashProgressBar_mBarThickness, 4));
             mPath = new Path();
             mPath.reset();
 
