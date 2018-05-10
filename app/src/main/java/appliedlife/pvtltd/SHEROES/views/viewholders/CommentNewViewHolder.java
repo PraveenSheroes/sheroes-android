@@ -217,7 +217,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mCommentCallback.userProfileNameClick(mComment, mCommentAuthorName);
     }
 
-    @OnClick(R.id.spam_comment_ui)
+    @OnClick(R.id.spam_comment_menu)
     public void onSpamCommentMenuClick() {
         mComment.setItemPosition(getAdapterPosition());
         mCommentCallback.onCommentMenuClicked(mComment, spamMenu);

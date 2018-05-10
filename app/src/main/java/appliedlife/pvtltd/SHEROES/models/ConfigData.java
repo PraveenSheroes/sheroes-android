@@ -43,4 +43,14 @@ public class ConfigData {
 
     @SerializedName("userTagCommentInfoText")
     public String mUserTagCommentInfoText = "You can tag community owners, your followers or people who engaged on this post";
+
+    @SerializedName("progressbar_max_dashes")
+    public int maxDash = 8;
+
+    @SerializedName("beginner_tick_index")
+    public  int beginnerStartIndex = 2;
+
+    @SerializedName("intermediate_tick_index")
+    public  int intermediateStartIndex = 5;
+
 }

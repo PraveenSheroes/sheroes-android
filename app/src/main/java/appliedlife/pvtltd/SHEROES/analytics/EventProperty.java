@@ -60,7 +60,8 @@ public enum EventProperty {
     CURRENT_VERSION("Current Version"),
     BRANCH_LINK("Branch link"),
     OPENED_FROM_EXTERNAL_APP("Opened from external app"),
-    SHARED_FROM_EXTERNAL_APP("Shared From External App");
+    SHARED_FROM_EXTERNAL_APP("Shared From External App"),
+    PROFILE_STRENGTH("Profile Strength");
 
     private final String string;
 
@@ -318,6 +319,11 @@ public enum EventProperty {
 
         public Builder isOpenedFromExternalApp(String value) {
             put(OPENED_FROM_EXTERNAL_APP, value);
+            return this;
+        }
+
+        public Builder profileStrength(String value) {
+            put(PROFILE_STRENGTH, value);
             return this;
         }
     }

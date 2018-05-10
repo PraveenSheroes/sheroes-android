@@ -118,7 +118,6 @@
     <string name="banned_user_device">Ban User Device</string>
 
 
-
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
@@ -183,7 +182,7 @@
     <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
     <string name="ID_SAVE">SAVE</string>
     <string name="ID_NEED_TO_BE_REVIEWED">Your post is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
-    <string name="COMMENT_REVIEW_MESSAGE">Your comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
+    <string name="COMMENT_REVIEW_MESSAGE">This comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
 
@@ -260,9 +259,15 @@
 
     <string name="married">Married</string>
     <string name="unmarried">Unmarried</string>
+
     <string-array name="relationship_status_arr">
-        <item>@string/married</item>
-        <item>@string/unmarried</item>
+        <item>Select Status</item>
+        <item>Single</item>
+        <item>In a Relationship</item>
+        <item>Married</item>
+        <item>Divorced</item>
+        <item>Widowed</item>
+        <item>Other</item>
     </string-array>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
@@ -497,7 +502,7 @@
     <string name="ID_ANSWERS">Answered questions in last 7 days</string>
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
-    <string name="private_information">Private Information</string>
+    <string name="private_information">Private Information (Only Visible to You)</string>
 
     <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
     <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
@@ -525,6 +530,7 @@
     <string name="add_skills">Add Skills</string>
     <string name="add_desc">Add Description</string>
     <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
+    <string name="profile_progress_message">Hey %1$s! \n%2$s"</string>
     <string name="post_schedule_message">You are scheduling a post for &lt;b&gt;%1$s&lt;/b&gt; Community to be posted on &lt;b&gt;%2$s&lt;/b&gt;.</string>
     <string name="followed_communities">Communities Joined</string>
     <string name="champions_followed">Champions Followed</string>
@@ -601,5 +607,31 @@
     <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
     <string name="reactivate_your_account">To reactivate your account write to us</string>
     <string name="care_sheroes">care@sheroes.in</string>
+
+    <string name="achieved">( Achieved )</string>
+    <string name="beginner">Beginner</string>
+    <string name="next_level">Next level</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="all_star">All star</string>
+    <string name="progress_status_beginner">Profile Strength : Beginner</string>
+    <string name="progress_status_all_star">Profile Strength : All Star</string>
+    <string name="progress_level_status_intermediate">Profile Strength : Intermediate</string>
+    <string name="add">Add</string>
+    <string name="all_star_filled">Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.</string>
+    <string name="all_star_unfilled">Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.</string>
+    <string name="intermediate_filled">Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.</string>
+    <string name="intermediate_unfilled">Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.</string>
+    <string name="beginner_message">You’re on your way now. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers and faster replies.</string>
+    <string name="city_error_msg">Invalid city name, please select again</string>
+    <string name="city_error_response">wrong id sent for city</string>
+    <string name="mobile_response_err">mobile number already registered with us</string>
+    <string name="add_more_to_bio">Add Bio (Complete your Bio)</string>
+    <string name="tell_us_something_about_yourself_min_60_chars">Tell us something about yourself (min. 60 chars)</string>
+    <string name="bio_min_char_limit_msg">Fill min. of 60 characters to proceed</string>
+    <string name="mobile_no_error_msg">Please enter your mobile number</string>
+    <string name="location_error_msg">Please enter Current location</string>
+    <string name="full_name_err_msg">Please enter full name</string>
+    <string name="limit">0/140</string>
+    <string name="other">Other</string>
 
 </resources>

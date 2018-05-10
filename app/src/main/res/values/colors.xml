@@ -33,6 +33,7 @@
     <color name="spam_post">#f6f6f6</color>
     <color name="on_board_work">#dcdcdc</color>
     <color name="spam_dialog_divider">#dcdcdc</color>
+    <color name="progress_unfilled">#dcdcdc</color>
     <color name="feed_back_color">#e8e8e8</color>
 
     <color name="black_current">#1a1818</color>
@@ -46,6 +47,7 @@
     <color name="searchbox_text_color">#9b9b9b</color>
     <color name="green">#28b51b</color>
     <color name="light_green">#6bba28</color>
+    <color name="dark_green">#009e55</color>
     <color name="email">#dc4541</color>
     <color name="red_opacity">#f5c7c5</color>
     <color name="chat_incomming_text_color">#814edf</color>
@@ -59,6 +61,7 @@
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#dc4541</color>
+    <color name="profile_level_header_background">#dc4541</color>
     <color name="toolbar_title_text">#dc4541</color>
     <color name="ripple_color">#dc4541</color>
     <color name="posted_in">#90949c</color>
@@ -78,6 +81,7 @@
     <color name="comment_text">#3c3c3c</color>
     <color name="feed_title">#3c3c3c</color>
     <color name="toolbar_title">#3c3c3c</color>
+    <color name="profile_progress_dialog_section">#3c3c3c</color>
 
     <!--colors set through priyanka-->
 
