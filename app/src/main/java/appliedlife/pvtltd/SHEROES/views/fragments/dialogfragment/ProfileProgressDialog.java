@@ -374,6 +374,10 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
                     }
                 }
             }
+
+            if (message.toString().endsWith(AppConstants.SPACE)) {
+                return message.substring(0, message.lastIndexOf(AppConstants.COMMA));
+            }
         }
 
         return message.toString();

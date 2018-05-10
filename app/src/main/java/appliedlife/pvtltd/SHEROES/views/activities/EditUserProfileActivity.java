@@ -18,7 +18,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -41,6 +40,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -101,6 +101,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private static final String TAG = EditUserProfileActivity.class.getName();
 
     private static final int BIO_MAX_LIMIT = 140;
+    private static final int BIO_MIN_LIMIT = 80;
     private SearchProfileLocationDialogFragment searchProfileLocationDialogFragment;
     private ProfileImageDialogFragment profileImageDialogFragment;
     private String mEncodeImageUrl;
@@ -109,7 +110,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private DatePickerDialog fromDatePickerDialog;
     private int cityId;
     private File localImageSaveForChallenge;
-    private String mAboutMe;
+    private String mAboutMe = "";
     private LoginResponse userDetailsResponse;
     private float profileProgress = -1;
     private String filledDetails ;
@@ -152,10 +153,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     TextInputLayout mobileContainer;
 
     @Bind(R.id.et_about_me)
-    public EditText aboutMe;
+    EditText aboutMe;
 
     @Bind(R.id.et_mobilenumber)
-    public EditText mobileNumber;
+    EditText mobileNumber;
 
     @Bind(R.id.tv_email_value)
     TextView emailAddress;
@@ -164,7 +165,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     TextView aboutMeText;
 
     @Bind(R.id.bio_limit)
-    public TextView bioMaxCharLimit;
+    TextView bioMaxCharLimit;
+
+    @Bind(R.id.bio_error_msg)
+    TextView bioError;
 
     @Bind(R.id.et_dob)
     EditText dateOfBirth;
@@ -230,6 +234,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
             @Override
             public void afterTextChanged(Editable s) {
+                bioError.setVisibility(View.GONE);
                 bioMaxCharLimit.setText(s.toString().length() + "/" + BIO_MAX_LIMIT);
             }
         });
@@ -355,7 +360,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
         mAboutMe = userSummary.getUserBO().getUserSummary();
         if (StringUtil.isNotNullOrEmptyString(mAboutMe)) {
-            aboutMe.setText(Html.fromHtml(mAboutMe));
+            aboutMe.setText(mAboutMe);
             int length = mAboutMe.length();
             bioMaxCharLimit.setText(length + "/" + BIO_MAX_LIMIT);
         } else {
@@ -378,8 +383,15 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         noOfChildren.setText(String.valueOf(noOfChildrenValue));
 
         String relationStatus = userSummary.getUserBO().getMaritalStatus();
-        if (StringUtil.isNotNullOrEmptyString(relationStatus)) {
-            relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(relationStatus));
+
+        if (relationStatus == null || relationStatus.isEmpty()) { //reset the martial status if comes empty
+            relationshipStatus.setSelection(0);
+        } else {
+            if(isRelationStatusValueAvailable(relationStatus)) {
+                relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(relationStatus));
+            } else { //if value not available select the other
+                relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(getString(R.string.other)));
+            }
         }
 
         String email = userSummary.getEmailId();
@@ -689,6 +701,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         scrollView.scrollTo(0, view.getBottom());
     }
 
+    //check if value exist in relationship options
+    private boolean isRelationStatusValueAvailable(String status) {
+        String[] relationshipOptions = getResources().getStringArray(R.array.relationship_status_arr);
+        return Arrays.asList(relationshipOptions).contains(status);
+    }
+
     private boolean validateName() {
         if (!StringUtil.isNotNullOrEmptyString(name.getText().toString().trim())) {
             fullNameContainer.setError(getString(R.string.full_name_err_msg));
@@ -726,10 +744,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateBio() {
-        if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && aboutMe.getText().length() >= 80) {
+        if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && aboutMe.getText().toString().trim().length() >= BIO_MIN_LIMIT) {
             aboutMe.setError(null);
+            bioError.setVisibility(View.GONE);
         } else {
-            aboutMe.setError(getString(R.string.bio_min_char_limit_msg));
+            bioError.setVisibility(View.VISIBLE);
+            bioError.setText(getString(R.string.bio_min_char_limit_msg));
             scrollView.scrollTo(0, aboutMeText.getScrollY());
             return false;
         }
@@ -813,7 +833,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             }
 
             //User Bio alone if bio have been changed
-            if (mAboutMe != null && StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && !mAboutMe.equalsIgnoreCase(aboutMe.getText().toString())) {
+            if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && (mAboutMe == null || !mAboutMe.equalsIgnoreCase(aboutMe.getText().toString()))) {
                 UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
                 userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
                 userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());

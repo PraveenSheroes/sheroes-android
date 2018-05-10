@@ -57,14 +57,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end|bottom"
-                    android:src="@drawable/ic_edit_pic"/>
+                    android:src="@drawable/ic_edit_pic" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:visibility="gone"
-                    android:background="@drawable/ic_edit_profile">
+                    android:background="@drawable/ic_edit_profile"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -85,7 +85,6 @@
                         android:background="@drawable/ic_photo_camera" />
 
                 </LinearLayout>
-
 
                 <ProgressBar
                     android:id="@+id/pb_image_loader"
@@ -110,8 +109,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_PROFILE_FULL_NAME"
-                    android:maxLines="@integer/int_value_for_line_1"
                     android:inputType="textCapWords"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:maxLength="@integer/name_char_limit"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_16" />
@@ -165,6 +165,7 @@
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="bottom"
                 android:hint="@string/tell_us_something_about_yourself_min_80_chars"
                 android:inputType="textMultiLine"
                 android:lineSpacingExtra="@dimen/sp_size_7"
@@ -175,14 +176,37 @@
                 android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_16" />
 
-            <TextView
-                android:id="@+id/bio_limit"
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|right"
-                android:layout_margin="@dimen/dp_size_5"
-                android:maxLines="@integer/int_value_for_line_1"
-                android:text="0/140" />
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/bio_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="end|right"
+                    android:layout_margin="@dimen/dp_size_5"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:text="@string/limit" />
+
+                <TextView
+                    android:id="@+id/bio_error_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginStart="@dimen/dp_size_16"
+                    android:layout_toLeftOf="@id/bio_limit"
+                    android:layout_toStartOf="@id/bio_limit"
+                    android:gravity="start"
+                    android:textColor="@color/red"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"

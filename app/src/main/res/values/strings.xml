@@ -267,6 +267,7 @@
         <item>Married</item>
         <item>Divorced</item>
         <item>Widowed</item>
+        <item>Other</item>
     </string-array>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
@@ -630,5 +631,7 @@
     <string name="mobile_no_error_msg">Please enter your mobile number</string>
     <string name="location_error_msg">Please enter Current location</string>
     <string name="full_name_err_msg">Please enter full name</string>
+    <string name="limit">0/140</string>
+    <string name="other">Other</string>
 
 </resources>
