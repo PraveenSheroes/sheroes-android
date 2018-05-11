@@ -103,6 +103,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         NAVTIVE("native"),
         WEB("web"),
         HTML("html"),
+        WEB_CUSTOM_TAB("web_custom_tab"),
         FRAGMENT("fragment");
 
         public String tabType;
@@ -558,6 +559,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                 if (communityTab.type.equalsIgnoreCase(TabType.WEB.getName())) {
                     NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "", false);
+                    mAdapter.addFragment(webViewFragment, communityTab.title);
+                    mTabFragments.add(webViewFragment);
+                }
+
+                if (communityTab.type.equalsIgnoreCase(TabType.WEB_CUSTOM_TAB.getName())) {
+                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "", false, true);
                     mAdapter.addFragment(webViewFragment, communityTab.title);
                     mTabFragments.add(webViewFragment);
                 }
