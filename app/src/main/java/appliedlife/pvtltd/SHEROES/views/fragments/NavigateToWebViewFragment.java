@@ -12,8 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
-import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -22,7 +20,6 @@ import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,10 +30,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -56,6 +51,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
     private static final String RELATIVE_PATH_ASSETS = "file:///android_asset/";
     private static final String TAG = NavigateToWebViewFragment.class.getName();
     public static final String HAS_FOOTER = "Has Footer";
+    public static final String FORCE_CUSTOM_TAB = "Force Custom Tab";
 
     @Bind(R.id.main_container)
     RelativeLayout mMainContainer;
@@ -69,6 +65,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
     @Inject
     Preference<LoginResponse> mUserPreference;
     private String currentSelectedItemName;
+    private boolean mForceCustomTab;
 
     public static NavigateToWebViewFragment newInstance(String webUrl, String webHtml, String menuName, boolean hasFooter) {
         Bundle bundle = new Bundle();
@@ -76,6 +73,19 @@ public class NavigateToWebViewFragment extends BaseFragment {
         bundle.putString(WEB_HTML, webHtml);
         bundle.putString(AppConstants.SELECTED_MENU_NAME, menuName);
         bundle.putBoolean(HAS_FOOTER, hasFooter);
+        NavigateToWebViewFragment fragment = new NavigateToWebViewFragment();
+        fragment.setArguments(bundle);
+
+        return fragment;
+    }
+
+    public static NavigateToWebViewFragment newInstance(String webUrl, String webHtml, String menuName, boolean hasFooter, boolean forceCustomTab) {
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.WEB_URL_FRAGMENT, webUrl);
+        bundle.putString(WEB_HTML, webHtml);
+        bundle.putString(AppConstants.SELECTED_MENU_NAME, menuName);
+        bundle.putBoolean(HAS_FOOTER, hasFooter);
+        bundle.putBoolean(FORCE_CUSTOM_TAB, forceCustomTab);
         NavigateToWebViewFragment fragment = new NavigateToWebViewFragment();
         fragment.setArguments(bundle);
 
@@ -118,6 +128,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL_FRAGMENT);
             String mWebHtml = getArguments().getString(WEB_HTML);
             boolean hasFooter = getArguments().getBoolean(HAS_FOOTER, false);
+            mForceCustomTab = getArguments().getBoolean(FORCE_CUSTOM_TAB, false);
             if(!hasFooter){
                 mMainContainer.setPadding(0, 0,0 ,0);
             }
@@ -146,6 +157,11 @@ public class NavigateToWebViewFragment extends BaseFragment {
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //Handle hyperlinks here
+                if(mForceCustomTab){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                }
 
                 if (StringUtil.isNotNullOrEmptyString(url)) {
                     if(url.startsWith("whatsapp://")) { //Share on WhatsApp
@@ -164,7 +180,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
                         }
                     }
                      else {
-                        webPagesView.loadUrl(url, getCustomHeaders(url));
+                            webPagesView.loadUrl(url, getCustomHeaders(url));
                     }
                     return true;
                 } else {
