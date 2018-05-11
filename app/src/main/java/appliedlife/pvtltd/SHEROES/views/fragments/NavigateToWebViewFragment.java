@@ -21,7 +21,9 @@ import android.widget.RelativeLayout;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -140,6 +142,18 @@ public class NavigateToWebViewFragment extends BaseFragment {
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //Handle hyperlinks here
+                //Open in chrome tab for multibhashi domain
+                String host = null;
+                try {
+                    host = new URL(url).getHost();
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                if(CommonUtil.isNotEmpty(host) && host.equals("www.multibhashi.com")){
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                }
 
                 if (StringUtil.isNotNullOrEmptyString(url)) {
                     if(url.startsWith("whatsapp://")) { //Share on WhatsApp
@@ -158,13 +172,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
                         }
                     }
                      else {
-                        if(CommonUtil.isSheroesValidLink(Uri.parse(url))){
                             webPagesView.loadUrl(url, getCustomHeaders(url));
-                        }else {
-                            AppUtils.openChromeTabForce(getActivity(), Uri.parse(url));
-                            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                            startActivity(intent);
-                        }
                     }
                     return true;
                 } else {
