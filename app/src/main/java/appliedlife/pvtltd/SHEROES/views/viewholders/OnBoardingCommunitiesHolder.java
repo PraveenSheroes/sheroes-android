@@ -15,11 +15,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -82,6 +80,10 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+        } else {
+            tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+            tvJoin.setText(mContext.getString(R.string.ID_JOIN));
+            tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
 
@@ -98,13 +100,11 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
 
     @OnClick(R.id.tv_boarding_communities_join)
     public void onJoinButtonClick() {
-        if(tvJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOINED)))
-        {
+        if (tvJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOINED))) {
             viewInterface.handleOnClick(communityFeedObj, tvJoin);
             communityFeedObj.setMember(false);
             communityFeedObj.setRequestPending(false);
-        }else
-        {
+        } else {
             viewInterface.handleOnClick(communityFeedObj, tvJoin);
             communityFeedObj.setMember(true);
             communityFeedObj.setRequestPending(false);

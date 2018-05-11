@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/grey8"
     android:layout_gravity="center"
+    android:background="@color/grey8"
     android:minWidth="320dp"
     android:orientation="vertical">
 
@@ -11,14 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <ImageView
             android:id="@+id/iv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:paddingRight="@dimen/dp_size_16"
-            android:paddingLeft="@dimen/dp_size_12"
             android:paddingBottom="@dimen/dp_size_12"
+            android:paddingLeft="@dimen/dp_size_12"
+            android:paddingRight="@dimen/dp_size_16"
             android:paddingTop="@dimen/dp_size_16"
             android:src="@drawable/ic_cross" />
 
@@ -27,7 +28,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_size_24"
             android:src="@drawable/vector_user_deactivated" />
 
         <TextView
@@ -49,10 +49,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="@dimen/dp_size_4"
             android:layout_marginTop="@dimen/dp_size_8"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
+            android:padding="@dimen/dp_size_4"
             android:text="@string/reactivate_your_account"
             android:textColor="@color/recent_post_comment"
             android:textSize="@dimen/sp_size_12" />
@@ -76,8 +76,8 @@
         android:id="@+id/rl_error_msg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:gravity="center">
+        android:gravity="center"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_no_connection"

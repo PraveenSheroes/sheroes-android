@@ -34,7 +34,7 @@ public class AppConstants {
     public static final String MASTER_DATA = "master_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
-    public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
+    public static final String HTTP_401_UNAUTHORIZED_ERROR = "HTTP 401 ";
     public static final String INAVLID_DATA = "INVALID_DATA";
     public static final String IS_DEACTIVATED = "IS_DEACTIVATED";
     public static final String COUNTRY_NAME = "India";
@@ -203,26 +203,26 @@ public class AppConstants {
     public static final String AND_SIGN = "&";
     public static final int MENTOR_TYPE_ID = 7;
 
-    public static final String HOME_USER_NAME_PREF= "HOME_USERANAME";
-    public static final String PROFILE_SHARE_PREF= "PROFILE_SHARE";
-    public static final String CREATE_POST_SHARE_PREF= "CREATE_POST_ANONYMOUS";
-    public static final String ASK_QUESTION_SHARE_PREF= "ASK_QUESTION_ANONYMOUS";
-    public static final String ASK_QUESTION_SESSION_SHARE_PREF= "ASK_QUESTION_SESSION_ANONYMOUS";
-    public static final String NOTIFICATION_SESSION_SHARE_PREF= "BELL_NOTIFICATION_SESSION";
-    public static final String NOTIFICATION_SHARE_PREF= "BELL_NOTIFICATION";
-    public static final String FOLLOWER_SHARE_PREF= "FOLLOW_USER";
-    public static final String PICTURE_SHARE_PREF= "PICTURE_SHARE_PREF";
-    public static final String PICTURE_SHARE_SESSION_PREF= "PICTURE_SHARE_SESSION_PREF";
-    public static final String INVITE_FRIEND_SESSION_PREF= "INVITE_FRIEND_SESSION_PREF";
-    public static final String INVITE_FRIEND_PREF= "INVITE_FRIEND_PREF";
-    public static final String ARTICLE_SHARE_SESSION_PREF= "ARTICLE_SHARE_SESSION_PREF";
-    public static final String ARTICLE_SHARE_PREF= "ARTICLE_SHARE_PREF";
-    public static final String HEADER_PROFILE_SESSION_PREF= "HEADER_PROFILE_SESSION_PREF";
-    public static final String HEADER_PROFILE_PREF= "HEADER_PROFILE_PREF";
-    public static final String NAV_SESSION_PREF= "NAV_SESSION_PREF";
-    public static final String NAV_PREF= "NAV_PREF";
-    public static final String CONTACT_SYNC_TIME_PREF= "CONTACT_SYNC";
-    public static final int MIN_QUESTION_SEARCH_LENGTH=3;
+    public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
+    public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
+    public static final String CREATE_POST_SHARE_PREF = "CREATE_POST_ANONYMOUS";
+    public static final String ASK_QUESTION_SHARE_PREF = "ASK_QUESTION_ANONYMOUS";
+    public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
+    public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
+    public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
+    public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";
+    public static final String PICTURE_SHARE_PREF = "PICTURE_SHARE_PREF";
+    public static final String PICTURE_SHARE_SESSION_PREF = "PICTURE_SHARE_SESSION_PREF";
+    public static final String INVITE_FRIEND_SESSION_PREF = "INVITE_FRIEND_SESSION_PREF";
+    public static final String INVITE_FRIEND_PREF = "INVITE_FRIEND_PREF";
+    public static final String ARTICLE_SHARE_SESSION_PREF = "ARTICLE_SHARE_SESSION_PREF";
+    public static final String ARTICLE_SHARE_PREF = "ARTICLE_SHARE_PREF";
+    public static final String HEADER_PROFILE_SESSION_PREF = "HEADER_PROFILE_SESSION_PREF";
+    public static final String HEADER_PROFILE_PREF = "HEADER_PROFILE_PREF";
+    public static final String NAV_SESSION_PREF = "NAV_SESSION_PREF";
+    public static final String NAV_PREF = "NAV_PREF";
+    public static final String CONTACT_SYNC_TIME_PREF = "CONTACT_SYNC";
+    public static final int MIN_QUESTION_SEARCH_LENGTH = 3;
     public static final String IS_FROM_ADVERTISEMENT = "IS_FROM_ADVERTISEMENT";
     public static final String ADS_DEEP_LINK_URL = "ADS_DEEP_LINK";
 
@@ -415,13 +415,12 @@ public class AppConstants {
     public static final String SET_ORDER_KEY = "set order key";
     public static final String FEED_CONFIG_VERSION = "feed config version";
     public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
-    public static final int MENTOR_USER_TYPE_FOR_TAGGING =7;
+    public static final int MENTOR_USER_TYPE_FOR_TAGGING = 7;
 
     public static final String NEXT_DAY_DATE = "NEXT_DAY_DATE";
 
     public static final int USER_MENTION_HEADER = 1;
     public static final int USER_MENTION_NO_RESULT_FOUND = 0;
 
-    public static final String HTTP_500_ERROR = "HTTP 500 Server Error";
 
 }
