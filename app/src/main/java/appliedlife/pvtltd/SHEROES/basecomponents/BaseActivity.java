@@ -1045,9 +1045,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 case AppConstants.MARK_AS_SPAM:
                     showNetworkTimeoutDoalog(true, false, errorReason);
                     break;
-                case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
-                    break;
                 case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                     break;

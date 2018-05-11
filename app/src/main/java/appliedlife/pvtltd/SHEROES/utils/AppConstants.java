@@ -34,7 +34,6 @@ public class AppConstants {
     public static final String MASTER_DATA = "master_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
-    public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
     public static final String HTTP_401_UNAUTHORIZED_ERROR = "HTTP 401 ";
     public static final String INAVLID_DATA = "INVALID_DATA";
     public static final String IS_DEACTIVATED = "IS_DEACTIVATED";
