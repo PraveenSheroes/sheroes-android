@@ -569,7 +569,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     mTabFragments.add(webViewFragment);
                 }
 
-
                 if (communityTab.type.equalsIgnoreCase(TabType.FRAGMENT.getName())) {
                     if (communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL) || communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL_COM)) {
 
