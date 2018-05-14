@@ -120,9 +120,6 @@ public class NavigateToWebViewFragment extends BaseFragment {
         webSettings.setDomStorageEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
-        webSettings.setAppCacheEnabled(true);
-        webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
-        webSettings.setSupportMultipleWindows(true);
 
         if (null != getArguments()) {
             String mWebUrl = getArguments().getString(AppConstants.WEB_URL_FRAGMENT);
