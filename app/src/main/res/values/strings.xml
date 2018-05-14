@@ -600,4 +600,8 @@
     <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
     <string name="reactivate_your_account">To reactivate your account write to us</string>
     <string name="care_sheroes">care@sheroes.in</string>
+    <string name="male">I’m a Man</string>
+    <string name="female">Yes, I’m a Woman</string>
+    <string name="share_sheroes_app">Share sheroes app</string>
+
 </resources>

@@ -1,30 +1,23 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,100 +27,88 @@ import butterknife.OnClick;
  */
 
 public class GenderInputFormDialogFragment extends BaseDialogFragment {
-    @Bind(R.id.tv_no_conn_desc)
-    TextView mTvNoConnDesc;
-    @Bind(R.id.tv_try_again)
-    TextView mTvTryAgain;
-    @Bind(R.id.li_user_deactivate)
-    LinearLayout mliUserDeactivate;
-    @Bind(R.id.rl_error_msg)
-    RelativeLayout mRlErrorMsg;
-    @Bind(R.id.tv_user_deactivate_text)
-    TextView mTvUserDeactivateText;
-    @Bind(R.id.tv_care_sheroes)
-    TextView mTvCareSheroes;
-    private boolean finishParent;
-    private boolean isCancellable;
-    private String errorMessage;
-    private String isUserDeActivated;
+    private static final String SCREEN_LABEL = "Gender Input Form Screen";
+    @Bind(R.id.tv_gender_select_finish)
+    TextView tvGenderSelectFinish;
+    @Bind(R.id.iv_male)
+    ImageView ivMale;
+    @Bind(R.id.iv_female)
+    ImageView ivFemale;
+    @Bind(R.id.tv_man)
+    TextView tvMan;
+    @Bind(R.id.tv_women)
+    TextView tvWomen;
+    @Bind(R.id.li_male_error)
+    LinearLayout liMaleError;
+    @Bind(R.id.rl_gender_input_form)
+    RelativeLayout rlGenderInputForm;
+    private String mUserName, mPersonnelEmailId;
+    private boolean isMaleSelected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.gender_input_form_fragment_layout, container, false);
-        ButterKnife.bind(this, view);
+        View v = inflater.inflate(R.layout.gender_input_form_fragment_layout, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
-        isCancellable = getArguments().getBoolean(IS_CANCELABLE);
-        isUserDeActivated = getArguments().getString(USER_DEACTIVATED);
-        errorMessage = getArguments().getString(ERROR_MESSAGE);
-        if (StringUtil.isNotNullOrEmptyString(isUserDeActivated) && isUserDeActivated.equalsIgnoreCase("true")) {
-            mliUserDeactivate.setVisibility(View.VISIBLE);
-            mRlErrorMsg.setVisibility(View.GONE);
-            if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                mTvUserDeactivateText.setText(errorMessage);
-            }
-            SpannableString content = new SpannableString(getString(R.string.care_sheroes));
-            content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-            mTvCareSheroes.setText(content);
-        } else {
-            mliUserDeactivate.setVisibility(View.GONE);
-            mRlErrorMsg.setVisibility(View.VISIBLE);
-            if (AppConstants.MARK_AS_SPAM.equalsIgnoreCase(errorMessage) || AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage)) {
-                mTvTryAgain.setText(getString(R.string.ID_DONE));
-            } else {
-                mTvTryAgain.setText(getString(R.string.IDS_STR_TRY_AGAIN_TEXT));
-            }
-            if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                mTvNoConnDesc.setText(errorMessage);
-            }
+        ButterKnife.bind(this, v);
+        if (null != getArguments()) {
+            mUserName = getArguments().getString(USER_NAME);
+            mPersonnelEmailId = getArguments().getString(EMAIL_ID);
         }
-
-        setCancelable(isCancellable);
-        return view;
+        liMaleError.setVisibility(View.GONE);
+        rlGenderInputForm.setVisibility(View.VISIBLE);
+        tvGenderSelectFinish.setEnabled(false);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        return v;
     }
 
-    @OnClick(R.id.iv_close)
-    public void closeDialog() {
-        dismissAllowingStateLoss();
+    @OnClick(R.id.iv_male)
+    public void maleImageClick() {
+        isMaleSelected=true;
+        tvGenderSelectFinish.setBackgroundResource(R.drawable.rectangle_boarding_active);
+        ivMale.setImageResource(R.drawable.vector_male_active);
+        tvMan.setTextColor(ContextCompat.getColor(getActivity(), R.color.footer_icon_text));
+        tvGenderSelectFinish.setEnabled(true);
+
+    }
+
+    @OnClick(R.id.iv_female)
+    public void femaleImageClick() {
+        isMaleSelected=false;
+        tvGenderSelectFinish.setEnabled(true);
+        tvGenderSelectFinish.setBackgroundResource(R.drawable.rectangle_boarding_active);
+        ivFemale.setImageResource(R.drawable.vector_female_active);
+        tvWomen.setTextColor(ContextCompat.getColor(getActivity(), R.color.footer_icon_text));
+    }
+
+    @OnClick(R.id.tv_gender_select_finish)
+    public void getStartedClick() {
+        if(isMaleSelected) {
+            liMaleError.setVisibility(View.VISIBLE);
+            rlGenderInputForm.setVisibility(View.GONE);
+        }else
+        {
+            if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {
+                ((WelcomeActivity) getActivity()).getTokenFromGoogleAuth(mPersonnelEmailId);
+                dismiss();
+            }
+        }
+    }
+
+    @OnClick(R.id.tv_share_sheroes_app)
+    public void tvShareSheroesAppClick() {
         dismiss();
     }
-
-    @OnClick(R.id.tv_care_sheroes)
-    public void careSheroes() {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", getString(R.string.care_sheroes), null));
-        startActivity(Intent.createChooser(emailIntent, null));
+    @OnClick(R.id.iv_close)
+    public void ivCloseClick() {
+        dismiss();
     }
-
-    @OnClick(R.id.tv_try_again)
-    public void tryAgainClick() {
-        dismissAllowingStateLoss();
-        if (finishParent) {
-            dismiss();
-        } else {
-            dismiss();
-            getActivity().recreate();
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-    }
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), getTheme()) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                dismissAllowingStateLoss();
-                if (finishParent) {
-                    dismiss();
-                } else {
-                    dismiss();
-                    getActivity().recreate();
-                }
+                dismiss();
             }
         };
     }

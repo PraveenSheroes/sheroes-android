@@ -46,7 +46,6 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
-import appliedlife.pvtltd.SHEROES.social.CustomSocialDialog;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -74,7 +73,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class LoginFragment extends BaseFragment implements LoginView {
     private static final String SCREEN_LABEL = "Email Login Screen";
-    private final String TAG = LogUtils.makeLogTag(LoginFragment.class);
+    public static final int LOGGING_IN_DIALOG = 1;
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -270,7 +269,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
         } else {
             mEmailSign.setEnabled(false);
-            showDialog(CustomSocialDialog.LOGGING_IN_DIALOG);
+            showDialog(LOGGING_IN_DIALOG);
             if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                 LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                 loginRequest.setUsername(email);
@@ -348,7 +347,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         ProgressDialog mProgressDialog = null;
         try {
             switch (id) {
-                case CustomSocialDialog.LOGGING_IN_DIALOG: {
+                case LOGGING_IN_DIALOG: {
                     mProgressDialog = new ProgressDialog(getActivity());
                     mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
                     mProgressDialog.setCancelable(true);
@@ -361,7 +360,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             return mProgressDialog;
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
-            LogUtils.error(TAG, e);
             return null;
         }
     }
