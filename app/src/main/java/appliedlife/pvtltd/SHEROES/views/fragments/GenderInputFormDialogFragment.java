@@ -68,6 +68,8 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         tvGenderSelectFinish.setBackgroundResource(R.drawable.rectangle_boarding_active);
         ivMale.setImageResource(R.drawable.vector_male_active);
         tvMan.setTextColor(ContextCompat.getColor(getActivity(), R.color.footer_icon_text));
+        ivFemale.setImageResource(R.drawable.vector_female);
+        tvWomen.setTextColor(ContextCompat.getColor(getActivity(), R.color.comment_text));
         tvGenderSelectFinish.setEnabled(true);
 
     }
@@ -79,6 +81,8 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         tvGenderSelectFinish.setBackgroundResource(R.drawable.rectangle_boarding_active);
         ivFemale.setImageResource(R.drawable.vector_female_active);
         tvWomen.setTextColor(ContextCompat.getColor(getActivity(), R.color.footer_icon_text));
+        ivMale.setImageResource(R.drawable.vector_male);
+        tvMan.setTextColor(ContextCompat.getColor(getActivity(), R.color.comment_text));
     }
 
     @OnClick(R.id.tv_gender_select_finish)
