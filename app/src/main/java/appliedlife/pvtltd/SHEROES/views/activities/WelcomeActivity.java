@@ -120,6 +120,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private static final String BRANCH_DEEP_LINK = "deep_link_url";
     private static final String BRANCH_REFERRER_LINK = "~referring_link";
     public static final int LOGGING_IN_DIALOG = 1;
+    public static final String GENDER = "female";
     public static final int TOKEN_LOGGING_PROGRESS_DIALOG = 2;
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -356,6 +357,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                             loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
                                             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
                                             loginRequest.setGcmorapnsid(mGcmId);
+                                            loginRequest.setUserGender(GENDER);
                                             loginViaSocial = MoEngageConstants.FACEBOOK;
                                             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                                         }
@@ -959,7 +961,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
             loginRequest.setGcmorapnsid(mGcmId);
             loginRequest.setCallForSignUp(AppConstants.GOOGLE_PLUS);
-            loginRequest.setUserGender("female");
+            loginRequest.setUserGender(GENDER);
             loginViaSocial = MoEngageConstants.GOOGLE;
             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
         }

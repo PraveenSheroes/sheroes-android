@@ -2,8 +2,13 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +35,10 @@ import butterknife.OnClick;
 
 public class GenderInputFormDialogFragment extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Gender Input Form Screen";
+    @Bind(R.id.tv_user_name)
+    TextView tvUserName;
+    @Bind(R.id.tv_msg)
+    TextView tvMsg;
     @Bind(R.id.tv_gender_select_finish)
     TextView tvGenderSelectFinish;
     @Bind(R.id.iv_male)
@@ -56,6 +65,18 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             mUserName = getArguments().getString(USER_NAME);
             mPersonnelEmailId = getArguments().getString(EMAIL_ID);
         }
+        if (StringUtil.isNotNullOrEmptyString(mUserName)) {
+            tvUserName.setText("Hi "+mUserName);
+        }
+        String description=getString(R.string.sheroes_msg);
+        SpannableString spannableString = new SpannableString(description);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 37, description.length(), 0);
+        spannableString.setSpan(new StyleSpan(Typeface.NORMAL), 37, description.length(), 0);
+        tvMsg.setMovementMethod(LinkMovementMethod.getInstance());
+        tvMsg.setText(spannableString, TextView.BufferType.SPANNABLE);
+        tvMsg.setSelected(true);
+
         liMaleError.setVisibility(View.GONE);
         rlGenderInputForm.setVisibility(View.VISIBLE);
         tvGenderSelectFinish.setEnabled(false);
@@ -64,9 +85,9 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         return v;
     }
 
-    @OnClick(R.id.iv_male)
+    @OnClick(R.id.li_male_layout)
     public void maleImageClick() {
-        isMaleSelected=true;
+        isMaleSelected = true;
         tvGenderSelectFinish.setBackgroundResource(R.drawable.rectangle_boarding_active);
         ivMale.setImageResource(R.drawable.vector_male_active);
         tvMan.setTextColor(ContextCompat.getColor(getActivity(), R.color.footer_icon_text));
@@ -76,9 +97,9 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
 
     }
 
-    @OnClick(R.id.iv_female)
+    @OnClick(R.id.li_female_layout)
     public void femaleImageClick() {
-        isMaleSelected=false;
+        isMaleSelected = false;
         tvGenderSelectFinish.setEnabled(true);
         tvGenderSelectFinish.setBackgroundResource(R.drawable.rectangle_boarding_active);
         ivFemale.setImageResource(R.drawable.vector_female_active);
@@ -89,11 +110,10 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.tv_gender_select_finish)
     public void getStartedClick() {
-        if(isMaleSelected) {
+        if (isMaleSelected) {
             liMaleError.setVisibility(View.VISIBLE);
             rlGenderInputForm.setVisibility(View.GONE);
-        }else
-        {
+        } else {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {
                 ((WelcomeActivity) getActivity()).getTokenFromGoogleAuth(mPersonnelEmailId);
                 dismiss();
@@ -109,10 +129,12 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + "");
         startActivity(intent);
     }
+
     @OnClick(R.id.iv_close)
     public void ivCloseClick() {
         dismiss();
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
