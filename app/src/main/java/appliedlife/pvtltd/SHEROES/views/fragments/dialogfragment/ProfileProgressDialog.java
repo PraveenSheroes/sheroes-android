@@ -184,7 +184,30 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         } else {
             dismiss();
         }
+    }
 
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        if (mProfileLevelType != ProfileLevelType.BEGINNER) {
+            mProfileLevelType = ProfileLevelType.BEGINNER;
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+        }
+    }
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        if (mProfileLevelType != ProfileLevelType.INTERMEDIATE) {
+            mProfileLevelType = ProfileLevelType.INTERMEDIATE;
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+        }
+    }
+
+    @OnClick(R.id.expert)
+    protected void openAllStarProgressDialog() {
+        if (mProfileLevelType != ProfileLevelType.ALLSTAR) {
+            mProfileLevelType = ProfileLevelType.ALLSTAR;
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+        }
     }
 
     @OnClick({R.id.tick})
@@ -382,7 +405,6 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
 
         return message.toString();
     }
-
 
     private ProfileLevelType userLevel(UserSolrObj userSolrObj) {
         ProfileLevelType profileType;
