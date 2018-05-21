@@ -137,7 +137,6 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_24"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:text="name"
             android:textColor="@color/comment_text"
             android:textSize="@dimen/sp_size_20" />
 
@@ -151,7 +150,6 @@
             android:layout_marginTop="@dimen/dp_size_16"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
-            android:text="SHEROES is a women only platform. How about you share the SHEROES app with the women in your life?"
             android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/sp_size_16" />
 

@@ -35,6 +35,7 @@ import butterknife.OnClick;
 
 public class GenderInputFormDialogFragment extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Gender Input Form Screen";
+    public static final String GENDER_SHARE_LINK = "https://shrs.me/xtap573vXM";
     @Bind(R.id.tv_user_name)
     TextView tvUserName;
     @Bind(R.id.tv_msg)
@@ -51,6 +52,10 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
     TextView tvWomen;
     @Bind(R.id.li_male_error)
     LinearLayout liMaleError;
+    @Bind(R.id.tv_user_name_male_error)
+    TextView tvUserNameMaleError;
+    @Bind(R.id.tv_description_male_error)
+    TextView tvDescriptionMaleError;
     @Bind(R.id.rl_gender_input_form)
     RelativeLayout rlGenderInputForm;
     private String mUserName, mPersonnelEmailId;
@@ -67,6 +72,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         }
         if (StringUtil.isNotNullOrEmptyString(mUserName)) {
             tvUserName.setText("Hi "+mUserName);
+            tvUserNameMaleError.setText(mUserName);
         }
         String description=getString(R.string.sheroes_msg);
         SpannableString spannableString = new SpannableString(description);
@@ -76,6 +82,8 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         tvMsg.setMovementMethod(LinkMovementMethod.getInstance());
         tvMsg.setText(spannableString, TextView.BufferType.SPANNABLE);
         tvMsg.setSelected(true);
+
+
 
         liMaleError.setVisibility(View.GONE);
         rlGenderInputForm.setVisibility(View.VISIBLE);
@@ -113,6 +121,14 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         if (isMaleSelected) {
             liMaleError.setVisibility(View.VISIBLE);
             rlGenderInputForm.setVisibility(View.GONE);
+            String description=getString(R.string.sheroes_gender_error);
+            SpannableString spannableString = new SpannableString(description);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, description.length(), 0);
+            tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+            tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+            tvDescriptionMaleError.setSelected(true);
         } else {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {
                 ((WelcomeActivity) getActivity()).getTokenFromGoogleAuth(mPersonnelEmailId);
@@ -126,7 +142,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + "");
+        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
         startActivity(intent);
     }
 

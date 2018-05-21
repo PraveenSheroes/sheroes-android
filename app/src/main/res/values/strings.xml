@@ -604,5 +604,7 @@
     <string name="female">Yes, I’m a Woman</string>
     <string name="share_sheroes_app">Share sheroes app</string>
     <string name="sheroes_msg">SHEROES is a platform only for women. Please declare that you are a woman before continuing.</string>
+    <string name="sheroes_gender_error">SHEROES is a women only platform. How about you share the SHEROES app with the women in your life?</string>
+
 
 </resources>
