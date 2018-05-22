@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
@@ -510,6 +511,10 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse) {}
+
+    @Override
+    public void onUserDeactivation(BaseResponse baseResponse) {
+    }
 }
 
 

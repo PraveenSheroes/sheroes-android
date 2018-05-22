@@ -6,6 +6,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
+import appliedlife.pvtltd.SHEROES.models.DeactivateReasonsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
@@ -89,6 +90,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import io.reactivex.Observable;
@@ -326,5 +328,12 @@ public interface SheroesAppServiceApi {
 
     @POST("entity/master/user_mention_suggestions")
     Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);
+
+    //deactivate user - for admin, community moderators, remove it after added to app config
+    @POST("participant/user/fetch_user_deactivation_reasons")
+    Observable<DeactivateReasonsResponse> fetchSpamReasons();
+
+    @POST("participant/user/deactivate_or_reactivate")
+    Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);
 
 }

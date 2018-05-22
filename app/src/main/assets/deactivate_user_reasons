@@ -1,0 +1,48 @@
+{
+  "deactivationReason": [
+    {
+      "deactivationReasonId": 1,
+      "deactivationReason": "Male User"
+    },
+    {
+      "deactivationReasonId": 2,
+      "deactivationReason": "Posts promotional content in excess"
+    },
+    {
+      "deactivationReasonId": 3,
+      "deactivationReason": "Posts pornographic content"
+    },
+    {
+      "deactivationReasonId": 4,
+      "deactivationReason": "Posts inappropriately violent content"
+    },
+    {
+      "deactivationReasonId": 5,
+      "deactivationReason": "Posts abusive content"
+    },
+    {
+      "deactivationReasonId": 6,
+      "deactivationReason": "Threatens community members"
+    },
+    {
+      "deactivationReasonId": 7,
+      "deactivationReason": "Posts scammy/ misleading content"
+    },
+    {
+      "deactivationReasonId": 8,
+      "deactivationReason": "Posts private information of others"
+    },
+    {
+      "deactivationReasonId": 9,
+      "deactivationReason": "Users wants to temporarily deactivate her account"
+    },
+    {
+      "deactivationReasonId": 10,
+      "deactivationReason": "User wants to permanently deactivate her account"
+    },
+    {
+      "deactivationReasonId": 11,
+      "deactivationReason": "Other"
+    }
+  ]
+}

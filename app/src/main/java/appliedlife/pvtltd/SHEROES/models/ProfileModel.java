@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
@@ -17,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCount
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -173,8 +175,15 @@ public class ProfileModel {
 
     }
 
+    //Spam request
     public Observable<SpamResponse> reportSpam(SpamPostRequest spamPostRequest) {
         return sheroesAppServiceApi.reportProfile(spamPostRequest).
+                subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+    }
+
+    //deactivation Request
+    public Observable<BaseResponse> deactivateUser(DeactivateUserRequest deactivateUserRequest) {
+        return sheroesAppServiceApi.deactivateUser(deactivateUserRequest).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
 

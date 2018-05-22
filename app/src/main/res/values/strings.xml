@@ -593,6 +593,7 @@
 
     <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
     <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
+    <string name="deactivation_dialog_message">Thank you, user has been deactivated.</string>
 
 
     <!--spam region end-->

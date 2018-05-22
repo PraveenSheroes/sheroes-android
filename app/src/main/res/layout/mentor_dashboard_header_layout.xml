@@ -352,6 +352,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/progress_bar_holder"
-        android:minHeight="@dimen/dp_size_24" />
+        android:minHeight="@dimen/dp_size_16" />
 
 </RelativeLayout>

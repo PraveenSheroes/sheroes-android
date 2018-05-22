@@ -29,6 +29,10 @@ public class ConfigData {
     @SerializedName("spam_reasons")
     public SpamReasons reasonOfSpamCategory;
 
+    //Todo - enable aftre added to app config
+    /*@SerializedName("deactivate_reasons")
+    DeactivateReasonsResponse deactivateReasonsResponse;*/
+
     @SerializedName("update_title")
     public String updateTitle;
 

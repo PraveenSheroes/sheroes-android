@@ -165,7 +165,7 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
         if(adapterPosition != RecyclerView.NO_POSITION) {
             Comment comment = mLikeListAdapter.getComment(adapterPosition);
             if(comment!=null) {
-                ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
             }
         }
     }

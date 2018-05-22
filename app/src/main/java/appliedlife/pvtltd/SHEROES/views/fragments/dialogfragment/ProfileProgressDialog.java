@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -51,9 +52,6 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     public static final int INTERMEDIATE_END_LIMIT = 60;
     public static final int ALL_STAR_START_LIMIT = 85;
     public static final int ALL_STAR_END_LIMIT = 100;
-    public static final int BEGINNER_TICK_START_INDEX = 2;
-    public static final int INTERMEDIATE_TICK_START_INDEX = 5;
-    public static final int MAX_DASH = 8;
     //endregion
 
     //region private member variable
@@ -107,7 +105,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     @Bind(R.id.intermediate)
     TextView intermediateTick;
 
-    @Bind(R.id.expert)
+    @Bind(R.id.all_star)
     TextView allStarTick;
     //endregion
 
@@ -142,7 +140,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
             if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
             } else {
-                dashProgressBar.setTotalDash(MAX_DASH);
+                dashProgressBar.setTotalDash(new ConfigData().maxDash);
             }
 
             invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
@@ -202,7 +200,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         }
     }
 
-    @OnClick(R.id.expert)
+    @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
         if (mProfileLevelType != ProfileLevelType.ALLSTAR) {
             mProfileLevelType = ProfileLevelType.ALLSTAR;
@@ -424,8 +422,9 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
 
     @Override
     public void onViewRendered(float dashWidth) {
-        int beginnerTickIndex = BEGINNER_TICK_START_INDEX;
-        int intermediateTickIndex = INTERMEDIATE_TICK_START_INDEX;
+        ConfigData configData = new ConfigData();
+        int beginnerTickIndex = configData.beginnerStartIndex;
+        int intermediateTickIndex = configData.intermediateStartIndex;
 
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
             beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;

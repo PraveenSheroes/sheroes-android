@@ -109,6 +109,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -144,9 +145,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
-import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.BEGINNER_TICK_START_INDEX;
-import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.INTERMEDIATE_TICK_START_INDEX;
-import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.MAX_DASH;
 
 /**
  * Created by Praveen_Singh on 04-08-2017.
@@ -156,9 +154,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
-    private final int mButtonSize = 31;
 
-    private String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
     private Long mChampionId;
     private boolean isMentor;
     private int mFromNotification;
@@ -174,6 +170,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
     private long loggedInUserId = -1;
+    private long loggedInUserIdTypeId = -1;
     private FragmentOpen mFragmentOpen;
     private Fragment mFragment;
     private UserSolrObj mUserSolarObject;
@@ -185,6 +182,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private File localImageSaveForChallenge;
     private boolean isMentorQARefresh = false;
     private PopupWindow popupWindowFollowTooTip;
+    private ProfileProgressDialog.ProfileLevelType profileLevelType;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -326,7 +324,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.intermediate)
     TextView intermediateTick;
 
-    @Bind(R.id.expert)
+    @Bind(R.id.all_star)
     TextView allStarTick;
 
     @Bind(R.id.fab_post)
@@ -379,6 +377,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isMentor = getIntent().getExtras().getBoolean(AppConstants.IS_MENTOR_ID);
             mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
+            profileLevelType = (ProfileProgressDialog.ProfileLevelType) getIntent().getSerializableExtra("PROFILE_LEVEL");
         }
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
@@ -395,6 +394,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
+            loggedInUserIdTypeId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
         }
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
@@ -475,7 +475,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
                     dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
                 } else {
-                    dashProgressBar.setTotalDash(MAX_DASH);
+                    dashProgressBar.setTotalDash(new ConfigData().maxDash);
                 }
 
                 dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
@@ -730,7 +730,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
 
-    @OnClick(R.id.expert)
+    @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
         openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
     }
@@ -810,6 +810,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
 
         mViewPager.setAdapter(mViewPagerAdapter);
+        if(!isMentor) { //for user make post as default tab
+            mViewPager.setCurrentItem(1);
+        }
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(this);
         if (askingQuestionCode == AppConstants.ASKING_QUESTION_CALL) {
@@ -834,15 +837,32 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
 
-        if (loggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
-            popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+        //admin community owner , moderator have the deactivate feature
+        if(loggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (userPostObj.getEntityOrParticipantTypeId() == 1)) {
+            popup.getMenu().add(0, R.id.deactivate_user, 1, menuIconWithText(getResources().getDrawable(R.drawable.deactivate_user), getResources().getString(R.string.deactivate_user)));
+        } else if (loggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
+            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+                    case R.id.deactivate_user:
+
+                        DeactivateUserRequest deactivateUserRequest = new DeactivateUserRequest();
+                        deactivateUserRequest.setUserId(mUserSolarObject.getIdOfEntityOrParticipant());
+                        deactivateUserRequest.setDeactivationReason(0);
+                        deactivateUserRequest.setReactivateUser(false);
+                        deactivateUserRequest.setRemoveCommentByUser(true);
+                        deactivateUserRequest.setRemovePostByUser(true);
+                        deactivateUserRequest.setReasonForDeactivationDetails("");
+
+                        profilePresenter.deactivateUser(deactivateUserRequest);
+
+                        return true;
                     case R.id.report_spam:
                         reportSpamDialog(SpamContentType.USER, userPostObj);
+                        return true;
                     default:
                         return false;
                 }
@@ -1199,6 +1219,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList)) {
             mUserSolarObject = (UserSolrObj) feedDetailList.get(0);
+            String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
             mUserSolarObject.setCallFromName(screenName);
 
             if (isMentor) {
@@ -1213,6 +1234,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (isMentor) {
                 loaderGif.setVisibility(View.GONE);
             }
+
+            if (profileLevelType != null)
+                openProfileProfileLevelDialog(profileLevelType);
         }
     }
 
@@ -1235,6 +1259,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
             }
         }
+    }
+
+    @Override
+    public void onUserDeactivation(BaseResponse baseResponse) {
+        CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.deactivation_dialog_message));
     }
 
     @Override
@@ -1311,7 +1340,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mUserSolarObject = new UserSolrObj();
         mUserSolarObject.setIdOfEntityOrParticipant(userId);
         mUserSolarObject.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        ProfileActivity.navigateTo(this, mUserSolarObject, userId, true, AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserSolarObject, userId, true, -1,  AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     private void shareCardViaSocial() {
@@ -1442,7 +1471,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            championLinkHandle(feedDetail);
+            ProfileActivity.navigateTo(this, feedDetail.getAuthorParticipantId(), isMentor, -1,  AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
@@ -1807,9 +1836,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
@@ -1820,34 +1846,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String source, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, int askinQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
 
         Bundle bundle = new Bundle();
         Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
         Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtra(AppConstants.CHAMPION_ID, userId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, source);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long id, boolean isMentor, int askinQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        intent.putExtra(AppConstants.CHAMPION_ID, id);
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.ASKING_QUESTION, askinQuestion);
+        if(askinQuestion !=  -1) {
+            intent.putExtra(AppConstants.ASKING_QUESTION, askinQuestion);
+        }
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtras(bundle);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -1877,22 +1887,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId,  String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        if(notificationId != -1) {
+            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
         }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
@@ -1900,16 +1901,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int askingQuestionCode, String sourceScreen, HashMap<String, Object> properties, int requestCode, UserSolrObj userSolrObj) {
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, ProfileProgressDialog.ProfileLevelType profileLevelType,  String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        Bundle bundle = new Bundle();
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        Parcelable parcelableMentor = Parcels.wrap(userSolrObj);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        intent.putExtra(AppConstants.ASKING_QUESTION, askingQuestionCode);
+        if (profileLevelType != null) {
+            intent.putExtra("PROFILE_LEVEL", profileLevelType);
+        }
         intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
-        intent.putExtras(bundle);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
@@ -1933,6 +1932,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     private void invalidateProfileButton() {
+        int mButtonSize = 31;
         if (isOwnProfile) {
             shareProfile.setVisibility(View.VISIBLE);
             if (isUserOrChampionDetailsFilled()) {
@@ -1982,10 +1982,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     //Check if user have filled its details in profile
-    //Added image condition - If its not the default image than only show profile filled completely
     private boolean isUserOrChampionDetailsFilled() {
-        return StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription()) &&
-                StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle()) && StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl()) && !mUserSolarObject.getImageUrl().contains("/default/user.png");
+        return mUserSolarObject.getProfileCompletionWeight() >= 90;
     }
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserSolrObj userSolrObj) { //Add other type as parameterised object
@@ -2092,8 +2090,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Override
     public void onViewRendered(float dashWidth) {
 
-        int beginnerTickIndex = BEGINNER_TICK_START_INDEX;
-        int intermediateTickIndex = INTERMEDIATE_TICK_START_INDEX;
+        ConfigData configData = new ConfigData();
+        int beginnerTickIndex = configData.beginnerStartIndex;
+        int intermediateTickIndex = configData.intermediateStartIndex;
 
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
             beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
