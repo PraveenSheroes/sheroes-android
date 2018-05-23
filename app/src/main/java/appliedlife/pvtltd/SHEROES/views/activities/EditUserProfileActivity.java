@@ -9,7 +9,6 @@ import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -19,13 +18,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
-import android.text.Html;
 import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -43,6 +40,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -96,24 +94,40 @@ import butterknife.OnClick;
  * User Profile Edit Screen
  */
 
-public class EditUserProfileActivity extends BaseActivity implements IEditProfileView, AdapterView.OnItemSelectedListener {
+public class EditUserProfileActivity extends BaseActivity implements IEditProfileView {
 
+    //region private variable
     private static final String SCREEN_LABEL = "Edit Profile Screen";
     private static final String TAG = EditUserProfileActivity.class.getName();
 
     private static final int BIO_MAX_LIMIT = 140;
+    private static final int BIO_MIN_LIMIT = 60;
     private SearchProfileLocationDialogFragment searchProfileLocationDialogFragment;
     private ProfileImageDialogFragment profileImageDialogFragment;
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
     private DatePickerDialog fromDatePickerDialog;
-    private String locationName;
     private int cityId;
     private File localImageSaveForChallenge;
-    private String aboutMeValue = "";
+    private String mAboutMe = "";
     private LoginResponse userDetailsResponse;
+    private float profileProgress = -1;
+    private String filledDetails ;
+    private String unfilledDetails;
+    //endregion
 
+    //region public variables
+    public static final String USER_NAME = "NAME";
+    public static final String USER_DESCRIPTION = "BIO";
+    public static final String LOCATION = "LOCATION";
+    public static final String IMAGE_URL = "IMAGE_URL";
+    public static final String PROFILE_COMPLETION_WEIGHT = "PROGRESSBAR_WEIGHT";
+    public static final String UNFILLED_FIELDS = "UNFILLED_FIELDS";
+    public static final String FILLED_FIELDS = "FILLED_FIELDS";
+    //endregion
+
+    //region bind variables
     @Bind(R.id.title_toolbar)
     TextView toolbarTitle;
 
@@ -130,25 +144,31 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     Toolbar mToolbar;
 
     @Bind(R.id.scroll_fragment_edit)
-    ScrollView scrollFragmentEdit;
+    ScrollView scrollView;
 
     @Bind(R.id.et_full_name_container)
     TextInputLayout fullNameContainer;
 
-    @Bind(R.id.et_mobile_container)
-    TextInputLayout mobileContainer;
+    @Bind(R.id.input_mobile_holder)
+    TextInputLayout inputMobileNumberHolder;
 
     @Bind(R.id.et_about_me)
-    public EditText aboutMe;
+    EditText aboutMe;
 
     @Bind(R.id.et_mobilenumber)
-    public EditText mobileNumber;
+    EditText mobileNumber;
 
     @Bind(R.id.tv_email_value)
     TextView emailAddress;
 
+    @Bind(R.id.about_me_label)
+    TextView aboutMeText;
+
     @Bind(R.id.bio_limit)
-    public TextView bioMaxCharLimit;
+    TextView bioMaxCharLimit;
+
+    @Bind(R.id.bio_error_msg)
+    TextView bioError;
 
     @Bind(R.id.et_dob)
     EditText dateOfBirth;
@@ -171,12 +191,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Bind(R.id.pb_profile_progress_bar)
     ProgressBar mProgressBar;
 
-    @Bind(R.id.pb_image_loader)
-    ProgressBar imageLoader;
-
     @BindDimen(R.dimen.dp_size_80)
     int authorProfileSize;
+    //endregion
 
+    //region activity method
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -199,7 +218,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
         editProfilePresenter.getALLUserDetails();
 
-        relationshipStatus.setOnItemSelectedListener(this);
         location.setOnClickListener(this);
         userImage.setOnClickListener(this);
 
@@ -216,6 +234,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
             @Override
             public void afterTextChanged(Editable s) {
+                bioError.setVisibility(View.GONE);
                 bioMaxCharLimit.setText(s.toString().length() + "/" + BIO_MAX_LIMIT);
             }
         });
@@ -224,292 +243,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    public void showProgressBar() {
-
-    }
-
-    @Override
-    public void hideProgressBar() {
-
-    }
-
-    @Override
-    public void showError(int error) {
-
-    }
-
-    @Override
-    public void errorMessage(String message) {
-        if (StringUtil.isNotNullOrEmptyString(message) && message.contains("mobile number already registered with us")) {
-            mobileContainer.setError(message.toUpperCase());
-            requestFocus(mobileNumber);
-            mProgressBar.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String relationshipStatusValue = (String) parent.getItemAtPosition(position);
-        LogUtils.info(TAG, relationshipStatusValue);
-        if (relationshipStatusValue.equalsIgnoreCase("unmarried")) {
-            resetNoOfChildrenField(false);
-        } else {
-            resetNoOfChildrenField(true);
-        }
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    private void resetNoOfChildrenField(boolean isEnabled) {
-        if (!isEnabled) {
-            noOfChildren.setText("0");
-            noOfChildren.setEnabled(false);
-            noOfChildren.setClickable(false);
-        } else {
-            noOfChildren.setEnabled(true);
-            noOfChildren.setClickable(true);
-        }
-    }
-
-    private void setDateTimeField() {
-        dateOfBirth.setOnClickListener(this);
-
-        Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                Calendar newDate = Calendar.getInstance();
-                newDate.set(year, monthOfYear, dayOfMonth);
-                dateOfBirth.setText(dateFormatter.format(newDate.getTime()));
-            }
-
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-    }
-
-    private void setUserDetails(UserSummary userSummary) {
-        String fullName = userSummary.getFirstName() + AppConstants.SPACE + userSummary.getLastName();
-        if (StringUtil.isNotNullOrEmptyString(fullName)) {
-            name.setText(fullName);
-        }
-
-        String locationValue = userSummary.getUserBO().getCityMaster();
-        if (StringUtil.isNotNullOrEmptyString(locationValue)) {
-            location.setText(locationValue);
-        }
-
-        aboutMeValue = userSummary.getUserBO().getUserSummary();
-        if (StringUtil.isNotNullOrEmptyString(aboutMeValue)) {
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                aboutMe.setText(Html.fromHtml(aboutMeValue)); // for 24 api and more
-            } else {
-                aboutMe.setText(Html.fromHtml(aboutMeValue));
-            }
-            int length = aboutMeValue.length();
-            bioMaxCharLimit.setText(length + "/" + BIO_MAX_LIMIT);
-        } else {
-            bioMaxCharLimit.setText(0 + "/" + BIO_MAX_LIMIT);
-        }
-
-        String dob = userSummary.getUserBO().getDob();
-        if (CommonUtil.isNotEmpty(dob) && !dob.equalsIgnoreCase("null")) {
-
-            Calendar cal = new GregorianCalendar();
-            cal.setTime(new Date(Long.valueOf(dob)));
-            String formattedDate = dateFormatter.format(cal.getTime());
-
-            if (formattedDate != null) {
-                dateOfBirth.setText(formattedDate);
-            }
-        }
-
-        int noOfChildrenValue = userSummary.getUserBO().getNoOfChildren();
-        noOfChildren.setText(String.valueOf(noOfChildrenValue));
-
-        String relationStatus = userSummary.getUserBO().getMaritalStatus();
-        if (StringUtil.isNotNullOrEmptyString(relationStatus)) {
-            relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(relationStatus));
-        }
-
-        String email = userSummary.getEmailId();
-        if (StringUtil.isNotNullOrEmptyString(email)) {
-            emailAddress.setText(email);
-        }
-
-        locationName = locationValue;  //initially set value from preferenece
-        cityId = (int) userSummary.getUserBO().getCityMasterId();
-
-        String mobile = userSummary.getMobile();
-        if (StringUtil.isNotNullOrEmptyString(mobile)) {
-            mobileNumber.setText(mobile);
-        }
-
-    }
-
-    @Override
-    public void getUserData(UserProfileResponse userProfileResponse) {
-
-        if (null != userProfileResponse) {
-            LoginResponse loginResponse = mUserPreference.get();
-            UserDetails userDetails = userProfileResponse.getUserDetails();
-            if (null != userDetails) {
-
-                UserSummary userSummary = loginResponse.getUserSummary();
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
-                    userSummary.setFirstName(userDetails.getFirstName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
-                    userSummary.setLastName(userDetails.getLastName());
-                }
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
-                    userSummary.getUserBO().setCityMaster(userDetails.getCityMaster());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
-                    userSummary.getUserBO().setEmailid(userDetails.getEmailid());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getMaritalStatus())) {
-                    userSummary.getUserBO().setMaritalStatus(userDetails.getMaritalStatus());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getMobile())) {
-                    userSummary.setMobile(userDetails.getMobile());
-                }
-
-                if (StringUtil.isNotNullOrEmptyString(userDetails.getUserSummary())) {
-                    userSummary.getUserBO().setUserSummary(userDetails.getUserSummary());
-                }
-
-                userSummary.getUserBO().setNoOfChildren(userDetails.getNoOfChildren());
-                userSummary.getUserBO().setDob(String.valueOf(userDetails.getDob()));
-
-                userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
-
-                loginResponse.setUserSummary(userSummary);
-                setUserDetails(userSummary);
-                mUserPreference.set(loginResponse);
-            }
-
-        }
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
     public void onBackPressed() {
         setResult();
         finish();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return editProfilePresenter;
-    }
-
-
-    private void setResult() {
-        imageLoader.setVisibility(View.GONE);
-        if (userDetailsResponse != null) {
-            Intent intent = new Intent();
-            UserSummary summary = userDetailsResponse.getUserSummary();
-            Bundle bundle = new Bundle();
-            bundle.putString("NAME", summary.getFirstName() + AppConstants.SPACE + summary.getLastName());
-            bundle.putString("BIO", summary.getUserBO().getUserSummary());
-            bundle.putString("LOCATION", summary.getUserBO().getCityMaster());
-            bundle.putString("IMAGE_URL", summary.getPhotoUrl());
-            intent.putExtras(bundle);
-            setResult(AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE, intent);
-        }
-    }
-
-    public void setProfileNameData(String imageUrl) {
-        if (null != imageUrl) {
-            userImage.setCircularImage(true);
-            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, authorProfileSize, authorProfileSize);
-            userImage.bindImage(authorThumborUrl);
-        }
-        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-        setLocalImageSaveForChallenge(localImageSaveForChallenge);
-    }
-
-    public void setLocalImageSaveForChallenge(File localImageSaveForChallenge) {
-        this.localImageSaveForChallenge = localImageSaveForChallenge;
-    }
-
-    @Override
-    public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof GetAllDataDocument) {
-            dataOnClickForCardItem(view, baseResponse);
-        }
-    }
-
-    private void dataOnClickForCardItem(View view, BaseResponse baseResponse) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_city_name_layout:
-                updateUserLocation(baseResponse);
-                break;
-
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-        }
-    }
-
-    private void updateUserLocation(BaseResponse baseResponse) {
-        GetAllDataDocument dataItem = (GetAllDataDocument) baseResponse;
-        if (null != searchProfileLocationDialogFragment) {
-            searchProfileLocationDialogFragment.dismiss();
-            submitLocation(dataItem.getId(), dataItem.getTitle());
-        }
-    }
-
-    public void submitLocation(String cityId, String city) {
-        locationName = city;
-        this.cityId = Integer.valueOf(cityId);
-        location.setText(city);
-        if (null != city) {
-            int length = city.length();
-            location.setSelection(length);
-        }
-    }
-
-    /**
-     * Search user location
-     *
-     * @return
-     */
-    public DialogFragment searchUserLocation() {
-        searchProfileLocationDialogFragment = (SearchProfileLocationDialogFragment) getFragmentManager().findFragmentByTag(SearchProfileLocationDialogFragment.class.getName());
-        if (searchProfileLocationDialogFragment == null) {
-            searchProfileLocationDialogFragment = new SearchProfileLocationDialogFragment();
-        }
-
-        if (!searchProfileLocationDialogFragment.isVisible() && !searchProfileLocationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            searchProfileLocationDialogFragment.show(getFragmentManager(), SearchProfileLocationDialogFragment.class.getName());
-        }
-        return searchProfileLocationDialogFragment;
-    }
-
-    public DialogFragment profileImageDialog() {
-
-        profileImageDialogFragment = (ProfileImageDialogFragment) getFragmentManager().findFragmentByTag(ProfileImageDialogFragment.class.getName());
-        if (profileImageDialogFragment == null) {
-            profileImageDialogFragment = new ProfileImageDialogFragment();
-            Bundle bundle = new Bundle();
-            profileImageDialogFragment.setArguments(bundle);
-        }
-        if (!profileImageDialogFragment.isVisible() && !profileImageDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            profileImageDialogFragment.show(getFragmentManager(), ProfileImageDialogFragment.class.getName());
-        }
-        return profileImageDialogFragment;
     }
 
     @Override
@@ -569,6 +305,267 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         }
 
     }
+    //endregion
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public void showError(int error) {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void errorMessage(String message) {
+        if (StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.mobile_response_err))) {
+            inputMobileNumberHolder.setError(message.toUpperCase());
+            requestFocus(inputMobileNumberHolder);
+            scrollView.scrollTo(0,  mobileNumber.getScrollY());
+        } else if(StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.city_error_response))) {
+            location.setError(getString(R.string.city_error_msg));
+            requestFocus(location);
+            scrollView.scrollTo(0, location.getScrollY());
+        }
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    private void setDateTimeField() {
+        dateOfBirth.setOnClickListener(this);
+
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                dateOfBirth.setText(dateFormatter.format(newDate.getTime()));
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+    }
+
+    private void setUserDetails(UserSummary userSummary) {
+        String fullName = userSummary.getFirstName() + AppConstants.SPACE + userSummary.getLastName();
+        if (StringUtil.isNotNullOrEmptyString(fullName)) {
+            name.setText(fullName);
+        }
+
+        String locationValue = userSummary.getUserBO().getCityMaster();
+        if (StringUtil.isNotNullOrEmptyString(locationValue)) {
+            location.setText(locationValue);
+        }
+
+        mAboutMe = userSummary.getUserBO().getUserSummary();
+        if (StringUtil.isNotNullOrEmptyString(mAboutMe)) {
+            aboutMe.setText(mAboutMe);
+            int length = mAboutMe.length();
+            bioMaxCharLimit.setText(length + "/" + BIO_MAX_LIMIT);
+        } else {
+            bioMaxCharLimit.setText(0 + "/" + BIO_MAX_LIMIT);
+        }
+
+        String dob = userSummary.getUserBO().getDob();
+        if (CommonUtil.isNotEmpty(dob) && !dob.equalsIgnoreCase("null")) {
+
+            Calendar cal = new GregorianCalendar();
+            cal.setTime(new Date(Long.valueOf(dob)));
+            String formattedDate = dateFormatter.format(cal.getTime());
+
+            if (formattedDate != null) {
+                dateOfBirth.setText(formattedDate);
+            }
+        }
+
+        int noOfChildrenValue = userSummary.getUserBO().getNoOfChildren();
+        noOfChildren.setText(String.valueOf(noOfChildrenValue));
+
+        String relationStatus = userSummary.getUserBO().getMaritalStatus();
+
+        if (relationStatus == null || relationStatus.isEmpty()) { //reset the martial status if comes empty
+            relationshipStatus.setSelection(0);
+        } else {
+            if(isRelationStatusValueAvailable(relationStatus)) {
+                relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(relationStatus));
+            } else { //if value not available select the other
+                relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(getString(R.string.other)));
+            }
+        }
+
+        String email = userSummary.getEmailId();
+        if (StringUtil.isNotNullOrEmptyString(email)) {
+            emailAddress.setText(email);
+        }
+
+        cityId = (int) userSummary.getUserBO().getCityMasterId();
+
+        String mobile = userSummary.getMobile();
+        if (StringUtil.isNotNullOrEmptyString(mobile)) {
+            mobileNumber.setText(mobile);
+        }
+
+    }
+
+    @Override
+    public void getUserData(UserProfileResponse userProfileResponse) {
+
+        if (null != userProfileResponse) {
+            LoginResponse loginResponse = mUserPreference.get();
+            UserDetails userDetails = userProfileResponse.getUserDetails();
+            if (null != userDetails) {
+
+                UserSummary userSummary = loginResponse.getUserSummary();
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getFirstName())) {
+                    userSummary.setFirstName(userDetails.getFirstName());
+                }
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getLastName())) {
+                    userSummary.setLastName(userDetails.getLastName());
+                }
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getCityMaster())) {
+                    userSummary.getUserBO().setCityMaster(userDetails.getCityMaster());
+                }
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
+                    userSummary.getUserBO().setEmailid(userDetails.getEmailid());
+                }
+
+                String relationshipStatus = userDetails.getMaritalStatus();
+                relationshipStatus = relationshipStatus == null ? "" : relationshipStatus;
+                userSummary.getUserBO().setMaritalStatus(relationshipStatus);
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getMobile())) {
+                    userSummary.setMobile(userDetails.getMobile());
+                }
+
+                if (StringUtil.isNotNullOrEmptyString(userDetails.getUserSummary())) {
+                    userSummary.getUserBO().setUserSummary(userDetails.getUserSummary());
+                }
+
+                userSummary.getUserBO().setNoOfChildren(userDetails.getNoOfChildren());
+                userSummary.getUserBO().setDob(String.valueOf(userDetails.getDob()));
+
+                userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
+
+                //Save image
+                userSummary.getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
+                userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
+                userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
+
+                loginResponse.setUserSummary(userSummary);
+                mUserPreference.set(loginResponse);
+                setUserDetails(userSummary);
+
+                setProfileNameData(userDetails.getPhotoUrlPath());
+            }
+        }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return editProfilePresenter;
+    }
+
+    private void setResult() {
+        if (userDetailsResponse != null) {
+            Intent intent = new Intent();
+            UserSummary summary = userDetailsResponse.getUserSummary();
+            Bundle bundle = new Bundle();
+            bundle.putString(USER_NAME, summary.getFirstName() + AppConstants.SPACE + summary.getLastName());
+            bundle.putString(USER_DESCRIPTION, summary.getUserBO().getUserSummary());
+            bundle.putString(LOCATION, summary.getUserBO().getCityMaster());
+            bundle.putString(IMAGE_URL, summary.getPhotoUrl());
+
+            bundle.putFloat(PROFILE_COMPLETION_WEIGHT, profileProgress);
+            bundle.putString(UNFILLED_FIELDS, unfilledDetails);
+            bundle.putString(FILLED_FIELDS, filledDetails);
+
+            intent.putExtras(bundle);
+            setResult(AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE, intent);
+        }
+    }
+
+    public void setProfileNameData(String imageUrl) {
+        if (null != imageUrl) {
+            userImage.setCircularImage(true);
+            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, authorProfileSize, authorProfileSize);
+            userImage.bindImage(authorThumborUrl);
+        }
+        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        setLocalImageSaveForChallenge(localImageSaveForChallenge);
+    }
+
+    public void setLocalImageSaveForChallenge(File localImageSaveForChallenge) {
+        this.localImageSaveForChallenge = localImageSaveForChallenge;
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        if (baseResponse instanceof GetAllDataDocument) {
+            dataOnClickForCardItem(view, baseResponse);
+        }
+    }
+
+    private void dataOnClickForCardItem(View view, BaseResponse baseResponse) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.li_city_name_layout:
+                updateUserLocation(baseResponse);
+                break;
+
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+        }
+    }
+
+    private void updateUserLocation(BaseResponse baseResponse) {
+        GetAllDataDocument dataItem = (GetAllDataDocument) baseResponse;
+        if (null != searchProfileLocationDialogFragment) {
+            searchProfileLocationDialogFragment.dismiss();
+            submitLocation(dataItem.getId(), dataItem.getTitle());
+        }
+    }
+
+    public void submitLocation(String cityId, String city) {
+        this.cityId = Integer.valueOf(cityId);
+        location.setText(city);
+        if (null != city) {
+            int length = city.length();
+            location.setSelection(length);
+        }
+    }
+
+    /**
+     * Search user location
+     *
+     * @return
+     */
+    public DialogFragment searchUserLocation() {
+        searchProfileLocationDialogFragment = (SearchProfileLocationDialogFragment) getFragmentManager().findFragmentByTag(SearchProfileLocationDialogFragment.class.getName());
+        if (searchProfileLocationDialogFragment == null) {
+            searchProfileLocationDialogFragment = new SearchProfileLocationDialogFragment();
+        }
+
+        if (!searchProfileLocationDialogFragment.isVisible() && !searchProfileLocationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            searchProfileLocationDialogFragment.show(getFragmentManager(), SearchProfileLocationDialogFragment.class.getName());
+        }
+        return searchProfileLocationDialogFragment;
+    }
+
+    public DialogFragment profileImageDialog() {
+
+        profileImageDialogFragment = (ProfileImageDialogFragment) getFragmentManager().findFragmentByTag(ProfileImageDialogFragment.class.getName());
+        if (profileImageDialogFragment == null) {
+            profileImageDialogFragment = new ProfileImageDialogFragment();
+            Bundle bundle = new Bundle();
+            profileImageDialogFragment.setArguments(bundle);
+        }
+        if (!profileImageDialogFragment.isVisible() && !profileImageDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            profileImageDialogFragment.show(getFragmentManager(), ProfileImageDialogFragment.class.getName());
+        }
+        return profileImageDialogFragment;
+    }
 
     private void cropingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
@@ -604,7 +601,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         }
     }
 
-
     public void selectImageFrmGallery() {
         CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
@@ -614,8 +610,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     public void requestForUpdateProfileImage() {
-        imageLoader.setVisibility(View.VISIBLE);
-        imageLoader.bringToFront();
         if (StringUtil.isNotNullOrEmptyString(mEncodeImageUrl)) {
             updateProfileData(mEncodeImageUrl);
             if (null != profileImageDialogFragment) {
@@ -682,12 +676,12 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void startProgressBar() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void stopProgressBar() {
-
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -710,60 +704,66 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
-        scrollFragmentEdit.scrollTo(0, view.getBottom());
+        scrollView.scrollTo(0, view.getBottom());
+    }
+
+    //check if value exist in relationship options
+    private boolean isRelationStatusValueAvailable(String status) {
+        String[] relationshipOptions = getResources().getStringArray(R.array.relationship_status_arr);
+        return Arrays.asList(relationshipOptions).contains(status);
     }
 
     private boolean validateName() {
         if (!StringUtil.isNotNullOrEmptyString(name.getText().toString().trim())) {
-            fullNameContainer.setError("Please enter full name");
+            fullNameContainer.setError(getString(R.string.full_name_err_msg));
             requestFocus(name);
+            scrollView.scrollTo(0, fullNameContainer.getScrollY());
             return false;
         } else {
             fullNameContainer.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, fullNameContainer.getBottom());
         return true;
     }
 
     private boolean validateLocation() {
         if (!StringUtil.isNotNullOrEmptyString(location.getText().toString())) {
-            location.setError("Please enter Current location");
+            location.setError(getString(R.string.location_error_msg));
             requestFocus(location);
+            scrollView.scrollTo(0, location.getScrollY());
             return false;
         } else {
             location.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, location.getBottom());
         return true;
     }
 
-    private boolean validateDOB() {
-        if (!StringUtil.isNotNullOrEmptyString(dateOfBirth.getText().toString())) {
-            dateOfBirth.setError("Please enter date of birth");
-            requestFocus(dateOfBirth);
-            return false;
-        } else {
-            dateOfBirth.setError(null);
-        }
-        scrollFragmentEdit.scrollTo(0, dateOfBirth.getBottom());
-        return true;
-    }
-
-    private boolean validateMobile() {
-
-        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) || mobileNumber.getText().length() < 10) {
-            mobileContainer.setError("Please enter valid mobile number");
+    private boolean validateMobileNumber() {
+        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
+            inputMobileNumberHolder.setError(getString(R.string.mobile_no_error_msg));
             requestFocus(mobileNumber);
+            scrollView.scrollTo(0, mobileNumber.getBottom());
             return false;
         } else {
-            mobileContainer.setError(null);
+            inputMobileNumberHolder.setError(null);
         }
-        scrollFragmentEdit.scrollTo(0, mobileContainer.getBottom());
+        return true;
+    }
+
+    private boolean validateBio() {
+        if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && aboutMe.getText().toString().trim().length() >= BIO_MIN_LIMIT) {
+            aboutMe.setError(null);
+            bioError.setVisibility(View.GONE);
+        } else {
+            bioError.setVisibility(View.VISIBLE);
+            bioError.setText(getString(R.string.bio_min_char_limit_msg));
+            scrollView.scrollTo(0, aboutMeText.getScrollY());
+            return false;
+        }
         return true;
     }
 
     private boolean validateUserDetails() {
-        return validateName() && validateLocation() && validateDOB() && validateMobile();
+        return validateName() && validateBio() && validateLocation() && validateMobileNumber();
     }
 
     private void setupToolbarItemsColor() {
@@ -798,24 +798,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             personalBasicDetailsRequest.setSubType("BASIC_USER_PROFILE_SERVICE");
             personalBasicDetailsRequest.setSource(AppConstants.SOURCE_NAME);
 
-            //USer Bio region
-            //if(!aboutMeValue.trim().equalsIgnoreCase(aboutMe.getText().toString().trim())) {
-            UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
-            userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
-            userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-            userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
-            userSummaryRequest.setLastScreenName(AppConstants.STRING);
-            userSummaryRequest.setScreenName(AppConstants.STRING);
-            userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
-            userSummaryRequest.setType(AppConstants.SUMMARY);
-            String aboutMeValue = StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) ? aboutMe.getText().toString() : "";
-            userSummaryRequest.setSummary(aboutMeValue);
-            userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
-
-            editProfilePresenter.getUserSummaryDetails(userSummaryRequest);
-            //}
-            //end region
-
             String userFullName = name.getText().toString().trim();
 
             if (StringUtil.isNotNullOrEmptyString(userFullName)) {
@@ -823,7 +805,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     userFullName = CommonUtil.camelCaseString(userFullName);
                     String name[] = userFullName.split(AppConstants.SPACE);
                     String firstName = name[0];
-                    String lastName = userFullName.substring(firstName.length()+1, userFullName.length());
+                    String lastName = userFullName.substring(firstName.length() + 1, userFullName.length());
 
                     personalBasicDetailsRequest.setFirstName(firstName);
                     personalBasicDetailsRequest.setLastName(lastName);
@@ -849,13 +831,33 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItem().toString());
+
+            personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItemPosition() > 0 ? relationshipStatus.getSelectedItem().toString(): "");
+
             if (StringUtil.isNotNullOrEmptyString(noOfChildren.getText().toString())) {
                 personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(noOfChildren.getText().toString()));
             }
 
-            editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
+            //User Bio alone if bio have been changed
+            if (StringUtil.isNotNullOrEmptyString(aboutMe.getText().toString()) && (mAboutMe == null || !mAboutMe.equalsIgnoreCase(aboutMe.getText().toString()))) {
+                UserSummaryRequest userSummaryRequest = new UserSummaryRequest();
+                userSummaryRequest.setAppVersion(appUtils.getAppVersionName());
+                userSummaryRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+                userSummaryRequest.setDeviceUniqueId(appUtils.getDeviceId());
+                userSummaryRequest.setLastScreenName(AppConstants.STRING);
+                userSummaryRequest.setScreenName(AppConstants.STRING);
+                userSummaryRequest.setSource(AppConstants.SOURCE_NAME);
+                userSummaryRequest.setType(AppConstants.SUMMARY);
+                userSummaryRequest.setSummary(aboutMe.getText().toString());
+                userSummaryRequest.setSubType(AppConstants.USER_SUMMARY_SERVICE);
+
+                editProfilePresenter.updateCompleteProfileDetails(personalBasicDetailsRequest, userSummaryRequest);
+            } else {
+                editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
+            }
+
             ((SheroesApplication) getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_BASIC_DETAIl_PERSONAL, AppConstants.EMPTY_STRING);
+            //endregion
         }
     }
 
@@ -866,6 +868,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             if (userDetailsResponse != null) {
 
                 try {
+                    //update the progressbar weight and filled , unfilled fields
+                    filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
+                    unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
+                    profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
+
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
                     String userName = name.getText().toString().trim();
 
@@ -912,13 +919,21 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
             if (userDetailsResponse != null) {
                 try {
+
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
+
+                        //update the progressbar weight and filled , unfilled fields
+                        filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
+                        unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
+                        profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
+
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.set(userDetailsResponse);
+
                     } else {
                         String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
                         userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
@@ -928,7 +943,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 } catch (Exception e) {
                     LogUtils.info(TAG, e.getMessage());
                 }
-                setResult();
             }
         }
     }

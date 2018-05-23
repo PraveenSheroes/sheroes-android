@@ -156,8 +156,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region onclick method
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        /*if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null && carouselDataObj.getFeedDetails().get(0) != null) {
-            if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
+        /*if (carouselDataObj != null && carouselDataObj.getUserSolrObj() != null && carouselDataObj.getUserSolrObj().get(0) != null) {
+            if (carouselDataObj.getUserSolrObj().get(0) instanceof UserSolrObj) {
                 if (viewInterface instanceof AllCommunityItemCallback) {
                     ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);
                 } else {

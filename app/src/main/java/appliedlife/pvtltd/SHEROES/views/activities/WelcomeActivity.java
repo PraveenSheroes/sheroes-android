@@ -196,7 +196,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        AppsFlyerLib.getInstance().setImeiData(appUtils.getIMEI());
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         checkAuthTokenExpireOrNot();
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);

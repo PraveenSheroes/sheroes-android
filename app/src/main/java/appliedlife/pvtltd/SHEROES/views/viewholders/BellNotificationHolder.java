@@ -45,60 +45,65 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     BaseHolderInterface mViewInterface;
     private BellNotificationResponse mDataItem;
     private Context mContext;
+
     public BellNotificationHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         this.mViewInterface = baseHolderInterface;
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(BellNotificationResponse belNotificationListResponse, Context context, int position) {
         this.mDataItem = belNotificationListResponse;
         mContext = context;
-            if(null != mDataItem) {
-                if(StringUtil.isNotNullOrEmptyString(mDataItem.getTitle())) {
-                    if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                        mTvNotificationTitle.setText(Html.fromHtml(mDataItem.getTitle(), 0)); // for 24 api and more
-                    } else {
-                        mTvNotificationTitle.setText(Html.fromHtml(mDataItem.getTitle()));// or for older api
-                    }
-                }
-                if(StringUtil.isNotNullOrEmptyString(mDataItem.getLastActivityDate())) {
-                    mTvNotificationDate.setText(mDataItem.getLastActivityDate());
-                }
-                if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())) {
-                    Glide.with(mContext)
-                            .load(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())
-                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
-                            .into(mIvNotificationImage);
+        if (null != mDataItem) {
+            if (StringUtil.isNotNullOrEmptyString(mDataItem.getTitle())) {
+                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                    mTvNotificationTitle.setText(Html.fromHtml(mDataItem.getTitle(), 0)); // for 24 api and more
                 } else {
-                    Glide.with(mContext)
-                             .load(R.drawable.notification_icon)
-                            .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
-                            .into(mIvNotificationImage);
-                }
-                if(StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreIconImageUrl())) {
-                    Glide.with(mContext)
-                            .load(mDataItem.getSolrIgnoreIconImageUrl())
-                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
-                            .into(mIvNotificationType);
+                    mTvNotificationTitle.setText(Html.fromHtml(mDataItem.getTitle()));// or for older api
                 }
             }
+            if (StringUtil.isNotNullOrEmptyString(mDataItem.getLastActivityDate())) {
+                mTvNotificationDate.setVisibility(View.VISIBLE);
+                mTvNotificationDate.setText(mDataItem.getLastActivityDate());
+            } else {
+                mTvNotificationDate.setVisibility(View.INVISIBLE);
+            }
+            if (StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())) {
+                Glide.with(mContext)
+                        .load(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                        .into(mIvNotificationImage);
+            } else {
+                Glide.with(mContext)
+                        .load(R.drawable.notification_icon)
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                        .into(mIvNotificationImage);
+            }
+            if (StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreIconImageUrl())) {
+                Glide.with(mContext)
+                        .load(mDataItem.getSolrIgnoreIconImageUrl())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                        .into(mIvNotificationType);
+            }
+        }
     }
 
     @Override
     public void viewRecycled() {
 
     }
+
     @OnClick(R.id.tv_notification_tittle)
-    public void onNotificationTitleClick()
-    {
+    public void onNotificationTitleClick() {
         mViewInterface.handleOnClick(mDataItem, mLnrNotification);
     }
+
     @OnClick(R.id.lnr_notification)
-    public void onViewClick()
-    {
+    public void onViewClick() {
         mViewInterface.handleOnClick(mDataItem, mLnrNotification);
     }
 

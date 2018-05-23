@@ -23,6 +23,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -76,6 +77,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -120,10 +122,12 @@ import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
 import butterknife.Bind;
@@ -140,12 +144,15 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.BEGINNER_TICK_START_INDEX;
+import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.INTERMEDIATE_TICK_START_INDEX;
+import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.MAX_DASH;
 
 /**
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener {
+public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, ProgressbarView {
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
@@ -163,12 +170,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private Uri mImageCaptureUri;
 
     private Dialog dialog = null;
+    private ProfileProgressDialog mProfileProgressDialog = null;
     private CommunityEnum communityEnum = MY_COMMUNITY;
     private long mCommunityPostId = 1;
     private long loggedInUserId = -1;
     private FragmentOpen mFragmentOpen;
     private Fragment mFragment;
-    private UserPostSolrObj mUserPostForCommunity;
     private UserSolrObj mUserSolarObject;
     private int itemPosition;
     boolean isFollowEvent;
@@ -176,6 +183,26 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private String userNameTitle;
     private boolean isProfileClicked = false;
     private File localImageSaveForChallenge;
+    private boolean isMentorQARefresh = false;
+    private PopupWindow popupWindowFollowTooTip;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    ProfilePresenterImpl profilePresenter;
+
+    @Inject
+    AppUtils mAppUtils;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
+
+    @Inject
+    HomePresenter mHomePresenter;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -284,8 +311,23 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.iv_mentor_verified)
     ImageView verifiedIcon;
 
+    @Bind(R.id.profile_level)
+    TextView profileLevel;
+
+    @Bind(R.id.progress_bar_holder)
+    ViewGroup progressbarContainer;
+
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
+
+    @Bind(R.id.beginner)
+    TextView beginnerTick;
+
+    @Bind(R.id.intermediate)
+    TextView intermediateTick;
+
+    @Bind(R.id.expert)
+    TextView allStarTick;
 
     @Bind(R.id.fab_post)
     FloatingActionButton createPost;
@@ -299,34 +341,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @BindDimen(R.dimen.dp_size_87)
     int profileSizeSmall;
 
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    ProfilePresenterImpl profilePresenter;
-
-    @Inject
-    AppUtils mAppUtils;
-
-    @Inject
-    Preference<Configuration> mConfiguration;
-
-    @Inject
-    HomePresenter mHomePresenter;
-
     @Bind(R.id.rl_mentor_full_view_header)
     RelativeLayout rlMentorFullViewHeader;
 
     @Bind(R.id.view_profile)
     View toolTipProfile;
+
     @Bind(R.id.view_tool_follow)
     View viewToolTipFollow;
 
+    @Bind(R.id.dashed_progressbar)
+    DashProgressBar dashProgressBar;
 
-    private boolean isMentorQARefresh = false;
-    private PopupWindow popupWindowFollowTooTip;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -414,6 +440,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (dialog != null) {
             dialog.dismiss();
         }
+
+        if (mProfileProgressDialog != null && mProfileProgressDialog.isVisible()) {
+            mProfileProgressDialog.dismiss();
+        }
         super.onStop();
     }
 
@@ -437,15 +467,24 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
                 viewFooter.setVisibility(View.VISIBLE);
 
+                progressbarContainer.setVisibility(View.VISIBLE);
+                setProfileLevel();
+                profileLevel.setVisibility(View.VISIBLE);
+
+                dashProgressBar.setListener(this);
+                if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                    dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
+                } else {
+                    dashProgressBar.setTotalDash(MAX_DASH);
+                }
+
+                dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
                 //hide menu dots
                 profileToolbarMenu.setVisibility(View.GONE);
 
             } else {
-                //hide menu dots for admin
-                //int adminId = 0;
-                //if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                //    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                //}
+                progressbarContainer.setVisibility(View.GONE);
+                profileLevel.setVisibility(View.GONE);
                 profileToolbarMenu.setVisibility(View.VISIBLE);
 
                 followUnFollowMentor();
@@ -629,6 +668,83 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 .setAspectRatio(1, 1)
                 .setAllowRotation(true)
                 .start(this);
+    }
+
+
+    private void setProfileLevel() {
+        if (mUserSolarObject.getProfileCompletionWeight() > ProfileProgressDialog.BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() < ProfileProgressDialog.INTERMEDIATE_END_LIMIT) {
+            profileLevel.setText(R.string.progress_status_beginner);
+
+            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.BEGINNER_END_LIMIT) {
+                beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            } else {
+                beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            }
+            intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+
+        } else if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
+            profileLevel.setText(R.string.progress_status_all_star);
+
+            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
+                allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
+            } else {
+                allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            }
+            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+
+        } else {
+            profileLevel.setText(R.string.progress_level_status_intermediate);
+
+            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.INTERMEDIATE_END_LIMIT) {
+                intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            } else {
+                intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+            }
+            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+
+        }
+    }
+
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+    }
+
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+    }
+
+
+    @OnClick(R.id.expert)
+    protected void openAllStarProgressDialog() {
+        openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+    }
+
+    private void openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType profileLevelType) {
+
+        if (mUserSolarObject == null) return;
+
+        if (mProfileProgressDialog != null && mProfileProgressDialog.isVisible()) {
+            mProfileProgressDialog.dismiss();
+        }
+
+        mProfileProgressDialog = new ProfileProgressDialog();
+        mProfileProgressDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+        if (!mProfileProgressDialog.isVisible() && !mIsDestroyed) {
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(mUserSolarObject);
+            bundle.putParcelable(AppConstants.USER, parcelable);
+            bundle.putSerializable(ProfileProgressDialog.PROFILE_LEVEL, profileLevelType);
+            bundle.putString(AppConstants.SOURCE_NAME, SCREEN_LABEL);
+            mProfileProgressDialog.setArguments(bundle);
+            mProfileProgressDialog.show(getFragmentManager(), ProfileProgressDialog.class.getName());
+        }
     }
 
     private void followUnFollowMentor() {
@@ -986,8 +1102,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
-        mUserPostForCommunity = userPostSolrObj;
-        int id = view.getId();
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         setFragment(mFragment);
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
@@ -1303,7 +1417,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
-                    refreshUserDetails(bundle.getString("NAME"), bundle.getString("LOCATION"), bundle.getString("BIO"), bundle.getString("IMAGE_URL"));
+                    invalidateUserInformation(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
+                            bundle.getString(EditUserProfileActivity.FILLED_FIELDS), bundle.getString(EditUserProfileActivity.UNFILLED_FIELDS), bundle.getFloat(EditUserProfileActivity.PROFILE_COMPLETION_WEIGHT));
                 }
             }
 
@@ -1416,6 +1531,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 try {
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
+
+                        //update progress bar
+                        if (mUserSolarObject != null) {
+                            mUserSolarObject.setFilledProfileFields(boardingDataResponse.getUserSolrObj().getFilledProfileFields());
+                            mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getUserSolrObj().getUnfilledProfileFields());
+                            mUserSolarObject.setProfileCompletionWeight(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight());
+                            dashProgressBar.setProgress(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight(), false);
+                            setProfileLevel();
+                        }
+
                         //Save image
                         userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
@@ -1475,7 +1600,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    private void refreshUserDetails(String name, String location, String userBio, String imageUrl) {
+    private void invalidateUserInformation(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
         if (StringUtil.isNotNullOrEmptyString(name)) {
             name = CommonUtil.camelCaseString(name);
             userName.setText(name);
@@ -1489,6 +1614,19 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (StringUtil.isNotNullOrEmptyString(userBio)) {
             userDescription.setText(userBio);
             mUserSolarObject.setDescription(userBio);
+        }
+
+        if (progressPercentage != -1) {
+            mUserSolarObject.setProfileCompletionWeight(progressPercentage);
+            dashProgressBar.setProgress(progressPercentage, false);
+
+            mUserSolarObject.setFilledProfileFields(filledFields);
+            mUserSolarObject.setUnfilledProfileFields(unfilledFields);
+            setProfileLevel();
+        }
+
+        if (imageUrl != null) {
+            refreshImageView(imageUrl);
         }
     }
 
@@ -1742,8 +1880,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public void refreshPostCount(boolean isPostDeleted) {
         if (isPostDeleted) {
-            String postCount = userTotalPostCount.getText().toString();
-            int postNumbers = Integer.parseInt(postCount);
+            int postNumbers = mUserSolarObject.getSolrIgnoreNoOfMentorPosts();
             postNumbers = postNumbers > 0 ? postNumbers - 1 : 0;
             setUsersPostCount(postNumbers);
         }
@@ -1906,4 +2043,22 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         AnalyticsManager.trackEvent(Event.PROFILE_REPORTED, getScreenName(), properties);
     }
 
+    @Override
+    public void onViewRendered(float dashWidth) {
+
+        int beginnerTickIndex = BEGINNER_TICK_START_INDEX;
+        int intermediateTickIndex = INTERMEDIATE_TICK_START_INDEX;
+
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
+            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
+        }
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
+        beginnerTick.setLayoutParams(buttonLayoutParams);
+
+        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
+        intermediateTick.setLayoutParams(intermediateLayoutParams);
+    }
 }

@@ -131,7 +131,7 @@ public class LoginActivity extends BaseActivity {
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
-                case AppConstants.HTTP_401_UNAUTHORIZED:
+                case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                     break;
                 default: {
@@ -139,6 +139,7 @@ public class LoginActivity extends BaseActivity {
                 }
             }
         }
+
     }
 
     @Override

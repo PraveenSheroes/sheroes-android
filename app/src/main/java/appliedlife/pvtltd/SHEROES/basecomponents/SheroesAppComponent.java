@@ -65,6 +65,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificatio
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
@@ -313,6 +314,8 @@ public interface SheroesAppComponent {
     void inject(FeedAdapter feedAdapter);
 
     void inject(GenderInputFormDialogFragment genderInputFormDialogFragment);
+
+    void inject(ProfileProgressDialog profileProgressDialog);
 
 }
 
