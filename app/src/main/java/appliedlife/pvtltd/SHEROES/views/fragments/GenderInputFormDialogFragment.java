@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -14,15 +13,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import butterknife.Bind;
@@ -34,8 +30,7 @@ import butterknife.OnClick;
  */
 
 public class GenderInputFormDialogFragment extends BaseDialogFragment {
-    private static final String SCREEN_LABEL = "Gender Input Form Screen";
-    public static final String GENDER_SHARE_LINK = "https://shrs.me/xtap573vXM";
+    private static final String SCREEN_LABEL = "Input Gender Screen";
     @Bind(R.id.tv_user_name)
     TextView tvUserName;
     @Bind(R.id.tv_msg)
@@ -50,14 +45,6 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
     TextView tvMan;
     @Bind(R.id.tv_women)
     TextView tvWomen;
-    @Bind(R.id.li_male_error)
-    LinearLayout liMaleError;
-    @Bind(R.id.tv_user_name_male_error)
-    TextView tvUserNameMaleError;
-    @Bind(R.id.tv_description_male_error)
-    TextView tvDescriptionMaleError;
-    @Bind(R.id.rl_gender_input_form)
-    RelativeLayout rlGenderInputForm;
     private String mUserName, mPersonnelEmailId;
     private boolean isMaleSelected;
 
@@ -71,10 +58,9 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             mPersonnelEmailId = getArguments().getString(EMAIL_ID);
         }
         if (StringUtil.isNotNullOrEmptyString(mUserName)) {
-            tvUserName.setText("Hi "+mUserName);
-            tvUserNameMaleError.setText(mUserName);
+            tvUserName.setText("Hi " + mUserName);
         }
-        String description=getString(R.string.sheroes_msg);
+        String description = getString(R.string.sheroes_msg);
         SpannableString spannableString = new SpannableString(description);
         spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
         spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 37, description.length(), 0);
@@ -83,10 +69,6 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         tvMsg.setText(spannableString, TextView.BufferType.SPANNABLE);
         tvMsg.setSelected(true);
 
-
-
-        liMaleError.setVisibility(View.GONE);
-        rlGenderInputForm.setVisibility(View.VISIBLE);
         tvGenderSelectFinish.setEnabled(false);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
@@ -119,36 +101,15 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
     @OnClick(R.id.tv_gender_select_finish)
     public void getStartedClick() {
         if (isMaleSelected) {
-            liMaleError.setVisibility(View.VISIBLE);
-            rlGenderInputForm.setVisibility(View.GONE);
-            String description=getString(R.string.sheroes_gender_error);
-            SpannableString spannableString = new SpannableString(description);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, description.length(), 0);
-            tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-            tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-            tvDescriptionMaleError.setSelected(true);
+            String description = getString(R.string.sheroes_gender_error);
+            ((WelcomeActivity) getActivity()).showFaceBookError(description, mUserName);
+            dismiss();
         } else {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {
                 ((WelcomeActivity) getActivity()).getTokenFromGoogleAuth(mPersonnelEmailId);
                 dismiss();
             }
         }
-    }
-
-    @OnClick(R.id.tv_share_sheroes_app)
-    public void tvShareSheroesAppClick() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
-        startActivity(intent);
-    }
-
-    @OnClick(R.id.iv_close)
-    public void ivCloseClick() {
-        dismiss();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -16,7 +17,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -28,16 +31,17 @@ import butterknife.OnClick;
  */
 
 public class FacebookErrorDialog extends BaseDialogFragment {
-    @Bind(R.id.tv_ok)
-    TextView mTvCacel;
-    @Bind(R.id.tv_message)
-    TextView mTvMessage;
-    @Bind(R.id.iv_women_error)
-    ImageView mIvWomenError;
-    @Bind(R.id.iv_hey_success_next)
-    ImageView mIvHeySuccessNext;
-    int callFor = 0;
-    String message;
+    private static final String SCREEN_LABEL = "Male User Message Screen";
+    public static final String GENDER_SHARE_LINK = "https://shrs.me/xtap573vXM";
+    @Bind(R.id.iv_close)
+    ImageView mTvCacel;
+    @Bind(R.id.tv_user_name_male_error)
+    TextView tvUserNameMaleError;
+    @Bind(R.id.tv_description_male_error)
+    TextView tvDescriptionMaleError;
+    private int callFor = 0;
+    private String message, mUserName;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,33 +51,37 @@ public class FacebookErrorDialog extends BaseDialogFragment {
         if (null != getArguments()) {
             callFor = getArguments().getInt(AppConstants.FACEBOOK_VERIFICATION);
             message = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
+            mUserName = getArguments().getString(BaseDialogFragment.USER_NAME);
         }
         if (StringUtil.isNotNullOrEmptyString(message)) {
-            if (message.equalsIgnoreCase(getString(R.string.ID_WOMEN_ERROR))) {
-                mIvHeySuccessNext.setVisibility(View.GONE);
-                mIvWomenError.setVisibility(View.VISIBLE);
+
+            if (StringUtil.isNotNullOrEmptyString(mUserName)) {
+                tvUserNameMaleError.setVisibility(View.VISIBLE);
+                tvUserNameMaleError.setText(mUserName);
+                SpannableString spannableString = new SpannableString(message);
+                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
+                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+                tvDescriptionMaleError.setSelected(true);
             } else {
-                mIvHeySuccessNext.setVisibility(View.VISIBLE);
-                mIvWomenError.setVisibility(View.GONE);
+                SpannableString spannableString = new SpannableString(message);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 0, message.length(), 0);
+                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+                tvDescriptionMaleError.setSelected(true);
             }
-            message=message.substring(6,message.length());
-            SpannableString spannableString = new SpannableString(message);
-            if (StringUtil.isNotNullOrEmptyString(message)) {
-                if(message.length()>32) {
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 13, 32, 0);
-                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 13, 32, 0);
-                }
-                    mTvMessage.setMovementMethod(LinkMovementMethod.getInstance());
-                    mTvMessage.setText(spannableString, TextView.BufferType.SPANNABLE);
-                    mTvMessage.setSelected(true);
-            }
+
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
 
-    @OnClick(R.id.tv_ok)
+    @OnClick(R.id.iv_close)
     public void tryAgainClick() {
         if (callFor == AppConstants.NO_REACTION_CONSTANT) {
 
@@ -90,6 +98,15 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             return;
         }
         // set the animations to use on showing and hiding the dialog
+    }
+
+    @OnClick(R.id.tv_share_sheroes_app)
+    public void tvShareSheroesAppClick() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.setPackage(AppConstants.WHATS_APP);
+        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
+        startActivity(intent);
     }
 
     @Override

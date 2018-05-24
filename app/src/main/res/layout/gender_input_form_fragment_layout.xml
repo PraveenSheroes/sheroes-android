@@ -4,7 +4,6 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:id="@+id/rl_gender_input_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -101,77 +100,5 @@
             android:textSize="@dimen/sp_size_14" />
 
     </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/li_male_error"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:orientation="vertical">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/vector_male_error" />
-
-            <ImageView
-                android:id="@+id/iv_close"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="@dimen/dp_size_12"
-                android:layout_marginTop="@dimen/dp_size_4"
-                android:padding="@dimen/dp_size_12"
-                android:src="@drawable/ic_cross" />
-        </FrameLayout>
-
-
-        <TextView
-            android:id="@+id/tv_user_name_male_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_size_24"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:textColor="@color/comment_text"
-            android:textSize="@dimen/sp_size_20" />
-
-        <TextView
-            android:id="@+id/tv_description_male_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_size_36"
-            android:layout_marginRight="@dimen/dp_size_36"
-            android:layout_marginTop="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:gravity="center"
-            android:textColor="@color/footer_icon_text"
-            android:textSize="@dimen/sp_size_16" />
-
-        <TextView
-            android:id="@+id/tv_share_sheroes_app"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_40"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_24"
-            android:background="@drawable/rectangle_feed_community_joined_active"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingLeft="@dimen/dp_size_16"
-            android:paddingRight="@dimen/dp_size_16"
-            android:paddingTop="@dimen/dp_size_10"
-            android:text="@string/share_sheroes_app"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14"
-            android:visibility="visible" />
-    </LinearLayout>
 
 </LinearLayout>
