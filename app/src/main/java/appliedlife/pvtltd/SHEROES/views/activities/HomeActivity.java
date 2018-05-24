@@ -1424,7 +1424,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
-        if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+        if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
+        } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
             if (fragment instanceof CommunitiesListFragment) {
                 CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
@@ -1432,12 +1434,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     currentFragment.refreshList();
                 }
             }
-        } else {
+        }  else {
             if (null != intent) {
-                if (requestCode == REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL && resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
-                    refreshCurrentFragment();
-                } else {
-
                     switch (requestCode) {
                         case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                             Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
@@ -1506,7 +1504,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         default:
                             LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
                     }
-                }
             }
         }
         if (!this.isFinishing() && null != mProgressDialog) {

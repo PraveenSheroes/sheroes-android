@@ -43,7 +43,7 @@ public class SpamUtil {
                 radioButton.setText(deactivationReason.getDeactivationReason());
                 radioButton.setLayoutParams(layoutParams);
                 radioButton.setId(i);
-                radioButton.setTag(deactivationReason.getDeactivationReasonId());
+                radioButton.setTag(deactivationReason);
                 radioGroup.addView(radioButton);
                 i++;
             }

@@ -52,6 +52,7 @@ import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -111,6 +112,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -850,19 +852,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.deactivate_user:
-
                         deactivateUser(mUserSolarObject);
-                        /*todo - make it dynaic from app config and local
-                        DeactivateUserRequest deactivateUserRequest = new DeactivateUserRequest();
-                        deactivateUserRequest.setUserId(mUserSolarObject.getIdOfEntityOrParticipant());
-                        deactivateUserRequest.setDeactivationReason(0);
-                        deactivateUserRequest.setReactivateUser(false);
-                        deactivateUserRequest.setRemoveCommentByUser(true);
-                        deactivateUserRequest.setRemovePostByUser(true);
-                        deactivateUserRequest.setReasonForDeactivationDetails("");
-
-                        profilePresenter.deactivateUser(deactivateUserRequest);*/
-
                         return true;
                     case R.id.report_spam:
                         reportSpamDialog(SpamContentType.USER, userPostObj);
@@ -1101,14 +1091,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         .addNextIntentWithParentStack(upIntent)
                         .startActivities();
             } else {
-                if(isUserDeactivated) {
-                    //todo - just see
-
-                    Intent intent = new Intent();
-                    Bundle bundle = new Bundle();
-                    bundle.putString("Ravi", "here");
-                    intent.putExtras(bundle);
-                    setResult(AppConstants.RESULT_CODE_FOR_DEACTIVATION, intent);
+                if (isUserDeactivated) {
+                    isUserDeactivated = false;
+                    setResult(AppConstants.RESULT_CODE_FOR_DEACTIVATION);
                     finish();
                 } else if (!isProfileClicked) {
                     onActivtyResultOfParentRefresh();
@@ -1277,7 +1262,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Override
     public void onUserDeactivation(BaseResponse baseResponse) {
         isUserDeactivated = true;
-       onBackClick();
+        onBackClick();
     }
 
     @Override
@@ -2000,8 +1985,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         return mUserSolarObject.getProfileCompletionWeight() >= 90;
     }
 
-    //ScaleAnimation scaleAnimation = new ScaleAnimation(1.0f, 1.0f, 2.0f, 2.0f);
-    private void deactivateUser(final  UserSolrObj userSolrObj) {
+    private void deactivateUser(final UserSolrObj userSolrObj) {
 
         if (ProfileActivity.this.isFinishing()) return;
 
@@ -2014,12 +1998,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             deactivationReasons = reasons != null ? reasons.getDeactivationReasons() : null;
         }
 
-        if (deactivationReasons == null || deactivationReasons.size()<=0) return;
+        if (deactivationReasons == null || deactivationReasons.size() <= 0) return;
 
         final Dialog userDeactivationDialog = new Dialog(ProfileActivity.this);
         userDeactivationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         userDeactivationDialog.setCancelable(true);
-        userDeactivationDialog.setContentView(R.layout.dialog_spam_options);
+        userDeactivationDialog.setContentView(R.layout.dialog_deactivate_user);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -2031,60 +2015,58 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         reasonSubTitle.setLayoutParams(layoutParams);
 
         final RadioGroup spamOptions = userDeactivationDialog.findViewById(R.id.options_container);
-
         SpamUtil.addDeactivationReasonsToRadioGroup(ProfileActivity.this, deactivationReasons, spamOptions);
+        final ScrollView scrollView = userDeactivationDialog.findViewById(R.id.scroll_container);
 
         Button submit = userDeactivationDialog.findViewById(R.id.submit);
         final EditText reason = userDeactivationDialog.findViewById(R.id.edit_text_reason);
 
-       // final SpamPostRequest finalSpamRequest = spamRequest;
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
 
+                    DeactivateUserRequest deactivateUserRequest = new DeactivateUserRequest();
+                    deactivateUserRequest.setUserId(userSolrObj.getIdOfEntityOrParticipant());
+                    deactivateUserRequest.setReactivateUser(false);
+                    deactivateUserRequest.setRemoveCommentByUser(true);
+                    deactivateUserRequest.setRemovePostByUser(true);
+                    deactivateUserRequest.setReasonForDeactivationDetails("");
+
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
-                    Spam spam = (Spam) radioButton.getTag();
-                    if (spam != null) {
-                        /*finalSpamRequest.setSpamReason(spam.getReason());
-                        finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                    DeactivationReason deactivationReason = (DeactivationReason) radioButton.getTag();
+                    if (deactivationReason != null) {
+                        deactivateUserRequest.setDeactivationReason(deactivationReason.getDeactivationReasonId());
+                        if (deactivationReason.getDeactivationReason().equalsIgnoreCase("Other")) {
                             if (reason.getVisibility() == View.VISIBLE) {
-
+                                scrollView.setVisibility(View.VISIBLE);
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
-                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
-                                    profilePresenter.reportSpamPostOrComment(finalSpamRequest); //submit
+                                    deactivateUserRequest.setReasonForDeactivationDetails(reason.getText().toString());
+                                    profilePresenter.deactivateUser(deactivateUserRequest); //submit
                                     userDeactivationDialog.dismiss();
 
-                                    if (spamContentType == SpamContentType.USER) {
-                                        onProfileReported(userSolrObj);   //report the profile
-                                    }
+                                    onProfileDeactivation(userSolrObj); //add profile deactivation analytics
                                 } else {
                                     reason.setError("Add the reason");
                                 }
 
                             } else {
                                 reason.setVisibility(View.VISIBLE);
+                                scrollView.setVisibility(View.GONE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
-                            }*/
+                            }
                         } else {
-                           /* profilePresenter.reportSpamPostOrComment(finalSpamRequest);  //submit request
+                            profilePresenter.deactivateUser(deactivateUserRequest);
                             userDeactivationDialog.dismiss();
-
-                            if (spamContentType == SpamContentType.USER) {
-                                onProfileReported(userSolrObj);   //report the profile
-                            }*/
+                            onProfileDeactivation(userSolrObj); //add profile deactivation analytics
                         }
                     }
                 }
-            //}
+            }
         });
 
         userDeactivationDialog.show();
     }
-
-
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserSolrObj userSolrObj) { //Add other type as parameterised object
 
@@ -2104,6 +2086,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         spamReasonsDialog.setCancelable(true);
         spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
+
+        final ScrollView scrollView = spamReasonsDialog.findViewById(R.id.scroll_container);
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -2143,6 +2127,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         finalSpamRequest.setScore(spam.getScore());
 
                         if (spam.getLabel().equalsIgnoreCase("Others")) {
+                            scrollView.setVisibility(View.GONE);
                             if (reason.getVisibility() == View.VISIBLE) {
 
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
@@ -2158,6 +2143,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                                 }
 
                             } else {
+                                scrollView.setVisibility(View.VISIBLE);
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
                             }
@@ -2175,6 +2161,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         });
 
         spamReasonsDialog.show();
+    }
+
+    private void onProfileDeactivation(UserSolrObj userSolrObj) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userSolrObj.getNameOrTitle())
+                        .isMentor(userSolrObj.isAuthorMentor())
+                        .build();
+        AnalyticsManager.trackEvent(Event.PROFILE_DEACTIVATE, getScreenName(), properties);
     }
 
     private void onProfileReported(UserSolrObj userSolrObj) {
