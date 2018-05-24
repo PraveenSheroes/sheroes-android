@@ -9,26 +9,19 @@ import com.google.gson.annotations.SerializedName;
 
 public class DeactivationReason {
 
-    @SerializedName("deactivationReasonId")
-    @Expose
-    private Integer deactivationReasonId;
     @SerializedName("deactivationReason")
     @Expose
     private String deactivationReason;
 
-    public Integer getDeactivationReasonId() {
-        return deactivationReasonId;
-    }
-
-    public void setDeactivationReasonId(Integer deactivationReasonId) {
-        this.deactivationReasonId = deactivationReasonId;
-    }
+    @SerializedName("deactivationReasonId")
+    @Expose
+    private int deactivationReasonId;
 
     public String getDeactivationReason() {
         return deactivationReason;
     }
 
-    public void setDeactivationReason(String deactivationReason) {
-        this.deactivationReason = deactivationReason;
+    public int getDeactivationReasonId() {
+        return deactivationReasonId;
     }
 }

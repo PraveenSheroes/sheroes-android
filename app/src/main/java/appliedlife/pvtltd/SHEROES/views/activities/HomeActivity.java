@@ -130,7 +130,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -173,9 +172,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Inject
     Preference<AppInstallation> mAppInstallation;
-
-    @Bind(R.id.dashed_progressbar)
-    DashProgressBar dashProgressBar;
 
     @Bind(R.id.beginner)
     TextView beginnerTick;
@@ -312,14 +308,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
 
         renderHomeFragmentView();
-        dashProgressBar.setListener(this);
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
-        } else {
-            dashProgressBar.setTotalDash(new ConfigData().maxDash);
-        }
-        dashProgressBar.setmBarThickness(CommonUtil.convertDpToPixel(8, this));
-        dashProgressBar.setProgress(50, false);
         assignNavigationRecyclerListView();
         sheUserInit();
         mHomePresenter.queryConfig();
@@ -1446,73 +1434,78 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         } else {
             if (null != intent) {
-                switch (requestCode) {
-                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                        Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                                .show();
-                        refreshCurrentFragment();
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-                        ((FeedFragment) fragment).refreshList();
-                        break;
+                if (requestCode == REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL && resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+                    refreshCurrentFragment();
+                } else {
 
-                    case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
-                        if (null != intent.getExtras()) {
-                            JobFeedSolrObj jobFeedSolrObj = null;
-                            jobFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
-                            invalidateItem(jobFeedSolrObj);
-                        }
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                        if (resultCode == Activity.RESULT_OK) {
+                    switch (requestCode) {
+                        case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                            Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
+                                    .show();
                             refreshCurrentFragment();
-                        }
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
-                        Parcelable parcelableArticlePost = intent.getParcelableExtra(AppConstants.HOME_FRAGMENT);
-                        ArticleSolrObj articleSolrObj = null;
-                        if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
-                            articleSolrObj = Parcels.unwrap(parcelableArticlePost);
-                        }
-                        if (articleSolrObj != null) {
-                            invalidateItem(articleSolrObj);
-                        }
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
-                        boolean isPostDeleted = false;
-                        UserPostSolrObj userPostSolrObj = null;
-                        Parcelable parcelableUserPost = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelableUserPost != null) {
-                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
-                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                        }
-                        if (userPostSolrObj == null) {
+                            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+                            ((FeedFragment) fragment).refreshList();
                             break;
-                        }
-                        if (isPostDeleted) {
-                            removeItem(userPostSolrObj);
-                        } else {
-                            invalidateItem(userPostSolrObj);
-                        }
-                    case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                        CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                        if (resultCode == RESULT_OK) {
-                            try {
-                                File file = new File(result.getUri().getPath());
-                                Bitmap photo = decodeFile(file);
-                            } catch (Exception e) {
-                                Crashlytics.getInstance().core.logException(e);
-                                e.printStackTrace();
-                            }
 
-                        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                            Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                        }
-                        break;
-                    default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                        case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
+                            if (null != intent.getExtras()) {
+                                JobFeedSolrObj jobFeedSolrObj = null;
+                                jobFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
+                                invalidateItem(jobFeedSolrObj);
+                            }
+                            break;
+
+                        case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                            if (resultCode == Activity.RESULT_OK) {
+                                refreshCurrentFragment();
+                            }
+                            break;
+
+                        case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
+                            Parcelable parcelableArticlePost = intent.getParcelableExtra(AppConstants.HOME_FRAGMENT);
+                            ArticleSolrObj articleSolrObj = null;
+                            if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
+                                articleSolrObj = Parcels.unwrap(parcelableArticlePost);
+                            }
+                            if (articleSolrObj != null) {
+                                invalidateItem(articleSolrObj);
+                            }
+                            break;
+
+                        case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                            boolean isPostDeleted = false;
+                            UserPostSolrObj userPostSolrObj = null;
+                            Parcelable parcelableUserPost = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                            if (parcelableUserPost != null) {
+                                userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                                isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                            }
+                            if (userPostSolrObj == null) {
+                                break;
+                            }
+                            if (isPostDeleted) {
+                                removeItem(userPostSolrObj);
+                            } else {
+                                invalidateItem(userPostSolrObj);
+                            }
+                        case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                            CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                            if (resultCode == RESULT_OK) {
+                                try {
+                                    File file = new File(result.getUri().getPath());
+                                    Bitmap photo = decodeFile(file);
+                                } catch (Exception e) {
+                                    Crashlytics.getInstance().core.logException(e);
+                                    e.printStackTrace();
+                                }
+
+                            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                                Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                            }
+                            break;
+                        default:
+                            LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                    }
                 }
             }
         }

@@ -38,9 +38,11 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:fitsSystemWindows="true"
+        android:layout_height="250dp">
 
         <RadioGroup
+            android:scrollbarAlwaysDrawVerticalTrack="true"
             android:id="@+id/options_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,6 +64,13 @@
         android:inputType="textMultiLine"
         android:visibility="gone"
         android:scrollHorizontally="false" />
+
+    <CheckBox
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:id="@+id/delete_user_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Keep User post, likes and comments" />
 
     <Button
         android:id="@+id/submit"

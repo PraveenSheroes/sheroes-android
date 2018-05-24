@@ -112,6 +112,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
+    public static final int RESULT_CODE_FOR_DEACTIVATION = 10007;
     public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
     public static final int REQUEST_CODE_FOR_COMMUNITY_LISTING = 1003;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
@@ -247,6 +248,7 @@ public class AppConstants {
     public static final String NAV_DRAWER_FILE_NAME = "nav_items";
     public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
     public static final String SPAM_REASONS_FILE = "spam_reasons";
+    public static final String DEACTIVATE_REASONS_FILE = "deactivate_user_reasons";
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY = "SUMMARY";

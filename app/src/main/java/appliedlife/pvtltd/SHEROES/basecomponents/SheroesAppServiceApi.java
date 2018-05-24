@@ -4,9 +4,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
-import appliedlife.pvtltd.SHEROES.models.DeactivateReasonsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
@@ -63,8 +61,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
@@ -329,9 +325,9 @@ public interface SheroesAppServiceApi {
     @POST("entity/master/user_mention_suggestions")
     Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);
 
-    //deactivate user - for admin, community moderators, remove it after added to app config
-    @POST("participant/user/fetch_user_deactivation_reasons")
-    Observable<DeactivateReasonsResponse> fetchSpamReasons();
+    //deactivate user - for admin, community moderators
+   /* @POST("participant/user/fetch_user_deactivation_reasons")
+    Observable<UserDeactivationReasonsResponse> fetchSpamReasons();*/
 
     @POST("participant/user/deactivate_or_reactivate")
     Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);

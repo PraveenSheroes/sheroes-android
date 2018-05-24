@@ -130,7 +130,7 @@
     <dimen name="challenge_completed_height">180dp</dimen>
     <dimen name="challenge_girl_height">151dp</dimen>
     <dimen name="challenge_girl_width">156dp</dimen>
-    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="nav_header_height">155dp</dimen>
 
 
     <!--Text sizes for SHEROES-->

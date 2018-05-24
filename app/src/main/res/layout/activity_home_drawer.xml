@@ -2,13 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/nav_header_height"
-    android:layout_marginBottom="@dimen/dp_size_4">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/nav_menu_header"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/nav_header_height"
         android:layout_marginTop="@dimen/dp_size_24"
         android:background="@drawable/nav_header_background"
         android:fitsSystemWindows="false"
@@ -45,9 +44,11 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/nav_menu_header_label"
             android:textSize="@dimen/sp_size_14"
+            android:layout_marginBottom="@dimen/dp_size_16"
             tools:text="Delhi" />
 
         <include
+            android:visibility="gone"
             android:id="@+id/progress_bar"
             layout="@layout/profile_progress_bar"
             android:layout_width="match_parent"

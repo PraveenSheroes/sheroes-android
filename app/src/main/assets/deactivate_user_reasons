@@ -1,5 +1,5 @@
 {
-  "deactivationReason": [
+  "deactivationReasons": [
     {
       "deactivationReasonId": 1,
       "deactivationReason": "Male User"
