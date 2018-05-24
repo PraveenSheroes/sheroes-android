@@ -223,7 +223,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void initializeAllDataAfterGCMId() {
         int versionCode = BuildConfig.VERSION_CODE;
         moEngageUtills.entityMoEngageAppVersion(this, mMoEHelper, payloadBuilder, versionCode);
-        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
             if (mInstallUpdatePreference.get().getAppVersion() < versionCode) {
                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                 installUpdateForMoEngage.setFirstOpen(true);
@@ -584,7 +584,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    public void showFaceBookError(String message,String userName) {
+    public void showFaceBookError(String message, String userName) {
         FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
         if (fragment == null) {
             fragment = new FacebookErrorDialog();
@@ -873,7 +873,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             mUserPreference.delete();
                             LoginManager.getInstance().logOut();
                             signOut();
-                            showFaceBookError(AppConstants.EMPTY_STRING,"");
+                            showFaceBookError(AppConstants.EMPTY_STRING, "");
                         }
                         break;
                     case AppConstants.INVALID:
@@ -892,11 +892,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
                             } else {
 
-                                showFaceBookError(errorMessage,"");
+                                showFaceBookError(errorMessage, "");
                             }
                         } else {
                             errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
-                            showFaceBookError(errorMessage,"");
+                            showFaceBookError(errorMessage, "");
                         }
                         break;
                 }
@@ -978,7 +978,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 if (resultCode == Activity.RESULT_OK) {
                     GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
                     if (!isFinishing()) {
-                    //    showDialogInWelcome(TOKEN_LOGGING_PROGRESS_DIALOG);
+                        //    showDialogInWelcome(TOKEN_LOGGING_PROGRESS_DIALOG);
                     }
                     handleSignInResult(result);
                 } else {

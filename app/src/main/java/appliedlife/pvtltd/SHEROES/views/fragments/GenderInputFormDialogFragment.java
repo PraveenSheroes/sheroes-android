@@ -31,20 +31,28 @@ import butterknife.OnClick;
 
 public class GenderInputFormDialogFragment extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Input Gender Screen";
+    //region View variables
     @Bind(R.id.tv_user_name)
     TextView tvUserName;
+
     @Bind(R.id.tv_msg)
     TextView tvMsg;
+
     @Bind(R.id.tv_gender_select_finish)
     TextView tvGenderSelectFinish;
+
     @Bind(R.id.iv_male)
     ImageView ivMale;
+
     @Bind(R.id.iv_female)
     ImageView ivFemale;
+
     @Bind(R.id.tv_man)
     TextView tvMan;
+
     @Bind(R.id.tv_women)
     TextView tvWomen;
+    //endregion
     private String mUserName, mPersonnelEmailId;
     private boolean isMaleSelected;
 

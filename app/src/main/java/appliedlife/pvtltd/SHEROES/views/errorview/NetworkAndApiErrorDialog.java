@@ -15,7 +15,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -27,6 +29,7 @@ import butterknife.OnClick;
  * DialogFragment displayed when timeout in request occurs .
  */
 public class NetworkAndApiErrorDialog extends BaseDialogFragment {
+    public static final String SCREEN_LABEL = "Deactivated User Dialog Screen";
     @Bind(R.id.tv_no_conn_desc)
     TextView mTvNoConnDesc;
     @Bind(R.id.tv_try_again)
@@ -62,6 +65,8 @@ public class NetworkAndApiErrorDialog extends BaseDialogFragment {
             SpannableString content = new SpannableString(getString(R.string.care_sheroes));
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             mTvCareSheroes.setText(content);
+            ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
+            AnalyticsManager.trackScreenView(SCREEN_LABEL);
         } else {
             mliUserDeactivate.setVisibility(View.GONE);
             mRlErrorMsg.setVisibility(View.VISIBLE);
