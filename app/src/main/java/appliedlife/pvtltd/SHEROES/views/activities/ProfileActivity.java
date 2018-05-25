@@ -2070,7 +2070,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     DeactivationReason deactivationReason = (DeactivationReason) radioButton.getTag();
                     if (deactivationReason != null) {
                         deactivateUserRequest.setDeactivationReason(deactivationReason.getDeactivationReasonId());
-                        if (deactivationReason.getDeactivationReason().equalsIgnoreCase("Other")) {
+                        if (deactivationReason.getDeactivationReason().equalsIgnoreCase(getString(R.string.other))) {
                             if (reason.getVisibility() == View.VISIBLE) {
                                 scrollView.setVisibility(View.VISIBLE);
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
@@ -2120,8 +2120,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         spamReasonsDialog.setCancelable(true);
         spamReasonsDialog.setContentView(R.layout.dialog_spam_options);
 
-        final ScrollView scrollView = spamReasonsDialog.findViewById(R.id.scroll_container);
-
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, ProfileActivity.this), CommonUtil.convertDpToPixel(10, ProfileActivity.this), 0, 0);
@@ -2159,8 +2157,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
 
-                        if (spam.getLabel().equalsIgnoreCase("Others")) {
-                            scrollView.setVisibility(View.GONE);
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) {
                             if (reason.getVisibility() == View.VISIBLE) {
 
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
@@ -2172,11 +2169,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                                         onProfileReported(userSolrObj);   //report the profile
                                     }
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
 
                             } else {
-                                scrollView.setVisibility(View.VISIBLE);
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
                             }

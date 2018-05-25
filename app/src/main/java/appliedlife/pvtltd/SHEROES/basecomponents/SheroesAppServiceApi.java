@@ -326,9 +326,6 @@ public interface SheroesAppServiceApi {
     Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);
 
     //deactivate user - for admin, community moderators
-   /* @POST("participant/user/fetch_user_deactivation_reasons")
-    Observable<UserDeactivationReasonsResponse> fetchSpamReasons();*/
-
     @POST("participant/user/deactivate_or_reactivate")
     Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);
 

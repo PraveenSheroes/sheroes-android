@@ -30,9 +30,6 @@ public class ConfigData {
     @SerializedName("deactivation_reasons")
     public DeactivationReasons deactivationReasons;
 
-   /* @SerializedName("deactivation_reasons")
-    public UserDeactivationReasonsResponse userDeactivationReasonsResponse;*/
-
     @SerializedName("update_title")
     public String updateTitle;
 

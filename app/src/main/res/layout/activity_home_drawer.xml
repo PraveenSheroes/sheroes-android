@@ -10,7 +10,6 @@
         android:layout_height="@dimen/nav_header_height"
         android:layout_marginTop="@dimen/dp_size_24"
         android:background="@drawable/nav_header_background"
-        android:fitsSystemWindows="false"
         android:orientation="vertical">
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView

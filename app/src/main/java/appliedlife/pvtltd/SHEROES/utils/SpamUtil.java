@@ -26,7 +26,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 public class SpamUtil {
 
     /**
-     * Add the spam options to radio group
+     * Add the Deactivation options to radio group
      *
      * @param context     context
      * @param deactivationReasons deactivation reasons
