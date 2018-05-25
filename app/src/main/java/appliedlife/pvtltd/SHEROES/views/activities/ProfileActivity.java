@@ -44,7 +44,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -148,6 +157,9 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.ALL_STAR_END_LIMIT;
+import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.BEGINNER_START_LIMIT;
+import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.INTERMEDIATE_END_LIMIT;
 
 /**
  * Created by Praveen_Singh on 04-08-2017.
@@ -321,14 +333,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
 
+    @Bind(R.id.new_feature)
+    TextView newFeature;
+
     @Bind(R.id.beginner)
-    TextView beginnerTick;
+    ImageView beginnerTick;
 
     @Bind(R.id.intermediate)
-    TextView intermediateTick;
+    ImageView intermediateTick;
 
     @Bind(R.id.all_star)
-    TextView allStarTick;
+    ImageView allStarTick;
 
     @Bind(R.id.fab_post)
     FloatingActionButton createPost;
@@ -474,6 +489,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 progressbarContainer.setVisibility(View.VISIBLE);
                 setProfileLevel();
                 profileLevel.setVisibility(View.VISIBLE);
+                newFeature.setVisibility(View.VISIBLE);
 
                 dashProgressBar.setListener(this);
                 if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
@@ -487,6 +503,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 profileToolbarMenu.setVisibility(View.GONE);
 
             } else {
+                newFeature.setVisibility(View.GONE);
                 progressbarContainer.setVisibility(View.GONE);
                 profileLevel.setVisibility(View.GONE);
                 profileToolbarMenu.setVisibility(View.VISIBLE);
@@ -686,38 +703,38 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
 
     private void setProfileLevel() {
-        if (mUserSolarObject.getProfileCompletionWeight() > ProfileProgressDialog.BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() < ProfileProgressDialog.INTERMEDIATE_END_LIMIT) {
+        if (mUserSolarObject.getProfileCompletionWeight() > BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() < INTERMEDIATE_END_LIMIT) {
             profileLevel.setText(R.string.progress_status_beginner);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.BEGINNER_END_LIMIT) {
-                beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+                beginnerTick.setImageResource(R.drawable.ic_level_complete);
             } else {
-                beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+                beginnerTick.setImageResource(R.drawable.ic_level_incomplete);
             }
-            intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
-            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
+            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
 
-        } else if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
+        } else if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
             profileLevel.setText(R.string.progress_status_all_star);
 
-            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
-                allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
+            if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
+                allStarTick.setImageResource(R.drawable.ic_all_level_complete);
             } else {
-                allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+                allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
             }
-            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
-            intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            beginnerTick.setImageResource(R.drawable.ic_level_complete);
+            intermediateTick.setImageResource(R.drawable.ic_level_complete);
 
         } else {
             profileLevel.setText(R.string.progress_level_status_intermediate);
 
-            if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            if (mUserSolarObject.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
+                intermediateTick.setImageResource(R.drawable.ic_level_complete);
             } else {
-                intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+                intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
             }
-            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
-            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+            beginnerTick.setImageResource(R.drawable.ic_level_complete);
 
         }
     }
@@ -737,6 +754,16 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
         openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+    }
+
+    @OnClick(R.id.new_feature)
+    protected void openUserProfileLevelDialog() {
+        if (mUserSolarObject != null) {
+            ProfileProgressDialog.ProfileLevelType profileLevelType = userLevel(mUserSolarObject);
+            openProfileProfileLevelDialog(profileLevelType);
+        } else {
+            newFeature.setVisibility(View.GONE);
+        }
     }
 
     private void openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType profileLevelType) {
@@ -2014,6 +2041,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         reasonTitle.setLayoutParams(layoutParams);
         reasonSubTitle.setLayoutParams(layoutParams);
 
+        final CheckBox deleteUserActivityCheck = userDeactivationDialog.findViewById(R.id.delete_user_activity);
         final RadioGroup spamOptions = userDeactivationDialog.findViewById(R.id.options_container);
         SpamUtil.addDeactivationReasonsToRadioGroup(ProfileActivity.this, deactivationReasons, spamOptions);
         final ScrollView scrollView = userDeactivationDialog.findViewById(R.id.scroll_container);
@@ -2029,9 +2057,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     DeactivateUserRequest deactivateUserRequest = new DeactivateUserRequest();
                     deactivateUserRequest.setUserId(userSolrObj.getIdOfEntityOrParticipant());
                     deactivateUserRequest.setReactivateUser(false);
-                    deactivateUserRequest.setRemoveCommentByUser(true);
-                    deactivateUserRequest.setRemovePostByUser(true);
                     deactivateUserRequest.setReasonForDeactivationDetails("");
+
+                    if (deleteUserActivityCheck.isChecked()) {
+                        deactivateUserRequest.setRemoveCommentByUser(true);
+                        deactivateUserRequest.setRemovePostByUser(true);
+                    } else {
+                        deactivateUserRequest.setRemoveCommentByUser(false);
+                        deactivateUserRequest.setRemovePostByUser(false);
+                    }
 
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     DeactivationReason deactivationReason = (DeactivationReason) radioButton.getTag();
@@ -2047,7 +2081,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
                                     onProfileDeactivation(userSolrObj); //add profile deactivation analytics
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getResources().getString(R.string.add_reason));
                                 }
 
                             } else {
@@ -2183,6 +2217,20 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         AnalyticsManager.trackEvent(Event.PROFILE_REPORTED, getScreenName(), properties);
     }
 
+    private ProfileProgressDialog.ProfileLevelType userLevel(UserSolrObj userSolrObj) {
+        ProfileProgressDialog.ProfileLevelType profileType;
+
+        if (userSolrObj.getProfileCompletionWeight() > BEGINNER_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= INTERMEDIATE_END_LIMIT) {
+            profileType = ProfileProgressDialog.ProfileLevelType.BEGINNER;
+        } else if (userSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT) {
+            profileType = ProfileProgressDialog.ProfileLevelType.ALLSTAR;
+        } else {
+            profileType = ProfileProgressDialog.ProfileLevelType.INTERMEDIATE;
+        }
+
+        return profileType;
+    }
+
     @Override
     public void onViewRendered(float dashWidth) {
 
@@ -2201,5 +2249,31 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
         intermediateTick.setLayoutParams(intermediateLayoutParams);
+
+        final Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
+        beginnerTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+        intermediateTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+        allStarTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+
+        beginnerTick.startAnimation(animation1);
+        intermediateTick.startAnimation(animation1);
+        allStarTick.startAnimation(animation1);
+
+        beginnerTick.postDelayed(new Runnable() {
+            public void run() {
+                animation1.cancel();
+                animation1.setAnimationListener(null);
+
+                beginnerTick.setBackground(null);
+                beginnerTick.clearAnimation();
+
+                intermediateTick.setBackground(null);
+                intermediateTick.clearAnimation();
+
+                allStarTick.setBackground(null);
+                allStarTick.clearAnimation();
+
+            }
+        }, 5000);
     }
 }

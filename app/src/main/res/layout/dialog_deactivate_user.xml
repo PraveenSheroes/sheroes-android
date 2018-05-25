@@ -32,22 +32,22 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginBottom="@dimen/dp_size_10"
         android:layout_marginTop="@dimen/dp_size_12"
-        android:background="@color/spam_dialog_divider"
-        android:layout_marginBottom="@dimen/dp_size_10"/>
+        android:background="@color/spam_dialog_divider" />
 
     <ScrollView
         android:id="@+id/scroll_container"
         android:layout_width="match_parent"
-        android:paddingBottom="@dimen/dp_size_10"
-        android:layout_height="@dimen/dp_size_250">
+        android:layout_height="@dimen/dp_size_250"
+        android:paddingBottom="@dimen/dp_size_10">
 
         <RadioGroup
             android:id="@+id/options_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
     </ScrollView>
 
@@ -55,24 +55,28 @@
         android:id="@+id/edit_text_reason"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_100"
-        android:background="@drawable/background_borderline_box"
-        android:layout_margin="@dimen/dp_size_16"
         android:layout_gravity="top"
+        android:layout_margin="@dimen/dp_size_16"
+        android:background="@drawable/background_borderline_box"
         android:gravity="top"
         android:hint="@string/please_elaborate"
-        android:padding="@dimen/dp_size_2"
         android:inputType="textMultiLine"
-        android:visibility="gone"
-        android:scrollHorizontally="false" />
+        android:padding="@dimen/dp_size_2"
+        android:scrollHorizontally="false"
+        android:visibility="gone" />
 
     <CheckBox
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_marginStart="@dimen/dp_size_10"
         android:id="@+id/delete_user_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/keep_user_post_likes_and_comments" />
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/keep_user_post_likes_and_comments"
+        android:textColor="@color/gray_light"
+        android:textSize="@dimen/sp_size_14"
+        android:theme="@style/MyCheckBox" />
 
     <Button
         android:id="@+id/submit"

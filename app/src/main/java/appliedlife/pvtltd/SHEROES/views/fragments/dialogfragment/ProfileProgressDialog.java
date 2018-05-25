@@ -100,13 +100,13 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     Button nextLevel;
 
     @Bind(R.id.beginner)
-    TextView beginnerTick;
+    ImageView beginnerTick;
 
     @Bind(R.id.intermediate)
-    TextView intermediateTick;
+    ImageView intermediateTick;
 
     @Bind(R.id.all_star)
-    TextView allStarTick;
+    ImageView allStarTick;
     //endregion
 
     //region Fragment methods
@@ -227,30 +227,30 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     private void invalidateProfileProgressBar(float progressPercentage) {
         if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
-                beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+                beginnerTick.setImageResource(R.drawable.ic_level_complete);
             } else {
-                beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+                beginnerTick.setImageResource(R.drawable.ic_level_incomplete);
             }
-            intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
-            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
+            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
 
         } else if (progressPercentage > ALL_STAR_START_LIMIT && progressPercentage <= ALL_STAR_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolrObj.getUnfilledProfileFields())) {
-                allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
+                allStarTick.setImageResource(R.drawable.ic_all_level_complete);
             } else {
-                allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+                allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
             }
-            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
-            intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            beginnerTick.setImageResource(R.drawable.ic_level_complete);
+            intermediateTick.setImageResource(R.drawable.ic_level_complete);
 
         } else {
             if (mUserSolrObj.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+                intermediateTick.setImageResource(R.drawable.ic_level_complete);
             } else {
-                intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+                intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
             }
-            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
-            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+            beginnerTick.setImageResource(R.drawable.ic_level_complete);
         }
     }
 

@@ -12,13 +12,13 @@
         android:layout_centerVertical="true"
         app:mBarThickness="@dimen/dp_size_10" />
 
-    <TextView
+    <ImageView
         android:id="@+id/beginner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_40"
         android:layout_marginStart="@dimen/dp_size_40"
-        android:background="@drawable/ic_level_complete" />
+        android:src="@drawable/ic_level_complete" />
 
     <TextView
         android:id="@+id/seprator"
@@ -26,7 +26,7 @@
         android:layout_height="1dp"
         android:layout_centerHorizontal="true" />
 
-    <TextView
+    <ImageView
         android:id="@+id/intermediate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -34,15 +34,15 @@
         android:layout_marginStart="@dimen/dp_size_15"
         android:layout_toEndOf="@id/seprator"
         android:layout_toRightOf="@id/seprator"
-        android:background="@drawable/ic_level_incomplete" />
+        android:src="@drawable/ic_level_incomplete" />
 
-    <TextView
+    <ImageView
         android:id="@+id/all_star"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/ic_all_level_complete" />
+        android:src="@drawable/ic_all_level_complete" />
 
 </RelativeLayout>

@@ -138,21 +138,30 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.iv_header_circle_icon)
     void userImageClickForProfile() {
+        openProfileActivity();
+    }
+
+    @OnClick(R.id.new_offer)
+    void offerClickForProfile() {
+
+        openProfileActivity();
+    }
+
+    private void openProfileActivity() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 dataItem.setEntityOrParticipantId(userId);
                 if(viewInterface instanceof FeedItemCallback){
-                        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-                        communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
-                        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                        ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
+                    CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+                    communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
+                    communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                    ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
                 }else {
                     viewInterface.handleOnClick(dataItem, ivLoginUserPic);
                 }
             }
         });
-
     }
 
     @OnClick(R.id.header_msg)

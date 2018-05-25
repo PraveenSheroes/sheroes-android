@@ -32,22 +32,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="2dp"
+        android:layout_marginBottom="@dimen/dp_size_10"
         android:layout_marginTop="@dimen/dp_size_12"
-        android:background="@color/spam_dialog_divider"
-        android:layout_marginBottom="@dimen/dp_size_10"/>
+        android:background="@color/spam_dialog_divider" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        android:layout_height="250dp">
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true">
 
         <RadioGroup
-            android:scrollbarAlwaysDrawVerticalTrack="true"
             android:id="@+id/options_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
     </ScrollView>
 
@@ -55,22 +54,15 @@
         android:id="@+id/edit_text_reason"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_100"
-        android:background="@drawable/background_borderline_box"
-        android:layout_margin="@dimen/dp_size_16"
         android:layout_gravity="top"
+        android:layout_margin="@dimen/dp_size_16"
+        android:background="@drawable/background_borderline_box"
         android:gravity="top"
         android:hint="@string/please_elaborate"
-        android:padding="@dimen/dp_size_2"
         android:inputType="textMultiLine"
-        android:visibility="gone"
-        android:scrollHorizontally="false" />
-
-    <CheckBox
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:id="@+id/delete_user_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Keep User post, likes and comments" />
+        android:padding="@dimen/dp_size_2"
+        android:scrollHorizontally="false"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/submit"
@@ -81,7 +73,7 @@
         android:background="@drawable/border_new_feature"
         android:foreground="?attr/selectableItemBackgroundBorderless"
         android:gravity="center"
-        android:text="submit"
+        android:text="@string/ID_SUBMIT"
         android:textAllCaps="true"
         android:textColor="@color/white" />
 

@@ -351,6 +351,7 @@ public class ContestInfoFragment extends BaseFragment {
         animatorSet.setInterpolator(mSelectedInterpolator);
         animatorSet.play(mAlphaAnimator);
         animatorSet.start();
+
     }
 
     //endregion

@@ -174,10 +174,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     Preference<AppInstallation> mAppInstallation;
 
     @Bind(R.id.beginner)
-    TextView beginnerTick;
+    ImageView beginnerTick;
 
     @Bind(R.id.intermediate)
-    TextView intermediateTick;
+    ImageView intermediateTick;
 
     @Bind(R.id.home_toolbar)
     public Toolbar mToolbar;
