@@ -345,8 +345,8 @@
         <TextView
             android:id="@+id/new_feature"
             android:layout_marginTop="@dimen/dp_size_8"
-            android:layout_width="@dimen/dp_size_52"
-            android:layout_height="@dimen/dp_size_20"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_size_22"
             android:layout_marginLeft="@dimen/dp_size_10"
             android:layout_marginStart="@dimen/dp_size_10"
             android:background="@drawable/border_new_feature"
@@ -370,6 +370,8 @@
         android:layout_below="@id/profile_level_container"
         android:layout_marginEnd="@dimen/dp_size_16"
         android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_3"
+        android:layout_marginBottom="@dimen/dp_size_3"
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginStart="@dimen/dp_size_16" />
 

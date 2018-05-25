@@ -291,11 +291,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     }
                     break;
             }
-        } else {
-            if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
-                if(mFeedFragment!=null) {
-                    mFeedFragment.refreshList();
-                }
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            if (mFeedFragment != null) {
+                mFeedFragment.refreshList();
             }
         }
     }

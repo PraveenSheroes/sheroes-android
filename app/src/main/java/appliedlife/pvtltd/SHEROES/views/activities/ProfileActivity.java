@@ -44,14 +44,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -502,6 +496,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 //hide menu dots
                 profileToolbarMenu.setVisibility(View.GONE);
 
+                //Hide the offer icon
+                if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
+                    newFeature.setVisibility(View.VISIBLE);
+                } else {
+                    newFeature.setVisibility(View.GONE);
+                }
             } else {
                 newFeature.setVisibility(View.GONE);
                 progressbarContainer.setVisibility(View.GONE);
@@ -758,10 +758,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.new_feature)
     protected void openUserProfileLevelDialog() {
-        if (mUserSolarObject != null) {
+        if (!CommonUtil.ensureFirstTime(AppConstants.PROFILE_OFFER_PREF) && mUserSolarObject != null) {
             ProfileProgressDialog.ProfileLevelType profileLevelType = userLevel(mUserSolarObject);
             openProfileProfileLevelDialog(profileLevelType);
-        } else {
             newFeature.setVisibility(View.GONE);
         }
     }
@@ -868,8 +867,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
 
-        //admin community owner , moderator have the deactivate feature
-        if(loggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (userPostObj.getEntityOrParticipantTypeId() == 1)) {
+        //admin , community moderator have the deactivate feature
+        if(loggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (userPostObj.getEntityOrParticipantTypeId() == 2 || userPostObj.getEntityOrParticipantTypeId() == 13)) {
             popup.getMenu().add(0, R.id.deactivate_user, 1, menuIconWithText(getResources().getDrawable(R.drawable.deactivate_user), getResources().getString(R.string.deactivate_user)));
         } else if (loggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
             popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
@@ -879,7 +878,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.deactivate_user:
-                        deactivateUser(mUserSolarObject);
+                        deactivateUser(userPostObj);
                         return true;
                     case R.id.report_spam:
                         reportSpamDialog(SpamContentType.USER, userPostObj);
@@ -2231,6 +2230,40 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         return profileType;
     }
 
+    private void animationOnProgressBar() {
+        if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
+            final ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 1.07f, 1f, 1.07f, beginnerTick.getWidth() / 2.0f, beginnerTick.getHeight() / 2.0f);
+            scaleAnimation.setDuration(1000); // scale to 1.1 times as big in 1 seconds
+            scaleAnimation.setRepeatCount(Animation.INFINITE);
+            scaleAnimation.setRepeatMode(Animation.INFINITE);
+            scaleAnimation.setInterpolator(this, android.R.interpolator.accelerate_decelerate);
+
+            beginnerTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+            intermediateTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+            allStarTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+
+            beginnerTick.startAnimation(scaleAnimation);
+            intermediateTick.startAnimation(scaleAnimation);
+            allStarTick.startAnimation(scaleAnimation);
+
+            beginnerTick.postDelayed(new Runnable() {
+                public void run() {
+                    scaleAnimation.cancel();
+                    scaleAnimation.setAnimationListener(null);
+
+                    beginnerTick.setBackground(null);
+                    beginnerTick.clearAnimation();
+
+                    intermediateTick.setBackground(null);
+                    intermediateTick.clearAnimation();
+
+                    allStarTick.setBackground(null);
+                    allStarTick.clearAnimation();
+                }
+            }, 5000);
+        }
+    }
+
     @Override
     public void onViewRendered(float dashWidth) {
 
@@ -2250,30 +2283,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
         intermediateTick.setLayoutParams(intermediateLayoutParams);
 
-        final Animation animation1 = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.bounce);
-        beginnerTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
-        intermediateTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
-        allStarTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
-
-        beginnerTick.startAnimation(animation1);
-        intermediateTick.startAnimation(animation1);
-        allStarTick.startAnimation(animation1);
-
-        beginnerTick.postDelayed(new Runnable() {
-            public void run() {
-                animation1.cancel();
-                animation1.setAnimationListener(null);
-
-                beginnerTick.setBackground(null);
-                beginnerTick.clearAnimation();
-
-                intermediateTick.setBackground(null);
-                intermediateTick.clearAnimation();
-
-                allStarTick.setBackground(null);
-                allStarTick.clearAnimation();
-
-            }
-        }, 5000);
+        animationOnProgressBar();
     }
 }

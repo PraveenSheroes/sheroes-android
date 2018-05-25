@@ -222,6 +222,8 @@ public class AppConstants {
     public static final String HEADER_PROFILE_PREF = "HEADER_PROFILE_PREF";
     public static final String NAV_SESSION_PREF = "NAV_SESSION_PREF";
     public static final String NAV_PREF = "NAV_PREF";
+    public static final String HOME_OFFER_PREF = "HOME_OFFER_PREF";
+    public static final String PROFILE_OFFER_PREF = "PROFILE_OFFER_PREF";
     public static final String CONTACT_SYNC_TIME_PREF = "CONTACT_SYNC";
     public static final int MIN_QUESTION_SEARCH_LENGTH = 3;
     public static final String IS_FROM_ADVERTISEMENT = "IS_FROM_ADVERTISEMENT";

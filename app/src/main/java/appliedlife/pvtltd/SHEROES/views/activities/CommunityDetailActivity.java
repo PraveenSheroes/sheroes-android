@@ -401,6 +401,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         invalidateItem(userPostSolrObj);
                     }
             }
+        } else  if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
         }
     }
 

@@ -55,6 +55,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.ripple)
     RippleView rippleView;
     private Context context;
+    @Bind(R.id.new_offer)
+    ImageView newOffer;
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
@@ -80,6 +82,12 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             isToolTip = CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF);
         } else {
             isToolTip = false;
+        }
+        //Hide the offer icon
+        if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF) || CommonUtil.getPrefValue(AppConstants.HOME_OFFER_PREF)) {
+            newOffer.setVisibility(View.VISIBLE);
+        } else {
+            newOffer.setVisibility(View.GONE);
         }
     }
 
@@ -143,8 +151,10 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.new_offer)
     void offerClickForProfile() {
-
-        openProfileActivity();
+        if(!CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+            openProfileActivity();
+            newOffer.setVisibility(View.GONE);
+        }
     }
 
     private void openProfileActivity() {
