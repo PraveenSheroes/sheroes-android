@@ -33,10 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_size_24"
-        android:visibility="gone"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/sp_size_20" />
+        android:textSize="@dimen/sp_size_20"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/tv_description_male_error"

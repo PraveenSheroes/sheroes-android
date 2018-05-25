@@ -53,9 +53,14 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
     @Bind(R.id.tv_women)
     TextView tvWomen;
     //endregion
-    private String mUserName, mPersonnelEmailId;
-    private boolean isMaleSelected;
 
+    //region member variables
+    private String mUserName, mPersonnelEmailId;
+
+    private boolean isMaleSelected;
+    //endregion
+
+    //region overridden methods
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.gender_input_form_fragment_layout, container, false);
@@ -82,7 +87,18 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return v;
     }
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                dismiss();
+            }
+        };
+    }
+    //endregion
 
+    //region onclick methods
     @OnClick(R.id.li_male_layout)
     public void maleImageClick() {
         isMaleSelected = true;
@@ -119,15 +135,5 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             }
         }
     }
-
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
-            @Override
-            public void onBackPressed() {
-                dismiss();
-            }
-        };
-    }
-
+    //endregion
 }

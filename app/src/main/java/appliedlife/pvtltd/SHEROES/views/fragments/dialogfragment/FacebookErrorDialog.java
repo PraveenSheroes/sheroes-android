@@ -33,16 +33,24 @@ import butterknife.OnClick;
 public class FacebookErrorDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Male User Message Screen";
     public static final String GENDER_SHARE_LINK = "https://shrs.me/xtap573vXM";
+    //region View variables
     @Bind(R.id.iv_close)
     ImageView mTvCacel;
+
     @Bind(R.id.tv_user_name_male_error)
     TextView tvUserNameMaleError;
+
     @Bind(R.id.tv_description_male_error)
     TextView tvDescriptionMaleError;
+    //endregion
+
+    //region member variables
     private int callFor = 0;
+
     private String message, mUserName;
+    //endregion
 
-
+    //region overridden variables
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -81,15 +89,6 @@ public class FacebookErrorDialog extends BaseDialogFragment {
         return view;
     }
 
-    @OnClick(R.id.iv_close)
-    public void tryAgainClick() {
-        if (callFor == AppConstants.NO_REACTION_CONSTANT) {
-
-        } else {
-            dismiss();
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -98,15 +97,6 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             return;
         }
         // set the animations to use on showing and hiding the dialog
-    }
-
-    @OnClick(R.id.tv_share_sheroes_app)
-    public void tvShareSheroesAppClick() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
-        startActivity(intent);
     }
 
     @Override
@@ -118,6 +108,26 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             }
         };
     }
+    //endregion
 
+    //region onclick methods
+    @OnClick(R.id.iv_close)
+    public void tryAgainClick() {
+        if (callFor == AppConstants.NO_REACTION_CONSTANT) {
+
+        } else {
+            dismiss();
+        }
+    }
+
+    @OnClick(R.id.tv_share_sheroes_app)
+    public void tvShareSheroesAppClick() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.setPackage(AppConstants.WHATS_APP);
+        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
+        startActivity(intent);
+    }
+    //endregion
 
 }
