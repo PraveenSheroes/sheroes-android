@@ -427,7 +427,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.li_post_link_render)
     public void tvLinkClick() {
-        LogUtils.info("Data", "######################## link clcik");
         if (null != mUserPostObj) {
             if (mUserPostObj.isOgVideoLinkB() && StringUtil.isNotNullOrEmptyString(mUserPostObj.getOgRequestedUrlS())) {
                 if (!mUserPostObj.getOgRequestedUrlS().contains(AppConstants.USER_YOU_TUBE) || !mUserPostObj.getOgRequestedUrlS().contains(AppConstants.CHANNEL_YOU_TUBE)) {
@@ -857,7 +856,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
 
 
-            if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
+            if (StringUtil.isNotNullOrEmptyString(lastComment.getPostedDate())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
                 tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
             } else {

@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -39,7 +38,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -68,7 +66,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.tooltip.Tooltip;
 
 import org.parceler.Parcels;
 
@@ -180,9 +177,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.anonymous)
     RelativeLayout mAnonymousView;
-    @Bind(R.id.view_anonymous)
-    View viewAnonymous;
-
 
     @Bind(R.id.action)
     TextView mAction;
@@ -404,15 +398,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             externalImageWithTextShare();
             setupToolBarItem();
 
-            if (!mIsChallengePost) {
-                try {
-                    if (CommonUtil.ensureFirstTime(AppConstants.CREATE_POST_SHARE_PREF)) {
-                        toolTipForAnonymous(CommunityPostActivity.this);
-                    }
-                } catch (Exception e) {
-                    Crashlytics.getInstance().core.logException(e);
-                }
-            }
         }
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
@@ -1100,16 +1085,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 setupUserView();
             }
         });
-    }
-
-    private void toolTipForAnonymous(Context context) {
-        Tooltip.Builder builder = new Tooltip.Builder(viewAnonymous, R.style.Tooltip)
-                //.setCancelable(true)
-                .setDismissOnClick(true)
-                .setGravity(Gravity.TOP)
-                .setText(R.string.tool_tip_create_post);
-        builder.show();
-
     }
 
     private void setupCommunityNameListener() {

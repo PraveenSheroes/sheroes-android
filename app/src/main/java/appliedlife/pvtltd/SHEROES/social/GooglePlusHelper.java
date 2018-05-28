@@ -78,43 +78,6 @@ public class GooglePlusHelper implements OnConnectionFailedListener {
         showErrorMessage();
     }
 
-
-    /**
-     * Show dialog
-     * @param id id of dialog
-     */
-    private void showDialog(int id) {
-        dialog = createCustomDialog(id);
-        if (dialog != null) {
-            dialog.show();
-        }
-    }
-
-    /**
-     * Creates and returns dialog
-     * @param id id of dialog
-     * @return dialog
-     */
-    private Dialog createCustomDialog(int id) {
-        Dialog dialog = null;
-        try {
-            CustomSocialDialog dialogCreater = null;
-            switch (id) {
-                case CustomSocialDialog.LOGGING_IN_DIALOG: {
-                    dialogCreater = new CustomSocialDialog(mContext, id);
-                    dialog = dialogCreater.createCustomDialog();
-                    break;
-                }
-                default:
-                    break;
-            }
-            return dialog;
-        } catch (Exception e) {
-            LogUtils.error(TAG,e);
-            return null;
-        }
-    }
-
     /**
      * If user is connected then clears which account is connected to app.
      */

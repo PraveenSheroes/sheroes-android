@@ -1020,7 +1020,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 @Override
                 public void callBack(boolean isShown) {
                     Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                   // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra(AppConstants.HIDE_SPLASH_THEME, true);
                     startActivity(intent);
                     finish();

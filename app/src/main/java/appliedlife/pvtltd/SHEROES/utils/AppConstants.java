@@ -221,8 +221,6 @@ public class AppConstants {
     public static final String ARTICLE_SHARE_PREF = "ARTICLE_SHARE_PREF";
     public static final String HEADER_PROFILE_SESSION_PREF = "HEADER_PROFILE_SESSION_PREF";
     public static final String HEADER_PROFILE_PREF = "HEADER_PROFILE_PREF";
-    public static final String NAV_SESSION_PREF = "NAV_SESSION_PREF";
-    public static final String NAV_PREF = "NAV_PREF";
     public static final String HOME_OFFER_PREF = "HOME_OFFER_PREF";
     public static final String PROFILE_OFFER_PREF = "PROFILE_OFFER_PREF";
     public static final String CONTACT_SYNC_TIME_PREF = "CONTACT_SYNC";
@@ -380,7 +378,6 @@ public class AppConstants {
     public static final String IS_FROM_PUSH = "Is From Push";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
     public static final String APP_SHARE_LINK = "https://shrs.me/m/3AICGHn1KJ";
-    public static final int DRAWER_SESSION = 3;
     public static final int NOTIFICATION_SESSION = 4;
     public static final int ALBUM_SESSION = 2;
     public static final int ARTICLE_SESSION = 2;

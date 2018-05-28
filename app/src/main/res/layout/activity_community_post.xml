@@ -33,13 +33,6 @@
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
-            <View
-                android:id="@+id/view_anonymous"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="@dimen/dp_size_30" />
-
             <CheckBox
                 android:id="@+id/anonymous_select"
                 android:layout_width="match_parent"

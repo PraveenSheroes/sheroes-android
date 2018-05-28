@@ -781,6 +781,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             }
                             postEntityId = userPostSolrObj.getEntityOrParticipantId();
                             postAuthorUserId = userPostSolrObj.getAuthorId();
+                        } else {
+                            if (null != mUserPostObj) {
+                                if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                                    communityId = null;
+                                } else {
+                                    communityId = mUserPostObj.getCommunityId();
+                                }
+                                postEntityId = mUserPostObj.getEntityOrParticipantId();
+                                postAuthorUserId = mUserPostObj.getAuthorId();
+                            }
                         }
                         if (query.length() == 1) {
                             searchUserDataRequest = mAppUtils.searchUserDataRequest("", communityId, postEntityId, postAuthorUserId, "COMMENT");

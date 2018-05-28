@@ -167,7 +167,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView , ProgressbarView{
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
-
     @Inject
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
 
@@ -233,6 +232,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     RecyclerView mRecyclerView;
     @Bind(R.id.tv_search_box)
     TextView mTvSearchBox;
+    @Bind(R.id.tv_setting)
+    TextView mTvSetting;
     @Bind(R.id.tv_job_home)
     TextView mTvJob;
     @Bind(R.id.tv_home)
@@ -289,6 +290,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public boolean mIsFirstTimeOpen = false;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
+    private String mUserName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -303,11 +305,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             isSheUser = mUserPreference.get().isSheUser();
             mUserId = mUserPreference.get().getUserSummary().getUserId();
+            mUserName = mUserPreference.get().getUserSummary().getFirstName();
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
                 isMentor = true;
             }
         }
-
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
         sheUserInit();
@@ -329,11 +331,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Crashlytics.getInstance().core.logException(e);
         }
         toolTipForNotification();
-        if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION) == AppConstants.DRAWER_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
-                toolTipForNav();
-            }
-        }
     }
 
     private void toolTipForNotification() {
@@ -369,20 +366,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
         openProfileActivity(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
-    }
-
-    private void toolTipForNav() {
-        try {
-            Tooltip.Builder builder = new Tooltip.Builder(viewToolTipNav, R.style.Tooltip)
-                    .setCancelable(true)
-                    .setDismissOnClick(true)
-                    .setGravity(Gravity.BOTTOM)
-                    .setText(R.string.tool_tip_nav);
-            builder.show();
-
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
     }
 
     @Override
@@ -556,7 +539,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
             showcaseManager.showFirstMainActivityShowcase();
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);
