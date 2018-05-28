@@ -285,6 +285,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public boolean mIsFirstTimeOpen = false;
     private String mGcmId;
     private ShowcaseManager showcaseManager;
+    private String mUserName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -299,6 +300,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             isSheUser = mUserPreference.get().isSheUser();
             mUserId = mUserPreference.get().getUserSummary().getUserId();
+            mUserName = mUserPreference.get().getUserSummary().getFirstName();
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
                 isMentor = true;
             }
@@ -324,11 +326,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Crashlytics.getInstance().core.logException(e);
         }
         toolTipForNotification();
-        if (CommonUtil.forGivenCountOnly(AppConstants.NAV_SESSION_PREF, AppConstants.DRAWER_SESSION) == AppConstants.DRAWER_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.NAV_PREF)) {
-                toolTipForNav();
-            }
-        }
     }
 
     private void toolTipForNotification() {
@@ -344,20 +341,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
                 }
             }
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-    }
-
-    private void toolTipForNav() {
-        try {
-            Tooltip.Builder builder = new Tooltip.Builder(viewToolTipNav, R.style.Tooltip)
-                    .setCancelable(true)
-                    .setDismissOnClick(true)
-                    .setGravity(Gravity.BOTTOM)
-                    .setText(R.string.tool_tip_nav);
-            builder.show();
-
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -534,7 +517,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
             showcaseManager.showFirstMainActivityShowcase();
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);

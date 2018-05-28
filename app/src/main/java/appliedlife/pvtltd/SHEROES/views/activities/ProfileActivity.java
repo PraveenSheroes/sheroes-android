@@ -493,16 +493,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             followUnFollowMentor();
         }
 
-        if (isOwnProfile) {
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    showToolTip();
-                }
-            }, 1000);
-        }
-
         if (userSolrObj.isAuthorMentor()) isMentor = true;
 
         if (isMentor) {
@@ -1269,42 +1259,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     public void dataOperationOnClick(BaseResponse baseResponse) {
         setAllValues(mFragmentOpen);
         super.dataOperationOnClick(baseResponse);
-    }
-
-    private void showToolTip() {
-        if (CommonUtil.ensureFirstTime(AppConstants.PROFILE_SHARE_PREF)) {
-            try {
-                LayoutInflater inflater = LayoutInflater.from(ProfileActivity.this);
-                final View view = inflater.inflate(R.layout.tooltip_arrow_up_side, null);
-                RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                lps.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.share_profile);
-                lps.setMargins(CommonUtil.convertDpToPixel(40, ProfileActivity.this), CommonUtil.convertDpToPixel(160, ProfileActivity.this), 0, 0);
-                final ImageView ivArrow = view.findViewById(R.id.iv_arrow);
-                RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                if (isUserOrChampionDetailsFilled()) {
-                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(150, ProfileActivity.this), 0);
-                } else {
-                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(18, ProfileActivity.this), 0);
-                }
-                imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
-                ivArrow.setLayoutParams(imageParams);
-                TextView title = view.findViewById(R.id.title);
-                title.setText(R.string.tool_tip_user_share);
-                rootLayout.addView(view, lps);
-                TextView gotIt = view.findViewById(R.id.got_it);
-                gotIt.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        rootLayout.removeView(view);
-                    }
-                });
-            } catch (IllegalArgumentException e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-        }
     }
 
     public void championDetailActivity(Long userId, boolean isMentor) {

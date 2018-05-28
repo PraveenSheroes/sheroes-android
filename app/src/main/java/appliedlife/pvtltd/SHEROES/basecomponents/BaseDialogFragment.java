@@ -34,6 +34,8 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     public static final String IS_CANCELABLE = "is_cancelable";
     public static final String ERROR_MESSAGE = "error_msg";
     public static final String USER_DEACTIVATED = "user_deactivate";
+    public static final String USER_NAME = "user_name";
+    public static final String EMAIL_ID = "email_id";
 
     @Override
     public void onStart() {
