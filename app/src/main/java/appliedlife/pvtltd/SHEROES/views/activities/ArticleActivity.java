@@ -117,6 +117,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
 
@@ -752,7 +753,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
-        ProfileActivity.navigateTo(this, userId, isMentor, -1, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userId, isMentor, PROFILE_NOTIFICATION_ID, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void updateTitleCommentCountView() {

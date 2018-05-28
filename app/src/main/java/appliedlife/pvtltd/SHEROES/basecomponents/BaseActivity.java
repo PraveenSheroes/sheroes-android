@@ -617,7 +617,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.fl_login_user:
             case R.id.tv_feed_community_post_login_user_name:
             case R.id.feed_img:
-                ProfileActivity.navigateTo(this, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), -1, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(this, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
                 break;
 
             case R.id.li_feed_article_images:

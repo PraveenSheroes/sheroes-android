@@ -407,7 +407,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(champId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), true, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
                 Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);
                 intent.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));

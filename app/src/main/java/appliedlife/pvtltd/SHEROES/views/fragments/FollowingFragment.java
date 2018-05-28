@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowi
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
@@ -226,7 +227,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     public void onItemClick(UserSolrObj mentor) {
         boolean isChampion = mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID;
         long id = mentor.getIdOfEntityOrParticipant();
-        ProfileActivity.navigateTo(getActivity(), id, isChampion, -1, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     @Override
