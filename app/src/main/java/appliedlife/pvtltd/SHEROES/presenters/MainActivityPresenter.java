@@ -11,6 +11,8 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
@@ -26,6 +28,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_NAV_DRAWER;
 
 /**
@@ -105,6 +108,43 @@ public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerVi
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+
+    }
+    public void fetchMyCommunities(MyCommunityRequest myCommunityRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
+            return;
+        }
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Function<FeedResponsePojo, FeedResponsePojo>() {
+            @Override
+            public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
+                return feedResponsePojo;
+            }
+        })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<FeedResponsePojo>() {
+            @Override
+            public void onComplete() {
+                getMvpView().stopProgressBar();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
+
+            }
+
+            @Override
+            public void onNext(FeedResponsePojo feedResponsePojo) {
+                getMvpView().stopProgressBar();
+                if (null != feedResponsePojo) {
+                    getMvpView().showMyCommunities(feedResponsePojo);
+                }
+            }
+        });
 
     }
 }

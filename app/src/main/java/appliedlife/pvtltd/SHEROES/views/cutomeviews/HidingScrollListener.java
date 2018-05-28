@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.presenters.CommunitiesListPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
+import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -42,6 +43,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     CommunitiesListPresenter mCommunitiesListPresenter;
     FollowingPresenterImpl mFollowingPresenter;
     RecyclerView mRecyclerView;
+    GridLayoutManager mGridLayoutManager;
     ProfilePresenterImpl profilePresenter;
     private LinearLayoutManager mManager;
     private int previousTotal = 0;
@@ -50,6 +52,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
     private OnBoardingPresenter mOnBoardingPresenter;
+    private MainActivityPresenter mMainActivityPresenter;
 
     public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mOnBoardingPresenter = onBoardingPresenter;
@@ -107,6 +110,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         this.mFragmentListRefreshData = mFragmentListRefreshData;
     }
 
+    public HidingScrollListener(MainActivityPresenter mainActivityPresenter, RecyclerView recyclerView, GridLayoutManager gridLayoutManager, FragmentListRefreshData mFragmentListRefreshData) {
+        mMainActivityPresenter = mainActivityPresenter;
+        mRecyclerView = recyclerView;
+        mGridLayoutManager = gridLayoutManager;
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+    }
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
@@ -133,8 +143,14 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         }
 
         visibleItemCount = mRecyclerView.getChildCount();
-        totalItemCount = mManager.getItemCount();
-        int lastVisibleItem = mManager.findLastVisibleItemPosition();
+        int lastVisibleItem;
+        if (mManager != null) {
+            totalItemCount = mManager.getItemCount();
+            lastVisibleItem = mManager.findLastVisibleItemPosition();
+        } else {
+            totalItemCount = mGridLayoutManager.getItemCount();
+            lastVisibleItem = mGridLayoutManager.findLastVisibleItemPosition();
+        }
         if (mFragmentListRefreshData.getSwipeToRefresh() == AppConstants.ONE_CONSTANT) {
             previousTotal = totalItemCount;
             loading = false;
@@ -169,6 +185,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     case AppConstants.MY_COMMUNITIES_FRAGMENT:
                         if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
                             mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
+                        }
+                        break;
+                    case AppConstants.MY_COMMUNITIES_DRAWER:
+                        if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
+                            mMainActivityPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
                         }
                         break;
                     case AppConstants.HOME_FRAGMENT:
@@ -260,10 +281,10 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), AppConstants.FOLLOWED_CHAMPION));
                         break;
                     case AppConstants.FOLLOWERS:
-                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(),  AppConstants.FOLLOWERS));
+                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), AppConstants.FOLLOWERS));
                         break;
                     case AppConstants.FOLLOWING:
-                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(),  AppConstants.FOLLOWING));
+                        mFollowingPresenter.getFollowersFollowing(mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), AppConstants.FOLLOWING));
                         break;
 
                     case AppConstants.ON_BOARDING_COMMUNITIES:

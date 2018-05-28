@@ -32,6 +32,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -99,9 +100,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
@@ -126,8 +129,10 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -216,14 +221,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     CoordinatorLayout mCLMainLayout;
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
-    @Bind(R.id.nav_view)
-    NavigationView mNavigationView;
+    @Bind(R.id.nav_view_left_drawer)
+    NavigationView mNavigationViewLeftDrawer;
+    @Bind(R.id.nav_view_right_drawer_communities)
+    NavigationView mNavigationViewRightDrawerWithCommunities;
     @Bind(R.id.rv_drawer)
     RecyclerView mRecyclerView;
-    @Bind(R.id.tv_search_box)
-    TextView mTvSearchBox;
-    @Bind(R.id.tv_setting)
-    TextView mTvSetting;
+    @Bind(R.id.rv_right_drawer_communities)
+    RecyclerView mRecyclerViewDrawerCommunities;
     @Bind(R.id.tv_job_home)
     TextView mTvJob;
     @Bind(R.id.tv_home)
@@ -266,7 +271,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
-    private CustiomActionBarToggle mCustiomActionBarToggle;
+    // private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
     private String profile;
     private MoEHelper mMoEHelper;
@@ -286,6 +291,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private String mGcmId;
     private ShowcaseManager showcaseManager;
     private String mUserName;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
+    int mPageNo = AppConstants.ONE_CONSTANT;
+    private SwipPullRefreshList mPullRefreshList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -391,7 +400,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void onResume() {
         super.onResume();
         if (isInviteReferral) {
-            if (this != null && !this.isFinishing() && null != mProgressDialog) {
+            if (!this.isFinishing() && null != mProgressDialog) {
                 mProgressDialog.dismiss();
             }
             isInviteReferral = false;
@@ -458,8 +467,34 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         LinearLayoutManager manager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
+
         //For navigation drawer items
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+
+
+        mMyCommunitiesAdapter=new MyCommunitiesDrawerAdapter(this,this);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
+        mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
+        //For right navigation drawer communities items
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities ,gridLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
     }
 
     public void renderHomeFragmentView() {
@@ -490,9 +525,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
         mInvite.setVisibility(View.VISIBLE);
-        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mDrawer.addDrawerListener(mCustiomActionBarToggle);
-        mNavigationView.setNavigationItemSelectedListener(this);
+        // mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        //   mDrawer.addDrawerListener(mCustiomActionBarToggle);
+        mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
+        mNavigationViewRightDrawerWithCommunities.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
@@ -693,7 +729,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             @Override
             public void run() {
-                //  mDrawer.openDrawer(Gravity.LEFT);
+                //  mDrawer.openDrawer(Gravity.START);
             }
         };
     }
@@ -708,6 +744,20 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         DrawerViewHolder.selectedOptionName = menuItemName;
         resetHamburgerSelectedItems();
+    }
+
+    @OnClick(R.id.tv_drawer_navigation)
+    public void drawerNavigationClick() {
+        AppUtils.hideKeyboard(mTvUserName, TAG);
+        mDrawer.openDrawer(Gravity.START);
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
+    }
+
+    @OnClick(R.id.ic_nav_communities)
+    public void onClickNavigationCommunities() {
+        AppUtils.hideKeyboard(mTvUserName, TAG);
+        mDrawer.openDrawer(GravityCompat.END);
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
     }
 
     @OnClick(R.id.fab_filter)
@@ -803,7 +853,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void resetUiSelectedOptions() {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
-        mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
@@ -820,8 +869,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void drawerItemOptions(View view, BaseResponse baseResponse) {
         NavMenuItem navMenuItem = (NavMenuItem) baseResponse;
 
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+        if (mDrawer.isDrawerOpen(GravityCompat.START) || mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.START);
+            mDrawer.closeDrawer(GravityCompat.END);
         }
 
         String url = navMenuItem.getMenuUrl();
@@ -1054,7 +1104,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void initHomeViewPagerAndTabs() {
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.ID_FEED));
         FragmentManager fm = getSupportFragmentManager();
@@ -1114,7 +1163,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
         flFeedFullView.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_FEED));
         homeButtonUi();
         initHomeViewPagerAndTabs();
     }
@@ -1149,7 +1197,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
         mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
 
         mTitleText.setText("");
@@ -1163,7 +1210,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void communityOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
-        mTvSearchBox.setText(getString(R.string.ID_SEARCH_IN_COMMUNITIES));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         initCommunityViewPagerAndTabs();
         FragmentManager fm = getSupportFragmentManager();
@@ -1218,7 +1264,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void articleUi() {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
         mFloatActionBtn.setVisibility(View.GONE);
-        mTvSearchBox.setVisibility(View.GONE);
         mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
 
@@ -1260,7 +1305,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
-        mTvSearchBox.setVisibility(View.GONE);
         if (isSheUser) {
             mICSheroes.setVisibility(View.GONE);
         } else {
@@ -1324,7 +1368,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.fl_notification)
     public void notificationClick() {
-        // mDrawer.openDrawer(Gravity.LEFT);
+        // mDrawer.openDrawer(Gravity.START);
         AppUtils.hideKeyboard(mTvUserName, TAG);
         bellNotificationDialog();
     }
@@ -1340,13 +1384,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
         }
-    }
-
-    @OnClick(R.id.tv_drawer_navigation)
-    public void drawerNavigationClick() {
-        AppUtils.hideKeyboard(mTvUserName, TAG);
-        mDrawer.openDrawer(Gravity.LEFT);
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
     }
 
     @Override
@@ -1692,6 +1729,34 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             });
             notifyNavigationDrawerItems(mNavigationDrawerItems);
         }
+    }
+
+    @Override
+    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
+        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+
+            List<FeedDetail> data = null;
+            FeedDetail feedProgressBar = new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data = mPullRefreshList.getFeedResponses();
+            if(data.size()>20) {
+                int position = data.size() - feedDetailList.size();
+                if (position > 0) {
+                    data.remove(position - 1);
+                }
+                data.add(feedProgressBar);
+            }
+            mMyCommunitiesAdapter.setData(data);
+
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
+        }
+        mMyCommunitiesAdapter.notifyDataSetChanged();
     }
 
     @Override

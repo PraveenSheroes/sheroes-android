@@ -127,6 +127,7 @@ public class AppConstants {
     public static final String HELPLINE_FRAGMENT = "helpline";
 
     public static final String FEATURE_FRAGMENT = "feature";
+    public static final String MY_COMMUNITIES_DRAWER = "my_communities_drawer";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";

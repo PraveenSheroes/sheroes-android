@@ -14,7 +14,7 @@
         android:id="@+id/snow_flake_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <include
         android:id="@+id/fl_feed_comments"
@@ -23,38 +23,92 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view_left_drawer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/white"
+        android:fitsSystemWindows="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@color/white"
-            android:fitsSystemWindows="true">
+            android:orientation="vertical">
 
-            <LinearLayout
+            <include
+                android:id="@+id/home_drawer"
+                layout="@layout/activity_home_drawer" />
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <include
-                    android:id="@+id/home_drawer"
-                    layout="@layout/activity_home_drawer" />
-
-                <FrameLayout
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_drawer"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent" />
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/rv_drawer"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
+                <include layout="@layout/progress_bar_login" />
 
-                    <include layout="@layout/progress_bar_login" />
+            </FrameLayout>
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
 
-                </FrameLayout>
-            </LinearLayout>
-        </android.support.design.widget.NavigationView>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view_right_drawer_communities"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="48dp"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:text="@string/ID_MY_COMMUNITIES"
+                android:textColor="@color/comment_text"
+                android:textSize="16sp"
+                android:textStyle="normal" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_right_drawer_communities"
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_24" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_size_24"
+                android:layout_gravity="center"
+                android:src="@drawable/vector_community_search" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:layout_gravity="center"
+                android:letterSpacing="0.07"
+                android:textAllCaps="true"
+                android:text="@string/explore_All"
+                android:gravity="center"
+                android:textColor="@color/footer_icon_text"
+                android:textSize="14sp"
+                android:textStyle="normal" />
+        </LinearLayout>
+
+    </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>
 

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/community_item"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+        android:id="@+id/mutual_community_icon"
+        android:layout_width="@dimen/my_community_drawer_icon_width"
+        android:layout_height="@dimen/my_community_drawer_icon_height"
+        android:src="@drawable/ic_anonomous" />
+
+    <TextView
+        android:id="@+id/community_name"
+        android:layout_width="95dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ellipsize="end"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:gravity="center"
+        android:lines="@integer/int_value_for_line_1"
+        android:text="I love My "
+        android:layout_marginBottom="@dimen/dp_size_4"
+        android:textColor="@color/recent_post_comment"
+        android:textSize="@dimen/sp_size_14" />
+
+</appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
