@@ -875,6 +875,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
 
+            if (PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
+
             if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {

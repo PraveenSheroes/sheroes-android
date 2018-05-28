@@ -37,10 +37,12 @@
         android:background="@color/spam_dialog_divider" />
 
     <ScrollView
+        android:id="@+id/scroll_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:fillViewport="true"
         android:fadeScrollbars="false"
-        android:fitsSystemWindows="true">
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp_size_10">
 
         <RadioGroup
             android:id="@+id/options_container"
@@ -64,6 +66,19 @@
         android:padding="@dimen/dp_size_2"
         android:scrollHorizontally="false"
         android:visibility="gone" />
+
+    <CheckBox
+        android:id="@+id/delete_user_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:text="@string/keep_user_post_likes_and_comments"
+        android:textColor="@color/gray_light"
+        android:textSize="@dimen/sp_size_14"
+        android:theme="@style/MyCheckBox" />
 
     <Button
         android:id="@+id/submit"

@@ -33,6 +33,7 @@
     <color name="spam_post">#f6f6f6</color>
     <color name="on_board_work">#dcdcdc</color>
     <color name="spam_dialog_divider">#dcdcdc</color>
+    <color name="nav_menu_header_divider">#dcdcdc</color>
     <color name="progress_unfilled">#dcdcdc</color>
     <color name="feed_back_color">#e8e8e8</color>
 
@@ -74,6 +75,7 @@
     <color name="fully_transparent">#00000000</color>
     <color name="light_red">#9C27B0</color>
     <color name="feed_article_label">#3C3C3C</color>
+    <color name="nav_menu_header_label">#3C3C3C</color>
     <color name="feed_article_comment">#777f8a</color>
     <color name="feed_card_time">#90949c</color>
     <color name="requested_btn">#5d6d7d</color>

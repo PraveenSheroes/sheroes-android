@@ -1,6 +1,5 @@
-package appliedlife.pvtltd.SHEROES;
+package appliedlife.pvtltd.SHEROES.basecomponents;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 
 /**

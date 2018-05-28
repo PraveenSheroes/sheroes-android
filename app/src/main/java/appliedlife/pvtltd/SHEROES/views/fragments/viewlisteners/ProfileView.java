@@ -29,4 +29,6 @@ public interface ProfileView extends BaseMvpView {
 
     void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj);
 
+    void onUserDeactivation(BaseResponse baseResponse);
+
 }

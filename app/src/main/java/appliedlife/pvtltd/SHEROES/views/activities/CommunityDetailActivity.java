@@ -401,6 +401,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         invalidateItem(userPostSolrObj);
                     }
             }
+        } else  if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
         }
     }
 
@@ -743,10 +745,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     public void invalidateItem(FeedDetail feedDetail) {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            Fragment fragment = mAdapter.getItem(i);
-            if (fragment instanceof FeedFragment) {
-                ((FeedFragment) fragment).updateItem(feedDetail);
+        if (mAdapter != null) {
+            for (int i = 0; i < mAdapter.getCount(); i++) {
+                Fragment fragment = mAdapter.getItem(i);
+                if (fragment instanceof FeedFragment) {
+                    ((FeedFragment) fragment).updateItem(feedDetail);
+                }
             }
         }
     }

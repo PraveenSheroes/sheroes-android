@@ -1191,6 +1191,11 @@ public class CommonUtil {
         return prefs.getString(key, "");
     }
 
+    public static boolean getPrefValue(String key) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        return prefs != null && prefs.getBoolean(key, false);
+    }
+
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (null == prefs) {

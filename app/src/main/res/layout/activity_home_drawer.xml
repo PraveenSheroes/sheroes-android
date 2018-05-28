@@ -1,68 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_size_172"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-    <ImageView
+    <LinearLayout
+        android:id="@+id/nav_menu_header"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/nav_header_height"
+        android:layout_marginTop="@dimen/dp_size_24"
         android:background="@drawable/nav_header_background"
-        android:id="@+id/iv_side_drawer_profile_blur_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="@null"
-        android:scaleType="fitXY" />
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/profile_link"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:clickable="true">
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/iv_drawer_profile_circle_icon"
+            android:layout_width="@dimen/dp_size_64"
+            android:layout_height="@dimen/dp_size_64"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_16" />
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_10"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textAllCaps="true"
+            android:textColor="@color/nav_menu_header_label"
+            android:textSize="@dimen/sp_size_14"
+            tools:text="Ravi kumar saini" />
+
+        <TextView
+            android:id="@+id/tv_user_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_6"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/nav_menu_header_label"
+            android:textSize="@dimen/sp_size_14"
+            android:layout_marginBottom="@dimen/dp_size_16"
+            tools:text="Delhi" />
+
+        <include
+            android:visibility="gone"
+            android:id="@+id/progress_bar"
+            layout="@layout/profile_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:alpha=".2"
-            android:background="@color/black"
-            android:orientation="vertical" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="vertical">
-
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_drawer_profile_circle_icon"
-                android:layout_width="@dimen/dp_size_64"
-                android:layout_height="@dimen/dp_size_64"
-                android:layout_marginTop="@dimen/dp_size_40"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginStart="@dimen/dp_size_16"/>
-
-            <TextView
-                android:layout_marginTop="@dimen/dp_size_10"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginStart="@dimen/dp_size_16"
-                android:id="@+id/tv_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_14" />
-
-            <TextView
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginStart="@dimen/dp_size_16"
-                android:id="@+id/tv_user_location"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_6"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_14" />
-        </LinearLayout>
-    </FrameLayout>
+            android:layout_height="@dimen/dp_size_2"
+            android:layout_marginTop="@dimen/dp_size_4"
+            android:background="@color/nav_menu_header_divider" />
+    </LinearLayout>
 </FrameLayout>

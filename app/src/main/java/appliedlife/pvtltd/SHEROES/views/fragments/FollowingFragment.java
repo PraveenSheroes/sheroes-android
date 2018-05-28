@@ -17,9 +17,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.FollowerFollowingCallback;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.FollowerFollowingCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowi
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
@@ -50,7 +51,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
  * Followed mentoring listing
  */
 
-public class FollowingFragment extends BaseFragment implements IFollowerFollowingView, FollowerFollowingCallback{
+public class FollowingFragment extends BaseFragment implements IFollowerFollowingView, FollowerFollowingCallback {
 
     private static final String SCREEN_LABEL = "Followed Champions Screen";
     private static final int MENTOR_TYPE_ID = 7;
@@ -129,7 +130,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     private void followedListPagination(FragmentListRefreshData mFragmentListRefreshData) {
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new FollowerFollowingAdapter(getContext(), followingPresenter, this);
+        mAdapter = new FollowerFollowingAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -226,7 +227,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     public void onItemClick(UserSolrObj mentor) {
         boolean isChampion = mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID;
         long id = mentor.getIdOfEntityOrParticipant();
-        ProfileActivity.navigateTo(getActivity(), id, isChampion, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     @Override
