@@ -165,6 +165,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
 
+    private static final float ORIGINAL_SIZE = 1.0f;
+    private static final float EXPANDED_SIZE = 1.02f;
+    private static final int ANIMATION_REPEAT_DURATION = 700;
+    private static final int ANIMATION_MAX_DURATION = 5000;
+
     private Long mChampionId;
     private boolean isMentor;
     private int mFromNotification;
@@ -1278,6 +1283,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+
+            if (ProfileActivity.this == null || ProfileActivity.this.isFinishing()) return;
+
             if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
@@ -2081,6 +2089,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
                                     onProfileDeactivation(userSolrObj); //add profile deactivation analytics
                                 } else {
+                                    reason.setVisibility(View.VISIBLE);
+                                    scrollView.setVisibility(View.GONE);
                                     reason.setError(getResources().getString(R.string.add_reason));
                                 }
 
@@ -2229,8 +2239,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private void animationOnProgressBar() {
         if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
-            final ScaleAnimation scaleAnimation = new ScaleAnimation(1f, 1.07f, 1f, 1.07f, beginnerTick.getWidth() / 2.0f, beginnerTick.getHeight() / 2.0f);
-            scaleAnimation.setDuration(1000); // scale to 1.1 times as big in 1 seconds
+            final ScaleAnimation scaleAnimation = new ScaleAnimation(ORIGINAL_SIZE, EXPANDED_SIZE, ORIGINAL_SIZE, EXPANDED_SIZE, beginnerTick.getWidth() / 2, beginnerTick.getHeight() / 2);
+            scaleAnimation.setDuration(ANIMATION_REPEAT_DURATION); // scale to 1.04 times as big in 700 milli-seconds
             scaleAnimation.setRepeatCount(Animation.INFINITE);
             scaleAnimation.setRepeatMode(Animation.INFINITE);
             scaleAnimation.setInterpolator(this, android.R.interpolator.accelerate_decelerate);
@@ -2257,7 +2267,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     allStarTick.setBackground(null);
                     allStarTick.clearAnimation();
                 }
-            }, 5000);
+            }, ANIMATION_MAX_DURATION);
         }
     }
 

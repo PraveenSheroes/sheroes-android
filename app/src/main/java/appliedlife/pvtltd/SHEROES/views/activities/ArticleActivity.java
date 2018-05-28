@@ -1209,6 +1209,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), position, comment);
             }
 
+            if (ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
+
             if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
