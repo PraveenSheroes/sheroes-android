@@ -49,6 +49,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -2028,7 +2029,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.deactivationReasons != null && mConfiguration.get().configData.deactivationReasons.getDeactivationReasons()!= null) {
             deactivationReasons = mConfiguration.get().configData.deactivationReasons.getDeactivationReasons();
         } else {
-            String deactivateReasonsContent = AppUtils.getStringContent(AppConstants.DEACTIVATE_REASONS_FILE); //read spam reasons from local file
+            String deactivateReasonsContent = AppUtils.getStringContent(AppConstants.DEACTIVATE_REASONS_FILE); //read user deactivation reasons from local file
            DeactivationReasons reasons = AppUtils.parseUsingGSONFromJSON(deactivateReasonsContent, DeactivationReasons.class.getName());
             deactivationReasons = reasons != null ? reasons.getDeactivationReasons() : null;
         }
@@ -2050,17 +2051,18 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         reasonSubTitle.setLayoutParams(layoutParams);
 
         final CheckBox deleteUserActivityCheck = userDeactivationDialog.findViewById(R.id.delete_user_activity);
-        final RadioGroup spamOptions = userDeactivationDialog.findViewById(R.id.options_container);
-        SpamUtil.addDeactivationReasonsToRadioGroup(ProfileActivity.this, deactivationReasons, spamOptions);
+        final RadioGroup deactivationOptions = userDeactivationDialog.findViewById(R.id.options_container);
+        SpamUtil.addDeactivationReasonsToRadioGroup(ProfileActivity.this, deactivationReasons, deactivationOptions);
         final ScrollView scrollView = userDeactivationDialog.findViewById(R.id.scroll_container);
-
+        LinearLayout.LayoutParams scrollviewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, CommonUtil.convertDpToPixel(250, ProfileActivity.this));
+        scrollView.setLayoutParams(scrollviewParams);
         Button submit = userDeactivationDialog.findViewById(R.id.submit);
         final EditText reason = userDeactivationDialog.findViewById(R.id.edit_text_reason);
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (spamOptions.getCheckedRadioButtonId() != -1) {
+                if (deactivationOptions.getCheckedRadioButtonId() != -1) {
 
                     DeactivateUserRequest deactivateUserRequest = new DeactivateUserRequest();
                     deactivateUserRequest.setUserId(userSolrObj.getIdOfEntityOrParticipant());
@@ -2075,13 +2077,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         deactivateUserRequest.setRemovePostByUser(false);
                     }
 
-                    RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
+                    RadioButton radioButton = deactivationOptions.findViewById(deactivationOptions.getCheckedRadioButtonId());
                     DeactivationReason deactivationReason = (DeactivationReason) radioButton.getTag();
                     if (deactivationReason != null) {
                         deactivateUserRequest.setDeactivationReason(deactivationReason.getDeactivationReasonId());
                         if (deactivationReason.getDeactivationReason().equalsIgnoreCase(getString(R.string.other))) {
+
                             if (reason.getVisibility() == View.VISIBLE) {
-                                scrollView.setVisibility(View.VISIBLE);
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     deactivateUserRequest.setReasonForDeactivationDetails(reason.getText().toString());
                                     profilePresenter.deactivateUser(deactivateUserRequest); //submit
@@ -2090,14 +2092,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                                     onProfileDeactivation(userSolrObj); //add profile deactivation analytics
                                 } else {
                                     reason.setVisibility(View.VISIBLE);
-                                    scrollView.setVisibility(View.GONE);
                                     reason.setError(getResources().getString(R.string.add_reason));
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
-                                scrollView.setVisibility(View.GONE);
-                                SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
+                                SpamUtil.hideSpamReason(deactivationOptions, deactivationOptions.getCheckedRadioButtonId());
+                                LinearLayout.LayoutParams scrollviewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, CommonUtil.convertDpToPixel(50, ProfileActivity.this));
+                                scrollView.setLayoutParams(scrollviewParams);
                             }
                         } else {
                             profilePresenter.deactivateUser(deactivateUserRequest);
