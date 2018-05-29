@@ -66,21 +66,21 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             if (StringUtil.isNotNullOrEmptyString(mUserName)) {
                 tvUserNameMaleError.setVisibility(View.VISIBLE);
                 tvUserNameMaleError.setText(mUserName);
-                SpannableString spannableString = new SpannableString(message);
-                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
-                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-                tvDescriptionMaleError.setSelected(true);
-            } else {
+
+            } /*else {
                 SpannableString spannableString = new SpannableString(message);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 0, message.length(), 0);
                 tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
                 tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
                 tvDescriptionMaleError.setSelected(true);
-            }
-
+            }*/
+            SpannableString spannableString = new SpannableString(message);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
+            tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+            tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+            tvDescriptionMaleError.setSelected(true);
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
