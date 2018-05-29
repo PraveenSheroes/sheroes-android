@@ -641,7 +641,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(thirdImage)) {
             ivThird.setOnClickListener(this);
-            String thirdThumborUrl = CommonUtil.getThumborUri(secondImage, CommonUtil.getWindowWidth(context), imageHeight / 2);
+            String thirdThumborUrl = CommonUtil.getThumborUri(thirdImage, CommonUtil.getWindowWidth(context), imageHeight / 2);
             Glide.with(context)
                     .load(thirdThumborUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
