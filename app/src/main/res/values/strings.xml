@@ -572,6 +572,7 @@
     <string name="suggested_list_blank">Want to see which friends are on Sheroes?</string>
     <string name="contact_list_blank">Find friends from your contacts</string>
     <string name="invite_friend_request_to_join">Join me on the women-only SHEROES app. You can participate (even anonymously) in discussions on women-related topics and help other women in the Indian community to make progress in their lives.</string>
+    <string name="share_with_friend_for_download_app">Hi, I found this women only app for you. It\'s name is SHEROES (Women Heroes). You can talk about and ask anything (even anonymously) without hesitation and help other women by giving them good advice.</string>
     <string name="invite_sync_contact">Allow us to sync your mobile contacts to make finding friends super easy!</string>
     <string name="sync_contact">Sync contacts</string>
     <string name="no_search_contact">No contact found</string>

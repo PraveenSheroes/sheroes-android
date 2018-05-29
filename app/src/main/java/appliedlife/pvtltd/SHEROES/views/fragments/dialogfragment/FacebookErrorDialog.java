@@ -32,7 +32,7 @@ import butterknife.OnClick;
 
 public class FacebookErrorDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Male User Message Screen";
-    public static final String GENDER_SHARE_LINK = "https://shrs.me/xtap573vXM";
+    public static final String GENDER_SHARE_LINK = " https://shrs.me/xtap573vXM";
     //region View variables
     @Bind(R.id.iv_close)
     ImageView mTvCacel;
@@ -125,7 +125,7 @@ public class FacebookErrorDialog extends BaseDialogFragment {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_with_friend_for_download_app) + GENDER_SHARE_LINK);
         startActivity(intent);
     }
     //endregion

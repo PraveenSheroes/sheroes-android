@@ -583,7 +583,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     case R.id.author:
 
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if (!comment.isAnonymous()) {
+                        if (!comment.isAnonymous() && !comment.isSpamComment()) {
                             openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
                         break;
