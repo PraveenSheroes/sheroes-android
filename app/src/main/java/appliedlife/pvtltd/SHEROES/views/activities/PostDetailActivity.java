@@ -79,6 +79,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -266,13 +267,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (mUserPostObj != null && StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
-            if (mUserPostObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                mTitleToolbar.setText(mUserPostObj.getPostCommunityName() + " post");
-            } else {
-                mTitleToolbar.setText(mUserPostObj.getAuthorName() + "'s" + " post");
-            }
-        }
+        setTitleToToolbar(userPostSolrObj);
+
         if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.mCommentHolderText)) {
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
             mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
@@ -407,6 +403,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setResult(RESULT_OK, intent);
     }
 
+    public void setTitleToToolbar(UserPostSolrObj userPostSolrObj) {
+        if (userPostSolrObj != null && StringUtil.isNotNullOrEmptyString(userPostSolrObj.getAuthorName())) {
+            if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                mTitleToolbar.setText(userPostSolrObj.getPostCommunityName() + " post");
+            } else {
+                mTitleToolbar.setText(userPostSolrObj.getAuthorName() + "'s" + " post");
+            }
+        }
+    }
+
     @Override
     public void addAllPost(int startIndex, List<Comment> commentList) {
         mPostDetailListAdapter.addDatas(startIndex, commentList);
@@ -414,6 +420,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void addData(int index, BaseResponse baseResponse) {
+        if(baseResponse instanceof UserPostSolrObj) {
+            setTitleToToolbar((UserPostSolrObj) baseResponse);
+        }
         mPostDetailListAdapter.addData(baseResponse, index);
     }
 
