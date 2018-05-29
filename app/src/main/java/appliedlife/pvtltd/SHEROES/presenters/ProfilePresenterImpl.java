@@ -214,6 +214,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
 
         profileModel.reportSpam(spamPostRequest)
                 .subscribeOn(Schedulers.io())
+                .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<SpamResponse>() {
                     @Override
@@ -247,6 +248,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
         profileModel.deactivateUser(deactivateUserRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<BaseResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<BaseResponse>() {
                     @Override
                     public void onComplete() {
