@@ -472,7 +472,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
 
 
-        mMyCommunitiesAdapter=new MyCommunitiesDrawerAdapter(this,this);
+        mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
@@ -481,7 +481,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         //For right navigation drawer communities items
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
         activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities ,gridLayoutManager, mFragmentListRefreshData) {
+        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
 
@@ -1171,6 +1171,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (null != mAdapter) {
             mAdapter.notifyDataSetChanged();
         }
+        if (null !=mMyCommunitiesAdapter ) {
+            mMyCommunitiesAdapter.notifyDataSetChanged();
+            if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+                mDrawer.closeDrawer(GravityCompat.END);
+            }
+        }
     }
 
     public void homeButtonUi() {
@@ -1206,7 +1212,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
 
-    @OnClick(R.id.tv_communities)
+    @OnClick({R.id.tv_communities,R.id.iv_communities_search})
     public void communityOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
@@ -1743,7 +1749,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             FeedDetail feedProgressBar = new FeedDetail();
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
             data = mPullRefreshList.getFeedResponses();
-            if(data.size()>20) {
+            if (data.size() > 20) {
                 int position = data.size() - feedDetailList.size();
                 if (position > 0) {
                     data.remove(position - 1);

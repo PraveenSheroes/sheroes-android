@@ -90,6 +90,7 @@
                 android:layout_marginTop="@dimen/dp_size_24" />
 
             <ImageView
+                android:id="@+id/iv_communities_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
