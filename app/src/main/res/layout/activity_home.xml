@@ -60,6 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="end"
+        android:background="@color/white"
         android:fitsSystemWindows="true">
 
         <LinearLayout
@@ -71,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="36dp"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/ID_MY_COMMUNITIES"
@@ -82,28 +83,31 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_right_drawer_communities"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="390dp"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_25"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_24" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_24"
                 android:layout_gravity="center"
+                android:paddingBottom="@dimen/dp_size_8"
+                android:paddingLeft="@dimen/dp_size_16"
+                android:paddingRight="@dimen/dp_size_16"
+                android:paddingTop="@dimen/dp_size_16"
                 android:src="@drawable/vector_community_search" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:layout_gravity="center"
-                android:letterSpacing="0.07"
-                android:textAllCaps="true"
-                android:text="@string/explore_All"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
+                android:letterSpacing="0.07"
+                android:text="@string/explore_All"
+                android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="14sp"
                 android:textStyle="normal" />

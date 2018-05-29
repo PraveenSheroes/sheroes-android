@@ -21,7 +21,6 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
         android:lines="@integer/int_value_for_line_1"
-        android:text="I love My "
         android:layout_marginBottom="@dimen/dp_size_4"
         android:textColor="@color/recent_post_comment"
         android:textSize="@dimen/sp_size_14" />
