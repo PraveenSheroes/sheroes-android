@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -30,30 +29,28 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textAllCaps="true"
             android:textColor="@color/nav_menu_header_label"
-            android:textSize="@dimen/sp_size_14"
-            tools:text="Ravi kumar saini" />
+            android:textSize="@dimen/sp_size_14" />
 
         <TextView
             android:id="@+id/tv_user_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_6"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/nav_menu_header_label"
-            android:textSize="@dimen/sp_size_14"
-            android:layout_marginBottom="@dimen/dp_size_16"
-            tools:text="Delhi" />
+            android:textSize="@dimen/sp_size_14" />
 
         <include
-            android:visibility="gone"
             android:id="@+id/progress_bar"
             layout="@layout/profile_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16" />
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
