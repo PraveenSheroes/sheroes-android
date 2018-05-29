@@ -37,7 +37,6 @@
     <application
         android:name=".basecomponents.SheroesApplication"
         android:allowBackup="false"
-        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_sheroes_launcher"
         android:label="@string/ID_APP_NAME"
         android:networkSecurityConfig="@xml/network_security_config"
