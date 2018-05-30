@@ -204,6 +204,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public TextView mTvNotificationReadCount;
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
+    @Bind(R.id.ic_nav_communities)
+    public ImageView mIvNavCommunities;
     @Bind(R.id.invite)
     ImageView mInvite;
     @Bind(R.id.fl_notification_read_count)
@@ -573,7 +575,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName,mIvNavCommunities);
             showcaseManager.showFirstMainActivityShowcase();
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);

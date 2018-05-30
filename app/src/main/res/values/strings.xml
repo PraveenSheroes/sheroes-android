@@ -514,6 +514,8 @@
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities for you!</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Tap here to explore various communities of interest.</string>
+    <string name="ID_SHOW_CASE_MY_COMMUNITIES_TITLE">My Communities</string>
+    <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
     <string name="ID_SHOW_CASE_FEED_TITLE">Welcome to SHEROES</string>
     <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
     <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
