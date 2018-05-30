@@ -185,7 +185,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private boolean mControlsVisible = true;
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
-
+    @Override
+    public void onCreate(Bundle bundle) {
+        super.onCreate(bundle );
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);

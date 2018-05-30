@@ -435,11 +435,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mEventId = getIntent().getExtras().getInt(AppConstants.EVENT_ID);
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
             if (!isSheUser) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    mAppBarLayout.setElevation(0);
-                }else {
-                    ViewCompat.setElevation(mAppBarLayout, 0);
-                }
                 initHomeViewPagerAndTabs();
             }
             if (mEventId > 0) {
@@ -1767,11 +1762,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void initHomeViewPagerAndTabs() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mAppBarLayout.setElevation(0f);
+        }else {
+            ViewCompat.setElevation(mAppBarLayout, 0f);
+        }
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.home_lable));
         FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
+        for (int i = 0; i < fm.getFragments().size(); ++i) {
+
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
