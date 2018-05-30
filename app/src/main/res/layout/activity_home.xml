@@ -80,14 +80,25 @@
                 android:textSize="16sp"
                 android:textStyle="normal" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_right_drawer_communities"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="390dp"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_25"
                 android:layout_marginRight="@dimen/dp_size_16"
-                android:layout_marginTop="@dimen/dp_size_24" />
+                android:layout_marginTop="@dimen/dp_size_24">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_right_drawer_communities"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+                <ProgressBar
+                    android:id="@+id/pb_communities_drawer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"/>
+
+            </FrameLayout>
 
             <ImageView
                 android:id="@+id/iv_communities_search"

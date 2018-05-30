@@ -247,6 +247,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     ImageView mICSheroes;
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar pbNavDrawer;
+    @Bind(R.id.pb_communities_drawer)
+    ProgressBar pbCommunitiesDrawer;
     @Bind(R.id.snow_flake_view)
     SnowFlakeView mSnowFlakView;
     @Bind(R.id.santa_view)
@@ -271,7 +273,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
-    // private CustiomActionBarToggle mCustiomActionBarToggle;
+    private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
     private String profile;
     private MoEHelper mMoEHelper;
@@ -473,14 +475,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
         mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
         //For right navigation drawer communities items
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
-        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
         mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -525,8 +525,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mICSheroes.setVisibility(View.VISIBLE);
         mTitleText.setVisibility(View.GONE);
         mInvite.setVisibility(View.VISIBLE);
-        // mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        //   mDrawer.addDrawerListener(mCustiomActionBarToggle);
+        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mDrawer.addDrawerListener(mCustiomActionBarToggle);
         mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
         mNavigationViewRightDrawerWithCommunities.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
@@ -564,12 +564,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void deepLinkingRedirection(JSONObject sessionParams) {
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
-        Intent intent = new Intent();
-        // Branch branch = Branch.getInstance(getApplicationContext());
-        //JSONObject sessionParams = branch.getFirstReferringParams();
+        Intent intent;
         try {
-            // JSONObject firstSession = branch.getLatestReferringParams();
-            //   if (firstSession.length() > 0 && (Boolean)branch.getLatestReferringParams().get("+is_first_session")|| (Boolean)branch.getLatestReferringParams().get("+clicked_branch_link")) {
             if (sessionParams.length() > 0) {
                 String url = sessionParams.getString(AppConstants.DEEP_LINK_URL);
                 String openWebViewFlag = sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW);
@@ -602,6 +598,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                                 intent.putExtra(key, (int) value);
                             }
                         } catch (JSONException e) {
+                            Crashlytics.getInstance().core.logException(e);
                         }
                     }
                     if (isIntentAvailable(this, intent)) {
@@ -653,7 +650,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean shouldShowSnowFlake() {
         boolean showSnowFlake = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW))) {
             String snowFlakeFlag = "";
             snowFlakeFlag = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW).get(0).getLabel();
             if (CommonUtil.isNotEmpty(snowFlakeFlag)) {
@@ -667,7 +664,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareText = "";
             shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareText)) {
@@ -680,7 +677,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void setProfileImage() { //Drawer top image
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
             profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             if (null != profile) {
                 ivDrawerProfileCircleIcon.setCircularImage(true);
@@ -698,7 +695,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void setArticleCategoryFilterValues() {
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get().getData()) {
             HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
             if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
                 {
@@ -755,6 +752,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.ic_nav_communities)
     public void onClickNavigationCommunities() {
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(GravityCompat.END);
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
@@ -1035,10 +1035,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onDrawerOpened() {
-       /* if (!mFragmentOpen.isImageBlur()) {
-            assignNavigationRecyclerListView();
-            mFragmentOpen.setImageBlur(true);
-        }*/
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            onClickNavigationCommunities();
+        }
     }
 
     @Override
@@ -1171,11 +1170,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (null != mAdapter) {
             mAdapter.notifyDataSetChanged();
         }
-        if (null !=mMyCommunitiesAdapter ) {
+        if (null != mMyCommunitiesAdapter) {
             mMyCommunitiesAdapter.notifyDataSetChanged();
-            if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-                mDrawer.closeDrawer(GravityCompat.END);
-            }
         }
     }
 
@@ -1212,7 +1208,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
 
-    @OnClick({R.id.tv_communities,R.id.iv_communities_search})
+    @OnClick({R.id.tv_communities, R.id.iv_communities_search})
     public void communityOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
@@ -1224,6 +1220,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         communityButton();
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
     }
 
     public void communityButton() {
@@ -1740,6 +1739,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
         List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        pbCommunitiesDrawer.setVisibility(View.GONE);
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);

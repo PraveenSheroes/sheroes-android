@@ -94,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesDrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
@@ -316,6 +317,8 @@ public interface SheroesAppComponent {
     void inject(GenderInputFormDialogFragment genderInputFormDialogFragment);
 
     void inject(ProfileProgressDialog profileProgressDialog);
+
+    void inject(MyCommunitiesDrawerViewHolder myCommunitiesDrawerViewHolder);
 
 }
 
