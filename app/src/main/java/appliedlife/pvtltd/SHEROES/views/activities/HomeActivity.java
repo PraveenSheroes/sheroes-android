@@ -1770,9 +1770,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.home_lable));
         FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getFragments().size(); ++i) {
-
-        }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         HomeFragment homeFragment = new HomeFragment();
