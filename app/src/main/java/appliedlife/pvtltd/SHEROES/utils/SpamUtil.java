@@ -10,6 +10,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
+import appliedlife.pvtltd.SHEROES.models.DeactivationReason;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -23,6 +24,31 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
  */
 
 public class SpamUtil {
+
+    /**
+     * Add the Deactivation options to radio group
+     *
+     * @param context     context
+     * @param deactivationReasons deactivation reasons
+     * @param radioGroup  radio Group
+     */
+    public static void addDeactivationReasonsToRadioGroup(Context context, List<DeactivationReason> deactivationReasons, RadioGroup radioGroup) {
+        if (deactivationReasons != null) {
+            int i = 0;
+            for (final DeactivationReason deactivationReason : deactivationReasons) {
+                RadioButton radioButton = (RadioButton) LayoutInflater.from(context).inflate(R.layout.radio_button_custom, null);
+                RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
+                        RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(CommonUtil.convertDpToPixel(16, context), CommonUtil.convertDpToPixel(10, context), CommonUtil.convertDpToPixel(8, context), 0);
+                radioButton.setText(deactivationReason.getDeactivationReason());
+                radioButton.setLayoutParams(layoutParams);
+                radioButton.setId(i);
+                radioButton.setTag(deactivationReason);
+                radioGroup.addView(radioButton);
+                i++;
+            }
+        }
+    }
 
     /**
      * Add the spam options to radio group

@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -51,9 +52,6 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     public static final int INTERMEDIATE_END_LIMIT = 60;
     public static final int ALL_STAR_START_LIMIT = 85;
     public static final int ALL_STAR_END_LIMIT = 100;
-    public static final int BEGINNER_TICK_START_INDEX = 2;
-    public static final int INTERMEDIATE_TICK_START_INDEX = 5;
-    public static final int MAX_DASH = 8;
     //endregion
 
     //region private member variable
@@ -102,13 +100,13 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     Button nextLevel;
 
     @Bind(R.id.beginner)
-    TextView beginnerTick;
+    ImageView beginnerTick;
 
     @Bind(R.id.intermediate)
-    TextView intermediateTick;
+    ImageView intermediateTick;
 
-    @Bind(R.id.expert)
-    TextView allStarTick;
+    @Bind(R.id.all_star)
+    ImageView allStarTick;
     //endregion
 
     //region Fragment methods
@@ -142,7 +140,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
             if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
             } else {
-                dashProgressBar.setTotalDash(MAX_DASH);
+                dashProgressBar.setTotalDash(new ConfigData().maxDash);
             }
 
             invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
@@ -184,7 +182,30 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         } else {
             dismiss();
         }
+    }
 
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        if (mProfileLevelType != ProfileLevelType.BEGINNER) {
+            mProfileLevelType = ProfileLevelType.BEGINNER;
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+        }
+    }
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        if (mProfileLevelType != ProfileLevelType.INTERMEDIATE) {
+            mProfileLevelType = ProfileLevelType.INTERMEDIATE;
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+        }
+    }
+
+    @OnClick(R.id.all_star)
+    protected void openAllStarProgressDialog() {
+        if (mProfileLevelType != ProfileLevelType.ALLSTAR) {
+            mProfileLevelType = ProfileLevelType.ALLSTAR;
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+        }
     }
 
     @OnClick({R.id.tick})
@@ -206,30 +227,30 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     private void invalidateProfileProgressBar(float progressPercentage) {
         if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
-                beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+                beginnerTick.setImageResource(R.drawable.ic_level_complete);
             } else {
-                beginnerTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+                beginnerTick.setImageResource(R.drawable.ic_level_incomplete);
             }
-            intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
-            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+            intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
+            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
 
         } else if (progressPercentage > ALL_STAR_START_LIMIT && progressPercentage <= ALL_STAR_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolrObj.getUnfilledProfileFields())) {
-                allStarTick.setBackgroundResource(R.drawable.ic_all_level_complete);
+                allStarTick.setImageResource(R.drawable.ic_all_level_complete);
             } else {
-                allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
+                allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
             }
-            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
-            intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+            beginnerTick.setImageResource(R.drawable.ic_level_complete);
+            intermediateTick.setImageResource(R.drawable.ic_level_complete);
 
         } else {
             if (mUserSolrObj.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setBackgroundResource(R.drawable.ic_level_complete);
+                intermediateTick.setImageResource(R.drawable.ic_level_complete);
             } else {
-                intermediateTick.setBackgroundResource(R.drawable.ic_level_incomplete);
+                intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
             }
-            allStarTick.setBackgroundResource(R.drawable.ic_all_level_incomplete);
-            beginnerTick.setBackgroundResource(R.drawable.ic_level_complete);
+            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+            beginnerTick.setImageResource(R.drawable.ic_level_complete);
         }
     }
 
@@ -383,7 +404,6 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         return message.toString();
     }
 
-
     private ProfileLevelType userLevel(UserSolrObj userSolrObj) {
         ProfileLevelType profileType;
 
@@ -402,8 +422,9 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
 
     @Override
     public void onViewRendered(float dashWidth) {
-        int beginnerTickIndex = BEGINNER_TICK_START_INDEX;
-        int intermediateTickIndex = INTERMEDIATE_TICK_START_INDEX;
+        ConfigData configData = new ConfigData();
+        int beginnerTickIndex = configData.beginnerStartIndex;
+        int intermediateTickIndex = configData.intermediateStartIndex;
 
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
             beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;

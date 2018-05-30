@@ -32,7 +32,7 @@ import butterknife.OnClick;
 
 public class FacebookErrorDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Male User Message Screen";
-    public static final String GENDER_SHARE_LINK = "https://shrs.me/xtap573vXM";
+    public static final String GENDER_SHARE_LINK = " https://shrs.me/xtap573vXM";
     //region View variables
     @Bind(R.id.iv_close)
     ImageView mTvCacel;
@@ -66,21 +66,21 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             if (StringUtil.isNotNullOrEmptyString(mUserName)) {
                 tvUserNameMaleError.setVisibility(View.VISIBLE);
                 tvUserNameMaleError.setText(mUserName);
-                SpannableString spannableString = new SpannableString(message);
-                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
-                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-                tvDescriptionMaleError.setSelected(true);
-            } else {
+
+            } /*else {
                 SpannableString spannableString = new SpannableString(message);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 0, message.length(), 0);
                 tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
                 tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
                 tvDescriptionMaleError.setSelected(true);
-            }
-
+            }*/
+            SpannableString spannableString = new SpannableString(message);
+            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
+            tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+            tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+            tvDescriptionMaleError.setSelected(true);
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
@@ -125,7 +125,7 @@ public class FacebookErrorDialog extends BaseDialogFragment {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + GENDER_SHARE_LINK);
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_with_friend_for_download_app) + GENDER_SHARE_LINK);
         startActivity(intent);
     }
     //endregion

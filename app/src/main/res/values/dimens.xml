@@ -28,7 +28,7 @@
     <dimen name="dp_size_32">32dp</dimen>
     <dimen name="dp_size_30">30dp</dimen>
     <dimen name="dp_size_35">35dp</dimen>
-    <dimen name="margin_card_share">22dp</dimen>
+    <dimen name="margin_card_share">30dp</dimen>
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_250">250dp</dimen>
     <dimen name="dp_size_16">16dp</dimen>
@@ -130,6 +130,7 @@
     <dimen name="challenge_completed_height">180dp</dimen>
     <dimen name="challenge_girl_height">151dp</dimen>
     <dimen name="challenge_girl_width">156dp</dimen>
+    <dimen name="nav_header_height">157dp</dimen>
 
 
     <!--Text sizes for SHEROES-->

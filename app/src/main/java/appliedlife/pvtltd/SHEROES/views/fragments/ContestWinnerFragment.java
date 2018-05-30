@@ -43,6 +43,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
+
 /**
  * Created by Ujjwal on 10/10/17.
  */
@@ -167,7 +169,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
             @Override
             public void onItemClick(Winner item) {
                 long userId = Long.valueOf(item.userId);
-                ProfileActivity.navigateTo(mActivity, userId, false, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(mActivity, userId, false, PROFILE_NOTIFICATION_ID, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
             }
         });
 

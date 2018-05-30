@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.FollowerFollowingCallback;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.FollowerFollowingCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -40,9 +40,8 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     private BaseHolderInterface baseHolderInterface;
 
     //region Constructor
-    public FollowerFollowingAdapter(Context context, FollowingPresenterImpl profilePresenter, BaseHolderInterface baseHolderInterface) {
+    public FollowerFollowingAdapter(Context context, BaseHolderInterface baseHolderInterface) {
         mContext = context;
-        FollowingPresenterImpl followingPresenter = profilePresenter;
         this.baseHolderInterface = baseHolderInterface;
     }
 

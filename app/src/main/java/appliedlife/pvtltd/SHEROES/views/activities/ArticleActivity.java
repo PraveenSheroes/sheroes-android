@@ -117,6 +117,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
 
@@ -582,7 +583,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     case R.id.author:
 
                         Comment comment = mCommentsAdapter.getComment(position);
-                        if (!comment.isAnonymous()) {
+                        if (!comment.isAnonymous() && !comment.isSpamComment()) {
                             openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
                         break;
@@ -752,7 +753,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
-        ProfileActivity.navigateTo(this, userId, isMentor, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userId, isMentor, PROFILE_NOTIFICATION_ID, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void updateTitleCommentCountView() {
@@ -1207,6 +1208,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             if (comment != null && !comment.isMyOwnParticipation() && adminId == AppConstants.TWO_CONSTANT) {
                 mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), position, comment);
             }
+
+            if (ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
 
             if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));

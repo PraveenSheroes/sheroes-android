@@ -55,6 +55,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.ripple)
     RippleView rippleView;
     private Context context;
+    @Bind(R.id.new_offer)
+    ImageView newOffer;
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
@@ -80,6 +82,12 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             isToolTip = CommonUtil.ensureFirstTime(AppConstants.HEADER_PROFILE_PREF);
         } else {
             isToolTip = false;
+        }
+        //Hide the offer icon
+        if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF) || CommonUtil.getPrefValue(AppConstants.HOME_OFFER_PREF)) {
+            newOffer.setVisibility(View.VISIBLE);
+        } else {
+            newOffer.setVisibility(View.GONE);
         }
     }
 
@@ -138,21 +146,32 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.iv_header_circle_icon)
     void userImageClickForProfile() {
+        openProfileActivity();
+    }
+
+    @OnClick(R.id.new_offer)
+    void offerClickForProfile() {
+        if(!CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
+            openProfileActivity();
+            newOffer.setVisibility(View.GONE);
+        }
+    }
+
+    private void openProfileActivity() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
                 dataItem.setEntityOrParticipantId(userId);
                 if(viewInterface instanceof FeedItemCallback){
-                        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-                        communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
-                        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                        ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
+                    CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+                    communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
+                    communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                    ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
                 }else {
                     viewInterface.handleOnClick(dataItem, ivLoginUserPic);
                 }
             }
         });
-
     }
 
     @OnClick(R.id.header_msg)

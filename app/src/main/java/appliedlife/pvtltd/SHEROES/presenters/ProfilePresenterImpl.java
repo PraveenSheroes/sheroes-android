@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
@@ -21,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResp
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -212,6 +214,7 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
 
         profileModel.reportSpam(spamPostRequest)
                 .subscribeOn(Schedulers.io())
+                .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<SpamResponse>() {
                     @Override
@@ -232,7 +235,39 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
                         getMvpView().stopProgressBar();
                     }
                 });
+    }
 
+    //deactivate user
+    public void deactivateUser(DeactivateUserRequest deactivateUserRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        profileModel.deactivateUser(deactivateUserRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse spamPostOrCommentResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().onUserDeactivation(spamPostOrCommentResponse);
+                    }
+                });
     }
 
 }

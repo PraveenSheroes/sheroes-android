@@ -81,7 +81,8 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         tvMsg.setMovementMethod(LinkMovementMethod.getInstance());
         tvMsg.setText(spannableString, TextView.BufferType.SPANNABLE);
         tvMsg.setSelected(true);
-
+        ivFemale.setImageResource(R.drawable.vector_female);
+        ivMale.setImageResource(R.drawable.vector_male);
         tvGenderSelectFinish.setEnabled(false);
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);

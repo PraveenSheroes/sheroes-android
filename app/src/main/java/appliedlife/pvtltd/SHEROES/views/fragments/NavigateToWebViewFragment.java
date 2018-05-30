@@ -103,8 +103,8 @@ public class NavigateToWebViewFragment extends BaseFragment {
 
         if(getActivity() instanceof HomeActivity){
             ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-            ((HomeActivity)getActivity()).resetUiSelectedOptions();
-
+           // ((HomeActivity)getActivity()).resetUiSelectedOptions();
+            ((HomeActivity)getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
         }
         pbWebView.setVisibility(View.VISIBLE);
         webPagesView.getSettings().setJavaScriptEnabled(true);
@@ -168,7 +168,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
                     } else if(url.startsWith("http://twitter.com")) { //share on twitter
                         CommonUtil.shareLinkToTwitter(getContext(), url);
                     }else if(CommonUtil.isBranchLink(Uri.parse(url))){
-                        if (null != url && StringUtil.isNotNullOrEmptyString(url)) {
+                        if (StringUtil.isNotNullOrEmptyString(url)) {
                             Uri uri = Uri.parse(url);
                             Intent intent = new Intent();
                             intent.setClass(getActivity(), BranchDeepLink.class);
@@ -232,13 +232,15 @@ public class NavigateToWebViewFragment extends BaseFragment {
     }
 
     private Map<String, String> getCustomHeaders(String url) {
-        String token = "";
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
+        String token = "",userId="";
+        if (null != mUserPreference && mUserPreference.isSet()) {
             token = mUserPreference.get().getToken();
+            userId=String.valueOf(mUserPreference.get().getUserSummary().getUserId());
         }
-        if (CommonUtil.isNotEmpty(url) && CommonUtil.isSheroesValidLink(Uri.parse(url))) {
+        if (CommonUtil.isNotEmpty(url) && (CommonUtil.isSheroesValidLink(Uri.parse(url))||url.contains("52.71.218.71"))) {
             Map<String, String> headers = new HashMap<>();
             headers.put("Authorization", token);
+            headers.put("userId", userId);
             return headers;
         } else {
             return null;

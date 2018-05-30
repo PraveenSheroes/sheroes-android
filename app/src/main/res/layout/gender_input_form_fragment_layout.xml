@@ -1,6 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -39,8 +40,7 @@
                 android:id="@+id/iv_female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:src="@drawable/vector_female" />
+                android:layout_marginLeft="@dimen/dp_size_16" />
 
             <TextView
                 android:id="@+id/tv_women"
@@ -65,8 +65,7 @@
                 android:id="@+id/iv_male"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="26dp"
-                android:src="@drawable/vector_male" />
+                android:layout_marginLeft="26dp" />
 
             <TextView
                 android:id="@+id/tv_man"

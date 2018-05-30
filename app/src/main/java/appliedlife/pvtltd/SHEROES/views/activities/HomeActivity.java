@@ -81,12 +81,14 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -146,6 +148,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -156,6 +159,7 @@ import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
@@ -165,7 +169,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView, ProgressbarView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     @Inject
@@ -173,6 +177,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Inject
     Preference<AppInstallation> mAppInstallation;
+
+    @Bind(R.id.beginner)
+    ImageView beginnerTick;
+
+    @Bind(R.id.intermediate)
+    ImageView intermediateTick;
 
     @Bind(R.id.home_toolbar)
     public Toolbar mToolbar;
@@ -235,10 +245,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public TextView mTvHome;
     @Bind(R.id.tv_communities)
     public TextView mTvCommunities;
-    @Bind(R.id.iv_side_drawer_profile_blur_background)
-    ImageView mIvSideDrawerProfileBlurBackground;
-    @Bind(R.id.iv_home_notification_icon)
-    TextView mIvHomeNotification;
     @Bind(R.id.fl_notification)
     FrameLayout mFlNotification;
     @Bind(R.id.title_text)
@@ -275,7 +281,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
-    private String profile;
     private MoEHelper mMoEHelper;
     private PayloadBuilder payloadBuilder;
     private MoEngageUtills moEngageUtills;
@@ -357,6 +362,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        openProfileActivity(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+    }
+
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        openProfileActivity(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+    }
+
+
+    @OnClick(R.id.all_star)
+    protected void openAllStarProgressDialog() {
+        openProfileActivity(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -421,37 +443,35 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
                     openArticleFragment(setCategoryIds(), false);
                 }
-            }
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-                handleHelpLineFragmentFromDeepLinkAndLoading();
-            }
+                if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
+                }
 
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
 
                     communityOnClick();
                 }
-            }
 
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
 
                     mentorListActivity();
                 }
-            }
 
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
 
                     renderFAQSView();
                 }
-            }
 
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
 
                     renderICCMemberListView();
                 }
+            } else {
+                homeOnClick();
             }
         }
     }
@@ -678,7 +698,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void setProfileImage() { //Drawer top image
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-            profile = mUserPreference.get().getUserSummary().getPhotoUrl();
+            String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             if (null != profile) {
                 ivDrawerProfileCircleIcon.setCircularImage(true);
                 ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.default_img);
@@ -740,7 +760,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
 
         DrawerViewHolder.selectedOptionName = menuItemName;
-        resetHamburgerSelectedItems();
     }
 
     @OnClick(R.id.tv_drawer_navigation)
@@ -1000,11 +1019,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         userSolrObj.setSuggested(false);
         mFeedDetail = userSolrObj;
-        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-    private void openProfileActivity() {
-        ProfileActivity.navigateTo(this, mUserId, isMentor, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+    private void openProfileActivity(ProfileProgressDialog.ProfileLevelType profileLevelType) {
+        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
@@ -1323,6 +1342,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void onBackPressed() {
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
         if (isSheUser) {
             super.onBackPressed();
             getFragmentManager().executePendingTransactions();
@@ -1428,7 +1448,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         super.onActivityResult(requestCode, resultCode, intent);
          /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
-        if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+        if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
+        } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
             if (fragment instanceof CommunitiesListFragment) {
                 CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
@@ -1636,12 +1658,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         return categoryIds;
     }
 
-    @OnClick(R.id.profile_link)
+    @OnClick(R.id.nav_menu_header)
     public void onClickProfile() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         }
-        openProfileActivity();
+        openProfileActivity(null);
     }
 
     @Override
@@ -1684,7 +1706,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override
@@ -1946,5 +1968,24 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void fetchAllCommunity() {
         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+    }
+
+    @Override
+    public void onViewRendered(float dashWidth) {
+        ConfigData configData = new ConfigData();
+        int beginnerTickIndex = configData.beginnerStartIndex;
+        int intermediateTickIndex = configData.intermediateStartIndex;
+
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
+            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
+        }
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
+        beginnerTick.setLayoutParams(buttonLayoutParams);
+
+        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
+        intermediateTick.setLayoutParams(intermediateLayoutParams);
     }
 }

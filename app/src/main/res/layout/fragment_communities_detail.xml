@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipe_view_communities_detail"
@@ -15,11 +15,14 @@
             android:layout_height="match_parent"
             android:divider="@color/fully_transparent" />
     </android.support.v4.widget.SwipeRefreshLayout>
+
     <ProgressBar
         android:id="@+id/pb_communities_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_marginTop="@dimen/dp_size_20"
+        android:layout_gravity="center_horizontal" />
+
     <LinearLayout
         android:id="@+id/li_no_result"
         android:layout_width="match_parent"
@@ -37,6 +40,7 @@
             android:text="@string/ID_NO_RESULT_FOUND"
             android:textColor="@color/detail_page_text" />
     </LinearLayout>
+
     <include
         layout="@layout/no_internet_connection_layout"
         android:visibility="gone" />

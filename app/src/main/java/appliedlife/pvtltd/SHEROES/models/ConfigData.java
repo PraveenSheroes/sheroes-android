@@ -2,8 +2,6 @@ package appliedlife.pvtltd.SHEROES.models;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONObject;
-
 /**
  * Created by ujjwal on 19/02/18.
  */
@@ -28,6 +26,9 @@ public class ConfigData {
 
     @SerializedName("spam_reasons")
     public SpamReasons reasonOfSpamCategory;
+
+    @SerializedName("deactivation_reasons")
+    public DeactivationReasons deactivationReasons;
 
     @SerializedName("update_title")
     public String updateTitle;
