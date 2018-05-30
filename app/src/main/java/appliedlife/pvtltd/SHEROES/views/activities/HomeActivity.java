@@ -15,7 +15,9 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
@@ -26,10 +28,14 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -37,9 +43,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -97,7 +105,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -142,6 +149,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
@@ -172,12 +180,36 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView, ProgressbarView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
+    private static final int ANIMATION_DELAY_TIME = 2000;
+    private static final int ANIMATION_DURATION_TIME = 5000;
+
+    // region inject variables
+    @Inject
+    Preference<Configuration> mConfiguration;
     @Inject
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
 
     @Inject
     Preference<AppInstallation> mAppInstallation;
 
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    HomePresenter mHomePresenter;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Inject
+    MainActivityPresenter activityDataPresenter;
+
+    @Inject
+    AppUtils mAppUtils;
+    //endregion
+
+    // region View variables
     @Bind(R.id.beginner)
     ImageView beginnerTick;
 
@@ -186,98 +218,109 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Bind(R.id.home_toolbar)
     public Toolbar mToolbar;
+
     @Bind(R.id.fl_home_footer_list)
     public FrameLayout mFlHomeFooterList;
+
     @Bind(R.id.li_article_spinner_icon)
     public RelativeLayout mliArticleSpinnerIcon;
+
     @Bind(R.id.tv_catagory_text)
     public TextView mTvCategoryText;
+
     @Bind(R.id.tv_catagory_choose)
     public TextView mTvCategoryChoose;
+
     @Bind(R.id.iv_spinner_icon)
     public ImageView mIvSpinner;
+
     @Bind(R.id.appbar_layout)
     public AppBarLayout mAppBarLayout;
+
     @Bind(R.id.fl_article_card_view)
     public FrameLayout flFeedFullView;
+
     @Bind(R.id.tv_notification_read_count)
     public TextView mTvNotificationReadCount;
+
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
+
     @Bind(R.id.ic_nav_communities)
     public ImageView mIvNavCommunities;
+
     @Bind(R.id.invite)
     ImageView mInvite;
+
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
 
-    @Inject
-    Preference<Configuration> mConfiguration;
-
-    private static final int ANIMATION_DELAY_TIME = 2000;
-    private static final int ANIMATION_DURATION_TIME = 5000;
-
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    HomePresenter mHomePresenter;
-
     @Bind(R.id.iv_drawer_profile_circle_icon)
     CircleImageView ivDrawerProfileCircleIcon;
+
     @Bind(R.id.tv_user_name)
     TextView mTvUserName;
+
     @Bind(R.id.tv_user_location)
     TextView mTvUserLocation;
+
     @Bind(R.id.cl_main_layout)
     CoordinatorLayout mCLMainLayout;
+
     @Bind(R.id.drawer_layout)
     DrawerLayout mDrawer;
+
     @Bind(R.id.nav_view_left_drawer)
     NavigationView mNavigationViewLeftDrawer;
+
     @Bind(R.id.nav_view_right_drawer_communities)
     NavigationView mNavigationViewRightDrawerWithCommunities;
+
     @Bind(R.id.rv_drawer)
     RecyclerView mRecyclerView;
+
     @Bind(R.id.rv_right_drawer_communities)
     RecyclerView mRecyclerViewDrawerCommunities;
-    @Bind(R.id.tv_job_home)
-    TextView mTvJob;
+
     @Bind(R.id.tv_home)
     public TextView mTvHome;
+
     @Bind(R.id.tv_communities)
     public TextView mTvCommunities;
+
     @Bind(R.id.fl_notification)
     FrameLayout mFlNotification;
+
     @Bind(R.id.title_text)
     TextView mTitleText;
+
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
+
     @Bind(R.id.pb_login_progress_bar)
     ProgressBar pbNavDrawer;
+
     @Bind(R.id.pb_communities_drawer)
     ProgressBar pbCommunitiesDrawer;
+
     @Bind(R.id.snow_flake_view)
     SnowFlakeView mSnowFlakView;
+
     @Bind(R.id.santa_view)
     ImageView mSantaView;
+
     @Bind(R.id.tv_drawer_navigation)
     public TextView tvDrawerNavigation;
+
     @Bind(R.id.view_tool_tip_nav)
     public View viewToolTipNav;
 
     @BindDimen(R.dimen.dp_size_64)
     int navProfileSize;
+    // endregion
 
-    GenericRecyclerViewAdapter mAdapter;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-    boolean doubleBackToExitPressedOnce = false;
-    @Inject
-    MainActivityPresenter activityDataPresenter;
-    @Inject
-    AppUtils mAppUtils;
-
+    // region member variables
+    private GenericRecyclerViewAdapter mAdapter;
     private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
@@ -302,9 +345,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private String mUserName;
     private FragmentListRefreshData mFragmentListRefreshData;
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
-    int mPageNo = AppConstants.ONE_CONSTANT;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
+    //endregion
 
+    // region Public methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -344,179 +389,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Crashlytics.getInstance().core.logException(e);
         }
         toolTipForNotification();
-    }
-
-    private void toolTipForNotification() {
-        try {
-            if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
-                if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
-                    Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
-                            .setCancelable(true)
-                            .setDismissOnClick(true)
-                            .setGravity(Gravity.BOTTOM)
-                            .setText(R.string.tool_tip_notification);
-                    builder.show();
-
-                }
-            }
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-    }
-
-    @OnClick({R.id.beginner})
-    protected void openBeginnerDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.BEGINNER);
-    }
-
-
-    @OnClick(R.id.intermediate)
-    protected void openIntermediateProgressDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
-    }
-
-
-    @OnClick(R.id.all_star)
-    protected void openAllStarProgressDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        activityDataPresenter.detachView();
-    }
-
-    private void sheUserInit() {
-        if (isSheUser && startedFirstTime()) {
-            openHelplineFragment();
-        }
-
-        if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-            handleHelpLineFragmentFromDeepLinkAndLoading();
-        }
-        if (getIntent() != null) {
-            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")) {
-                    communityOnClick();
-                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
-                    renderFAQSView();
-                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
-                    renderICCMemberListView();
-                }
-                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
-                        openArticleFragment(setCategoryIds(), false);
-                    }
-                }
-                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(AppConstants.HELPLINE_CHAT)) && getIntent().getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-                    handleHelpLineFragmentFromDeepLinkAndLoading();
-                }
-                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-                        mentorListActivity();
-                    }
-                }
-            }
-        }
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (isInviteReferral) {
-            if (!this.isFinishing() && null != mProgressDialog) {
-                mProgressDialog.dismiss();
-            }
-            isInviteReferral = false;
-        } else {
-            setProfileImage();
-        }
-        resetHamburgerSelectedItems();
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (intent != null && intent.getExtras() != null) {
-
-            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
-                    openArticleFragment(setCategoryIds(), false);
-                }
-                if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-                    handleHelpLineFragmentFromDeepLinkAndLoading();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
-
-                    communityOnClick();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-
-                    mentorListActivity();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
-
-                    renderFAQSView();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
-
-                    renderICCMemberListView();
-                }
-            } else {
-                homeOnClick();
-            }
-        }
-    }
-
-    private boolean startedFirstTime() {
-        if (null != getIntent() && null != getIntent().getExtras()) {
-            return getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0;
-        } else {
-            return true;
-        }
-    }
-
-    private void assignNavigationRecyclerListView() {
-        mAdapter = new GenericRecyclerViewAdapter(this, this);
-        LinearLayoutManager manager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(manager);
-        mRecyclerView.setAdapter(mAdapter);
-
-        //For navigation drawer items
-        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
-
-
-        mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
-        mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
-        //For right navigation drawer communities items
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
-        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
-        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
-            @Override
-            public void onHide() {
-
-            }
-
-            @Override
-            public void onShow() {
-            }
-
-            @Override
-            public void dismissReactions() {
-            }
-        });
     }
 
     public void renderHomeFragmentView() {
@@ -563,6 +435,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mEventId = getIntent().getExtras().getInt(AppConstants.EVENT_ID);
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
             if (!isSheUser) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    mAppBarLayout.setElevation(0);
+                }else {
+                    ViewCompat.setElevation(mAppBarLayout, 0);
+                }
                 initHomeViewPagerAndTabs();
             }
             if (mEventId > 0) {
@@ -575,12 +452,943 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName,mIvNavCommunities);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName, mIvNavCommunities);
             showcaseManager.showFirstMainActivityShowcase();
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        activityDataPresenter.detachView();
+    }
+
+    public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
+        setAllValues(mFragmentOpen);
+        mTitleText.setText("");
+        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItemName, true);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
+
+        DrawerViewHolder.selectedOptionName = menuItemName;
+    }
+
+    @OnClick(R.id.tv_drawer_navigation)
+    public void drawerNavigationClick() {
+        AppUtils.hideKeyboard(mTvUserName, TAG);
+        mDrawer.openDrawer(Gravity.START);
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
+    }
+
+    @OnClick(R.id.ic_nav_communities)
+    public void onClickNavigationCommunities() {
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        AppUtils.hideKeyboard(mTvUserName, TAG);
+        mDrawer.openDrawer(GravityCompat.END);
+        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
+    }
+
+    @OnClick(R.id.fab_filter)
+    public void createPostActivity() {
+        String fabString = (String) mFloatActionBtn.getTag();
+        if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
+            CommunityPost communityPost = new CommunityPost();
+            communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
+            createCommunityPostOnClick(communityPost);
+
+        }
+
+    }
+
+    @OnClick(R.id.invite)
+    public void onInviteClicked() {
+        AllContactActivity.navigateTo(this, getScreenName(), null);
+    }
+
+    public void logOut() {
+        AnalyticsManager.initializeMixpanel(HomeActivity.this);
+        logOutUser();
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        if (baseResponse instanceof FeedDetail) {
+            mFeedDetail = (FeedDetail) baseResponse;
+            feedRelatedOptions(view, baseResponse);
+        } else if (baseResponse instanceof NavMenuItem) {
+            drawerItemOptions(view, baseResponse);
+        } else if (baseResponse instanceof Comment) {
+            setAllValues(mFragmentOpen);
+             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
+            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+        } else if (baseResponse instanceof FAQS) {
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
+            ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
+        } else if (baseResponse instanceof BellNotificationResponse) {
+            BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
+            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
+                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
+                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
+                    challengeIdHandle(urlStr);
+                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
+                    mTitleText.setText("");
+                    communityOnClick();
+                } else {
+                    mTitleText.setText("");
+                    homeOnClick();
+                }
+            }
+            if (null != bellNotificationDialogFragment) {
+                bellNotificationDialogFragment.dismiss();
+            }
+        }
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+        ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null, 0, 0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
+    }
+
+    public void resetUiSelectedOptions() {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+    }
+
+    public void eventDetailDialog(long eventID) {
+        eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
+        if (eventDetailDialogFragment == null) {
+            eventDetailDialogFragment = new EventDetailDialogFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong(AppConstants.EVENT_ID, eventID);
+            Parcelable parcelable = Parcels.wrap(mFeedDetail);
+            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
+            eventDetailDialogFragment.setArguments(bundle);
+        }
+        if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
+        }
+    }
+
+    @Override
+    public List getListData() {
+        return mHomeSpinnerItemList;
+    }
+
+    @Override
+    public void onDrawerOpened() {
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            onClickNavigationCommunities();
+        }
+    }
+
+    @Override
+    public void onDrawerClosed() {
+    }
+
+    public void notifyNavigationDrawerItems(List<NavMenuItem> menuItems) {
+        if (mRecyclerView != null && mAdapter != null) {
+            mAdapter.setSheroesGenericListData(menuItems);
+            mAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    public void changeFragmentWithCommunities() {
+        mFragmentOpen.setFeedFragment(false);
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setText(getString(R.string.home_lable));
+
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+
+        mFloatActionBtn.setVisibility(View.GONE);
+
+        flFeedFullView.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.li_article_spinner_icon)
+    public void openSpinnerOnClick() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
+        if (!AppUtils.isFragmentUIActive(fragment)) {
+            mFlHomeFooterList.setVisibility(View.GONE);
+            if (!StringUtil.isNotEmptyCollection(mHomeSpinnerItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
+                setArticleCategoryFilterValues();
+                mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
+            } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
+                mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
+            }
+            mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
+            bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
+            mArticleCategorySpinnerFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
+    }
+
+    @OnClick(R.id.tv_home)
+    public void homeOnClick() {
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+        flFeedFullView.setVisibility(View.VISIBLE);
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        homeButtonUi();
+        initHomeViewPagerAndTabs();
+    }
+
+    public void homeButtonUi() {
+
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+        mFragmentOpen.setFeedFragment(true);
+
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
+        mTvHome.setText(getString(R.string.home_lable));
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+
+
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
+        mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
+        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
+        mICSheroes.setVisibility(View.VISIBLE);
+
+        mTitleText.setText("");
+        mTitleText.setVisibility(View.VISIBLE);
+        mInvite.setVisibility(View.VISIBLE);
+
+    }
+
+
+    @OnClick({R.id.tv_communities, R.id.iv_communities_search})
+    public void communityOnClick() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mAppBarLayout.setElevation(10);
+        }else {
+            ViewCompat.setElevation(mAppBarLayout, 10);
+        }
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        initCommunityViewPagerAndTabs();
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        communityButton();
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
+    }
+
+    public void communityButton() {
+
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
+        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
+        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+        mTvHome.setText(getString(R.string.home_lable));
+
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
+        mTitleText.setVisibility(View.VISIBLE);
+        mICSheroes.setVisibility(View.GONE);
+        mInvite.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
+    }
+
+    public void createCommunityPostOnClick(CommunityPost communityPost) {
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+        //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
+    }
+
+    public void articleUi() {
+        mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
+        mFloatActionBtn.setVisibility(View.GONE);
+        mICSheroes.setVisibility(View.VISIBLE);
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+
+        mTitleText.setText("");
+        mTitleText.setVisibility(View.VISIBLE);
+        mInvite.setVisibility(View.VISIBLE);
+    }
+
+    public void inviteMyCommunityDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.ID_INVITE_WOMEN_FRIEND));
+        mProgressDialog.setCancelable(true);
+        mProgressDialog.show();
+        LoginManager.getInstance().logOut();
+        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
+
+    }
+
+    public void helplineUi() {
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFlHomeFooterList.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.GONE);
+        if (isSheUser) {
+            mICSheroes.setVisibility(View.GONE);
+        } else {
+            mICSheroes.setVisibility(View.VISIBLE);
+        }
+        mTitleText.setText("");
+        mTitleText.setVisibility(View.VISIBLE);
+        mInvite.setVisibility(View.VISIBLE);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        mFlHomeFooterList.setVisibility(View.VISIBLE);
+        if (isSheUser) {
+            super.onBackPressed();
+            getFragmentManager().executePendingTransactions();
+            int count = getFragmentManager().getBackStackEntryCount();
+            if (count <= 1) {
+                finish();
+            } else {
+                getFragmentManager().popBackStack();
+            }
+        } else {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+            if (fragment != null && fragment instanceof CommunitiesListFragment) {
+                if (AppUtils.isFragmentUIActive(fragment)) {
+                    homeOnClick();
+                }
+            } else if (fragment != null && fragment instanceof FeedFragment) {
+                if (doubleBackToExitPressedOnce) {
+                    getSupportFragmentManager().popBackStackImmediate();
+                    finish();
+                    return;
+                }
+                doubleBackToExitPressedOnce = true;
+                if (flFeedFullView.getVisibility() == View.VISIBLE) {
+                    Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
+
+                } else {
+                    homeOnClick();
+                }
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleBackToExitPressedOnce = false;
+                    }
+                }, 2000);
+
+            } else {
+                resetUiSelectedOptions();
+                super.onBackPressed();
+            }
+        }
+        resetHamburgerSelectedItems();
+    }
+
+    @OnClick(R.id.fl_notification)
+    public void notificationClick() {
+        // mDrawer.openDrawer(Gravity.START);
+        AppUtils.hideKeyboard(mTvUserName, TAG);
+        bellNotificationDialog();
+    }
+
+    public void bellNotificationDialog() {
+        bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
+        if (bellNotificationDialogFragment == null) {
+            bellNotificationDialogFragment = new BellNotificationDialogFragment();
+            Bundle bundle = new Bundle();
+            bellNotificationDialogFragment.setArguments(bundle);
+            flNotificationReadCount.setVisibility(View.GONE);
+        }
+        if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
+        }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+        setAllValues(mFragmentOpen);
+        super.dataOperationOnClick(baseResponse);
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean isCheked) {
+        List<HomeSpinnerItem> localList = new ArrayList<>();
+        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
+            HomeSpinnerItem passedHomeItem = (HomeSpinnerItem) data;
+            if (passedHomeItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
+                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
+                    homeSpinnerItem.setChecked(passedHomeItem.isChecked());
+                    localList.add(homeSpinnerItem);
+                }
+            } else {
+                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
+                    if (homeSpinnerItem.getId() == (passedHomeItem.getId())) {
+                        homeSpinnerItem.setChecked(passedHomeItem.isChecked());
+                        localList.add(homeSpinnerItem);
+                    } else {
+                        localList.add(homeSpinnerItem);
+                    }
+                }
+            }
+        }
+        mHomeSpinnerItemList.clear();
+        mHomeSpinnerItemList.addAll(localList);
+    }
+
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
+        if (StringUtil.isNotEmptyCollection(navigationItems)) {
+            List<NavMenuItem> mNavigationDrawerItems = new ArrayList<>(); //Filter only navigation drawer items
+            for (NavMenuItem navMenuItem : navigationItems) {
+                if (navMenuItem.getMenuType() == 1) {
+                    mNavigationDrawerItems.add(navMenuItem);
+                }
+            }
+            pbNavDrawer.setVisibility(View.GONE);
+            notifyNavigationDrawerItems(mNavigationDrawerItems);
+        }
+    }
+
+    @Override
+    public void getNavigationDrawerItemsFailed() {
+        if (null != pbNavDrawer) {
+            pbNavDrawer.setVisibility(View.GONE);
+        }
+
+        String stringContent = "";
+        if (isSheUser) {
+            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_SHE_FILE_NAME); //read from local file
+        } else {
+            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
+        }
+        NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
+        if (null != eventResponseList) {
+            List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
+            List<NavMenuItem> mNavigationDrawerItems = new ArrayList<>(); //Filter only navigation drawer items
+            for (NavMenuItem navMenuItem : navMenuItems) {
+                if (navMenuItem.getMenuType() == 1) {
+                    mNavigationDrawerItems.add(navMenuItem);
+                }
+            }
+            Collections.sort(mNavigationDrawerItems, new Comparator<NavMenuItem>() { //Sort based on display order
+                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
+                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
+                }
+            });
+            notifyNavigationDrawerItems(mNavigationDrawerItems);
+        }
+    }
+
+    @Override
+    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
+        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        pbCommunitiesDrawer.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+
+            List<FeedDetail> data = null;
+            FeedDetail feedProgressBar = new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data = mPullRefreshList.getFeedResponses();
+            if (data.size() > 20) {
+                int position = data.size() - feedDetailList.size();
+                if (position > 0) {
+                    data.remove(position - 1);
+                }
+                data.add(feedProgressBar);
+            }
+            mMyCommunitiesAdapter.setData(data);
+
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
+        }
+        mMyCommunitiesAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void startProgressBar() {
+
+    }
+
+    @Override
+    public void stopProgressBar() {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
+
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case NOTIFICATION_COUNT:
+                unReadNotificationCount(baseResponse);
+                break;
+            case GCM_ID:
+                gcmIdResponse(baseResponse);
+                break;
+            case USER_CONTACTS_ACCESS_SUCCESS:
+                getAppContactsListSuccess(baseResponse);
+                break;
+            default:
+                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
+        }
+    }
+
+    @Override
+    public void onConfigFetched() {
+        AnalyticsManager.initializeMixpanel(this, false);
+    }
+
+    public void fetchAllCommunity() {
+        mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+    }
+
+    @Override
+    public void onViewRendered(float dashWidth) {
+        ConfigData configData = new ConfigData();
+        int beginnerTickIndex = configData.beginnerStartIndex;
+        int intermediateTickIndex = configData.intermediateStartIndex;
+
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
+            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
+        }
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
+        beginnerTick.setLayoutParams(buttonLayoutParams);
+
+        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
+        intermediateTick.setLayoutParams(intermediateLayoutParams);
+    }
+
+    @Override
+    public void onCancelDone(int pressedEvent) {
+        if (AppConstants.ONE_CONSTANT == pressedEvent) {
+            getSupportFragmentManager().popBackStack(ArticlesFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            mTvCategoryChoose.setVisibility(View.GONE);
+            StringBuilder stringBuilder = new StringBuilder();
+            mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
+            if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
+                List<Long> categoryIds = new ArrayList<>();
+                List<HomeSpinnerItem> localList = new ArrayList<>();
+                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
+                    if (homeSpinnerItem.isChecked()) {
+                        categoryIds.add(homeSpinnerItem.getId());
+                        if (!homeSpinnerItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
+                            stringBuilder.append(homeSpinnerItem.getName());
+                            stringBuilder.append(AppConstants.COMMA);
+                        }
+                        homeSpinnerItem.setDone(true);
+                    } else {
+                        homeSpinnerItem.setDone(false);
+                    }
+                    localList.add(homeSpinnerItem);
+                }
+                if (StringUtil.isNotEmptyCollection(localList)) {
+                    mHomeSpinnerItemList.clear();
+                    mHomeSpinnerItemList.addAll(localList);
+                }
+                if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
+                    String total = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+                    if (total.length() > 25) {
+                        total = stringBuilder.toString().substring(0, 25) + AppConstants.DOTS;
+                        mTvCategoryText.setText(total);
+                    } else {
+                        mTvCategoryText.setText(total);
+                    }
+                } else {
+                    mTvCategoryText.setText(AppConstants.EMPTY_STRING);
+                    mTvCategoryChoose.setVisibility(View.VISIBLE);
+                }
+                openArticleFragment(categoryIds, false);
+            }
+        } else {
+            mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
+            List<HomeSpinnerItem> localList = new ArrayList<>();
+            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
+                if (homeSpinnerItem.isDone()) {
+                    homeSpinnerItem.setChecked(true);
+                } else {
+                    homeSpinnerItem.setChecked(false);
+                }
+                localList.add(homeSpinnerItem);
+            }
+            if (StringUtil.isNotEmptyCollection(localList)) {
+                mHomeSpinnerItemList.clear();
+                mHomeSpinnerItemList.addAll(localList);
+            }
+
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
+            if (AppUtils.isFragmentUIActive(fragment)) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
+        }
+    }
+
+    @OnClick(R.id.nav_menu_header)
+    public void onClickProfile() {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        }
+        openProfileActivity(null);
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+            championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
+        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
+            UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
+            championLinkHandle(feedDetail);
+        } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
+        } else if (baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
+            Comment comment = (Comment) baseResponse;
+            if (!comment.isAnonymous()) {
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+        } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
+            if (StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+                Comment comment = articleDetails.getLastComments().get(0);
+                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+        } else if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
+        } else if (baseResponse instanceof Comment) {
+            Comment comment = (Comment) baseResponse;
+            championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+        }
+    }
+    // endregion
+
+    // region Protected methods
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        openProfileActivity(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+    }
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        openProfileActivity(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+    }
+
+    @OnClick(R.id.all_star)
+    protected void openAllStarProgressDialog() {
+        openProfileActivity(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isInviteReferral) {
+            if (!this.isFinishing() && null != mProgressDialog) {
+                mProgressDialog.dismiss();
+            }
+            isInviteReferral = false;
+        } else {
+            setProfileImage();
+        }
+        resetHamburgerSelectedItems();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return activityDataPresenter;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        resetHamburgerSelectedItems();
+        if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
+        } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+            if (fragment instanceof CommunitiesListFragment) {
+                CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
+                if (currentFragment != null && currentFragment.isVisible()) {
+                    currentFragment.refreshList();
+                }
+            }
+        } else {
+            if (null != intent) {
+                switch (requestCode) {
+                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                        Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
+                                .show();
+                        refreshCurrentFragment();
+                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+                        ((FeedFragment) fragment).refreshList();
+                        break;
+                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                        if (resultCode == Activity.RESULT_OK) {
+                            refreshCurrentFragment();
+                        }
+                        break;
+
+                    case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
+                        Parcelable parcelableArticlePost = intent.getParcelableExtra(AppConstants.HOME_FRAGMENT);
+                        ArticleSolrObj articleSolrObj = null;
+                        if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
+                            articleSolrObj = Parcels.unwrap(parcelableArticlePost);
+                        }
+                        if (articleSolrObj != null) {
+                            invalidateItem(articleSolrObj);
+                        }
+                        break;
+
+                    case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                        boolean isPostDeleted = false;
+                        UserPostSolrObj userPostSolrObj = null;
+                        Parcelable parcelableUserPost = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        if (parcelableUserPost != null) {
+                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                        }
+                        if (userPostSolrObj == null) {
+                            break;
+                        }
+                        if (isPostDeleted) {
+                            removeItem(userPostSolrObj);
+                        } else {
+                            invalidateItem(userPostSolrObj);
+                        }
+                    case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                        CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                        if (resultCode == RESULT_OK) {
+                            try {
+                                File file = new File(result.getUri().getPath());
+                                Bitmap photo = decodeFile(file);
+                            } catch (Exception e) {
+                                Crashlytics.getInstance().core.logException(e);
+                                e.printStackTrace();
+                            }
+
+                        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                }
+            }
+        }
+        if (!this.isFinishing() && null != mProgressDialog) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null && intent.getExtras() != null) {
+
+            if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                    openArticleFragment(setCategoryIds(), false);
+                }
+                if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
+                }
+
+
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
+
+                    communityOnClick();
+                }
+
+
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
+
+                    mentorListActivity();
+                }
+
+
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
+
+                    renderFAQSView();
+                }
+
+
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
+
+                    renderICCMemberListView();
+                }
+            } else {
+                homeOnClick();
+            }
+        }
+    }
+    //endregion
+
+    // region Private methods
+    private void toolTipForNotification() {
+        try {
+            if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
+                if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+                    Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
+                            .setCancelable(true)
+                            .setDismissOnClick(true)
+                            .setGravity(Gravity.BOTTOM)
+                            .setText(R.string.tool_tip_notification);
+                    builder.show();
+
+                }
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+    }
+
+    private void sheUserInit() {
+        if (isSheUser && startedFirstTime()) {
+            openHelplineFragment();
+        }
+
+        if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+            handleHelpLineFragmentFromDeepLinkAndLoading();
+        }
+        if (getIntent() != null) {
+            if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase("Community List")) {
+                    communityOnClick();
+                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
+                    renderFAQSView();
+                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
+                    renderICCMemberListView();
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                        openArticleFragment(setCategoryIds(), false);
+                    }
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(AppConstants.HELPLINE_CHAT)) && getIntent().getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                    handleHelpLineFragmentFromDeepLinkAndLoading();
+                }
+                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
+                        mentorListActivity();
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean startedFirstTime() {
+        if (null != getIntent() && null != getIntent().getExtras()) {
+            return getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID) == 0;
+        } else {
+            return true;
+        }
+    }
+
+    private void assignNavigationRecyclerListView() {
+        mAdapter = new GenericRecyclerViewAdapter(this, this);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setAdapter(mAdapter);
+
+        //For navigation drawer items
+        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+
+
+        mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
+        mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
+        //For right navigation drawer communities items
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
+        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
     }
 
     private void deepLinkingRedirection(JSONObject sessionParams) {
@@ -742,7 +1550,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-
     private Runnable openDrawerRunnable() {
         return new Runnable() {
 
@@ -751,57 +1558,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 //  mDrawer.openDrawer(Gravity.START);
             }
         };
-    }
-
-    public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
-        setAllValues(mFragmentOpen);
-        mTitleText.setText("");
-        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItemName, true);
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
-
-        DrawerViewHolder.selectedOptionName = menuItemName;
-    }
-
-    @OnClick(R.id.tv_drawer_navigation)
-    public void drawerNavigationClick() {
-        AppUtils.hideKeyboard(mTvUserName, TAG);
-        mDrawer.openDrawer(Gravity.START);
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
-    }
-
-    @OnClick(R.id.ic_nav_communities)
-    public void onClickNavigationCommunities() {
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
-        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        AppUtils.hideKeyboard(mTvUserName, TAG);
-        mDrawer.openDrawer(GravityCompat.END);
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
-    }
-
-    @OnClick(R.id.fab_filter)
-    public void createPostActivity() {
-        String fabString = (String) mFloatActionBtn.getTag();
-        if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
-            CommunityPost communityPost = new CommunityPost();
-            communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
-            createCommunityPostOnClick(communityPost);
-
-        }
-
-    }
-
-    @OnClick(R.id.invite)
-    public void onInviteClicked() {
-        AllContactActivity.navigateTo(this, getScreenName(), null);
-    }
-
-
-    public void logOut() {
-        AnalyticsManager.initializeMixpanel(HomeActivity.this);
-        logOutUser();
     }
 
     private void challengeIdHandle(String urlOfSharedCard) {
@@ -829,53 +1585,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             intent.setData(url);
             startActivity(intent);
         }
-    }
-
-
-    @Override
-    public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof FeedDetail) {
-            mFeedDetail = (FeedDetail) baseResponse;
-            feedRelatedOptions(view, baseResponse);
-        } else if (baseResponse instanceof NavMenuItem) {
-            drawerItemOptions(view, baseResponse);
-        } else if (baseResponse instanceof Comment) {
-            setAllValues(mFragmentOpen);
-             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
-        } else if (baseResponse instanceof FAQS) {
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
-            ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
-        } else if (baseResponse instanceof BellNotificationResponse) {
-            BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
-                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
-                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
-                    challengeIdHandle(urlStr);
-                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
-                    mTitleText.setText("");
-                    communityOnClick();
-                } else {
-                    mTitleText.setText("");
-                    homeOnClick();
-                }
-            }
-            if (null != bellNotificationDialogFragment) {
-                bellNotificationDialogFragment.dismiss();
-            }
-        }
-    }
-
-    @Override
-    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-        ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null, 0, 0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
-    }
-
-    public void resetUiSelectedOptions() {
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
     private void openNativeViews(String url) {
@@ -916,7 +1625,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Intent intent = new Intent(this, MentorsUserListingActivity.class);
         startActivityForResult(intent, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
-
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
@@ -1032,51 +1740,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         openHelplineFragment();
     }
 
-    public void eventDetailDialog(long eventID) {
-        eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
-        if (eventDetailDialogFragment == null) {
-            eventDetailDialogFragment = new EventDetailDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putLong(AppConstants.EVENT_ID, eventID);
-            Parcelable parcelable = Parcels.wrap(mFeedDetail);
-            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
-            eventDetailDialogFragment.setArguments(bundle);
-        }
-        if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
-        }
-    }
-
-
-    @Override
-    public List getListData() {
-        return mHomeSpinnerItemList;
-    }
-
-
-    @Override
-    public void onDrawerOpened() {
-        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            onClickNavigationCommunities();
-        }
-    }
-
-    @Override
-    public void onDrawerClosed() {
-    }
-
-    public void notifyNavigationDrawerItems(List<NavMenuItem> menuItems) {
-        if (mRecyclerView != null && mAdapter != null) {
-            mAdapter.setSheroesGenericListData(menuItems);
-            mAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
-    }
-
     private void renderFAQSView() {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
@@ -1089,7 +1752,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
     }
-
 
     private void renderICCMemberListView() {
         changeFragmentWithCommunities();
@@ -1104,43 +1766,29 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
     }
 
-    public void changeFragmentWithCommunities() {
-        mFragmentOpen.setFeedFragment(false);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
-
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.ID_FEED));
-        mTvJob.setText(getString(R.string.ID_CARRIER));
-
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-
-        mFloatActionBtn.setVisibility(View.GONE);
-
-        flFeedFullView.setVisibility(View.VISIBLE);
-    }
-
     private void initHomeViewPagerAndTabs() {
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.ID_FEED));
+        mTvHome.setText(getString(R.string.home_lable));
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-        FeedFragment feedFragment = new FeedFragment();
+        HomeFragment homeFragment = new HomeFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.SCREEN_NAME, "Home Screen");
+        homeFragment.setArguments(bundle);
+        mFragmentOpen.setFeedFragment(true);
+        /*FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
         bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
         feedFragment.setArguments(bundle);
-        mFragmentOpen.setFeedFragment(true);
+        mFragmentOpen.setFeedFragment(true);*/
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, feedFragment, FeedFragment.class.getName()).commitAllowingStateLoss();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
 
     }
 
@@ -1156,37 +1804,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesListFragment, CommunitiesListFragment.class.getName()).commitAllowingStateLoss();
     }
 
-
-    @OnClick(R.id.li_article_spinner_icon)
-    public void openSpinnerOnClick() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
-        if (!AppUtils.isFragmentUIActive(fragment)) {
-            mFlHomeFooterList.setVisibility(View.GONE);
-            if (!StringUtil.isNotEmptyCollection(mHomeSpinnerItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
-                setArticleCategoryFilterValues();
-                mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
-            } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
-                mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
-            }
-            mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
-            Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
-            bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
-            mArticleCategorySpinnerFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        }
-    }
-
-    @OnClick(R.id.tv_home)
-    public void homeOnClick() {
-        DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
-        flFeedFullView.setVisibility(View.VISIBLE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        homeButtonUi();
-        initHomeViewPagerAndTabs();
-    }
-
     private void resetHamburgerSelectedItems() { //Reset navigation drawer selected item
         if (null != mAdapter) {
             mAdapter.notifyDataSetChanged();
@@ -1195,83 +1812,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mMyCommunitiesAdapter.notifyDataSetChanged();
         }
     }
-
-    public void homeButtonUi() {
-
-        DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
-
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        mFragmentOpen.setFeedFragment(true);
-
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
-        mTvHome.setText(getString(R.string.ID_FEED));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-
-        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
-        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvJob.setText(getString(R.string.ID_CARRIER));
-
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.VISIBLE);
-        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
-        mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
-        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        mICSheroes.setVisibility(View.VISIBLE);
-
-        mTitleText.setText("");
-        mTitleText.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-
-    }
-
-
-    @OnClick({R.id.tv_communities, R.id.iv_communities_search})
-    public void communityOnClick() {
-        DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        initCommunityViewPagerAndTabs();
-        FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
-        }
-        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        communityButton();
-        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            mDrawer.closeDrawer(GravityCompat.END);
-        }
-    }
-
-    public void communityButton() {
-
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text));
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvHome.setText(getString(R.string.ID_FEED));
-        mTvJob.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_job_unselected), null, null);
-        mTvJob.setTextColor(ContextCompat.getColor(getApplication(), R.color.feed_card_time));
-        mTvJob.setText(getString(R.string.ID_CARRIER));
-
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
-        mTitleText.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
-        mInvite.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.GONE);
-    }
-
-    public void createCommunityPostOnClick(CommunityPost communityPost) {
-        communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
-        //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
-    }
-
 
     private void openArticleFragment(List<Long> categoryIds, boolean fromDrawer) {
         changeFragmentWithCommunities();
@@ -1285,27 +1825,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT, (ArrayList) categoryIds);
         articlesFragment.setArguments(bundleArticle);
         fm.beginTransaction().replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
-    }
-
-    public void articleUi() {
-        mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
-        mFloatActionBtn.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-
-        mTitleText.setText("");
-        mTitleText.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-    }
-
-    public void inviteMyCommunityDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setMessage(getString(R.string.ID_INVITE_WOMEN_FRIEND));
-        mProgressDialog.setCancelable(true);
-        mProgressDialog.show();
-        LoginManager.getInstance().logOut();
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
-
     }
 
     private void openHelplineFragment() {
@@ -1325,216 +1844,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
 
-    }
-
-    public void helplineUi() {
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFlHomeFooterList.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.GONE);
-        if (isSheUser) {
-            mICSheroes.setVisibility(View.GONE);
-        } else {
-            mICSheroes.setVisibility(View.VISIBLE);
-        }
-        mTitleText.setText("");
-        mTitleText.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
-        if (isSheUser) {
-            super.onBackPressed();
-            getFragmentManager().executePendingTransactions();
-            int count = getFragmentManager().getBackStackEntryCount();
-            if (count <= 1) {
-                finish();
-            } else {
-                getFragmentManager().popBackStack();
-            }
-        } else {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-            if (fragment != null && fragment instanceof CommunitiesListFragment) {
-                if (AppUtils.isFragmentUIActive(fragment)) {
-                    homeOnClick();
-                }
-            } else if (fragment != null && fragment instanceof FeedFragment) {
-                if (doubleBackToExitPressedOnce) {
-                    getSupportFragmentManager().popBackStackImmediate();
-                    finish();
-                    return;
-                }
-                doubleBackToExitPressedOnce = true;
-                if (flFeedFullView.getVisibility() == View.VISIBLE) {
-                    Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-
-                } else {
-                    homeOnClick();
-                }
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        doubleBackToExitPressedOnce = false;
-                    }
-                }, 2000);
-
-            } else {
-                resetUiSelectedOptions();
-                super.onBackPressed();
-            }
-        }
-        resetHamburgerSelectedItems();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return activityDataPresenter;
-    }
-
-    @OnClick(R.id.fl_notification)
-    public void notificationClick() {
-        // mDrawer.openDrawer(Gravity.START);
-        AppUtils.hideKeyboard(mTvUserName, TAG);
-        bellNotificationDialog();
-    }
-
-    public void bellNotificationDialog() {
-        bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
-        if (bellNotificationDialogFragment == null) {
-            bellNotificationDialogFragment = new BellNotificationDialogFragment();
-            Bundle bundle = new Bundle();
-            bellNotificationDialogFragment.setArguments(bundle);
-            flNotificationReadCount.setVisibility(View.GONE);
-        }
-        if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
-        }
-    }
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-        setAllValues(mFragmentOpen);
-        super.dataOperationOnClick(baseResponse);
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean isCheked) {
-        List<HomeSpinnerItem> localList = new ArrayList<>();
-        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-            HomeSpinnerItem passedHomeItem = (HomeSpinnerItem) data;
-            if (passedHomeItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
-                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                    homeSpinnerItem.setChecked(passedHomeItem.isChecked());
-                    localList.add(homeSpinnerItem);
-                }
-            } else {
-                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                    if (homeSpinnerItem.getId() == (passedHomeItem.getId())) {
-                        homeSpinnerItem.setChecked(passedHomeItem.isChecked());
-                        localList.add(homeSpinnerItem);
-                    } else {
-                        localList.add(homeSpinnerItem);
-                    }
-                }
-            }
-        }
-        mHomeSpinnerItemList.clear();
-        mHomeSpinnerItemList.addAll(localList);
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
-        resetHamburgerSelectedItems();
-        if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
-            refreshCurrentFragment();
-        } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
-            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-            if (fragment instanceof CommunitiesListFragment) {
-                CommunitiesListFragment currentFragment = (CommunitiesListFragment) getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
-                if (currentFragment != null && currentFragment.isVisible()) {
-                    currentFragment.refreshList();
-                }
-            }
-        } else {
-            if (null != intent) {
-                switch (requestCode) {
-                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                        Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                                .show();
-                        refreshCurrentFragment();
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-                        ((FeedFragment) fragment).refreshList();
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
-                        if (null != intent.getExtras()) {
-                            JobFeedSolrObj jobFeedSolrObj = null;
-                            jobFeedSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.JOB_FRAGMENT));
-                            invalidateItem(jobFeedSolrObj);
-                        }
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                        if (resultCode == Activity.RESULT_OK) {
-                            refreshCurrentFragment();
-                        }
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
-                        Parcelable parcelableArticlePost = intent.getParcelableExtra(AppConstants.HOME_FRAGMENT);
-                        ArticleSolrObj articleSolrObj = null;
-                        if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
-                            articleSolrObj = Parcels.unwrap(parcelableArticlePost);
-                        }
-                        if (articleSolrObj != null) {
-                            invalidateItem(articleSolrObj);
-                        }
-                        break;
-
-                    case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
-                        boolean isPostDeleted = false;
-                        UserPostSolrObj userPostSolrObj = null;
-                        Parcelable parcelableUserPost = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
-                        if (parcelableUserPost != null) {
-                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
-                            isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                        }
-                        if (userPostSolrObj == null) {
-                            break;
-                        }
-                        if (isPostDeleted) {
-                            removeItem(userPostSolrObj);
-                        } else {
-                            invalidateItem(userPostSolrObj);
-                        }
-                    case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                        CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                        if (resultCode == RESULT_OK) {
-                            try {
-                                File file = new File(result.getUri().getPath());
-                                Bitmap photo = decodeFile(file);
-                            } catch (Exception e) {
-                                Crashlytics.getInstance().core.logException(e);
-                                e.printStackTrace();
-                            }
-
-                        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                            Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                        }
-                        break;
-                    default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-                }
-            }
-        }
-        if (!this.isFinishing() && null != mProgressDialog) {
-            mProgressDialog.dismiss();
-        }
     }
 
     private void removeItem(FeedDetail feedDetail) {
@@ -1584,70 +1893,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         return null;
     }
 
-    @Override
-    public void onCancelDone(int pressedEvent) {
-        if (AppConstants.ONE_CONSTANT == pressedEvent) {
-            getSupportFragmentManager().popBackStack(ArticlesFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            mTvCategoryChoose.setVisibility(View.GONE);
-            StringBuilder stringBuilder = new StringBuilder();
-            mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
-            if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-                List<Long> categoryIds = new ArrayList<>();
-                List<HomeSpinnerItem> localList = new ArrayList<>();
-                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                    if (homeSpinnerItem.isChecked()) {
-                        categoryIds.add(homeSpinnerItem.getId());
-                        if (!homeSpinnerItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
-                            stringBuilder.append(homeSpinnerItem.getName());
-                            stringBuilder.append(AppConstants.COMMA);
-                        }
-                        homeSpinnerItem.setDone(true);
-                    } else {
-                        homeSpinnerItem.setDone(false);
-                    }
-                    localList.add(homeSpinnerItem);
-                }
-                if (StringUtil.isNotEmptyCollection(localList)) {
-                    mHomeSpinnerItemList.clear();
-                    mHomeSpinnerItemList.addAll(localList);
-                }
-                if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    String total = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
-                    if (total.length() > 25) {
-                        total = stringBuilder.toString().substring(0, 25) + AppConstants.DOTS;
-                        mTvCategoryText.setText(total);
-                    } else {
-                        mTvCategoryText.setText(total);
-                    }
-                } else {
-                    mTvCategoryText.setText(AppConstants.EMPTY_STRING);
-                    mTvCategoryChoose.setVisibility(View.VISIBLE);
-                }
-                openArticleFragment(categoryIds, false);
-            }
-        } else {
-            mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
-            List<HomeSpinnerItem> localList = new ArrayList<>();
-            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                if (homeSpinnerItem.isDone()) {
-                    homeSpinnerItem.setChecked(true);
-                } else {
-                    homeSpinnerItem.setChecked(false);
-                }
-                localList.add(homeSpinnerItem);
-            }
-            if (StringUtil.isNotEmptyCollection(localList)) {
-                mHomeSpinnerItemList.clear();
-                mHomeSpinnerItemList.addAll(localList);
-            }
-
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
-            if (AppUtils.isFragmentUIActive(fragment)) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
-        }
-    }
-
     private List<Long> setCategoryIds() {
         List<Long> categoryIds = new ArrayList<>();
         if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
@@ -1658,44 +1903,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         return categoryIds;
-    }
-
-    @OnClick(R.id.nav_menu_header)
-    public void onClickProfile() {
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
-        }
-        openProfileActivity(null);
-    }
-
-    @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
-            championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
-        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
-            UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            championLinkHandle(feedDetail);
-        } else if (mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            CommunityDetailActivity.navigateTo(this, postDetails.getCommunityId(), getScreenName(), null, 1);
-        } else if (baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) {
-            Comment comment = (Comment) baseResponse;
-            if (!comment.isAnonymous()) {
-                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-            }
-        } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
-            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
-            if (StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
-                Comment comment = articleDetails.getLastComments().get(0);
-                championDetailActivity(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-            }
-        } else if (baseResponse instanceof FeedDetail) {
-            FeedDetail feedDetail = (FeedDetail) baseResponse;
-            championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
-        } else if (baseResponse instanceof Comment) {
-            Comment comment = (Comment) baseResponse;
-            championDetailActivity(comment.getParticipantId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-        }
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
@@ -1711,107 +1918,56 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    public void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems) {
-        if (StringUtil.isNotEmptyCollection(navigationItems)) {
-            List<NavMenuItem> mNavigationDrawerItems = new ArrayList<>(); //Filter only navigation drawer items
-            for (NavMenuItem navMenuItem : navigationItems) {
-                if (navMenuItem.getMenuType() == 1) {
-                    mNavigationDrawerItems.add(navMenuItem);
+    private void unReadNotificationCount(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof NotificationReadCountResponse) {
+                    NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
+                    StringBuilder stringBuilder = new StringBuilder();
+                    int notificationCount = notificationReadCountResponse.getUnread_notification_count();
+                    if (notificationReadCountResponse.getUnread_notification_count() > 0) {
+                        flNotificationReadCount.setVisibility(View.VISIBLE);
+                        String notification = String.valueOf(notificationCount);
+                        stringBuilder.append(notification);
+                        mTvNotificationReadCount.setText(stringBuilder.toString());
+                    } else {
+                        flNotificationReadCount.setVisibility(View.GONE);
+                    }
                 }
-            }
-            pbNavDrawer.setVisibility(View.GONE);
-            notifyNavigationDrawerItems(mNavigationDrawerItems);
+                break;
+            case AppConstants.FAILED:
+                flNotificationReadCount.setVisibility(View.GONE);
+                break;
+            default:
+                flNotificationReadCount.setVisibility(View.GONE);
         }
     }
 
-    @Override
-    public void getNavigationDrawerItemsFailed() {
-        if (null != pbNavDrawer) {
-            pbNavDrawer.setVisibility(View.GONE);
-        }
-
-        String stringContent = "";
-        if (isSheUser) {
-            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_SHE_FILE_NAME); //read from local file
-        } else {
-            stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
-        }
-        NavigationItems eventResponseList = AppUtils.parseUsingGSONFromJSON(stringContent, NavigationItems.class.getName());
-        if (null != eventResponseList) {
-            List<NavMenuItem> navMenuItems = eventResponseList.getMenuItems();
-            List<NavMenuItem> mNavigationDrawerItems = new ArrayList<>(); //Filter only navigation drawer items
-            for (NavMenuItem navMenuItem : navMenuItems) {
-                if (navMenuItem.getMenuType() == 1) {
-                    mNavigationDrawerItems.add(navMenuItem);
+    private void gcmIdResponse(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                if (baseResponse instanceof GcmIdResponse) {
+                    LoginResponse loginResponse = mUserPreference.get();
+                    loginResponse.setGcmId(mGcmId);
+                    mUserPreference.set(loginResponse);
+                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                    installUpdateForMoEngage.setFirstOpen(false);
+                    mInstallUpdatePreference.set(installUpdateForMoEngage);
                 }
-            }
-            Collections.sort(mNavigationDrawerItems, new Comparator<NavMenuItem>() { //Sort based on display order
-                public int compare(NavMenuItem obj1, NavMenuItem obj2) {
-                    return obj1.getDisplayOrder().compareTo(obj2.getDisplayOrder());
-                }
-            });
-            notifyNavigationDrawerItems(mNavigationDrawerItems);
+                break;
+            case AppConstants.FAILED:
+                break;
+            default:
         }
     }
 
-    @Override
-    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
-        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
-        pbCommunitiesDrawer.setVisibility(View.GONE);
-        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
-            mPageNo = mFragmentListRefreshData.getPageNo();
-            mFragmentListRefreshData.setPageNo(++mPageNo);
-            mPullRefreshList.allListData(feedDetailList);
-
-            List<FeedDetail> data = null;
-            FeedDetail feedProgressBar = new FeedDetail();
-            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-            data = mPullRefreshList.getFeedResponses();
-            if (data.size() > 20) {
-                int position = data.size() - feedDetailList.size();
-                if (position > 0) {
-                    data.remove(position - 1);
-                }
-                data.add(feedProgressBar);
-            }
-            mMyCommunitiesAdapter.setData(data);
-
-        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
-            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
-            data.remove(data.size() - 1);
+    private void getAppContactsListSuccess(BaseResponse baseResponse) {
+        switch (baseResponse.getStatus()) {
+            case AppConstants.SUCCESS:
+                LoginResponse loginResponse = mUserPreference.get();
+                loginResponse.setAppContactAccessed(true);
+                mUserPreference.set(loginResponse);
         }
-        mMyCommunitiesAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void startProgressBar() {
-
-    }
-
-    @Override
-    public void stopProgressBar() {
-
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     private void getGcmId() {
@@ -1868,126 +2024,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         });
     }
+    //endregion
 
-    @Override
-    public void getLogInResponse(LoginResponse loginResponse) {
-
-    }
-
-    @Override
-    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
-    }
-
-    @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
-    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
-
-    }
-
-    @Override
-    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case NOTIFICATION_COUNT:
-                unReadNotificationCount(baseResponse);
-                break;
-            case GCM_ID:
-                gcmIdResponse(baseResponse);
-                break;
-            case USER_CONTACTS_ACCESS_SUCCESS:
-                getAppContactsListSuccess(baseResponse);
-                break;
-            default:
-                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
-        }
-    }
-
-    @Override
-    public void onConfigFetched() {
-        AnalyticsManager.initializeMixpanel(this, false);
-    }
-
-    private void unReadNotificationCount(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (baseResponse instanceof NotificationReadCountResponse) {
-                    NotificationReadCountResponse notificationReadCountResponse = (NotificationReadCountResponse) baseResponse;
-                    StringBuilder stringBuilder = new StringBuilder();
-                    int notificationCount = notificationReadCountResponse.getUnread_notification_count();
-                    if (notificationReadCountResponse.getUnread_notification_count() > 0) {
-                        flNotificationReadCount.setVisibility(View.VISIBLE);
-                        String notification = String.valueOf(notificationCount);
-                        stringBuilder.append(notification);
-                        mTvNotificationReadCount.setText(stringBuilder.toString());
-                    } else {
-                        flNotificationReadCount.setVisibility(View.GONE);
-                    }
-                }
-                break;
-            case AppConstants.FAILED:
-                flNotificationReadCount.setVisibility(View.GONE);
-                break;
-            default:
-                flNotificationReadCount.setVisibility(View.GONE);
-        }
-    }
-
-    private void gcmIdResponse(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (baseResponse instanceof GcmIdResponse) {
-                    LoginResponse loginResponse = mUserPreference.get();
-                    loginResponse.setGcmId(mGcmId);
-                    mUserPreference.set(loginResponse);
-                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                    installUpdateForMoEngage.setFirstOpen(false);
-                    mInstallUpdatePreference.set(installUpdateForMoEngage);
-                }
-                break;
-            case AppConstants.FAILED:
-                break;
-            default:
-        }
-    }
-
-    private void getAppContactsListSuccess(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                LoginResponse loginResponse = mUserPreference.get();
-                loginResponse.setAppContactAccessed(true);
-                mUserPreference.set(loginResponse);
-        }
-    }
-
-    public void fetchAllCommunity() {
-        mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
-    }
-
-    @Override
-    public void onViewRendered(float dashWidth) {
-        ConfigData configData = new ConfigData();
-        int beginnerTickIndex = configData.beginnerStartIndex;
-        int intermediateTickIndex = configData.intermediateStartIndex;
-
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
-            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
-        }
-        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
-        beginnerTick.setLayoutParams(buttonLayoutParams);
-
-        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
-        intermediateTick.setLayoutParams(intermediateLayoutParams);
-    }
 }

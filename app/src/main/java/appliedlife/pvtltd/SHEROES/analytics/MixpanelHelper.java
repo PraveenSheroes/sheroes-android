@@ -303,9 +303,7 @@ public class MixpanelHelper {
             case AppConstants.FEED_COMMUNITY_POST:
                 type = MoEngageConstants.COMMUNITY_POST;
                 break;
-            case AppConstants.FEED_JOB:
-                type = MoEngageConstants.JOB;
-                break;
+
         }
         return type;
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fl_home_footer_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -9,9 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_marginTop="@dimen/dp_size_20"
-        android:orientation="horizontal"
-        android:elevation="@dimen/dp_size_5"
         android:background="@drawable/rectangle_grey_round_corner"
+        android:elevation="@dimen/dp_size_5"
+        android:orientation="horizontal"
         android:weightSum="1">
 
         <TextView
@@ -20,28 +19,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight=".5"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/ID_FEED"
             android:drawablePadding="@dimen/dp_size_4"
             android:drawableTop="@drawable/ic_home_selected_icon"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="bottom|center_horizontal"
+            android:text="@string/home_lable"
             android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/sp_size_12" />
-        <TextView
-            android:id="@+id/tv_job_home"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight=".33"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
 
-            android:visibility="gone"
-            android:drawablePadding="4dp"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/ID_CARRIER"
-            android:drawableTop="@drawable/ic_job_unselected"
-            android:textColor="@color/feed_card_time"
-            android:textSize="@dimen/sp_size_12" />
 
         <TextView
             android:id="@+id/tv_communities"
@@ -49,10 +34,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight=".5"
+            android:drawableTop="@drawable/ic_community_unselected_icon"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
             android:text="@string/ID_COMMUNITIY"
-            android:drawableTop="@drawable/ic_community_unselected_icon"
             android:textColor="@color/feed_card_time"
             android:textSize="@dimen/sp_size_12" />
 

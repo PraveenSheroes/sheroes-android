@@ -205,18 +205,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                             }
                         }
                         break;
-                    case AppConstants.JOB_FRAGMENT:
-                        if (null != mFragmentListRefreshData) {
-                            if (null != mFragmentListRefreshData.getFeedRequestPojo()) {
-                                FeedRequestPojo feedRequestJobPojo = mFragmentListRefreshData.getFeedRequestPojo();
-                                feedRequestJobPojo.setPageNo(pageNo);
-                                mHomePresenter.getFeedFromPresenter(feedRequestJobPojo);
-                            } else {
-                                FeedRequestPojo feedRequestJobPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_JOB, pageNo);
-                                mHomePresenter.getFeedFromPresenter(feedRequestJobPojo);
-                            }
-                        }
-                        break;
                     case AppConstants.COMMUNITY_DETAIL:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getIdFeedDetail()));
                         break;
@@ -250,9 +238,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
                     case AppConstants.HELPLINE_FRAGMENT:
                         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(pageNo));
-                        break;
-                    case AppConstants.ALL_SEARCH:
-                        mHomePresenter.getFeedFromPresenter(mAppUtils.searchRequestBuilder(AppConstants.FEED_JOB, mFragmentListRefreshData.getSearchStringName(), mFragmentListRefreshData.getPageNo(), AppConstants.ALL_SEARCH, null, AppConstants.PAGE_SIZE));
                         break;
                     case AppConstants.SPAM_LIST_FRAGMENT:
                         FeedRequestPojo feedRequestSpamListPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo());

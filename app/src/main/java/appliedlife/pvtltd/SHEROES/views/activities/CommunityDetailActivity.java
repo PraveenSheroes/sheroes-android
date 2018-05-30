@@ -66,7 +66,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
@@ -359,14 +358,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         onCommunityJoined();
                     }
                     refreshCurrentFragment();
-                    break;
-
-                case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
-                    if (null != data && null != data.getExtras()) {
-                        JobFeedSolrObj jobFeedSolrObj = null;
-                        jobFeedSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
-                        invalidateItem(jobFeedSolrObj);
-                    }
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:

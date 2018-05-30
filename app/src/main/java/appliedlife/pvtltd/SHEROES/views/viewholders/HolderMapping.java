@@ -32,12 +32,6 @@ public enum HolderMapping {
             return new FeedCommunityPostHolder(view, viewInterface);
         }
     },
-    FEED_JOB(R.layout.feed_job_normal_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new FeedJobHolder(view, viewInterface);
-        }
-    },
 
     FEED_ARTICLE(R.layout.feed_article_card_normal) {
         @Override
@@ -212,9 +206,7 @@ public enum HolderMapping {
                             case AppConstants.FEED_ARTICLE:
                                 returnView = FEED_ARTICLE.ordinal();
                                 break;
-                            case AppConstants.FEED_JOB:
-                                returnView = FEED_JOB.ordinal();
-                                break;
+
                             case AppConstants.FEED_COMMUNITY:
                                 returnView = ON_BOARDING_COMMUNITIES_CARD.ordinal();
                                 break;
@@ -284,9 +276,6 @@ public enum HolderMapping {
                                 if (isFeatured && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isMember()) {
                                     returnView = FEATURE_CARD.ordinal();
                                 }
-                                break;
-                            case AppConstants.FEED_JOB:
-                                returnView = FEED_JOB.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
                                 UserPostSolrObj userPostSolrObj = new UserPostSolrObj();

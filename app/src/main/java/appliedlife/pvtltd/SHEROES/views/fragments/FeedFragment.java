@@ -59,8 +59,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -73,11 +71,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -247,7 +243,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public boolean showUpdateCard() {
-        if (mConfiguration!= null && mConfiguration.isSet() && mConfiguration.get().configData!=null && mConfiguration.get().configData.updateVersion!= null && !CommonUtil.isLaterClicked()) {
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.updateVersion != null && !CommonUtil.isLaterClicked()) {
             return CommonUtil.versionCompare(CommonUtil.getCurrentAppVersion(), mConfiguration.get().configData.updateVersion);
         }
         return false;
@@ -339,6 +335,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return SCREEN_LABEL;
         }
     }
+
     @Override
     public List getListData() {
         return null;
@@ -582,26 +579,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         }
-        if (feedDetail.getSubType().equals(AppConstants.FEED_JOB)) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
-                            .title(feedDetail.getNameOrTitle())
-                            .companyId(Long.toString(((JobFeedSolrObj) feedDetail).getCompanyMasterId()))
-                            .location(feedDetail.getAuthorCityName())
-                            .build();
-            trackEvent(Event.JOBS_SHARED, properties);
+        if (!isWhatsappShare) {
+            HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+            AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
         } else {
-            if (!isWhatsappShare) {
-                HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
-                properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
-                AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
-            } else {
-                HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
-                properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
-                AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
-            }
+            HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+            AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
         }
+
     }
 
     @Override
@@ -627,7 +614,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostMenuClicked(final UserPostSolrObj userPostObj, final View view) {
-        if(getActivity() == null) return;
+        if (getActivity() == null) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
         long currentUserId = -1;
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -682,8 +669,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
 
             //Enable delete response for admin in challenge response
-            if(userPostObj.communityId == 0) {
-                if(adminId == AppConstants.TWO_CONSTANT) {
+            if (userPostObj.communityId == 0) {
+                if (adminId == AppConstants.TWO_CONSTANT) {
                     popup.getMenu().findItem(R.id.delete).setVisible(true);
                 } else {
                     popup.getMenu().findItem(R.id.delete).setVisible(false);
@@ -707,9 +694,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             CommunityPostActivity.navigateTo(getActivity(), userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, mPrimaryColor, mTitleTextColor, mScreenProperties);
                             return true;
                         case R.id.delete:
-                            if(finalCurrentUserId != userPostObj.getAuthorId() && finalAdminId == AppConstants.TWO_CONSTANT) {
+                            if (finalCurrentUserId != userPostObj.getAuthorId() && finalAdminId == AppConstants.TWO_CONSTANT) {
                                 reportSpamDialog(SpamContentType.POST, userPostObj);
-                            } else{
+                            } else {
                                 AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostObj, getScreenName());
                                 mFeedPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(userPostObj.getIdOfEntityOrParticipant()), userPostObj);
                             }
@@ -718,7 +705,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
                             mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
                             return true;
-                        case R.id.report_spam :
+                        case R.id.report_spam:
                             reportSpamDialog(SpamContentType.POST, userPostObj);
                             return true;
                         default:
@@ -765,7 +752,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onCommentMenuClicked(final UserPostSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
-        if(getActivity() ==null || getActivity().isFinishing()) return;
+        if (getActivity() == null || getActivity().isFinishing()) return;
 
         PopupMenu popup = new PopupMenu(getActivity(), tvFeedCommunityPostUserCommentPostMenu);
         long currentUserId = -1;
@@ -773,7 +760,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             currentUserId = mUserPreference.get().getUserSummary().getUserId();
         }
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-           // popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
+            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete_comment, popup.getMenu());
             if (CommonUtil.isEmpty(userPostObj.getLastComments())) {
                 return;
             }
@@ -790,7 +777,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             Comment comment = userPostObj.getLastComments().get(0);
 
             if (comment.getParticipantUserId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
-                if(comment.getParticipantUserId() == currentUserId) {
+                if (comment.getParticipantUserId() == currentUserId) {
                     popup.getMenu().findItem(R.id.edit).setVisible(true);
                 } else {
                     popup.getMenu().findItem(R.id.edit).setVisible(false);
@@ -815,8 +802,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.COMMENT, userPostObj);
-                           //SpamPostRequest request = SpamUtil.spamRequestBuilder(userPostObj, tvFeedCommunityPostUserCommentPostMenu, mLoggedInUser);
-                           //reportSpamDialog(request, userPostObj);
+                            //SpamPostRequest request = SpamUtil.spamRequestBuilder(userPostObj, tvFeedCommunityPostUserCommentPostMenu, mLoggedInUser);
+                            //reportSpamDialog(request, userPostObj);
 
                         default:
                             return false;
@@ -971,17 +958,17 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         PopupMenu popup = new PopupMenu(getActivity(), view);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
-           if(view.getId() == R.id.tv_feed_article_user_comment_post_menu || view.getId() == R.id.spam_article_comment_menu) {
+            if (view.getId() == R.id.tv_feed_article_user_comment_post_menu || view.getId() == R.id.spam_article_comment_menu) {
                 long currentUserId = -1;
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                     currentUserId = mUserPreference.get().getUserSummary().getUserId();
                 }
 
-                if(articleObj.getLastComments().size()>0) {
+                if (articleObj.getLastComments().size() > 0) {
                     Comment comment = articleObj.getLastComments().get(0);
-                    if(comment ==null) return;
+                    if (comment == null) return;
 
-                    long adminId =0;
+                    long adminId = 0;
                     if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                         if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                             adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
@@ -1000,8 +987,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
 
             } else {
-               popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
-           }
+                popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            }
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
@@ -1017,10 +1004,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             shareCardDetail(articleObj);
                             return true;
 
-                        case R.id.report_spam :
-                               // SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(articleObj, view, mLoggedInUser);
-                              //  reportSpamDialog(spamPostRequest);
-                                return true;
+                        case R.id.report_spam:
+                            // SpamPostRequest spamPostRequest  = SpamUtil.spamRequestBuilder(articleObj, view, mLoggedInUser);
+                            //  reportSpamDialog(spamPostRequest);
+                            return true;
 
                         default:
                             return false;
@@ -1107,10 +1094,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onJobPostClicked(JobFeedSolrObj jobFeedObj) {
-    }
-
-    @Override
     public void onChallengeClicked(Contest contest) {
         ContestActivity.navigateTo(getActivity(), contest, mScreenLabel, mScreenProperties, 0, 0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
     }
@@ -1186,7 +1169,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserPostSolrObj userPostSolrObj) {
 
-        if(getActivity() == null || getActivity().isFinishing()) return;
+        if (getActivity() == null || getActivity().isFinishing()) return;
 
         SpamReasons spamReasons;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null && mConfiguration.get().configData.reasonOfSpamCategory != null) {
@@ -1196,7 +1179,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             spamReasons = AppUtils.parseUsingGSONFromJSON(spamReasonsContent, SpamReasons.class.getName());
         }
 
-        if(spamReasons == null) return;
+        if (spamReasons == null) return;
 
         final Dialog spamReasonsDialog = new Dialog(getActivity());
         spamReasonsDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -1214,21 +1197,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         final RadioGroup spamOptions = spamReasonsDialog.findViewById(R.id.options_container);
 
-        List<Spam> spamList =null;
+        List<Spam> spamList = null;
         SpamPostRequest spamRequest = null;
-        if(spamContentType == SpamContentType.POST) {
+        if (spamContentType == SpamContentType.POST) {
             spamList = spamReasons.getPostTypeSpams();
             spamRequest = SpamUtil.createSpamPostRequest(userPostSolrObj, false, mLoggedInUser);
-        } else if(spamContentType == SpamContentType.COMMENT) {
+        } else if (spamContentType == SpamContentType.COMMENT) {
             spamList = spamReasons.getCommentTypeSpams();
             spamRequest = SpamUtil.createSpamPostRequest(userPostSolrObj, true, mLoggedInUser);
         }
 
-        if(spamRequest == null || spamList == null) return;
+        if (spamRequest == null || spamList == null) return;
 
         final EditText reason = spamReasonsDialog.findViewById(R.id.edit_text_reason);
 
-        SpamUtil.addRadioToView(getContext(), spamList , spamOptions);
+        SpamUtil.addRadioToView(getContext(), spamList, spamOptions);
 
         Button submit = spamReasonsDialog.findViewById(R.id.submit);
 
@@ -1237,7 +1220,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(spamOptions.getCheckedRadioButtonId()!=-1) {
+                if (spamOptions.getCheckedRadioButtonId() != -1) {
 
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
@@ -1248,15 +1231,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         if (spam.getLabel().equalsIgnoreCase("Others")) {
                             if (reason.getVisibility() == View.VISIBLE) {
 
-                                if(reason.getText().length() > 0 && reason.getText().toString().trim().length()>0) {
-                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":"+reason.getText().toString()));
+                                if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
+                                    finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mFeedPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj); //submit
                                     spamReasonsDialog.dismiss();
 
 
-                                    if(spamContentType == SpamContentType.POST) {
+                                    if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
-                                    } else if(spamContentType == SpamContentType.COMMENT) {
+                                    } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
 
@@ -1271,9 +1254,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             mFeedPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj);  //submit request
                             spamReasonsDialog.dismiss();
 
-                            if(spamContentType == SpamContentType.POST) {
+                            if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
-                            } else if(spamContentType == SpamContentType.COMMENT) {
+                            } else if (spamContentType == SpamContentType.COMMENT) {
                                 AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                             }
                         }
@@ -1335,7 +1318,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
         if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
             boolean isMentor = userSolrObj.isAuthorMentor();
-            ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID,  AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
 
     }
@@ -1454,7 +1437,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void updateItem(FeedDetail updatedFeedDetail) {
-        if(updatedFeedDetail == null) return;
+        if (updatedFeedDetail == null) return;
         findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
     }
 

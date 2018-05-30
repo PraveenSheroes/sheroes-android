@@ -44,7 +44,6 @@
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
-    <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
@@ -185,24 +184,6 @@
     <string name="COMMENT_REVIEW_MESSAGE">This comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
-
-    <!--String Related personal other details page-->
-
-
-    <!--String Related professional choose_city details page-->
-
-
-    <!--String Related professional  travel_like details page-->
-    <!--string related professional work_experience page -->
-
-    <string name="ID_JOB">Job</string>
-
-
-    <!--string related work_experience_selfempolyment page-->
-
-
-    <!-- String related to setting_preference_work_experience  view page-->
-
 
     <!--string_related_profile_basic_details_card-->
 
@@ -646,5 +627,6 @@
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
+    <string name="home_lable">Home</string>
 
 </resources>
