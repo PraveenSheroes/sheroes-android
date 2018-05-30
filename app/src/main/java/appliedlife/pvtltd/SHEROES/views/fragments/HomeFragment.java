@@ -108,9 +108,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void setupViewPager(final ViewPager viewPager) {
-        if (null == getActivity())
-            return;
-        mFragmentAdapter = new Adapter((getActivity()).getSupportFragmentManager());
+        mFragmentAdapter = new Adapter(getChildFragmentManager());
         for (String name : homeTabs) {
             if (name.equalsIgnoreCase(TabType.FEED.getName())) {
                 FeedFragment feedFragment = new FeedFragment();
