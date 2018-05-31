@@ -457,6 +457,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
         setAllValues(mFragmentOpen);
         mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItemName, true);
         FragmentManager fm = getSupportFragmentManager();
@@ -683,8 +684,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
-        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
-        mICSheroes.setVisibility(View.GONE);
         setAppBarElevation();
     }
 
@@ -696,11 +695,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setText(getString(R.string.home_lable));
-
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-
         mInvite.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
+        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
+        mICSheroes.setVisibility(View.GONE);
     }
 
     public void createCommunityPostOnClick(CommunityPost communityPost) {
@@ -714,6 +713,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
         setAppBarElevation();
     }
@@ -733,13 +733,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFlHomeFooterList.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
         setAppBarElevation();
     }
 
     @Override
     public void onBackPressed() {
-        mFlHomeFooterList.setVisibility(View.VISIBLE);
         if (isSheUser) {
             super.onBackPressed();
             getFragmentManager().executePendingTransactions();
@@ -1717,6 +1717,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         FAQSFragment faqsFragment = new FAQSFragment();
         FragmentManager fm = getSupportFragmentManager();
@@ -1730,6 +1731,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
         FragmentManager fm = getSupportFragmentManager();
@@ -1807,6 +1809,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void openHelplineFragment() {
         mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);

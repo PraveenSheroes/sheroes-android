@@ -85,8 +85,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        homeTabs.add(TabType.FEED.getName());
-        homeTabs.add(TabType.TRENDING.getName());
+
     }
 
     @Override
@@ -109,6 +108,8 @@ public class HomeFragment extends BaseFragment {
 
     // region Private methods
     private void initializeHomeViews() {
+        homeTabs.add(TabType.FEED.getName());
+        homeTabs.add(TabType.TRENDING.getName());
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
         String alphaColor = mCommunityTitleTextColor;
         alphaColor = alphaColor.replace("#", "#" + "BF");
