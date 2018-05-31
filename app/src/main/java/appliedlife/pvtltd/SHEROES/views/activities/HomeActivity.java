@@ -15,7 +15,6 @@ import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -28,14 +27,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
@@ -43,11 +39,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -182,6 +176,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
+    private static final int APP_BAR_ELEVATION = 10;
 
     // region inject variables
     @Inject
@@ -416,8 +411,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mSnowFlakView.setVisibility(View.GONE);
         }
         pbNavDrawer.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.VISIBLE);
-        mTitleText.setVisibility(View.GONE);
         mInvite.setVisibility(View.VISIBLE);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
@@ -464,12 +457,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
         setAllValues(mFragmentOpen);
         mTitleText.setText("");
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItemName, true);
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
-
         DrawerViewHolder.selectedOptionName = menuItemName;
+        setAppBarElevation();
     }
 
     @OnClick(R.id.tv_drawer_navigation)
@@ -553,7 +547,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void resetUiSelectedOptions() {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
@@ -644,6 +637,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         homeButtonUi();
         initHomeViewPagerAndTabs();
+        mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
     }
 
     public void homeButtonUi() {
@@ -667,10 +662,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
         mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        mICSheroes.setVisibility(View.VISIBLE);
 
-        mTitleText.setText("");
-        mTitleText.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
 
     }
@@ -678,11 +670,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick({R.id.tv_communities, R.id.iv_communities_search})
     public void communityOnClick() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mAppBarLayout.setElevation(10);
-        }else {
-            ViewCompat.setElevation(mAppBarLayout, 10);
-        }
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -696,6 +683,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
+        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
+        mICSheroes.setVisibility(View.GONE);
+        setAppBarElevation();
     }
 
     public void communityButton() {
@@ -708,9 +698,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvHome.setText(getString(R.string.home_lable));
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mTitleText.setText(getString(R.string.ID_COMMUNITIES));
-        mTitleText.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
+
         mInvite.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
     }
@@ -724,12 +712,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void articleUi() {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
         mFloatActionBtn.setVisibility(View.GONE);
-        mICSheroes.setVisibility(View.VISIBLE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
-
         mTitleText.setText("");
-        mTitleText.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
+        setAppBarElevation();
     }
 
     public void inviteMyCommunityDialog() {
@@ -746,15 +732,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
-        if (isSheUser) {
-            mICSheroes.setVisibility(View.GONE);
-        } else {
-            mICSheroes.setVisibility(View.VISIBLE);
-        }
         mTitleText.setText("");
-        mTitleText.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
-
+        setAppBarElevation();
     }
 
     @Override
@@ -1258,10 +1238,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
                     openArticleFragment(setCategoryIds(), false);
                 }
-                if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
-                    handleHelpLineFragmentFromDeepLinkAndLoading();
-                }
-
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
 
@@ -1285,6 +1261,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
                     renderICCMemberListView();
                 }
+            } else if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
+                handleHelpLineFragmentFromDeepLinkAndLoading();
             } else {
                 homeOnClick();
             }
@@ -1738,38 +1716,41 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private void renderFAQSView() {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
-        mTitleText.setText(getString(R.string.ID_APP_NAME));
-        mTitleText.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
+        mTitleText.setText("");
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         FAQSFragment faqsFragment = new FAQSFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
+        setAppBarElevation();
     }
 
     private void renderICCMemberListView() {
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
-        mTitleText.setText(getString(R.string.ID_APP_NAME));
-        mTitleText.setVisibility(View.VISIBLE);
-        mICSheroes.setVisibility(View.GONE);
+        mTitleText.setText("");
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
+        setAppBarElevation();
     }
 
     private void initHomeViewPagerAndTabs() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mAppBarLayout.setElevation(0f);
-        }else {
+        } else {
             ViewCompat.setElevation(mAppBarLayout, 0f);
         }
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.home_lable));
         FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
+        }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         HomeFragment homeFragment = new HomeFragment();
@@ -1825,22 +1806,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openHelplineFragment() {
-        if (isSheUser && startedFirstTime()) {
-            mTitleText.setText(getString(R.string.ID_APP_NAME));
-            mTitleText.setVisibility(View.VISIBLE);
-            mICSheroes.setVisibility(View.GONE);
-        } else {
-            mTitleText.setText("");
-            mTitleText.setVisibility(View.GONE);
-            mICSheroes.setVisibility(View.VISIBLE);
-        }
+        mTitleText.setText("");
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         changeFragmentWithCommunities();
         setAllValues(mFragmentOpen);
         HelplineFragment helplineFragment = HelplineFragment.createInstance(AppConstants.helpline_desk);
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+        setAppBarElevation();
     }
 
     private void removeItem(FeedDetail feedDetail) {
@@ -1982,7 +1956,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         appInstallation.gcmId = registrationId;
                         mAppInstallation.set(appInstallation);
                     }
-                    if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && null != mInstallUpdatePreference.get()) {
+                    if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();
                             loginRequest.setGcmorapnsid(registrationId);
@@ -1993,7 +1967,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             }
                             mHomePresenter.getNewGCMidFromPresenter(loginRequest);
                         } else {
-                            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
+                            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
                                 String mOldGcmId = mUserPreference.get().getGcmId();
                                 if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
                                     if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
@@ -2020,6 +1994,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             }
         });
+    }
+
+    private void setAppBarElevation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mAppBarLayout.setElevation(APP_BAR_ELEVATION);
+        } else {
+            ViewCompat.setElevation(mAppBarLayout, APP_BAR_ELEVATION);
+        }
     }
     //endregion
 

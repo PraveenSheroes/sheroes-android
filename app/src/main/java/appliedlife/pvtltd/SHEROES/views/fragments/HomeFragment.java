@@ -39,7 +39,6 @@ public class HomeFragment extends BaseFragment {
 
     private Adapter mFragmentAdapter;
     private String mCommunityPrimaryColor = "#ffffff";
-    private String mCommunitySecondaryColor = "#dc4541";
     private String mCommunityTitleTextColor = "#3c3c3c";
     private List<Fragment> mTabFragments = new ArrayList<>();
     private String mDefaultTabKey = "My Feed";
@@ -49,7 +48,6 @@ public class HomeFragment extends BaseFragment {
         FEED("My Feed"),
         TRENDING("Trending");
         public String tabType;
-        private String mCommS;
 
         TabType(String tabType) {
             this.tabType = tabType;
@@ -165,12 +163,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void run() {
                 int tabLayoutWidth = mTabLayout.getWidth();
-
-                DisplayMetrics metrics = new DisplayMetrics();
-                (getActivity()).getWindowManager().getDefaultDisplay().getMetrics(metrics);
-                int deviceWidth = metrics.widthPixels;
-
-                if (tabLayoutWidth < deviceWidth) {
+                if (tabLayoutWidth < CommonUtil.getWindowWidth(getContext())) {
                     mTabLayout.setTabMode(TabLayout.MODE_FIXED);
                     ViewGroup.LayoutParams mParams = mTabLayout.getLayoutParams();
                     mParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
