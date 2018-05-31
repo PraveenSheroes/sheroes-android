@@ -131,7 +131,7 @@ public class HomeFragment extends BaseFragment {
             if (name.equalsIgnoreCase(TabType.TRENDING.getName())) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
+                bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
                 bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
                 feedFragment.setArguments(bundle);

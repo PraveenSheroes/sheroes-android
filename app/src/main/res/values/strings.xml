@@ -106,6 +106,7 @@
     <string name="ID_INVITE">Invite</string>
     <string name="ID_SHARE">Share</string>
     <string name="ID_EDIT">Edit</string>
+    <string name="SHARE_PROFILE">Share Profile</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_APPROVE">Approve</string>

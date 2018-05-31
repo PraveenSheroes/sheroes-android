@@ -170,6 +170,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private static final float EXPANDED_SIZE = 1.02f;
     private static final int ANIMATION_REPEAT_DURATION = 700;
     private static final int ANIMATION_MAX_DURATION = 5000;
+    private static final int ADMIN_TYPE_ID = 2;
+    private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
 
     private Long mChampionId;
     private boolean isMentor;
@@ -864,9 +866,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
 
-        //admin , community moderator have the deactivate feature
-        if(loggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (loggedInUserIdTypeId == 2 || loggedInUserIdTypeId == 13)) {
-            popup.getMenu().add(0, R.id.deactivate_user, 1, menuIconWithText(getResources().getDrawable(R.drawable.deactivate_user), getResources().getString(R.string.deactivate_user)));
+        //admin and community moderator have feature to share profile and deactivate user
+        if(loggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (loggedInUserIdTypeId == ADMIN_TYPE_ID || loggedInUserIdTypeId == COMMUNITY_MODERATOR_TYPE_ID)) {
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.SHARE_PROFILE)));
+            popup.getMenu().add(0, R.id.deactivate_user, 2, menuIconWithText(getResources().getDrawable(R.drawable.deactivate_user), getResources().getString(R.string.deactivate_user)));
         } else if (loggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
             popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
         }
@@ -876,6 +879,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 switch (item.getItemId()) {
                     case R.id.deactivate_user:
                         deactivateUser(userPostObj);
+                        return true;
+                    case R.id.share :
+                        shareProfile();
                         return true;
                     case R.id.report_spam:
                         reportSpamDialog(SpamContentType.USER, userPostObj);
