@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="36dp"
+                android:layout_marginTop="48dp"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/ID_MY_COMMUNITIES"
@@ -78,7 +78,7 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_25"
                 android:layout_marginRight="@dimen/dp_size_16"
-                android:layout_marginTop="@dimen/dp_size_24">
+                android:layout_marginTop="@dimen/dp_size_16">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_right_drawer_communities"
@@ -101,7 +101,7 @@
                 android:paddingBottom="@dimen/dp_size_8"
                 android:paddingLeft="@dimen/dp_size_16"
                 android:paddingRight="@dimen/dp_size_16"
-                android:paddingTop="@dimen/dp_size_16"
+                android:paddingTop="@dimen/dp_size_24"
                 android:src="@drawable/vector_community_search" />
 
             <TextView

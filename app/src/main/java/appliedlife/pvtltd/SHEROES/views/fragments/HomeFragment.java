@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -28,7 +30,8 @@ import butterknife.ButterKnife;
  */
 
 public class HomeFragment extends BaseFragment {
-    public static String SCREEN_LABEL = "Home Fragment";
+    public static String TRENDING_FEED_SCREEN_LABEL = "Trending Feed Screen";
+    public static String FEED_SCREEN_LABEL = "Feed Screen";
     // region View variables
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
@@ -74,8 +77,26 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        homeTabs.clear();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        homeTabs.add(TabType.FEED.getName());
+        homeTabs.add(TabType.TRENDING.getName());
+    }
+
+    @Override
     public String getScreenName() {
-        return SCREEN_LABEL;
+        return null;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
     //endregion
 
@@ -88,8 +109,6 @@ public class HomeFragment extends BaseFragment {
 
     // region Private methods
     private void initializeHomeViews() {
-        homeTabs.add(TabType.FEED.getName());
-        homeTabs.add(TabType.TRENDING.getName());
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
         String alphaColor = mCommunityTitleTextColor;
         alphaColor = alphaColor.replace("#", "#" + "BF");
@@ -122,7 +141,7 @@ public class HomeFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
-                bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
+                bundle.putString(AppConstants.SCREEN_NAME, FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
                 mFragmentAdapter.addFragment(feedFragment, TabType.FEED.getName());
                 mTabFragments.add(feedFragment);
@@ -133,7 +152,7 @@ public class HomeFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
-                bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
+              //  bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
                 mFragmentAdapter.addFragment(feedFragment, TabType.TRENDING.getName());
                 mTabFragments.add(feedFragment);
@@ -190,6 +209,15 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
+                switch (tab.getPosition()) {
+                    case 1:
+                        AnalyticsManager.trackScreenView(TRENDING_FEED_SCREEN_LABEL);
+                        break;
+                    case 2:
+                        break;
+                    default:
+                }
+
             }
 
             @Override
@@ -202,7 +230,6 @@ public class HomeFragment extends BaseFragment {
             }
         });
     }
-
     //endregion
 
     // region Static innerclass

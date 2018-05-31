@@ -13,10 +13,13 @@ public class ConfigData {
     public String mProfileSharedText = "I found like-minded women on SHEROES to share my thoughts without hesitation.";
 
     @SerializedName("commentHolderText")
-    public String mCommentHolderText = "Type your comment here...";
+    public String mCommentHolderText = "Comment here, Use @ to tag people...";
 
     @SerializedName("createPostText")
-    public String mCreatePostText = "Ask/ Share without hesitation";
+    public String mCreatePostText = "Type here, Use @ to tag people...";
+
+    @SerializedName("feedHeaderPostText")
+    public String mFeedHeaderPostText = "Ask/ Share without hesitation";
 
     @SerializedName("showArticleViews")
     public boolean showArticleViews;

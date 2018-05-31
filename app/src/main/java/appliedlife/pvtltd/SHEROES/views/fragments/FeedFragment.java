@@ -339,6 +339,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+
     @Override
     public List getListData() {
         return null;
@@ -387,8 +388,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 String sourceScreenId = mProperties != null && mProperties.get(EventProperty.ID.getString()) != null ? ((String) mProperties.get(EventProperty.ID.getString())) : "";
                 if (CommonUtil.isNotEmpty(screenName)) {
                     mScreenLabel = screenName;
+                    AnalyticsManager.trackScreenView(mScreenLabel);
                 }
-
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
                 }
@@ -730,7 +731,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public boolean shouldTrackScreen() {
-        return mCommunityTab == null;
+        return false;
     }
 
     @Override

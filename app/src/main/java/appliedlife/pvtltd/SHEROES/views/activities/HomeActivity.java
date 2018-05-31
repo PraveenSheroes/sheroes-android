@@ -480,7 +480,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(GravityCompat.END);
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
+        AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
     }
 
     @OnClick(R.id.fab_filter)

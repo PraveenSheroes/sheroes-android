@@ -24,20 +24,25 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
             android:text="@string/home_lable"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@color/comment_text"
             android:textSize="@dimen/sp_size_12" />
 
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/spam_dialog_divider" />
 
         <TextView
             android:id="@+id/tv_communities"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:drawablePadding="@dimen/dp_size_5"
             android:layout_weight=".5"
             android:drawableTop="@drawable/ic_community_unselected_icon"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
-            android:text="@string/ID_COMMUNITIY"
+            android:text="@string/ID_COMMUNITIES"
             android:textColor="@color/feed_card_time"
             android:textSize="@dimen/sp_size_12" />
 
