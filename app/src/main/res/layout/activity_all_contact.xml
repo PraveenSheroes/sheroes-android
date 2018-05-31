@@ -21,9 +21,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             app:tabBackground="@color/search_shortcut_icon_color"
-            app:tabIndicatorColor="@color/footer_icon_text"
+            app:tabIndicatorColor="@color/tab_text"
             app:tabIndicatorHeight="@dimen/dp_size_2"
-            app:tabSelectedTextColor="@color/footer_icon_text"
+            app:tabSelectedTextColor="@color/tab_text"
             app:tabTextColor="@color/mentor_profession" />
 
     </android.support.design.widget.AppBarLayout>

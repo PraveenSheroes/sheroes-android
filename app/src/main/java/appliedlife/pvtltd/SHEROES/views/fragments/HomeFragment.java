@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,20 +29,24 @@ import butterknife.ButterKnife;
 
 public class HomeFragment extends BaseFragment {
     public static String SCREEN_LABEL = "Home Fragment";
-
+    // region View variables
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
 
     @Bind(R.id.home_tabs)
     TabLayout mTabLayout;
+    //endregion
 
+    // region member variables
     private Adapter mFragmentAdapter;
     private String mCommunityPrimaryColor = "#ffffff";
     private String mCommunityTitleTextColor = "#3c3c3c";
     private List<Fragment> mTabFragments = new ArrayList<>();
     private String mDefaultTabKey = "My Feed";
     private List<String> homeTabs = new ArrayList<>();
+    //endregion
 
+    // region Enum
     public enum TabType {
         FEED("My Feed"),
         TRENDING("Trending");
@@ -57,7 +60,9 @@ public class HomeFragment extends BaseFragment {
             return tabType;
         }
     }
+    //endregion
 
+    // region Public methods
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -72,12 +77,16 @@ public class HomeFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+    //endregion
 
+    // region Protected methods
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
     }
+    //endregion
 
+    // region Private methods
     private void initializeHomeViews() {
         homeTabs.add(TabType.FEED.getName());
         homeTabs.add(TabType.TRENDING.getName());
@@ -194,6 +203,9 @@ public class HomeFragment extends BaseFragment {
         });
     }
 
+    //endregion
+
+    // region Static innerclass
     static class Adapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
@@ -222,4 +234,5 @@ public class HomeFragment extends BaseFragment {
             return mFragmentTitles.get(position);
         }
     }
+    //endregion
 }
