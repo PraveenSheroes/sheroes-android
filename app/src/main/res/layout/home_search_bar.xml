@@ -61,7 +61,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/ic_nav_communities">
+        android:layout_toLeftOf="@id/ic_nav_communities">
 
         <TextView
             android:id="@+id/iv_home_notification_icon"
@@ -70,7 +70,6 @@
             android:layout_gravity="center|right"
             android:drawableLeft="@drawable/ic_notification"
             android:padding="@dimen/dp_size_10" />
-
 
         <FrameLayout
             android:id="@+id/fl_notification_read_count"
@@ -102,6 +101,4 @@
         android:layout_toLeftOf="@id/fl_notification"
         android:padding="@dimen/dp_size_10"
         android:src="@drawable/vector_invite_24dp" />
-
-
 </RelativeLayout>

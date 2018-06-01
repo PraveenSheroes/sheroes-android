@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -83,12 +82,6 @@ public class HomeFragment extends BaseFragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public String getScreenName() {
         return null;
     }
@@ -153,7 +146,7 @@ public class HomeFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
-              //  bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
+                //  bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
                 mFragmentAdapter.addFragment(feedFragment, TabType.TRENDING.getName());
                 mTabFragments.add(feedFragment);
@@ -171,13 +164,10 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-
-
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 

@@ -600,7 +600,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
 
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.home_lable));
+        mTvHome.setText(getString(R.string.home_label));
 
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
@@ -652,7 +652,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
-        mTvHome.setText(getString(R.string.home_lable));
+        mTvHome.setText(getString(R.string.home_label));
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
@@ -694,7 +694,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-        mTvHome.setText(getString(R.string.home_lable));
+        mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mInvite.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
@@ -1748,7 +1748,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             ViewCompat.setElevation(mAppBarLayout, 0f);
         }
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.home_lable));
+        mTvHome.setText(getString(R.string.home_label));
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();

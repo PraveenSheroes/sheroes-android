@@ -118,6 +118,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerVi
             }
         })
                 .subscribeOn(Schedulers.io())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {

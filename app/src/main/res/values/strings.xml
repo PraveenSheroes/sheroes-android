@@ -628,6 +628,6 @@
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
-    <string name="home_lable">Home</string>
+    <string name="home_label">Home</string>
 
 </resources>

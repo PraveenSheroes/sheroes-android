@@ -23,7 +23,7 @@
             android:drawableTop="@drawable/ic_home_selected_icon"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="bottom|center_horizontal"
-            android:text="@string/home_lable"
+            android:text="@string/home_label"
             android:textColor="@color/comment_text"
             android:textSize="@dimen/sp_size_12" />
 
