@@ -764,7 +764,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 if (AppUtils.isFragmentUIActive(fragment)) {
                     homeOnClick();
                 }
-            } else if (fragment != null && fragment instanceof FeedFragment) {
+            } else if (fragment != null && fragment instanceof HomeFragment) {
                 if (doubleBackToExitPressedOnce) {
                     getSupportFragmentManager().popBackStackImmediate();
                     finish();
