@@ -35,13 +35,12 @@ public class ShowcaseManager {
     private TextView tvDrawerNavigation;
     private RecyclerView recyclerView;
     private String mUserName;
-    private ImageView mIvNavCommunities;
 
     public ShowcaseManager(Activity activity) {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName, ImageView ivNavCommunities) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;
@@ -49,12 +48,10 @@ public class ShowcaseManager {
         this.tvDrawerNavigation = tvDrawerNavigation;
         this.recyclerView = recyclerView;
         this.mUserName = userName;
-        this.mIvNavCommunities=ivNavCommunities;
         tvDrawerNavigation.setEnabled(false);
         floatActionBtn.setEnabled(false);
         tvHome.setEnabled(false);
         tvCommunities.setEnabled(false);
-        mIvNavCommunities.setEnabled(false);
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -135,7 +132,6 @@ public class ShowcaseManager {
                                 tvHome.setEnabled(true);
                                 tvCommunities.setEnabled(true);
                                 tvDrawerNavigation.setEnabled(true);
-                                mIvNavCommunities.setEnabled(true);
                                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
                                     public boolean onTouch(View v, MotionEvent event) {
@@ -152,43 +148,6 @@ public class ShowcaseManager {
         showcaseView.setButtonPosition(getButtonLayoutParams());
         // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
         // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
-    }
-    //endregion
-
-    //region showcase Second in MainActivity
-    private void showFourthMainActivityShowcase() {
-        showcaseView = new ShowcaseView.Builder(activity)
-                .withMaterialShowcase()
-                .setTarget(new ViewTarget(mIvNavCommunities))
-                .setStyle(R.style.CustomShowcaseTheme)
-                .setContentTitle(activity.getString(R.string.ID_SHOW_CASE_MY_COMMUNITIES_TITLE))
-                .setContentText(activity.getString(R.string.ID_SHOW_CASE_MY_COMMUNITIES_DEC))
-                .replaceEndButton(R.layout.showcase_btn_layout)
-                .setShowcaseEventListener(
-                        new SimpleShowcaseEventListener() {
-                            @Override
-                            public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                                floatActionBtn.setEnabled(true);
-                                tvHome.setEnabled(true);
-                                tvCommunities.setEnabled(true);
-                                tvDrawerNavigation.setEnabled(true);
-                                mIvNavCommunities.setEnabled(true);
-                                recyclerView.setOnTouchListener(new View.OnTouchListener() {
-                                    @Override
-                                    public boolean onTouch(View v, MotionEvent event) {
-                                        return false;
-                                    }
-                                });
-                                HashMap<String, Object> properties = new EventProperty.Builder().build();
-                                AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, "", properties);
-                            }
-                        }
-                )
-                .build();
-        showcaseView.setButtonText(activity.getString(R.string.ID_GOT));
-        showcaseView.setButtonPosition(getButtonLayoutParams());
-        // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
-        //  showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
     }
     //endregion
 

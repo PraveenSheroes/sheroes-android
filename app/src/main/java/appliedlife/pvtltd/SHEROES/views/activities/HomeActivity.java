@@ -241,9 +241,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
 
-    @Bind(R.id.ic_nav_communities)
-    public ImageView mIvNavCommunities;
-
     @Bind(R.id.invite)
     ImageView mInvite;
 
@@ -310,6 +307,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.view_tool_tip_nav)
     public View viewToolTipNav;
 
+    @Bind(R.id.iv_new_tag)
+    public ImageView ivNewTag;
+
     @BindDimen(R.dimen.dp_size_64)
     int navProfileSize;
     // endregion
@@ -342,6 +342,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
+    private boolean isDrawerOpen;
     //endregion
 
     // region Public methods
@@ -384,6 +385,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             Crashlytics.getInstance().core.logException(e);
         }
         toolTipForNotification();
+        if (CommonUtil.ensureFirstTime(AppConstants.NEW_TAG_FOR_RIGHT_SWIP)) {
+            ivNewTag.setVisibility(View.VISIBLE);
+        }
     }
 
     public void renderHomeFragmentView() {
@@ -440,7 +444,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName, mIvNavCommunities);
+            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
             showcaseManager.showFirstMainActivityShowcase();
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);
@@ -474,15 +478,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
     }
 
-    @OnClick(R.id.ic_nav_communities)
+    @OnClick(R.id.fl_nav_communities)
     public void onClickNavigationCommunities() {
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
-        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        AppUtils.hideKeyboard(mTvUserName, TAG);
+        ivNewTag.setVisibility(View.GONE);
+        isDrawerOpen = true;
         mDrawer.openDrawer(GravityCompat.END);
-        AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
     }
 
     @OnClick(R.id.fab_filter)
@@ -575,7 +575,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            onClickNavigationCommunities();
+            if (isDrawerOpen) {
+                isDrawerOpen = false;
+                mPullRefreshList = new SwipPullRefreshList();
+                mPullRefreshList.setPullToRefresh(false);
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+                AppUtils.hideKeyboard(mTvUserName, TAG);
+                AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
+            }
         }
     }
 
