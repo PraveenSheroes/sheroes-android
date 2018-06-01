@@ -40,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
@@ -84,7 +85,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
@@ -94,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesDrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
@@ -155,8 +156,6 @@ public interface SheroesAppComponent {
     void inject(FeatureCardHolder featureCardHolder);
 
     void inject(FeedCommunityPostHolder feedCommunityPostHolder);
-
-    void inject(FeedJobHolder feedJobHolder);
 
     void inject(FeedArticleHolder feedArticleHolder);
 
@@ -316,6 +315,10 @@ public interface SheroesAppComponent {
     void inject(GenderInputFormDialogFragment genderInputFormDialogFragment);
 
     void inject(ProfileProgressDialog profileProgressDialog);
+
+    void inject(MyCommunitiesDrawerViewHolder myCommunitiesDrawerViewHolder);
+
+    void inject(HomeFragment homeFragment);
 
 }
 

@@ -51,7 +51,6 @@ public class MoEngageConstants {
     public static final String SHARE_VIA_EMAIL = "shared using email ids";
     public static final String COMMUNITY_POST = "community post";
     public static final String CHALLENGE_POST = "challenge post";
-    public static final String JOB = "job";
     public static final String ARTICLE = "article";
     public static final String COMMUNITY = "community";
     public static final String FEATURE_COMMUNITY = "feature community ";

@@ -62,6 +62,7 @@
     <color name="searchbox_icon_tint">#a4a4a4</color>
     <color name="dashboard_label">#f1403c</color>
     <color name="footer_icon_text">#dc4541</color>
+    <color name="tab_text">#3c3c3c</color>
     <color name="profile_level_header_background">#dc4541</color>
     <color name="toolbar_title_text">#dc4541</color>
     <color name="ripple_color">#dc4541</color>

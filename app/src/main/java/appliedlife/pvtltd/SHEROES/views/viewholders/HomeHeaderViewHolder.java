@@ -117,9 +117,9 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             userName.setText(name);
         }
         if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            headerMsg.setText(mConfiguration.get().configData.mCreatePostText);
+            headerMsg.setText(mConfiguration.get().configData.mFeedHeaderPostText);
         } else {
-            headerMsg.setText((new ConfigData().mCreatePostText));
+            headerMsg.setText((new ConfigData().mFeedHeaderPostText));
         }
         if (isToolTip) {
             toolTipForHeaderFeed(context);

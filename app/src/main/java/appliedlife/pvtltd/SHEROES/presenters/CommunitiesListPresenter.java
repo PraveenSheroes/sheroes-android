@@ -66,7 +66,8 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         }
         getMvpView().startProgressBar();
         Observable<FeedResponsePojo> observable = getAllCommunities();
-        observable.subscribe(new DisposableObserver<FeedResponsePojo>() {
+        observable.compose(this.<FeedResponsePojo>bindToLifecycle())
+        .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
@@ -106,6 +107,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
             }
         })
                 .subscribeOn(Schedulers.io())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
@@ -164,6 +166,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommunityResponse>() {
                     @Override
                     public void onComplete() {
@@ -216,6 +219,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<MemberListResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MemberListResponse>() {
                     @Override
                     public void onComplete() {

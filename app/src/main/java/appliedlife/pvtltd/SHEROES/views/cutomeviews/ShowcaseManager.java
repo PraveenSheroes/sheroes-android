@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,7 +40,7 @@ public class ShowcaseManager {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView,String userName) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;
@@ -149,7 +150,6 @@ public class ShowcaseManager {
         // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
     }
     //endregion
-
 
     //region private helper methods
     private RelativeLayout.LayoutParams getButtonLayoutParams() {

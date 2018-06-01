@@ -33,7 +33,6 @@ import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
-import java.net.HttpURLConnection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -507,9 +505,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case R.id.tv_feed_community_post_user_bookmark:
                 bookmarkCall();
                 break;
-            case R.id.tv_feed_job_user_bookmark:
-                bookmarkCall();
-                break;
             case R.id.tv_article_bookmark:
                 bookMarkTrending();
                 break;
@@ -534,13 +529,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     shareWithMultipleOption(baseResponse);
                 }
                 break;
-            case R.id.tv_feed_job_user_share:
-                if (isWhatsAppShare) {
-                    shareCardViaSocial(baseResponse);
-                } else {
-                    shareWithMultipleOption(baseResponse);
-                }
-                break;
+
             case R.id.tv_article_share:
                 if (isWhatsAppShare) {
                     shareCardViaSocial(baseResponse);
@@ -565,9 +554,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
             case R.id.tv_feed_article_user_menu:
-                clickMenuItem(view, baseResponse, FEED_CARD_MENU);
-                break;
-            case R.id.tv_feed_job_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU);
                 break;
             /* All user comment menu option edit,delete */
@@ -728,19 +714,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
-        if (feedDetail.getSubType().equals(AppConstants.FEED_JOB)) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
-                            .title(mFeedDetail.getNameOrTitle())
-                            .companyId(Long.toString(((JobFeedSolrObj) mFeedDetail).getCompanyMasterId()))
-                            .sharedTo(AppConstants.WHATSAPP_ICON)
-                            .location(mFeedDetail.getAuthorCityName())
-                            .build();
-            trackEvent(Event.JOBS_SHARED, properties);
-        } else {
-            AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
-        }
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
+
 
     }
 
@@ -823,9 +798,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case R.id.tv_feed_article_user_menu:
                 tvShare.setVisibility(View.VISIBLE);
-                break;
-            case R.id.tv_feed_job_user_menu:
-
                 break;
             case R.id.tv_user_comment_list_menu:
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -1020,7 +992,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 @Override
                 public void callBack(boolean isShown) {
                     Intent intent = new Intent(getApplicationContext(), WelcomeActivity.class);
-                   // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                    // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                     intent.putExtra(AppConstants.HIDE_SPLASH_THEME, true);
                     startActivity(intent);
                     finish();

@@ -9,10 +9,8 @@ import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
@@ -41,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 
 /**
@@ -56,8 +53,6 @@ public class PushNotificationService extends GcmListenerService {
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
-
-
 
 
     @Override
@@ -84,7 +79,7 @@ public class PushNotificationService extends GcmListenerService {
                 return;
             }
 
-            if(action.equalsIgnoreCase("nothing")){
+            if (action.equalsIgnoreCase("nothing")) {
                 return;
             }
         }
@@ -109,7 +104,7 @@ public class PushNotificationService extends GcmListenerService {
                     .title(MoEngageNotificationUtils.getNotificationTitleIfAny(data))
                     .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
                     .build();
-            AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN,"", properties);
+            AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN, "", properties);
             data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
             data.putBoolean(AppConstants.IS_MOENGAGE, true);
             data.putString(AppConstants.TITLE, MoEngageNotificationUtils.getNotificationTitleIfAny(data));
@@ -117,7 +112,7 @@ public class PushNotificationService extends GcmListenerService {
             data.putString(BaseActivity.SOURCE_SCREEN, "From Push Notification");
             data.putBoolean(AppConstants.IS_FROM_PUSH, true);
             PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
-        }else {
+        } else {
             if (StringUtil.isNotNullOrEmptyString(url)) {
                 if (StringUtil.isNotNullOrEmptyString(url)) {
                     sendNotification(from, message, url);
@@ -130,14 +125,10 @@ public class PushNotificationService extends GcmListenerService {
                 } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
                     entityId = data.getString(this.getString(R.string.ID_COMMUNITIY));
                     moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
-                } else if (url.contains(AppConstants.JOB_URL) || url.contains(AppConstants.JOB_URL_COM)) {
-                    entityId = data.getString(this.getString(R.string.ID_JOB));
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_JOB), from, from);
-                }else if(url.contains(AppConstants.HELPLINE_URL) || url.contains(AppConstants.HELPLINE_URL_COM))
-                {
+                } else if (url.contains(AppConstants.HELPLINE_URL) || url.contains(AppConstants.HELPLINE_URL_COM)) {
                     Intent intent = new Intent();
                     intent.setAction("BroadCastReceiver");
-                    intent.putExtra(AppConstants.HELPLINE_CHAT,message);
+                    intent.putExtra(AppConstants.HELPLINE_CHAT, message);
                     sendBroadcast(intent);
                 }
                 final HashMap<String, Object> properties = new EventProperty.Builder()
@@ -148,7 +139,7 @@ public class PushNotificationService extends GcmListenerService {
                         .isMonengage(false)
                         .body(message)
                         .build();
-                AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN,"", properties);
+                AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN, "", properties);
             }
         }
     }
@@ -192,7 +183,7 @@ public class PushNotificationService extends GcmListenerService {
         notificationIntent.setAction(AppConstants.SHEROES + mCount);
         Random random = new Random();
         int randomId = random.nextInt(9999 - 1000) + 1000;
-        PendingIntent pIntent = stackBuilder.getPendingIntent(randomId,PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pIntent = stackBuilder.getPendingIntent(randomId, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new NotificationCompat.Builder(PushNotificationService.this, relatedChannelId)
                 .setContentTitle(title)
                 .setTicker(AppConstants.TICKER)

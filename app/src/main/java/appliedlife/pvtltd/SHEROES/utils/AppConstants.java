@@ -83,7 +83,6 @@ public class AppConstants {
     public static final int ASKING_QUESTION_CALL = 101;
 
     public static final String FEED_COMMUNITY = "C";
-    public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
     public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
@@ -105,7 +104,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final int REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL = 2002;
     public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
-    public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
+
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_ADDRESS = 50011;
@@ -124,11 +123,11 @@ public class AppConstants {
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE = 1506;
-    public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT = "helpline";
 
     public static final String FEATURE_FRAGMENT = "feature";
+    public static final String MY_COMMUNITIES_DRAWER = "my_communities_drawer";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
@@ -143,7 +142,6 @@ public class AppConstants {
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";
-    public static final String ALL_SEARCH = "search";
     public static final String IMAGE = "Img";
 
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
@@ -212,6 +210,7 @@ public class AppConstants {
     public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
+    public static final String NEW_TAG_FOR_RIGHT_SWIP = "NEW_TAG";
     public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";
     public static final String PICTURE_SHARE_PREF = "PICTURE_SHARE_PREF";
     public static final String PICTURE_SHARE_SESSION_PREF = "PICTURE_SHARE_SESSION_PREF";
@@ -258,8 +257,6 @@ public class AppConstants {
     public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
     public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
-    public static final String JOB_URL = "https://sheroes.in/jobs";
-    public static final String JOB_URL_COM = "https://sheroes.com/jobs";
     public static final String COMMUNITY_POST_URL_COM = "https://sheroes.com/community-post";
     public static final String COMMUNITY_POST_URL = "https://sheroes.in/community-post";
     public static final String INVITE_FRIEND_URL = "https://sheroes.in/invite-friends";

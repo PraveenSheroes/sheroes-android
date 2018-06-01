@@ -44,7 +44,6 @@
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
-    <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
@@ -58,6 +57,7 @@
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
+    <string name="ID_DRAWER_NAVIGATION_COMMUNITIES">Right Swipe Navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
@@ -106,6 +106,7 @@
     <string name="ID_INVITE">Invite</string>
     <string name="ID_SHARE">Share</string>
     <string name="ID_EDIT">Edit</string>
+    <string name="SHARE_PROFILE">Share Profile</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_APPROVE">Approve</string>
@@ -184,24 +185,6 @@
     <string name="COMMENT_REVIEW_MESSAGE">This comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
-
-    <!--String Related personal other details page-->
-
-
-    <!--String Related professional choose_city details page-->
-
-
-    <!--String Related professional  travel_like details page-->
-    <!--string related professional work_experience page -->
-
-    <string name="ID_JOB">Job</string>
-
-
-    <!--string related work_experience_selfempolyment page-->
-
-
-    <!-- String related to setting_preference_work_experience  view page-->
-
 
     <!--string_related_profile_basic_details_card-->
 
@@ -513,6 +496,8 @@
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities for you!</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Tap here to explore various communities of interest.</string>
+    <string name="ID_SHOW_CASE_MY_COMMUNITIES_TITLE">My Communities</string>
+    <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
     <string name="ID_SHOW_CASE_FEED_TITLE">Welcome to SHEROES</string>
     <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
     <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
@@ -639,8 +624,10 @@
     <string name="full_name_err_msg">Please enter full name</string>
     <string name="limit">0/140</string>
     <string name="other">Other</string>
+    <string name="explore_All">Explore all</string>
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
+    <string name="home_label">Home</string>
 
 </resources>
