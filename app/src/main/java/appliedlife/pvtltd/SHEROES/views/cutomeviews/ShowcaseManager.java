@@ -131,12 +131,24 @@ public class ShowcaseManager {
                         new SimpleShowcaseEventListener() {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
-                                showFourthMainActivityShowcase();
+                                floatActionBtn.setEnabled(true);
+                                tvHome.setEnabled(true);
+                                tvCommunities.setEnabled(true);
+                                tvDrawerNavigation.setEnabled(true);
+                                mIvNavCommunities.setEnabled(true);
+                                recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                                    @Override
+                                    public boolean onTouch(View v, MotionEvent event) {
+                                        return false;
+                                    }
+                                });
+                                HashMap<String, Object> properties = new EventProperty.Builder().build();
+                                AnalyticsManager.trackEvent(Event.WALKTHROUGH_COMPLETED, "", properties);
                             }
                         }
                 )
                 .build();
-        showcaseView.setButtonText(activity.getString(R.string.ID_NEXT));
+        showcaseView.setButtonText(activity.getString(R.string.ID_GOT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
         // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
         // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
