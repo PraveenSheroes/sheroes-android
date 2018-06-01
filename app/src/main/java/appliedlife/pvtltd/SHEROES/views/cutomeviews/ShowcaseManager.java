@@ -136,7 +136,7 @@ public class ShowcaseManager {
                         }
                 )
                 .build();
-        showcaseView.setButtonText(activity.getString(R.string.ID_GOT));
+        showcaseView.setButtonText(activity.getString(R.string.ID_NEXT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
         // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
         // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
@@ -173,7 +173,7 @@ public class ShowcaseManager {
                         }
                 )
                 .build();
-        showcaseView.setButtonText(activity.getString(R.string.ID_NEXT));
+        showcaseView.setButtonText(activity.getString(R.string.ID_GOT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
         // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
         //  showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);

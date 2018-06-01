@@ -1168,8 +1168,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
                                 .show();
                         refreshCurrentFragment();
-                        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
-                        ((FeedFragment) fragment).refreshList();
                         break;
                     case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
                         if (resultCode == Activity.RESULT_OK) {
@@ -1821,23 +1819,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void removeItem(FeedDetail feedDetail) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
         if (fragment != null) {
-            ((FeedFragment) fragment).removeItem(feedDetail);
+            ((HomeFragment) fragment).removeItem(feedDetail);
         }
     }
 
     private void invalidateItem(FeedDetail feedDetail) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
         if (fragment != null) {
-            ((FeedFragment) fragment).updateItem(feedDetail);
+            ((HomeFragment) fragment).invalidateItem(feedDetail);
         }
     }
 
     private void refreshCurrentFragment() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(FeedFragment.class.getName());
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
         if (fragment != null) {
-            ((FeedFragment) fragment).refreshList();
+            ((HomeFragment) fragment).refreshCurrentFragment();
         }
     }
 

@@ -19,8 +19,12 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -89,6 +93,28 @@ public class HomeFragment extends BaseFragment {
     @Override
     public boolean shouldTrackScreen() {
         return false;
+    }
+
+
+    public void invalidateItem(FeedDetail feedDetail) {
+        Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+        if (AppUtils.isFragmentUIActive(activeFragment)) {
+            ((FeedFragment) activeFragment).updateItem(feedDetail);
+        }
+    }
+
+    public void removeItem(FeedDetail feedDetail) {
+        Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+        if (AppUtils.isFragmentUIActive(activeFragment)) {
+            ((FeedFragment) activeFragment).removeItem(feedDetail);
+        }
+    }
+
+    public void refreshCurrentFragment() {
+        Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+        if (AppUtils.isFragmentUIActive(activeFragment)) {
+            ((FeedFragment) activeFragment).refreshList();
+        }
     }
     //endregion
 
