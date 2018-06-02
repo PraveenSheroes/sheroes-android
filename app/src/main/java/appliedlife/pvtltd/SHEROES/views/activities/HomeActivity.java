@@ -1148,7 +1148,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         resetHamburgerSelectedItems();
     }
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
+    }
     @Override
     protected SheroesPresenter getPresenter() {
         return activityDataPresenter;
@@ -1354,6 +1360,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         //For right navigation drawer communities items
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
         pbCommunitiesDrawer.setVisibility(View.VISIBLE);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
