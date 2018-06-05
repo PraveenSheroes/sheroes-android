@@ -580,6 +580,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mPullRefreshList = new SwipPullRefreshList();
                 mPullRefreshList.setPullToRefresh(false);
                 mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mFragmentListRefreshData.setSwipeToRefresh(1);
                 activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
                 AppUtils.hideKeyboard(mTvUserName, TAG);
                 AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
