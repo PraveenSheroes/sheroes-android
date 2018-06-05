@@ -86,6 +86,8 @@ public class UserPostFragment extends BaseFragment {
     ProgressBar mProgressBar;
     @Bind(R.id.swipe_view_communities_detail)
     SwipeRefreshLayout mSwipeView;
+
+
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
@@ -116,7 +118,7 @@ public class UserPostFragment extends BaseFragment {
     private FeedDetail mApprovePostFeedDetail;
     private boolean mIsSpam;
     boolean isMentor = false;
-    private long mUserId;
+    private long mUserId = -1;
     private Comment mComment;
     private boolean hideAnonymousPost = true;
 
@@ -144,6 +146,11 @@ public class UserPostFragment extends BaseFragment {
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            mUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
+
         if (null != getArguments()) {
             mCommunityPostId = getArguments().getLong(AppConstants.COMMUNITY_POST_ID);
             if (getArguments().getString(BaseActivity.SOURCE_SCREEN) != null) {
@@ -156,10 +163,6 @@ public class UserPostFragment extends BaseFragment {
                 CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
                 communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getIdOfEntityOrParticipant());
                 communityFeedSolrObj.setAuthorMentor(mUserMentorObj.isAuthorMentor());
-
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                    mUserId = mUserPreference.get().getUserSummary().getUserId();
-                }
                 isMentor = mUserMentorObj.isAuthorMentor();
 
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
@@ -207,6 +210,7 @@ public class UserPostFragment extends BaseFragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
             if (StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                 mAdapter = new GenericRecyclerViewAdapter(getContext(), (ProfileActivity) getActivity());
+                mAdapter.setUserId(mUserId);
                 mFragmentListRefreshData.setCallForNameUser(AppConstants.GROWTH_PUBLIC_PROFILE);
             }
             mRecyclerView.setLayoutManager(mLayoutManager);
@@ -307,7 +311,6 @@ public class UserPostFragment extends BaseFragment {
         }
     }
 
-
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
@@ -389,8 +392,8 @@ public class UserPostFragment extends BaseFragment {
                         data.remove(position - 1);
                     }
                     data.add(feedProgressBar);
-                    mAdapter.setSheroesGenericListData(data);
                     mAdapter.setUserId(mUserId);
+                    mAdapter.setSheroesGenericListData(data);
                     if (mPageNo == AppConstants.TWO_CONSTANT) {
                         mAdapter.notifyDataSetChanged();
                     } else {

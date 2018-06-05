@@ -17,29 +17,28 @@ package appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces;
 import android.os.Parcelable;
 
 
-
 /**
  * Interface for a model to implement in order for it to be able to be suggested.
  * <p/>
  * Note that the information gathered from the below methods are used in the default layout for the
- * {@link SuggestionsAdapter}.
+ * {@link UserTagSuggestionsAdapter}.
  */
 public interface Suggestible extends Parcelable {
 
-	/**
-	 * Must be unique (useful for eliminating duplicate suggestions)
-	 *
-	 * @return int the suggestible id
-	 */
+    /**
+     * Must be unique (useful for eliminating duplicate suggestions)
+     *
+     * @return int the suggestible id
+     */
     int getSuggestibleId();
 
-	/**
-	 * Main text for the given suggestion, as will be shown to the user. Note other data fields can
-	 * be added (other text, pictures), but this is the only required field, as it is used for the
-	 * default layout.
-	 *
-	 * @return String the user visible suggestion
-	 */
+    /**
+     * Main text for the given suggestion, as will be shown to the user. Note other data fields can
+     * be added (other text, pictures), but this is the only required field, as it is used for the
+     * default layout.
+     *
+     * @return String the user visible suggestion
+     */
     String getSuggestiblePrimaryText();
 
 }

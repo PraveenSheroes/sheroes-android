@@ -1,18 +1,23 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
+
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {UserPostSolrObj.class,FeedDetail.class})
+@Parcel(analyze = {UserPostSolrObj.class, FeedDetail.class})
 public class UserPostSolrObj extends FeedDetail {
     public static final String USER_POST_OBJ = "USER_POST_OBJ";
     public static final String USER_POST_ID = "USER_POST_ID";
+
+    public boolean isRecentCommentClicked = false;
 
     public Boolean isTextExpanded = false;
 
@@ -62,7 +67,7 @@ public class UserPostSolrObj extends FeedDetail {
     private long communityTypeId;
 
 
-    @SerializedName(value="solr_ignore_is_community_owner")
+    @SerializedName(value = "solr_ignore_is_community_owner")
     private boolean isCommunityOwner;
 
     @SerializedName(value = "post_image_width_is")
@@ -70,15 +75,15 @@ public class UserPostSolrObj extends FeedDetail {
     @SerializedName(value = "post_image_height_is")
     private List<Integer> imageHeight;
     @SerializedName(value = "post_image_dimention_ratio_ds")
-    private List<Double>  imageRatio;
+    private List<Double> imageRatio;
 
-    @SerializedName(value="community_type_id_l")
+    @SerializedName(value = "community_type_id_l")
     private Long commTypeId;
 
-    @SerializedName(value="source_type_s")
+    @SerializedName(value = "source_type_s")
     private String sourceType;
 
-    @SerializedName(value="user_post_source_entity_id_l")
+    @SerializedName(value = "user_post_source_entity_id_l")
     private Long userPostSourceEntityId;
 
     @SerializedName("challenge_accept_post_text_s")
@@ -86,6 +91,13 @@ public class UserPostSolrObj extends FeedDetail {
 
     @SerializedName("is_top_post_b")
     private boolean isTopPost;
+
+    @SerializedName("has_mentions_b")
+    private boolean hasMention;
+
+    @SerializedName("user_mentions")
+    @Expose
+    private List<MentionSpan> userMentionList;
 
     //this field are added by own
     private int noOfOpenings;
@@ -313,5 +325,21 @@ public class UserPostSolrObj extends FeedDetail {
 
     public void setTopPost(boolean topPost) {
         isTopPost = topPost;
+    }
+
+    public boolean isHasMention() {
+        return hasMention;
+    }
+
+    public void setHasMention(boolean hasMention) {
+        this.hasMention = hasMention;
+    }
+
+    public List<MentionSpan> getUserMentionList() {
+        return userMentionList;
+    }
+
+    public void setUserMentionList(List<MentionSpan> userMentionList) {
+        this.userMentionList = userMentionList;
     }
 }

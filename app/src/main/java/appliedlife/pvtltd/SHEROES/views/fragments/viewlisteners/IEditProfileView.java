@@ -15,10 +15,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 
 public interface IEditProfileView extends BaseMvpView {
 
-    void showProgressBar();
-
-    void hideProgressBar();
-
     void showError(@StringRes int error);
 
     void errorMessage(String message);

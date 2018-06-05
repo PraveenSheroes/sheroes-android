@@ -4,13 +4,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -51,8 +49,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onCommunityTitleClicked(UserPostSolrObj userPostObj);
 
     void userCommentLikeRequest(UserPostSolrObj comment, boolean isLikedAction, int adapterPosition);
-
-    void onJobPostClicked(JobFeedSolrObj jobFeedObj);
 
     void onChallengeClicked(Contest contest);
 
@@ -105,4 +101,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor);
 
     void onPostMenuClicked(ArticleSolrObj articleObj, View view);
+
+    void onUpdateNowClicked();
+
+    void onUpdateLaterClicked();
 }

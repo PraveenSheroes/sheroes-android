@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
@@ -21,14 +22,20 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResp
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
 /**
  * Created by ravi on 01/01/18.
@@ -75,10 +82,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-               // getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+               getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -110,10 +117,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -145,10 +152,10 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
@@ -181,22 +188,86 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
             }
 
             @Override
-            public void onError(Throwable throwable) {
-                Crashlytics.getInstance().core.logException(throwable);
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
             }
 
             @Override
             public void onNext(ProfileCommunitiesResponsePojo userCommunities) {
-                LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if(userCommunities.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().getUsersCommunities(userCommunities);
                 }
             }
         });
+    }
 
+    //spam
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        profileModel.reportSpam(spamPostRequest)
+                .subscribeOn(Schedulers.io())
+                .compose(this.<SpamResponse>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<SpamResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(SpamResponse spamPostOrCommentResponse) {
+                        getMvpView().onSpamPostOrCommentReported(spamPostOrCommentResponse);
+                        getMvpView().stopProgressBar();
+                    }
+                });
+    }
+
+    //deactivate user
+    public void deactivateUser(DeactivateUserRequest deactivateUserRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        profileModel.deactivateUser(deactivateUserRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse spamPostOrCommentResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().onUserDeactivation(spamPostOrCommentResponse);
+                    }
+                });
     }
 
 }

@@ -34,8 +34,10 @@ public class AppConstants {
     public static final String MASTER_DATA = "master_data";
     public static final String INSTALL_UPDATE = "install_update";
     public static final String SHEROES_PREFERENCE = "sheroes_preference";
+    public static final String HTTP_401_UNAUTHORIZED_ERROR = "HTTP 401 ";
     public static final String HTTP_401_UNAUTHORIZED = "HTTP 401 Unauthorized";
     public static final String INAVLID_DATA = "INVALID_DATA";
+    public static final String IS_DEACTIVATED = "IS_DEACTIVATED";
     public static final String COUNTRY_NAME = "India";
     public static final String ERROR = "error";
     public static final String EXTRA_IMAGE = "extraImage";
@@ -82,7 +84,6 @@ public class AppConstants {
     public static final int ASKING_QUESTION_CALL = 101;
 
     public static final String FEED_COMMUNITY = "C";
-    public static final String FEED_JOB = "J";
     public static final String FEED_ARTICLE = "A";
     public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
@@ -98,12 +99,13 @@ public class AppConstants {
     public static final String MASTER_SKILL = "master_data_skill";
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
+    public static final int PROFILE_NOTIFICATION_ID = -1;
     public static final int REQUEST_CODE_FOR_CHALLENGE_DETAIL = 1901;
     public static final int REQUEST_CODE_FOR_POST_DETAIL = 1902;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final int REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL = 2002;
     public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
-    public static final int REQUEST_CODE_FOR_JOB_DETAIL = 3001;
+
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_ADDRESS = 50011;
@@ -111,6 +113,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
+    public static final int RESULT_CODE_FOR_DEACTIVATION = 10007;
     public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
     public static final int REQUEST_CODE_FOR_COMMUNITY_LISTING = 1003;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
@@ -121,11 +124,11 @@ public class AppConstants {
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE = 1506;
-    public static final String JOB_FRAGMENT = "job";
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT = "helpline";
 
     public static final String FEATURE_FRAGMENT = "feature";
+    public static final String MY_COMMUNITIES_DRAWER = "my_communities_drawer";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
@@ -140,7 +143,6 @@ public class AppConstants {
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";
-    public static final String ALL_SEARCH = "search";
     public static final String IMAGE = "Img";
 
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
@@ -202,26 +204,27 @@ public class AppConstants {
     public static final String AND_SIGN = "&";
     public static final int MENTOR_TYPE_ID = 7;
 
-    public static final String HOME_USER_NAME_PREF= "HOME_USERANAME";
-    public static final String PROFILE_SHARE_PREF= "PROFILE_SHARE";
-    public static final String CREATE_POST_SHARE_PREF= "CREATE_POST_ANONYMOUS";
-    public static final String ASK_QUESTION_SHARE_PREF= "ASK_QUESTION_ANONYMOUS";
-    public static final String ASK_QUESTION_SESSION_SHARE_PREF= "ASK_QUESTION_SESSION_ANONYMOUS";
-    public static final String NOTIFICATION_SESSION_SHARE_PREF= "BELL_NOTIFICATION_SESSION";
-    public static final String NOTIFICATION_SHARE_PREF= "BELL_NOTIFICATION";
-    public static final String FOLLOWER_SHARE_PREF= "FOLLOW_USER";
-    public static final String PICTURE_SHARE_PREF= "PICTURE_SHARE_PREF";
-    public static final String PICTURE_SHARE_SESSION_PREF= "PICTURE_SHARE_SESSION_PREF";
-    public static final String INVITE_FRIEND_SESSION_PREF= "INVITE_FRIEND_SESSION_PREF";
-    public static final String INVITE_FRIEND_PREF= "INVITE_FRIEND_PREF";
-    public static final String ARTICLE_SHARE_SESSION_PREF= "ARTICLE_SHARE_SESSION_PREF";
-    public static final String ARTICLE_SHARE_PREF= "ARTICLE_SHARE_PREF";
-    public static final String HEADER_PROFILE_SESSION_PREF= "HEADER_PROFILE_SESSION_PREF";
-    public static final String HEADER_PROFILE_PREF= "HEADER_PROFILE_PREF";
-    public static final String NAV_SESSION_PREF= "NAV_SESSION_PREF";
-    public static final String NAV_PREF= "NAV_PREF";
-    public static final String CONTACT_SYNC_TIME_PREF= "CONTACT_SYNC";
-    public static final int MIN_QUESTION_SEARCH_LENGTH=3;
+    public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
+    public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
+    public static final String CREATE_POST_SHARE_PREF = "CREATE_POST_ANONYMOUS";
+    public static final String ASK_QUESTION_SHARE_PREF = "ASK_QUESTION_ANONYMOUS";
+    public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
+    public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
+    public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
+    public static final String NEW_TAG_FOR_RIGHT_SWIP = "NEW_TAG";
+    public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";
+    public static final String PICTURE_SHARE_PREF = "PICTURE_SHARE_PREF";
+    public static final String PICTURE_SHARE_SESSION_PREF = "PICTURE_SHARE_SESSION_PREF";
+    public static final String INVITE_FRIEND_SESSION_PREF = "INVITE_FRIEND_SESSION_PREF";
+    public static final String INVITE_FRIEND_PREF = "INVITE_FRIEND_PREF";
+    public static final String ARTICLE_SHARE_SESSION_PREF = "ARTICLE_SHARE_SESSION_PREF";
+    public static final String ARTICLE_SHARE_PREF = "ARTICLE_SHARE_PREF";
+    public static final String HEADER_PROFILE_SESSION_PREF = "HEADER_PROFILE_SESSION_PREF";
+    public static final String HEADER_PROFILE_PREF = "HEADER_PROFILE_PREF";
+    public static final String HOME_OFFER_PREF = "HOME_OFFER_PREF";
+    public static final String PROFILE_OFFER_PREF = "PROFILE_OFFER_PREF";
+    public static final String CONTACT_SYNC_TIME_PREF = "CONTACT_SYNC";
+    public static final int MIN_QUESTION_SEARCH_LENGTH = 3;
     public static final String IS_FROM_ADVERTISEMENT = "IS_FROM_ADVERTISEMENT";
     public static final String ADS_DEEP_LINK_URL = "ADS_DEEP_LINK";
 
@@ -242,8 +245,11 @@ public class AppConstants {
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
+    public static final String helpline_desk = "Helpline Desk";
     public static final String NAV_DRAWER_FILE_NAME = "nav_items";
     public static final String NAV_DRAWER_SHE_FILE_NAME = "she_nav_items";
+    public static final String SPAM_REASONS_FILE = "spam_reasons";
+    public static final String DEACTIVATE_REASONS_FILE = "deactivate_user_reasons";
     public static final String OPEN_COMMUNITY = "open community for join";
     public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY = "SUMMARY";
@@ -252,8 +258,6 @@ public class AppConstants {
     public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
     public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
-    public static final String JOB_URL = "https://sheroes.in/jobs";
-    public static final String JOB_URL_COM = "https://sheroes.com/jobs";
     public static final String COMMUNITY_POST_URL_COM = "https://sheroes.com/community-post";
     public static final String COMMUNITY_POST_URL = "https://sheroes.in/community-post";
     public static final String INVITE_FRIEND_URL = "https://sheroes.in/invite-friends";
@@ -372,7 +376,6 @@ public class AppConstants {
     public static final String IS_FROM_PUSH = "Is From Push";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
     public static final String APP_SHARE_LINK = "https://shrs.me/m/3AICGHn1KJ";
-    public static final int DRAWER_SESSION = 3;
     public static final int NOTIFICATION_SESSION = 4;
     public static final int ALBUM_SESSION = 2;
     public static final int ARTICLE_SESSION = 2;
@@ -412,6 +415,13 @@ public class AppConstants {
     public static final String SET_ORDER_KEY = "set order key";
     public static final String FEED_CONFIG_VERSION = "feed config version";
     public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
+    public static final int MENTOR_USER_TYPE_FOR_TAGGING = 7;
+
+    public static final String NEXT_DAY_DATE = "NEXT_DAY_DATE";
+
+    public static final int USER_MENTION_HEADER = 1;
+    public static final int USER_MENTION_NO_RESULT_FOUND = 0;
+
 
     public static final String ARTICLE_GUIDELINE = "<h3> 7 things to keep in mind when writing article on SHEROES </h3><p>1. We welcome you to share your experiences and expertise with the SHEROES audience. If you think you can help the mothers and fathers on our platform in some way or have a really interesting story to tell, do write to us.</p><p>2. Word length for an article should be between 200 words to 1000 words.</p><p>3. By submitting the article you grant us a license to use, edit, and modify the content.</p><p>4. Please ensure the content you submit is your original work.</p><p>5. Promotional or Spammy content in any form would not be accepted.</p><p>6. Email to us at  incase you have any further queries regarding submitting an article.</p><p>7. All the best!</p>";
 

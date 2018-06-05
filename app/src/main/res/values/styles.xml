@@ -187,5 +187,8 @@
         <item name="cornerRadius">5dp</item>
     </style>
 
-
+    <style name="MyCheckBox" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/gray_light</item>
+        <item name="colorControlActivated">@color/red</item>
+    </style>
 </resources>

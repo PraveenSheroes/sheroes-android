@@ -24,12 +24,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.SuggestionsResult;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResult;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsListBuilder;
 
@@ -43,11 +42,11 @@ public class BasicSuggestionsListBuilder implements SuggestionsListBuilder {
      */
     @Override
     @NonNull
-    public List<Suggestible> buildSuggestions(final @NonNull Map<String, SuggestionsResult> latestResults,
+    public List<Suggestible> buildSuggestions(final @NonNull Map<String, UserTagSuggestionsResult> latestResults,
                                               final @NonNull String currentTokenString) {
         List<Suggestible> results = new ArrayList<Suggestible>();
-        for (Map.Entry<String, SuggestionsResult> entry : latestResults.entrySet()) {
-            SuggestionsResult result = entry.getValue();
+        for (Map.Entry<String, UserTagSuggestionsResult> entry : latestResults.entrySet()) {
+            UserTagSuggestionsResult result = entry.getValue();
             if (currentTokenString.equalsIgnoreCase(result.getQueryToken().getTokenString())) {
                 results.addAll(result.getSuggestions());
             }

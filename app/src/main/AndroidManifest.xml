@@ -39,9 +39,9 @@
         android:allowBackup="false"
         android:icon="@mipmap/ic_sheroes_launcher"
         android:label="@string/ID_APP_NAME"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:networkSecurityConfig="@xml/network_security_config"
         tools:replace="android:label">
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -74,8 +74,9 @@
         <meta-data
             android:name="io.branch.sdk.BranchKey.test"
             android:value="key_test_ahwTwSEImTLdFFn9os4s1hkmAvlQK7ck" />
-
-        <meta-data android:name="io.branch.sdk.TestMode" android:value="${branchTestMode}"/>
+        <meta-data
+            android:name="io.branch.sdk.TestMode"
+            android:value="${branchTestMode}" />
 
         <!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
@@ -130,6 +131,7 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -204,9 +206,7 @@
         <activity
             android:name=".views.activities.CommunityPostActivity"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:screenOrientation="portrait" >
-        </activity>
-
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -214,7 +214,7 @@
         <activity
             android:name=".views.activities.AllContactActivity"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -252,8 +252,8 @@
         </activity>
         <activity
             android:name=".views.activities.SheroesDeepLinkingActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -281,33 +281,37 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="text/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND_MULTIPLE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
         <activity
             android:name=".imageops.CropImageActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".views.activities.EditUserProfileActivity"
-            android:windowSoftInputMode="adjustPan" />
 
+        <activity android:name=".views.activities.EditUserProfileActivity"  android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".views.activities.CollectionActivity"/>
+        <activity android:name=".views.activities.CollectionActivity" />
 
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity" />
+        <activity android:name=".views.activities.ProfileCommunitiesActivity" />
 
-        <activity android:name="appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity" />
+        <activity android:name=".views.activities.FollowingActivity" />
 
         <service
             android:name=".service.PushNotificationService"
@@ -332,7 +336,6 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name="io.branch.referral.InstallListener"
             android:exported="true">
@@ -355,6 +358,7 @@
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>

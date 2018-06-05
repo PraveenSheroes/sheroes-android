@@ -1,19 +1,25 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.media.Image;
 import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
@@ -21,14 +27,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
-import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
@@ -36,13 +41,14 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityFlatViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.FeedJobHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
+import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ujjwal on 28/12/17.
@@ -58,6 +64,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region Constructor
@@ -80,8 +89,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new FeedCommunityPostHolder(mInflater.inflate(R.layout.feed_comunity_user_post_normal, parent, false), mBaseHolderInterface);
             case TYPE_LOADER:
                 return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
-            case TYPE_JOB:
-                return new FeedJobHolder(mInflater.inflate(R.layout.feed_job_normal_card, parent, false), mBaseHolderInterface);
             case TYPE_CHALLENGE:
                 return new ChallengeFeedHolder(mInflater.inflate(R.layout.challenge_feed_item, parent, false), mBaseHolderInterface);
             case TYPE_EVENT:
@@ -123,11 +130,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_LOADER:
                 LoaderViewHolder loaderViewHolder = ((LoaderViewHolder) holder);
                 loaderViewHolder.bindData(holder.getAdapterPosition(), showLoader);
-                break;
-            case TYPE_JOB:
-                FeedJobHolder feedJobHolder = (FeedJobHolder) holder;
-                JobFeedSolrObj jobFeedSolrObj = (JobFeedSolrObj) mFeedDetailList.get(position);
-                feedJobHolder.bindData(jobFeedSolrObj, mContext, position);
                 break;
             case TYPE_CHALLENGE:
                 ChallengeFeedHolder challengeFeedHolder = (ChallengeFeedHolder) holder;
@@ -186,7 +188,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_ARTICLE = 1;
     private static final int TYPE_USER_POST = 2;
     private static final int TYPE_CAROUSEL = 3;
-    private static final int TYPE_JOB = 4;
     private static final int TYPE_CHALLENGE = 5;
     private static final int TYPE_EVENT = 6;
     private static final int TYPE_ORGANIZATION = 7;
@@ -213,12 +214,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
                 } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
                     return TYPE_ORGANIZATION;
-                }else {
+                } else {
                     return TYPE_USER_POST;
                 }
-            }
-            if (feedDetail instanceof JobFeedSolrObj) {
-                return TYPE_JOB;
             }
             if (feedDetail instanceof ChallengeSolrObj) {
                 return TYPE_CHALLENGE;
@@ -252,7 +250,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return TYPE_IMAGE;
             }
 
-            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)){
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)) {
                 return TYPE_HOME_FEED_HEADER;
             }
         }
@@ -278,10 +276,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
         return null;
     }
 
-    @Override
-    public void bindHeaderViewHolder(HeaderRecyclerViewAdapter.HeaderViewHolder holder) {
-
-    }
     //endregion
 
     //region Public methods
@@ -328,7 +322,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
         notifyItemChanged(position);
     }
 
-    public void setData(int outerPosition, int innerPosition,  FeedDetail updatedInnerFeedItem) {
+    public void setData(int outerPosition, int innerPosition, FeedDetail updatedInnerFeedItem) {
         FeedDetail feedDetail = mFeedDetailList.get(outerPosition);
         if (feedDetail instanceof CarouselDataObj) {
             FeedDetail innerFeedItem = ((CarouselDataObj) feedDetail).getFeedDetails().get(innerPosition);
@@ -356,12 +350,43 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     //endregion
 
     //region feedHeaderview
-    public class HeaderViewHolder extends HeaderRecyclerViewAdapter.HeaderViewHolder {
+    public class FeedHeaderViewHolder extends HeaderRecyclerViewAdapter.HeaderViewHolder {
 
-        public HeaderViewHolder(View headerView) {
+        @Bind(R.id.update_later)
+        TextView later;
+        @Bind(R.id.update_now)
+        TextView update;
+        @Bind(R.id.update_title)
+        TextView updateTitle;
+        @Bind(R.id.update_description)
+        TextView updateDescription;
+
+        public FeedHeaderViewHolder(View headerView) {
             super(headerView);
             ButterKnife.bind(this, headerView);
         }
+
+        @OnClick(R.id.update_now)
+        public void onUpdateNowClicked() {
+            if (mBaseHolderInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) mBaseHolderInterface).onUpdateNowClicked();
+            }
+        }
+
+        @OnClick(R.id.update_later)
+        public void onUpdateLaterClicked() {
+            if (mBaseHolderInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) mBaseHolderInterface).onUpdateLaterClicked();
+            }
+        }
+
+    }
+
+    @Override
+    public void bindHeaderViewHolder(HeaderRecyclerViewAdapter.HeaderViewHolder holder) {
+        FeedHeaderViewHolder feedHeaderViewHolder = (FeedHeaderViewHolder) holder;
+        feedHeaderViewHolder.updateTitle.setText((mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.updateTitle)) ? mConfiguration.get().configData.updateTitle : mContext.getString(R.string.update_title));
+        feedHeaderViewHolder.updateDescription.setText((mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.updateDescription)) ? mConfiguration.get().configData.updateDescription : mContext.getString(R.string.update_description));
     }
     //endregion
 }

@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -19,12 +20,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -42,6 +46,9 @@ import io.branch.referral.BranchError;
 public class BranchDeepLink extends BaseActivity {
     public static final String TAG = "BranchDeepLinkActivity";
     public static final String SCREEN_LABEL = "Deeplink Activity";
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,7 @@ public class BranchDeepLink extends BaseActivity {
                            }
                 , this.getIntent().getData(), this);
     }
+
     private  void deepLinkingRedirection()
     {
         // params are the deep linked params associated with the link that the user clicked before showing up
@@ -198,9 +206,15 @@ public class BranchDeepLink extends BaseActivity {
         }
     }
     private void startMainActivity() {
-        Intent intent = new Intent(BranchDeepLink.this, HomeActivity.class);
-        ActivityCompat.startActivity(BranchDeepLink.this, intent, null);
-        finish();
+        if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            Intent intent = new Intent(BranchDeepLink.this, HomeActivity.class);
+            ActivityCompat.startActivity(BranchDeepLink.this, intent, null);
+            finish();
+        } else {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(""));
+            intent.setClass(BranchDeepLink.this, SheroesDeepLinkingActivity.class);
+            startActivity(intent);
+        }
     }
 
     private boolean isIntentAvailable(Context ctx, Intent intent) {

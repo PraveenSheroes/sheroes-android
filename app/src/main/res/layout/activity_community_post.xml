@@ -15,13 +15,6 @@
             layout="@layout/toolbar_community_post" />
     </android.support.design.widget.AppBarLayout>
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
     <LinearLayout
         android:id="@+id/upload_image_container"
         android:layout_width="match_parent"
@@ -29,15 +22,17 @@
         android:layout_alignParentBottom="true"
         android:orientation="vertical">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/suggestions_list"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:background="@drawable/user_tagg_border"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/anonymous"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-            <View
-                android:id="@+id/view_anonymous"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="@dimen/dp_size_30"/>
             <CheckBox
                 android:id="@+id/anonymous_select"
                 android:layout_width="match_parent"
@@ -137,7 +132,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/upload_image_container"
-        android:layout_below="@id/fb_share_container">
+        android:layout_below="@id/fb_share_container"
+        android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -191,24 +187,19 @@
 
             </RelativeLayout>
 
-            <EditText
-                android:id="@+id/et_default_hint_text"
+            <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
+                android:id="@+id/et_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_below="@id/user_container"
                 android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginTop="@dimen/dp_size_5"
-                android:background="@null"
-                android:gravity="top"
-                android:inputType="textMultiLine|textCapSentences"
-                android:scrollHorizontally="false"
-                android:textSize="20sp" />
+                android:layout_marginTop="@dimen/dp_size_16" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/card_link_render"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/et_default_hint_text"
+                android:layout_below="@id/et_view"
                 android:layout_margin="@dimen/dp_size_10"
                 android:elevation="@dimen/dp_size_5"
                 android:visibility="gone">
@@ -277,10 +268,13 @@
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/card_link_render">
+                android:layout_below="@id/card_link_render"
+                android:layout_marginTop="@dimen/dp_size_8">
+
                 <TextView
                     android:id="@+id/image_count"
                     android:layout_width="wrap_content"
@@ -290,16 +284,24 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="50dp"
                     android:text="0/5"
-                    android:visibility="gone"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="gone" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/image_list_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/image_count"/>
+                    android:layout_toLeftOf="@id/image_count" />
 
             </RelativeLayout>
         </RelativeLayout>
     </ScrollView>
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>

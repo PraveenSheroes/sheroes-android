@@ -74,4 +74,11 @@ public class ImageViewHolder extends BaseViewHolder<FeedDetail> {
             ((FeedItemCallback)viewInterface).onImagePostClicked(mImageSolrObj);
         }
     }
+
+    @OnClick(R.id.share_card)
+    protected void shareCard() {
+        if (CommonUtil.isNotEmpty(mImageSolrObj.getImageUrl())) {
+            CommonUtil.shareImageChooser(mContext, "Sheroes" , mImageSolrObj.getImageUrl());
+        }
+    }
 }

@@ -2,6 +2,9 @@ package appliedlife.pvtltd.SHEROES.models;
 
 import com.google.gson.Gson;
 
+import java.util.HashMap;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
@@ -17,6 +20,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityReque
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -141,6 +146,19 @@ public class CommunityModel {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+    //region Private Helper methods
+    public Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
+         return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
+                .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
+                    @Override
+                    public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
+                        return searchUserDataResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
     }
 
 }

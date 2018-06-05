@@ -56,6 +56,7 @@ public class SheroesApplication extends MultiDexApplication  {
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
         MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
+        MoEHelper.getInstance(getApplicationContext()).optOutOfIMEICollection(this, true);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         AnalyticsTrackers.initialize(this);

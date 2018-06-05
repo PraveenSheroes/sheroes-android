@@ -224,8 +224,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     } else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/")) {
                         homeActivityCall(ArticlesFragment.SCREEN_LABEL);
-                    } else if (urlOfSharedCard.equals(AppConstants.JOB_URL) || urlOfSharedCard.equals(AppConstants.JOB_URL_COM) || urlOfSharedCard.equals(AppConstants.JOB_URL + "/") || urlOfSharedCard.equals(AppConstants.JOB_URL_COM + "/")) {
-                        homeActivityCall(AppConstants.JOB_FRAGMENT);
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
 
@@ -279,7 +277,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             destinationIntent.putExtra(AppConstants.SHARE_DIALOG_TITLE, sourceIntent.getExtras().getString(AppConstants.SHARE_DIALOG_TITLE));
             destinationIntent.putExtra(AppConstants.SHARE_IMAGE, sourceIntent.getExtras().getString(AppConstants.SHARE_IMAGE));
             destinationIntent.putExtra(AppConstants.IS_SHARE_DEEP_LINK, sourceIntent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK));
-            destinationIntent.putExtra(AppConstants.SHARE_CHANNEL, sourceIntent.getExtras().getBoolean(AppConstants.SHARE_CHANNEL));
+            destinationIntent.putExtra(AppConstants.SHARE_CHANNEL, sourceIntent.getExtras().getString(AppConstants.SHARE_CHANNEL));
         }
     }
 
@@ -407,14 +405,13 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 String id = urlSharedViaSocial.substring(champId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
                 dataIdString = new String(id1, AppConstants.UTF_8);
-                ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), true, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
                 Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);
                 intent.putExtra(AppConstants.CHAMPION_ID, Long.parseLong(dataIdString));
                // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
+                intent.putExtra(AppConstants.IS_MENTOR_ID, true);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
                 finish();

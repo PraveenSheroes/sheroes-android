@@ -45,7 +45,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -143,7 +142,6 @@ public class SheroesAppModule {
                 .of(FeedDetail.class, "sub_type")
                 .registerSubtype(ArticleSolrObj.class, AppConstants.FEED_ARTICLE)
                 .registerSubtype(UserSolrObj.class, AppConstants.USER_SUB_TYPE)
-                .registerSubtype(JobFeedSolrObj.class, AppConstants.FEED_JOB)
                 .registerSubtype(CommunityFeedSolrObj.class, AppConstants.FEED_COMMUNITY)
                 .registerSubtype(UserPostSolrObj.class, AppConstants.FEED_COMMUNITY_POST)
                 .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)

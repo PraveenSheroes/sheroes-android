@@ -4,6 +4,7 @@
 
  import java.text.ParseException;
  import java.text.SimpleDateFormat;
+ import java.util.Calendar;
  import java.util.Date;
  import java.util.Locale;
 
@@ -166,4 +167,38 @@
          SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_ONLY_FORMAT, LOCALE);
          return dateFormat.format(date);
      }
+
+     public static boolean isToday(Date date) {
+         if (date == null)
+             return false;
+         Date now = new Date();
+         return isSameDay(date, now);
+     }
+
+     public static Date parseOnlyDate(String dateStr) {
+         return parseDateFormat(dateStr, DATE_ONLY_FORMAT);
+     }
+
+
+     public static boolean isSameDay(Date date1, Date date2) {
+         if (date1 != null && date2 != null) {
+             SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd", LOCALE);
+             return fmt.format(date1).equals(fmt.format(date2));
+         } else return date1 == null && date2 == null;
+     }
+
+     public static Date getCurrentDate() {
+         return Calendar.getInstance().getTime();
+     }
+
+     public static Date addDays(Date date, int days) {
+         if (!validateDate(date)) {
+             return null;
+         }
+         Calendar c = Calendar.getInstance();
+         c.setTime(date);
+         c.add(Calendar.DATE, days);
+         return c.getTime();
+     }
+
  }

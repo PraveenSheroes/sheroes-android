@@ -10,30 +10,52 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
  */
 
 public class SearchUserDataRequest extends BaseRequest {
-    @SerializedName("participating_entity_or_participant_id")
+    @SerializedName("community_id")
     @Expose
-    private long participatingEntityOrParticipantId;
-    @SerializedName("list_type")
+    private Long communityId;
+    @SerializedName("post_entity_id")
     @Expose
-    private String listTypeForUserTagging;
+    private Long postEntityId;
+    @SerializedName("post_author_user_id")
+    @Expose
+    private Long postAuthorUserId;
+    @SerializedName("user_mention_context")
+    @Expose
+    private String userMentionContext;
     @SerializedName("search_text")
     @Expose
     private String searchNameOfUserForTagging;
 
-    public long getParticipatingEntityOrParticipantId() {
-        return participatingEntityOrParticipantId;
+    public Long getCommunityId() {
+        return communityId;
     }
 
-    public void setParticipatingEntityOrParticipantId(long participatingEntityOrParticipantId) {
-        this.participatingEntityOrParticipantId = participatingEntityOrParticipantId;
+    public void setCommunityId(Long communityId) {
+        this.communityId = communityId;
     }
 
-    public String getListTypeForUserTagging() {
-        return listTypeForUserTagging;
+    public Long getPostEntityId() {
+        return postEntityId;
     }
 
-    public void setListTypeForUserTagging(String listTypeForUserTagging) {
-        this.listTypeForUserTagging = listTypeForUserTagging;
+    public void setPostEntityId(Long postEntityId) {
+        this.postEntityId = postEntityId;
+    }
+
+    public Long getPostAuthorUserId() {
+        return postAuthorUserId;
+    }
+
+    public void setPostAuthorUserId(Long postAuthorUserId) {
+        this.postAuthorUserId = postAuthorUserId;
+    }
+
+    public String getUserMentionContext() {
+        return userMentionContext;
+    }
+
+    public void setUserMentionContext(String userMentionContext) {
+        this.userMentionContext = userMentionContext;
     }
 
     public String getSearchNameOfUserForTagging() {

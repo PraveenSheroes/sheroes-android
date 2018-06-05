@@ -15,7 +15,7 @@
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
-    <string name="IDS_UN_AUTHORIZE">The server encountered an error and could not complete your request.</string>
+    <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
     <string name="ID_TODAY">Today</string>
@@ -44,7 +44,6 @@
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
-    <string name="ID_FEED">Feed</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
@@ -58,9 +57,9 @@
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
+    <string name="ID_DRAWER_NAVIGATION_COMMUNITIES">Right Swipe Navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
-    <string name="ID_WOMEN_ERROR">Please declare that you are a woman by ticking the box.</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
     <string name="ID_UNABLE_TO_COMMENT"> Sorry, unable to comment. Please try again in a few minutes.</string>
     <string name="ID_UNABLE_TO_EDIT_DELETE"> Sorry unable to edit,delete the comment. Please try again in a few minutes.</string>
@@ -107,11 +106,18 @@
     <string name="ID_INVITE">Invite</string>
     <string name="ID_SHARE">Share</string>
     <string name="ID_EDIT">Edit</string>
+    <string name="SHARE_PROFILE">Share Profile</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_DELETE">Delete</string>
     <string name="ID_APPROVE">Approve</string>
 
     <string name="ID_REPORT">Report as spam</string>
+    <string name="REPORT_SPAM">Report Spam</string>
+    <string name="report_user">Report User</string>
+    <string name="deactivate_user">Deactivate User</string>
+    <string name="banned_user_device">Ban User Device</string>
+
+
     <string name="ID_REFRESH">Refresh feed</string>
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
@@ -175,28 +181,10 @@
     <string name="ID_RELACTIONSHIP_HINT"><font size="12">RELATIONSHIP STATUS</font></string>
     <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
     <string name="ID_SAVE">SAVE</string>
-    <string name="ID_NEED_TO_BE_REVIEWED">Hi! Your post is being reviewed by our community moderators. Please check back soon.</string>
-
+    <string name="ID_NEED_TO_BE_REVIEWED">Your post is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
+    <string name="COMMENT_REVIEW_MESSAGE">This comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
-
-    <!--String Related personal other details page-->
-
-
-    <!--String Related professional choose_city details page-->
-
-
-    <!--String Related professional  travel_like details page-->
-    <!--string related professional work_experience page -->
-
-    <string name="ID_JOB">Job</string>
-
-
-    <!--string related work_experience_selfempolyment page-->
-
-
-    <!-- String related to setting_preference_work_experience  view page-->
-
 
     <!--string_related_profile_basic_details_card-->
 
@@ -253,9 +241,15 @@
 
     <string name="married">Married</string>
     <string name="unmarried">Unmarried</string>
+
     <string-array name="relationship_status_arr">
-        <item>@string/married</item>
-        <item>@string/unmarried</item>
+        <item>Select Status</item>
+        <item>Single</item>
+        <item>In a Relationship</item>
+        <item>Married</item>
+        <item>Divorced</item>
+        <item>Widowed</item>
+        <item>Other</item>
     </string-array>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
@@ -431,6 +425,9 @@
     <string name="menu.post_as_user">Post as %1$s</string>
 
 
+    <string name="spam.status.post">post</string>
+    <string name="spam.status.comment">comment</string>
+    <string name="spam.status.user">user</string>
 
 
     <string name="contest.status.ongoing">Live</string>
@@ -489,7 +486,7 @@
     <string name="ID_ANSWERS">Answered questions in last 7 days</string>
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
-    <string name="private_information">Private Information</string>
+    <string name="private_information">Private Information (Only Visible to You)</string>
 
     <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
     <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
@@ -497,11 +494,13 @@
     <string name="ID_SECOND_WELCOME">Join Communities</string>
     <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
     <string name="ID_GOT"> Got it!</string>
-    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Ask a question or share something</string>
-    <string name="ID_SHOW_CASE_CREATE_POST_DESC">Start a conversation in any community by tapping here</string>
-    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities To Talk And Share</string>
-    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Explore new communities to join and start talking</string>
-    <string name="ID_SHOW_CASE_FEED_TITLE">Welcome To Your SHEROES Feed</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Need help with a problem?</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities for you!</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Tap here to explore various communities of interest.</string>
+    <string name="ID_SHOW_CASE_MY_COMMUNITIES_TITLE">My Communities</string>
+    <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
+    <string name="ID_SHOW_CASE_FEED_TITLE">Welcome to SHEROES</string>
     <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
     <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
     <string name="ID_NEXT">Next</string>
@@ -517,23 +516,23 @@
     <string name="add_skills">Add Skills</string>
     <string name="add_desc">Add Description</string>
     <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
+    <string name="profile_progress_message">Hey %1$s! \n%2$s"</string>
     <string name="post_schedule_message">You are scheduling a post for &lt;b&gt;%1$s&lt;/b&gt; Community to be posted on &lt;b&gt;%2$s&lt;/b&gt;.</string>
     <string name="followed_communities">Communities Joined</string>
     <string name="champions_followed">Champions Followed</string>
     <string name="join_communities">Join Communities &amp; Connect></string>
 
-    <string name="ID_SHARE_ON_WHATS_APP">Whatsapp</string>
+    <string name="ID_SHARE_ON_WHATS_APP">Share</string>
 
     <!-- String related to tooltip -->
-    <string name="tool_tip_user_profile">Tap here to check out this user and follow her</string>
-    <string name="tool_tip_user_share">Share your profile and get friends to follow you on SHEROES</string>
+    <string name="tool_tip_user_profile">Find out more about this user</string>
+
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
     <string name="my_communities">My Communities</string>
 
     <string name="got_it">Got It</string>
 
-    <string name="tool_tip_create_post">Use this button to hide your identity on the post.</string>
     <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
     <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
     <string name="tool_tip_follower">Follow her to see what she shares!</string>
@@ -557,9 +556,10 @@
     <string name="contact_list_friend">Contacts</string>
     <string name="contact_invite_friend">Invite</string>
     <string name="whats_app_not_installed">WhatsApp not Installed</string>
-    <string name="suggested_list_blank">No friends to follow. Invite your friends to SHEROES</string>
+    <string name="suggested_list_blank">Want to see which friends are on Sheroes?</string>
     <string name="contact_list_blank">Find friends from your contacts</string>
     <string name="invite_friend_request_to_join">Join me on the women-only SHEROES app. You can participate (even anonymously) in discussions on women-related topics and help other women in the Indian community to make progress in their lives.</string>
+    <string name="share_with_friend_for_download_app">Hi, I found this women only app for you. It\'s name is SHEROES (Women Heroes). You can talk about and ask anything (even anonymously) without hesitation and help other women by giving them good advice.</string>
     <string name="invite_sync_contact">Allow us to sync your mobile contacts to make finding friends super easy!</string>
     <string name="sync_contact">Sync contacts</string>
     <string name="no_search_contact">No contact found</string>
@@ -569,6 +569,69 @@
     <string name="retry">Retry</string>
     <string name="setting">Go to settings</string>
     <string name="check_internet_Connection">Check your Internet connection and try again</string>
+    <string name="select_a_reason">Select a reason</string>
+    <string name="why_is_it_inappropriate">Why is it inappropriate?</string>
+    <string name="please_elaborate">Please elaborate…</string>
+
+    <!--spam region start-->
+    <string name="spam_confirmation_dialog_title">Thank you for your feedback!</string>
+    <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and it is in review. Thank You!</string>
+
+    <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
+    <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
+    <string name="deactivation_dialog_message">Thank you, user has been deactivated.</string>
+
+
+    <!--spam region end-->
+
+    <string name="later">LATER</string>
+    <string name="update">UPDATE</string>
+    <string name="update.title">New Update Available</string>
+    <string name="update.description">Update now to have an awesome experience</string>
+    <string name="searching">Searching...</string>
+    <string name="no_result_found">No Result Found</string>
+    <string name="user_mention_area_at_post">You can tag community owners &amp; your followers</string>
+    <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
+    <string name="reactivate_your_account">To reactivate your account write to us</string>
+    <string name="care_sheroes">care@sheroes.in</string>
+    <string name="male">I’m a Man</string>
+    <string name="female">Yes, I’m a Woman</string>
+    <string name="share_sheroes_app">Share sheroes app</string>
+    <string name="sheroes_msg">SHEROES is a platform only for women. Please declare that you are a woman before continuing.</string>
+    <string name="sheroes_gender_error">SHEROES is a women only platform. How about you share the SHEROES app with the women in your life?</string>
+
+
+    <string name="achieved">( Achieved )</string>
+    <string name="beginner">Beginner</string>
+    <string name="next_level">Next level</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="all_star">All star</string>
+    <string name="progress_status_beginner">Profile Strength : Beginner</string>
+    <string name="progress_status_all_star">Profile Strength : All Star</string>
+    <string name="progress_level_status_intermediate">Profile Strength : Intermediate</string>
+    <string name="add">Add</string>
+    <string name="all_star_filled">Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.</string>
+    <string name="all_star_unfilled">Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.</string>
+    <string name="intermediate_filled">Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.</string>
+    <string name="intermediate_unfilled">Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.</string>
+    <string name="beginner_message">You’re on your way now. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers and faster replies.</string>
+    <string name="city_error_msg">Invalid city name, please select again</string>
+    <string name="city_error_response">wrong id sent for city</string>
+    <string name="mobile_response_err">mobile number already registered with us</string>
+    <string name="add_more_to_bio">Add Bio (Complete your Bio)</string>
+    <string name="tell_us_something_about_yourself_min_60_chars">Tell us something about yourself (min. 60 chars)</string>
+    <string name="bio_min_char_limit_msg">Fill min. of 60 characters to proceed</string>
+    <string name="mobile_no_error_msg">Please enter your mobile number</string>
+    <string name="location_error_msg">Please enter Current location</string>
+    <string name="full_name_err_msg">Please enter full name</string>
+    <string name="limit">0/140</string>
+    <string name="other">Other</string>
+    <string name="explore_All">Explore all</string>
+    <string name="keep_user_post_likes_and_comments">Delete user activity</string>
+    <string name="add_reason">Add the reason</string>
+    <string name="others">Others</string>
+    <string name="home_label">Home</string>
+
 
     <string name="action_draft">Draft</string>
     <string name="action_info">Info</string>

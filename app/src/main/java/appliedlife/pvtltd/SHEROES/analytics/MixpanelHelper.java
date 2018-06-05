@@ -221,6 +221,7 @@ public class MixpanelHelper {
                             .title(feedDetail.getNameOrTitle())
                             .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
                             .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .positionInList(feedDetail.getItemPosition())
                             .build();
@@ -230,6 +231,9 @@ public class MixpanelHelper {
     }
 
     public static HashMap<String, Object> getPostProperties(FeedDetail feedDetail, String screenName) {
+        if (feedDetail == null) {
+            return null;
+        }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             UserPostSolrObj userPostSolrObj = null;
             if(feedDetail instanceof UserPostSolrObj){
@@ -299,9 +303,7 @@ public class MixpanelHelper {
             case AppConstants.FEED_COMMUNITY_POST:
                 type = MoEngageConstants.COMMUNITY_POST;
                 break;
-            case AppConstants.FEED_JOB:
-                type = MoEngageConstants.JOB;
-                break;
+
         }
         return type;
     }

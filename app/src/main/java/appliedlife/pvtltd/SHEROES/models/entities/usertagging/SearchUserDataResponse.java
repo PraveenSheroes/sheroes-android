@@ -12,16 +12,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  */
 
 public class SearchUserDataResponse extends BaseResponse {
-    @SerializedName("participant_list")
+    @SerializedName("user_mention_suggestions")
     @Expose
-    private List<UserTaggingPerson> participantList;
+    private List<Mention> participantList;
 
 
-    public List<UserTaggingPerson> getParticipantList() {
+    public List<Mention> getParticipantList() {
         return participantList;
     }
 
-    public void setParticipantList(List<UserTaggingPerson> participantList) {
+    public void setParticipantList(List<Mention> participantList) {
         this.participantList = participantList;
     }
 }

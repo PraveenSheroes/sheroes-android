@@ -28,14 +28,13 @@
     <dimen name="dp_size_32">32dp</dimen>
     <dimen name="dp_size_30">30dp</dimen>
     <dimen name="dp_size_35">35dp</dimen>
-    <dimen name="margin_card_share">22dp</dimen>
     <dimen name="dp_size_10">10dp</dimen>
     <dimen name="dp_size_250">250dp</dimen>
     <dimen name="dp_size_16">16dp</dimen>
     <dimen name="dp_size_0.5">0.5dp</dimen>
     <dimen name="dp_size_5">5dp</dimen>
-    <dimen name="dp_size_minus_5"> -5dp</dimen>
-    <dimen name="dp_size_minus_20"> -20dp</dimen>
+    <dimen name="dp_size_minus_5">-5dp</dimen>
+    <dimen name="dp_size_minus_20">-20dp</dimen>
     <dimen name="dp_size_6">6dp</dimen>
     <dimen name="dp_size_50">50dp</dimen>
     <dimen name="dp_size_8">8dp</dimen>
@@ -130,6 +129,7 @@
     <dimen name="challenge_completed_height">180dp</dimen>
     <dimen name="challenge_girl_height">151dp</dimen>
     <dimen name="challenge_girl_width">156dp</dimen>
+    <dimen name="nav_header_height">157dp</dimen>
 
 
     <!--Text sizes for SHEROES-->
@@ -137,10 +137,13 @@
 
     <dimen name="community_compact_card_width">300dp</dimen>
     <dimen name="community_compact_card_height">212dp</dimen>
+    <dimen name="dialog_profile_level_width">312dp</dimen>
     <dimen name="community_join_width">78dp</dimen>
     <dimen name="community_join_height">30dp</dimen>
     <dimen name="my_community_container_width">111dp</dimen>
     <dimen name="my_community_container_height">94dp</dimen>
+    <dimen name="my_community_drawer_icon_width">48dp</dimen>
+    <dimen name="my_community_drawer_icon_height">48dp</dimen>
     <dimen name="my_community_icon_width">50dp</dimen>
     <dimen name="my_community_icon_height">50dp</dimen>
     <dimen name="dp_community_icon_width">40dp</dimen>
@@ -155,5 +158,6 @@
     <dimen name="contact_icon_circle">50dp</dimen>
     <dimen name="invite_btn_width">100dp</dimen>
     <dimen name="invite_btn_height">30dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
 

@@ -53,7 +53,15 @@ public enum EventProperty {
     COLLECTION_NAME("Collection Name"),
     STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
-    POSITION_OF_CAROUSEL("Position Of Carousel");
+    POSITION_OF_CAROUSEL("Position Of Carousel"),
+    POST_COMMENT_ID("Post / Comment ID"),
+    TAGGED_IN("Tagged In"),
+    TAGGED_USER_ID("Tagged User ID"),
+    CURRENT_VERSION("Current Version"),
+    BRANCH_LINK("Branch link"),
+    OPENED_FROM_EXTERNAL_APP("Opened from external app"),
+    SHARED_FROM_EXTERNAL_APP("Shared From External App"),
+    PROFILE_STRENGTH("Profile Strength");
 
     private final String string;
 
@@ -90,6 +98,18 @@ public enum EventProperty {
 
         public Builder id(String value){
             put(ID, value);
+            return this;
+        }
+        public Builder postCommentId(String value){
+            put(POST_COMMENT_ID, value);
+            return this;
+        }
+        public Builder taggedUserId(String value){
+            put(TAGGED_USER_ID, value);
+            return this;
+        }
+        public Builder taggedIn(String value){
+            put(TAGGED_IN, value);
             return this;
         }
 
@@ -287,5 +307,24 @@ public enum EventProperty {
             return this;
         }
 
+        public Builder branchLink(String value){
+            put(BRANCH_LINK, value);
+            return this;
+        }
+
+        public Builder isSharedFromExternalApp(String value) {
+            put(SHARED_FROM_EXTERNAL_APP, value);
+            return this;
+        }
+
+        public Builder isOpenedFromExternalApp(String value) {
+            put(OPENED_FROM_EXTERNAL_APP, value);
+            return this;
+        }
+
+        public Builder profileStrength(String value) {
+            put(PROFILE_STRENGTH, value);
+            return this;
+        }
     }
 }

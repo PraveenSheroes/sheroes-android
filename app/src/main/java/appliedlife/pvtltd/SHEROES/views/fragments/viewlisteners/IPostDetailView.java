@@ -1,13 +1,22 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.text.Editable;
+import android.view.View;
 
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.usertagging.UserTaggingPerson;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
+import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 
 /**
  * Created by ujjwal on 28/04/17.
@@ -39,12 +48,25 @@ public interface IPostDetailView extends BaseMvpView {
 
     void setData(int index, BaseResponse baseResponse);
 
+    void updateComment(Comment comment);
+
     void onPostDeleted();
 
     void editLastComment();
 
     void deleteLastComment();
-    void showListOfParticipate(List<UserTaggingPerson>participantLists);
+
 
     String getStreamType();
+
+    void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment);
+
+    void userMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
+
+
+    List<String> onQueryReceived(final @NonNull QueryToken queryToken);
+
+    Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
+
+    void textChangeListner(final Editable s);
 }

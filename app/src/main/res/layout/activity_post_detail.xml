@@ -46,26 +46,12 @@
                 android:layout_marginRight="8dp"
                 android:src="@drawable/ic_anonomous" />
 
-            <EditText
+            <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
                 android:id="@+id/input_edit_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:background="@color/white"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:inputType="textMultiLine|textShortMessage|textCapSentences"
-                android:maxLines="1"
-                android:minHeight="48dp"
-                android:paddingBottom="12dp"
-                android:paddingLeft="12dp"
-                android:paddingRight="16dp"
-                android:paddingTop="12dp"
-                android:textColor="@color/black"
-                android:textColorHint="#90949c"
-                android:textSize="14sp" />
-
+                android:layout_weight="@integer/int_value_for_line_1"
+                android:background="@color/white" />
 
             <ImageView
                 android:id="@+id/sendButton"
@@ -103,7 +89,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_25"
+                android:ellipsize="end"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:maxLines="@integer/int_value_for_line_1"
                 android:text="@string/ID_OWNER"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
@@ -132,6 +120,15 @@
         android:divider="@android:color/transparent"
         android:paddingBottom="8dp"
         android:paddingTop="8dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/suggestions_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottom_container"
+        android:layout_below="@+id/appbar_layout"
+        android:background="@drawable/user_tagg_border"
+        android:visibility="gone" />
 
     <View
         android:id="@+id/divider"

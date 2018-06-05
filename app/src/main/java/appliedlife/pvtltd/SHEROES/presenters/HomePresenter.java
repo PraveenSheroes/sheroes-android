@@ -174,7 +174,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -209,7 +209,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -225,38 +225,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     }
 
-    public void getNewHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest,fragmentListRefreshData)
-                .compose(this.<List<FeedDetail>>bindToLifecycle())
-                .subscribe(new DisposableObserver<List<FeedDetail>>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
-
-            }
-
-            @Override
-            public void onNext(List<FeedDetail> feedDetailList) {
-                LogUtils.info(TAG, "********response***********");
-                getMvpView().stopProgressBar();
-                if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-                    getMvpView().showHomeFeedList(feedDetailList);
-                }
-            }
-        });
-
-    }
 
     public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -275,7 +243,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -293,38 +261,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     }
 
-    public void getMyCommunityFromPresenter(final MyCommunityRequest myCommunityRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getMyCommunityFromModel(myCommunityRequest)
-                .compose(this.<FeedResponsePojo>bindToLifecycle())
-                .subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
-
-            }
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                getMvpView().stopProgressBar();
-                if (null != feedResponsePojo) {
-                    getMvpView().getFeedListSuccess(feedResponsePojo);
-                }
-            }
-        });
-
-    }
 
     public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -344,7 +280,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MY_COMMUNITIES);
+                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
 
             }
 
@@ -377,7 +313,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOK_MARK_LIST);
+                getMvpView().showError(e.getMessage(), ERROR_BOOK_MARK_LIST);
 
             }
 
@@ -409,7 +345,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
             }
 
@@ -447,7 +383,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), FOLLOW_UNFOLLOW);
+                getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
             }
 
             @Override
@@ -483,7 +419,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                //getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -514,7 +450,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
 
             }
 
@@ -545,7 +481,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
 
             }
 
@@ -579,7 +515,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = false;
                 comment.likeCount--;
                 getMvpView().invalidateLikeUnlike(comment);
@@ -621,7 +557,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 comment.isLiked = true;
                 comment.likeCount++;
                 getMvpView().invalidateLikeUnlike(comment);
@@ -660,7 +596,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
             }
 
@@ -691,7 +627,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
+                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
 
             }
 
@@ -722,7 +658,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -753,7 +689,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
+                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
             }
 
@@ -784,7 +720,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_SEARCH_DATA);
+                getMvpView().showError(e.getMessage(), ERROR_SEARCH_DATA);
 
             }
 
@@ -821,35 +757,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         });
 
     }
-    public void getSpamPostApproveFromPresenter(ApproveSpamPostRequest approveSpamPostRequest) {
-        getMvpView().startProgressBar();
-        mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest)
-                .compose(this.<ApproveSpamPostResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
-
-            @Override
-            public void onComplete() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-            }
-
-            @Override
-            public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
-                getMvpView().stopProgressBar();
-                if (null != approveSpamPostResponse) {
-                    getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
-                }
-            }
-        });
-
-    }
-
-
 
     public void queryConfig() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -868,7 +775,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_MEMBER);
+                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
                 getMvpView().stopProgressBar();
             }
 

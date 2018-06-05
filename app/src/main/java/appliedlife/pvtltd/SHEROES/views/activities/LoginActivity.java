@@ -6,9 +6,14 @@ import android.os.Bundle;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -75,16 +80,17 @@ public class LoginActivity extends BaseActivity {
         callFirstFragment(R.id.fragment_login, frag);
     }
 
-    public void onErrorOccurence(String errorMessage) {
+    public void onErrorOccurence(String errorMessage,String isDeactivated) {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        if (AppConstants.FACEBOOK_VERIFICATION.equalsIgnoreCase(errorMessage)) {
-            //openFaceBookLogin();
-        } else {
+        if(StringUtil.isNotNullOrEmptyString(isDeactivated)&&isDeactivated.equalsIgnoreCase("true"))
+        {
+            showErrorDialogOnUserAction(true,false,errorMessage,"true");
+        }else
+        {
             showNetworkTimeoutDoalog(true, false, errorMessage);
         }
-
     }
 
 
@@ -94,6 +100,11 @@ public class LoginActivity extends BaseActivity {
         } else {
 
             if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+
+                //Event for on-boarding skipping for new user came through branch link
+                final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(deepLinkUrl).build();
+                AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
+
                 Uri url = Uri.parse(deepLinkUrl);
                 Intent intent = new Intent(LoginActivity.this, SheroesDeepLinkingActivity.class);
                 Bundle bundle = new Bundle();
@@ -118,26 +129,18 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
-                case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-                    break;
+                case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                 case AppConstants.HTTP_401_UNAUTHORIZED:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                     break;
                 default: {
-                    if (AppConstants.HTTP_401_UNAUTHORIZED.contains(errorReason)) {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
-                    } else {
-                        showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
-                    }
+                    super.onShowErrorDialog(errorReason,feedParticipationEnum);
                 }
             }
-        } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
+
     }
 
     @Override

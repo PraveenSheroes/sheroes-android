@@ -5,7 +5,10 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 
 /**
  * Created by Praveen_Singh on 15-02-2017.
@@ -90,6 +93,16 @@ public class Comment extends BaseResponse{
 
     @SerializedName("particitipating_entity_community_id_l")
     private String communityId;
+
+    @SerializedName("is_spam_comment_b")
+    private boolean isSpamComment;
+
+    @SerializedName("has_comment_mentions_b")
+    private boolean hasCommentMention;
+
+    @SerializedName("comment_user_mentions")
+    @Expose
+    private List<MentionSpan> commentUserMentionList;
 
     public boolean isEdit() {
         return isEdit;
@@ -284,5 +297,29 @@ public class Comment extends BaseResponse{
 
     public void setCommunityId(String communityId) {
         this.communityId = communityId;
+    }
+
+    public boolean isSpamComment() {
+        return isSpamComment;
+    }
+
+    public void setSpamComment(boolean spamComment) {
+        isSpamComment = spamComment;
+    }
+
+    public List<MentionSpan> getCommentUserMentionList() {
+        return commentUserMentionList;
+    }
+
+    public void setCommentUserMentionList(List<MentionSpan> commentUserMentionList) {
+        this.commentUserMentionList = commentUserMentionList;
+    }
+
+    public boolean isHasCommentMention() {
+        return hasCommentMention;
+    }
+
+    public void setHasCommentMention(boolean hasCommentMention) {
+        this.hasCommentMention = hasCommentMention;
     }
 }

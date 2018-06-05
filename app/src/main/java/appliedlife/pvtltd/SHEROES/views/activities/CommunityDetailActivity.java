@@ -39,7 +39,6 @@ import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -67,7 +66,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.JobFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
@@ -104,6 +102,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         NAVTIVE("native"),
         WEB("web"),
         HTML("html"),
+        WEB_CUSTOM_TAB("web_custom_tab"),
         FRAGMENT("fragment");
 
         public String tabType;
@@ -198,9 +197,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             initializeLayout();
         }
         if (CommonUtil.forGivenCountOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, AppConstants.INVITE_FRIEND_SESSION) == AppConstants.INVITE_FRIEND_SESSION) {
-           if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
+            if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
                 toolTipForInviteFriends();
-           }
+            }
         }
     }
 
@@ -219,7 +218,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         final LinearLayout llToolTipBg = inviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
                         RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
-                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0,0,0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
                         llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
                         llToolTipBg.setLayoutParams(llParams);
                     } else {
@@ -239,8 +238,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, CommunityDetailActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
                     imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
                     ivArrow.setLayoutParams(imageParams);
-                    final TextView tvGotIt =  inviteFriendToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle =  inviteFriendToolTip.findViewById(R.id.title);
+                    final TextView tvGotIt = inviteFriendToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = inviteFriendToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.tool_tip_invite_friend));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -361,16 +360,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     refreshCurrentFragment();
                     break;
 
-                case AppConstants.REQUEST_CODE_FOR_JOB_DETAIL:
-                    if (null != data && null != data.getExtras()) {
-                        JobFeedSolrObj jobFeedSolrObj = null;
-                        jobFeedSolrObj = Parcels.unwrap(data.getParcelableExtra(AppConstants.JOB_FRAGMENT));
-                        invalidateItem(jobFeedSolrObj);
-                    }
-                    break;
-
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                        refreshCurrentFragment();
+                    refreshCurrentFragment();
                     break;
 
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
@@ -401,6 +392,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         invalidateItem(userPostSolrObj);
                     }
             }
+        } else  if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
         }
     }
 
@@ -563,10 +556,16 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     mTabFragments.add(webViewFragment);
                 }
 
+                if (communityTab.type.equalsIgnoreCase(TabType.WEB_CUSTOM_TAB.getName())) {
+                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "", false, true);
+                    mAdapter.addFragment(webViewFragment, communityTab.title);
+                    mTabFragments.add(webViewFragment);
+                }
 
                 if (communityTab.type.equalsIgnoreCase(TabType.FRAGMENT.getName())) {
-                    if(communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL) || communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL_COM)){
-                        HelplineFragment helplineFragment = new HelplineFragment();
+                    if (communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL) || communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL_COM)) {
+
+                        HelplineFragment helplineFragment = HelplineFragment.createInstance(mCommunityFeedSolrObj.getNameOrTitle());
                         mAdapter.addFragment(helplineFragment, communityTab.title);
                         mTabFragments.add(helplineFragment);
                     }
@@ -585,7 +584,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
             @Override
             public void onPageSelected(int position) {
-                if (mCommunityFeedSolrObj.communityTabs.size() <= position) {
+                if (mCommunityFeedSolrObj == null && mCommunityFeedSolrObj.communityTabs == null && mCommunityFeedSolrObj.communityTabs.size() <= position) {
                     return;
                 }
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
@@ -602,7 +601,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
                     mFabButton.setVisibility(View.VISIBLE);
                     mFabButton.setImageResource(R.drawable.challenge_placeholder);
-                    if(CommonUtil.isValidContextForGlide(mFabButton.getContext())){
+                    if (CommonUtil.isValidContextForGlide(mFabButton.getContext())) {
                         Glide.with(mFabButton.getContext())
                                 .load(communityTab.fabIconUrl)
                                 .into(mFabButton);
@@ -668,7 +667,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override
@@ -737,10 +736,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     public void invalidateItem(FeedDetail feedDetail) {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            Fragment fragment = mAdapter.getItem(i);
-            if (fragment instanceof FeedFragment) {
-                ((FeedFragment) fragment).updateItem(feedDetail);
+        if (mAdapter != null) {
+            for (int i = 0; i < mAdapter.getCount(); i++) {
+                Fragment fragment = mAdapter.getItem(i);
+                if (fragment instanceof FeedFragment) {
+                    ((FeedFragment) fragment).updateItem(feedDetail);
+                }
             }
         }
     }

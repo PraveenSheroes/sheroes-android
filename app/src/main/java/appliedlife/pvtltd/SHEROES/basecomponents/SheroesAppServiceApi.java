@@ -4,7 +4,6 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
@@ -62,8 +61,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
@@ -89,6 +86,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import io.reactivex.Observable;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
@@ -193,8 +193,6 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
 
-    @POST("entity/master/get_tagging_list")
-    Observable<SearchUserDataResponse> getUserTaggingResponse(@Body SearchUserDataRequest searchUserDataRequest);
 
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
@@ -313,5 +311,22 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_user_device")
     Observable<AppInstallation> saveInstallation(@Body AppInstallation appInstallation);
+
+    //Spam Post
+    @POST("participation/post/spam_report")
+    Observable<SpamResponse> reportSpamPostOrComment(@Body SpamPostRequest spamPostRequest);
+
+    @POST("participant/user/spam_report")
+    Observable<SpamResponse> reportProfile(@Body SpamPostRequest spamPostRequest);
+
+    @POST("participation/post/approve_or_delete_comment")
+    Observable<SpamResponse> approveSpamComment(@Body ApproveSpamPostRequest approveSpamPostRequest);
+
+    @POST("entity/master/user_mention_suggestions")
+    Observable<SearchUserDataResponse> userMentionSuggestion(@Body SearchUserDataRequest searchUserDataRequest);
+
+    //deactivate user - for admin, community moderators
+    @POST("participant/user/deactivate_or_reactivate")
+    Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);
 
 }

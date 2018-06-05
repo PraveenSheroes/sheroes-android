@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -27,20 +28,19 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
 import io.reactivex.Observable;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -83,7 +83,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 //getMvpView().stopProgressBar();
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                getMvpView().showError(e.getMessage(), null);
 
             }
 
@@ -348,7 +348,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 getMvpView().stopProgressBar();
                 article.isBookmarked = isBookMarked;
                 getMvpView().invalidateBookmark(article);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
             }
 
@@ -405,7 +405,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     article.likesCount++;
                 }
                 getMvpView().invalidateLike(article);
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
             }
 
@@ -466,7 +466,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 //   getMvpView().stopProgressBar();
-                //getMvpView().showError(mSheroesApplication.getString(R.string.ID_SERVER_PROBLEM),ERROR_COMMENT_REACTION);
+                getMvpView().showError(e.getMessage(),ERROR_COMMENT_REACTION);
             }
 
             @Override
@@ -542,4 +542,74 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     .observeOn(AndroidSchedulers.mainThread());
         }
     }
+
+    public void reportSpamPostOrComment(SpamPostRequest spamPostRequest, final Comment comment, final int position) {
+        getMvpView().startProgressBar();
+
+        sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<SpamResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<SpamResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(SpamResponse spamResponse) {
+                        getMvpView().onSpamPostOrCommentReported(spamResponse, comment, position);
+                        getMvpView().stopProgressBar();
+                    }
+                });
+    }
+
+    //Approve/Delete of spam comment only for admin
+    public void getSpamCommentApproveOrDeleteByAdmin(final ApproveSpamPostRequest approveSpamPostRequest, final int position, final Comment comment) {
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+                .compose(this.<SpamResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
+
+            @Override
+            public void onComplete() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+                getMvpView().stopProgressBar();
+                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
+            }
+
+            @Override
+            public void onNext(BaseResponse approveSpamPostResponse) {
+                getMvpView().stopProgressBar();
+                if (null != approveSpamPostResponse) {
+                    getMvpView().removeAndNotifyComment(position);
+                    getMvpView().showMessage(R.string.comment_deleted);
+
+                    //Event for the article comment deleted by admin
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Long.toString(comment.getId()))
+                                    .postId(Long.toString(comment.getEntityId()))
+                                    .postType(AnalyticsEventType.ARTICLE.toString())
+                                    .body(comment.getComment())
+                                    .streamType(getMvpView().getStreamType())
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.REPLY_DELETED,ArticleActivity.SOURCE_SCREEN, properties);
+                }
+            }
+        });
+
+    }
+
 }

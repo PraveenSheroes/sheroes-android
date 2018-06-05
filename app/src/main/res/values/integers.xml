@@ -8,6 +8,7 @@
 
     <!--Search View Integers -->
     <integer name="int_value_for_line_140">140</integer>
+    <integer name="name_char_limit">99</integer>
 
   <integer name="hashtag2">1000</integer>
   <integer name="hashtag3">500</integer>

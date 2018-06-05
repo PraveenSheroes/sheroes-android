@@ -25,7 +25,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.SystemClock;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntRange;
 import android.support.annotation.MenuRes;
@@ -53,12 +52,11 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
-
 import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpanConfig;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
@@ -68,6 +66,8 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
+
+import static appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable.MentionDisplayMode.FULL;
 
 /**
  * Class that overrides {@link EditText} in order to have more control over touch events and selection ranges for use in
@@ -103,7 +103,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     private MentionSpanConfig mentionSpanConfig;
     private boolean isLongPressed;
     private CheckLongClickRunnable longClickRunnable;
-
+    RichEditorView richEditView;
     public MentionsEditText(@NonNull Context context) {
         super(context);
         init(null, 0);
@@ -142,9 +142,11 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     public boolean onKeyPreIme(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             mSuggestionsVisibilityManager.displaySuggestions(false);
+            richEditView.setEditTextShouldWrapContent(true);
         }
         return false;
     }
+
     private MentionSpanConfig parseMentionSpanConfigFromAttributes(@Nullable AttributeSet attrs, int defStyleAttr) {
         final Context context = getContext();
         MentionSpanConfig.Builder builder = new MentionSpanConfig.Builder();
@@ -236,6 +238,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      */
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
+        richEditView.setEditTextShouldWrapContent(true);
         final MentionSpan touchedSpan = getTouchedSpan(event);
         boolean superResult = super.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -662,7 +665,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
                 Mentionable.MentionDisplayMode displayMode = prevSpan.getDisplayMode();
                 // Determine new DisplayMode given previous DisplayMode and MentionDeleteStyle
                 if (deleteStyle == Mentionable.MentionDeleteStyle.PARTIAL_NAME_DELETE
-                        && displayMode == Mentionable.MentionDisplayMode.FULL) {
+                        && displayMode == FULL) {
                     prevSpan.setDisplayMode(Mentionable.MentionDisplayMode.PARTIAL);
                 } else {
                     prevSpan.setDisplayMode(Mentionable.MentionDisplayMode.NONE);
@@ -797,40 +800,36 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         }
         MentionSpan[] spans = text.getSpans(0, text.length(), MentionSpan.class);
         boolean spanAltered = false;
-        List<MentionSpan> mentionSpanList=new ArrayList<>();
         for (MentionSpan span : spans) {
             int start = text.getSpanStart(span);
             int end = text.getSpanEnd(span);
-            span.setStartIndex(start);
-            span.setEndIndex(end);
             CharSequence spanText = text.subSequence(start, end).toString();
             Mentionable.MentionDisplayMode displayMode = span.getDisplayMode();
-
             switch (displayMode) {
 
                 case PARTIAL:
+
                 case FULL:
-                    String name = span.getDisplayString();
-                    if (!name.equals(spanText) && start >= 0 && start < end && end <= text.length()) {
+                    String fullName = span.getDisplayString();
+                    if (!fullName.equals(spanText) && start >= 0 && start < end && end <= text.length()) {
                         // Mention display name does not match what is being shown,
                         // replace text in span with proper display name
                         int cursor = getSelectionStart();
                         int diff = cursor - end;
                         text.removeSpan(span);
-                        text.replace(start, end, name);
+                        text.replace(start, end, fullName);
                         if (diff > 0 && start + end + diff < text.length()) {
                             text.replace(start + end, start + end + diff, "");
                         }
-                        if (name.length() > 0) {
-                            text.setSpan(span, start, start + name.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        if (fullName.length() > 0) {
+                            text.setSpan(span, start, start + fullName.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         }
                         // Notify for partially deleted mentions.
                         if (mMentionWatchers.size() > 0 && displayMode == Mentionable.MentionDisplayMode.PARTIAL) {
-                            notifyMentionPartiallyDeletedWatchers(span.getMention(), name, start, end);
+                            notifyMentionPartiallyDeletedWatchers(span.getMention(), fullName, start, end);
                         }
                         spanAltered = true;
                     }
-                    mentionSpanList.add(span);
                     break;
 
                 case NONE:
@@ -847,7 +846,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
                     break;
             }
         }
-        mQueryTokenReceiver.onMentionReceived(mentionSpanList,text.toString());
+
         // Reset input method if spans have been changed (updates suggestions)
         if (spanAltered) {
             restartInput();
@@ -944,7 +943,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      *
      * @param mention {@link Mentionable} to insert a span for
      */
-    public void insertMention(@NonNull Mentionable mention) {
+    public void insertMention(@NonNull Mention mention) {
         if (mTokenizer == null) {
             return;
         }
@@ -960,35 +959,21 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
         insertMentionInternal(mention, text, start, end);
     }
-    public void editInsertMention(@NonNull Mentionable mention,int start,int end) {
-
+    public void editCreateInsertMention(@NonNull Mention mention, int start, int end) {
 
         // Setup variables and ensure they are valid
         Editable text = getEditableText();
         insertMentionInternal(mention, text, start, end);
     }
 
-    /**
-     * Inserts a mention. This will not take any token into consideration. This method is useful
-     * when you want to insert a mention which doesn't have a token.
-     *
-     * @param mention {@link Mentionable} to insert a span for
-     */
-    public void insertMentionWithoutToken(@NonNull Mentionable mention) {
-        // Setup variables and ensure they are valid
-        Editable text = getEditableText();
-        int index = getSelectionStart();
-        index = index > 0 ? index : 0;
 
-        insertMentionInternal(mention, text, index, index);
-    }
-
-    private void insertMentionInternal(@NonNull Mentionable mention, @NonNull Editable text, int start, int end) {
+    private void insertMentionInternal(@NonNull Mention mention, @NonNull Editable text, int start, int end) {
         // Insert the span into the editor
         MentionSpan mentionSpan = mentionSpanFactory.createMentionSpan(mention, mentionSpanConfig);
         String name = mention.getSuggestiblePrimaryText();
 
         mBlockCompletion = true;
+
         text.replace(start, end, name);
         int endOfMention = start + name.length();
         text.setSpan(mentionSpan, start, endOfMention, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -1008,16 +993,6 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
         // Reset input method since text has been changed (updates mention draw states)
         restartInput();
-    }
-
-    /**
-     * Determines if the {@link Tokenizer} is looking at an explicit token right now.
-     *
-     * @return true if the {@link Tokenizer} is currently considering an explicit query
-     */
-    public boolean isCurrentlyExplicit() {
-        String tokenString = getCurrentTokenString();
-        return tokenString.length() > 0 && mTokenizer != null && mTokenizer.isExplicitChar(tokenString.charAt(0));
     }
 
     /**
@@ -1272,7 +1247,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     public static class MentionSpanFactory {
 
         @NonNull
-        public MentionSpan createMentionSpan(@NonNull Mentionable mention,
+        public MentionSpan createMentionSpan(@NonNull Mention mention,
                                              @Nullable MentionSpanConfig config) {
             return (config != null) ? new MentionSpan(mention, config) : new MentionSpan(mention);
         }
@@ -1391,6 +1366,10 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      */
     public void setAvoidPrefixOnTap(boolean avoidPrefixOnTap) {
         mAvoidPrefixOnTap = avoidPrefixOnTap;
+    }
+
+    public void setRichEditView(RichEditorView richEditView) {
+        this.richEditView = richEditView;
     }
 
     // --------------------------------------------------

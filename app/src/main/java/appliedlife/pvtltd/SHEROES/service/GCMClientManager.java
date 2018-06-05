@@ -30,12 +30,12 @@ public class GCMClientManager {
     private GoogleCloudMessaging gcm;
     private String regid;
     private String projectNumber;
-    private Activity activity;
+    private Context mContext;
 
-    public GCMClientManager(Activity activity, String projectNumber) {
-        this.activity = activity;
+    public GCMClientManager(Context context, String projectNumber) {
+        this.mContext = context;
         this.projectNumber = projectNumber;
-        this.gcm = GoogleCloudMessaging.getInstance(activity);
+        this.gcm = GoogleCloudMessaging.getInstance(context);
     }
 
     /**
@@ -168,7 +168,9 @@ public class GCMClientManager {
             int resultCode = googleAPI.isGooglePlayServicesAvailable(getContext());
             if (resultCode != ConnectionResult.SUCCESS) {
                 if (googleAPI.isUserResolvableError(resultCode)) {
-                    googleAPI.getErrorDialog(getActivity(),resultCode,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                    if(getContext() instanceof Activity){
+                        googleAPI.getErrorDialog((Activity)getContext(),resultCode,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                    }
                 }
                 return false;
             }
@@ -180,11 +182,7 @@ public class GCMClientManager {
     }
 
     private Context getContext() {
-        return activity;
-    }
-
-    private Activity getActivity() {
-        return activity;
+        return mContext;
     }
 
     public static abstract class RegistrationCompletedHandler {

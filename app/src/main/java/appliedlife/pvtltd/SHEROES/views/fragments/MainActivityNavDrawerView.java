@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 
 /**
@@ -13,4 +14,5 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 public interface MainActivityNavDrawerView extends BaseMvpView {
     void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems);
     void getNavigationDrawerItemsFailed();
+    void showMyCommunities(FeedResponsePojo feedResponse);
 }

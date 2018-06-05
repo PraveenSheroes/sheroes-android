@@ -1,0 +1,103 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_24"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/comment_text"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_user_name"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_18" />
+
+        <LinearLayout
+            android:id="@+id/li_female_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_msg"
+            android:layout_marginTop="48dp">
+
+            <ImageView
+                android:id="@+id/iv_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_size_16" />
+
+            <TextView
+                android:id="@+id/tv_women"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:text="@string/female"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/sp_size_16" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/li_male_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/li_female_layout"
+            android:layout_marginTop="40dp">
+
+            <ImageView
+                android:id="@+id/iv_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="26dp" />
+
+            <TextView
+                android:id="@+id/tv_man"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="36dp"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:gravity="center"
+                android:text="@string/male"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/sp_size_16" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_gender_select_finish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/rectangle_gender_form_btn_deactive"
+            android:drawablePadding="@dimen/dp_size_4"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="bottom|center_horizontal"
+            android:paddingBottom="@dimen/dp_size_12"
+            android:paddingTop="@dimen/dp_size_12"
+            android:text="@string/ID_LETS_GET_STARTED"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_14" />
+
+    </RelativeLayout>
+
+</LinearLayout>

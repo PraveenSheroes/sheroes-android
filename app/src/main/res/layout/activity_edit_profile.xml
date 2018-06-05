@@ -57,14 +57,14 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end|bottom"
-                    android:src="@drawable/ic_edit_pic"/>
+                    android:src="@drawable/ic_edit_pic" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:visibility="gone"
-                    android:background="@drawable/ic_edit_profile">
+                    android:background="@drawable/ic_edit_profile"
+                    android:visibility="gone">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -85,7 +85,6 @@
                         android:background="@drawable/ic_photo_camera" />
 
                 </LinearLayout>
-
 
                 <ProgressBar
                     android:id="@+id/pb_image_loader"
@@ -110,8 +109,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:hint="@string/ID_PROFILE_FULL_NAME"
-                    android:maxLines="@integer/int_value_for_line_1"
                     android:inputType="textCapWords"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:maxLength="@integer/name_char_limit"
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/gray_light"
                     android:textSize="@dimen/sp_size_16" />
@@ -146,39 +146,67 @@
                 android:textColorHint="@color/gray_light"
                 android:textSize="@dimen/sp_size_16" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/et_about_me_container"
+            <TextView
+                android:id="@+id/about_me_label"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16"
-                android:theme="@style/MyTextInputLayout">
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="@string/ID_ABOUT_ME"
+                android:textColor="@color/gray_light"
+                android:textSize="@dimen/sp_size_16" />
 
-                <EditText
-                    android:id="@+id/et_about_me"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:hint="@string/ID_ABOUT_ME"
-                    android:inputType="textMultiLine"
-                    android:lineSpacingExtra="@dimen/sp_size_7"
-                    android:maxLength="@integer/int_value_for_line_160"
-                    android:maxLines="@integer/int_value_for_line_4"
-                    android:minHeight="@dimen/dp_size_70"
-                    android:textColor="@color/text_color_contactdetails_page"
-                    android:textColorHint="@color/gray_light"
-                    android:textSize="@dimen/sp_size_16" />
-            </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:id="@+id/bio_limit"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/et_about_me"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end|right"
-                android:layout_margin="@dimen/dp_size_5"
-                android:maxLines="@integer/int_value_for_line_1"
-                android:text="0/140" />
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginRight="@dimen/dp_size_16"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:gravity="bottom"
+                android:hint="@string/tell_us_something_about_yourself_min_60_chars"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="@dimen/sp_size_7"
+                android:maxLength="@integer/int_value_for_line_140"
+                android:maxLines="@integer/int_value_for_line_4"
+                android:minHeight="@dimen/dp_size_70"
+                android:textColor="@color/text_color_contactdetails_page"
+                android:textColorHint="@color/gray_light"
+                android:textSize="@dimen/sp_size_16" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/bio_limit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="end|right"
+                    android:layout_margin="@dimen/dp_size_5"
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:text="@string/limit" />
+
+                <TextView
+                    android:id="@+id/bio_error_msg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="@dimen/dp_size_16"
+                    android:layout_marginStart="@dimen/dp_size_16"
+                    android:layout_toLeftOf="@id/bio_limit"
+                    android:layout_toStartOf="@id/bio_limit"
+                    android:gravity="start"
+                    android:textColor="@color/red"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -279,7 +307,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/et_mobile_container"
+                android:id="@+id/input_mobile_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_16"

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,11 +12,13 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -25,7 +28,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.text.Html;
+import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -35,11 +38,12 @@ import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -68,6 +72,7 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -80,11 +85,11 @@ import java.util.regex.Pattern;
 
 import javax.security.auth.x500.X500Principal;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -613,6 +618,40 @@ public class CommonUtil {
 
     }
 
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+
+        int width = drawable.getIntrinsicWidth();
+        width = width > 0 ? width : 1;
+        int height = drawable.getIntrinsicHeight();
+        height = height > 0 ? height : 1;
+
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+
+        return bitmap;
+    }
+
+    public static Bitmap combineImages(Bitmap c, Bitmap s) { // can add a 3rd parameter 'String loc' if you want to save the new image - left some code to do that at the bottom
+        Bitmap cs = null;
+
+        int width, height = 0;
+            width = c.getWidth();
+            height = c.getHeight() + s.getHeight();
+
+        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        Canvas comboImage = new Canvas(cs);
+
+        comboImage.drawBitmap(c, 0f, 0f, null);
+        comboImage.drawBitmap(s, 0f, c.getHeight(), null);
+        return cs;
+    }
+
     public static void shareImageChooser(final Context context, final String imageShareText, final String url) {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
@@ -797,6 +836,9 @@ public class CommonUtil {
 
     public static String getThumborUri(@NonNull String image, int width, int height) {
         String uri = image;
+        if (!CommonUtil.isNotEmpty(uri)) {
+            return "";
+        }
         try {
             uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
                     .resize(width, height)
@@ -996,7 +1038,7 @@ public class CommonUtil {
         boolean equalsObject(T t, U u);
     }
 
-    public static boolean isMarshmallow() {
+    public static boolean isMarshmallowAndAbove() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
     }
 
@@ -1128,14 +1170,15 @@ public class CommonUtil {
         void callBack(boolean isShown);
     }
 
-    public static boolean ensureFirstTime(String key) {
+
+    public static synchronized boolean ensureFirstTime(String key) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (prefs == null) {
             return false;
         }
         boolean shown = prefs.getBoolean(key, false);
         if (!shown) {
-            prefs.edit().putBoolean(key, true).apply();
+            prefs.edit().putBoolean(key, true).commit();
         }
         return !shown;
     }
@@ -1146,6 +1189,11 @@ public class CommonUtil {
             return "";
         }
         return prefs.getString(key, "");
+    }
+
+    public static boolean getPrefValue(String key) {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        return prefs != null && prefs.getBoolean(key, false);
     }
 
     public static void setTimeForContacts(String key, long contactSyncTime) {
@@ -1331,5 +1379,95 @@ public class CommonUtil {
             }
         }
         return true;
+    }
+
+    public static void createDialog(Context context, String title, String message) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setCancelable(true);
+        dialog.setContentView(R.layout.dialog_success);
+        dialog.setTitle(title);
+
+        TextView titleText = dialog.findViewById(R.id.title);
+        titleText.setText(title);
+
+        ImageView cross = dialog.findViewById(R.id.cross);
+
+        cross.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        TextView messageText = dialog.findViewById(R.id.message);
+        messageText.setText(message);
+
+        dialog.show();
+    }
+
+    public static int getCurrentAppVersion() {
+        int currentVersion = 0;
+        try {
+            currentVersion = SheroesApplication.mContext.getPackageManager().getPackageInfo(SheroesApplication.mContext.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return currentVersion;
+    }
+
+    public static boolean isLaterClicked() {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return false;
+        }
+        String reminderDate = prefs.getString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.getCurrentDate()));
+        if (DateUtil.isToday(DateUtil.parseOnlyDate(reminderDate))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static void saveReminderForTomorrow() {
+        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+        if (prefs == null) {
+            return;
+        }
+        prefs.edit().putString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.addDays(DateUtil.getCurrentDate(), 1))).apply();
+    }
+
+    private static boolean validateDate(Date date) {
+        return date != null;
+    }
+
+
+    public static Date getCurrentDate() {
+        return Calendar.getInstance().getTime();
+    }
+
+    public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {}
+    }
+
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if(dir!= null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
     }
 }

@@ -3,19 +3,22 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -25,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -72,6 +76,15 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     @Bind(R.id.comment_author_name)
     TextView mCommentAuthorName;
 
+    @Bind(R.id.spam_comment_ui)
+    RelativeLayout spamUiContainer;
+
+    @Bind(R.id.spam_comment_menu)
+    ImageView spamMenu;
+
+    @Bind(R.id.comment_container)
+    RelativeLayout commentContainer;
+
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
 
@@ -79,6 +92,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     CommentCallBack mCommentCallback;
     private Comment mComment;
     private long mAdminId;
+
     public CommentNewViewHolder(View itemView, CommentCallBack commentCallBack) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -103,16 +117,14 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             mCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
 
-        if (mComment.isMyOwnParticipation()||mAdminId==AppConstants.TWO_CONSTANT) {
-            mUserCommentListMenu.setVisibility(View.VISIBLE);
-        } else {
-            mUserCommentListMenu.setVisibility(View.GONE);
-        }
         mCommentAuthorName.setText(mComment.getParticipantName());
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(item);
-        if(!((Activity)mContext).isFinishing()){
-            if (item.isAnonymous()&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
+
+        invalidateSpamComment(item);
+
+        if (!((Activity) mContext).isFinishing()) {
+            if (item.isAnonymous() && StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                 String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
                 mUserProfilePic.bindImage(authorThumborUrl);
                 StringBuilder stringBuilder = new StringBuilder();
@@ -123,23 +135,29 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
                 getCommentString.setSpan(typefaceSpan, 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
                 getCommentString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-                //getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
-                mUserComment.setText(hashTagColorInString(mComment.getComment()));
-
+                if (mComment.isHasCommentMention()) {
+                    List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
+                    if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                        showUserMentionName(mComment.getComment(), mentionSpanList);
+                    }
+                } else {
+                    mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
+                }
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);
             } else {
-                if (StringUtil.isNotNullOrEmptyString(mComment.getComment())&&StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
+                if (StringUtil.isNotNullOrEmptyString(mComment.getComment()) && StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                     String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
                     mUserProfilePic.bindImage(authorThumborUrl);
-                /*StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(mComment.getParticipantName()).append(AppConstants.COLON).append(AppConstants.SPACE).append(mComment.getComment());
-                Spannable getCommentString = new SpannableString(stringBuilder.toString());
-                int size = mComment.getParticipantName().length() + 1;
-                getCommentString.setSpan(new ForegroundColorSpan(Color.BLACK), 0, size, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                getCommentString.setSpan(new StyleSpan(Typeface.BOLD), 0, size, Spannable.SPAN_INCLUSIVE_INCLUSIVE);*/
-                    mUserComment.setText(hashTagColorInString(mComment.getComment()));
+                    if (mComment.isHasCommentMention()) {
+                        List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
+                        if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                            showUserMentionName(mComment.getComment(), mentionSpanList);
+                        }
+                    } else {
+                        mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
+                    }
+                    ;
                     linkifyURLs(mUserComment);
                     if (!mComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (mComment.isVerifiedMentor()) {
@@ -147,7 +165,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                         } else {
                             mProfileVerfied.setVisibility(View.GONE);
                         }
-                    }else {
+                    } else {
                         mProfileVerfied.setVisibility(View.GONE);
                     }
                 }
@@ -155,10 +173,26 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         }
     }
 
+    private void invalidateSpamComment(Comment item) {
+        if (item.isSpamComment()) {
+            spamUiContainer.setVisibility(View.VISIBLE);
+            commentContainer.setVisibility(View.GONE);
+        } else {
+            spamUiContainer.setVisibility(View.GONE);
+            commentContainer.setVisibility(View.VISIBLE);
+        }
+
+        if (!mComment.isSpamComment() && (mComment.isMyOwnParticipation() || mAdminId == AppConstants.TWO_CONSTANT)) { //hide 3 dot of menu
+            spamMenu.setVisibility(View.VISIBLE);
+        } else {
+            spamMenu.setVisibility(View.GONE);
+        }
+    }
+
     private void invalidateLikeView(Comment item) {
-        if(item.likeCount > 0){
+        if (item.likeCount > 0) {
             mCommentLike.setText(Integer.toString(item.likeCount));
-        }else {
+        } else {
             mCommentLike.setText("");
         }
         if (item.isLiked) {
@@ -175,12 +209,18 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
 
     @OnClick(R.id.user_profile_pic)
     public void onUserImageClick() {
-      mCommentCallback.userProfileNameClick(mComment,  mUserProfilePic);
+        mCommentCallback.userProfileNameClick(mComment, mUserProfilePic);
     }
 
     @OnClick(R.id.comment_author_name)
     public void onUserNameClick() {
-      mCommentCallback.userProfileNameClick(mComment,  mCommentAuthorName);
+        mCommentCallback.userProfileNameClick(mComment, mCommentAuthorName);
+    }
+
+    @OnClick(R.id.spam_comment_menu)
+    public void onSpamCommentMenuClick() {
+        mComment.setItemPosition(getAdapterPosition());
+        mCommentCallback.onCommentMenuClicked(mComment, spamMenu);
     }
 
     @OnClick(R.id.tv_user_comment_list_menu)
@@ -188,6 +228,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mComment.setItemPosition(getAdapterPosition());
         mCommentCallback.onCommentMenuClicked(mComment, mUserCommentListMenu);
     }
+
     @OnClick(R.id.tv_list_user_comment)
     public void onCommentWithNameClick() {
        /* if (mComment.isVerifiedMentor()) {
@@ -196,7 +237,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     }
 
     @OnClick(R.id.like)
-    public void onCommentLikeClicked(){
+    public void onCommentLikeClicked() {
         if (mComment.isLiked) {
             mCommentCallback.userCommentLikeRequest(mComment, false, getAdapterPosition());
         } else {
@@ -217,4 +258,52 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     public void onClick(View view) {
     }
 
+    private void showUserMentionName(String description, List<MentionSpan> mentionSpanList) {
+        StringBuilder strWithAddExtra = new StringBuilder(description);
+        for (int i = 0; i < mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getStartIndex() + i < strWithAddExtra.length()) {
+                    strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
+                }
+            }
+        }
+        SpannableString spannableString = new SpannableString(strWithAddExtra);
+        for (int i = 0; i < mentionSpanList.size(); i++) {
+            final MentionSpan mentionSpan = mentionSpanList.get(i);
+            if (null != mentionSpan && null != mentionSpan.getMention()) {
+                final ClickableSpan postedInClick = new ClickableSpan() {
+                    @Override
+                    public void onClick(View textView) {
+                        Comment comment = new Comment();
+                        long participantId = mentionSpan.getMention().userId;
+                        comment.setParticipantUserId(participantId);
+                        if (mentionSpan.getMention().getUserType() == 7) {
+                            comment.setVerifiedMentor(true);
+                        } else {
+                            comment.setVerifiedMentor(false);
+                        }
+                        mCommentCallback.userProfileNameClick(comment, mCommentAuthorName);
+                    }
+
+                    @Override
+                    public void updateDrawState(final TextPaint textPaint) {
+                        textPaint.setUnderlineText(false);
+                    }
+                };
+
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <=spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
+                    int start = mentionSpan.getMention().getStartIndex() + i;
+                    int end = mentionSpan.getMention().getEndIndex() + i;
+                    spannableString.setSpan(postedInClick, start, end + 1, 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
+                }
+
+            }
+        }
+        mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
+        mUserComment.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
+
+        // tvMention.setSelected(true);
+    }
 }

@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
@@ -32,17 +34,20 @@ public class ShowcaseManager {
     private TextView tvCommunities;
     private TextView tvDrawerNavigation;
     private RecyclerView recyclerView;
+    private String mUserName;
+
     public ShowcaseManager(Activity activity) {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation,RecyclerView recyclerView) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;
         this.tvCommunities = tvCommunities;
-        this.tvDrawerNavigation=tvDrawerNavigation;
-        this.recyclerView=recyclerView;
+        this.tvDrawerNavigation = tvDrawerNavigation;
+        this.recyclerView = recyclerView;
+        this.mUserName = userName;
         tvDrawerNavigation.setEnabled(false);
         floatActionBtn.setEnabled(false);
         tvHome.setEnabled(false);
@@ -57,11 +62,12 @@ public class ShowcaseManager {
 
     //region showcase First in MainActivity
     public void showFirstMainActivityShowcase() {
+        mUserName = "Hello " + mUserName + "! " + activity.getString(R.string.ID_SHOW_CASE_FEED_TITLE);
         showcaseView = new ShowcaseView.Builder(activity)
-                 .withMaterialShowcase()
+                .withMaterialShowcase()
                 .setTarget(new ViewTarget(tvHome))
                 .setStyle(R.style.CustomShowcaseTheme)
-                .setContentTitle(activity.getString(R.string.ID_SHOW_CASE_FEED_TITLE))
+                .setContentTitle(mUserName)
                 .setContentText(activity.getString(R.string.ID_SHOW_CASE_FEED_DEC))
                 .replaceEndButton(R.layout.showcase_btn_layout)
                 .setShowcaseEventListener(
@@ -77,9 +83,9 @@ public class ShowcaseManager {
                 .build();
         showcaseView.setButtonText(activity.getString(R.string.ID_NEXT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
-       // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
-       // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
-       // showcaseView.forceTextPosition(ShowcaseView.ABOVE);
+        // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
+        // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
+        // showcaseView.forceTextPosition(ShowcaseView.ABOVE);
     }
     //endregion
 
@@ -104,8 +110,8 @@ public class ShowcaseManager {
                 .build();
         showcaseView.setButtonText(activity.getString(R.string.ID_NEXT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
-       // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
-      //  showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
+        // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
+        //  showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
     }
     //endregion
 
@@ -140,11 +146,10 @@ public class ShowcaseManager {
                 .build();
         showcaseView.setButtonText(activity.getString(R.string.ID_GOT));
         showcaseView.setButtonPosition(getButtonLayoutParams());
-       // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
-       // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
+        // showcaseView.setDetailTextAlignment(Layout.Alignment.ALIGN_CENTER);
+        // showcaseView.setTitleTextAlignment(Layout.Alignment.ALIGN_CENTER);
     }
     //endregion
-
 
     //region private helper methods
     private RelativeLayout.LayoutParams getButtonLayoutParams() {

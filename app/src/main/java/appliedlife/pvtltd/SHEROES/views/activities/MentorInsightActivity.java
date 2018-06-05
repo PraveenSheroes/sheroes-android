@@ -418,7 +418,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
+        onShowErrorDialog(s, feedParticipationEnum);
     }
 
     @Override

@@ -225,18 +225,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             data.add(feedProgressBar);
 
             mMyCommunitiesAdapter.setData(data);
-            mMyCommunitiesAdapter.notifyDataSetChanged();
 
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
-            mMyCommunitiesAdapter.notifyDataSetChanged();
-        } else {
-            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
-            if (null != data)
-                data.remove(data.size() - 1);
-            mMyCommunitiesAdapter.notifyDataSetChanged();
         }
+        mMyCommunitiesAdapter.notifyDataSetChanged();
     }
 
     @Override

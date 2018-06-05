@@ -217,6 +217,7 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     private String callFromName;
     private boolean isTrending;
     private boolean isFromHome;
+    private boolean isSharedFromExternalApp = false;
     private AppIntroData appIntroDataItems = null;
     private int lastReactionValue;
 
@@ -806,5 +807,13 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     public void setStreamType(String streamType) {
         this.streamType = streamType;
+    }
+
+    public boolean isSharedFromExternalApp() {
+        return isSharedFromExternalApp;
+    }
+
+    public void setSharedFromExternalApp(boolean sharedFromExternalApp) {
+        isSharedFromExternalApp = sharedFromExternalApp;
     }
 }

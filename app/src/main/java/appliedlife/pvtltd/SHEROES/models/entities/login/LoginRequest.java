@@ -29,6 +29,9 @@ public class LoginRequest extends BaseRequest {
     @SerializedName("username")
     @Expose
     private String username;
+    @SerializedName("user_gender")
+    @Expose
+    private String userGender;
     private String callForSignUp;
     public String getAdvertisementid() {
         return advertisementid;
@@ -92,5 +95,13 @@ public class LoginRequest extends BaseRequest {
 
     public void setCallForSignUp(String callForSignUp) {
         this.callForSignUp = callForSignUp;
+    }
+
+    public String getUserGender() {
+        return userGender;
+    }
+
+    public void setUserGender(String userGender) {
+        this.userGender = userGender;
     }
 }

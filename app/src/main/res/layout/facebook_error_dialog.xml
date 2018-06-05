@@ -5,64 +5,69 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:background="@drawable/male_error" />
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/dp_size_8"
+            android:layout_marginTop="@dimen/dp_size_4"
+            android:padding="@dimen/dp_size_12"
+            android:src="@drawable/ic_cross" />
+    </FrameLayout>
+
+
     <TextView
-        android:id="@+id/tv_ok"
+        android:id="@+id/tv_user_name_male_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|right"
-        android:drawableLeft="@drawable/ic_cross"
-        android:padding="@dimen/dp_size_16" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_size_24"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:textColor="@color/comment_text"
+        android:textSize="@dimen/sp_size_20"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_description_male_error"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_size_36"
+        android:layout_marginRight="@dimen/dp_size_36"
+        android:layout_marginTop="@dimen/dp_size_16"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
-        android:orientation="vertical">
+        android:textColor="@color/footer_icon_text"
+        android:textSize="@dimen/sp_size_16" />
 
-        <ImageView
-            android:id="@+id/iv_hey_success_next"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_male_gender" />
-
-        <ImageView
-            android:id="@+id/iv_women_error"
-            android:layout_width="@dimen/dp_size_54"
-            android:layout_height="@dimen/dp_size_54"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_size_20"
-            android:src="@drawable/ic_women_error_dilog"
-            android:visibility="gone" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_size_8"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:lineSpacingExtra="@dimen/dp_size_5"
-            android:text="Oops!!"
-            android:textStyle="bold"
-            android:textAlignment="center"
-            android:textColor="@color/comment_text"
-            android:textSize="@dimen/sp_size_18" />
-        <TextView
-            android:id="@+id/tv_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/dp_size_8"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="@dimen/dp_size_5"
-            android:text="Oops!! Sheroes is a women only platform. Facebook says you are a Gentleman"
-            android:textAlignment="center"
-            android:textColor="@color/recent_post_comment"
-            android:textSize="@dimen/sp_size_16" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_share_sheroes_app"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_40"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_24"
+        android:background="@drawable/rectangle_feed_community_joined_active"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:paddingRight="@dimen/dp_size_16"
+        android:paddingTop="@dimen/dp_size_10"
+        android:text="@string/share_sheroes_app"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_size_14"
+        android:visibility="visible" />
 </LinearLayout>

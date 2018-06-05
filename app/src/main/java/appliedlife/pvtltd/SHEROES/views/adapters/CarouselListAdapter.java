@@ -85,6 +85,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case TYPE_COMMUNITY:
                     CommunityCompactViewHolder communityCompactViewHolder = (CommunityCompactViewHolder) holder;
                     CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetails.get(position);
+                    communityFeedSolrObj.setItemPosition(mCarouselDataObj!=null ? mCarouselDataObj.getItemPosition() : 0);
                     communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
                     break;
 
@@ -105,6 +106,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 case TYPE_USER_POST:
                 UserPostCompactViewHolder userPostCompactViewHolder = (UserPostCompactViewHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetails.get(position);
+                userPostSolrObj.setItemPosition(mCarouselDataObj!=null ? mCarouselDataObj.getItemPosition() : 0);
                 userPostCompactViewHolder.bindData(userPostSolrObj, mContext);
                 break;
             case TYPE_SEE_MORE:

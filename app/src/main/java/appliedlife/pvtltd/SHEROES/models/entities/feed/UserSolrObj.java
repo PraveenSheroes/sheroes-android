@@ -169,6 +169,14 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_total_no_of_comments_created")
     private int userCommentsCount;
 
+    @SerializedName("solr_ignore_profile_weight_count")
+    private float profileCompletionWeight;
+
+    @SerializedName("solr_ignore_profile_filled_fields_name")
+    private String filledProfileFields;
+
+    @SerializedName("solr_ignore_profile_unfilled_fields_name")
+    private String unfilledProfileFields;
 
     public int getTotalExperience() {
         return totalExperience;
@@ -602,5 +610,29 @@ public class UserSolrObj extends FeedDetail {
 
     public void setUserCommentsCount(int userCommentsCount) {
         this.userCommentsCount = userCommentsCount;
+    }
+
+    public float getProfileCompletionWeight() {
+        return profileCompletionWeight;
+    }
+
+    public void setProfileCompletionWeight(float profileCompletionWeight) {
+        this.profileCompletionWeight = profileCompletionWeight;
+    }
+
+    public String getUnfilledProfileFields() {
+        return unfilledProfileFields;
+    }
+
+    public void setUnfilledProfileFields(String unfilledProfileFields) {
+        this.unfilledProfileFields = unfilledProfileFields;
+    }
+
+    public String getFilledProfileFields() {
+        return filledProfileFields;
+    }
+
+    public void setFilledProfileFields(String filledProfileFields) {
+        this.filledProfileFields = filledProfileFields;
     }
 }

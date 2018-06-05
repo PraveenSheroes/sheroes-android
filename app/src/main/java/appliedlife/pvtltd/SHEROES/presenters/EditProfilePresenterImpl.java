@@ -1,17 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import javax.inject.Inject;
 
@@ -30,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IEditProfileView;
 import io.reactivex.observers.DisposableObserver;
-
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 
@@ -66,7 +55,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getAllUserDetailsromModel().subscribe(new DisposableObserver<UserProfileResponse>() {
+        profileModel.getAllUserDetailsromModel()
+                .compose(this.<UserProfileResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<UserProfileResponse>() {
             @Override
             public void onComplete() {
 
@@ -76,7 +67,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -90,6 +81,39 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
 
     }
 
+    //synchronous call for updating both user summary and after that basic user information
+    public void updateCompleteProfileDetails(final PersonalBasicDetailsRequest personalBasicDetailsRequest, UserSummaryRequest userSummaryRequest) {
+
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            return;
+        }
+        getMvpView().startProgressBar();
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
+
+                    @Override
+                    public void onNext(BoardingDataResponse boardingDataResponse) {
+                        getMvpView().stopProgressBar();
+                        getPersonalBasicDetails(personalBasicDetailsRequest);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
+                        getPersonalBasicDetails(personalBasicDetailsRequest); //if summary api failed call the another api for saving user details
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     // Update User Basic Details
     public void getPersonalBasicDetails(PersonalBasicDetailsRequest personalBasicDetailsRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -98,7 +122,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
         }
 
         getMvpView().startProgressBar();
-        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalBasicDetails(personalBasicDetailsRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 
@@ -109,7 +135,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
             }
 
             @Override
@@ -120,6 +146,8 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                         if(boardingDataResponse.getFieldErrorMessageMap().containsKey(AppConstants.INAVLID_DATA)) {
                             String errorMessage = boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
                             getMvpView().errorMessage(errorMessage);
+                        } else {
+                            getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
                         }
                     } else if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                         getMvpView().getPersonalBasicDetailsResponse(boardingDataResponse);
@@ -137,7 +165,9 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 
@@ -147,17 +177,22 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
-                //getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
+                getMvpView().showError(mSheroesApplication.getString(R.string.ID_GENERIC_ERROR), ERROR_AUTH_TOKEN);
             }
 
             @Override
             public void onNext(BoardingDataResponse boardingDataResponse) {
                 getMvpView().stopProgressBar();
                 if (null != boardingDataResponse) {
-                    getMvpView().getUserSummaryResponse(boardingDataResponse);
+                    if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        getMvpView().getUserSummaryResponse(boardingDataResponse);
+                    } else {
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                    }
+                } else {
+                    getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
                 }
             }
         });
-
     }
 }

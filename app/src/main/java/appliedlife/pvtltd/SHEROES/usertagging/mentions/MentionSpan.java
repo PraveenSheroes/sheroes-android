@@ -23,7 +23,10 @@ import android.text.style.ClickableSpan;
 import android.view.View;
 import android.widget.EditText;
 
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
 
 /**
@@ -31,21 +34,26 @@ import appliedlife.pvtltd.SHEROES.usertagging.ui.MentionsEditText;
  * specifically used by the {@link MentionsEditText}.
  */
 public class MentionSpan extends ClickableSpan implements Parcelable {
+    @SerializedName("mention")
+    @Expose
+    public Mention mention;
+    @SerializedName("config")
+    @Expose
+    public MentionSpanConfig config;
+    @SerializedName("isSelected")
+    @Expose
+    public boolean isSelected = false;
+    @SerializedName("mDisplayMode")
+    @Expose
+    public Mention.MentionDisplayMode mDisplayMode = Mention.MentionDisplayMode.FULL;
 
-    private final Mentionable mention;
-    private MentionSpanConfig config;
-    private long startIndex;
-    private long endIndex;
-    private boolean isSelected = false;
-    private Mentionable.MentionDisplayMode mDisplayMode = Mentionable.MentionDisplayMode.FULL;
-
-    public MentionSpan(@NonNull Mentionable mention) {
+    public MentionSpan(@NonNull Mention mention) {
         super();
         this.mention = mention;
         this.config = new MentionSpanConfig.Builder().build();
     }
 
-    public MentionSpan(@NonNull Mentionable mention, @NonNull MentionSpanConfig config) {
+    public MentionSpan(@NonNull Mention mention, @NonNull MentionSpanConfig config) {
         super();
         this.mention = mention;
         this.config = config;
@@ -94,8 +102,12 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         tp.setUnderlineText(false);
     }
 
-    public Mentionable getMention() {
+    public Mention getMention() {
         return mention;
+    }
+
+    public void setMention(Mention mention) {
+        this.mention = mention;
     }
 
     public boolean isSelected() {
@@ -118,64 +130,52 @@ public class MentionSpan extends ClickableSpan implements Parcelable {
         return mention.getTextForDisplayMode(mDisplayMode);
     }
 
+    public MentionSpanConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(MentionSpanConfig config) {
+        this.config = config;
+    }
+
+    public Mention.MentionDisplayMode getmDisplayMode() {
+        return mDisplayMode;
+    }
+
+    public void setmDisplayMode(Mention.MentionDisplayMode mDisplayMode) {
+        this.mDisplayMode = mDisplayMode;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(@NonNull final Parcel dest, int flags) {
-        dest.writeInt(config.NORMAL_TEXT_COLOR);
-        dest.writeInt(config.NORMAL_TEXT_BACKGROUND_COLOR);
-        dest.writeInt(config.SELECTED_TEXT_COLOR);
-        dest.writeInt(config.SELECTED_TEXT_BACKGROUND_COLOR);
-        dest.writeLong(this.startIndex);
-        dest.writeLong(this.endIndex);
-        dest.writeInt(getDisplayMode().ordinal());
-        dest.writeInt(isSelected() ? 1 : 0);
-        dest.writeParcelable(getMention(), flags);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(this.mention, flags);
+        dest.writeParcelable(this.config, flags);
+        dest.writeByte(this.isSelected ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.mDisplayMode == null ? -1 : this.mDisplayMode.ordinal());
     }
 
-    public MentionSpan(Parcel in) {
-        int normalTextColor = in.readInt();
-        int normalTextBackgroundColor = in.readInt();
-        int selectedTextColor = in.readInt();
-        int selectedTextBackgroundColor = in.readInt();
-        config = new MentionSpanConfig(normalTextColor, normalTextBackgroundColor,
-                                       selectedTextColor, selectedTextBackgroundColor);
-
-        mDisplayMode = Mentionable.MentionDisplayMode.values()[in.readInt()];
-        setSelected((in.readInt() == 1));
-        startIndex = in.readInt();
-        endIndex = in.readInt();
-        mention = in.readParcelable(Mentionable.class.getClassLoader());
+    protected MentionSpan(Parcel in) {
+        this.mention = in.readParcelable(Mention.class.getClassLoader());
+        this.config = in.readParcelable(MentionSpanConfig.class.getClassLoader());
+        this.isSelected = in.readByte() != 0;
+        int tmpMDisplayMode = in.readInt();
+        this.mDisplayMode = tmpMDisplayMode == -1 ? null : Mention.MentionDisplayMode.values()[tmpMDisplayMode];
     }
 
-    public static final Creator<MentionSpan> CREATOR
-            = new Creator<MentionSpan>() {
-        public MentionSpan createFromParcel(Parcel in) {
-            return new MentionSpan(in);
+    public static final Creator<MentionSpan> CREATOR = new Creator<MentionSpan>() {
+        @Override
+        public MentionSpan createFromParcel(Parcel source) {
+            return new MentionSpan(source);
         }
 
+        @Override
         public MentionSpan[] newArray(int size) {
             return new MentionSpan[size];
         }
     };
-
-    public long getStartIndex() {
-        return startIndex;
-    }
-
-    public void setStartIndex(long startIndex) {
-        this.startIndex = startIndex;
-    }
-
-    public long getEndIndex() {
-        return endIndex;
-    }
-
-    public void setEndIndex(long endIndex) {
-        this.endIndex = endIndex;
-    }
-
 }

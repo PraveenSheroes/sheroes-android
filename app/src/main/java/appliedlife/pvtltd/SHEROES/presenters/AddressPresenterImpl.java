@@ -25,6 +25,8 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+
 /**
  * Created by ujjwal on 04/05/17.
  */
@@ -60,7 +62,7 @@ public class AddressPresenterImpl extends BasePresenter<IAddressView> {
             @Override
             public void onError(Throwable e) {
                 getMvpView().stopProgressBar();
-                // getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
+                 getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
             }
 
             @Override
