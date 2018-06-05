@@ -12,8 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -23,7 +25,11 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -66,7 +72,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -78,6 +87,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
@@ -87,13 +99,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
  */
 
-public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView {
+public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String TAB_KEY = "tab_key";
     private String streamType;
@@ -143,8 +156,18 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Bind(R.id.bottom_bar)
     FrameLayout mBottomBar;
+
     @Bind(R.id.view_tool_tip_invite)
     View viewToolTipInvite;
+
+    @Bind(R.id.drawer_community_layout)
+    DrawerLayout mDrawer;
+
+    @Bind(R.id.nav_view_right_drawer_community_detail)
+    NavigationView mNavigationViewRightDrawerWithCommunity_detail;
+
+    @Bind(R.id.rv_right_drawer_community_detail)
+    RecyclerView mRecyclerViewDrawerCommunities;
 
 
     private CommunityFeedSolrObj mCommunityFeedSolrObj;
@@ -160,6 +183,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private int mFromNotification;
     private View inviteFriendToolTip;
     private PopupWindow popupWindowInviteFriendTooTip;
+    private CustiomActionBarToggle mCustiomActionBarToggle;
+
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    private SwipPullRefreshList mPullRefreshList;
+    private boolean isDrawerOpen;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -201,6 +231,31 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 toolTipForInviteFriends();
             }
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    public void onDrawerOpened() {
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            if (isDrawerOpen) {
+                isDrawerOpen = false;
+                mPullRefreshList = new SwipPullRefreshList();
+                mPullRefreshList.setPullToRefresh(false);
+                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+                AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
+            }
+        }
+
+    }
+
+    @Override
+    public void onDrawerClosed() {
+
     }
 
     private void toolTipForInviteFriends() {
@@ -289,9 +344,34 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         invalidateOptionsMenu();
     }
 
+    private void setUpMyCommunitiesList() {
+        mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
+        mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
+        //For right navigation drawer communities items
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(mCommunityDetailPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
+    }
+
     private void setupToolBar() {
         mTitleToolbar.setText(mCommunityFeedSolrObj.getNameOrTitle());
         mBottomBar.setBackgroundColor(Color.parseColor(mCommunitySecondaryColor));
+        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mDrawer.addDrawerListener(mCustiomActionBarToggle);
     }
 
     private void setAllColor() {
@@ -392,7 +472,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         invalidateItem(userPostSolrObj);
                     }
             }
-        } else  if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
         }
     }
@@ -449,6 +529,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 break;
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.nav_communities:
+                isDrawerOpen = true;
+                mDrawer.openDrawer(GravityCompat.END);
                 break;
         }
         return true;
@@ -725,6 +809,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         }
 
         initializeLayout();
+    }
+
+    @Override
+    public void showMyCommunities(FeedResponsePojo feedResponse) {
+
     }
 
     @Override
