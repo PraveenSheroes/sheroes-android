@@ -500,6 +500,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         MenuItem menuItem = menu.findItem(R.id.share);
         menuItem.getIcon().mutate();
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        MenuItem item = menu.findItem(R.id.nav_communities);
+        item.getIcon().mutate();
+        item.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
 
