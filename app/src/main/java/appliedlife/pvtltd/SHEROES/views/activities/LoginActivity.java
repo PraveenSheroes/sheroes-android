@@ -132,6 +132,7 @@ public class LoginActivity extends BaseActivity {
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
                 case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
+                case AppConstants.HTTP_401_UNAUTHORIZED:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                     break;
                 default: {

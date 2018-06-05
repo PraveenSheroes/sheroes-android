@@ -37,6 +37,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
@@ -141,7 +142,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
@@ -580,6 +580,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mPullRefreshList = new SwipPullRefreshList();
                 mPullRefreshList.setPullToRefresh(false);
                 mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+                mFragmentListRefreshData.setSwipeToRefresh(1);
                 activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
                 AppUtils.hideKeyboard(mTvUserName, TAG);
                 AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
@@ -906,13 +907,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             FeedDetail feedProgressBar = new FeedDetail();
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
             data = mPullRefreshList.getFeedResponses();
-            if (data.size() > 20) {
-                int position = data.size() - feedDetailList.size();
-                if (position > 0) {
-                    data.remove(position - 1);
-                }
-                data.add(feedProgressBar);
+            int position = data.size() - feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
             }
+            data.add(feedProgressBar);
+
             mMyCommunitiesAdapter.setData(data);
 
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
@@ -1151,6 +1151,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
+    }
+
+    @Override
     protected SheroesPresenter getPresenter() {
         return activityDataPresenter;
     }
@@ -1355,6 +1363,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         //For right navigation drawer communities items
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
         pbCommunitiesDrawer.setVisibility(View.VISIBLE);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -1369,6 +1380,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             public void dismissReactions() {
             }
         });
+        ((SimpleItemAnimator) mRecyclerViewDrawerCommunities.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     private void deepLinkingRedirection(JSONObject sessionParams) {
