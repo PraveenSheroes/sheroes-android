@@ -30,6 +30,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -136,6 +137,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @Inject
     Preference<LoginResponse> userPreference;
 
+    @Bind(R.id.pb_communities_drawer)
+    ProgressBar pbCommunitiesDrawer;
+
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -198,7 +202,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         setContentView(R.layout.activity_community_detail);
         ButterKnife.bind(this);
         mCommunityDetailPresenter.attachView(this);
-
+        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mDrawer.addDrawerListener(mCustiomActionBarToggle);
         if (getIntent() != null && getIntent().getExtras() != null) {
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
@@ -243,10 +248,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             if (isDrawerOpen) {
                 isDrawerOpen = false;
-                mPullRefreshList = new SwipPullRefreshList();
-                mPullRefreshList.setPullToRefresh(false);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
                 AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
             }
         }
@@ -334,6 +335,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     private void initializeLayout() {
+        setUpMyCommunitiesList();
         setAllColor();
         setupToolbarItemsColor();
         setupColorTheme();
@@ -350,7 +352,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
         mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
         //For right navigation drawer communities items
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DEATIL_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(mCommunityDetailPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
@@ -365,13 +371,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             public void dismissReactions() {
             }
         });
+        ((SimpleItemAnimator) mRecyclerViewDrawerCommunities.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     private void setupToolBar() {
         mTitleToolbar.setText(mCommunityFeedSolrObj.getNameOrTitle());
         mBottomBar.setBackgroundColor(Color.parseColor(mCommunitySecondaryColor));
-        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mDrawer.addDrawerListener(mCustiomActionBarToggle);
     }
 
     private void setAllColor() {
@@ -443,7 +448,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
                     refreshCurrentFragment();
                     break;
-
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
+                    this.finish();
+                    break;
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
                     Parcelable parcelableArticlePost = data.getParcelableExtra(AppConstants.HOME_FRAGMENT);
                     ArticleSolrObj articleSolrObj = null;
@@ -499,7 +506,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
-
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -812,8 +825,31 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     @Override
-    public void showMyCommunities(FeedResponsePojo feedResponse) {
+    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
+        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        pbCommunitiesDrawer.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
 
+            List<FeedDetail> data = null;
+            FeedDetail feedProgressBar = new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data = mPullRefreshList.getFeedResponses();
+            int position = data.size() - feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
+            }
+            data.add(feedProgressBar);
+
+            mMyCommunitiesAdapter.setData(data);
+
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
+        }
+        mMyCommunitiesAdapter.notifyDataSetChanged();
     }
 
     @Override

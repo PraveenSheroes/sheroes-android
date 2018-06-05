@@ -577,11 +577,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             if (isDrawerOpen) {
                 isDrawerOpen = false;
-                mPullRefreshList = new SwipPullRefreshList();
-                mPullRefreshList.setPullToRefresh(false);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mFragmentListRefreshData.setSwipeToRefresh(1);
-                activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
                 AppUtils.hideKeyboard(mTvUserName, TAG);
                 AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
             }
@@ -914,12 +909,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             data.add(feedProgressBar);
 
             mMyCommunitiesAdapter.setData(data);
+            mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
 
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
         }
-        mMyCommunitiesAdapter.notifyDataSetChanged();
+
     }
 
     @Override
