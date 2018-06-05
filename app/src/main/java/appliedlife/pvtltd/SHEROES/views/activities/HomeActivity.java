@@ -37,6 +37,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
@@ -905,13 +906,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             FeedDetail feedProgressBar = new FeedDetail();
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
             data = mPullRefreshList.getFeedResponses();
-            if (data.size() > 20) {
-                int position = data.size() - feedDetailList.size();
-                if (position > 0) {
-                    data.remove(position - 1);
-                }
-                data.add(feedProgressBar);
+            int position = data.size() - feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
             }
+            data.add(feedProgressBar);
+
             mMyCommunitiesAdapter.setData(data);
 
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
@@ -1148,6 +1148,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         resetHamburgerSelectedItems();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -1155,6 +1156,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mDrawer.closeDrawer(GravityCompat.END);
         }
     }
+
     @Override
     protected SheroesPresenter getPresenter() {
         return activityDataPresenter;
@@ -1377,6 +1379,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             public void dismissReactions() {
             }
         });
+        ((SimpleItemAnimator) mRecyclerViewDrawerCommunities.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     private void deepLinkingRedirection(JSONObject sessionParams) {
