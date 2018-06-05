@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -54,9 +52,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView userName;
     @Bind(R.id.ripple)
     RippleView rippleView;
-    private Context context;
     @Bind(R.id.new_offer)
-    ImageView newOffer;
+    FrameLayout newOffer;
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
@@ -69,8 +66,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     private String loggedInUser;
     private long userId;
     private FeedDetail dataItem;
-    private View popupViewToolTip;
-    private PopupWindow popupWindowTooTip;
     private boolean isToolTip;
 
     public HomeHeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -94,7 +89,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        this.context = context;
         if (null != userPreference && userPreference.isSet()  && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
@@ -152,7 +146,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.new_offer)
     void offerClickForProfile() {
         if(!CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
-            openProfileActivity();
+            navigateToProfileActivity();
             newOffer.setVisibility(View.GONE);
         }
     }
@@ -161,17 +155,21 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                dataItem.setEntityOrParticipantId(userId);
-                if(viewInterface instanceof FeedItemCallback){
-                    CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-                    communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
-                    communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                    ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
-                }else {
-                    viewInterface.handleOnClick(dataItem, ivLoginUserPic);
-                }
+              navigateToProfileActivity();
             }
         });
+    }
+
+    private void navigateToProfileActivity() {
+        dataItem.setEntityOrParticipantId(userId);
+        if(viewInterface instanceof FeedItemCallback){
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
+        }else {
+            viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        }
     }
 
     @OnClick(R.id.header_msg)
