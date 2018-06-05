@@ -193,7 +193,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
-    private boolean isDrawerOpen;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -246,10 +245,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            if (isDrawerOpen) {
-                isDrawerOpen = false;
-                AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
-            }
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
         }
 
     }
@@ -506,6 +502,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -513,6 +510,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             mDrawer.closeDrawer(GravityCompat.END);
         }
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -544,7 +542,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 onBackPressed();
                 break;
             case R.id.nav_communities:
-                isDrawerOpen = true;
                 mDrawer.openDrawer(GravityCompat.END);
                 break;
         }

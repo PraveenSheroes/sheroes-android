@@ -342,7 +342,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
-    private boolean isDrawerOpen;
     //endregion
 
     // region Public methods
@@ -481,7 +480,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @OnClick(R.id.fl_nav_communities)
     public void onClickNavigationCommunities() {
         ivNewTag.setVisibility(View.GONE);
-        isDrawerOpen = true;
         mDrawer.openDrawer(GravityCompat.END);
     }
 
@@ -575,11 +573,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            if (isDrawerOpen) {
-                isDrawerOpen = false;
-                AppUtils.hideKeyboard(mTvUserName, TAG);
-                AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
-            }
+            AppUtils.hideKeyboard(mTvUserName, TAG);
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
         }
     }
 
