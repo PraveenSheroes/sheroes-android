@@ -291,7 +291,6 @@
 
 
     <!--Google Analytics Screen Names-->
-    <string name="ID_VEDIO_PLAYER_SCREEN">video play</string>
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
     <string name="communities_listing">Communities Screen</string>

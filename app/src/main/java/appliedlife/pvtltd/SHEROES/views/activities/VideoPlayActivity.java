@@ -10,12 +10,14 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -41,11 +43,6 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         youTubeView.initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         playerStateChangeListener = new MyPlayerStateChangeListener();
         playbackEventListener = new MyPlaybackEventListener();
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_VEDIO_PLAYER_SCREEN));
-
-        HashMap<String, Object> properties = new EventProperty.Builder().url(videoString).build();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
-        AnalyticsManager.trackScreenView(SCREEN_LABEL);
     }
 
     @Override
@@ -122,7 +119,18 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
             getYouTubePlayerProvider().initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         }
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AnalyticsManager.timeScreenView(SCREEN_LABEL);
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        HashMap<String, Object> properties = new EventProperty.Builder().url(videoString).build();
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+    }
     @Override
     public void onBackPressed() {
         if (player != null) {
