@@ -170,29 +170,40 @@
 
                     <TextView
                         android:id="@+id/link_description"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:fontFamily="sans-serif-medium"
-                        android:maxLines="1"
-                        android:textColor="#3c3c3c"
-                        android:textSize="12sp"
-                        android:textStyle="normal"
-                        tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_16"
+                        android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/link_sub_title"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/link_description"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="@dimen/dp_size_4"
                         android:ellipsize="end"
-                        android:fontFamily="sans-serif-medium"
-                        android:maxLines="1"
-                        android:textColor="#3c3c3c"
-                        android:textSize="12sp"
-                        android:textStyle="normal"
-                        tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_12" />
+
+                    <TextView
+                        android:id="@+id/tv_source_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/link_sub_title"
+                        android:layout_marginTop="@dimen/dp_size_12"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:text="@string/youtube"
+                        android:textAllCaps="true"
+                        android:textColor="@color/posted_in"
+                        android:textSize="@dimen/sp_size_9" />
                 </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>

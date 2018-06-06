@@ -628,5 +628,7 @@
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
     <string name="home_label">Home</string>
+    <string name="youtube">Youtube.com</string>
+
 
 </resources>
