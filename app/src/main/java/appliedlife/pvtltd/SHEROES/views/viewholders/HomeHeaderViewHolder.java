@@ -42,14 +42,6 @@ import butterknife.OnClick;
 
 public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
-    //region private member variables
-    private String mPhotoUrl;
-    private String loggedInUser;
-    private long userId;
-    private FeedDetail dataItem;
-    private boolean isToolTip;
-    //endregion
-
     //region dagger injection
     @Inject
     Preference<LoginResponse> userPreference;
@@ -74,6 +66,14 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
+    //endregion
+
+    //region private member variables
+    private String mPhotoUrl;
+    private String loggedInUser;
+    private long userId;
+    private FeedDetail dataItem;
+    private boolean isToolTip;
     //endregion
 
     //region Constructor
