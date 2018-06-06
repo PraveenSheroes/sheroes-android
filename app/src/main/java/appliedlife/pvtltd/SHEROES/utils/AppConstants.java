@@ -204,7 +204,7 @@ public class AppConstants {
     public static final String AND_SIGN = "&";
     public static final int MENTOR_TYPE_ID = 7;
 
-    public static final String HOME_USER_NAME_PREF = "HOME_USER_NAME";
+    public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
     public static final String CREATE_POST_SHARE_PREF = "CREATE_POST_ANONYMOUS";
     public static final String ASK_QUESTION_SHARE_PREF = "ASK_QUESTION_ANONYMOUS";
