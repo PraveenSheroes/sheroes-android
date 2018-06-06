@@ -21,15 +21,17 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
     private static final String SCREEN_LABEL = "Video Play Screen";
     private static final int RECOVERY_REQUEST = 1;
-
+    // region member variables
     private YouTubePlayerView youTubeView;
     private MyPlayerStateChangeListener playerStateChangeListener;
     private MyPlaybackEventListener playbackEventListener;
     private YouTubePlayer player;
     private String videoString;
+    // endregion
 
+    // region overridden methods
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.video_player_activity);
         if (null != getIntent() && null != getIntent().getExtras()) {
@@ -121,10 +123,17 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         }
     }
 
-    protected YouTubePlayer.Provider getYouTubePlayerProvider() {
-        return youTubeView;
+    @Override
+    public void onBackPressed() {
+        if (player != null) {
+            player.release();
+        }
+        player = null;
+        finish();
     }
+    // endregion
 
+    // region Private methods
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
@@ -192,13 +201,9 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
             // Called when an error occurs.
         }
     }
+    // endregion
 
-    @Override
-    public void onBackPressed() {
-        if (player != null) {
-            player.release();
-        }
-        player = null;
-        finish();
+    protected YouTubePlayer.Provider getYouTubePlayerProvider() {
+        return youTubeView;
     }
 }
