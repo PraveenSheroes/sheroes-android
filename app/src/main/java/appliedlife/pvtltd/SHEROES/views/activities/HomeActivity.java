@@ -906,6 +906,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
         }
 
     }

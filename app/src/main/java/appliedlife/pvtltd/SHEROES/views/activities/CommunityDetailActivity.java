@@ -844,12 +844,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             data.add(feedProgressBar);
 
             mMyCommunitiesAdapter.setData(data);
+            mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
 
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
         }
-        mMyCommunitiesAdapter.notifyDataSetChanged();
     }
 
     @Override
