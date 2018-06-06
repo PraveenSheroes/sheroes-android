@@ -199,12 +199,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
             return;
         }
-        sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-            @Override
-            public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                return feedResponsePojo;
-            }
-        })
+        sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<FeedResponsePojo>() {
