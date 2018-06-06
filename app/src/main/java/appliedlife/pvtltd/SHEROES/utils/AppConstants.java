@@ -380,7 +380,7 @@ public class AppConstants {
     public static final int NOTIFICATION_SESSION = 4;
     public static final int ALBUM_SESSION = 2;
     public static final int ARTICLE_SESSION = 2;
-    public static final int HEADER_SESSION = 2;
+    public static final int HEADER_SESSION = 3;
     public static final int INVITE_FRIEND_SESSION = 2;
     public static final int ASK_QUESTION_SESSION = 2;
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
