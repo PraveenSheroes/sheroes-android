@@ -463,7 +463,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             ivLinkThumbnail.setImageBitmap(profileImage);
                             pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
-                                ivPlay.getBackground().setAlpha(75);
                                 ivPlay.setVisibility(View.VISIBLE);
                             } else {
                                 ivPlay.setVisibility(View.GONE);

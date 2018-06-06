@@ -161,7 +161,7 @@
                 android:id="@+id/fm_image_thumb"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_180"
-                android:background="@color/comment_box_edit_border">
+                android:background="@color/video_thumbnail_view">
 
                 <ImageView
                     android:id="@+id/iv_post_link_thumbnail"
@@ -176,9 +176,8 @@
                     android:layout_width="@dimen/dp_size_50"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_media_play_dark"
-                    android:visibility="gone"
-                    android:background="@drawable/circular_view" />/>
+                    android:visibility="visible"
+                    android:src="@drawable/ic_video_play_icon" />/>
 
                 <ProgressBar
                     android:id="@+id/progress_bar_post_link"
