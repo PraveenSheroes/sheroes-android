@@ -9,6 +9,7 @@
     <color name="gray_light">#878787</color>
     <color name="user_tagg">#2793e7</color>
     <color name="comment_box_edit_border">#66aaaaaa</color>
+    <color name="video_thumbnail_view">#dedede</color>
     <color name="primary_text_default_dark">#FFFFFFFF</color>
     <color name="primary_text_disabled_dark">#4DFFFFFF</color>
     <color name="secondary_text_disabled_dark">#36FFFFFF</color>

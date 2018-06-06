@@ -280,8 +280,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.tv_communities)
     public TextView mTvCommunities;
 
-    @Bind(R.id.fl_notification)
-    FrameLayout mFlNotification;
+    @Bind(R.id.tv_home_notification_icon)
+    TextView mTvNotification;
 
     @Bind(R.id.title_text)
     TextView mTitleText;
@@ -304,8 +304,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.tv_drawer_navigation)
     public TextView tvDrawerNavigation;
 
-    @Bind(R.id.view_tool_tip_nav)
-    public View viewToolTipNav;
 
     @Bind(R.id.iv_new_tag)
     public ImageView ivNewTag;
@@ -342,7 +340,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
-    private boolean isDrawerOpen;
     //endregion
 
     // region Public methods
@@ -481,7 +478,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @OnClick(R.id.fl_nav_communities)
     public void onClickNavigationCommunities() {
         ivNewTag.setVisibility(View.GONE);
-        isDrawerOpen = true;
         mDrawer.openDrawer(GravityCompat.END);
     }
 
@@ -575,16 +571,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            if (isDrawerOpen) {
-                isDrawerOpen = false;
-                mPullRefreshList = new SwipPullRefreshList();
-                mPullRefreshList.setPullToRefresh(false);
-                mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-                mFragmentListRefreshData.setSwipeToRefresh(1);
-                activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-                AppUtils.hideKeyboard(mTvUserName, TAG);
-                AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
-            }
+            AppUtils.hideKeyboard(mTvUserName, TAG);
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
         }
     }
 
@@ -793,9 +781,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
     }
 
-    @OnClick(R.id.fl_notification)
+    @OnClick(R.id.tv_home_notification_icon)
     public void notificationClick() {
-        // mDrawer.openDrawer(Gravity.START);
         AppUtils.hideKeyboard(mTvUserName, TAG);
         bellNotificationDialog();
     }
@@ -914,12 +901,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             data.add(feedProgressBar);
 
             mMyCommunitiesAdapter.setData(data);
+            mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
 
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
         }
-        mMyCommunitiesAdapter.notifyDataSetChanged();
+
     }
 
     @Override
@@ -1290,7 +1279,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         try {
             if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
                 if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
-                    Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
+                    Tooltip.Builder builder = new Tooltip.Builder(mTvNotification, R.style.Tooltip)
                             .setCancelable(true)
                             .setDismissOnClick(true)
                             .setGravity(Gravity.BOTTOM)

@@ -9,4 +9,9 @@
         android:icon="@drawable/vector_invite_24dp"
         android:title="@string/action_share"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/nav_communities"
+        android:icon="@drawable/ic_nav_icon_community"
+        android:title="@string/action_share"
+        app:showAsAction="always" />
 </menu>

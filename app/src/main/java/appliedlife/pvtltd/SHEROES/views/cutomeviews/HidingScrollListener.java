@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommunitiesListPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.CommunityDetailPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -53,6 +54,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private FragmentListRefreshData mFragmentListRefreshData;
     private OnBoardingPresenter mOnBoardingPresenter;
     private MainActivityPresenter mMainActivityPresenter;
+    private CommunityDetailPresenterImpl mCommunityDetailPresenter;
 
     public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mOnBoardingPresenter = onBoardingPresenter;
@@ -112,6 +114,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
 
     public HidingScrollListener(MainActivityPresenter mainActivityPresenter, RecyclerView recyclerView, GridLayoutManager gridLayoutManager, FragmentListRefreshData mFragmentListRefreshData) {
         mMainActivityPresenter = mainActivityPresenter;
+        mRecyclerView = recyclerView;
+        mGridLayoutManager = gridLayoutManager;
+        this.mFragmentListRefreshData = mFragmentListRefreshData;
+    }
+
+    public HidingScrollListener(CommunityDetailPresenterImpl communityDetailPresenter, RecyclerView recyclerView, GridLayoutManager gridLayoutManager, FragmentListRefreshData mFragmentListRefreshData) {
+        mCommunityDetailPresenter = communityDetailPresenter;
         mRecyclerView = recyclerView;
         mGridLayoutManager = gridLayoutManager;
         this.mFragmentListRefreshData = mFragmentListRefreshData;
@@ -190,6 +199,11 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                     case AppConstants.MY_COMMUNITIES_DRAWER:
                         if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
                             mMainActivityPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
+                        }
+                        break;
+                    case AppConstants.COMMUNITY_DEATIL_DRAWER:
+                        if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
+                            mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
                         }
                         break;
                     case AppConstants.HOME_FRAGMENT:

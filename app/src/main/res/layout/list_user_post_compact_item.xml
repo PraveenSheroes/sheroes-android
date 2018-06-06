@@ -90,9 +90,9 @@
                 android:id="@+id/image_container"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:visibility="gone"
                 android:layout_below="@id/post_description"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="8dp"
+                android:visibility="gone">
 
                 <RelativeLayout
                     android:id="@+id/second_image_container"
@@ -103,9 +103,9 @@
                     <ImageView
                         android:id="@+id/image_second"
                         android:layout_width="150dp"
-                        android:layout_marginLeft="1dp"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
+                        android:layout_marginLeft="1dp"
                         android:scaleType="fitXY"
                         android:src="@color/email" />
 
@@ -138,10 +138,10 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/post_description"
                 android:layout_marginLeft="16dp"
-                android:visibility="gone"
                 android:layout_marginRight="16dp"
+                android:layout_marginTop="8dp"
                 android:background="@drawable/rectangle_border"
-                android:layout_marginTop="8dp">
+                android:visibility="gone">
 
                 <FrameLayout
                     android:id="@+id/link_image_container"
@@ -159,42 +159,52 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/circular_view"
-                        android:src="@drawable/ic_media_play_dark" />/>
+                        android:src="@drawable/ic_video_play_icon" />
                 </FrameLayout>
 
-                    <RelativeLayout
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/link_image_container"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:id="@+id/link_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@id/link_image_container"
-                        android:padding="8dp">
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_16"
+                        android:textStyle="normal" />
 
-                        <TextView
-                            android:id="@+id/link_description"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:fontFamily="sans-serif-medium"
-                            android:maxLines="1"
-                            android:textColor="#3c3c3c"
-                            android:textSize="12sp"
-                            android:textStyle="normal"
-                            tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
+                    <TextView
+                        android:id="@+id/link_sub_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/link_description"
+                        android:layout_marginTop="@dimen/dp_size_4"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:textColor="@color/comment_text"
+                        android:textSize="@dimen/sp_size_12" />
 
-                        <TextView
-                            android:id="@+id/link_sub_title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@id/link_description"
-                            android:layout_marginTop="4dp"
-                            android:ellipsize="end"
-                            android:fontFamily="sans-serif-medium"
-                            android:maxLines="1"
-                            android:textColor="#3c3c3c"
-                            android:textSize="12sp"
-                            android:textStyle="normal"
-                            tools:text="Lyrical: Moh Moh Ke Dhaage (Male) Song with Lyrics" />
-                    </RelativeLayout>
+                    <TextView
+                        android:id="@+id/tv_source_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/link_sub_title"
+                        android:layout_marginTop="@dimen/dp_size_12"
+                        android:ellipsize="end"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:maxLines="@integer/int_value_for_line_1"
+                        android:text="@string/youtube"
+                        android:textAllCaps="true"
+                        android:textColor="@color/posted_in"
+                        android:textSize="@dimen/sp_size_9" />
+                </RelativeLayout>
             </RelativeLayout>
         </RelativeLayout>
 
@@ -400,9 +410,9 @@
                     android:layout_below="@+id/comment_description"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="5dp"
-                    android:textSize="12sp"
                     android:layout_toRightOf="@+id/comment_author_image_container"
-                    android:drawablePadding="8dp" />
+                    android:drawablePadding="8dp"
+                    android:textSize="12sp" />
 
             </RelativeLayout>
 
@@ -459,9 +469,9 @@
 
     <FrameLayout
         android:id="@+id/fl_spam_post_ui"
-        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
         <FrameLayout
             android:layout_width="match_parent"

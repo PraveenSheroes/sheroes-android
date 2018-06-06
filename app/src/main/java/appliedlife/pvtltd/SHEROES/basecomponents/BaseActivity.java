@@ -33,6 +33,8 @@ import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +78,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkAndApiErrorDialog;
@@ -460,8 +463,25 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 return;
             }
             if (AppUtils.matchesWebsiteURLPattern(intent.getDataString())) {
-                Uri url = Uri.parse(intent.getDataString());
-                AppUtils.openChromeTab(this, url);
+                String urlString = intent.getDataString();
+                if (StringUtil.isNotNullOrEmptyString(urlString)) {
+                    try {
+                        URI uri = new URI(urlString);
+                        String domain = uri.getHost();
+                        if (domain.contains(AppConstants.YOUTUBE_VIDEO_CODE) || domain.contains(AppConstants.MOBILE_YOUTUBE_VIDEO_CODE) || domain.contains("youtube")) {
+                            Intent youTube = new Intent(this, VideoPlayActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, urlString);
+                            youTube.putExtras(bundle);
+                            startActivity(youTube);
+                        } else {
+                            Uri url = Uri.parse(urlString);
+                            AppUtils.openChromeTab(this, url);
+                        }
+                    } catch (URISyntaxException e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
+                }
                 handled = true;
             }
         }
