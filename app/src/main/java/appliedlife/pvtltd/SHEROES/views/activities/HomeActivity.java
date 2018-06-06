@@ -280,8 +280,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.tv_communities)
     public TextView mTvCommunities;
 
-    @Bind(R.id.fl_notification)
-    FrameLayout mFlNotification;
+    @Bind(R.id.tv_home_notification_icon)
+    TextView mTvNotification;
 
     @Bind(R.id.title_text)
     TextView mTitleText;
@@ -304,8 +304,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.tv_drawer_navigation)
     public TextView tvDrawerNavigation;
 
-    @Bind(R.id.view_tool_tip_nav)
-    public View viewToolTipNav;
 
     @Bind(R.id.iv_new_tag)
     public ImageView ivNewTag;
@@ -783,9 +781,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
     }
 
-    @OnClick(R.id.fl_notification)
+    @OnClick(R.id.tv_home_notification_icon)
     public void notificationClick() {
-        // mDrawer.openDrawer(Gravity.START);
         AppUtils.hideKeyboard(mTvUserName, TAG);
         bellNotificationDialog();
     }
@@ -1281,7 +1278,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         try {
             if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
                 if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
-                    Tooltip.Builder builder = new Tooltip.Builder(mFlNotification, R.style.Tooltip)
+                    Tooltip.Builder builder = new Tooltip.Builder(mTvNotification, R.style.Tooltip)
                             .setCancelable(true)
                             .setDismissOnClick(true)
                             .setGravity(Gravity.BOTTOM)
