@@ -572,7 +572,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             AppUtils.hideKeyboard(mTvUserName, TAG);
-            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES),getScreenName(),null);
         }
     }
 

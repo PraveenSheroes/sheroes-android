@@ -245,7 +245,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES));
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES),getScreenName(),null);
         }
 
     }
