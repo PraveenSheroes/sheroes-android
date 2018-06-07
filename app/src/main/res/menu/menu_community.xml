@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/leave_join"
         android:title="@string/ID_LEAVE"
+        android:visible="false"
         app:showAsAction="never"/>
     <item
         android:id="@+id/share"

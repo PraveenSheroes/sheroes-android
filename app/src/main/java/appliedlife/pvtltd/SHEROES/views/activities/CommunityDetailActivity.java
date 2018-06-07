@@ -488,7 +488,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mCommunityFeedSolrObj != null) {
+       /* if (mCommunityFeedSolrObj != null) {
             boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
             if (mCommunityFeedSolrObj != null) {
                 menu.findItem(R.id.leave_join).setTitle(isOwnerOrMember ? R.string.ID_LEAVE : R.string.ID_JOIN);
@@ -496,7 +496,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             if (mCommunityFeedSolrObj != null && mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID) {
                 menu.findItem(R.id.leave_join).setVisible(false);
             }
-        }
+        }*/
         MenuItem menuItem = menu.findItem(R.id.share);
         menuItem.getIcon().mutate();
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);

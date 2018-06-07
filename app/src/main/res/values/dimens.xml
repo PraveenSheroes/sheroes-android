@@ -159,5 +159,6 @@
     <dimen name="invite_btn_width">100dp</dimen>
     <dimen name="invite_btn_height">30dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="drawer_width">220dp</dimen>
 </resources>
 
