@@ -46,7 +46,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_gravity="center"
+        android:layout_gravity="right"
         android:paddingBottom="@dimen/dp_size_10"
         android:paddingRight="@dimen/dp_size_16"
         android:paddingTop="@dimen/dp_size_10"
@@ -57,12 +57,10 @@
         android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/fl_nav_communities"
-        android:layout_gravity="center"
-        android:layout_marginLeft="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_toEndOf="@+id/ic_sheroes"
-        android:layout_toRightOf="@+id/ic_sheroes"
+        android:layout_centerVertical="true"
+        android:layout_gravity="right"
+        android:layout_toLeftOf="@+id/tv_home_notification_icon"
+        android:layout_toStartOf="@+id/tv_home_notification_icon"
         android:padding="@dimen/dp_size_10"
         android:src="@drawable/vector_invite_24dp" />
 
@@ -84,11 +82,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/fl_nav_communities"
-        android:layout_gravity="center|right"
+        android:layout_gravity="right"
         android:layout_toLeftOf="@+id/fl_nav_communities"
         android:layout_toStartOf="@+id/fl_nav_communities"
         android:drawableLeft="@drawable/ic_notification"
-        android:padding="@dimen/dp_size_10" />
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingLeft="@dimen/dp_size_10"
+        android:paddingRight="@dimen/dp_size_10"
+        android:paddingTop="@dimen/dp_size_12" />
 
     <FrameLayout
         android:id="@+id/fl_notification_read_count"
@@ -97,7 +98,6 @@
         android:layout_alignEnd="@+id/tv_home_notification_icon"
         android:layout_alignRight="@+id/tv_home_notification_icon"
         android:layout_alignTop="@+id/tv_home_notification_icon"
-        android:layout_gravity="top|right"
         android:background="@drawable/ic_red_circle"
         android:backgroundTint="@color/footer_icon_text"
         android:visibility="gone">

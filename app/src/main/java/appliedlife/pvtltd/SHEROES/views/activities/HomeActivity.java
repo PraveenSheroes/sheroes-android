@@ -762,7 +762,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 doubleBackToExitPressedOnce = true;
                 if (flFeedFullView.getVisibility() == View.VISIBLE) {
                     Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-
                 } else {
                     homeOnClick();
                 }
@@ -779,6 +778,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         resetHamburgerSelectedItems();
+        if (mDrawer.isDrawerOpen(GravityCompat.START) || mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
     }
 
     @OnClick(R.id.tv_home_notification_icon)
