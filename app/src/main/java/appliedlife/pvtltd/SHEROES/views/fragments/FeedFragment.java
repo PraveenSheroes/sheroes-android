@@ -437,18 +437,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     if (firstVisibleItem == 0) {
                         if (!mControlsVisible) {
                             ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                            ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.GONE);
                             mControlsVisible = true;
                         }
                     } else {
                         if (mScrolledDistance > HIDE_THRESHOLD && mControlsVisible) {
                             ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
-                            ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.VISIBLE);
                             mControlsVisible = false;
                             mScrolledDistance = 0;
                         } else if (mScrolledDistance < -HIDE_THRESHOLD && !mControlsVisible) {
                             ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                            ((HomeActivity) getActivity()).mFloatActionBtn.setVisibility(View.GONE);
                             mControlsVisible = true;
                             mScrolledDistance = 0;
                         }

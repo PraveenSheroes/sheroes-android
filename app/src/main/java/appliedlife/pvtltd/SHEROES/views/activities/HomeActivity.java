@@ -657,6 +657,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mFloatActionBtn.setVisibility(View.VISIBLE);
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
         mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
