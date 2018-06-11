@@ -147,7 +147,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         invalidateToolBar();
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         this.localImageSaveForChallenge = localImageSaveForChallenge;
-        String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get() != null && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
+        String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
         mBody.setText(Html.fromHtml(articleGuideline));
         if (article == null) {
             shouldShowGuideLine = true;
@@ -375,7 +375,11 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @Override
     public void onEditorFragmentInitialized() {
         mEditorFragment.setTitlePlaceholder("Article Title");
-        mEditorFragment.setContentPlaceholder("Your awesome story");
+        String hintText="You story";
+        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            hintText = mConfiguration.get().configData.mHerStoryHintText;
+        }
+        mEditorFragment.setContentPlaceholder(hintText);
         mEditorFragment.setLocalDraft(true);
     }
 
