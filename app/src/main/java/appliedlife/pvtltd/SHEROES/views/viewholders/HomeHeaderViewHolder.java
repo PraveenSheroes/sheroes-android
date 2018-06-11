@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,7 +25,6 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -43,6 +41,15 @@ import butterknife.OnClick;
  */
 
 public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
+
+    //region dagger injection
+    @Inject
+    Preference<LoginResponse> userPreference;
+    @Inject
+    Preference<Configuration> mConfiguration;
+    //endregion
+
+    //region Bind view variables
     @Bind(R.id.card_header_view)
     CardView rootLayout;
     BaseHolderInterface viewInterface;
@@ -54,25 +61,22 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView userName;
     @Bind(R.id.ripple)
     RippleView rippleView;
-    private Context context;
     @Bind(R.id.new_offer)
-    ImageView newOffer;
+    FrameLayout newOffer;
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
+    //endregion
 
-    @Inject
-    Preference<LoginResponse> userPreference;
-    @Inject
-    Preference<Configuration> mConfiguration;
+    //region private member variables
     private String mPhotoUrl;
     private String loggedInUser;
     private long userId;
     private FeedDetail dataItem;
-    private View popupViewToolTip;
-    private PopupWindow popupWindowTooTip;
     private boolean isToolTip;
+    //endregion
 
+    //region Constructor
     public HomeHeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -83,18 +87,14 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         } else {
             isToolTip = false;
         }
-        //Hide the offer icon
-        if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF) || CommonUtil.getPrefValue(AppConstants.HOME_OFFER_PREF)) {
-            newOffer.setVisibility(View.VISIBLE);
-        } else {
-            newOffer.setVisibility(View.GONE);
-        }
-    }
 
+    }
+    //endregion
+
+    //region adapter method
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        this.context = context;
         if (null != userPreference && userPreference.isSet()  && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
@@ -124,8 +124,17 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         if (isToolTip) {
             toolTipForHeaderFeed(context);
         }
-    }
 
+        //Show/hide the new offer icon
+        if(CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF) || CommonUtil.getPrefValue(AppConstants.HOME_OFFER_PREF)) {
+            newOffer.setVisibility(View.GONE);
+        } else {
+            newOffer.setVisibility(View.VISIBLE);
+        }
+    }
+    //endregion
+
+    //region onClick method
     @OnClick(R.id.user_name)
     void userNameClickForProfile() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -151,27 +160,9 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.new_offer)
     void offerClickForProfile() {
-        if(!CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
-            openProfileActivity();
-            newOffer.setVisibility(View.GONE);
-        }
-    }
-
-    private void openProfileActivity() {
-        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleView rippleView) {
-                dataItem.setEntityOrParticipantId(userId);
-                if(viewInterface instanceof FeedItemCallback){
-                    CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-                    communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
-                    communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                    ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
-                }else {
-                    viewInterface.handleOnClick(dataItem, ivLoginUserPic);
-                }
-            }
-        });
+        newOffer.setVisibility(View.GONE);
+        CommonUtil.setPrefValue(AppConstants.HOME_OFFER_PREF);
+        navigateToProfileActivity();
     }
 
     @OnClick(R.id.header_msg)
@@ -188,7 +179,9 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         });
 
     }
+    //endregion
 
+    //region BaseViewHolder override methods
     @Override
     public void viewRecycled() {
 
@@ -197,6 +190,29 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void onClick(View v) {
 
+    }
+    //endregion
+
+    //region private methods
+    private void openProfileActivity() {
+        rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleView rippleView) {
+                navigateToProfileActivity();
+            }
+        });
+    }
+
+    private void navigateToProfileActivity() {
+        dataItem.setEntityOrParticipantId(userId);
+        if(viewInterface instanceof FeedItemCallback){
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
+        }else {
+            viewInterface.handleOnClick(dataItem, ivLoginUserPic);
+        }
     }
 
     private void toolTipForHeaderFeed(Context context) {
@@ -232,4 +248,5 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             Crashlytics.getInstance().core.logException(e);
         }
     }
+    //endregion
 }

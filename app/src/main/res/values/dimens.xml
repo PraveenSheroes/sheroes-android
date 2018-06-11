@@ -129,7 +129,7 @@
     <dimen name="challenge_completed_height">180dp</dimen>
     <dimen name="challenge_girl_height">151dp</dimen>
     <dimen name="challenge_girl_width">156dp</dimen>
-    <dimen name="nav_header_height">157dp</dimen>
+    <dimen name="nav_header_height">153dp</dimen>
 
 
     <!--Text sizes for SHEROES-->
@@ -159,5 +159,6 @@
     <dimen name="invite_btn_width">100dp</dimen>
     <dimen name="invite_btn_height">30dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="drawer_width">220dp</dimen>
 </resources>
 

@@ -182,6 +182,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 ImageViewHolder imageViewHolder = (ImageViewHolder) holder;
                 FeedDetail feedDetail2 = mFeedDetailList.get(position);
                 imageViewHolder.bindData(feedDetail2, mContext, position);
+                break;
         }
     }
 

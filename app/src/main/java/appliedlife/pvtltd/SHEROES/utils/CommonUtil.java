@@ -12,7 +12,6 @@ import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -28,7 +27,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -1191,9 +1189,27 @@ public class CommonUtil {
         return prefs.getString(key, "");
     }
 
-    public static boolean getPrefValue(String key) {
-        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        return prefs != null && prefs.getBoolean(key, false);
+    public static synchronized boolean getPrefValue(String key) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null && prefs.contains(key)) {
+                return prefs.getBoolean(key, false);
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return false;
+    }
+
+    public static synchronized void setPrefValue(String key) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null) {
+                prefs.edit().putBoolean(key, true).commit();
+            }
+        }catch (Exception e) {
+            LogUtils.error(TAG, e.toString());
+        }
     }
 
     public static void setTimeForContacts(String key, long contactSyncTime) {

@@ -14,12 +14,6 @@
         android:paddingTop="@dimen/dp_size_10"
         android:visibility="visible" />
 
-    <View
-        android:id="@+id/view_tool_tip_nav"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="@dimen/dp_size_30" />
-
     <TextView
         android:id="@+id/title_text"
         style="@style/TextAppearance.Toolbar"
@@ -44,78 +38,76 @@
         android:layout_marginTop="@dimen/dp_size_16"
         android:background="@drawable/ic_sheroes_header" />
 
-    <FrameLayout
+
+    <ImageView
         android:id="@+id/fl_nav_communities"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true">
+        android:layout_alignParentTop="true"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingRight="@dimen/dp_size_16"
+        android:paddingTop="@dimen/dp_size_10"
+        android:src="@drawable/vector_communities_nav_icon" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_16"
-            android:paddingTop="@dimen/dp_size_10"
-            android:src="@drawable/vector_communities_nav_icon" />
-
-        <ImageView
-            android:id="@+id/iv_new_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/dp_size_14"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:src="@drawable/ic_new_tag"
-            android:visibility="gone" />
-
-    </FrameLayout>
-
-
-    <FrameLayout
-        android:id="@+id/fl_notification"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/fl_nav_communities">
-
-        <TextView
-            android:id="@+id/iv_home_notification_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|right"
-            android:drawableLeft="@drawable/ic_notification"
-            android:padding="@dimen/dp_size_10" />
-
-        <FrameLayout
-            android:id="@+id/fl_notification_read_count"
-            android:layout_width="@dimen/dp_size_25"
-            android:layout_height="@dimen/dp_size_25"
-            android:layout_gravity="top|right"
-            android:layout_marginBottom="@dimen/dp_size_10"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/ic_red_circle"
-            android:backgroundTint="@color/footer_icon_text"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tv_notification_read_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_size_9" />
-        </FrameLayout>
-    </FrameLayout>
 
     <ImageView
         android:id="@+id/invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_toLeftOf="@id/fl_notification"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/tv_home_notification_icon"
+        android:layout_toStartOf="@+id/tv_home_notification_icon"
         android:padding="@dimen/dp_size_10"
         android:src="@drawable/vector_invite_24dp" />
+
+    <ImageView
+        android:id="@+id/iv_new_tag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fl_nav_communities"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="-8dp"
+        android:layout_toEndOf="@+id/tv_home_notification_icon"
+        android:layout_toRightOf="@+id/tv_home_notification_icon"
+        android:src="@drawable/ic_new_tag"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_home_notification_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fl_nav_communities"
+        android:layout_toLeftOf="@+id/fl_nav_communities"
+        android:layout_toStartOf="@+id/fl_nav_communities"
+        android:drawableLeft="@drawable/ic_notification"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingLeft="@dimen/dp_size_10"
+        android:paddingRight="@dimen/dp_size_10"
+        android:paddingTop="@dimen/dp_size_14" />
+
+    <FrameLayout
+        android:id="@+id/fl_notification_read_count"
+        android:layout_width="@dimen/dp_size_25"
+        android:layout_height="@dimen/dp_size_25"
+        android:layout_alignEnd="@+id/tv_home_notification_icon"
+        android:layout_alignRight="@+id/tv_home_notification_icon"
+        android:layout_alignTop="@+id/tv_home_notification_icon"
+        android:background="@drawable/ic_red_circle"
+        android:backgroundTint="@color/footer_icon_text"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_notification_read_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_9" />
+    </FrameLayout>
+
+
 </RelativeLayout>

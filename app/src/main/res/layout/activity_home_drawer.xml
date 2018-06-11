@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/nav_menu_header"
         android:layout_width="match_parent"
         android:layout_height="@dimen/nav_header_height"
-        android:layout_marginTop="@dimen/dp_size_24"
         android:background="@drawable/nav_header_background"
         android:orientation="vertical">
 
@@ -51,11 +51,10 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:visibility="gone" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_2"
-            android:layout_marginTop="@dimen/dp_size_4"
-            android:background="@color/nav_menu_header_divider" />
     </LinearLayout>
-</FrameLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_2"
+        android:background="@color/nav_menu_header_divider" />
+</LinearLayout>

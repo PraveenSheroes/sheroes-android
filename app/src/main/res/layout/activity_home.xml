@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:fitsSystemWindows="false"
     tools:openDrawer="start">
 
     <include layout="@layout/activity_home_dashboard" />
@@ -49,7 +49,7 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view_right_drawer_communities"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="@color/white"
@@ -67,7 +67,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:layout_marginTop="48dp"
+                android:layout_marginTop="24dp"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/ID_MY_COMMUNITIES"
@@ -94,7 +94,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="24dp"
-                    android:layout_marginRight="@dimen/dp_size_16" />
+                    android:layout_marginRight="@dimen/dp_size_24" />
             </FrameLayout>
 
             <ImageView

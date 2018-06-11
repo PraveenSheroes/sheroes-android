@@ -3,10 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/leave_join"
         android:title="@string/ID_LEAVE"
+        android:visible="false"
         app:showAsAction="never"/>
     <item
         android:id="@+id/share"
         android:icon="@drawable/vector_invite_24dp"
+        android:title="@string/action_share"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/nav_communities"
+        android:icon="@drawable/ic_nav_icon_community"
         android:title="@string/action_share"
         app:showAsAction="always" />
 </menu>

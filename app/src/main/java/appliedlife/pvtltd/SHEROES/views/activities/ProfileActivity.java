@@ -757,7 +757,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.new_feature)
     protected void openUserProfileLevelDialog() {
-        if (!CommonUtil.ensureFirstTime(AppConstants.PROFILE_OFFER_PREF) && mUserSolarObject != null) {
+        if (mUserSolarObject != null) {
+            CommonUtil.setPrefValue(AppConstants.PROFILE_OFFER_PREF);
             ProfileProgressDialog.ProfileLevelType profileLevelType = userLevel(mUserSolarObject);
             openProfileProfileLevelDialog(profileLevelType);
             newFeature.setVisibility(View.GONE);

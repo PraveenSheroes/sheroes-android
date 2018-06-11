@@ -130,6 +130,7 @@ public class AppConstants {
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_DRAWER = "my_communities_drawer";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
+    public static final String COMMUNITY_DEATIL_DRAWER = "community_detail_drawer";
     public static final String ARTICLE_FRAGMENT = "article";
     public static final String COMMUNITY_POST_FRAGMENT = "community_post_fragment";
     public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
@@ -379,7 +380,7 @@ public class AppConstants {
     public static final int NOTIFICATION_SESSION = 4;
     public static final int ALBUM_SESSION = 2;
     public static final int ARTICLE_SESSION = 2;
-    public static final int HEADER_SESSION = 2;
+    public static final int HEADER_SESSION = 3;
     public static final int INVITE_FRIEND_SESSION = 2;
     public static final int ASK_QUESTION_SESSION = 2;
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";

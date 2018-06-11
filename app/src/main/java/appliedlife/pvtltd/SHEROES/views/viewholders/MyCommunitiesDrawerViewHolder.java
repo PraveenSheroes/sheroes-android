@@ -31,7 +31,6 @@ import butterknife.OnClick;
 public class MyCommunitiesDrawerViewHolder extends BaseViewHolder<FeedDetail> {
 
     //region private variables
-    private BaseHolderInterface viewInterface;
     private FeedDetail mFeedDetail;
     private Context mContext;
     //endregion
@@ -54,7 +53,6 @@ public class MyCommunitiesDrawerViewHolder extends BaseViewHolder<FeedDetail> {
     public MyCommunitiesDrawerViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
     //endregion
@@ -97,7 +95,11 @@ public class MyCommunitiesDrawerViewHolder extends BaseViewHolder<FeedDetail> {
         communityItemContainer.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                CommunityDetailActivity.navigateTo(((HomeActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, "Communities drawer", null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                if (mContext instanceof HomeActivity) {
+                    CommunityDetailActivity.navigateTo(((HomeActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, mContext.getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                } else if (mContext instanceof CommunityDetailActivity) {
+                    CommunityDetailActivity.navigateTo(((CommunityDetailActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, mContext.getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                }
             }
         });
 

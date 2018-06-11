@@ -89,6 +89,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/dp_size_65"
         android:layout_marginRight="@dimen/dp_size_20"
+        android:visibility="gone"
         android:src="@drawable/ic_pencil"
         app:backgroundTint="@color/email" />
 

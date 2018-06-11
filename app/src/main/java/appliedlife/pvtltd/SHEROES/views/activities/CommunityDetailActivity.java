@@ -12,8 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -23,7 +25,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.graphics.drawable.DrawableCompat;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -66,7 +73,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -78,6 +88,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
@@ -87,13 +100,14 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
  */
 
-public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView {
+public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String TAB_KEY = "tab_key";
     private String streamType;
@@ -123,6 +137,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @Inject
     Preference<LoginResponse> userPreference;
 
+    @Bind(R.id.pb_communities_drawer)
+    ProgressBar pbCommunitiesDrawer;
+
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -143,8 +160,18 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Bind(R.id.bottom_bar)
     FrameLayout mBottomBar;
+
     @Bind(R.id.view_tool_tip_invite)
     View viewToolTipInvite;
+
+    @Bind(R.id.drawer_community_layout)
+    DrawerLayout mDrawer;
+
+    @Bind(R.id.nav_view_right_drawer_community_detail)
+    NavigationView mNavigationViewRightDrawerWithCommunity_detail;
+
+    @Bind(R.id.rv_right_drawer_community_detail)
+    RecyclerView mRecyclerViewDrawerCommunities;
 
 
     private CommunityFeedSolrObj mCommunityFeedSolrObj;
@@ -160,6 +187,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private int mFromNotification;
     private View inviteFriendToolTip;
     private PopupWindow popupWindowInviteFriendTooTip;
+    private CustiomActionBarToggle mCustiomActionBarToggle;
+
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    private SwipPullRefreshList mPullRefreshList;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -168,7 +201,8 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         setContentView(R.layout.activity_community_detail);
         ButterKnife.bind(this);
         mCommunityDetailPresenter.attachView(this);
-
+        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mDrawer.addDrawerListener(mCustiomActionBarToggle);
         if (getIntent() != null && getIntent().getExtras() != null) {
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
@@ -201,6 +235,24 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 toolTipForInviteFriends();
             }
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    public void onDrawerOpened() {
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES),getScreenName(),null);
+        }
+
+    }
+
+    @Override
+    public void onDrawerClosed() {
+
     }
 
     private void toolTipForInviteFriends() {
@@ -279,6 +331,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     }
 
     private void initializeLayout() {
+        setUpMyCommunitiesList();
         setAllColor();
         setupToolbarItemsColor();
         setupColorTheme();
@@ -287,6 +340,34 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         invalidateBottomBar();
         setupToolBar();
         invalidateOptionsMenu();
+    }
+
+    private void setUpMyCommunitiesList() {
+        mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
+        mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
+        //For right navigation drawer communities items
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DEATIL_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(mCommunityDetailPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
+        ((SimpleItemAnimator) mRecyclerViewDrawerCommunities.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     private void setupToolBar() {
@@ -363,7 +444,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
                     refreshCurrentFragment();
                     break;
-
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
+                    this.finish();
+                    break;
                 case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
                     Parcelable parcelableArticlePost = data.getParcelableExtra(AppConstants.HOME_FRAGMENT);
                     ArticleSolrObj articleSolrObj = null;
@@ -392,7 +475,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         invalidateItem(userPostSolrObj);
                     }
             }
-        } else  if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
         }
     }
@@ -405,7 +488,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-        if (mCommunityFeedSolrObj != null) {
+       /* if (mCommunityFeedSolrObj != null) {
             boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
             if (mCommunityFeedSolrObj != null) {
                 menu.findItem(R.id.leave_join).setTitle(isOwnerOrMember ? R.string.ID_LEAVE : R.string.ID_JOIN);
@@ -413,11 +496,22 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             if (mCommunityFeedSolrObj != null && mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID) {
                 menu.findItem(R.id.leave_join).setVisible(false);
             }
-        }
+        }*/
         MenuItem menuItem = menu.findItem(R.id.share);
         menuItem.getIcon().mutate();
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        MenuItem item = menu.findItem(R.id.nav_communities);
+        item.getIcon().mutate();
+        item.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
     }
 
     @Override
@@ -449,6 +543,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 break;
             case android.R.id.home:
                 onBackPressed();
+                break;
+            case R.id.nav_communities:
+                mDrawer.openDrawer(GravityCompat.END);
                 break;
         }
         return true;
@@ -725,6 +822,35 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         }
 
         initializeLayout();
+    }
+
+    @Override
+    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
+        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        pbCommunitiesDrawer.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
+            mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+
+            List<FeedDetail> data = null;
+            FeedDetail feedProgressBar = new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            data = mPullRefreshList.getFeedResponses();
+            int position = data.size() - feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
+            }
+            data.add(feedProgressBar);
+
+            mMyCommunitiesAdapter.setData(data);
+            mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
+
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override

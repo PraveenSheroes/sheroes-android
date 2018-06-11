@@ -626,13 +626,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
                         public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                            //fmImageThumb.setLayoutParams(params);
                             mLinkImage.setVisibility(View.VISIBLE);
                             mLinkImage.setImageBitmap(profileImage);
-                            //  pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
-                                mPlayIcon.getBackground().setAlpha(75);
                                 mPlayIcon.setVisibility(View.VISIBLE);
                             } else {
                                 mPlayIcon.setVisibility(View.GONE);

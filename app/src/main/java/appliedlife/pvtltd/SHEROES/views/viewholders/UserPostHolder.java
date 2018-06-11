@@ -242,23 +242,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         populatePostText();
         allTextViewStringOperations(mContext);
         likeCommentOps();
-/*
-        if (mUserPostObj.getAuthorId() == userId || mUserPostObj.isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
-            mPostMenu.setVisibility(View.VISIBLE);
-            if (mUserPostObj.getCommunityId() == AppConstants.NO_REACTION_CONSTANT) {
-                mPostMenu.setVisibility(View.GONE);
-            } else {
-                mPostMenu.setVisibility(View.VISIBLE);
-                if (mUserPostObj.communityId == 0) {
-                    mPostMenu.setVisibility(View.GONE);
-                } else {
-                    mPostMenu.setVisibility(View.VISIBLE);
-                }
-
-            }
-        } else {
-            mPostMenu.setVisibility(View.GONE);
-        }*/
         mPostMenu.setVisibility(View.VISIBLE);
     }
 
