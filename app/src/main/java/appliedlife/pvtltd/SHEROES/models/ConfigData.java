@@ -57,4 +57,7 @@ public class ConfigData {
     @SerializedName("intermediate_tick_index")
     public  int intermediateStartIndex = 5;
 
+    @SerializedName("promoCardUrl")
+    public String mPromoCardUrl = "Quiz";
+
 }

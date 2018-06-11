@@ -35,10 +35,13 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -185,10 +188,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private boolean mControlsVisible = true;
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
+
     @Override
     public void onCreate(Bundle bundle) {
-        super.onCreate(bundle );
+        super.onCreate(bundle);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -911,16 +916,31 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onImagePostClicked(ImageSolrObj imageSolrObj) {
         if (CommonUtil.isNotEmpty(imageSolrObj.getDeepLinkUrl())) {
-            Uri url = Uri.parse(imageSolrObj.getDeepLinkUrl());
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(url);
-            startActivity(intent);
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(String.valueOf(imageSolrObj.getIdOfEntityOrParticipant()))
-                            .url(imageSolrObj.getDeepLinkUrl())
-                            .build();
-            AnalyticsManager.trackEvent(Event.IMAGE_CARD, null, properties);
+            try {
+                URI uri = new URI(imageSolrObj.getDeepLinkUrl());
+                String uriPath = uri.getPath();
+                String mPromoCardUrl="Quiz";
+                if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                    mPromoCardUrl = mConfiguration.get().configData.mPromoCardUrl;
+                }
+                if (uriPath.contains("/"+mPromoCardUrl.toLowerCase())) {
+                    if (null != getActivity() && getActivity() instanceof HomeActivity)
+                        ((HomeActivity) getActivity()).openWebUrlFragment(imageSolrObj.getDeepLinkUrl(), mPromoCardUrl);
+                } else {
+                    Uri url = Uri.parse(imageSolrObj.getDeepLinkUrl());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(url);
+                    startActivity(intent);
+                }
+                HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(String.valueOf(imageSolrObj.getIdOfEntityOrParticipant()))
+                                .url(imageSolrObj.getDeepLinkUrl())
+                                .build();
+                AnalyticsManager.trackEvent(Event.IMAGE_CARD, null, properties);
+            } catch (URISyntaxException e) {
+                Crashlytics.getInstance().core.logException(e);
+            }
         }
     }
 
