@@ -128,6 +128,8 @@ public class NavigateToWebViewFragment extends BaseFragment {
             mForceCustomTab = getArguments().getBoolean(FORCE_CUSTOM_TAB, false);
             if(!hasFooter){
                 mMainContainer.setPadding(0, 0,0 ,0);
+            }else {
+                mMainContainer.setPadding(0, 0, 0, CommonUtil.navHeight(getActivity()));
             }
             currentSelectedItemName = getArguments().getString(AppConstants.SELECTED_MENU_NAME);
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
