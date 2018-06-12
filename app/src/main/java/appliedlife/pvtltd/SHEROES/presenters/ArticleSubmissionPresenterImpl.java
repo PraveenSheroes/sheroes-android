@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.crashlytics.android.Crashlytics;
@@ -73,7 +74,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
 
     }
 
-    public void uploadFile(Uri fullPath, Context applicationContext) {
+   /* public void uploadFile(Uri fullPath, Context applicationContext) {
         final String reportImagePath = FileUtil.getExternalStorageDirectory() + File.separator + new Date().getTime() + Math.floor(Math.random() * 10000) + ".jpg";
         if (fullPath != null) {
             // Generate slide
@@ -87,9 +88,12 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                             }
 
                             File file = new File(reportImagePath);
+                            Bitmap photo = CompressImageUtil.decodeFile(file);
+                            String encodedImageUrl = CompressImageUtil.setImageOnHolder(photo);
+
                             UploadImageRequest uploadImageRequest = new UploadImageRequest();
                             uploadImageRequest.images = new ArrayList<>();
-                            uploadImageRequest.images.add(RequestBody.create(MediaType.parse(FileUtil.getMimeType(reportImagePath)), file).toString());
+                            uploadImageRequest.images.add(encodedImageUrl);
 
                             return sheroesAppServiceApi.uploadImage(uploadImageRequest);
                         }
@@ -123,6 +127,33 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                 }
             });
         }
+    }*/
+
+    public void uploadFile(String encodedImage, Context applicationContext) {
+        UploadImageRequest uploadImageRequest = new UploadImageRequest();
+        uploadImageRequest.images = new ArrayList<>();
+        uploadImageRequest.images.add(encodedImage);
+                    sheroesAppServiceApi.uploadImage(uploadImageRequest)
+                    .compose(this.<UpLoadImageResponse>bindToLifecycle())
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<UpLoadImageResponse>() {
+                @Override
+                public void onNext(UpLoadImageResponse upLoadImageResponse) {
+                    String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
+                    getMvpView().showImage(finalImageUrl);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
     }
     //endregion
 

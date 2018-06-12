@@ -331,6 +331,6 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/deactivate_or_reactivate")
     Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);
 
-    @POST("participation/article/image/add")
+    @POST("participation/image/add")
     Observable<UpLoadImageResponse> uploadImage(@Body UploadImageRequest uploadImageRequest);
 }

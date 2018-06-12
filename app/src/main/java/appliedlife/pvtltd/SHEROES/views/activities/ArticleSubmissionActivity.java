@@ -340,7 +340,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        mArticleSubmissionPresenter.uploadFile(result.getUri(), this);
+                        mArticleSubmissionPresenter.uploadFile(mEncodeImageUrl, this);
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
@@ -424,16 +424,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
-                .setAspectRatio(1, 1)
                 .setAllowRotation(true)
                 .start(this);
     }
 
     public void selectImageFrmGallery() {
         CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
-                .setAspectRatio(1, 1)
                 .setAllowRotation(true)
                 .start(this);
     }
