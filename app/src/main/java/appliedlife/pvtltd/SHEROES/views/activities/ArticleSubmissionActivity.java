@@ -64,6 +64,7 @@ import appliedlife.pvtltd.SHEROES.utils.ArticleStatus;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
@@ -318,6 +319,11 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
                         cropingIMG();
                     }
                     break;
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    if (resultCode == Activity.RESULT_OK) {
+                        cropingIMG();
+                    }
+                    break;
                 case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
                     imageCropping(intent);
                     break;
@@ -325,39 +331,23 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
                 case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                     CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                     if (resultCode == RESULT_OK) {
-                        MediaFile mediaFile = new MediaFile();
                         try {
                             File file = new File(result.getUri().getPath());
                             Bitmap photo = CompressImageUtil.decodeFile(file);
                             mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-                            mediaFile.setFileURL(file.getPath());
-                            String mediaId = String.valueOf(System.currentTimeMillis());
-                            mediaFile.setMediaId(mediaId);
-                            mediaFile.setVideo(false);
-                            mEditorFragment.appendMediaFile(mediaFile, "", null);
+
 
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        //showImage(mEncodeImageUrl);
-                        //mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
+                        mArticleSubmissionPresenter.uploadFile(result.getUri(), this);
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
+
+                    break;
             }
         }
-       /* final CameraUtil.OnImageCroppedListener listener = new CameraUtil.OnImageCroppedListener() {
-            @Override
-            public void onDone(final Uri outputUri) {
-                if (outputUri != null) {
-                    showProgressBar();
-                    mArticleSubmissionPresenter.uploadFile(outputUri, getApplicationContext());
-                }
-            }
-        };
-        if (mCameraUtil != null) {
-            mCameraUtil.onResult(this, listener, requestCode, resultCode, data);
-        }*/
     }
     //endregion
 
@@ -390,16 +380,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void onAddMediaClicked() {
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setAllowRotation(true)
-                .start(this);
-       /* if (!CommonUtil.isMarshmallow()) {
-            showCamera();
-        } else {
-            RxUtil.requestPermission(ArticleSubmissionActivity.this, CareApplication.getAppContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE, Globals.STORAGE_PERMISSION, Globals.CAMERA);
-        }*/
+        CameraBottomSheetFragment.showDialog(this, getScreenName());
     }
 
     @Override
@@ -437,6 +418,25 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     }
     //endregion
+
+
+    public void selectImageFrmCamera() {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
+                .start(this);
+    }
+
+    public void selectImageFrmGallery() {
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
+                .start(this);
+    }
 
     //region private methods
     private void showCamera() {

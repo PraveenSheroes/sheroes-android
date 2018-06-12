@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import butterknife.Bind;
@@ -106,6 +107,9 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         if(getActivity() instanceof ProfileActivity){
             ((ProfileActivity) getActivity()).selectImageFrmCamera();
         }
+        if(getActivity() instanceof ArticleSubmissionActivity){
+            ((ArticleSubmissionActivity) getActivity()).selectImageFrmCamera();
+        }
         dismiss();
     }
 
@@ -116,6 +120,10 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         }
         if(getActivity() instanceof ProfileActivity){
             ((ProfileActivity) getActivity()).selectImageFrmGallery();
+        }
+
+        if(getActivity() instanceof ArticleSubmissionActivity){
+            ((ArticleSubmissionActivity) getActivity()).selectImageFrmGallery();
         }
         dismiss();
     }

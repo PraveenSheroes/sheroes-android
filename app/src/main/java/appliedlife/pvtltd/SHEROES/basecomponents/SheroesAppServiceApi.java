@@ -34,6 +34,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
@@ -329,4 +331,6 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/deactivate_or_reactivate")
     Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);
 
+    @POST("participation/article/image/add")
+    Observable<UpLoadImageResponse> uploadImage(@Body UploadImageRequest uploadImageRequest);
 }
