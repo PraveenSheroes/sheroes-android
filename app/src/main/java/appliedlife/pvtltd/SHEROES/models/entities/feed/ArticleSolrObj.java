@@ -1,14 +1,25 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
+import android.support.annotation.DrawableRes;
+
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import appliedlife.pvtltd.SHEROES.R;
+
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {ArticleSolrObj.class,FeedDetail.class})
+@Parcel(analyze = {ArticleSolrObj.class, FeedDetail.class})
 public class ArticleSolrObj extends FeedDetail {
+    public static final String ARTICLE_OBJ = "ARTICLE_OBJ";
+    public boolean isLiked;
+    public int likesCount;
+
+    public boolean isThreadClosed;
+    public boolean showComments = true;
+
     @SerializedName(value = "slug_s")
     private String slug;
 
@@ -39,16 +50,16 @@ public class ArticleSolrObj extends FeedDetail {
     @SerializedName(value = "char_count_i")
     private int charCount;
 
-    @SerializedName(value="thumbnailImage_width_i")
+    @SerializedName(value = "thumbnailImage_width_i")
     private int thumbImageWidth;
 
-    @SerializedName(value="thumbnailImage_height_i")
+    @SerializedName(value = "thumbnailImage_height_i")
     private int thumbImageHeight;
 
-    @SerializedName(value="highresImage_width_i")
+    @SerializedName(value = "highresImage_width_i")
     private int highresImageWidth;
 
-    @SerializedName(value="highresImage_height_i")
+    @SerializedName(value = "highresImage_height_i")
     private int highresImageHeight;
 
     public String getSlug() {
@@ -162,4 +173,16 @@ public class ArticleSolrObj extends FeedDetail {
     public void setHighresImageHeight(int highresImageHeight) {
         this.highresImageHeight = highresImageHeight;
     }
+    public
+    @DrawableRes
+     int getBookmarkActivityDrawable() {
+        return this.isBookmarked() ? R.drawable.vector_bookmarked : R.drawable.vector_unbookmarked;
+    }
+
+    public
+    @DrawableRes
+    int getLikeActivityDrawable() {
+        return this.isLiked ? R.drawable.vector_like : R.drawable.vector_unlike;
+    }
+
 }

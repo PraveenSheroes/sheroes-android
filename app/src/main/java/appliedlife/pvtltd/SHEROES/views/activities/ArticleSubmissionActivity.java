@@ -55,8 +55,8 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.presenters.ArticleSubmissionPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -137,10 +137,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         ButterKnife.bind(this);
         mArticleSubmissionPresenter.attachView(this);
 
-        Article article = null;
-        Parcelable parcelable = getIntent().getParcelableExtra(Article.ARTICLE_OBJ);
+        ArticleSolrObj articleSolrObj = null;
+        Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
         if (parcelable != null) {
-            article = Parcels.unwrap(parcelable);
+            articleSolrObj = Parcels.unwrap(parcelable);
         }
         setSupportActionBar(mToolbar);
         toolbarTitle.setText(R.string.title_article_submit);
@@ -151,7 +151,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         this.localImageSaveForChallenge = localImageSaveForChallenge;
         String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
         mBody.setText(Html.fromHtml(articleGuideline));
-        if (article == null) {
+        if (articleSolrObj == null) {
             shouldShowGuideLine = true;
         }
         setupShareToFbListener();
@@ -225,10 +225,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     }
 
     @Override
-    public void setupEditArticleView(Article article) {
+    public void setupEditArticleView(ArticleSolrObj article) {
         getSupportActionBar().setTitle("Edit Article");
-        mEditorFragment.setContent(article.body);
-        mEditorFragment.setTitle(article.title);
+        mEditorFragment.setContent(article.getListDescription());
+        mEditorFragment.setTitle(article.getNameOrTitle());
     }
 
     @Override
@@ -588,11 +588,11 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
-    public static void navigateTo(Activity fromActivity, Article article, String sourceScreen, HashMap<String, Object> screenProperties) {
+    public static void navigateTo(Activity fromActivity, ArticleSolrObj article, String sourceScreen, HashMap<String, Object> screenProperties) {
 
         Intent intent = new Intent(fromActivity, ArticleSubmissionActivity.class);
         Parcelable parcelable = Parcels.wrap(article);
-        intent.putExtra(Article.ARTICLE_OBJ, parcelable);
+        intent.putExtra(ArticleSolrObj.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
 
         if (!CommonUtil.isEmpty(screenProperties)) {

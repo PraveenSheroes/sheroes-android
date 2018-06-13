@@ -6,7 +6,6 @@ import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 
 /**
  * Created by Praveen on 13/06/18.
