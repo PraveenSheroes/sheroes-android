@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -37,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -56,22 +58,52 @@ import okhttp3.RequestBody;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 /**
  * Created by avinash on 28/01/16.
  */
 public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmissionView> {
     SheroesAppServiceApi sheroesAppServiceApi;
-
+    SheroesApplication mSheroesApplication;
     //region Constructor
 
     @Inject
-    public ArticleSubmissionPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi) {
+    public ArticleSubmissionPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi,SheroesApplication sheroesApplication) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
     }
 
-    public void prepareArticle(String articleTitle, String articleBody, String articleStatus) {
+    public void prepareArticle(ArticleSubmissionRequest articleSubmissionRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            return;
+        }
+        getMvpView().startProgressBar();
+        /*sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<SpamResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<SpamResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(SpamResponse spamResponse) {
+                        getMvpView().onSpamPostOrCommentReported(spamResponse, userPostSolrObj);
+                        getMvpView().stopProgressBar();
+                    }
+                });*/
     }
 
    /* public void uploadFile(Uri fullPath, Context applicationContext) {

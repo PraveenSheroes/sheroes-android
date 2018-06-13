@@ -2,11 +2,9 @@ package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
 import android.app.ActivityManager;
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -73,8 +71,8 @@ import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -1524,13 +1522,13 @@ public class AppUtils {
     public FollowersFollowingRequest followerFollowingRequest(int pageNo, long userId, String followerFollowingType) {
         switch (followerFollowingType) {
             case AppConstants.FOLLOWED_CHAMPION:
-               return followerFollowingRequestBuilder(pageNo, userId, false, false);
+                return followerFollowingRequestBuilder(pageNo, userId, false, false);
             case AppConstants.FOLLOWERS:
                 return followerFollowingRequestBuilder(pageNo, userId, false, true);
             case AppConstants.FOLLOWING:
                 return followerFollowingRequestBuilder(pageNo, userId, true, true);
-             default:
-                 return null;
+            default:
+                return null;
         }
     }
 
@@ -1678,7 +1676,7 @@ public class AppUtils {
         return userSummaryRequest;
     }
 
-    public SearchUserDataRequest searchUserDataRequest(String query, Long communityId, Long postEntityId, Long postUserAuthorId,String context) {
+    public SearchUserDataRequest searchUserDataRequest(String query, Long communityId, Long postEntityId, Long postUserAuthorId, String context) {
         AppUtils appUtils = AppUtils.getInstance();
         SearchUserDataRequest searchUserDataRequest = new SearchUserDataRequest();
         searchUserDataRequest.setSearchNameOfUserForTagging(query);
@@ -1691,6 +1689,7 @@ public class AppUtils {
         searchUserDataRequest.setUserMentionContext(context);
         return searchUserDataRequest;
     }
+
     /**
      * Request for feed api
      */
@@ -1836,14 +1835,14 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime,boolean hasMention, List<MentionSpan> userMentionList) {
-        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken,hasMention,userMentionList);
+    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime, boolean hasMention, List<MentionSpan> userMentionList) {
+        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken, hasMention, userMentionList);
         communityPostCreateRequest.setSchedulePost(mDateTime);
         return communityPostCreateRequest;
     }
 
 
-        public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean hasMention, List<MentionSpan> userMentionList) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1870,13 +1869,13 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         /*User tagging fields*/
-            if(StringUtil.isNotEmptyCollection(userMentionList)) {
-                communityPostCreateRequest.setHasMentions(true);
-                communityPostCreateRequest.setUserMentionList(userMentionList);
-            }else {
-                communityPostCreateRequest.setHasMentions(false);
-                communityPostCreateRequest.setUserMentionList(null);
-            }
+        if (StringUtil.isNotEmptyCollection(userMentionList)) {
+            communityPostCreateRequest.setHasMentions(true);
+            communityPostCreateRequest.setUserMentionList(userMentionList);
+        } else {
+            communityPostCreateRequest.setHasMentions(false);
+            communityPostCreateRequest.setUserMentionList(null);
+        }
         return communityPostCreateRequest;
     }
 
@@ -1912,10 +1911,10 @@ public class AppUtils {
             challengePostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
         /*User tagging fields*/
-        if(StringUtil.isNotEmptyCollection(userMentionList)) {
+        if (StringUtil.isNotEmptyCollection(userMentionList)) {
             challengePostCreateRequest.setHasMentions(true);
             challengePostCreateRequest.setUserMentionList(userMentionList);
-        }else {
+        } else {
             challengePostCreateRequest.setHasMentions(false);
             challengePostCreateRequest.setUserMentionList(null);
         }
@@ -1957,10 +1956,10 @@ public class AppUtils {
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
               /*User tagging fields*/
-        if(StringUtil.isNotEmptyCollection(userMentionList)) {
+        if (StringUtil.isNotEmptyCollection(userMentionList)) {
             communityPostCreateRequest.setHasMentions(true);
             communityPostCreateRequest.setUserMentionList(userMentionList);
-        }else {
+        } else {
             communityPostCreateRequest.setHasMentions(false);
             communityPostCreateRequest.setUserMentionList(null);
         }
@@ -2029,7 +2028,7 @@ public class AppUtils {
     }
 
 
-    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous,boolean hasMention, List<MentionSpan> mentionSpanList) {
+    public static CommentReactionRequestPojo postCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2040,10 +2039,10 @@ public class AppUtils {
         commentReactionRequestPojo.setIsAnonymous(isAnonymous);
         commentReactionRequestPojo.setEntityId(entityId);
         /*User mention*/
-        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+        if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             commentReactionRequestPojo.setHasMentions(true);
             commentReactionRequestPojo.setUserMentionList(mentionSpanList);
-        }else {
+        } else {
             commentReactionRequestPojo.setHasMentions(false);
             commentReactionRequestPojo.setUserMentionList(null);
         }
@@ -2051,7 +2050,7 @@ public class AppUtils {
     }
 
 
-    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId,boolean hasMention, List<MentionSpan> mentionSpanList) {
+    public static CommentReactionRequestPojo editCommentRequestBuilder(long entityId, String userComment, boolean isAnonymous, boolean isActive, long participationId, boolean hasMention, List<MentionSpan> mentionSpanList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommentReactionRequestPojo commentReactionRequestPojo = new CommentReactionRequestPojo();
         commentReactionRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2064,10 +2063,10 @@ public class AppUtils {
         commentReactionRequestPojo.setEntityId(entityId);
         commentReactionRequestPojo.setParticipationId(participationId);
         /*User mention*/
-        if(StringUtil.isNotEmptyCollection(mentionSpanList)) {
+        if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
             commentReactionRequestPojo.setHasMentions(true);
             commentReactionRequestPojo.setUserMentionList(mentionSpanList);
-        }else {
+        } else {
             commentReactionRequestPojo.setHasMentions(false);
             commentReactionRequestPojo.setUserMentionList(null);
         }
@@ -2158,4 +2157,15 @@ public class AppUtils {
         return m.find();
     }
 
+    public ArticleSubmissionRequest makeArticleDraftRequest(boolean isPublish, String articleTitle, String articleBody) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
+        articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
+        articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        articleSubmissionRequest.isPublish = isPublish;
+        articleSubmissionRequest.storyTitle = articleTitle;
+        articleSubmissionRequest.storyContent = articleBody;
+        return articleSubmissionRequest;
+    }
 }

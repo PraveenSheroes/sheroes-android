@@ -17,7 +17,6 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -60,7 +59,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.presenters.ArticleSubmissionPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.ArticleStatus;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -68,7 +67,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
-import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -80,6 +78,9 @@ import butterknife.OnClick;
 public class ArticleSubmissionActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener {
     public static final String SCREEN_LABEL = "Article Submission activity";
     private static int flagActivity = 0;
+
+    @Inject
+    AppUtils mAppUtils;
 
     @Inject
     ArticleSubmissionPresenterImpl mArticleSubmissionPresenter;
@@ -256,17 +257,17 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-                if (isNextPage) {
-                    hideNextPage();
-                } else {
-                    onBackPress();
-                }
+            if (isNextPage) {
+                hideNextPage();
+            } else {
+                onBackPress();
+            }
             return true;
         }
         if (id == R.id.post) {
-                if (validateFields(false, true)) {
-                    postArticle(false);
-                }
+            if (validateFields(false, true)) {
+                postArticle(true);
+            }
         }
 
         if (id == R.id.next) {
@@ -274,9 +275,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
 
         if (id == R.id.draft) {
-                if (validateFields(true, true)) {
-                    postArticle(true);
-                }
+            if (validateFields(true, true)) {
+                postArticle(false);
+            }
         }
         if (id == R.id.guideline) {
             showGuideLineView();
@@ -286,11 +287,13 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     private void showNextPage() {
         isNextPage = true;
-        mArticleNextPageContainer.setVisibility(View.VISIBLE);;
+        mArticleNextPageContainer.setVisibility(View.VISIBLE);
+        ;
         mEditorContainer.setVisibility(View.GONE);
         invalidateToolBar();
         invalidateOptionsMenu();
     }
+
     private void hideNextPage() {
         isNextPage = false;
         mArticleNextPageContainer.setVisibility(View.GONE);
@@ -365,7 +368,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @Override
     public void onEditorFragmentInitialized() {
         mEditorFragment.setTitlePlaceholder("Article Title");
-        String hintText="You story";
+        String hintText = "You story";
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
         }
@@ -449,32 +452,19 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         });
     }
 
-    private void postArticle(boolean isDraft) {
+    private void postArticle(boolean isPublish) {
         String articleTitle = null;
         String articleBody = null;
         try {
             articleTitle = mEditorFragment.getTitle().toString();
-        } catch (EditorFragment.IllegalEditorStateException e) {
-            e.printStackTrace();
-        }
-
-        try {
             articleBody = mEditorFragment.getContent().toString();
         } catch (EditorFragment.IllegalEditorStateException e) {
             e.printStackTrace();
         }
 
-        Article article = new Article();
-        article.body = articleBody;
-        article.title = articleTitle;
-        String articleStatus;
-        if (isDraft) {
-            articleStatus = getString(ArticleStatus.DRAFT.getStatusName());
-        } else {
-            articleStatus = getString(ArticleStatus.SUBMITTED.getStatusName());;
-        }
         showProgressBar();
-        mArticleSubmissionPresenter.prepareArticle(articleTitle, articleBody, articleStatus);
+
+        mArticleSubmissionPresenter.prepareArticle(mAppUtils.makeArticleDraftRequest(isPublish, articleTitle, articleBody));
     }
 
     private void showProgressBar() {
@@ -530,19 +520,19 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             return false;
         }
         if (!CommonUtil.isNotEmpty(articleTitle) && !CommonUtil.isNotEmpty(articleBody)) {
-            if(showError){
+            if (showError) {
                 showMessage(R.string.error_draft);
             }
             return false;
         }
         if (!isDraft && !CommonUtil.isNotEmpty(articleTitle)) {
-            if(showError){
+            if (showError) {
                 showMessage(R.string.error_title);
             }
             return false;
         }
         if (!isDraft && !CommonUtil.isNotEmpty(articleBody)) {
-            if(showError){
+            if (showError) {
                 showMessage(R.string.error_body);
             }
             return false;
@@ -689,12 +679,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     //region next page view
     @OnClick(R.id.add_photo_container)
-    public void onAddCoverClicked(){
+    public void onAddCoverClicked() {
 
     }
 
     @OnClick(R.id.choose_community_container)
-    public void onChooseCommunityClicked(){
+    public void onChooseCommunityClicked() {
         PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
     }
     //endregion
