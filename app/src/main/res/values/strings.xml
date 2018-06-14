@@ -650,6 +650,8 @@
     <string name="error.draft">Error saving in draft. Article is empty</string>
     <string name="error.title">Article title cannot be blank</string>
     <string name="error.body">Article content cannot be blank</string>
+    <string name="error.tag.max">Tags can\'t be more than 5</string>
+    <string name="error.tag.min">Minimum 1 tag required</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
 </resources>

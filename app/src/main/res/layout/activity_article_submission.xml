@@ -13,14 +13,14 @@
         layout="@layout/layout_article_post_final"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"/>
+        android:layout_below="@id/toolbar" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/editor_container"
@@ -28,11 +28,11 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar">
 
-    <fragment
-        android:id="@+id/postEditor"
-        android:name="org.wordpress.android.editor.EditorFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <fragment
+            android:id="@+id/postEditor"
+            android:name="org.wordpress.android.editor.EditorFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </RelativeLayout>
 
@@ -40,11 +40,11 @@
         android:id="@+id/guideline_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/transparent_darker"
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:padding="16dp"
-        android:background="@color/transparent_darker"
         android:visibility="gone">
 
         <ImageView
@@ -52,8 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:padding="16dp"
             android:clickable="true"
+            android:padding="16dp"
             android:src="@drawable/vector_clear" />
 
         <ScrollView
@@ -65,7 +65,7 @@
                 android:id="@+id/body"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white" />
         </ScrollView>
     </RelativeLayout>
 

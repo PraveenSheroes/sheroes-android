@@ -150,7 +150,9 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
 
                 @Override
                 public void onError(Throwable e) {
-
+                    Crashlytics.getInstance().core.logException(e);
+                    getMvpView().showError(e.getMessage(), ERROR_TAG);
+                    getMvpView().stopProgressBar();
                 }
 
                 @Override

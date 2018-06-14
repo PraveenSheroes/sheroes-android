@@ -38,6 +38,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.tokenautocomplete.FilteredArrayAdapter;
@@ -125,6 +129,15 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @Bind(R.id.share_on_fb_switch)
     SwitchCompat mShareToFacebook;
 
+    @Bind(R.id.add_photo_image_view)
+    ImageView ivAddPhoto;
+
+    @Bind(R.id.add_cover_text_view)
+    TextView tvAddCover;
+
+    @Bind(R.id.tv_tag_lable)
+    TextView tvTagLable;
+
     //endregion
 
     //region member variables
@@ -138,6 +151,8 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     private ContactsCompletionView completionView;
     private ArticleTagName[] people;
     private ArrayAdapter<ArticleTagName> adapter;
+    private boolean mIsCoverPhoto;
+    private List<ArticleTagName> mTagsList = new ArrayList<>();
     //endregion
 
     //region activity methods
@@ -238,8 +253,13 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
             @Override
             protected boolean keepObject(ArticleTagName articleTagName, String mask) {
-                mask = mask.toLowerCase();
-                return articleTagName.getTagName().toLowerCase().startsWith(mask);
+                if (StringUtil.isNotEmptyCollection(mTagsList) && mTagsList.size() > 4) {
+                    showMessage(R.string.error_tag_max);
+                    return false;
+                } else {
+                    mask = mask.toLowerCase();
+                    return articleTagName.getTagName().toLowerCase().startsWith(mask);
+                }
             }
         };
 
@@ -287,7 +307,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         if (isGuidelineVisible) {
             mGuidelineClose.performClick();
         } else {
-            super.onBackPressed();
+            onBackPress();
         }
     }
 
@@ -318,11 +338,33 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void showImage(String finalImageUrl) {
-        MediaFile mediaFile = new MediaFile();
-        String mediaId = String.valueOf(System.currentTimeMillis());
-        mediaFile.setMediaId(mediaId);
-        mediaFile.setVideo(false);
-        mEditorFragment.appendMediaFile(mediaFile, finalImageUrl, null);
+        if (mIsCoverPhoto) {
+            if (StringUtil.isNotNullOrEmptyString(finalImageUrl)) {
+                int imageHeight = CommonUtil.getWindowWidth(this) / 2;
+                finalImageUrl = CommonUtil.getThumborUri(finalImageUrl, CommonUtil.getWindowWidth(this), imageHeight);
+                Glide.with(this)
+                        .asBitmap()
+                        .load(finalImageUrl)
+                        .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
+                                ivAddPhoto.setVisibility(View.VISIBLE);
+                                ivAddPhoto.setImageBitmap(profileImage);
+                                tvAddCover.setVisibility(View.GONE);
+                            }
+                        });
+            } else {
+                tvAddCover.setVisibility(View.VISIBLE);
+                ivAddPhoto.setVisibility(View.GONE);
+            }
+        } else {
+            MediaFile mediaFile = new MediaFile();
+            String mediaId = String.valueOf(System.currentTimeMillis());
+            mediaFile.setMediaId(mediaId);
+            mediaFile.setVideo(false);
+            mEditorFragment.appendMediaFile(mediaFile, finalImageUrl, null);
+        }
         stopProgressBar();
     }
 
@@ -330,11 +372,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == android.R.id.home) {
-            if (isNextPage) {
-                hideNextPage();
-            } else {
-                onBackPress();
-            }
+            onBackPress();
             return true;
         }
         if (id == R.id.post_article_submit) {
@@ -453,6 +491,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void onAddMediaClicked() {
+        mIsCoverPhoto = false;
         CameraBottomSheetFragment.showDialog(this, getScreenName());
     }
 
@@ -537,10 +576,15 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     }
 
     private void onBackPress() {
-        if (!validateFields(true, false)) {
-            finish();
+        if (isNextPage) {
+            hideNextPage();
             return;
         }
+        if (!validateFields(true, false)) {
+            super.onBackPressed();
+            return;
+        }
+
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(ArticleSubmissionActivity.this);
 
@@ -572,15 +616,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         String articleBody = null;
         try {
             articleTitle = mEditorFragment.getTitle().toString();
-        } catch (EditorFragment.IllegalEditorStateException e) {
-            e.printStackTrace();
-            return false;
-        }
-
-        try {
             articleBody = mEditorFragment.getContent().toString();
         } catch (EditorFragment.IllegalEditorStateException e) {
-            e.printStackTrace();
+            Crashlytics.getInstance().core.logException(e);
             return false;
         }
         if (!CommonUtil.isNotEmpty(articleTitle) && !CommonUtil.isNotEmpty(articleBody)) {
@@ -601,6 +639,14 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             }
             return false;
         }
+
+        if (!StringUtil.isNotEmptyCollection(mTagsList)) {
+            if (showError) {
+                showMessage(R.string.error_tag_min);
+            }
+            return false;
+        }
+
         return true;
     }
 
@@ -727,27 +773,26 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     //region next page view
     @OnClick(R.id.add_photo_container)
     public void onAddCoverClicked() {
-
+        mIsCoverPhoto = true;
+        CameraBottomSheetFragment.showDialog(this, getScreenName());
     }
-
-
-    private void updateTokenConfirmation() {
-        StringBuilder sb = new StringBuilder("Current tokens:\n");
-        for (Object token : completionView.getObjects()) {
-            sb.append(token.toString());
-            sb.append("\n");
-        }
-    }
-
 
     @Override
     public void onTokenAdded(ArticleTagName token) {
-        updateTokenConfirmation();
+        if (StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+            tvTagLable.setVisibility(View.GONE);
+        }
+        mTagsList.clear();
+        mTagsList.addAll(completionView.getObjects());
     }
 
     @Override
     public void onTokenRemoved(ArticleTagName token) {
-        updateTokenConfirmation();
+        if (!StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+            tvTagLable.setVisibility(View.VISIBLE);
+        }
+        mTagsList.clear();
+        mTagsList.addAll(completionView.getObjects());
     }
 
     //endregion
