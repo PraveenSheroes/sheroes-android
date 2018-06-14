@@ -195,7 +195,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj) {
-
+        hideNextPage();
     }
 
     @Override
@@ -290,18 +290,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         itemNext.setTitle(s);
     }
 
-
-    @Override
-    public void hideProgressBar() {
-        mEditorFragment.getView().setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void goBack() {
-        onBackPressed();
-    }
-
     @Override
     public void onBackPressed() {
         if (isGuidelineVisible) {
@@ -326,14 +314,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     @Override
     public void showMessage(int stringID) {
         Toast.makeText(getApplicationContext(), stringID, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void navigateToMyArticleList() {
-      /*  if (flagActivity != MyArticleListActivity.MY_ARTICLE_LIST_ACTIVITY) {
-            MyArticleListActivity.navigateTo(this, getScreenName(), null);
-        }
-        finish();*/
     }
 
     @Override
@@ -562,17 +542,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             articleTitle = mEditorFragment.getTitle().toString();
             articleBody = mEditorFragment.getContent().toString();
         } catch (EditorFragment.IllegalEditorStateException e) {
-            e.printStackTrace();
+            Crashlytics.getInstance().core.logException(e);
         }
-
-        showProgressBar();
-
         mArticleSubmissionPresenter.prepareArticle(mAppUtils.makeArticleDraftRequest(isPublish, articleTitle, articleBody));
-    }
-
-    private void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-        mEditorFragment.getView().setVisibility(View.GONE);
     }
 
     private void onBackPress() {

@@ -28,13 +28,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  * Created by avinash on 28/01/16.
  */
 public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmissionView> {
-    SheroesAppServiceApi sheroesAppServiceApi;
+    SheroesAppServiceApi mSheroesAppServiceApi;
     SheroesApplication mSheroesApplication;
     //region Constructor
 
     @Inject
-    public ArticleSubmissionPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi,SheroesApplication sheroesApplication) {
-        this.sheroesAppServiceApi = sheroesAppServiceApi;
+    public ArticleSubmissionPresenterImpl(SheroesAppServiceApi mSheroesAppServiceApi, SheroesApplication sheroesApplication) {
+        this.mSheroesAppServiceApi = mSheroesAppServiceApi;
+        this.mSheroesApplication = sheroesApplication;
     }
 
     public void prepareArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
@@ -43,7 +44,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
             return;
         }
         getMvpView().startProgressBar();
-        sheroesAppServiceApi.articleSubmit(articleSubmissionRequest)
+        mSheroesAppServiceApi.articleSubmit(articleSubmissionRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ArticleSubmissionResponse>bindToLifecycle())
@@ -99,7 +100,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                             uploadImageRequest.images = new ArrayList<>();
                             uploadImageRequest.images.add(encodedImageUrl);
 
-                            return sheroesAppServiceApi.uploadImage(uploadImageRequest);
+                            return mSheroesAppServiceApi.uploadImage(uploadImageRequest);
                         }
                     })
                     .map(new Function<UpLoadImageResponse, UpLoadImageResponse>() {
@@ -137,7 +138,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
         UploadImageRequest uploadImageRequest = new UploadImageRequest();
         uploadImageRequest.images = new ArrayList<>();
         uploadImageRequest.images.add(encodedImage);
-                    sheroesAppServiceApi.uploadImage(uploadImageRequest)
+                    mSheroesAppServiceApi.uploadImage(uploadImageRequest)
                     .compose(this.<UpLoadImageResponse>bindToLifecycle())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
