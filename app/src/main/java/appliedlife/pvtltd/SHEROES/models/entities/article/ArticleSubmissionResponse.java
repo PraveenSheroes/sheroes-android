@@ -14,4 +14,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 public class ArticleSubmissionResponse extends BaseResponse {
     @SerializedName("story")
     private ArticleSolrObj articleSolrObj;
+
+    public ArticleSolrObj getArticleSolrObj() {
+        return articleSolrObj;
+    }
+
+    public void setArticleSolrObj(ArticleSolrObj articleSolrObj) {
+        this.articleSolrObj = articleSolrObj;
+    }
 }

@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -10,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -34,17 +37,17 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
         this.sheroesAppServiceApi = sheroesAppServiceApi;
     }
 
-    public void prepareArticle(ArticleSubmissionRequest articleSubmissionRequest) {
+    public void prepareArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         }
         getMvpView().startProgressBar();
-        /*sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+        sheroesAppServiceApi.articleSubmit(articleSubmissionRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<SpamResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<SpamResponse>() {
+                .compose(this.<ArticleSubmissionResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ArticleSubmissionResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -53,16 +56,26 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
                         getMvpView().stopProgressBar();
                     }
 
                     @Override
-                    public void onNext(SpamResponse spamResponse) {
-                        getMvpView().onSpamPostOrCommentReported(spamResponse, userPostSolrObj);
+                    public void onNext(ArticleSubmissionResponse articleSubmissionResponse) {
                         getMvpView().stopProgressBar();
+                        if(null!=articleSubmissionResponse)
+                        {
+                            switch (articleSubmissionResponse.getStatus())
+                            {
+                                case AppConstants.SUCCESS:
+                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj());
+                                    break;
+                                case AppConstants.FAILED:
+                                    break;
+                            }
+                        }
                     }
-                });*/
+                });
     }
 
    /* public void uploadFile(Uri fullPath, Context applicationContext) {

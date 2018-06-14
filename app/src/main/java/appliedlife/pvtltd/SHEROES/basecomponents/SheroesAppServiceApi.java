@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollow
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
@@ -336,5 +337,5 @@ public interface SheroesAppServiceApi {
     Observable<UpLoadImageResponse> uploadImage(@Body UploadImageRequest uploadImageRequest);
 
     @POST("participation/article/story/add")
-    Observable<SpamResponse> articleSubmit(@Body ArticleSubmissionRequest articleSubmissionRequest);
+    Observable<ArticleSubmissionResponse> articleSubmit(@Body ArticleSubmissionRequest articleSubmissionRequest);
 }

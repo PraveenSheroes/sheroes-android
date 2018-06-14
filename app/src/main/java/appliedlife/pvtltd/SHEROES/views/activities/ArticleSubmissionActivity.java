@@ -17,14 +17,20 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -34,6 +40,8 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.tokenautocomplete.FilteredArrayAdapter;
+import com.tokenautocomplete.TokenCompleteTextView;
 
 import org.parceler.Parcels;
 import org.wordpress.android.editor.EditorFragment;
@@ -55,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagName;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.ArticleSubmissionPresenterImpl;
@@ -63,8 +72,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -75,7 +84,7 @@ import butterknife.OnClick;
  */
 
 
-public class ArticleSubmissionActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener {
+public class ArticleSubmissionActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
     public static final String SCREEN_LABEL = "Article Submission activity";
     private static int flagActivity = 0;
 
@@ -126,6 +135,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     private Uri mImageCaptureUri;
     private String mEncodeImageUrl;
     private boolean isNextPage;
+    private ContactsCompletionView completionView;
+    private ArticleTagName[] people;
+    private ArrayAdapter<ArticleTagName> adapter;
     //endregion
 
     //region activity methods
@@ -155,6 +167,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             shouldShowGuideLine = true;
         }
         setupShareToFbListener();
+        setupSearchAddRemoveTagContainer();
     }
 
     @Override
@@ -165,6 +178,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         super.onResumeFragments();
     }
 
+    @Override
+    public void articleSubmitResponse(ArticleSolrObj articleSolrObj) {
+
+    }
 
     @Override
     public String getScreenName() {
@@ -183,9 +200,60 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         return super.onPrepareOptionsMenu(menu);
     }
 
+    private void setupSearchAddRemoveTagContainer() {
+        ArticleTagName articleTagName = new ArticleTagName();
+        ArticleTagName articleTagName1 = new ArticleTagName();
+        ArticleTagName articleTagName2 = new ArticleTagName();
+        ArticleTagName articleTagName3 = new ArticleTagName();
+        ArticleTagName articleTagName4 = new ArticleTagName();
+        ArticleTagName articleTagName5 = new ArticleTagName();
+        articleTagName.setTagName("Marshall Weir");
+        articleTagName1.setTagName("Margaret Smith");
+        articleTagName2.setTagName("Max Jordan");
+        articleTagName3.setTagName("Meg Peterson");
+        articleTagName4.setTagName("Amanda Johnson");
+        articleTagName5.setTagName("Terry Anderson");
+        people = new ArticleTagName[]{
+                articleTagName,
+                articleTagName1,
+                articleTagName2,
+                articleTagName3,
+                articleTagName4,
+                articleTagName5
+        };
+
+        adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, people) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+
+                    LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                    convertView = l.inflate(R.layout.article_tag_layout, parent, false);
+                }
+
+                ArticleTagName p = getItem(position);
+                ((TextView) convertView.findViewById(R.id.tv_article_tag)).setText(p.getTagName());
+                return convertView;
+            }
+
+            @Override
+            protected boolean keepObject(ArticleTagName articleTagName, String mask) {
+                mask = mask.toLowerCase();
+                return articleTagName.getTagName().toLowerCase().startsWith(mask);
+            }
+        };
+
+        completionView = findViewById(R.id.tag_search_view);
+        completionView.setAdapter(adapter);
+        completionView.setTokenListener(this);
+        //completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
+        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
+
+    }
+
     private void setUpOptionMenuStates(Menu menu) {
-        MenuItem itemNext = menu.findItem(R.id.next);
-        MenuItem itemPost = menu.findItem(R.id.post);
+        MenuItem itemNext = menu.findItem(R.id.next_article_submit);
+        MenuItem itemPost = menu.findItem(R.id.post_article_submit);
         MenuItem itemInfo = menu.findItem(R.id.guideline);
         if (isNextPage) {
             itemInfo.setVisible(false);
@@ -196,6 +264,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             itemNext.setVisible(true);
             itemPost.setVisible(false);
         }
+
+        SpannableString s = new SpannableString(itemNext.getTitle());
+        s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.blue_light)), 0, s.length(), 0);
+        itemNext.setTitle(s);
     }
 
 
@@ -251,6 +323,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         mediaFile.setMediaId(mediaId);
         mediaFile.setVideo(false);
         mEditorFragment.appendMediaFile(mediaFile, finalImageUrl, null);
+        stopProgressBar();
     }
 
     @Override
@@ -264,13 +337,13 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             }
             return true;
         }
-        if (id == R.id.post) {
+        if (id == R.id.post_article_submit) {
             if (validateFields(false, true)) {
                 postArticle(true);
             }
         }
 
-        if (id == R.id.next) {
+        if (id == R.id.next_article_submit) {
             showNextPage();
         }
 
@@ -288,7 +361,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     private void showNextPage() {
         isNextPage = true;
         mArticleNextPageContainer.setVisibility(View.VISIBLE);
-        ;
         mEditorContainer.setVisibility(View.GONE);
         invalidateToolBar();
         invalidateOptionsMenu();
@@ -312,8 +384,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_GALLERY:
@@ -337,9 +407,8 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
                         try {
                             File file = new File(result.getUri().getPath());
                             Bitmap photo = CompressImageUtil.decodeFile(file);
+                            startProgressBar();
                             mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -352,6 +421,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             }
         }
     }
+
     //endregion
 
     //region editor methods
@@ -436,12 +506,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
                 .setAllowRotation(true)
                 .start(this);
     }
-
-    //region private methods
-    private void showCamera() {
-        /*mCameraUtil.openImageIntent(ArticleSubmissionActivity.this);*/
-    }
-
 
     private void setupShareToFbListener() {
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -556,24 +620,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
     }
 
-   /* private void onCameraPermission(final CameraEvent cameraEvent) {
-        if (cameraEvent.isPermissionAllowed) {
-            showCamera();
-        } else {
-            Snackbar snackbar = Snackbar
-                    .make(mToolbar, R.string.chat_image_permission, Snackbar.LENGTH_LONG)
-                    .setAction("Try Now", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            RxUtil.requestPermission(ArticleSubmissionActivity.this, CareApplication.getAppContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE, Globals.STORAGE_PERMISSION);
-                        }
-                    });
-
-            snackbar.show();
-        }
-    }*/
-    //endregion
-
     //region static methods
     public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
 
@@ -653,12 +699,13 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void startProgressBar() {
-
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.bringToFront();
     }
 
     @Override
     public void stopProgressBar() {
-
+        mProgressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -683,9 +730,25 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     }
 
-    @OnClick(R.id.choose_community_container)
-    public void onChooseCommunityClicked() {
-        PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+
+    private void updateTokenConfirmation() {
+        StringBuilder sb = new StringBuilder("Current tokens:\n");
+        for (Object token : completionView.getObjects()) {
+            sb.append(token.toString());
+            sb.append("\n");
+        }
     }
+
+
+    @Override
+    public void onTokenAdded(ArticleTagName token) {
+        updateTokenConfirmation();
+    }
+
+    @Override
+    public void onTokenRemoved(ArticleTagName token) {
+        updateTokenConfirmation();
+    }
+
     //endregion
 }

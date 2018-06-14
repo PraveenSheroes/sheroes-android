@@ -11,11 +11,11 @@
         android:title="@string/action_draft"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/next"
+    <item android:id="@+id/next_article_submit"
         android:title="@string/action.next"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/post"
+    <item android:id="@+id/post_article_submit"
         android:title="@string/action.post"
         app:showAsAction="always"/>
 

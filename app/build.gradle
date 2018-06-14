@@ -198,6 +198,7 @@ dependencies {
     compile 'com.github.vihtarb:tooltip:0.1.9'
     compile(name: 'WordPress-Editor-Android-develop-0.2-g60e13dd-1461-release', ext: 'aar')
     compile('org.wordpress:utils:1.17.1')
+    compile "com.splitwise:tokenautocomplete:2.0.8@aar"
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'
