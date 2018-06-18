@@ -12,8 +12,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 public interface IArticleSubmissionView extends BaseMvpView {
     void showImage(String finalImageUrl);
 
-    void setupEditArticleView(ArticleSolrObj articleSolrObj);
-
     void articleSubmitResponse(ArticleSolrObj articleSolrObj);
 
     void showMessage(int stringID);

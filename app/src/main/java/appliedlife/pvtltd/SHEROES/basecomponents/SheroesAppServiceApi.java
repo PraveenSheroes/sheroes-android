@@ -337,5 +337,8 @@ public interface SheroesAppServiceApi {
     Observable<UpLoadImageResponse> uploadImage(@Body UploadImageRequest uploadImageRequest);
 
     @POST("participation/article/story/add")
-    Observable<ArticleSubmissionResponse> articleSubmit(@Body ArticleSubmissionRequest articleSubmissionRequest);
+    Observable<ArticleSubmissionResponse> submitArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
+
+    @POST("participation/article/story/edit")
+    Observable<ArticleSubmissionResponse> editArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
 }

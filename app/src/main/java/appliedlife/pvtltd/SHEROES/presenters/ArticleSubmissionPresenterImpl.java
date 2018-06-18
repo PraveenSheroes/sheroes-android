@@ -38,13 +38,54 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
         this.mSheroesApplication = sheroesApplication;
     }
 
-    public void prepareArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
+    public void postArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         }
         getMvpView().startProgressBar();
-        mSheroesAppServiceApi.articleSubmit(articleSubmissionRequest)
+        mSheroesAppServiceApi.submitArticle(articleSubmissionRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<ArticleSubmissionResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ArticleSubmissionResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(ArticleSubmissionResponse articleSubmissionResponse) {
+                        getMvpView().stopProgressBar();
+                        if(null!=articleSubmissionResponse)
+                        {
+                            switch (articleSubmissionResponse.getStatus())
+                            {
+                                case AppConstants.SUCCESS:
+                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj());
+                                    break;
+                                case AppConstants.FAILED:
+                                    break;
+                            }
+                        }
+                    }
+                });
+    }
+
+    public void editArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.editArticle(articleSubmissionRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ArticleSubmissionResponse>bindToLifecycle())

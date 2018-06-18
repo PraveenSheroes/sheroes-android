@@ -17,12 +17,9 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -149,10 +146,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     private String mEncodeImageUrl;
     private boolean isNextPage;
     private ContactsCompletionView completionView;
-    private ArticleTagName[] people;
+    private List<ArticleTagName> mArticleTagNameList;
     private ArrayAdapter<ArticleTagName> adapter;
     private boolean mIsCoverPhoto;
     private List<ArticleTagName> mTagsList = new ArrayList<>();
+    private ArticleSolrObj mArticleSolrObj = null;
+    private Long mArticleCategoryId;
     //endregion
 
     //region activity methods
@@ -163,11 +162,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         SheroesApplication.getAppComponent(this).inject(this);
         ButterKnife.bind(this);
         mArticleSubmissionPresenter.attachView(this);
-
-        ArticleSolrObj articleSolrObj = null;
         Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
         if (parcelable != null) {
-            articleSolrObj = Parcels.unwrap(parcelable);
+            mArticleSolrObj = Parcels.unwrap(parcelable);
         }
         setSupportActionBar(mToolbar);
         toolbarTitle.setText(R.string.title_article_submit);
@@ -178,8 +175,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         this.localImageSaveForChallenge = localImageSaveForChallenge;
         String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
         mBody.setText(Html.fromHtml(articleGuideline));
-        if (articleSolrObj == null) {
+        if (mArticleSolrObj == null) {
             shouldShowGuideLine = true;
+        } else {
+            setupEditArticleView(mArticleSolrObj);
         }
         setupShareToFbListener();
         setupSearchAddRemoveTagContainer();
@@ -228,16 +227,14 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         articleTagName3.setTagName("Meg Peterson");
         articleTagName4.setTagName("Amanda Johnson");
         articleTagName5.setTagName("Terry Anderson");
-        people = new ArticleTagName[]{
-                articleTagName,
-                articleTagName1,
-                articleTagName2,
-                articleTagName3,
-                articleTagName4,
-                articleTagName5
-        };
-
-        adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, people) {
+        mArticleTagNameList = new ArrayList<>();
+        mArticleTagNameList.add(articleTagName);
+        mArticleTagNameList.add(articleTagName1);
+        mArticleTagNameList.add(articleTagName2);
+        mArticleTagNameList.add(articleTagName3);
+        mArticleTagNameList.add(articleTagName4);
+        mArticleTagNameList.add(articleTagName5);
+        adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, mArticleTagNameList) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if (convertView == null) {
@@ -266,7 +263,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         completionView = findViewById(R.id.tag_search_view);
         completionView.setAdapter(adapter);
         completionView.setTokenListener(this);
-        //completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Select);
         completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
 
     }
@@ -284,10 +280,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             itemNext.setVisible(true);
             itemPost.setVisible(false);
         }
-
-        SpannableString s = new SpannableString(itemNext.getTitle());
-        s.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.blue_light)), 0, s.length(), 0);
-        itemNext.setTitle(s);
     }
 
     @Override
@@ -304,8 +296,8 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         return mArticleSubmissionPresenter;
     }
 
-    @Override
     public void setupEditArticleView(ArticleSolrObj article) {
+        mArticleCategoryId=article.getArticleCategoryId();
         getSupportActionBar().setTitle("Edit Article");
         mEditorFragment.setContent(article.getListDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
@@ -357,7 +349,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
         if (id == R.id.post_article_submit) {
             if (validateFields(false, true)) {
-                postArticle(true);
+                postArticle();
             }
         }
 
@@ -367,7 +359,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
         if (id == R.id.draft) {
             if (validateFields(true, true)) {
-                postArticle(false);
+                draftArticle();
             }
         }
         if (id == R.id.guideline) {
@@ -445,12 +437,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     //region editor methods
     @Override
     public void onMediaDropped(ArrayList<Uri> arrayList) {
-
+        Toast.makeText(this, "onMediaDropped", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRequestDragAndDropPermissions(DragEvent dragEvent) {
-
+        Toast.makeText(this, "onRequestDragAndDropPermissions", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -477,22 +469,22 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void onMediaRetryClicked(String s) {
-
+        Toast.makeText(this, "onMediaRetryClicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onMediaUploadCancelClicked(String s, boolean b) {
-
+        Toast.makeText(this, "onMediaUploadCancelClicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFeaturedImageChanged(long l) {
-
+        Toast.makeText(this, "onFeaturedImageChanged", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onVideoPressInfoRequested(String s) {
-
+        Toast.makeText(this, "onVideoPressInfoRequested", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -502,12 +494,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void saveMediaFile(MediaFile mediaFile) {
-
+        Toast.makeText(this, "saveMediaFile", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onTrackableEvent(EditorFragmentAbstract.TrackableEvent trackableEvent) {
-
+        Toast.makeText(this, "onTrackableEvent", Toast.LENGTH_SHORT).show();
     }
     //endregion
 
@@ -535,7 +527,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         });
     }
 
-    private void postArticle(boolean isPublish) {
+    private void draftArticle() {
         String articleTitle = null;
         String articleBody = null;
         try {
@@ -544,7 +536,24 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        mArticleSubmissionPresenter.prepareArticle(mAppUtils.makeArticleDraftRequest(isPublish, articleTitle, articleBody));
+        mArticleSubmissionPresenter.postArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody));
+    }
+
+    private void postArticle() {
+        String articleTitle = null;
+        String articleBody = null;
+        try {
+            articleTitle = mEditorFragment.getTitle().toString();
+            articleBody = mEditorFragment.getContent().toString();
+        } catch (EditorFragment.IllegalEditorStateException e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        if (null != mArticleCategoryId) {
+            mArticleSubmissionPresenter.postArticle(mAppUtils.articleAddEditRequest(mArticleCategoryId, articleTitle, articleBody));
+        } else {
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody));
+        }
+
     }
 
     private void onBackPress() {
@@ -574,7 +583,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 if (validateFields(true, true)) {
-                    postArticle(true);
+                    postArticle();
                 }
             }
         });
@@ -615,6 +624,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         if (!StringUtil.isNotEmptyCollection(mTagsList)) {
             if (showError) {
                 showMessage(R.string.error_tag_min);
+                tvTagLable.setVisibility(View.VISIBLE);
             }
             return false;
         }
@@ -760,9 +770,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void onTokenRemoved(ArticleTagName token) {
-        if (!StringUtil.isNotEmptyCollection(completionView.getObjects())) {
-            tvTagLable.setVisibility(View.VISIBLE);
-        }
         mTagsList.clear();
         mTagsList.addAll(completionView.getObjects());
     }
