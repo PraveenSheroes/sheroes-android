@@ -23,7 +23,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserJoinedCommunitiesListFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -64,7 +64,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
 
         setupToolbarItemsColor();
 
-        Fragment followingFragment = UserMentorCommunity.createInstance(userMentorId, "", isSelfProfile);
+        Fragment followingFragment = UserJoinedCommunitiesListFragment.createInstance(userMentorId, "", isSelfProfile);
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();

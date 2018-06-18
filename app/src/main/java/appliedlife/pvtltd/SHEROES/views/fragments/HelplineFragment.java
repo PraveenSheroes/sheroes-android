@@ -212,7 +212,7 @@ public class HelplineFragment extends BaseFragment {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            //mRecyclerView.smoothScrollToPosition(0);
+            //mBadgeRecyceler.smoothScrollToPosition(0);
         }
 
     }

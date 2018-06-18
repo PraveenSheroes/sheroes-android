@@ -38,9 +38,12 @@ import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesBadgesActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityLeaderBoardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserJoinedCommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
@@ -61,7 +64,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -129,11 +132,11 @@ public interface SheroesAppComponent {
 
     void inject(ArticlesFragment articlesFragment);
 
-
+    void inject(CommunityLeaderBoardFragment leaderBoardFragment);
 
     void inject(CommunitiesListFragment myCommunitiesFragment);
 
-    void inject(UserMentorCommunity userMentorCommunity);
+    void inject(UserJoinedCommunitiesListFragment userMentorCommunity);
 
     void inject(FollowingFragment followingFragment);
 
@@ -320,6 +323,9 @@ public interface SheroesAppComponent {
 
     void inject(HomeFragment homeFragment);
 
+    void inject(CommunitiesBadgesActivity communitiesBadgesActivity);
+
+    void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
 }
 
 

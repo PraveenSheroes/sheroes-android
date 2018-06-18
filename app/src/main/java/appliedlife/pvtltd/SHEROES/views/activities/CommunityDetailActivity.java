@@ -91,6 +91,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunityLeaderBoardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
@@ -665,6 +666,11 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         HelplineFragment helplineFragment = HelplineFragment.createInstance(mCommunityFeedSolrObj.getNameOrTitle());
                         mAdapter.addFragment(helplineFragment, communityTab.title);
                         mTabFragments.add(helplineFragment);
+                    } else if(communityTab.dataUrl.equalsIgnoreCase(AppConstants.LEADERBOARD_URL)) { //Leaderbaord
+
+                        CommunityLeaderBoardFragment communityLeaderBoardFragment = CommunityLeaderBoardFragment.getInstance();
+                        mAdapter.addFragment(communityLeaderBoardFragment, communityTab.title);
+                        mTabFragments.add(communityLeaderBoardFragment);
                     }
                 }
             }

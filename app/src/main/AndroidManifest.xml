@@ -302,6 +302,7 @@
         <activity android:name=".views.activities.ProfileCommunitiesActivity" />
 
         <activity android:name=".views.activities.FollowingActivity" />
+        <activity android:name=".views.fragments.CommunitiesBadgesActivity" />
 
         <service
             android:name=".service.PushNotificationService"

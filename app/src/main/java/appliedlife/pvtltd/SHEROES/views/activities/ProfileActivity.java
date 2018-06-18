@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -36,6 +35,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,7 +49,6 @@ import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -132,9 +131,11 @@ import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesBadgesActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
@@ -262,6 +263,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.tv_mentor_description)
     TextView userDescription;
 
+    @Bind(R.id.description_view_more)
+    TextView viewMoreOnDescription;
+
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
 
@@ -312,11 +316,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.tv_mentor_dashboard_follow)
     TextView tvMentorDashBoardFollow;
 
-    @Bind(R.id.edit_overlay_container)
-    LinearLayout editProfileOverlayContainer;
-
     @Bind(R.id.edit_icon)
     ImageView editIcon;
+
+    @Bind(R.id.user_badge)
+    ImageView userBadgeIcon;
 
     @Bind(R.id.share_profile)
     TextView shareProfile;
@@ -484,38 +488,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
                 isOwnProfile = true;
-                tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
-                tvMentorAskQuestion.setText(getString(R.string.ID_ANSWER_QUESTION));
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
-                viewFooter.setVisibility(View.VISIBLE);
-
-                progressbarContainer.setVisibility(View.VISIBLE);
-                setProfileLevel();
-                profileLevel.setVisibility(View.VISIBLE);
-                newFeature.setVisibility(View.VISIBLE);
-
-                dashProgressBar.setListener(this);
-                if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                    dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
-                } else {
-                    dashProgressBar.setTotalDash(new ConfigData().maxDash);
-                }
-
-                dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
-                //hide menu dots
-                profileToolbarMenu.setVisibility(View.GONE);
-
-                //Hide the offer icon
-                if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
-                    newFeature.setVisibility(View.VISIBLE);
-                } else {
-                    newFeature.setVisibility(View.GONE);
-                }
+                invalidateOwnProfile(userSolrObj);
             } else {
                 newFeature.setVisibility(View.GONE);
                 progressbarContainer.setVisibility(View.GONE);
                 profileLevel.setVisibility(View.GONE);
                 profileToolbarMenu.setVisibility(View.VISIBLE);
+
+                //Hide view more from desc and make max of four line
+                userDescription.setMaxLines(R.integer.int_value_for_line_4);
+                viewMoreOnDescription.setVisibility(View.GONE);
+                userDescription.setSingleLine(false);
 
                 followUnFollowMentor();
             }
@@ -533,19 +516,68 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         invalidateProfileButton();
 
+        invalidateUserBadges();
+
         if (isOwnProfile) {
             verifiedIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.GONE);
             editIcon.setVisibility(View.VISIBLE);
         } else {
             editIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.GONE);
         }
 
         updateProfileInfo();
         setPagerAndLayouts();
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
+    }
+
+    private void invalidateOwnProfile(UserSolrObj userSolrObj) {
+        tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
+        tvMentorAskQuestion.setText(getString(R.string.ID_ANSWER_QUESTION));
+        tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
+        viewFooter.setVisibility(View.VISIBLE);
+
+        progressbarContainer.setVisibility(View.VISIBLE);
+        setProfileLevel();
+        profileLevel.setVisibility(View.VISIBLE);
+        newFeature.setVisibility(View.VISIBLE);
+
+        dashProgressBar.setListener(this);
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
+        } else {
+            dashProgressBar.setTotalDash(new ConfigData().maxDash);
+        }
+
+        //shorten desc for own profile to one line , and view more redirect to edit profile
+        userDescription.setMaxLines(R.integer.int_value_for_line_1);
+        userDescription.setSingleLine(true);
+
+        userDescription.setEllipsize(TextUtils.TruncateAt.END);
+        viewMoreOnDescription.setVisibility(View.VISIBLE);
+
+        dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
+        //hide menu dots
+        profileToolbarMenu.setVisibility(View.GONE);
+
+        //Hide the offer icon
+        if(!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
+            newFeature.setVisibility(View.VISIBLE);
+        } else {
+            newFeature.setVisibility(View.GONE);
+        }
+    }
+
+    private void invalidateUserBadges() {
+        boolean useHoldBadge = true;
+
+        if (useHoldBadge && !isMentor) {
+            //get the badge from url
+            verifiedIcon.setVisibility(View.GONE);
+            userBadgeIcon.setVisibility(View.VISIBLE);
+        } else {
+            userBadgeIcon.setVisibility(View.GONE);
+        }
     }
 
     private void updateProfileInfo() {
@@ -763,6 +795,19 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             openProfileProfileLevelDialog(profileLevelType);
             newFeature.setVisibility(View.GONE);
         }
+    }
+
+    @OnClick(R.id.badge_details)
+    protected void openBadgeDetailsDialog() {
+        BadgeDetailsDialogFragment badgeDetailsDialogFragment = new BadgeDetailsDialogFragment();
+        badgeDetailsDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+        badgeDetailsDialogFragment.show(getFragmentManager(), ProfileProgressDialog.class.getName());
+
+    }
+
+    @OnClick(R.id.more_badges)
+    protected void launchUserBadgesActivity() {
+        CommunitiesBadgesActivity.navigateTo(this, loggedInUserId, false, SCREEN_LABEL, null);
     }
 
     private void openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType profileLevelType) {
@@ -1009,7 +1054,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    @OnClick({R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description})
+    @OnClick({R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description, R.id.description_view_more})
     public void navigateToProfileEditing() {
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
@@ -1979,7 +2024,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     //Check if user have filled its details in profile
     private boolean isUserOrChampionDetailsFilled() {
-        return mUserSolarObject.getProfileCompletionWeight() >= 90;
+        return mUserSolarObject.getProfileCompletionWeight() >= 85;
     }
 
     private void deactivateUser(final UserSolrObj userSolrObj) {

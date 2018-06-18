@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="24dp"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/trophy_image"
+        android:layout_width="23dp"
+        android:layout_height="18dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/crown_icon" />
+
+    <ImageView
+        android:id="@+id/profile_pic"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_toEndOf="@id/trophy_image"
+        android:layout_toRightOf="@id/trophy_image"
+        android:src="@drawable/ic_user_deactivate" />
+
+    <LinearLayout
+        android:id="@+id/winner_info"
+        android:layout_width="match_parent"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10"
+        android:layout_toEndOf="@id/profile_pic"
+        android:layout_toRightOf="@id/profile_pic"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:lineSpacingExtra="2sp"
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/sp_size_14"
+            tools:text="Champa Roy" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray_light"
+            tools:text="158 Posts · 168 Likes · 140 Comments"
+            android:textSize="14sp" />
+    </LinearLayout>
+</RelativeLayout>

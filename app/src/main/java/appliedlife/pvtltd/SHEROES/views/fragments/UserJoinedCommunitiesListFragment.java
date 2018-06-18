@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -46,18 +47,16 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
 
 /**
  * Created by ravi on 11/01/18.
- * Community listing
+ * User's Joined Communities listing from profile
  */
 
-public class UserMentorCommunity extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
+public class UserJoinedCommunitiesListFragment extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
 
     public static final String SCREEN_LABEL = "Followed Communities Screen";
 
     private long userMentorId;
     private boolean isSelfProfile;
-    private int mPageNo = AppConstants.ONE_CONSTANT;
     private List<CommunityFeedSolrObj> profileCommunities;
-    private LinearLayoutManager mLayoutManager;
     private FragmentListRefreshData mFragmentListRefreshData;
     private ProfileCommunityAdapter mAdapter;
     private SwipPullRefreshList mPullRefreshList;
@@ -80,13 +79,13 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static UserMentorCommunity createInstance(long userId, String name, boolean isSelfProfile) {
-        UserMentorCommunity userMentorCommunity = new UserMentorCommunity();
+    public static UserJoinedCommunitiesListFragment createInstance(long userId, String name, boolean isSelfProfile) {
+        UserJoinedCommunitiesListFragment userJoinedCommunitiesListFragment = new UserJoinedCommunitiesListFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putBoolean(SELF_PROFILE, isSelfProfile);
-        userMentorCommunity.setArguments(bundle);
-        return userMentorCommunity;
+        userJoinedCommunitiesListFragment.setArguments(bundle);
+        return userJoinedCommunitiesListFragment;
     }
 
     @Override
@@ -116,7 +115,7 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
     }
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         RecyclerRowDivider decoration = new RecyclerRowDivider(getContext(), ContextCompat.getColor(getContext(), R.color.on_board_work), 1);
         mRecyclerView.addItemDecoration(decoration);
@@ -194,29 +193,30 @@ public class UserMentorCommunity extends BaseFragment implements ProfileView, Pr
 
             List<CommunityFeedSolrObj> otherCommunities = getUsersCommunity(userCommunities, mFragmentListRefreshData.getPageNo());
             if (StringUtil.isNotEmptyCollection(otherCommunities) && mAdapter != null) {
-                mPageNo = mFragmentListRefreshData.getPageNo();
+                int mPageNo = mFragmentListRefreshData.getPageNo();
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mPullRefreshList.allListData(otherCommunities);
                 List<CommunityFeedSolrObj> data = null;
-                // CommunityFeedSolrObj feedProgressBar = new CommunityFeedSolrObj();
-                // feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+                 CommunityFeedSolrObj feedProgressBar = new CommunityFeedSolrObj();
+                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
                 data = mPullRefreshList.getFeedResponses();
-                //int position = data.size() - otherCommunities.size();
-                //if (position > 0) {
-                //    data.remove(position - 1);
-                //}
-                //data.add(feedProgressBar);
+                int position = data.size() - otherCommunities.size();
+                if (position > 0) {
+                    data.remove(position - 1);
+                }
+                data.add(feedProgressBar);
                 mAdapter.setData(data);
                 mSwipeView.setRefreshing(false);
 
             } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mAdapter != null) {
                 List<CommunityFeedSolrObj> data = mPullRefreshList.getFeedResponses();
                 data.remove(data.size() - 1);
-                mAdapter.notifyDataSetChanged();
+
                 mSwipeView.setRefreshing(false);
             } else {
-                // mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
+                // mBadgeRecyceler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
             }
+            mAdapter.notifyDataSetChanged();
         }
     }
 
