@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
@@ -146,12 +147,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     private String mEncodeImageUrl;
     private boolean isNextPage;
     private ContactsCompletionView completionView;
-    private List<ArticleTagName> mArticleTagNameList;
     private ArrayAdapter<ArticleTagName> adapter;
     private boolean mIsCoverPhoto;
-    private List<ArticleTagName> mTagsList = new ArrayList<>();
+    private List<Long> mDeletedTagsList = new ArrayList<>();
     private ArticleSolrObj mArticleSolrObj = null;
-    private Long mArticleCategoryId;
+    private Long mIdOfEntityOrParticipantArticle;
+    private List<ArticleTagName>mArticleTagNameList=new ArrayList<>();
     //endregion
 
     //region activity methods
@@ -166,6 +167,28 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         if (parcelable != null) {
             mArticleSolrObj = Parcels.unwrap(parcelable);
         }
+/*
+        mArticleSolrObj=new ArticleSolrObj();
+        List<Long>longList=new ArrayList<>();
+        longList.add(1l);
+        longList.add(2l);
+        longList.add(3l);
+        longList.add(4l);
+        longList.add(5l);
+        longList.add(6l);
+        mArticleSolrObj.setTag_ids(longList);
+
+        List<String>name=new ArrayList<>();
+        name.add("One");
+        name.add("two");
+        name.add("three");
+        name.add("four");
+        name.add("five");
+        name.add("six");
+        mArticleSolrObj.setTags(name);
+        mArticleSolrObj.setListDescription("Hello test");
+        mArticleSolrObj.setNameOrTitle("Edit");*/
+
         setSupportActionBar(mToolbar);
         toolbarTitle.setText(R.string.title_article_submit);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -181,7 +204,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             setupEditArticleView(mArticleSolrObj);
         }
         setupShareToFbListener();
-        setupSearchAddRemoveTagContainer();
+        mArticleSubmissionPresenter.getArticleTags();
     }
 
     @Override
@@ -193,8 +216,49 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     }
 
     @Override
-    public void articleSubmitResponse(ArticleSolrObj articleSolrObj) {
-        hideNextPage();
+    public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isDraft) {
+        if (!isDraft) {
+            finish();
+        }
+    }
+
+    @Override
+    public void getArticleTagList(List<ArticleTagName> articleTagNameList,boolean isEdit) {
+        mArticleTagNameList=articleTagNameList;
+        completionView = findViewById(R.id.tag_search_view);
+        if(isEdit)
+        {
+            for(ArticleTagName articleTagName:articleTagNameList) {
+                completionView.addObject(articleTagName);
+            }
+        }else
+        {
+            adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, articleTagNameList) {
+                @Override
+                public View getView(int position, View convertView, ViewGroup parent) {
+                    if (convertView == null) {
+
+                        LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                        convertView = l.inflate(R.layout.article_tag_layout, parent, false);
+                    }
+
+                    ArticleTagName p = getItem(position);
+                    ((TextView) convertView.findViewById(R.id.tv_article_tag)).setText(p.getTagName());
+                    return convertView;
+                }
+
+                @Override
+                protected boolean keepObject(ArticleTagName articleTagName, String mask) {
+                    mask = mask.toLowerCase();
+                    return articleTagName.getTagName().toLowerCase().startsWith(mask);
+                }
+            };
+        }
+        completionView.setAdapter(adapter);
+        completionView.setTokenListener(this);
+        completionView.allowDuplicates(false);
+        completionView.setTokenLimit(5);
+        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
     }
 
     @Override
@@ -212,59 +276,6 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     public boolean onPrepareOptionsMenu(Menu menu) {
         setUpOptionMenuStates(menu);
         return super.onPrepareOptionsMenu(menu);
-    }
-
-    private void setupSearchAddRemoveTagContainer() {
-        ArticleTagName articleTagName = new ArticleTagName();
-        ArticleTagName articleTagName1 = new ArticleTagName();
-        ArticleTagName articleTagName2 = new ArticleTagName();
-        ArticleTagName articleTagName3 = new ArticleTagName();
-        ArticleTagName articleTagName4 = new ArticleTagName();
-        ArticleTagName articleTagName5 = new ArticleTagName();
-        articleTagName.setTagName("Marshall Weir");
-        articleTagName1.setTagName("Margaret Smith");
-        articleTagName2.setTagName("Max Jordan");
-        articleTagName3.setTagName("Meg Peterson");
-        articleTagName4.setTagName("Amanda Johnson");
-        articleTagName5.setTagName("Terry Anderson");
-        mArticleTagNameList = new ArrayList<>();
-        mArticleTagNameList.add(articleTagName);
-        mArticleTagNameList.add(articleTagName1);
-        mArticleTagNameList.add(articleTagName2);
-        mArticleTagNameList.add(articleTagName3);
-        mArticleTagNameList.add(articleTagName4);
-        mArticleTagNameList.add(articleTagName5);
-        adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, mArticleTagNameList) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if (convertView == null) {
-
-                    LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                    convertView = l.inflate(R.layout.article_tag_layout, parent, false);
-                }
-
-                ArticleTagName p = getItem(position);
-                ((TextView) convertView.findViewById(R.id.tv_article_tag)).setText(p.getTagName());
-                return convertView;
-            }
-
-            @Override
-            protected boolean keepObject(ArticleTagName articleTagName, String mask) {
-                if (StringUtil.isNotEmptyCollection(mTagsList) && mTagsList.size() > 4) {
-                    showMessage(R.string.error_tag_max);
-                    return false;
-                } else {
-                    mask = mask.toLowerCase();
-                    return articleTagName.getTagName().toLowerCase().startsWith(mask);
-                }
-            }
-        };
-
-        completionView = findViewById(R.id.tag_search_view);
-        completionView.setAdapter(adapter);
-        completionView.setTokenListener(this);
-        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
-
     }
 
     private void setUpOptionMenuStates(Menu menu) {
@@ -297,10 +308,21 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     }
 
     public void setupEditArticleView(ArticleSolrObj article) {
-        mArticleCategoryId=article.getArticleCategoryId();
+        if (article.getIdOfEntityOrParticipant() > 0) {
+            mIdOfEntityOrParticipantArticle = article.getIdOfEntityOrParticipant();
+        }
         getSupportActionBar().setTitle("Edit Article");
         mEditorFragment.setContent(article.getListDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
+        mArticleNextPageContainer.setVisibility(View.GONE);
+        mEditorContainer.setVisibility(View.VISIBLE);
+        for(int i=0;i<mArticleSolrObj.getTag_ids().size();i++) {
+            ArticleTagName articleTagName=new ArticleTagName();
+            articleTagName.setId(mArticleSolrObj.getTag_ids().get(i));
+            articleTagName.setTagName(mArticleSolrObj.getTags().get(i));
+            mArticleTagNameList.add(articleTagName);
+        }
+        getArticleTagList(mArticleTagNameList,true);
     }
 
     @Override
@@ -349,7 +371,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
         if (id == R.id.post_article_submit) {
             if (validateFields(false, true)) {
-                postArticle();
+                addEditArticle();
             }
         }
 
@@ -437,12 +459,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     //region editor methods
     @Override
     public void onMediaDropped(ArrayList<Uri> arrayList) {
-        Toast.makeText(this, "onMediaDropped", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onRequestDragAndDropPermissions(DragEvent dragEvent) {
-        Toast.makeText(this, "onRequestDragAndDropPermissions", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -469,22 +489,21 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void onMediaRetryClicked(String s) {
-        Toast.makeText(this, "onMediaRetryClicked", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onMediaUploadCancelClicked(String s, boolean b) {
-        Toast.makeText(this, "onMediaUploadCancelClicked", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onFeaturedImageChanged(long l) {
-        Toast.makeText(this, "onFeaturedImageChanged", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onVideoPressInfoRequested(String s) {
-        Toast.makeText(this, "onVideoPressInfoRequested", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -494,12 +513,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     @Override
     public void saveMediaFile(MediaFile mediaFile) {
-        Toast.makeText(this, "saveMediaFile", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onTrackableEvent(EditorFragmentAbstract.TrackableEvent trackableEvent) {
-        Toast.makeText(this, "onTrackableEvent", Toast.LENGTH_SHORT).show();
+
     }
     //endregion
 
@@ -536,10 +555,10 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        mArticleSubmissionPresenter.postArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody));
+        mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody), true);
     }
 
-    private void postArticle() {
+    private void addEditArticle() {
         String articleTitle = null;
         String articleBody = null;
         try {
@@ -548,10 +567,15 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        if (null != mArticleCategoryId) {
-            mArticleSubmissionPresenter.postArticle(mAppUtils.articleAddEditRequest(mArticleCategoryId, articleTitle, articleBody));
+        List<Long> tagList=new ArrayList<>();
+        for(ArticleTagName articleTagName:completionView.getObjects())
+        {
+            tagList.add(articleTagName.getId());
+        }
+        if (null != mIdOfEntityOrParticipantArticle) {
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList,mArticleSolrObj), false);
         } else {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody));
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList,mArticleSolrObj), false);
         }
 
     }
@@ -583,7 +607,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 if (validateFields(true, true)) {
-                    postArticle();
+
                 }
             }
         });
@@ -620,15 +644,13 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             }
             return false;
         }
-
-        if (!StringUtil.isNotEmptyCollection(mTagsList)) {
+        if (!isDraft && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
             if (showError) {
                 showMessage(R.string.error_tag_min);
                 tvTagLable.setVisibility(View.VISIBLE);
             }
             return false;
         }
-
         return true;
     }
 
@@ -764,15 +786,12 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         if (StringUtil.isNotEmptyCollection(completionView.getObjects())) {
             tvTagLable.setVisibility(View.GONE);
         }
-        mTagsList.clear();
-        mTagsList.addAll(completionView.getObjects());
     }
 
     @Override
     public void onTokenRemoved(ArticleTagName token) {
-        mTagsList.clear();
-        mTagsList.addAll(completionView.getObjects());
+        mDeletedTagsList.add(token.getId());
     }
 
-    //endregion
+//endregion
 }

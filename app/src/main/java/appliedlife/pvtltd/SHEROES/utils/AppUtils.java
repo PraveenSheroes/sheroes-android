@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -2157,28 +2158,51 @@ public class AppUtils {
         return m.find();
     }
 
-    public ArticleSubmissionRequest makeArticleDraftRequest( String articleTitle, String articleBody) {
+    public ArticleSubmissionRequest makeArticleDraftRequest(String articleTitle, String articleBody) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
         articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
         articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        articleSubmissionRequest.isPublish = true;
+        articleSubmissionRequest.isPublish = false;
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;
         return articleSubmissionRequest;
     }
 
-    public ArticleSubmissionRequest articleAddEditRequest(Long articleCategoryId, String articleTitle, String articleBody) {
+    public ArticleSubmissionRequest articleAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
         articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
         articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        articleSubmissionRequest.articleCategoryId=articleCategoryId;
+        if(null!=articleId) {
+            articleSubmissionRequest.articleId = articleId;
+            if (StringUtil.isNotEmptyCollection(articleSolrObj.getTag_ids())) {
+                for (long oldTag:articleSolrObj.getTag_ids())
+                {
+                    boolean isMatch=false;
+                    for (long deletedTag:deletedTagList) {
+                        if (oldTag== deletedTag) {
+                            isMatch=true;
+                            break;
+                        }else
+                        {
+                            isMatch=false;
+                        }
+                    }
+                    if(isMatch)
+                    {
+                        deletedTagList.add(oldTag);
+                    }
+                }
+                articleSubmissionRequest.deletedTagIds = deletedTagList;
+            }
+        }
         articleSubmissionRequest.isPublish = true;
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;
+        articleSubmissionRequest.tagIds = tagList;
         return articleSubmissionRequest;
     }
 }

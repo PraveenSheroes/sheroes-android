@@ -62,6 +62,33 @@ public class ArticleSolrObj extends FeedDetail {
     @SerializedName(value = "highresImage_height_i")
     private int highresImageHeight;
 
+    @SerializedName("is_user_story_b")
+    private boolean isUserStory;
+
+    @SerializedName("user_story_status_s")
+    private String userStoryStatus;
+
+    @SerializedName("story_deeplink_url_s")
+    private String storyDeeplinkUrl;
+
+    @SerializedName("is_public_story_b")
+    private boolean isPublicStory;
+
+    @SerializedName("is_private_story_b")
+    private boolean isPrivateStory;
+
+    @SerializedName("is_paid_story_b")
+    private boolean isPaidStory;
+
+    @SerializedName("paid_amount_f")
+    private float paidAmount;
+
+    @SerializedName("is_indexed_b")
+    private boolean isIndexed;
+
+    @SerializedName("relative_path_url_s")
+    private String relativePathUrl;
+
     public String getSlug() {
         return slug;
     }
@@ -173,9 +200,10 @@ public class ArticleSolrObj extends FeedDetail {
     public void setHighresImageHeight(int highresImageHeight) {
         this.highresImageHeight = highresImageHeight;
     }
+
     public
     @DrawableRes
-     int getBookmarkActivityDrawable() {
+    int getBookmarkActivityDrawable() {
         return this.isBookmarked() ? R.drawable.vector_bookmarked : R.drawable.vector_unbookmarked;
     }
 
@@ -185,4 +213,75 @@ public class ArticleSolrObj extends FeedDetail {
         return this.isLiked ? R.drawable.vector_like : R.drawable.vector_unlike;
     }
 
+    public boolean isUserStory() {
+        return isUserStory;
+    }
+
+    public void setUserStory(boolean userStory) {
+        isUserStory = userStory;
+    }
+
+    public String getUserStoryStatus() {
+        return userStoryStatus;
+    }
+
+    public void setUserStoryStatus(String userStoryStatus) {
+        this.userStoryStatus = userStoryStatus;
+    }
+
+    public String getStoryDeeplinkUrl() {
+        return storyDeeplinkUrl;
+    }
+
+    public void setStoryDeeplinkUrl(String storyDeeplinkUrl) {
+        this.storyDeeplinkUrl = storyDeeplinkUrl;
+    }
+
+    public boolean isPublicStory() {
+        return isPublicStory;
+    }
+
+    public void setPublicStory(boolean publicStory) {
+        isPublicStory = publicStory;
+    }
+
+    public boolean isPrivateStory() {
+        return isPrivateStory;
+    }
+
+    public void setPrivateStory(boolean privateStory) {
+        isPrivateStory = privateStory;
+    }
+
+    public boolean isPaidStory() {
+        return isPaidStory;
+    }
+
+    public void setPaidStory(boolean paidStory) {
+        isPaidStory = paidStory;
+    }
+
+    public float getPaidAmount() {
+        return paidAmount;
+    }
+
+    public void setPaidAmount(float paidAmount) {
+        this.paidAmount = paidAmount;
+    }
+
+    public boolean isIndexed() {
+        return isIndexed;
+    }
+
+    public void setIndexed(boolean indexed) {
+        isIndexed = indexed;
+    }
+
+    public String getRelativePathUrl() {
+        return relativePathUrl;
+    }
+
+    public void setRelativePathUrl(String relativePathUrl) {
+        this.relativePathUrl = relativePathUrl;
+    }
 }

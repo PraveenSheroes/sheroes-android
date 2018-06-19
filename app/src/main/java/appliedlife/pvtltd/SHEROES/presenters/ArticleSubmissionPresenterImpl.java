@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -22,6 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 /**
@@ -38,7 +40,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
         this.mSheroesApplication = sheroesApplication;
     }
 
-    public void postArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
+    public void submitAndDraftArticle(final ArticleSubmissionRequest articleSubmissionRequest, final boolean isDraft) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
@@ -64,12 +66,10 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                     @Override
                     public void onNext(ArticleSubmissionResponse articleSubmissionResponse) {
                         getMvpView().stopProgressBar();
-                        if(null!=articleSubmissionResponse)
-                        {
-                            switch (articleSubmissionResponse.getStatus())
-                            {
+                        if (null != articleSubmissionResponse) {
+                            switch (articleSubmissionResponse.getStatus()) {
                                 case AppConstants.SUCCESS:
-                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj());
+                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isDraft);
                                     break;
                                 case AppConstants.FAILED:
                                     break;
@@ -79,7 +79,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                 });
     }
 
-    public void editArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
+    public void editArticle(final ArticleSubmissionRequest articleSubmissionRequest, final boolean isDraft) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
@@ -105,12 +105,10 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                     @Override
                     public void onNext(ArticleSubmissionResponse articleSubmissionResponse) {
                         getMvpView().stopProgressBar();
-                        if(null!=articleSubmissionResponse)
-                        {
-                            switch (articleSubmissionResponse.getStatus())
-                            {
+                        if (null != articleSubmissionResponse) {
+                            switch (articleSubmissionResponse.getStatus()) {
                                 case AppConstants.SUCCESS:
-                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj());
+                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isDraft);
                                     break;
                                 case AppConstants.FAILED:
                                     break;
@@ -179,29 +177,67 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
         UploadImageRequest uploadImageRequest = new UploadImageRequest();
         uploadImageRequest.images = new ArrayList<>();
         uploadImageRequest.images.add(encodedImage);
-                    mSheroesAppServiceApi.uploadImage(uploadImageRequest)
-                    .compose(this.<UpLoadImageResponse>bindToLifecycle())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DisposableObserver<UpLoadImageResponse>() {
-                @Override
-                public void onNext(UpLoadImageResponse upLoadImageResponse) {
-                    String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
-                    getMvpView().showImage(finalImageUrl);
-                }
+        mSheroesAppServiceApi.uploadImage(uploadImageRequest)
+                .compose(this.<UpLoadImageResponse>bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<UpLoadImageResponse>() {
+                    @Override
+                    public void onNext(UpLoadImageResponse upLoadImageResponse) {
+                        String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
+                        getMvpView().showImage(finalImageUrl);
+                    }
 
-                @Override
-                public void onError(Throwable e) {
-                    Crashlytics.getInstance().core.logException(e);
-                    getMvpView().showError(e.getMessage(), ERROR_TAG);
-                    getMvpView().stopProgressBar();
-                }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        getMvpView().stopProgressBar();
+                    }
 
-                @Override
-                public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-                }
-            });
+                    }
+                });
+    }
+
+    public void getArticleTags() {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        mSheroesAppServiceApi.getArticleTags()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<ArticleTagResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ArticleTagResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(ArticleTagResponse articleTagResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != articleTagResponse) {
+                            switch (articleTagResponse.getStatus()) {
+                                case AppConstants.SUCCESS:
+                                    getMvpView().getArticleTagList(articleTagResponse.getTags(),false);
+                                    break;
+                                case AppConstants.FAILED:
+                                    break;
+                            }
+                        }
+                    }
+                });
     }
     //endregion
 

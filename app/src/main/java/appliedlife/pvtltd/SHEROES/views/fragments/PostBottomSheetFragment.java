@@ -77,7 +77,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if(getArguments()!=null){
+        if (getArguments() != null) {
 
         }
         return super.onCreateDialog(savedInstanceState);
@@ -85,9 +85,9 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void onAttach(Activity activity) {
-        if(activity instanceof CommunityPostActivity){
+        if (activity instanceof CommunityPostActivity) {
             mCommunityPostActivity = (CommunityPostActivity) activity;
-        }else {
+        } else {
             mArticleSubmissionActivity = (ArticleSubmissionActivity) activity;
         }
         super.onAttach(activity);
@@ -101,7 +101,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         View containerView = View.inflate(getContext(), R.layout.dialog_community_list, null);
         dialog.setContentView(containerView);
         ButterKnife.bind(this, containerView);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity()){
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
@@ -118,7 +118,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
             parcelable = getArguments().getParcelable(MyCommunities.MY_COMMUNITY_OBJ);
             mMyCommunities = Parcels.unwrap(parcelable);
             mCommunityList = mMyCommunities.myCommunities;
-        }else {
+        } else {
             setMyCommunityList();
         }
         showCommunity();
@@ -127,21 +127,21 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     private void setMyCommunityList() {
         mMyCommunities = new MyCommunities();
         boolean isFirstOtherSet = false;
-        if (mAllCommunities!=null && mAllCommunities.isSet() && mAllCommunities.get() != null && !CommonUtil.isEmpty(mAllCommunities.get().feedDetails)) {
+        if (mAllCommunities != null && mAllCommunities.isSet() && !CommonUtil.isEmpty(mAllCommunities.get().feedDetails)) {
             for (FeedDetail feedDetail : mAllCommunities.get().feedDetails) {
                 Community community = new Community();
                 community.id = feedDetail.getIdOfEntityOrParticipant();
                 community.name = feedDetail.getNameOrTitle();
                 community.thumbImageUrl = feedDetail.getThumbnailImageUrl();
-                community.isOwner = ((CommunityFeedSolrObj)feedDetail).isOwner();
-                if (!((CommunityFeedSolrObj)feedDetail).isOwner() && !((CommunityFeedSolrObj)feedDetail).isMember() && !isFirstOtherSet) {
+                community.isOwner = ((CommunityFeedSolrObj) feedDetail).isOwner();
+                if (!((CommunityFeedSolrObj) feedDetail).isOwner() && !((CommunityFeedSolrObj) feedDetail).isMember() && !isFirstOtherSet) {
                     community.isFirstOther = true;
                     isFirstOtherSet = true;
                 }
                 mCommunityList.add(community);
             }
             mMyCommunities.myCommunities = new ArrayList<>(mCommunityList);
-        }else {
+        } else {
             mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         }
     }
@@ -168,10 +168,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        if(getActivity() instanceof CommunityPostActivity){
+        if (getActivity() instanceof CommunityPostActivity) {
             mCommunityPostActivity.showError(s, feedParticipationEnum);
-        }else {
-            if(getActivity() instanceof ArticleSubmissionActivity){
+        } else {
+            if (getActivity() instanceof ArticleSubmissionActivity) {
                 mArticleSubmissionActivity.showError(s, feedParticipationEnum);
             }
         }
@@ -190,12 +190,12 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
-            for (FeedDetail feedDetail : feedResponsePojo.getFeedDetails()){
+            for (FeedDetail feedDetail : feedResponsePojo.getFeedDetails()) {
                 Community community = new Community();
                 community.id = feedDetail.getIdOfEntityOrParticipant();
                 community.name = feedDetail.getNameOrTitle();
                 community.thumbImageUrl = feedDetail.getThumbnailImageUrl();
-                community.isOwner = ((CommunityFeedSolrObj)feedDetail).isOwner();
+                community.isOwner = ((CommunityFeedSolrObj) feedDetail).isOwner();
                 mCommunityList.add(community);
             }
             mMyCommunities.myCommunities = new ArrayList<>(mCommunityList);
@@ -235,7 +235,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 clearCheck();
                 mMyCommunities.myCommunities.get(position).isChecked = true;
                 mCommunityListAdapter.notifyDataSetChanged();
-                if(getActivity() instanceof CommunityPostActivity){
+                if (getActivity() instanceof CommunityPostActivity) {
                     mCommunityPostActivity.setMainCommunity(community, mMyCommunities);
                 }
                 dismiss();
@@ -244,8 +244,8 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     private void clearCheck() {
-        if(!CommonUtil.isEmpty(mCommunityList)){
-            for (Community community : mCommunityList){
+        if (!CommonUtil.isEmpty(mCommunityList)) {
+            for (Community community : mCommunityList) {
                 community.isChecked = false;
             }
         }
@@ -262,7 +262,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         return postBottomSheetFragment;
     }
 
-    public static PostBottomSheetFragment showDialog(AppCompatActivity activity, String sourceScreen,MyCommunities myCommunities) {
+    public static PostBottomSheetFragment showDialog(AppCompatActivity activity, String sourceScreen, MyCommunities myCommunities) {
         PostBottomSheetFragment postBottomSheetFragment = new PostBottomSheetFragment();
         Bundle args = new Bundle();
         args.putParcelable(MyCommunities.MY_COMMUNITY_OBJ, Parcels.wrap(myCommunities));

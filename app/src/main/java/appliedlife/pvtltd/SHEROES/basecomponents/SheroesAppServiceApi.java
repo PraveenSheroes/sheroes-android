@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsigh
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
@@ -341,4 +342,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/article/story/edit")
     Observable<ArticleSubmissionResponse> editArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
+
+    @GET("entity/master/get_tags")
+    Observable<ArticleTagResponse> getArticleTags();
 }
