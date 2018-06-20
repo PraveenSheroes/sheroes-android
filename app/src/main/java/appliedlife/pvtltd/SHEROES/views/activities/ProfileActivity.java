@@ -848,7 +848,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             screenName="My Stories";
             bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true");
         }
-        bundle.putString(AppConstants.SCREEN_NAME, "Stories Screen");
+        bundle.putString(AppConstants.SCREEN_NAME, "Profile Stories Screen");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
         feedFragment.setArguments(bundle);
         mViewPagerAdapter.addFragment(feedFragment,screenName);

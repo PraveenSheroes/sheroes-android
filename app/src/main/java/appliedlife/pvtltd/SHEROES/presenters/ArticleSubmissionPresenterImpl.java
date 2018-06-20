@@ -214,27 +214,20 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                 .subscribe(new DisposableObserver<ArticleTagResponse>() {
                     @Override
                     public void onComplete() {
-                        getMvpView().stopProgressBar();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), ERROR_TAG);
-                        getMvpView().stopProgressBar();
+                        getMvpView().getArticleTagList(null, false);
                     }
 
                     @Override
                     public void onNext(ArticleTagResponse articleTagResponse) {
-                        getMvpView().stopProgressBar();
                         if (null != articleTagResponse) {
-                            switch (articleTagResponse.getStatus()) {
-                                case AppConstants.SUCCESS:
-                                    getMvpView().getArticleTagList(articleTagResponse.getTags(),false);
-                                    break;
-                                case AppConstants.FAILED:
-                                    break;
-                            }
+                            getMvpView().getArticleTagList(articleTagResponse.getTags(), false);
                         }
                     }
                 });

@@ -216,7 +216,14 @@ public enum Event {
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
     FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, ""),
-    USER_TAGGED(AnalyticsEventType.USER, "Tagged");
+    USER_TAGGED(AnalyticsEventType.USER, "Tagged"),
+    STORY_DRAFT_SAVED(AnalyticsEventType.STORY, "Draft Saved"),
+    STORY_CREATED(AnalyticsEventType.STORY, "Created"),
+    STORY_BOOKMARKED(AnalyticsEventType.STORY, "Bookmarked"),
+    STORY_UN_BOOKMARKED(AnalyticsEventType.STORY, "UnBookmarked"),
+    STORY_LIKED(AnalyticsEventType.STORY, "Liked"),
+    STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
+    STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created");
     //endregion
 
     public final AnalyticsEventType type;

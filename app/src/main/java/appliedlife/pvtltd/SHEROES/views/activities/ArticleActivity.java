@@ -125,6 +125,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
 public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener, AppBarLayout.OnOffsetChangedListener {
 
     public static final String SCREEN_LABEL = "Article Activity";
+    public static final String SCREEN_LABEL_STORY = "Story Details Screen";
     public static final String IMAGE_WIDTH = "IMAGE_WIDTH";
     public static final String IMAGE_HEIGHT = "IMAGE_HEIGHT";
     private static final String NOTIFICATION_SCREEN = "Push Notification";
@@ -276,6 +277,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private String streamType;
     private List<MentionSpan> mentionSpanList;
     private boolean hasMentions = false;
+    private String mSourceScreen;
+    private HashMap<String, Object> mProperties;
     //endregion
 
     //region Activity methods
@@ -289,20 +292,25 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mArticlePresenter.attachView(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
-        mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
-        mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
-        if (parcelable != null) {
-            mArticleSolrObj = Parcels.unwrap(parcelable);
-            if (mArticleSolrObj != null) {
-                mCommentCount = mArticleSolrObj.getNoOfComments();
-                updateTitleCommentCountView();
-                mImageWidth = mArticleSolrObj.getHighresImageWidth();
-                mImageHeight = mArticleSolrObj.getHighresImageHeight();
-                streamType = mArticleSolrObj.getStreamType();
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
+            Parcelable properties = getIntent().getParcelableExtra(BaseActivity.SOURCE_PROPERTIES);
+            if (properties != null) {
+                mProperties = Parcels.unwrap(properties);
             }
-        } else {
-            if (getIntent().getExtras() != null) {
+            Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
+            mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
+            mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
+            if (parcelable != null) {
+                mArticleSolrObj = Parcels.unwrap(parcelable);
+                if (mArticleSolrObj != null) {
+                    mCommentCount = mArticleSolrObj.getNoOfComments();
+                    updateTitleCommentCountView();
+                    mImageWidth = mArticleSolrObj.getHighresImageWidth();
+                    mImageHeight = mArticleSolrObj.getHighresImageHeight();
+                    streamType = mArticleSolrObj.getStreamType();
+                }
+            } else {
                 String notificationId = getIntent().getExtras().getString("notificationId");
                 Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
@@ -311,11 +319,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 }
                 mImageWidth = getIntent().getExtras().getInt(IMAGE_WIDTH);
                 mImageHeight = getIntent().getExtras().getInt(IMAGE_HEIGHT);
-            } else {
-                finish();
+
             }
         }
-
         mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
                 0xaa000000, 8, Gravity.TOP));
 
@@ -350,7 +356,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     fab.hide();
                     mSubmitButton.setVisibility(View.VISIBLE);
                     mCancelButton.setVisibility(View.VISIBLE);
-                    mArticleLayout.smoothScrollTo(0, mAuthorDesView.getBottom());
+                    //mArticleLayout.smoothScrollTo(0, mAuthorDesView.getBottom());
 
                 } else {
                     mHasFocus = false;
@@ -366,6 +372,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 toolTipForShareArticle();
             }
         }
+
     }
 
     private void setupToolbarItemsColor() {
@@ -794,6 +801,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentBody.setText("");
         mCommentBody.clearFocus();
         CommonUtil.hideKeyboard(ArticleActivity.this);
+        if (mArticleSolrObj.isUserStory()) {
+            HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, getScreenName());
+            AnalyticsManager.trackEvent(Event.STORY_REPLY_CREATED, getScreenName(), properties);
+        }
     }
 
     @OnClick(R.id.cancel)
@@ -830,7 +841,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         streamType = articleSolrObj.getStreamType();
         mImageHeight = articleSolrObj.getHighresImageHeight();
         mImageWidth = articleSolrObj.getHighresImageWidth();
-
         mArticleSolrObj = articleSolrObj;
         invalidateOptionsMenu();
         mCommentCount = articleSolrObj.getNoOfComments();
@@ -919,6 +929,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             webViewText.addJavascriptInterface(webViewClickListener, "video");
         }
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
+
+        if (null != mArticleSolrObj && mArticleSolrObj.isUserStory()) {
+            AnalyticsManager.trackScreenView(SCREEN_LABEL_STORY, mSourceScreen, mProperties);
+        } else {
+            AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        }
     }
 
 
@@ -1098,6 +1114,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
     //endregion
 
     //region OnScroll methods

@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -255,6 +256,22 @@ public class MixpanelHelper {
         }else {
             return null;
         }
+    }
+
+    public static HashMap<String, Object> getArticleOrStoryProperties(ArticleSolrObj articleSolrObj, String screenName) {
+        if (articleSolrObj == null) {
+            return null;
+        }
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(articleSolrObj.getEntityOrParticipantId()))
+                            .title(articleSolrObj.getNameOrTitle())
+                            .authorId(String.valueOf(articleSolrObj.getAuthorId()))
+                            .authorName(articleSolrObj.getAuthorName())
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+            return properties;
+
     }
 
     //TODO - Fix this with ujjwal

@@ -19,7 +19,7 @@ public class ArticleTagName {
     @SerializedName("is_other")
     private boolean isOther;
     @SerializedName("crdt")
-    private int crdt;
+    private long crdt;
 
 
     public String getTagName() {
@@ -55,11 +55,11 @@ public class ArticleTagName {
         isOther = other;
     }
 
-    public int getCrdt() {
+    public long getCrdt() {
         return crdt;
     }
 
-    public void setCrdt(int crdt) {
+    public void setCrdt(long crdt) {
         this.crdt = crdt;
     }
 }
