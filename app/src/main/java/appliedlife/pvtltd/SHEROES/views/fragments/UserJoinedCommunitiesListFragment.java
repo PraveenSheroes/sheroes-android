@@ -214,7 +214,7 @@ public class UserJoinedCommunitiesListFragment extends BaseFragment implements P
 
                 mSwipeView.setRefreshing(false);
             } else {
-                // mBadgeRecyceler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
+                // mBadgeRecycler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
             }
             mAdapter.notifyDataSetChanged();
         }

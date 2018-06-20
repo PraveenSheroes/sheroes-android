@@ -67,7 +67,7 @@ public class CommunitiesBadgesActivity extends BaseActivity implements ProfileVi
     TextView titleName;
 
     @Bind(R.id.communities)
-    RecyclerView mBadgeRecyceler;
+    RecyclerView mBadgeRecycler;
 
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
@@ -147,18 +147,23 @@ public class CommunitiesBadgesActivity extends BaseActivity implements ProfileVi
 
     private void mentorSearchInListPagination() {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
-        mBadgeRecyceler.setLayoutManager(mLayoutManager);
+        mBadgeRecycler.setLayoutManager(mLayoutManager);
         RecyclerRowDivider decoration = new RecyclerRowDivider(this, ContextCompat.getColor(this, R.color.on_board_work), 1);
-        mBadgeRecyceler.addItemDecoration(decoration);
+        mBadgeRecycler.addItemDecoration(decoration);
         mAdapter = new BadgesListAdapter(CommunitiesBadgesActivity.this, this);
-        mBadgeRecyceler.setAdapter(mAdapter);
+        mBadgeRecycler.setAdapter(mAdapter);
 
         List<BadgeDetails> badges = new ArrayList<>();
 
         for (int i = 0; i < 15; i++) {
             BadgeDetails details = new BadgeDetails();
-            details.setEarnedDate("23-Nov-2017");
-            details.setName("ABC" + i);
+            if (i<3) {
+                details.setEarnedDate("Won this week");
+            } else {
+                details.setEarnedDate("23-Nov-2017");
+            }
+
+            details.setName("Magic Pen Badge");
             badges.add(details);
         }
 
@@ -169,7 +174,7 @@ public class CommunitiesBadgesActivity extends BaseActivity implements ProfileVi
        // mPullRefreshList = new SwipPullRefreshList();
        // mPullRefreshList.setPullToRefresh(false);
 
-      /*  mBadgeRecyceler.addOnScrollListener(new HidingScrollListener(profilePresenter, mBadgeRecyceler, mLayoutManager, fragmentListRefreshData) {
+      /*  mBadgeRecycler.addOnScrollListener(new HidingScrollListener(profilePresenter, mBadgeRecycler, mLayoutManager, fragmentListRefreshData) {
             @Override
             public void onHide() {
             }
@@ -246,7 +251,7 @@ public class CommunitiesBadgesActivity extends BaseActivity implements ProfileVi
                 data.remove(data.size() - 1);
 
             } else {
-                // mBadgeRecyceler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
+                // mBadgeRecycler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
             }
             mAdapter.notifyDataSetChanged();
         }*/

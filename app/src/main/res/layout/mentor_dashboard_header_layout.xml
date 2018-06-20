@@ -23,9 +23,10 @@
 
         <ImageView
             android:id="@+id/edit_icon"
+            android:layout_marginTop="@dimen/dp_size_16"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="end|bottom"
+            android:layout_gravity="end|right"
             android:src="@drawable/ic_edit_pic"
             android:visibility="gone" />
 
@@ -33,9 +34,8 @@
             android:id="@+id/user_badge"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="right|end"
-            android:layout_marginTop="@dimen/dp_size_16"
-            android:src="@drawable/ic_edit_pic"
+            android:layout_gravity="end|bottom"
+            android:src="@drawable/ic_badge_golden"
             android:visibility="gone" />
 
         <ImageView
@@ -240,42 +240,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_mentor_name"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginStart="@dimen/dp_size_16">
+        android:layout_marginLeft="@dimen/dp_size_10"
+        android:layout_marginStart="@dimen/dp_size_10">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:layout_width="@dimen/dp_size_38"
+            android:layout_height="@dimen/dp_size_38"
+            android:layout_margin="@dimen/dp_size_4"
+            android:background="@drawable/ic_community_badge" />
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:layout_width="@dimen/dp_size_38"
+            android:layout_height="@dimen/dp_size_38"
+            android:layout_margin="@dimen/dp_size_4"
+            android:background="@drawable/ic_community_badge" />
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/badge_details"
             android:layout_width="@dimen/dp_size_38"
             android:layout_height="@dimen/dp_size_38"
             android:layout_margin="@dimen/dp_size_4"
-            android:background="@drawable/circle"
-            android:padding="@dimen/dp_size_7"
-            android:src="@drawable/vector_user_deactivated" />
-
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:layout_width="@dimen/dp_size_38"
-            android:layout_height="@dimen/dp_size_38"
-            android:layout_margin="@dimen/dp_size_4"
-            android:background="@drawable/circle"
-            android:padding="@dimen/dp_size_7"
-            android:src="@drawable/vector_user_deactivated" />
-
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:layout_width="@dimen/dp_size_38"
-            android:layout_height="@dimen/dp_size_38"
-            android:layout_margin="@dimen/dp_size_4"
-            android:background="@drawable/circle"
-            android:padding="@dimen/dp_size_7"
-            android:src="@drawable/vector_user_deactivated" />
+            android:background="@drawable/ic_community_badge" />
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
             android:id="@+id/more_badges"
             android:layout_width="@dimen/dp_size_38"
             android:layout_height="@dimen/dp_size_38"
             android:layout_margin="@dimen/dp_size_4"
-            android:background="@drawable/circle"
-            android:padding="@dimen/dp_size_7"
-            android:src="@drawable/more" />
+            android:background="@drawable/ic_community_badge" />
 
     </LinearLayout>
 
@@ -285,7 +277,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/badges_container"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginTop="@dimen/dp_size_4"
         android:orientation="horizontal"
         android:weightSum="@integer/int_value_for_line_1">
 

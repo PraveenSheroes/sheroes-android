@@ -8,33 +8,37 @@
     android:layout_marginTop="24dp"
     android:background="@color/white">
 
-    <ImageView
-        android:id="@+id/trophy_image"
-        android:layout_width="23dp"
-        android:layout_height="18dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/crown_icon" />
+    <FrameLayout
+        android:id="@+id/icon_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true">
 
-    <ImageView
-        android:id="@+id/profile_pic"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_marginStart="@dimen/dp_size_10"
-        android:layout_toEndOf="@id/trophy_image"
-        android:layout_toRightOf="@id/trophy_image"
-        android:src="@drawable/ic_user_deactivate" />
+        <ImageView
+            android:id="@+id/profile_pic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="@dimen/dp_size_28"
+            android:layout_marginStart="@dimen/dp_size_28"
+            android:src="@drawable/circular_background" />
+
+        <ImageView
+            android:id="@+id/trophy_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_community_badge" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/winner_info"
         android:layout_width="match_parent"
-        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/dp_size_10"
         android:layout_marginStart="@dimen/dp_size_10"
-        android:layout_toEndOf="@id/profile_pic"
-        android:layout_toRightOf="@id/profile_pic"
+        android:layout_toEndOf="@id/icon_container"
+        android:layout_toRightOf="@id/icon_container"
         android:orientation="vertical">
 
         <TextView
@@ -43,17 +47,17 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="2sp"
+            android:text="Champa Roy"
             android:textColor="@color/gray_light"
-            android:textSize="@dimen/sp_size_14"
-            tools:text="Champa Roy" />
+            android:textSize="@dimen/sp_size_14" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="158 Posts · 168 Likes · 140 Comments"
             android:textColor="@color/gray_light"
-            tools:text="158 Posts · 168 Likes · 140 Comments"
             android:textSize="14sp" />
     </LinearLayout>
 </RelativeLayout>

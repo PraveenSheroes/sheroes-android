@@ -3,50 +3,40 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
-import org.parceler.Parcels;
-
-import java.util.Date;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
-import appliedlife.pvtltd.SHEROES.utils.DateUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
-import appliedlife.pvtltd.SHEROES.views.adapters.WinnerListAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.LeaderBoardListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
+import butterknife.OnClick;
 
 /**
  * Created by Ravi on 11/06/18.
  */
 
-public class CommunityLeaderBoardFragment extends BaseFragment implements IContestWinnerView {
+public class CommunityLeaderBoardFragment extends BaseFragment implements LeaderBoardListAdapter.OnItemClickListener {
     private static final String SCREEN_LABEL = "Contest Winner Fragment";
 
     @Inject
@@ -56,6 +46,8 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
     @Bind(R.id.winner_list)
     EmptyRecyclerView mRecyclerView;
 
+
+
     @Bind(R.id.empty_view)
     View emptyView;
 
@@ -63,17 +55,20 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
     ProgressBar mProgressBar;
     //endregion
 
+    BottomSheetBehavior sheetBehavior;
+
     //region private methods
-    private WinnerListAdapter mWinnerListAdapter;
-    private Contest mContest;
+    private LeaderBoardListAdapter mWinnerListAdapter;
+    //private Contest mContest;
     //endregion
 
     //region Fragment lifecycle methods
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.framgment_contest_winner, container, false);
+        View view = inflater.inflate(R.layout.fragment_community_leaderbaord, container, false);
         ButterKnife.bind(this, view);
+
         Parcelable parcelable = null;
         if (getArguments() != null) {
             if (getArguments().getParcelable(Contest.CONTEST_OBJ) != null) {
@@ -84,30 +79,24 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
                 parcelable = getActivity().getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
             }
         }
-        if (parcelable != null) {
-            mContest = Parcels.unwrap(parcelable);
-        }else {
-            return view;
+
+        mWinnerListAdapter = new LeaderBoardListAdapter(getContext(), this);
+
+        List<Winner> data = new ArrayList<>();
+        for(int i=0; i<10; i++) {
+            Winner winner = new Winner();
+            data.add(winner);
         }
+
+        mWinnerListAdapter.setData(data);
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-        mContestWinnerPresenter.attachView(this);
+       // mContestWinnerPresenter.attachView(this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
-        if (CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt()) == ContestStatus.COMPLETED) {
-            if (!mContest.hasMyPost) {
-                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                        RelativeLayout.LayoutParams.WRAP_CONTENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT
-                );
-                params.setMargins(0, 0, 0, 0);
-                mRecyclerView.setLayoutParams(params);
-            }
-        }
-        initAdapter();
-
-        mContestWinnerPresenter.fetchWinners(Integer.toString(mContest.remote_id));
+     //   mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
+        mRecyclerView.setAdapter(mWinnerListAdapter);
+       // mContestWinnerPresenter.fetchWinners(Integer.toString(mContest.remote_id));
 
         return view;
     }
@@ -115,13 +104,6 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
     //endregion
 
     //region IContestWinnerView
-    @Override
-    public void showPrizes(List<Winner> winners) {
-        Winner winner = new Winner();
-        winner.isHeader = true;
-        winners.add(0, winner);
-        mWinnerListAdapter.setData(winners);
-    }
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -132,18 +114,6 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
     }
 
     @Override
-    protected Map<String, Object> getExtraProperties() {
-        final EventProperty.Builder builder = new EventProperty.Builder();
-        if (mContest != null) {
-            builder.title(mContest.title)
-                    .id(Integer.toString(mContest.remote_id));
-
-        }
-        HashMap<String, Object> properties = builder.build();
-        return properties;
-    }
-
-    @Override
     public boolean shouldTrackScreen() {
         return false;
     }
@@ -151,27 +121,6 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
     //endregion
 
     //region private methods
-
-    private String getDateString(String winnerAnnouncementDate) {
-        if (winnerAnnouncementDate == null) {
-            return this.getResources().getString(R.string.soon);
-        } else {
-            Date announcementDate = DateUtil.parseDateFormat(mContest.winnerAnnouncementDate, AppConstants.DATE_FORMAT);
-            return "on" + " <b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) +"</b>";
-        }
-    }
-
-    private void initAdapter() {
-        mWinnerListAdapter = new WinnerListAdapter(getActivity(), new WinnerListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Winner item) {
-                long userId = Long.valueOf(item.userId);
-                ProfileActivity.navigateTo(mActivity, userId, false, PROFILE_NOTIFICATION_ID, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-            }
-        });
-
-        mRecyclerView.setAdapter(mWinnerListAdapter);
-    }
 
     @Override
     public void startProgressBar() {
@@ -186,6 +135,16 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
         if (null != mProgressBar) {
             mProgressBar.setVisibility(View.GONE);
             mRecyclerView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * manually opening / closing bottom sheet on button click
+     */
+    @OnClick(R.id.about_leaderboard)
+    public void toggleLeaderBoardBottomSheet() {
+        if(getContext()!=null) {
+            LeaderBoardBottomSheetFragment.showDialog((AppCompatActivity) getContext());
         }
     }
 
@@ -204,5 +163,12 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements IConte
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public void onItemClick(Winner item) {
+        //Open BadgeDetail dialog
+        if(getActivity() ==null || getActivity().isFinishing()) return;
+        BadgeDetailsDialogFragment.showDialog(getActivity(), BadgeDetailsDialogFragment.SCREEN_NAME, true);
     }
 }

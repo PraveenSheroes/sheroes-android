@@ -14,18 +14,24 @@
         android:layout_marginLeft="@dimen/dp_size_18"
         android:layout_marginStart="@dimen/dp_size_18"
         android:layout_marginTop="@dimen/dp_size_18"
-        android:src="@drawable/crown_icon" />
+        android:src="@drawable/ic_community_badge" />
 
-    <ImageView
+    <TextView
         android:id="@+id/earned_badge_count"
-        android:layout_width="@dimen/dp_size_30"
-        android:layout_height="@dimen/dp_size_30"
+        android:layout_width="@dimen/dp_size_36"
+        android:layout_height="@dimen/dp_size_36"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif"
+        android:textStyle="bold"
+        android:text="5"
+        android:gravity="center"
         android:layout_marginEnd="@dimen/dp_size_24"
         android:layout_marginRight="@dimen/dp_size_24"
+        android:textColor="#dc4541"
         android:layout_marginTop="@dimen/dp_size_21"
-        android:src="@drawable/crown_icon" />
+        android:background="@drawable/ic_active_badge_blank" />
 
     <LinearLayout
         android:layout_width="match_parent"

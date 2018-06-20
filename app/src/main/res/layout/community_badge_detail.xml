@@ -8,7 +8,7 @@
         android:id="@+id/header_container"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:background="@drawable/ic_image">
+        android:background="@color/red">
 
         <ImageView
             android:id="@+id/cross"
@@ -25,15 +25,18 @@
             android:layout_height="108dp"
             android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/dp_size_16"
-            android:src="@drawable/crown_icon" />
+            android:src="@drawable/ic_community_badge" />
 
         <ImageView
             android:id="@+id/user_image"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_size_10"
-            android:layout_marginRight="@dimen/dp_size_10"
+            android:layout_marginEnd="@dimen/dp_size_35"
+            android:layout_marginRight="@dimen/dp_size_35"
             android:paddingEnd="@dimen/dp_size_1"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_gravity="right|end"
+            android:src="@drawable/ic_badge_dialog_girl"
             android:paddingLeft="@dimen/dp_size_8"
             android:paddingRight="@dimen/dp_size_1"
             android:paddingStart="@dimen/dp_size_8" />
@@ -52,10 +55,10 @@
         android:layout_marginTop="@dimen/dp_size_21"
         android:fontFamily="sans-serif-medium"
         android:lineSpacingExtra="8sp"
+        android:text="Wealth Creators Badge"
         android:textColor="#de3c3c3c"
         android:textSize="20sp"
-        android:textStyle="normal"
-        tools:text="Wealth Creators Badge" />
+        android:textStyle="normal" />
 
 
     <TextView
@@ -70,23 +73,61 @@
         android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="sans-serif"
         android:lineSpacingExtra="8sp"
+        android:text="21- 27 Feb 2018
+Anupriya was a Super SHEROES in Money Matters"
         android:textColor="#878787"
         android:textSize="16sp"
-        android:textStyle="bold"
-        tools:text="21- 27 Feb 2018
-Anupriya was a Super SHEROES in Money Matters" />
+        android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/buttonPanel"
-        android:layout_width="@dimen/dp_size_160"
-        android:layout_height="@dimen/dp_size_36"
+    <TextView
+        android:id="@+id/share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/badge_desc"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/dp_size_24"
-        android:layout_marginTop="@dimen/dp_size_24"
-        android:background="@drawable/border_new_feature"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:gravity="center"
-        android:text="@string/ID_OK"
-        android:textColor="@color/white" />
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.04"
+        android:padding="@dimen/dp_size_16"
+        android:text="SHARE"
+        android:textColor="#dc4541"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/show_leaderBoard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/badge_desc"
+        android:layout_toLeftOf="@id/share"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.04"
+        android:paddingBottom="@dimen/dp_size_16"
+        android:visibility="gone"
+        android:paddingRight="@dimen/dp_size_8"
+        android:paddingTop="@dimen/dp_size_16"
+        android:text="SHOW LEADERBOARD"
+        android:textColor="#dc4541"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/view_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/badge_desc"
+        android:layout_toLeftOf="@id/share"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.04"
+        android:paddingBottom="@dimen/dp_size_16"
+        android:paddingRight="@dimen/dp_size_8"
+        android:paddingTop="@dimen/dp_size_16"
+        android:text="VIEW PROFILE"
+        android:visibility="gone"
+        android:textColor="#dc4541"
+        android:textSize="14sp"
+        android:textStyle="normal" />
+
 </RelativeLayout>

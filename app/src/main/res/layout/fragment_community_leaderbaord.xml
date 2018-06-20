@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" />
+
+    <TextView
+        android:id="@+id/about_leaderboard"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_45"
+        android:drawableLeft="@drawable/ic_idea"
+        android:drawablePadding="@dimen/dp_size_16"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:text="How do I become a SuperSheroes?"
+        android:textColor="#3c3c3c"
+        android:textSize="13sp"
+        android:textStyle="normal" />
+
+    <TextView
+        android:id="@+id/divider"
+        android:layout_below="@id/about_leaderboard"
+        android:layout_width="match_parent"
+        android:background="@color/lighter_gray"
+        android:layout_height="@dimen/dp_size_1" />
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView
+        android:id="@+id/winner_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider" />
+
+    <include layout="@layout/empty_list_view" />
+
+</RelativeLayout>

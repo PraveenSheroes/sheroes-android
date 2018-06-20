@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CommunityLeaderBoardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LeaderBoardBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserJoinedCommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
@@ -326,6 +327,8 @@ public interface SheroesAppComponent {
     void inject(CommunitiesBadgesActivity communitiesBadgesActivity);
 
     void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
+
+    void inject(LeaderBoardBottomSheetFragment leaderBoardBottomSheetFragment);
 }
 
 

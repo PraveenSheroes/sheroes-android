@@ -799,10 +799,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.badge_details)
     protected void openBadgeDetailsDialog() {
-        BadgeDetailsDialogFragment badgeDetailsDialogFragment = new BadgeDetailsDialogFragment();
-        badgeDetailsDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-        badgeDetailsDialogFragment.show(getFragmentManager(), ProfileProgressDialog.class.getName());
-
+        if (ProfileActivity.this.isFinishing()) return;
+        BadgeDetailsDialogFragment.showDialog(ProfileActivity.this, BadgeDetailsDialogFragment.SCREEN_NAME, false);
     }
 
     @OnClick(R.id.more_badges)
