@@ -59,7 +59,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -237,40 +236,35 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     public void getArticleTagList(List<ArticleTagName> articleTagNameList, boolean isEdit) {
         mArticleTagNameList = articleTagNameList;
         completionView = findViewById(R.id.tag_search_view);
-        if (!StringUtil.isNotEmptyCollection(articleTagNameList)) {
-            articleTagNameList = new ArrayList<>();
-            ArticleTagName articleTagName = new ArticleTagName();
-            articleTagName.setTagName("No tag found");
-            articleTagNameList.add(articleTagName);
-            completionView.addObject(articleTagName);
-        }
-        if (isEdit) {
-            for (ArticleTagName articleTagName : articleTagNameList) {
-                completionView.addObject(articleTagName);
-            }
-        } else {
-            adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, articleTagNameList) {
-                @Override
-                public View getView(int position, View convertView, ViewGroup parent) {
-                    if (convertView == null) {
+        if (StringUtil.isNotEmptyCollection(articleTagNameList)) {
+            if (isEdit) {
+                for (ArticleTagName articleTagName : articleTagNameList) {
+                    completionView.addObject(articleTagName);
+                }
+            } else {
+                adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, articleTagNameList) {
+                    @Override
+                    public View getView(int position, View convertView, ViewGroup parent) {
+                        if (convertView == null) {
 
-                        LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-                        convertView = l.inflate(R.layout.article_tag_layout, parent, false);
+                            LayoutInflater l = (LayoutInflater) getContext().getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+                            convertView = l.inflate(R.layout.article_tag_layout, parent, false);
+                        }
+
+                        ArticleTagName p = getItem(position);
+                        ((TextView) convertView.findViewById(R.id.tv_article_tag)).setText(p.getTagName());
+                        return convertView;
                     }
 
-                    ArticleTagName p = getItem(position);
-                    ((TextView) convertView.findViewById(R.id.tv_article_tag)).setText(p.getTagName());
-                    return convertView;
-                }
-
-                @Override
-                protected boolean keepObject(ArticleTagName articleTagName, String mask) {
-                    mask = mask.toLowerCase();
-                    return articleTagName.getTagName().toLowerCase().startsWith(mask);
-                }
-            };
+                    @Override
+                    protected boolean keepObject(ArticleTagName articleTagName, String mask) {
+                        mask = mask.toLowerCase();
+                        return articleTagName.getTagName().toLowerCase().startsWith(mask);
+                    }
+                };
+            }
+            completionView.setAdapter(adapter);
         }
-        completionView.setAdapter(adapter);
         completionView.setTokenListener(this);
         completionView.allowDuplicates(false);
         completionView.setTokenLimit(5);
@@ -333,7 +327,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         if (article.getIdOfEntityOrParticipant() > 0) {
             mIdOfEntityOrParticipantArticle = article.getIdOfEntityOrParticipant();
         }
-        getSupportActionBar().setTitle("Edit Article");
+        getSupportActionBar().setTitle("Edit a Story");
         mEditorFragment.setContent(article.getListDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
         mArticleNextPageContainer.setVisibility(View.GONE);
@@ -580,7 +574,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
         mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody), true);
         HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
-        AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED,SCREEN_LABEL, properties);
+        AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
     }
 
     private void addEditArticle() {
@@ -602,9 +596,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj), false);
         }
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY);
-        AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY,SCREEN_LABEL,null);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);
         HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
-        AnalyticsManager.trackEvent(Event.STORY_CREATED,SCREEN_LABEL_SUBMIT_STORY, properties);
+        AnalyticsManager.trackEvent(Event.STORY_CREATED, SCREEN_LABEL_SUBMIT_STORY, properties);
     }
 
     private void onBackPress() {

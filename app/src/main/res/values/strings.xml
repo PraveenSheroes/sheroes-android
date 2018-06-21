@@ -414,7 +414,7 @@
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Write a Post</string>
     <string name="title.ask_question">Ask a Question</string>
-    <string name="title.article_submit">Write Article</string>
+    <string name="title.article_submit">Write a Story</string>
     <string name="anonymous">Anonymous</string>
     <string name="choose_community_option">Choose your community</string>
     <string name="image_count">%1$d/%2$d</string>
@@ -652,8 +652,10 @@
     <string name="error.body">Article content cannot be blank</string>
     <string name="error.tag.max">Tags can\'t be more than 5</string>
     <string name="error.tag.min">Minimum 1 tag required</string>
+    <string name="error.tag.found">No tag found</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="no_tag_found">No</string>
 
 
 </resources>

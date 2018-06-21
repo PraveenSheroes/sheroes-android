@@ -460,6 +460,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
         String backgrndImageUrl = articleObj.getImageUrl();
         if (StringUtil.isNotNullOrEmptyString(backgrndImageUrl)) {
+            liFeedArticleImages.setVisibility(View.VISIBLE);
             liFeedArticleImages.removeAllViews();
             liFeedArticleImages.removeAllViewsInLayout();
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -511,6 +512,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                         }
                     });
             liFeedArticleImages.addView(backgroundImage);
+        } else {
+            liFeedArticleImages.setVisibility(View.GONE);
         }
     }
 

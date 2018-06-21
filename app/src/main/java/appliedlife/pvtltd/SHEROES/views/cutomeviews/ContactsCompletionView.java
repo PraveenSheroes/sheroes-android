@@ -47,7 +47,7 @@ public class ContactsCompletionView extends TokenCompleteTextView<ArticleTagName
     @Override
     protected ArticleTagName defaultObject(String completionText) {
         //Stupid simple example of guessing if we have an email or not
-        int index = completionText.indexOf('@');
+       /* int index = completionText.indexOf('@');
         ArticleTagName articleTagName = new ArticleTagName();
         if (index == -1) {
             articleTagName.setTagName(completionText);
@@ -55,7 +55,8 @@ public class ContactsCompletionView extends TokenCompleteTextView<ArticleTagName
         } else {
             articleTagName.setTagName(completionText.substring(0, index));
             return articleTagName;
-        }
+        }*/
+       return null;
     }
 
     @Override

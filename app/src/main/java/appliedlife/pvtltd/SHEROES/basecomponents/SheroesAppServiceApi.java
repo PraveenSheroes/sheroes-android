@@ -99,7 +99,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequ
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -345,4 +347,7 @@ public interface SheroesAppServiceApi {
 
     @GET("entity/master/get_tags")
     Observable<ArticleTagResponse> getArticleTags();
+
+    @POST("participant/feed/stream?setOrderKey=UserStoryStream")
+    Observable<FeedResponsePojo> getUserStory(@Query("id") String article_id, @Body FeedRequestPojo feedRequestPojo);
 }

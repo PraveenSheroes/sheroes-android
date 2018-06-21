@@ -266,7 +266,7 @@ public class MixpanelHelper {
                     new EventProperty.Builder()
                             .id(Long.toString(articleSolrObj.getEntityOrParticipantId()))
                             .title(articleSolrObj.getNameOrTitle())
-                            .authorId(String.valueOf(articleSolrObj.getAuthorId()))
+                            .authorId(String.valueOf(articleSolrObj.getCreatedBy()))
                             .authorName(articleSolrObj.getAuthorName())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);

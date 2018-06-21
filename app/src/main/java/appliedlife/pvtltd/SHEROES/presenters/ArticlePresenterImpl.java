@@ -63,13 +63,13 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     //region IArticlePresenter methods
 
-    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded) {
+    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded,final ArticleSolrObj articleSolrObj) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo)
+        getFeedFromModel(feedRequestPojo,articleSolrObj)
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
                     @Override
@@ -105,16 +105,13 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     }
 
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo,ArticleSolrObj articleSolrObj) {
+        if(articleSolrObj.isUserStory())
+        {
+            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()),feedRequestPojo);
+        }else {
+            return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo);
+        }
     }
 
     public void onDeleteCommentClicked(final int position, CommentReactionRequestPojo commentReactionRequestPojo) {

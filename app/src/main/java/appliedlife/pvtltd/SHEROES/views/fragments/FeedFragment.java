@@ -1091,15 +1091,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-            if (null != userPostObj) {
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-                    if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
-                        Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(url);
-                        startActivity(intent);
-                    }
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+                if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
+                    Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    intent.setData(url);
+                    startActivity(intent);
                 }
+
             }
         } else {
             if (userPostObj.getCommunityId() == 0) {
@@ -1399,7 +1398,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             screenProperties.put(EventProperty.IS_STORY.toString(), true);
             screenProperties.put(EventProperty.ID.toString(), String.valueOf(articleObj.getIdOfEntityOrParticipant()));
             screenProperties.put(EventProperty.NAME.toString(), articleObj.getNameOrTitle());
-            screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getAuthorId());
+            screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
             screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
         }
         ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
@@ -1518,7 +1517,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             int adminId = 0;
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                 if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                     adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
                 }
