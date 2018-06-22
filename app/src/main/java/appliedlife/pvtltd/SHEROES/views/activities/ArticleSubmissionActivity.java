@@ -591,9 +591,9 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
             tagList.add(articleTagName.getId());
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj), false);
-        } else {
             mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj), false);
+        } else {
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj), false);
         }
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY);
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);
