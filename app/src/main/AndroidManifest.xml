@@ -212,6 +212,10 @@
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".views.activities.WebViewActivity"
+            android:parentActivityName=".views.activities.WebViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".views.activities.AllContactActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait">

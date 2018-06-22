@@ -146,7 +146,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -460,10 +459,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItemName, true);
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
+        WebViewActivity.navigateTo(this, getScreenName(), null, url, menuItemName);
         DrawerViewHolder.selectedOptionName = menuItemName;
         setAppBarElevation();
     }
@@ -573,7 +569,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             AppUtils.hideKeyboard(mTvUserName, TAG);
-            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES),getScreenName(),null);
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), getScreenName(), null);
         }
     }
 

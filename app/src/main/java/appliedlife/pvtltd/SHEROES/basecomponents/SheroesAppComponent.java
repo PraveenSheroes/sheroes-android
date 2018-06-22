@@ -34,22 +34,22 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
@@ -63,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -88,9 +89,9 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
@@ -121,7 +122,6 @@ public interface SheroesAppComponent {
 
     void inject(HomeActivity homeActivity);
 
-
     void inject(LoginActivity loginActivity);
 
     void inject(LoginFragment loginFragment);
@@ -129,8 +129,6 @@ public interface SheroesAppComponent {
     void inject(ArticleCategorySpinnerFragment articleCategorySpinnerFragment);
 
     void inject(ArticlesFragment articlesFragment);
-
-
 
     void inject(CommunitiesListFragment myCommunitiesFragment);
 
@@ -322,6 +320,8 @@ public interface SheroesAppComponent {
     void inject(MyCommunitiesDrawerViewHolder myCommunitiesDrawerViewHolder);
 
     void inject(HomeFragment homeFragment);
+
+    void inject(WebViewActivity webViewActivity);
 
 }
 

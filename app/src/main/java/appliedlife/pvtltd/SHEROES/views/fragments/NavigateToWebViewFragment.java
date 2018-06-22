@@ -100,12 +100,6 @@ public class NavigateToWebViewFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_web_url, container, false);
         ButterKnife.bind(this, view);
-
-        if(getActivity() instanceof HomeActivity){
-            ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-           // ((HomeActivity)getActivity()).resetUiSelectedOptions();
-            ((HomeActivity)getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-        }
         pbWebView.setVisibility(View.VISIBLE);
         webPagesView.getSettings().setJavaScriptEnabled(true);
         webPagesView.setVerticalScrollBarEnabled(false);
