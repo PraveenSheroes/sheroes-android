@@ -12,7 +12,6 @@
         android:id="@+id/iv_bell_noti_circle_icon"
         android:layout_width="@dimen/feed_profile_icon_size"
         android:layout_height="@dimen/feed_profile_icon_size"
-        android:src="@drawable/ic_anonomous"
         app:layout_editor_absoluteY="16dp" />
 
 
@@ -24,7 +23,6 @@
         android:layout_marginStart="@dimen/dp_size_16"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:lineSpacingExtra="6sp"
-        android:text="hsjskdkds lkl nmd kkdkdk "
         android:textColor="@color/comment_text"
         android:textSize="14sp"
         android:textStyle="normal"
@@ -89,7 +87,6 @@
         android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="6sp"
-        android:text="24m"
         android:textColor="@color/recent_post_comment"
         android:textSize="12sp"
         android:textStyle="normal"
@@ -103,7 +100,6 @@
         android:layout_height="@dimen/feed_profile_icon_size"
         android:layout_marginEnd="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
-        android:src="@drawable/ic_anonomous"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_editor_absoluteY="16dp" />
 
