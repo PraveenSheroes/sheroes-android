@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -105,4 +106,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onUpdateNowClicked();
 
     void onUpdateLaterClicked();
+
+    void onLeaderBoardUserClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj);
 }

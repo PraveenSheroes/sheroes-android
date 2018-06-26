@@ -168,8 +168,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 break;
             case TYPE_LEADER:
                 LeaderViewHolder leaderViewHolder = (LeaderViewHolder) holder;
-                FeedDetail leaderObj =  mFeedDetailList.get(position);
-                leaderViewHolder.bindData(leaderObj, mContext, position);
+                LeaderBoardUserSolrObj leaderBoardUserSolrObj = (LeaderBoardUserSolrObj) mFeedDetailList.get(position);
+                leaderViewHolder.bindData(leaderBoardUserSolrObj, mContext, position);
                 break;
 
             case TYPE_HOME_FEED_HEADER:
@@ -209,7 +209,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return TYPE_ARTICLE;
             }
 
-            if (feedDetail.getUserSubType()!=null && feedDetail.getUserSubType().equalsIgnoreCase(AppConstants.LEADER_SUB_TYPE)) {
+            if (feedDetail instanceof LeaderBoardUserSolrObj) {
                 return TYPE_LEADER;
             }
 

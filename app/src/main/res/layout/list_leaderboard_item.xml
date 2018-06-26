@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/leader_board_users_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="@dimen/dp_size_8"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:padding="@dimen/dp_size_16">
 
     <FrameLayout
         android:id="@+id/icon_container"
@@ -12,7 +14,7 @@
         android:layout_centerVertical="true">
 
         <ImageView
-            android:id="@+id/profile_pic"
+            android:id="@+id/user_pic_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginLeft="@dimen/dp_size_28"
@@ -20,7 +22,7 @@
             android:src="@drawable/circular_background" />
 
         <ImageView
-            android:id="@+id/trophy_image"
+            android:id="@+id/badge_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/ic_community_badge" />
@@ -44,17 +46,17 @@
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="2sp"
-            android:text="Champa Roy"
             android:textColor="@color/gray_light"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/sp_size_14"
+            tools:text="Champa Roy" />
 
         <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="158 Posts · 168 Likes · 140 Comments"
             android:textColor="@color/gray_light"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:text="158 Posts · 168 Likes · 140 Comments" />
     </LinearLayout>
 </RelativeLayout>

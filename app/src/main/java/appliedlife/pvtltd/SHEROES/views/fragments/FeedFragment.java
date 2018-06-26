@@ -74,6 +74,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -102,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
@@ -1053,6 +1055,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         AnalyticsManager.trackEvent(Event.APP_UPDATE_NO, getScreenName(), null);
         CommonUtil.saveReminderForTomorrow();
         mAdapter.removeHeader(HeaderRecyclerViewAdapter.header);
+    }
+
+    @Override
+    public void onLeaderBoardUserClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
+        if(getActivity()!=null && getActivity().isFinishing()) return;
+        BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, getScreenName(), true);
     }
 
     @Override

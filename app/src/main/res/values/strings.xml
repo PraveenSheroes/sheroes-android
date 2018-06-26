@@ -421,6 +421,7 @@
     <string name="menu.post_as_community">Post as Community</string>
     <string name="menu.post_as_user">Post as %1$s</string>
 
+    <string name="leaderboard_user_like_comment">%1$d %2$s \t·\t  %3$d %4$s</string>
 
     <string name="spam.status.post">post</string>
     <string name="spam.status.comment">comment</string>

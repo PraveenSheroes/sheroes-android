@@ -574,7 +574,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (useHoldBadge && !isMentor) {
             //get the badge from url
             verifiedIcon.setVisibility(View.GONE);
-            userBadgeIcon.setVisibility(View.VISIBLE);
+            userBadgeIcon.setVisibility(View.GONE);
         } else {
             userBadgeIcon.setVisibility(View.GONE);
         }
@@ -800,7 +800,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @OnClick(R.id.badge_details)
     protected void openBadgeDetailsDialog() {
         if (ProfileActivity.this.isFinishing()) return;
-        BadgeDetailsDialogFragment.showDialog(ProfileActivity.this, BadgeDetailsDialogFragment.SCREEN_NAME, false);
+       // BadgeDetailsDialogFragment.showDialog(ProfileActivity.this, BadgeDetailsDialogFragment.SCREEN_NAME, false);
     }
 
     @OnClick(R.id.more_badges)

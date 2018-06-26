@@ -25,6 +25,10 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
     @Expose
     private BadgeDetails solrIgnoreBadgeDetails;
 
+    @SerializedName("solr_ignore_user_obj")
+    @Expose
+    private UserSolrObj userSolrObj;
+
     public BadgeDetails getSolrIgnoreBadgeDetails() {
         return solrIgnoreBadgeDetails;
     }
@@ -47,5 +51,13 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
 
     public void setSolrIgnoreNoOfCommentsOnUserPost(int solrIgnoreNoOfCommentsOnUserPost) {
         this.solrIgnoreNoOfCommentsOnUserPost = solrIgnoreNoOfCommentsOnUserPost;
+    }
+
+    public UserSolrObj getUserSolrObj() {
+        return userSolrObj;
+    }
+
+    public void setUserSolrObj(UserSolrObj userSolrObj) {
+        this.userSolrObj = userSolrObj;
     }
 }

@@ -91,7 +91,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunityLeaderBoardFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;

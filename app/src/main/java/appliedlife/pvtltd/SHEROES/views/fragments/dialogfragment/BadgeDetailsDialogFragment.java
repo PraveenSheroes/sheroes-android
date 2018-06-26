@@ -1,45 +1,36 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.app.Activity;
-import android.app.DialogFragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
-import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -52,18 +43,33 @@ import butterknife.OnClick;
 public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
     //region private member variable
-    public static final String SCREEN_NAME = "Badge Dialog";
-    private static final String IS_LEADER_BOARD = "IS_LEADERBOARD";
+    public static String SCREEN_NAME = "Badge Dialog Screen";
+    private static final String IS_LEADER_BOARD = "IS_LEADER_BOARD";
+    private static final String LEADER_BOARD_DETAILS = "LeaderBoard_Details";
     private boolean isLeaderBoard = false;
+
     //endregion
 
     //region private member variable
+    private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
     //endregion
 
     @Inject
     Preference<Configuration> mConfiguration;
 
     //region Bind view variables
+
+    @Bind(R.id.header_container)
+    FrameLayout headerContainer;
+
+    @Bind(R.id.badge_icon)
+    ImageView badgeIcon;
+
+    @Bind(R.id.badge_title)
+    TextView badgeTitle;
+
+    @Bind(R.id.badge_desc)
+    TextView badgeDesc;
 
     @Bind(R.id.view_profile)
     TextView viewProfile;
@@ -85,10 +91,16 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         View view = inflater.inflate(R.layout.community_badge_detail, container, false);
         ButterKnife.bind(this, view);
 
-        //Add analytics screen open Event
-            if (getArguments() != null) {
-                isLeaderBoard = getArguments().getBoolean(IS_LEADER_BOARD);
+        if (getArguments() != null) {
+            isLeaderBoard = getArguments().getBoolean(IS_LEADER_BOARD);
+            SCREEN_NAME = getArguments().getString(BaseActivity.SOURCE_SCREEN);
+
+            //Todo -handle with usersolor object when profile get badge
+            if (getArguments().getParcelable(LEADER_BOARD_DETAILS) != null) {
+                Parcelable parcelable = getArguments().getParcelable(LEADER_BOARD_DETAILS);
+                mLeaderBoardUserSolrObj = Parcels.unwrap(parcelable);
             }
+        }
 
         if (!isLeaderBoard) {
             showLeaderBoard.setVisibility(View.VISIBLE);
@@ -98,6 +110,28 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             viewProfile.setVisibility(View.VISIBLE);
         }
 
+        if(mLeaderBoardUserSolrObj!=null && mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null) {
+            BadgeDetails leaderBoardUser = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails();
+            headerContainer.setBackgroundColor(Color.parseColor(leaderBoardUser.getPrimaryColor()));
+
+            badgeTitle.setText(leaderBoardUser.getName());
+            if (CommonUtil.isNotEmpty(leaderBoardUser.getImageUrl())) {
+                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUser.getImageUrl(), 108 , 108);
+                Glide.with(badgeIcon.getContext())
+                        .load(trophyImageUrl)
+                        .into(badgeIcon);
+               // badgeIcon.setBackgroundResource(ContextCompat.getDrawable(getActivity(), R.drawble.circle));
+
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    badgeDesc.setText(Html.fromHtml(leaderBoardUser.getDescription(), Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    badgeDesc.setText(Html.fromHtml(leaderBoardUser.getDescription()));
+                }
+            }
+        }
+
+
+        //Add analytics screen open Event
           /*      String strengthLevel = userLevel(mUserSolrObj).name();
                 String sourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
                 HashMap<String, Object> properties =
@@ -113,12 +147,14 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     }
     //endregion
 
-    public static BadgeDetailsDialogFragment showDialog(Activity activity, String sourceScreen, boolean isLeaderBaord) {
+    public static BadgeDetailsDialogFragment showDialog(Activity activity, LeaderBoardUserSolrObj leaderBoardUserSolrObj, String sourceScreen, boolean isLeaderBaord) {
 
         BadgeDetailsDialogFragment badgeDetailsDialogFragment = new BadgeDetailsDialogFragment();
         Bundle args = new Bundle();
         args.putBoolean(IS_LEADER_BOARD, isLeaderBaord);
         badgeDetailsDialogFragment.setArguments(args);
+        Parcelable parcelable = Parcels.wrap(leaderBoardUserSolrObj);
+        args.putParcelable(LEADER_BOARD_DETAILS, parcelable);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         badgeDetailsDialogFragment.setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, 0);
         badgeDetailsDialogFragment.show(activity.getFragmentManager(), SCREEN_NAME);
@@ -136,15 +172,14 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     @OnClick(R.id.view_profile)
     protected void openUserProfile() {
         dismiss();
-        ProfileActivity.navigateTo(getActivity(), 995047, false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
-
 
     @OnClick(R.id.show_leaderBoard)
     protected void showLeaderBaord() {
         dismiss();
-        //CommonUtil
-        ProfileActivity.navigateTo(getActivity(), 995047, false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        if(getActivity().isFinishing()) return;
+        CommunityDetailActivity.navigateTo(getActivity(), mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId(), SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }
-
+    //endregion
 }
