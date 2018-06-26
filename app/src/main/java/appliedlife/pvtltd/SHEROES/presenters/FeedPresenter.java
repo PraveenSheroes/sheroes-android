@@ -758,7 +758,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(BelNotificationListResponse bellNotificationResponse) {
                 getMvpView().stopProgressBar();
                 if (null != bellNotificationResponse) {
-                   // getMvpView().getNotificationListSuccess(bellNotificationResponse);
+                   // getMvpView().showNotificationList(bellNotificationResponse);
                 }
             }
         });

@@ -21,7 +21,7 @@ public interface HomeView extends BaseMvpView {
     void showHomeFeedList(List<FeedDetail> feedDetailList);
     void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum);
 
-    void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse);
+    void showNotificationList(BelNotificationListResponse bellNotificationResponse);
     void getNotificationReadCountSuccess(BaseResponse baseResponse,FeedParticipationEnum feedParticipationEnum);
 
     void invalidateLikeUnlike(Comment comment);

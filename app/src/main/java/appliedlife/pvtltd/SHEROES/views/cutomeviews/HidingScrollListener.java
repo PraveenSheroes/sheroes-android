@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.presenters.CommunitiesListPresenter;
@@ -290,6 +291,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         FeedRequestPojo feedRequestPojo = makeFeedRequest(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo());
                         feedRequestPojo.setOnBoardingCommunities(true);
                         mOnBoardingPresenter.getFeedFromPresenter(feedRequestPojo);
+                        break;
+
+                    case AppConstants.BELL_NOTIFICATION_LISTING:
+                        BellNotificationRequest bellNotificationRequest=mAppUtils.getBellNotificationRequest();
+                        bellNotificationRequest.setPageNo(mFragmentListRefreshData.getPageNo());
+                        mHomePresenter.getBellNotificationFromPresenter(bellNotificationRequest);
                         break;
                     default:
                         LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + mFragmentListRefreshData.getCallFromFragment());

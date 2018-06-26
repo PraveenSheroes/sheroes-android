@@ -214,7 +214,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 

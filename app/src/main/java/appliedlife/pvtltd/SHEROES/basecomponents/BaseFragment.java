@@ -506,7 +506,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 

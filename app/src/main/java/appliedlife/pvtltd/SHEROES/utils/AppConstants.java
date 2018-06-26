@@ -93,6 +93,7 @@ public class AppConstants {
     public static final String HOME_FRAGMENT = "home";
     public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
+    public static final String BELL_NOTIFICATION_LISTING = "bell_notification_listing";
     public static final String PROFILE_COMMUNITY_LISTING = "profile_community_listing";
     public static final String PROFILE_CHAMPION = "profile_champion";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";

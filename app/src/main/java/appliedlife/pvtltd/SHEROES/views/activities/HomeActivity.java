@@ -950,7 +950,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 

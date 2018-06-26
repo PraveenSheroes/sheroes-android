@@ -1331,7 +1331,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 
