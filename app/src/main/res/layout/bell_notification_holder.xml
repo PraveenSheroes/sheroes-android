@@ -44,7 +44,6 @@
         android:layout_marginStart="@dimen/dp_size_16"
         android:paddingTop="@dimen/dp_size_10"
         android:layout_marginTop="@dimen/dp_size_8"
-        android:text="@string/view_your_profile"
         android:textAllCaps="true"
         android:textColor="@drawable/selecter_contact_text_color"
         android:textSize="@dimen/sp_size_14"

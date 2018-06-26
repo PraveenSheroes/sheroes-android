@@ -71,6 +71,12 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
         mContext = context;
         if (null != mBellNotification) {
             if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.FOLLOW.toString())) {
+                mTvBellViewProfile.setText("view her profile");
+                mTvBellViewProfile.setVisibility(View.VISIBLE);
+                mTvDot.setVisibility(View.GONE);
+                mIvBellReaction.setVisibility(View.GONE);
+            } else if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.JOIN.toString())) {
+                mTvBellViewProfile.setText("view your profile");
                 mTvBellViewProfile.setVisibility(View.VISIBLE);
                 mTvDot.setVisibility(View.GONE);
                 mIvBellReaction.setVisibility(View.GONE);
@@ -147,7 +153,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
 
     enum NotificationCategoryEnum {
         FOLLOW("FOLLOW"),
-        FIRST_COMMENT("FIRST_COMMENT");
+        JOIN("JOINED");
 
 
         private final String string;
