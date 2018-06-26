@@ -40,7 +40,7 @@ public class AnalyticsManager {
         sAppContext = context;
         MixpanelHelper mixpanelHelper = new MixpanelHelper();
         mixpanelHelper.setupMixpanel(context);
-        mixpanelHelper.(context, isNewUser);
+        mixpanelHelper.setupUser(context, isNewUser);
     }
 
     public static void initializeMixpanel(Context context){

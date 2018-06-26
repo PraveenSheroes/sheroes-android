@@ -45,7 +45,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -148,7 +148,7 @@ public class SheroesAppModule {
                 .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
-                .registerSubtype(LeaderObj.class, AppConstants.LEADER_SUB_TYPE)
+                .registerSubtype(LeaderBoardUserSolrObj.class, AppConstants.USER_SUB_TYPE)
                 .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE);
 
         return new GsonBuilder()

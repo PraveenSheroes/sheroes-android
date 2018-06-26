@@ -141,9 +141,9 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
 
     @OnClick(R.id.show_leaderBoard)
-    protected void openUserProfile() {
+    protected void showLeaderBaord() {
         dismiss();
-        CommonUtil
+        //CommonUtil
         ProfileActivity.navigateTo(getActivity(), 995047, false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 

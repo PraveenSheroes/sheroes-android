@@ -11,16 +11,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
@@ -68,15 +65,11 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import io.reactivex.Observable;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
@@ -233,7 +226,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
                     }else {
 
-                        if(feedResponsePojo.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
+                        if(feedResponsePojo.getStatus().equals(AppConstants.FAILED)) {
                             getMvpView().setFeedEnded(true);
                         }
                         else if(!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size()<5){
@@ -1248,7 +1241,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                     }
                 });
-
     }
 
 }

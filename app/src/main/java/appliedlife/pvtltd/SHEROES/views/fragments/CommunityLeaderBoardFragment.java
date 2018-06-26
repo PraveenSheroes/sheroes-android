@@ -1,10 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -12,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,12 +18,12 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
-import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LeaderBoardUserDetail;
+import appliedlife.pvtltd.SHEROES.presenters.CommunityLeaderBoardPresenterImpl;
 import appliedlife.pvtltd.SHEROES.views.adapters.LeaderBoardListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityLeaderBoardUser;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,17 +32,16 @@ import butterknife.OnClick;
  * Created by Ravi on 11/06/18.
  */
 
-public class CommunityLeaderBoardFragment extends BaseFragment implements LeaderBoardListAdapter.OnItemClickListener {
+public class CommunityLeaderBoardFragment extends BaseFragment implements LeaderBoardListAdapter.OnItemClickListener, ICommunityLeaderBoardUser {
     private static final String SCREEN_LABEL = "Contest Winner Fragment";
+    public static final String COMMUNITY_ID = "Community_id";
 
     @Inject
-    ContestWinnerPresenterImpl mContestWinnerPresenter;
+    CommunityLeaderBoardPresenterImpl mLeaderBoardPresenter;
 
     //region view variable
     @Bind(R.id.winner_list)
     EmptyRecyclerView mRecyclerView;
-
-
 
     @Bind(R.id.empty_view)
     View emptyView;
@@ -55,10 +50,8 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements Leader
     ProgressBar mProgressBar;
     //endregion
 
-    BottomSheetBehavior sheetBehavior;
-
     //region private methods
-    private LeaderBoardListAdapter mWinnerListAdapter;
+    private LeaderBoardListAdapter mLeaderBoardAdapter;
     //private Contest mContest;
     //endregion
 
@@ -68,35 +61,24 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements Leader
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community_leaderbaord, container, false);
         ButterKnife.bind(this, view);
-
-        Parcelable parcelable = null;
-        if (getArguments() != null) {
-            if (getArguments().getParcelable(Contest.CONTEST_OBJ) != null) {
-                parcelable = getArguments().getParcelable(Contest.CONTEST_OBJ);
-            }
-        } else {
-            if (getActivity().getIntent() != null) {
-                parcelable = getActivity().getIntent().getParcelableExtra(Contest.CONTEST_OBJ);
-            }
-        }
-
-        mWinnerListAdapter = new LeaderBoardListAdapter(getContext(), this);
-
-        List<Winner> data = new ArrayList<>();
-        for(int i=0; i<10; i++) {
-            Winner winner = new Winner();
-            data.add(winner);
-        }
-
-        mWinnerListAdapter.setData(data);
-
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-       // mContestWinnerPresenter.attachView(this);
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-     //   mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
-        mRecyclerView.setAdapter(mWinnerListAdapter);
-       // mContestWinnerPresenter.fetchWinners(Integer.toString(mContest.remote_id));
+
+        if (getArguments() != null) {
+            mLeaderBoardPresenter.attachView(this);
+
+            mLeaderBoardAdapter = new LeaderBoardListAdapter(getContext(), this);
+
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+            mRecyclerView.setAdapter(mLeaderBoardAdapter);
+
+            int communityId = getArguments().getInt(CommunityLeaderBoardFragment.COMMUNITY_ID);
+          //  mLeaderBoardPresenter.fetchLeaderBoardUsers(communityId);
+
+        }
+
+
+
 
         return view;
     }
@@ -150,7 +132,7 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements Leader
 
     @Override
     protected SheroesPresenter getPresenter() {
-        return mContestWinnerPresenter;
+        return mLeaderBoardPresenter;
     }
     //endregion
 
@@ -166,9 +148,22 @@ public class CommunityLeaderBoardFragment extends BaseFragment implements Leader
     }
 
     @Override
-    public void onItemClick(Winner item) {
+    public void onItemClick(LeaderBoardUserDetail item) {
         //Open BadgeDetail dialog
         if(getActivity() ==null || getActivity().isFinishing()) return;
         BadgeDetailsDialogFragment.showDialog(getActivity(), BadgeDetailsDialogFragment.SCREEN_NAME, true);
+    }
+
+    @Override
+    public void onProfilePicClick(LeaderBoardUserDetail item) {
+        //Open Profile dialog
+        if(getActivity() ==null || getActivity().isFinishing()) return;
+        BadgeDetailsDialogFragment.showDialog(getActivity(), BadgeDetailsDialogFragment.SCREEN_NAME, true);
+    }
+
+
+    @Override
+    public void showUsersInLeaderBoard(List<LeaderBoardUserDetail> leaderBoardUserDetails) {
+        mLeaderBoardAdapter.setData(leaderBoardUserDetails);
     }
 }

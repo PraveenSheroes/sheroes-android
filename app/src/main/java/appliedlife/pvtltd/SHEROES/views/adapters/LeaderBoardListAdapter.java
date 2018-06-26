@@ -5,30 +5,22 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import butterknife.Bind;
-import butterknife.BindDimen;
+import appliedlife.pvtltd.SHEROES.models.entities.community.LeaderBoardUserDetail;
 import butterknife.ButterKnife;
 
 /**
- * Created by ujjwal on 10/10/17.
+ * Created by Ravi on 17/06/18.
  */
 
 public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final Context mContext;
-    private List<Winner> mPrizes;
+    private List<LeaderBoardUserDetail> leaderBoardUserDetails;
     private static OnItemClickListener listener;
 
     private static final int TYPE_WINNER = 1;
@@ -36,7 +28,7 @@ public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public LeaderBoardListAdapter(Context context, OnItemClickListener itemClickListener) {
         this.mContext = context;
-        mPrizes = new ArrayList<>();
+        leaderBoardUserDetails = new ArrayList<>();
         listener = itemClickListener;
     }
 
@@ -45,7 +37,7 @@ public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         switch (viewType) {
             case TYPE_HEADER:
-                return new LeaderboardHeaderItemViewHolder(mInflater.inflate(R.layout.list_winner_header_item, parent, false));
+                return new LeaderBoardHeaderItemViewHolder(mInflater.inflate(R.layout.list_winner_header_item, parent, false));
             case TYPE_WINNER:
                 return new WinnerListItemViewHolder(mInflater.inflate(R.layout.list_leaderboard_item, parent, false));
         }
@@ -56,14 +48,14 @@ public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (holder.getItemViewType()) {
             case TYPE_HEADER:
-                LeaderboardHeaderItemViewHolder winnerHeaderItemViewHolder = (LeaderboardHeaderItemViewHolder) holder;
-                Winner winner =  mPrizes.get(position);
-                winnerHeaderItemViewHolder.bindData(winner, mContext);
+                LeaderBoardHeaderItemViewHolder leaderBoardHeaderItemViewHolder = (LeaderBoardHeaderItemViewHolder) holder;
+                LeaderBoardUserDetail leaderBoardUserDetail = leaderBoardUserDetails.get(position);
+                leaderBoardHeaderItemViewHolder.bindData(leaderBoardUserDetail, mContext);
                 break;
             case TYPE_WINNER:
                 WinnerListItemViewHolder winnerListItemViewHolder = (WinnerListItemViewHolder) holder;
-                Winner winnerr =  mPrizes.get(position);
-                winnerListItemViewHolder.bindData(winnerr, mContext);
+                LeaderBoardUserDetail leaderBoardUserDetailItem = leaderBoardUserDetails.get(position);
+                winnerListItemViewHolder.bindData(leaderBoardUserDetailItem, mContext);
                 break;
         }
 
@@ -71,21 +63,23 @@ public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemViewType(int position) {
-        Winner winner = mPrizes.get(position);
+        /*LeaderBoardUserDetail winner = leaderBoardUserDetails.get(position);
         if (winner.isHeader) {
             return TYPE_HEADER;
         } else {
             return TYPE_WINNER;
-        }
+        }*/
+
+        return TYPE_WINNER;
     }
 
     @Override
     public int getItemCount() {
-        return mPrizes == null ? 0 : mPrizes.size();
+        return leaderBoardUserDetails == null ? 0 : leaderBoardUserDetails.size();
     }
 
-    public void setData(List<Winner> winners) {
-        mPrizes = winners;
+    public void setData(List<LeaderBoardUserDetail> leaderBoardUserDetails) {
+        this.leaderBoardUserDetails = leaderBoardUserDetails;
         notifyDataSetChanged();
     }
 
@@ -119,8 +113,8 @@ public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(final Winner prize, Context context){
-            if (prize!=null) {
+        public void bindData(final LeaderBoardUserDetail leaderBoardUserDetail, Context context) {
+            if (leaderBoardUserDetail != null) {
              /*   mDescription.setText(prize.prizeDescription);
                 if (CommonUtil.isNotEmpty(prize.mPrizeIcon)) {
                     String trophyImageUrl = CommonUtil.getThumborUri(prize.mPrizeIcon, mTrophySize, mTrophySize);
@@ -139,27 +133,31 @@ public class LeaderBoardListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 }*/
 
                 itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override public void onClick(View v) {
-                        listener.onItemClick(prize);
+                    @Override
+                    public void onClick(View v) {
+                        listener.onItemClick(leaderBoardUserDetail);
                     }
                 });
             }
         }
     }
 
-    static class LeaderboardHeaderItemViewHolder extends RecyclerView.ViewHolder {
-        public LeaderboardHeaderItemViewHolder(View itemView) {
+    static class LeaderBoardHeaderItemViewHolder extends RecyclerView.ViewHolder {
+
+        public LeaderBoardHeaderItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
-        public void bindData(Winner prize, Context context){
+        public void bindData(LeaderBoardUserDetail le, Context context) {
 
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Winner item);
+        void onItemClick(LeaderBoardUserDetail leaderBoardUserDetail);
+
+        void onProfilePicClick(LeaderBoardUserDetail leaderBoardUserDetail);
     }
 
 }
