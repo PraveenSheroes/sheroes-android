@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_notification"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/dp_size_16"
+    android:layout_marginStart="@dimen/dp_size_16"
+    android:layout_marginTop="@dimen/dp_size_16">
 
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
         android:id="@+id/iv_bell_noti_circle_icon"
         android:layout_width="@dimen/feed_profile_icon_size"
         android:layout_height="@dimen/feed_profile_icon_size"
-        android:src="@drawable/ic_anonomous"
-        app:layout_editor_absoluteX="16dp"
         app:layout_editor_absoluteY="16dp" />
 
 
@@ -22,7 +23,6 @@
         android:layout_marginStart="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:lineSpacingExtra="6sp"
-        android:text="Sairee Chahal liked your post. thi jjjjj "
         android:textColor="@color/comment_text"
         android:textSize="14sp"
         android:textStyle="normal"
@@ -32,11 +32,11 @@
 
     <ImageView
         android:id="@+id/iv_bell_reaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
         android:layout_marginLeft="@dimen/dp_size_8"
         android:layout_marginStart="@dimen/dp_size_8"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginTop="@dimen/dp_size_12"
         android:src="@drawable/ic_heart_active"
         app:layout_constraintStart_toEndOf="@+id/iv_bell_noti_circle_icon"
         app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_title" />
@@ -50,6 +50,7 @@
         android:layout_marginTop="@dimen/dp_size_8"
         android:text="•"
         android:textColor="@color/recent_post_comment"
+        android:textSize="@dimen/sp_size_16"
         app:layout_constraintStart_toEndOf="@+id/iv_bell_reaction"
         app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_title" />
 
@@ -60,11 +61,10 @@
         android:layout_marginLeft="@dimen/dp_size_8"
         android:layout_marginStart="@dimen/dp_size_8"
         android:layout_marginTop="@dimen/dp_size_8"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="6sp"
-        android:text="24m"
         android:textColor="@color/recent_post_comment"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="normal"
         app:layout_constraintStart_toEndOf="@+id/tv_dot"
         app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_title" />
@@ -74,21 +74,19 @@
         android:id="@+id/iv_bell_noti_image"
         android:layout_width="@dimen/feed_profile_icon_size"
         android:layout_height="@dimen/feed_profile_icon_size"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/ic_anonomous"
+        android:layout_marginEnd="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_editor_absoluteY="16dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_0.5"
-        android:layout_marginLeft="@dimen/dp_size_56"
-        android:layout_marginStart="@dimen/dp_size_56"
+        android:layout_marginLeft="@dimen/dp_size_52"
+        android:layout_marginStart="@dimen/dp_size_52"
         android:layout_marginTop="@dimen/dp_size_18"
+        android:alpha=".3"
         android:background="@color/recent_post_comment"
         app:layout_constraintStart_toEndOf="@+id/iv_bell_noti_circle_icon"
-        app:layout_constraintTop_toBottomOf="@+id/iv_bell_reaction"
-
-        />
+        app:layout_constraintTop_toBottomOf="@+id/iv_bell_reaction" />
 </android.support.constraint.ConstraintLayout>

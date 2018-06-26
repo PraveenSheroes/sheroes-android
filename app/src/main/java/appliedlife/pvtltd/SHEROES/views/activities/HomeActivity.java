@@ -520,9 +520,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             BellNotification bellNotification = bellNotificationResponse.getNotification();
             if (StringUtil.isNotNullOrEmptyString(bellNotification.getDeepLinkUrl())) {
                 challengeIdHandle(bellNotification.getDeepLinkUrl());
-            } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
-                mTitleText.setText("");
-                communityOnClick();
             } else {
                 mTitleText.setText("");
                 homeOnClick();

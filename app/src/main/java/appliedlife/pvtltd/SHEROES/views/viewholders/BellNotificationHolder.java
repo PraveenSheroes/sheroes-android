@@ -96,7 +96,6 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getIcon())) {
                 Glide.with(mContext)
                         .load(mBellNotification.getIcon())
-                        .apply(new RequestOptions())
                         .into(mIvNotificationType);
             }
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getRightImageIcon())) {

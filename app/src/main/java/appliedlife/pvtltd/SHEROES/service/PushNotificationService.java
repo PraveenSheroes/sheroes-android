@@ -17,9 +17,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.moe.pushlibrary.MoEHelper;
@@ -166,7 +163,7 @@ public class PushNotificationService extends GcmListenerService {
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_combined_shape : R.drawable.ic_combined_shape;
+        return useWhiteIcon ? R.drawable.ic_push_notification_icon : R.drawable.ic_push_notification_icon;
     }
     private class NotificationImageLoader extends AsyncTask<String, Void, Bitmap> {
 
@@ -265,7 +262,6 @@ public class PushNotificationService extends GcmListenerService {
                         .setLargeIcon(result)
                         .setChannelId(relatedChannelId)
                         .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
-
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                         .setSmallIcon(getNotificationIcon()).build();
                 notificationManager.notify(Integer.parseInt(randomId + ""), notification);
