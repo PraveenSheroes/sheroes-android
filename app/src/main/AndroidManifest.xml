@@ -168,7 +168,7 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name=".views.activities.ArticleSubmissionActivity"
+            android:name=".views.activities.HerStoryOrArticleSubmissionActivity"
             android:exported="true"
             android:configChanges="keyboardHidden"
             android:parentActivityName=".views.activities.HomeActivity"

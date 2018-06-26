@@ -12,6 +12,7 @@
         android:id="@+id/iv_bell_noti_circle_icon"
         android:layout_width="@dimen/feed_profile_icon_size"
         android:layout_height="@dimen/feed_profile_icon_size"
+        android:src="@drawable/ic_anonomous"
         app:layout_editor_absoluteY="16dp" />
 
 
@@ -19,10 +20,11 @@
         android:id="@+id/tv_bell_noti_title"
         android:layout_width="230dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_8"
-        android:layout_marginStart="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:lineSpacingExtra="6sp"
+        android:text="hsjskdkds lkl nmd kkdkdk "
         android:textColor="@color/comment_text"
         android:textSize="14sp"
         android:textStyle="normal"
@@ -30,13 +32,36 @@
         app:layout_editor_absoluteX="16dp"
         app:layout_editor_absoluteY="16dp" />
 
+    <TextView
+        android:id="@+id/tv_bell_view_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selecter_invite_friend"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:gravity="center"
+        android:paddingBottom="@dimen/dp_size_10"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:paddingRight="@dimen/dp_size_16"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16"
+        android:paddingTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:text="@string/view_your_profile"
+        android:textAllCaps="true"
+        android:textColor="@drawable/selecter_contact_text_color"
+        android:textSize="@dimen/sp_size_14"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/iv_bell_noti_circle_icon"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_title" />
+
     <ImageView
         android:id="@+id/iv_bell_reaction"
         android:layout_width="12dp"
         android:layout_height="12dp"
-        android:layout_marginLeft="@dimen/dp_size_8"
-        android:layout_marginStart="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_12"
+        android:visibility="visible"
         android:src="@drawable/ic_heart_active"
         app:layout_constraintStart_toEndOf="@+id/iv_bell_noti_circle_icon"
         app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_title" />
@@ -49,6 +74,7 @@
         android:layout_marginStart="@dimen/dp_size_8"
         android:layout_marginTop="@dimen/dp_size_8"
         android:text="•"
+        android:visibility="visible"
         android:textColor="@color/recent_post_comment"
         android:textSize="@dimen/sp_size_16"
         app:layout_constraintStart_toEndOf="@+id/iv_bell_reaction"
@@ -58,16 +84,17 @@
         android:id="@+id/tv_bell_noti_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_8"
-        android:layout_marginStart="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="6sp"
+        android:text="24m"
         android:textColor="@color/recent_post_comment"
         android:textSize="12sp"
         android:textStyle="normal"
         app:layout_constraintStart_toEndOf="@+id/tv_dot"
-        app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_title" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_bell_view_profile" />
 
 
     <ImageView
@@ -76,6 +103,7 @@
         android:layout_height="@dimen/feed_profile_icon_size"
         android:layout_marginEnd="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
+        android:src="@drawable/ic_anonomous"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_editor_absoluteY="16dp" />
 
@@ -88,5 +116,5 @@
         android:alpha=".3"
         android:background="@color/recent_post_comment"
         app:layout_constraintStart_toEndOf="@+id/iv_bell_noti_circle_icon"
-        app:layout_constraintTop_toBottomOf="@+id/iv_bell_reaction" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_bell_noti_time" />
 </android.support.constraint.ConstraintLayout>

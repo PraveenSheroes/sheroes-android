@@ -36,15 +36,19 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     @Bind(R.id.tv_bell_noti_title)
     TextView mTvNotificationTitle;
     @Bind(R.id.tv_bell_noti_time)
-    TextView mTvNotificationDate;
+    TextView mTvBellNotiTime;
     @Bind(R.id.iv_bell_noti_circle_icon)
     CircleImageView mIvNotificationImage;
     @Bind(R.id.cl_notification)
     ConstraintLayout mClNotification;
     @Bind(R.id.iv_bell_reaction)
-    ImageView mIvNotificationType;
+    ImageView mIvBellReaction;
     @Bind(R.id.iv_bell_noti_image)
     ImageView mIvBellNotiImage;
+    @Bind(R.id.tv_dot)
+    TextView mTvDot;
+    @Bind(R.id.tv_bell_view_profile)
+    TextView mTvBellViewProfile;
     BaseHolderInterface mViewInterface;
     private Context mContext;
     @BindDimen(R.dimen.dp_size_40)
@@ -62,17 +66,25 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(BellNotificationResponse belNotificationListResponse, Context context, int position) {
-        mBelNotificationListResponse=belNotificationListResponse;
+        mBelNotificationListResponse = belNotificationListResponse;
         mBellNotification = belNotificationListResponse.getNotification();
-
         mContext = context;
         if (null != mBellNotification) {
+            if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.FOLLOW.toString())) {
+                mTvBellViewProfile.setVisibility(View.VISIBLE);
+                mTvDot.setVisibility(View.GONE);
+                mIvBellReaction.setVisibility(View.GONE);
+            } else {
+                mTvBellViewProfile.setVisibility(View.GONE);
+                mTvDot.setVisibility(View.VISIBLE);
+                mIvBellReaction.setVisibility(View.VISIBLE);
+            }
+
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getTitle())) {
-                String title=mBellNotification.getTitle();
-                if(StringUtil.isNotNullOrEmptyString(mBellNotification.getMessage()))
-                {
-                    title=title+" "+mBellNotification.getMessage();
-                }else {
+                String title = mBellNotification.getTitle();
+                if (StringUtil.isNotNullOrEmptyString(mBellNotification.getMessage())) {
+                    title = title + " " + mBellNotification.getMessage();
+                } else {
                     title = title;
                 }
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -82,10 +94,10 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                 }
             }
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getSolrIgnorePostingDateDt())) {
-                mTvNotificationDate.setVisibility(View.VISIBLE);
-                mTvNotificationDate.setText(mBellNotification.getSolrIgnorePostingDateDt());
+                mTvBellNotiTime.setVisibility(View.VISIBLE);
+                mTvBellNotiTime.setText(mBellNotification.getSolrIgnorePostingDateDt());
             } else {
-                mTvNotificationDate.setVisibility(View.INVISIBLE);
+                mTvBellNotiTime.setVisibility(View.INVISIBLE);
             }
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getLeftImageIcon())) {
                 mIvNotificationImage.setCircularImage(true);
@@ -96,7 +108,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getIcon())) {
                 Glide.with(mContext)
                         .load(mBellNotification.getIcon())
-                        .into(mIvNotificationType);
+                        .into(mIvBellReaction);
             }
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getRightImageIcon())) {
                 Glide.with(context)
@@ -123,8 +135,33 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
         mViewInterface.handleOnClick(mBelNotificationListResponse, mClNotification);
     }
 
+    @OnClick(R.id.tv_bell_view_profile)
+    public void onViewProfileClick() {
+        mViewInterface.handleOnClick(mBelNotificationListResponse, mClNotification);
+    }
+
     @Override
     public void onClick(View v) {
 
+    }
+
+    enum NotificationCategoryEnum {
+        FOLLOW("FOLLOW"),
+        FIRST_COMMENT("FIRST_COMMENT");
+
+
+        private final String string;
+
+        NotificationCategoryEnum(final String string) {
+            this.string = string;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
+        @Override
+        public String toString() {
+            return string;
+        }
     }
 }

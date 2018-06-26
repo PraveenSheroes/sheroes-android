@@ -88,7 +88,7 @@ import butterknife.OnClick;
  */
 
 
-public class ArticleSubmissionActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
+public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
     private static int flagActivity = 0;
@@ -612,7 +612,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
         }
 
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(ArticleSubmissionActivity.this);
+                new AlertDialog.Builder(HerStoryOrArticleSubmissionActivity.this);
 
         builder.setTitle(R.string.dialog_title_draft);
         builder.setMessage(R.string.dialog_body_draft);
@@ -696,8 +696,8 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
     //region static methods
     public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
 
-        Intent intent = new Intent(fromActivity, ArticleSubmissionActivity.class);
-        ArticleSubmissionActivity.flagActivity = flagActivity;
+        Intent intent = new Intent(fromActivity, HerStoryOrArticleSubmissionActivity.class);
+        HerStoryOrArticleSubmissionActivity.flagActivity = flagActivity;
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
 
         if (!CommonUtil.isEmpty(screenProperties)) {
@@ -709,7 +709,7 @@ public class ArticleSubmissionActivity extends BaseActivity implements IArticleS
 
     public static void navigateTo(Activity fromActivity, ArticleSolrObj article, String sourceScreen, HashMap<String, Object> screenProperties) {
 
-        Intent intent = new Intent(fromActivity, ArticleSubmissionActivity.class);
+        Intent intent = new Intent(fromActivity, HerStoryOrArticleSubmissionActivity.class);
         Parcelable parcelable = Parcels.wrap(article);
         intent.putExtra(ArticleSolrObj.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);

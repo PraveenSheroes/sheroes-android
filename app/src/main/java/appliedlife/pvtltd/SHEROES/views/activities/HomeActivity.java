@@ -487,7 +487,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             createCommunityPostOnClick(communityPost);
 
         }*/
-        ArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
+        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
 
     }
 

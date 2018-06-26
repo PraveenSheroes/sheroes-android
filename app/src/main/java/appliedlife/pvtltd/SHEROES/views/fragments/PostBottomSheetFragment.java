@@ -41,7 +41,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityListAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -61,7 +61,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     public List<Community> mCommunityList = new ArrayList<>();
     private MyCommunities mMyCommunities;
     CommunityPostActivity mCommunityPostActivity;
-    ArticleSubmissionActivity mArticleSubmissionActivity;
+    HerStoryOrArticleSubmissionActivity mHerStoryOrArticleSubmissionActivity;
     @Inject
     HomePresenter mHomePresenter;
 
@@ -88,7 +88,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         if (activity instanceof CommunityPostActivity) {
             mCommunityPostActivity = (CommunityPostActivity) activity;
         } else {
-            mArticleSubmissionActivity = (ArticleSubmissionActivity) activity;
+            mHerStoryOrArticleSubmissionActivity = (HerStoryOrArticleSubmissionActivity) activity;
         }
         super.onAttach(activity);
     }
@@ -171,8 +171,8 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         if (getActivity() instanceof CommunityPostActivity) {
             mCommunityPostActivity.showError(s, feedParticipationEnum);
         } else {
-            if (getActivity() instanceof ArticleSubmissionActivity) {
-                mArticleSubmissionActivity.showError(s, feedParticipationEnum);
+            if (getActivity() instanceof HerStoryOrArticleSubmissionActivity) {
+                mHerStoryOrArticleSubmissionActivity.showError(s, feedParticipationEnum);
             }
         }
     }

@@ -16,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -309,7 +309,7 @@ public interface SheroesAppComponent {
 
     void inject(AppInstallationHelper appInstallationHelper);
 
-    void inject(ArticleSubmissionActivity articleSubmissionActivity);
+    void inject(HerStoryOrArticleSubmissionActivity herStoryOrArticleSubmissionActivity);
 
     void inject(FeedAdapter feedAdapter);
 
