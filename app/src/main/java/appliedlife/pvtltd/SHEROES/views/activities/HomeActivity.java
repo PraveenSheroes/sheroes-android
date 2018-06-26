@@ -103,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotification;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -516,20 +517,15 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
         } else if (baseResponse instanceof BellNotificationResponse) {
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
-                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
-                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
-                    challengeIdHandle(urlStr);
-                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
-                    mTitleText.setText("");
-                    communityOnClick();
-                } else {
-                    mTitleText.setText("");
-                    homeOnClick();
-                }
-            }
-            if (null != bellNotificationDialogFragment) {
-                bellNotificationDialogFragment.dismiss();
+            BellNotification bellNotification = bellNotificationResponse.getNotification();
+            if (StringUtil.isNotNullOrEmptyString(bellNotification.getDeepLinkUrl())) {
+                challengeIdHandle(bellNotification.getDeepLinkUrl());
+            } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
+                mTitleText.setText("");
+                communityOnClick();
+            } else {
+                mTitleText.setText("");
+                homeOnClick();
             }
         }
     }

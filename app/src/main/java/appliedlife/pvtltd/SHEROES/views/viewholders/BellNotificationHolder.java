@@ -3,26 +3,27 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.support.constraint.ConstraintLayout;
 import android.text.Html;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotification;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -32,19 +33,24 @@ import butterknife.OnClick;
 
 public class BellNotificationHolder extends BaseViewHolder<BellNotificationResponse> {
 
-    @Bind(R.id.tv_notification_tittle)
+    @Bind(R.id.tv_bell_noti_title)
     TextView mTvNotificationTitle;
-    @Bind(R.id.tv_notification_date)
+    @Bind(R.id.tv_bell_noti_time)
     TextView mTvNotificationDate;
-    @Bind(R.id.iv_notification_image)
-    ImageView mIvNotificationImage;
-    @Bind(R.id.lnr_notification)
-    FrameLayout mLnrNotification;
-    @Bind(R.id.iv_notification_type)
+    @Bind(R.id.iv_bell_noti_circle_icon)
+    CircleImageView mIvNotificationImage;
+    @Bind(R.id.cl_notification)
+    ConstraintLayout mClNotification;
+    @Bind(R.id.iv_bell_reaction)
     ImageView mIvNotificationType;
+    @Bind(R.id.iv_bell_noti_image)
+    ImageView mIvBellNotiImage;
     BaseHolderInterface mViewInterface;
-    private BellNotificationResponse mDataItem;
     private Context mContext;
+    @BindDimen(R.dimen.dp_size_40)
+    int authorPicSizeFourty;
+    private BellNotification mBellNotification;
+    private BellNotificationResponse mBelNotificationListResponse;
 
     public BellNotificationHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -56,39 +62,50 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(BellNotificationResponse belNotificationListResponse, Context context, int position) {
-        this.mDataItem = belNotificationListResponse;
+        mBelNotificationListResponse=belNotificationListResponse;
+        mBellNotification = belNotificationListResponse.getNotification();
+
         mContext = context;
-        if (null != mDataItem) {
-            if (StringUtil.isNotNullOrEmptyString(mDataItem.getTitle())) {
+        if (null != mBellNotification) {
+            if (StringUtil.isNotNullOrEmptyString(mBellNotification.getTitle())) {
+                String title=mBellNotification.getTitle();
+                if(StringUtil.isNotNullOrEmptyString(mBellNotification.getMessage()))
+                {
+                    title=title+" "+mBellNotification.getMessage();
+                }else {
+                    title = title;
+                }
                 if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    mTvNotificationTitle.setText(Html.fromHtml(mDataItem.getTitle(), 0)); // for 24 api and more
+                    mTvNotificationTitle.setText(Html.fromHtml(title, 0)); // for 24 api and more
                 } else {
-                    mTvNotificationTitle.setText(Html.fromHtml(mDataItem.getTitle()));// or for older api
+                    mTvNotificationTitle.setText(Html.fromHtml(title));// or for older api
                 }
             }
-            if (StringUtil.isNotNullOrEmptyString(mDataItem.getLastActivityDate())) {
+            if (StringUtil.isNotNullOrEmptyString(mBellNotification.getSolrIgnorePostingDateDt())) {
                 mTvNotificationDate.setVisibility(View.VISIBLE);
-                mTvNotificationDate.setText(mDataItem.getLastActivityDate());
+                mTvNotificationDate.setText(mBellNotification.getSolrIgnorePostingDateDt());
             } else {
                 mTvNotificationDate.setVisibility(View.INVISIBLE);
             }
-            if (StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())) {
-                Glide.with(mContext)
-                        .load(mDataItem.getSolrIgnoreAuthorOrEntityImageUrl())
-                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
-                        .into(mIvNotificationImage);
-            } else {
-                Glide.with(mContext)
-                        .load(R.drawable.notification_icon)
-                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)).diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
-                        .into(mIvNotificationImage);
+            if (StringUtil.isNotNullOrEmptyString(mBellNotification.getLeftImageIcon())) {
+                mIvNotificationImage.setCircularImage(true);
+                String authorThumborUrl = CommonUtil.getThumborUri(mBellNotification.getLeftImageIcon(), authorPicSizeFourty, authorPicSizeFourty);
+                mIvNotificationImage.bindImage(authorThumborUrl);
             }
-            if (StringUtil.isNotNullOrEmptyString(mDataItem.getSolrIgnoreIconImageUrl())) {
+
+            if (StringUtil.isNotNullOrEmptyString(mBellNotification.getIcon())) {
                 Glide.with(mContext)
-                        .load(mDataItem.getSolrIgnoreIconImageUrl())
-                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.DATA).skipMemoryCache(true))
+                        .load(mBellNotification.getIcon())
+                        .apply(new RequestOptions())
                         .into(mIvNotificationType);
             }
+            if (StringUtil.isNotNullOrEmptyString(mBellNotification.getRightImageIcon())) {
+                Glide.with(context)
+                        .load(mBellNotification.getRightImageIcon())
+                        .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                        .into(mIvBellNotiImage);
+            }
+
         }
     }
 
@@ -97,14 +114,14 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
 
     }
 
-    @OnClick(R.id.tv_notification_tittle)
+    @OnClick(R.id.tv_bell_noti_title)
     public void onNotificationTitleClick() {
-        mViewInterface.handleOnClick(mDataItem, mLnrNotification);
+        mViewInterface.handleOnClick(mBelNotificationListResponse, mClNotification);
     }
 
-    @OnClick(R.id.lnr_notification)
+    @OnClick(R.id.cl_notification)
     public void onViewClick() {
-        mViewInterface.handleOnClick(mDataItem, mLnrNotification);
+        mViewInterface.handleOnClick(mBelNotificationListResponse, mClNotification);
     }
 
     @Override

@@ -11,8 +11,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 /**
  * Created by priyanka on 24/04/17.
  */
-@Parcel(analyze = {BellNotificationResponse.class,BaseResponse.class})
-public class BellNotificationResponse extends BaseResponse{
+@Parcel(analyze = {BellNotificationResponse.class, BaseResponse.class})
+public class BellNotificationResponse extends BaseResponse {
+    @SerializedName("notification")
+    private BellNotification notification;
     @SerializedName("title")
     @Expose
     private String title;
@@ -104,6 +106,7 @@ public class BellNotificationResponse extends BaseResponse{
     public void setSolrIgnoreAuthorCommunityParticipantId(Long solrIgnoreAuthorCommunityParticipantId) {
         this.solrIgnoreAuthorCommunityParticipantId = solrIgnoreAuthorCommunityParticipantId;
     }
+
     public String getSolrIgnoreIconImageUrl() {
         return solrIgnoreIconImageUrl;
     }
@@ -115,4 +118,11 @@ public class BellNotificationResponse extends BaseResponse{
     public BellNotificationResponse() {
     }
 
+    public BellNotification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(BellNotification notification) {
+        this.notification = notification;
+    }
 }
