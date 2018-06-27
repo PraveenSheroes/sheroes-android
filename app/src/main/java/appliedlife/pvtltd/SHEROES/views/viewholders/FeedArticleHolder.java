@@ -135,6 +135,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_feed_article_draft)
     TextView tvFeedArticleDraft;
 
+    @Bind(R.id.rl_comment_reaction)
+    RelativeLayout rlCommentReaction;
+
+    @Bind(R.id.rl_feed_article_join_conversation)
+    RelativeLayout rlFeedArticleJoinConversation;
+
+
     @BindDimen(R.dimen.dp_size_40)
     int profileSize;
 
@@ -200,12 +207,29 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (!articleObj.isTrending()) {
             imageOperations(context);
         }
-        if (StringUtil.isNotNullOrEmptyString(articleObj.getStatus()) && articleObj.getStatus().equalsIgnoreCase(ArticleStatusEnum.DRAFT.toString())) {
-            tvFeedArticleUserBookmark.setVisibility(View.GONE);
-            tvFeedArticleDraft.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(articleObj.getUserStoryStatus())) {
+            if (articleObj.getUserStoryStatus().equalsIgnoreCase(ArticleStatusEnum.DRAFT.toString())) {
+                tvFeedArticleUserBookmark.setVisibility(View.GONE);
+                tvFeedArticleDraft.setVisibility(View.VISIBLE);
+                rlCommentReaction.setVisibility(View.GONE);
+                lastCommentContainer.setVisibility(View.GONE);
+                lineForNoImage.setVisibility(View.GONE);
+                rlFeedArticleJoinConversation.setVisibility(View.GONE);
+            } else {
+                tvFeedArticleUserBookmark.setVisibility(View.VISIBLE);
+                tvFeedArticleDraft.setVisibility(View.GONE);
+                rlCommentReaction.setVisibility(View.VISIBLE);
+                lastCommentContainer.setVisibility(View.VISIBLE);
+                lineForNoImage.setVisibility(View.VISIBLE);
+                rlFeedArticleJoinConversation.setVisibility(View.VISIBLE);
+            }
         } else {
             tvFeedArticleUserBookmark.setVisibility(View.VISIBLE);
             tvFeedArticleDraft.setVisibility(View.GONE);
+            rlCommentReaction.setVisibility(View.VISIBLE);
+            lastCommentContainer.setVisibility(View.VISIBLE);
+            lineForNoImage.setVisibility(View.VISIBLE);
+            rlFeedArticleJoinConversation.setVisibility(View.VISIBLE);
         }
 
         // TODO : ujjwal
@@ -239,7 +263,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
         }
-        mViewMoreDescription = articleObj.getShortDescription();
+        mViewMoreDescription = articleObj.getDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -525,7 +549,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_article_user_menu)
     public void menuItemClick() {
         if (viewInterface instanceof FeedItemCallback) {
-            ((FeedItemCallback) viewInterface).onPostMenuClicked(articleObj, tvFeedArticleUserMenu);
+            if (StringUtil.isNotNullOrEmptyString(articleObj.getUserStoryStatus())) {
+                ((FeedItemCallback) viewInterface).onHerStoryPostMenuClicked(articleObj, tvFeedArticleUserMenu);
+            } else {
+                ((FeedItemCallback) viewInterface).onPostMenuClicked(articleObj, tvFeedArticleUserMenu);
+            }
         } else {
             viewInterface.handleOnClick(articleObj, tvFeedArticleUserMenu);
         }

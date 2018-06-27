@@ -102,6 +102,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPostMenuClicked(ArticleSolrObj articleObj, View view);
 
+    void onHerStoryPostMenuClicked(ArticleSolrObj articleObj, View view);
+
     void onUpdateNowClicked();
 
     void onUpdateLaterClicked();

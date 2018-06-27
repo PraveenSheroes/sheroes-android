@@ -11,20 +11,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -68,15 +67,11 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import io.reactivex.Observable;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
@@ -140,7 +135,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     }
 
     public void fetchFeed(final int feedState) {
-        if(mIsFeedLoading){
+        if (mIsFeedLoading) {
             return;
         }
         Integer limit = null;
@@ -156,8 +151,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         switch (mFeedState) {
             case NORMAL_REQUEST:
                 mNextToken = null;
-                if(mIsHomeFeed){
-                    if(CommonUtil.isEmpty(mFeedDetailList)){
+                if (mIsHomeFeed) {
+                    if (CommonUtil.isEmpty(mFeedDetailList)) {
                         List<FeedDetail> feedList = new ArrayList<>();
                         FeedDetail homeFeedHeader = new FeedDetail();
                         homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
@@ -177,72 +172,72 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
         communityFeedRequestPojo.setNextToken(mNextToken);
 
-            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-                return;
-            }
-            mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl)
-                    .compose(this.<FeedResponsePojo>bindToLifecycle())
-                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
-                @Override
-                public void onComplete() {
-                    getMvpView().stopProgressBar();
-                }
-                @Override
-                public void onError(Throwable e) {
-                    mIsFeedLoading = false;
-                    getMvpView().stopProgressBar();
-                    Crashlytics.getInstance().core.logException(e);
-                    getMvpView().showFeedList(mFeedDetailList);
-
-                }
-
-                @Override
-                public void onNext(FeedResponsePojo feedResponsePojo) {
-                    mIsFeedLoading = false;
-                    getMvpView().stopProgressBar();
-                    getMvpView().hideGifLoader();
-                    if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
-                        List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
-                        mNextToken = feedResponsePojo.getNextToken();
-                        switch (mFeedState) {
-                            case NORMAL_REQUEST:
-                                getMvpView().stopProgressBar();
-                                if(mIsHomeFeed){
-                                    FeedDetail homeFeedHeader = new FeedDetail();
-                                    homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                                    feedList.add(0, homeFeedHeader);
-                                }
-                                mFeedDetailList = feedList;
-                                getMvpView().setFeedEnded(false);
-                                List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
-                                getMvpView().showFeedList(feedDetails);
-                                getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
-                                break;
-                            case LOAD_MORE_REQUEST:
-                                // append in case of load more
-                                if (!CommonUtil.isEmpty(feedList)) {
-                                    mFeedDetailList.addAll( feedList);
-                                    //getMvpView().showFeedList(mFeedDetailList);
-                                    getMvpView().addAllFeed(feedList);
-                                }else {
-                                    getMvpView().setFeedEnded(true);
-                                }
-                                break;
-                        }
-
-                    }else {
-
-                        if(feedResponsePojo.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
-                            getMvpView().setFeedEnded(true);
-                        }
-                        else if(!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size()<5){
-                            getMvpView().setFeedEnded(true);
-                        }
-                        getMvpView().showFeedList(mFeedDetailList);
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        mHomeModel.getCommunityFeedFromModel(communityFeedRequestPojo, mEndpointUrl)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
                     }
-                }
-            });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mIsFeedLoading = false;
+                        getMvpView().stopProgressBar();
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showFeedList(mFeedDetailList);
+
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        mIsFeedLoading = false;
+                        getMvpView().stopProgressBar();
+                        getMvpView().hideGifLoader();
+                        if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+                            mNextToken = feedResponsePojo.getNextToken();
+                            switch (mFeedState) {
+                                case NORMAL_REQUEST:
+                                    getMvpView().stopProgressBar();
+                                    if (mIsHomeFeed) {
+                                        FeedDetail homeFeedHeader = new FeedDetail();
+                                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                        feedList.add(0, homeFeedHeader);
+                                    }
+                                    mFeedDetailList = feedList;
+                                    getMvpView().setFeedEnded(false);
+                                    List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                                    getMvpView().showFeedList(feedDetails);
+                                    getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                    break;
+                                case LOAD_MORE_REQUEST:
+                                    // append in case of load more
+                                    if (!CommonUtil.isEmpty(feedList)) {
+                                        mFeedDetailList.addAll(feedList);
+                                        //getMvpView().showFeedList(mFeedDetailList);
+                                        getMvpView().addAllFeed(feedList);
+                                    } else {
+                                        getMvpView().setFeedEnded(true);
+                                    }
+                                    break;
+                            }
+
+                        } else {
+
+                            if (feedResponsePojo.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
+                                getMvpView().setFeedEnded(true);
+                            } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
+                                getMvpView().setFeedEnded(true);
+                            }
+                            getMvpView().showFeedList(mFeedDetailList);
+                        }
+                    }
+                });
 
     }
 
@@ -250,17 +245,18 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         return mIsFeedLoading;
     }
 
-    public void getNewHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, AppIntroScreenRequest appIntroScreenRequest,FragmentListRefreshData fragmentListRefreshData) {
+    public void getNewHomeFeedFromPresenter(FeedRequestPojo feedRequestPojo, AppIntroScreenRequest appIntroScreenRequest, FragmentListRefreshData fragmentListRefreshData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest,fragmentListRefreshData).subscribe(new DisposableObserver<List<FeedDetail>>() {
+        mHomeModel.getNewHomeFeedFromModel(feedRequestPojo, appIntroScreenRequest, fragmentListRefreshData).subscribe(new DisposableObserver<List<FeedDetail>>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
@@ -292,6 +288,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onComplete() {
                 getMvpView().stopProgressBar();
             }
+
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
@@ -404,7 +401,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         });
 
     }
-    public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest,final UserSolrObj userSolrObj) {
+
+    public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
             return;
@@ -427,25 +425,24 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
-                {
+                if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
                     if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers()+1);
+                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                    }else {
-                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount()+1);
+                    } else {
+                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
                         userSolrObj.setSolrIgnoreIsUserFollowed(true);
                     }
                     getMvpView().invalidateItem(userSolrObj);
-                }else
-                {
+                } else {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                 }
             }
         });
 
     }
-    public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest,final UserSolrObj userSolrObj) {
+
+    public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
             return;
@@ -468,24 +465,23 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                 getMvpView().stopProgressBar();
-                if(mentorFollowUnfollowResponse.getStatus()!=AppConstants.SUCCESS)
-                {
+                if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
                     if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
                         userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                    }else {
+                    } else {
                         userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
                         userSolrObj.setSolrIgnoreIsUserFollowed(false);
                     }
                     getMvpView().invalidateItem(userSolrObj);
-                }else
-                {
+                } else {
                     userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                 }
             }
         });
 
     }
+
     public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
@@ -607,7 +603,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     comment.isLiked = true;
                     comment.likeCount++;
                 }
@@ -640,7 +636,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-               // //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+                // //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
             }
         });
 
@@ -758,12 +754,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(BelNotificationListResponse bellNotificationResponse) {
                 getMvpView().stopProgressBar();
                 if (null != bellNotificationResponse) {
-                   // getMvpView().showNotificationList(bellNotificationResponse);
+                    // getMvpView().showNotificationList(bellNotificationResponse);
                 }
             }
         });
 
     }
+
     public void getNotificationCountFromPresenter(NotificationReadCount notificationReadCount) {
         mHomeModel.getNotificationReadCountFromModel(notificationReadCount).subscribe(new DisposableObserver<NotificationReadCountResponse>() {
 
@@ -804,10 +801,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
                 getMvpView().stopProgressBar();
                 if (null != approveSpamPostResponse) {
-                    if(approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true){
+                    if (approveSpamPostRequest.isApproved() == false && approveSpamPostRequest.isSpam() == true) {
                         // spam post was rejected
                         getMvpView().removeItem(userPostSolrObj);
-                    }else if(approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false){
+                    } else if (approveSpamPostRequest.isApproved() == true && approveSpamPostRequest.isSpam() == false) {
                         // spam post was approved
                         userPostSolrObj.setSpamPost(false);
                         getMvpView().invalidateItem(userPostSolrObj);
@@ -818,7 +815,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         });
 
     }
-
 
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
@@ -879,7 +875,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus().equals(AppConstants.FAILED)){
+                if (likeResponse.getStatus().equals(AppConstants.FAILED)) {
                     feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                     feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                     getMvpView().invalidateItem(feedDetail);
@@ -926,7 +922,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                 feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-               // mBaseResponseList.set(0, userPostSolrObj);
+                // mBaseResponseList.set(0, userPostSolrObj);
                 getMvpView().invalidateItem(feedDetail);
 
             }
@@ -934,10 +930,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                     feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                  //  mBaseResponseList.set(0, userPostSolrObj);
+                    //  mBaseResponseList.set(0, userPostSolrObj);
                 }
                 AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, FeedFragment.SCREEN_LABEL);
                 getMvpView().invalidateItem(feedDetail);
@@ -990,7 +986,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     comment.isLiked = true;
                     comment.likeCount++;
                 }
@@ -1003,7 +999,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
-                                .streamType((userPostSolrObj!=null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType(): "")
+                                .streamType((userPostSolrObj != null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType() : "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -1041,7 +1037,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
-                if(likeResponse.getStatus() == AppConstants.FAILED){
+                if (likeResponse.getStatus() == AppConstants.FAILED) {
                     comment.isLiked = false;
                     comment.likeCount--;
                     userPostSolrObj.getLastComments().set(0, comment);
@@ -1054,7 +1050,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
-                                .streamType((userPostSolrObj!=null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType(): "")
+                                .streamType((userPostSolrObj != null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType() : "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -1064,7 +1060,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_COMMUNITY_OWNER);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
@@ -1092,8 +1088,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest){
-        LogUtils.info(TAG,"***************edit community Post****"+new Gson().toJson(communityPostCreateRequest));
+    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
+        LogUtils.info(TAG, "***************edit community Post****" + new Gson().toJson(communityPostCreateRequest));
         return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
@@ -1112,6 +1108,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     public void setEndpointUrl(String endpointUrl) {
         this.mEndpointUrl = endpointUrl;
     }
+
     public void setIsHomeFeed(boolean isHomeFeed) {
         this.mIsHomeFeed = isHomeFeed;
     }
@@ -1159,7 +1156,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
                             communityFeedSolrObj.setMember(false);
                             getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
-                        }else {
+                        } else {
                             getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
                         }
                         getMvpView().stopProgressBar();
@@ -1251,4 +1248,36 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
+    public void deleteArticle(final ArticleSubmissionRequest articleSubmissionRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            return;
+        }
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.deleteArticle(articleSubmissionRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<ArticleSubmissionResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ArticleSubmissionResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(ArticleSubmissionResponse articleSubmissionResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != articleSubmissionResponse) {
+                            getMvpView().removeItem(articleSubmissionResponse.getArticleSolrObj());
+                        }
+                    }
+                });
+    }
 }

@@ -2205,4 +2205,16 @@ public class AppUtils {
         articleSubmissionRequest.tagIds = tagList;
         return articleSubmissionRequest;
     }
+    public ArticleSubmissionRequest articleDeleteRequest( ArticleSolrObj articleSolrObj) {
+        AppUtils appUtils = AppUtils.getInstance();
+        ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
+        articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
+        articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        articleSubmissionRequest.articleId=articleSolrObj.getIdOfEntityOrParticipant();
+        articleSubmissionRequest.storyTitle=articleSolrObj.getNameOrTitle();
+        articleSubmissionRequest.storyContent=articleSolrObj.getDescription();
+
+        return articleSubmissionRequest;
+    }
 }

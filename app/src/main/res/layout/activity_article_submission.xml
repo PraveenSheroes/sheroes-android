@@ -1,13 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/TextAppearance.Toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/AppTheme.Toolbar"
+        app:popupTheme="@style/AppTheme.PopupMenu">
 
-    <include
-        android:id="@id/toolbar"
-        layout="@layout/toolbar" />
+        <TextView
+            android:id="@+id/title_toolbar"
+            style="@style/TextAppearance.Toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_size_10"
+            android:layout_marginStart="@dimen/dp_size_10"
+            android:ellipsize="end"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center_vertical"
+            android:maxLines="@integer/int_value_for_line_1"
+            android:text="write a story" />
+
+        <ImageView
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_12"
+            android:layout_marginStart="@dimen/dp_size_12"
+            android:gravity="center_vertical"
+            android:src="@drawable/vector_info_24dp" />
+
+        <TextView
+            android:id="@+id/tv_draft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:lineSpacingExtra="6sp"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:padding="@dimen/dp_size_8"
+            android:text="@string/action_draft"
+            android:textAllCaps="true"
+            android:textColor="#90949c"
+            android:textSize="14sp" />
+    </android.support.v7.widget.Toolbar>
 
     <include
         layout="@layout/layout_article_post_final"

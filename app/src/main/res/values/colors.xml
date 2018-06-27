@@ -71,6 +71,8 @@
     <color name="posted_in">#90949c</color>
     <color name="menu_icon">#90949c</color>
     <color name="search_tab_text">#3949ab</color>
+    <color name="fb_Color">#3B5998</color>
+
 
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>

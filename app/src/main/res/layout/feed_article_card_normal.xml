@@ -186,6 +186,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_comment_reaction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_8"

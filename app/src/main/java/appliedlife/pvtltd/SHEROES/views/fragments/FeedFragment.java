@@ -97,6 +97,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
@@ -999,7 +1000,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         PopupMenu popup = new PopupMenu(getActivity(), view);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-            // popup.getMenuInflater().inflate(R.menu.menu_edit_delete, popup.getMenu());
             if (view.getId() == R.id.tv_feed_article_user_comment_post_menu || view.getId() == R.id.spam_article_comment_menu) {
                 long currentUserId = -1;
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -1060,6 +1060,56 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         popup.show();
     }
 
+    @Override
+    public void onHerStoryPostMenuClicked(final ArticleSolrObj articleObj, final View view) {
+        if (getActivity() == null || getActivity().isFinishing()) return;
+        PopupMenu popup = new PopupMenu(getActivity(), view);
+        if (view.getId() == R.id.tv_feed_article_user_menu) {
+            popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+            popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.edit:
+                        onHerStoryEdit(articleObj);
+                        return true;
+                    case R.id.delete:
+                        onHerStoryDelete(articleObj);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
+
+    }
+    public void onHerStoryEdit(ArticleSolrObj articleObj) {
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleObj.getItemPosition()));
+        if (articleObj.isUserStory()) {
+            screenProperties.put(EventProperty.IS_STORY.toString(), true);
+            screenProperties.put(EventProperty.ID.toString(), String.valueOf(articleObj.getIdOfEntityOrParticipant()));
+            screenProperties.put(EventProperty.NAME.toString(), articleObj.getNameOrTitle());
+            screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
+            screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
+        }
+        HerStoryOrArticleSubmissionActivity.navigateTo(getActivity(), articleObj, getScreenName(), null);
+    }
+    public void onHerStoryDelete(ArticleSolrObj articleObj) {
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleObj.getItemPosition()));
+        if (articleObj.isUserStory()) {
+            screenProperties.put(EventProperty.IS_STORY.toString(), true);
+            screenProperties.put(EventProperty.ID.toString(), String.valueOf(articleObj.getIdOfEntityOrParticipant()));
+            screenProperties.put(EventProperty.NAME.toString(), articleObj.getNameOrTitle());
+            screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
+            screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
+        }
+        mFeedPresenter.deleteArticle(mAppUtils.articleDeleteRequest(articleObj));
+    }
     @Override
     public void onUpdateNowClicked() {
         AnalyticsManager.trackEvent(Event.APP_UPDATE_YES, getScreenName(), null);
@@ -1648,4 +1698,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 
+    enum ArticleStatusEnum {
+        PUBLIC("Public"),
+        DRAFT("Draft");
+
+
+        private final String string;
+
+        ArticleStatusEnum(final String string) {
+            this.string = string;
+        }
+
+        /* (non-Javadoc)
+         * @see java.lang.Enum#toString()
+         */
+        @Override
+        public String toString() {
+            return string;
+        }
+    }
 }

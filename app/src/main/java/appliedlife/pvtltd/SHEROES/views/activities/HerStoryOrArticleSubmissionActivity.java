@@ -17,6 +17,7 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -69,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagName;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.ArticleSubmissionPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -78,6 +80,7 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -101,6 +104,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Inject
     Preference<Configuration> mConfiguration;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     //region view variables
     @Bind(R.id.title_toolbar)
@@ -139,11 +145,12 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     @Bind(R.id.tv_tag_lable)
     TextView tvTagLable;
 
+
+
     //endregion
 
     //region member variables
     private EditorFragmentAbstract mEditorFragment;
-    private boolean shouldShowGuideLine;
     private boolean isGuidelineVisible;
     private File localImageSaveForChallenge;
     private Uri mImageCaptureUri;
@@ -175,28 +182,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             }
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
         }
-/*
-        mArticleSolrObj=new ArticleSolrObj();
-        List<Long>longList=new ArrayList<>();
-        longList.add(1l);
-        longList.add(2l);
-        longList.add(3l);
-        longList.add(4l);
-        longList.add(5l);
-        longList.add(6l);
-        mArticleSolrObj.setTag_ids(longList);
-
-        List<String>name=new ArrayList<>();
-        name.add("One");
-        name.add("two");
-        name.add("three");
-        name.add("four");
-        name.add("five");
-        name.add("six");
-        mArticleSolrObj.setTags(name);
-        mArticleSolrObj.setListDescription("Hello test");
-        mArticleSolrObj.setNameOrTitle("Edit");*/
-
         setSupportActionBar(mToolbar);
         toolbarTitle.setText(R.string.title_article_submit);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -206,28 +191,28 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         this.localImageSaveForChallenge = localImageSaveForChallenge;
         String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
         mBody.setText(Html.fromHtml(articleGuideline));
-        if (mArticleSolrObj == null) {
-            shouldShowGuideLine = true;
-        } else {
-            setupEditArticleView(mArticleSolrObj);
-        }
-        setupShareToFbListener();
-        mArticleSubmissionPresenter.getArticleTags();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL);
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
-    }
-
-    @Override
-    protected void onResumeFragments() {
-        if (shouldShowGuideLine) {
+        if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
         }
-        super.onResumeFragments();
+        if (mArticleSolrObj != null) {
+            setupEditArticleView(mArticleSolrObj);
+        }
+        mArticleNextPageContainer.setVisibility(View.GONE);
+        mEditorContainer.setVisibility(View.VISIBLE);
+        setupShareToFbListener();
+        mArticleSubmissionPresenter.getArticleTags();
+        // AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
 
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isDraft) {
         if (!isDraft) {
+            boolean isMentor=false;
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
+            }
+            ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor,-1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
             finish();
         }
     }
@@ -297,13 +282,10 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     private void setUpOptionMenuStates(Menu menu) {
         MenuItem itemNext = menu.findItem(R.id.next_article_submit);
         MenuItem itemPost = menu.findItem(R.id.post_article_submit);
-        MenuItem itemInfo = menu.findItem(R.id.guideline);
         if (isNextPage) {
-            itemInfo.setVisible(false);
             itemNext.setVisible(false);
             itemPost.setVisible(true);
         } else {
-            itemInfo.setVisible(true);
             itemNext.setVisible(true);
             itemPost.setVisible(false);
         }
@@ -328,17 +310,19 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             mIdOfEntityOrParticipantArticle = article.getIdOfEntityOrParticipant();
         }
         getSupportActionBar().setTitle("Edit a Story");
-        mEditorFragment.setContent(article.getListDescription());
+        mEditorFragment.setContent(article.getDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
         mArticleNextPageContainer.setVisibility(View.GONE);
         mEditorContainer.setVisibility(View.VISIBLE);
-        for (int i = 0; i < mArticleSolrObj.getTag_ids().size(); i++) {
-            ArticleTagName articleTagName = new ArticleTagName();
-            articleTagName.setId(mArticleSolrObj.getTag_ids().get(i));
-            articleTagName.setTagName(mArticleSolrObj.getTags().get(i));
-            mArticleTagNameList.add(articleTagName);
+        if(StringUtil.isNotEmptyCollection(mArticleSolrObj.getTag_ids())) {
+            for (int i = 0; i < mArticleSolrObj.getTag_ids().size(); i++) {
+                ArticleTagName articleTagName = new ArticleTagName();
+                articleTagName.setId(mArticleSolrObj.getTag_ids().get(i));
+                articleTagName.setTagName(mArticleSolrObj.getTags().get(i));
+                mArticleTagNameList.add(articleTagName);
+            }
+            getArticleTagList(mArticleTagNameList, true);
         }
-        getArticleTagList(mArticleTagNameList, true);
     }
 
     @Override
@@ -395,17 +379,20 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             showNextPage();
         }
 
-        if (id == R.id.draft) {
-            if (validateFields(true, true)) {
-                draftArticle();
-            }
-        }
-        if (id == R.id.guideline) {
-            showGuideLineView();
-        }
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.guideline)
+    public void onGuidelineClick() {
+        showGuideLineView();
+    }
+
+    @OnClick(R.id.tv_draft)
+    public void onDraftClick() {
+        if (validateFields(true, true)) {
+            draftArticle();
+        }
+    }
     private void showNextPage() {
         isNextPage = true;
         mArticleNextPageContainer.setVisibility(View.VISIBLE);
@@ -483,8 +470,8 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Override
     public void onEditorFragmentInitialized() {
-        mEditorFragment.setTitlePlaceholder("Article Title");
-        String hintText = "You story";
+        mEditorFragment.setTitlePlaceholder("Title");
+        String hintText = "Your story...";
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
         }
@@ -558,7 +545,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-
+                mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small_active),null, null, null);
+                mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.fb_Color));
+                mShareToFacebook.setText("Share on Facebook");
             }
         });
     }
@@ -676,7 +665,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     }
 
     private void showGuideLineView() {
-        shouldShowGuideLine = false;
         isGuidelineVisible = true;
         mGuidelineContainer.setVisibility(View.VISIBLE);
         mGuidelineContainer.requestFocusFromTouch();
@@ -751,7 +739,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         List list = getPackageManager().queryIntentActivities(intent, 0);
         intent.setData(mImageCaptureUri);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
-        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectX", 2);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
         if (StringUtil.isNotEmptyCollection(list)) {

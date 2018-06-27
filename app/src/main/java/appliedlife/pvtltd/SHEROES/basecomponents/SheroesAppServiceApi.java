@@ -345,6 +345,9 @@ public interface SheroesAppServiceApi {
     @POST("participation/article/story/edit")
     Observable<ArticleSubmissionResponse> editArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
 
+    @POST("participation/article/story/delete")
+    Observable<ArticleSubmissionResponse> deleteArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
+
     @GET("entity/master/get_tags")
     Observable<ArticleTagResponse> getArticleTags();
 

@@ -353,6 +353,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.view_footer)
     View viewFooter;
 
+    @Bind(R.id.cl_story_footer)
+    CardView clStoryFooter;
+
+
     @BindDimen(R.dimen.dp_size_90)
     int profileSize;
 
@@ -826,32 +830,31 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
-            if (isOwnProfile) {
-                createPost.setVisibility(View.VISIBLE);
-            } else {
-                createPost.setVisibility(View.GONE);
-            }
             mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
         }
+        if (isOwnProfile) {
+            createPost.setVisibility(View.VISIBLE);
+        } else {
+            createPost.setVisibility(View.GONE);
+        }
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         String screenName;
         if (mLoggedInUserId != mUserSolarObject.getIdOfEntityOrParticipant()) {
-            screenName="Stories";
-            bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&userId="+mUserSolarObject.getIdOfEntityOrParticipant());
-        }else
-        {
-            screenName="My Stories";
+            screenName = "Stories";
+            bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&userId=" + mUserSolarObject.getIdOfEntityOrParticipant());
+        } else {
+            screenName = "My Stories";
             bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true");
         }
         bundle.putString(AppConstants.SCREEN_NAME, "Profile Stories Screen");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
         feedFragment.setArguments(bundle);
-        mViewPagerAdapter.addFragment(feedFragment,screenName);
+        mViewPagerAdapter.addFragment(feedFragment, screenName);
 
         mViewPager.setAdapter(mViewPagerAdapter);
         if (!isMentor) { //for user make post as default tab
@@ -926,6 +929,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         communityPost.isEdit = false;
         CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
 
+    }
+
+    @OnClick(R.id.cl_story_footer)
+    public void writeAStory() {
+        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.li_follower)
@@ -1110,9 +1118,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             } else {
                 createPost.setVisibility(View.GONE);
             }
+            clStoryFooter.setVisibility(View.GONE);
         } else if (fragment instanceof MentorQADetailFragment) {
             createPost.setVisibility(View.GONE);
+            clStoryFooter.setVisibility(View.GONE);
+        } else if (fragment instanceof FeedFragment) {
+            clStoryFooter.setVisibility(View.VISIBLE);
+            createPost.setVisibility(View.GONE);
         } else {
+            clStoryFooter.setVisibility(View.GONE);
             createPost.setVisibility(View.GONE);
         }
 
