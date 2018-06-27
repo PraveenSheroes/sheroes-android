@@ -80,7 +80,6 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -146,7 +145,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     TextView tvTagLable;
 
 
-
     //endregion
 
     //region member variables
@@ -209,11 +207,11 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isDraft) {
         if (!isDraft) {
-            boolean isMentor=false;
+            boolean isMentor = false;
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
                 isMentor = true;
             }
-            ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor,-1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor, -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL,true);
             finish();
         }
     }
@@ -313,9 +311,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         getSupportActionBar().setTitle("Edit a Story");
         mEditorFragment.setContent(article.getDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
-        mArticleNextPageContainer.setVisibility(View.GONE);
-        mEditorContainer.setVisibility(View.VISIBLE);
-        if(StringUtil.isNotEmptyCollection(mArticleSolrObj.getTag_ids())) {
+        if (StringUtil.isNotEmptyCollection(mArticleSolrObj.getTag_ids())) {
             for (int i = 0; i < mArticleSolrObj.getTag_ids().size(); i++) {
                 ArticleTagName articleTagName = new ArticleTagName();
                 articleTagName.setId(mArticleSolrObj.getTag_ids().get(i));
@@ -323,6 +319,10 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
                 mArticleTagNameList.add(articleTagName);
             }
             getArticleTagList(mArticleTagNameList, true);
+        }
+        if (StringUtil.isNotNullOrEmptyString(mArticleSolrObj.getImageUrl())) {
+            mIsCoverPhoto = true;
+            showImage(mArticleSolrObj.getImageUrl());
         }
     }
 
@@ -335,7 +335,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     public void showImage(String finalImageUrl) {
         if (mIsCoverPhoto) {
             if (StringUtil.isNotNullOrEmptyString(finalImageUrl)) {
-                mCoverImageUrl=finalImageUrl;
+                mCoverImageUrl = finalImageUrl;
                 int imageHeight = CommonUtil.getWindowWidth(this) / 2;
                 finalImageUrl = CommonUtil.getThumborUri(finalImageUrl, CommonUtil.getWindowWidth(this), imageHeight);
                 Glide.with(this)
@@ -395,6 +395,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             draftArticle();
         }
     }
+
     private void showNextPage() {
         isNextPage = true;
         mArticleNextPageContainer.setVisibility(View.VISIBLE);
@@ -547,11 +548,10 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                if(isChecked) {
+                if (isChecked) {
                     mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small_active), null, null, null);
                     mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.fb_Color));
-                }else
-                {
+                } else {
                     mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small), null, null, null);
                     mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
                 }
@@ -568,7 +568,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody,mCoverImageUrl), true);
+        mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody, mCoverImageUrl), true);
         HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
         AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
     }
@@ -587,9 +587,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             tagList.add(articleTagName.getId());
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj,mCoverImageUrl), false);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj,mCoverImageUrl), false);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
         }
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY);
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);

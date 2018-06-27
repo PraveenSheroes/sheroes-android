@@ -32,6 +32,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -167,7 +168,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         mHandler = new Handler();
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
             mUserId = userPreference.get().getUserSummary().getUserId();
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
@@ -178,7 +179,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = first + AppConstants.SPACE + last;
             }
         }
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareOption = "";
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareOption)) {
@@ -194,6 +195,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         articleObj = new ArticleSolrObj();
         if (item instanceof ArticleSolrObj) {
             articleObj = (ArticleSolrObj) item;
+        }
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            tvArticleJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
+        } else {
+            tvArticleJoinConversation.setText(new ConfigData().mCommentHolderText);
         }
         articleObj.setItemPosition(position);
         this.mContext = context;

@@ -164,6 +164,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
+    private static final String STORIES_TAB = "write a story";
 
     private static final float ORIGINAL_SIZE = 1.0f;
     private static final float EXPANDED_SIZE = 1.02f;
@@ -174,6 +175,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private Long mChampionId;
     private boolean isMentor;
+    private boolean isWriteAStory;
     private int mFromNotification;
     private FeedDetail mFeedDetail;
     private int askingQuestionCode;
@@ -401,6 +403,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             askingQuestionCode = getIntent().getExtras().getInt(AppConstants.ASKING_QUESTION);
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isMentor = getIntent().getExtras().getBoolean(AppConstants.IS_MENTOR_ID);
+            isWriteAStory = getIntent().getExtras().getBoolean(STORIES_TAB);
             mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
             profileLevelType = (ProfileProgressDialog.ProfileLevelType) getIntent().getSerializableExtra("PROFILE_LEVEL");
         }
@@ -836,11 +839,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
         }
-        if (isOwnProfile) {
-            createPost.setVisibility(View.VISIBLE);
-        } else {
-            createPost.setVisibility(View.GONE);
-        }
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         String screenName;
@@ -855,10 +853,19 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
         feedFragment.setArguments(bundle);
         mViewPagerAdapter.addFragment(feedFragment, screenName);
-
         mViewPager.setAdapter(mViewPagerAdapter);
-        if (!isMentor) { //for user make post as default tab
-            mViewPager.setCurrentItem(1);
+
+        if (isWriteAStory) {
+            mViewPager.setCurrentItem(mViewPagerAdapter.getCount()-1);
+        } else {
+            if (isOwnProfile) {
+                createPost.setVisibility(View.VISIBLE);
+            } else {
+                createPost.setVisibility(View.GONE);
+            }
+            if (!isMentor) { //for user make post as default tab
+                mViewPager.setCurrentItem(1);
+            }
         }
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.addOnPageChangeListener(this);
@@ -1913,6 +1920,21 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (notificationId != -1) {
+            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
+        }
+        intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
+        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        intent.putExtra(STORIES_TAB, isWriteAStory);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (notificationId != -1) {
