@@ -25,6 +25,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -81,6 +82,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
@@ -475,14 +477,16 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message =  "<font color='#dc4541'>" + "Title" + "</font>";;
-        mEditorFragment.setTitlePlaceholder(Html.fromHtml(message));
+        String message = "Title" ;
+        mEditorFragment.setTitlePlaceholder(message);
         String hintText = "Your story...";
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
         }
         mEditorFragment.setContentPlaceholder(hintText);
+        mEditorFragment.setContent(hintText);
         mEditorFragment.setLocalDraft(true);
+        mEditorFragment.isActionInProgress();
     }
 
     @Override
@@ -527,7 +531,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Override
     public void onTrackableEvent(EditorFragmentAbstract.TrackableEvent trackableEvent) {
-        Toast.makeText(this, "Ontrack", Toast.LENGTH_SHORT).show();
 
     }
     //endregion
@@ -572,7 +575,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             Crashlytics.getInstance().core.logException(e);
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(mIdOfEntityOrParticipantArticle,articleTitle, articleBody, mCoverImageUrl), true);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.makeArticleDraftRequest(mIdOfEntityOrParticipantArticle,articleTitle, articleBody, mCoverImageUrl), true);
         } else {
             mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(null,articleTitle, articleBody, mCoverImageUrl), true);
            }

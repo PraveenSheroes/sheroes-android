@@ -1068,7 +1068,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
             popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             }
-
+        popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -1077,6 +1077,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         return true;
                     case R.id.delete:
                         onHerStoryDelete(articleObj);
+                        return true;
+                    case R.id.share:
+                        shareCardDetail(articleObj);
                         return true;
                     default:
                         return false;

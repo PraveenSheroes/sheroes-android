@@ -76,7 +76,8 @@
             android:id="@+id/postEditor"
             android:name="org.wordpress.android.editor.EditorFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:textIsSelectable="true" />
 
     </RelativeLayout>
 
