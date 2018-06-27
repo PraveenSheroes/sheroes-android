@@ -41,24 +41,12 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
         return solrIgnoreBadgeDetails;
     }
 
-    public void setSolrIgnoreBadgeDetails(BadgeDetails solrIgnoreBadgeDetails) {
-        this.solrIgnoreBadgeDetails = solrIgnoreBadgeDetails;
-    }
-
     public int getSolrIgnoreNoOfLikesOnUserPost() {
         return solrIgnoreNoOfLikesOnUserPost;
     }
 
-    public void setSolrIgnoreNoOfLikesOnUserPost(int solrIgnoreNoOfLikesOnUserPost) {
-        this.solrIgnoreNoOfLikesOnUserPost = solrIgnoreNoOfLikesOnUserPost;
-    }
-
     public int getSolrIgnoreNoOfCommentsOnUserPost() {
         return solrIgnoreNoOfCommentsOnUserPost;
-    }
-
-    public void setSolrIgnoreNoOfCommentsOnUserPost(int solrIgnoreNoOfCommentsOnUserPost) {
-        this.solrIgnoreNoOfCommentsOnUserPost = solrIgnoreNoOfCommentsOnUserPost;
     }
 
     public UserSolrObj getUserSolrObj() {
@@ -73,15 +61,7 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
         return solrIgnoreStartDate;
     }
 
-    public void setSolrIgnoreStartDate(String solrIgnoreStartDate) {
-        this.solrIgnoreStartDate = solrIgnoreStartDate;
-    }
-
     public String getSolrIgnoreEndDate() {
         return solrIgnoreEndDate;
-    }
-
-    public void setSolrIgnoreEndDate(String solrIgnoreEndDate) {
-        this.solrIgnoreEndDate = solrIgnoreEndDate;
     }
 }

@@ -38,20 +38,19 @@ import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.LeaderBoardBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.LeaderBoardBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
@@ -63,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
@@ -89,12 +89,13 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesDrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
@@ -118,10 +119,10 @@ import dagger.Component;
 @Singleton
 @Component(modules = {SheroesAppModule.class})
 public interface SheroesAppComponent {
+
     void inject(MixpanelHelper mixpanelHelper);
 
     void inject(HomeActivity homeActivity);
-
 
     void inject(LoginActivity loginActivity);
 
@@ -299,7 +300,6 @@ public interface SheroesAppComponent {
 
     void inject(SuggestedContactCardHolder suggestedContactCardHolder);
 
-
     void inject(UserMentionCardHolder userMentionCardHolder);
 
     void inject(HeaderTaggedUserViewHolder headerTaggedUserViewHolder);
@@ -320,11 +320,11 @@ public interface SheroesAppComponent {
 
     void inject(HomeFragment homeFragment);
 
-    void inject(CommunitiesBadgesActivity communitiesBadgesActivity);
-
     void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
 
     void inject(LeaderBoardBottomSheetFragment leaderBoardBottomSheetFragment);
+
+    void inject(LeaderBoardViewHolder leaderBoardViewHolder);
 }
 
 

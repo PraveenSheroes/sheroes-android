@@ -43,7 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.Bind;
@@ -67,6 +67,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
     @Inject
     Preference<Configuration> mConfiguration;
+
     //endregion
 
     //region Constructor
@@ -102,7 +103,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_MENTOR_COMPACT:
                 return new MentorCard(mInflater.inflate(R.layout.feed_mentor_card, parent, false), mBaseHolderInterface);
             case TYPE_LEADER:
-                return new LeaderViewHolder(mInflater.inflate(R.layout.list_leaderboard_item, parent, false), mBaseHolderInterface);
+                return new LeaderBoardViewHolder(mInflater.inflate(R.layout.list_leaderboard_item, parent, false), mBaseHolderInterface);
             case TYPE_COMMUNITY:
                 return new CommunityFlatViewHolder(mInflater.inflate(R.layout.community_flat_layout, parent, false), mBaseHolderInterface);
             case TYPE_HOME_FEED_HEADER:
@@ -167,10 +168,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 communityFlatViewHolder.bindData(communityFeedSolrObj, mContext, position);
                 break;
             case TYPE_LEADER:
-                LeaderViewHolder leaderViewHolder = (LeaderViewHolder) holder;
+                LeaderBoardViewHolder leaderBoardViewHolder = (LeaderBoardViewHolder) holder;
                 LeaderBoardUserSolrObj leaderBoardUserSolrObj = (LeaderBoardUserSolrObj) mFeedDetailList.get(position);
-                leaderViewHolder.totalNumberOfUsersInLeaderBoard(mFeedDetailList.size());
-                leaderViewHolder.bindData(leaderBoardUserSolrObj, mContext, position);
+                leaderBoardViewHolder.totalNumberOfUsersInLeaderBoard(mFeedDetailList.size());
+                leaderBoardViewHolder.bindData(leaderBoardUserSolrObj, mContext, position);
                 break;
 
             case TYPE_HOME_FEED_HEADER:

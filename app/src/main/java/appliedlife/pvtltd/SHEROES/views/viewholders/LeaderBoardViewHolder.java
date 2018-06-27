@@ -1,9 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -26,10 +31,11 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Praveen on 18/09/17.
+ * Updated by Ravi on 27/06/18.
  * Leader board holder
  */
 
-public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
+public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
 
     @Bind(R.id.top_header_container)
     LinearLayout topHeaderContainer;
@@ -59,16 +65,22 @@ public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
     int mUserPicSize;
 
     @Inject
-    Preference<LoginResponse> userPreference;
+    Preference<LoginResponse> mUserPreference;
 
     private int mNumCount = 10;
+    private long mLoggedInUserId = -1;
     private BaseHolderInterface viewInterface;
     private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
 
-    public LeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public LeaderBoardViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
+
+        SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            mLoggedInUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
     }
 
     @Override
@@ -109,30 +121,54 @@ public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
             String pluralLikes = context.getResources().getQuantityString(R.plurals.numberOfLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost());
             String pluralComments = context.getResources().getQuantityString(R.plurals.numberOfComments, leaderBoardUserSolrObj.getSolrIgnoreNoOfCommentsOnUserPost());
             mDescription.setText(context.getResources().getString(R.string.leaderboard_user_like_comment, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost(), pluralLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfCommentsOnUserPost(), pluralComments));
+
+            //Highlight user if in leaderBoard list
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            FrameLayout.LayoutParams profilePicParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+
+            if (mLoggedInUserId != -1 && mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant() == mLoggedInUserId) {
+                final String backgroundColor = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor();
+                itemContainer.setBackgroundColor(Color.parseColor(backgroundColor));
+                badgeIcon.setVisibility(View.GONE);
+                mDescription.setTextColor(ContextCompat.getColor(context,R.color.white_color));
+                mName.setTextColor(ContextCompat.getColor(context,R.color.white_color));
+                itemContainer.setBackground(ContextCompat.getDrawable(context, R.drawable.border_new_feature));
+                layoutParams.setMargins(CommonUtil.convertDpToPixel(16, context), 0, CommonUtil.convertDpToPixel(16, context), 0);
+                profilePicParams.setMargins(CommonUtil.convertDpToPixel(8, context), 0 , 0, 0);
+            } else {
+                itemContainer.setBackgroundColor(Color.WHITE);
+                mDescription.setTextColor(ContextCompat.getColor(context,R.color.gray_light));
+                mName.setTextColor(ContextCompat.getColor(context,R.color.gray_light));
+                itemContainer.setBackground(null);
+                badgeIcon.setVisibility(View.VISIBLE);
+                profilePicParams.setMargins(CommonUtil.convertDpToPixel(28, context), 0 , 0, 0);
+                layoutParams.setMargins(0, 0, 0, 0);
+            }
+            itemContainer.setLayoutParams(layoutParams);
+            mProfilePic.setLayoutParams(profilePicParams);
         }
     }
 
     @Override
     public void viewRecycled() {
-
     }
 
     @Override
     public void onClick(View view) {
         if (viewInterface instanceof FeedItemCallback && mLeaderBoardUserSolrObj != null) {
             switch (view.getId()) {
-
                 case R.id.user_pic_icon:
                     ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false);
                     break;
                 case R.id.leader_board_users_container:
                     ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj);
                     break;
-
                 case R.id.about_leaderboard:
                     ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj);
                     break;
-
             }
         }
     }

@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/top_header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:orientation="vertical"
         android:visibility="gone">
 
@@ -55,7 +55,6 @@
         android:id="@+id/leader_board_users_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:padding="@dimen/dp_size_16">
 
         <FrameLayout
@@ -99,7 +98,7 @@
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:lineSpacingExtra="2sp"
                 android:textColor="@color/gray_light"
-                android:textSize="@dimen/sp_size_14"
+                android:textSize="@dimen/sp_size_16"
                 tools:text="Champa Roy" />
 
             <TextView

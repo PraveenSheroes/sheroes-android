@@ -803,7 +803,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.more_badges)
     protected void launchUserBadgesActivity() {
-        CommunitiesBadgesActivity.navigateTo(this, loggedInUserId, false, SCREEN_LABEL, null);
+        //CommunitiesBadgesActivity.navigateTo(this, loggedInUserId, false, SCREEN_LABEL, null);
     }
 
     private void openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType profileLevelType) {

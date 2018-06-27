@@ -92,7 +92,7 @@
         android:textColor="#878787"
         android:textSize="16sp"
         android:textStyle="bold"
-        tools:text="21- 27 Feb 2018 \n Anupriya was a Super SHEROES in Money Matters" />
+        tools:text="Anupriya was a Super SHEROES in Money Matters" />
 
     <TextView
         android:id="@+id/share"
@@ -102,7 +102,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/badge_desc"
         android:fontFamily="sans-serif-medium"
-        android:gravity="center_horizontal"
+        android:gravity="right"
         android:textAllCaps="true"
         android:letterSpacing="0.04"
         android:padding="@dimen/dp_size_16"
@@ -117,17 +117,20 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/badge_desc"
         android:layout_toLeftOf="@id/share"
+        android:layout_toStartOf="@id/share"
         android:fontFamily="sans-serif-medium"
         android:gravity="center_horizontal"
         android:letterSpacing="0.04"
+        android:layout_alignParentRight="true"
         android:paddingBottom="@dimen/dp_size_16"
         android:paddingRight="@dimen/dp_size_8"
+        android:paddingEnd="@dimen/dp_size_8"
         android:paddingTop="@dimen/dp_size_16"
         android:text="@string/show_leaderboard"
         android:textColor="#dc4541"
         android:textSize="14sp"
         android:textStyle="normal"
-        android:visibility="gone" />
+        />
 
     <TextView
         android:id="@+id/view_profile"
@@ -146,6 +149,6 @@
         android:textColor="#dc4541"
         android:textSize="14sp"
         android:textStyle="normal"
-        android:visibility="gone" />
+        />
 
 </RelativeLayout>

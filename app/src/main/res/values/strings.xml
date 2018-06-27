@@ -634,6 +634,7 @@
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
     <string name="badge_period_date_text">Won Latest on : %1$s-%2$s</string>
+    <string name="badge_desc">%1$s is a Super SHEROES in %2$s.</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>
     <string name="view_profile">VIEW PROFILE</string>
 

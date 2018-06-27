@@ -18,6 +18,9 @@ public class BadgeDetails {
     @SerializedName("communityId")
     @Expose
     private int communityId;
+    @SerializedName("communityName")
+    @Expose
+    private String communityName;
     @SerializedName("name")
     @Expose
     private String name;
@@ -167,4 +170,11 @@ public class BadgeDetails {
         this.lastModifiedBy = lastModifiedBy;
     }
 
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
+    }
 }
