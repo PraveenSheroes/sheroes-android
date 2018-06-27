@@ -2158,7 +2158,7 @@ public class AppUtils {
         return m.find();
     }
 
-    public ArticleSubmissionRequest makeArticleDraftRequest(String articleTitle, String articleBody) {
+    public ArticleSubmissionRequest makeArticleDraftRequest(String articleTitle, String articleBody,String coverImageUrl) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2167,10 +2167,11 @@ public class AppUtils {
         articleSubmissionRequest.isPublish = false;
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;
+        articleSubmissionRequest.coverImageUrl=coverImageUrl;
         return articleSubmissionRequest;
     }
 
-    public ArticleSubmissionRequest articleAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj) {
+    public ArticleSubmissionRequest articleAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj,String coverImageUrl) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2203,6 +2204,7 @@ public class AppUtils {
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;
         articleSubmissionRequest.tagIds = tagList;
+        articleSubmissionRequest.coverImageUrl=coverImageUrl;
         return articleSubmissionRequest;
     }
     public ArticleSubmissionRequest articleDeleteRequest( ArticleSolrObj articleSolrObj) {

@@ -159,6 +159,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     private ContactsCompletionView completionView;
     private ArrayAdapter<ArticleTagName> adapter;
     private boolean mIsCoverPhoto;
+    private String mCoverImageUrl;
     private List<Long> mDeletedTagsList = new ArrayList<>();
     private ArticleSolrObj mArticleSolrObj = null;
     private Long mIdOfEntityOrParticipantArticle;
@@ -334,6 +335,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     public void showImage(String finalImageUrl) {
         if (mIsCoverPhoto) {
             if (StringUtil.isNotNullOrEmptyString(finalImageUrl)) {
+                mCoverImageUrl=finalImageUrl;
                 int imageHeight = CommonUtil.getWindowWidth(this) / 2;
                 finalImageUrl = CommonUtil.getThumborUri(finalImageUrl, CommonUtil.getWindowWidth(this), imageHeight);
                 Glide.with(this)
@@ -545,9 +547,14 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds( ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small_active),null, null, null);
-                mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.fb_Color));
-                mShareToFacebook.setText("Share on Facebook");
+                if(isChecked) {
+                    mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small_active), null, null, null);
+                    mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.fb_Color));
+                }else
+                {
+                    mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small), null, null, null);
+                    mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+                }
             }
         });
     }
@@ -561,7 +568,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody), true);
+        mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody,mCoverImageUrl), true);
         HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
         AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
     }
@@ -580,9 +587,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             tagList.add(articleTagName.getId());
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj), false);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj,mCoverImageUrl), false);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj), false);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj,mCoverImageUrl), false);
         }
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY);
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);

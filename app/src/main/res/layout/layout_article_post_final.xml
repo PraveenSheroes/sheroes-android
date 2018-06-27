@@ -124,7 +124,7 @@
                 android:drawablePadding="12dp"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="Share on Facebook"
-                android:textColor="#878787"
+                android:textColor="@color/recent_post_comment"
                 android:textSize="14sp" />
         </RelativeLayout>
     </RelativeLayout>
