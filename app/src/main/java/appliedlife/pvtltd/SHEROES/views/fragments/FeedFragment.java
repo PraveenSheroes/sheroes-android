@@ -1058,9 +1058,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onLeaderBoardUserClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
+    public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
         if(getActivity()!=null && getActivity().isFinishing()) return;
         BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, getScreenName(), true);
+    }
+
+    @Override
+    public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
+        LeaderBoardBottomSheetFragment.showDialog((AppCompatActivity) getActivity());
+    }
+
+    @Override
+    public void onLeaderBoardUserClick(long userId, boolean isMentor) {
+        ProfileActivity.navigateTo(getActivity(), userId, isMentor, PROFILE_NOTIFICATION_ID, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

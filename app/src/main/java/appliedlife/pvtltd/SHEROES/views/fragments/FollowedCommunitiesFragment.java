@@ -23,7 +23,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -50,7 +49,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
  * User's Joined Communities listing from profile
  */
 
-public class UserJoinedCommunitiesListFragment extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
+public class FollowedCommunitiesFragment extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
 
     public static final String SCREEN_LABEL = "Followed Communities Screen";
 
@@ -79,13 +78,13 @@ public class UserJoinedCommunitiesListFragment extends BaseFragment implements P
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static UserJoinedCommunitiesListFragment createInstance(long userId, String name, boolean isSelfProfile) {
-        UserJoinedCommunitiesListFragment userJoinedCommunitiesListFragment = new UserJoinedCommunitiesListFragment();
+    public static FollowedCommunitiesFragment createInstance(long userId, String name, boolean isSelfProfile) {
+        FollowedCommunitiesFragment followedCommunitiesFragment = new FollowedCommunitiesFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putBoolean(SELF_PROFILE, isSelfProfile);
-        userJoinedCommunitiesListFragment.setArguments(bundle);
-        return userJoinedCommunitiesListFragment;
+        followedCommunitiesFragment.setArguments(bundle);
+        return followedCommunitiesFragment;
     }
 
     @Override

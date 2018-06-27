@@ -519,7 +519,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
         } else if (baseResponse instanceof BellNotificationResponse) {
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-            bellNotificationResponse.setScreenName("abc");
             if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
                 if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
                     String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();

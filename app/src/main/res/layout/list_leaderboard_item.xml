@@ -1,62 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/leader_board_users_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:padding="@dimen/dp_size_16">
-
-    <FrameLayout
-        android:id="@+id/icon_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true">
-
-        <ImageView
-            android:id="@+id/user_pic_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="@dimen/dp_size_28"
-            android:layout_marginStart="@dimen/dp_size_28"
-            android:src="@drawable/circular_background" />
-
-        <ImageView
-            android:id="@+id/badge_icon"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/ic_community_badge" />
-
-    </FrameLayout>
+    android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/winner_info"
+        android:id="@+id/top_header_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_marginStart="@dimen/dp_size_10"
-        android:layout_toEndOf="@id/icon_container"
-        android:layout_toRightOf="@id/icon_container"
-        android:orientation="vertical">
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:lineSpacingExtra="2sp"
-            android:textColor="@color/gray_light"
-            android:textSize="@dimen/sp_size_14"
-            tools:text="Champa Roy" />
+            android:id="@+id/about_leaderboard"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_45"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:drawableLeft="@drawable/ic_idea"
+            android:drawablePadding="@dimen/dp_size_16"
+            android:drawableStart="@drawable/ic_idea"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/how_do_i_become_a_supersheroes"
+            android:textColor="#3c3c3c"
+            android:textSize="13sp"
+            android:textStyle="normal" />
 
         <TextView
-            android:id="@+id/description"
-            android:layout_width="wrap_content"
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:background="@color/lighter_gray" />
+
+        <TextView
+            android:id="@+id/top_user_title"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textColor="@color/gray_light"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:fontFamily="sans-serif-medium"
+            android:paddingBottom="@dimen/dp_size_8"
+            android:paddingTop="@dimen/dp_size_14"
+            android:text="@string/leaderbaord_top_10_user"
+            android:textAllCaps="true"
+            android:textColor="#878787"
             android:textSize="14sp"
-            tools:text="158 Posts · 168 Likes · 140 Comments" />
+            android:textStyle="normal" />
     </LinearLayout>
-</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/leader_board_users_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dp_size_16">
+
+        <FrameLayout
+            android:id="@+id/icon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/user_pic_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/dp_size_28"
+                android:layout_marginStart="@dimen/dp_size_28"
+                android:src="@drawable/circular_background_grey" />
+
+            <ImageView
+                android:id="@+id/badge_icon"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/circular_background_yellow"
+                android:padding="@dimen/dp_size_2" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/winner_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_size_10"
+            android:layout_marginStart="@dimen/dp_size_10"
+            android:layout_toEndOf="@id/icon_container"
+            android:layout_toRightOf="@id/icon_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:lineSpacingExtra="2sp"
+                android:textColor="@color/gray_light"
+                android:textSize="@dimen/sp_size_14"
+                tools:text="Champa Roy" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textColor="@color/gray_light"
+                android:textSize="14sp"
+                tools:text="158 Posts · 168 Likes · 140 Comments" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

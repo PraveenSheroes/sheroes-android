@@ -337,7 +337,6 @@ public class AppConstants {
     public static final int REQ_CODE_SPEECH_INPUT = 100;
     public static final int EVENT_COMMUNITY_ID = 299;
     public static final String GOOGLE_PLUS = "Google plus";
-    public static final String LEADERBOARD_URL = "add url here";
     public static final String HELPLINE_URL = "https://sheroes.in/helpline";
     public static final String HELPLINE_URL_COM = "https://sheroes.com/helpline";
     public static final String HELPLINE_CHAT = "helpline_chat";

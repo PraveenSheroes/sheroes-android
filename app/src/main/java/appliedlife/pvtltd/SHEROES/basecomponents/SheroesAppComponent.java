@@ -38,12 +38,11 @@ import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesBadgesActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LeaderBoardBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserJoinedCommunitiesListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
@@ -134,7 +133,7 @@ public interface SheroesAppComponent {
 
     void inject(CommunitiesListFragment myCommunitiesFragment);
 
-    void inject(UserJoinedCommunitiesListFragment userMentorCommunity);
+    void inject(FollowedCommunitiesFragment userMentorCommunity);
 
     void inject(FollowingFragment followingFragment);
 

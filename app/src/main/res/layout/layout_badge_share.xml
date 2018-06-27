@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/badge_card_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <FrameLayout
+            android:id="@+id/header_container"
+            android:layout_width="match_parent"
+            android:layout_height="140dp">
+
+            <ImageView
+                android:id="@+id/badge_icon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="@dimen/dp_size_16"
+                android:src="@drawable/ic_community_badge" />
+
+            <ImageView
+                android:id="@+id/user_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|end"
+                android:layout_marginEnd="@dimen/dp_size_35"
+                android:layout_marginRight="@dimen/dp_size_35"
+                android:layout_marginTop="@dimen/dp_size_8"
+                android:paddingEnd="@dimen/dp_size_1"
+                android:paddingLeft="@dimen/dp_size_8"
+                android:paddingRight="@dimen/dp_size_1"
+                android:paddingStart="@dimen/dp_size_8"
+                android:src="@drawable/ic_badge_dialog_girl" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/badge_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/header_container"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:fontFamily="sans-serif-medium"
+            android:lineSpacingExtra="8sp"
+            android:textColor="#de3c3c3c"
+            android:textSize="20sp"
+            android:textStyle="normal"
+            tools:text="Magic Pen Badge" />
+
+
+        <TextView
+            android:id="@+id/badge_des_prefix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/badge_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:text="@string/yay"
+            android:textColor="#878787"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/badge_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/badge_des_prefix"
+            android:layout_marginEnd="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="2sp"
+            android:textColor="#878787"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/playstore_icon"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/badge_desc"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_playstore" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/playstore_icon"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_sheroes_header" />
+
+    </RelativeLayout>
+</FrameLayout>

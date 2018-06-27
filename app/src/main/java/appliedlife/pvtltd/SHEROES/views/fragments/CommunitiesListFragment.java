@@ -18,13 +18,9 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-
 import java.util.ArrayList;
-
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 

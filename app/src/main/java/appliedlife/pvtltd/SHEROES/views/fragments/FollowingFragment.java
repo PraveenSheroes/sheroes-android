@@ -213,7 +213,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
             mAdapter.notifyDataSetChanged();
             mSwipeView.setRefreshing(false);
         } else {
-            // mBadgeRecycler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
+            // mRecyclerView.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
         }
 
     }

@@ -115,6 +115,7 @@
     <color name="blue_light">#b9f2ff</color>
     <!--colors close trough priyanka-->
 
+    <color name="golden_color">#FFC961</color>
     <color name="white_color">#FFFFFF</color>
 
     <color name="image_upload_bg_color">#d9000000</color>

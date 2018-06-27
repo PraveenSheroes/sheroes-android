@@ -29,6 +29,14 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
     @Expose
     private UserSolrObj userSolrObj;
 
+    @SerializedName("solr_ignore_user_badge_start_date")
+    @Expose
+    private String solrIgnoreStartDate;
+
+    @SerializedName("solr_ignore_user_badge_end_date")
+    @Expose
+    private String solrIgnoreEndDate;
+
     public BadgeDetails getSolrIgnoreBadgeDetails() {
         return solrIgnoreBadgeDetails;
     }
@@ -59,5 +67,21 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
 
     public void setUserSolrObj(UserSolrObj userSolrObj) {
         this.userSolrObj = userSolrObj;
+    }
+
+    public String getSolrIgnoreStartDate() {
+        return solrIgnoreStartDate;
+    }
+
+    public void setSolrIgnoreStartDate(String solrIgnoreStartDate) {
+        this.solrIgnoreStartDate = solrIgnoreStartDate;
+    }
+
+    public String getSolrIgnoreEndDate() {
+        return solrIgnoreEndDate;
+    }
+
+    public void setSolrIgnoreEndDate(String solrIgnoreEndDate) {
+        this.solrIgnoreEndDate = solrIgnoreEndDate;
     }
 }

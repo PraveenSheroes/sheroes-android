@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,12 +26,22 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Praveen on 18/09/17.
+ * Leader board holder
  */
 
 public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
 
+    @Bind(R.id.top_header_container)
+    LinearLayout topHeaderContainer;
+
+    @Bind(R.id.about_leaderboard)
+    TextView topHeaderView;
+
     @Bind(R.id.leader_board_users_container)
     RelativeLayout itemContainer;
+
+    @Bind(R.id.top_user_title)
+    TextView topUserTitle;
 
     @Bind(R.id.user_pic_icon)
     ImageView mProfilePic;
@@ -50,8 +61,8 @@ public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
     @Inject
     Preference<LoginResponse> userPreference;
 
-    BaseHolderInterface viewInterface;
-
+    private int mNumCount = 10;
+    private BaseHolderInterface viewInterface;
     private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
 
     public LeaderViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
@@ -64,7 +75,17 @@ public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
     public void bindData(LeaderBoardUserSolrObj leaderBoardUserSolrObj, final Context context, int position) {
 
         if (leaderBoardUserSolrObj != null) {
+
+            if (position == 0) {
+                topHeaderContainer.setVisibility(View.VISIBLE);
+            } else {
+                topHeaderContainer.setVisibility(View.GONE);
+            }
+
             mLeaderBoardUserSolrObj = leaderBoardUserSolrObj;
+
+            mProfilePic.setOnClickListener(this);
+            topHeaderView.setOnClickListener(this);
             itemContainer.setOnClickListener(this);
 
             if (CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
@@ -83,9 +104,10 @@ public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(context)))
                         .into(mProfilePic);
             }
+
+            topUserTitle.setText(context.getResources().getString(R.string.leaderbaord_top_10_user, mNumCount));
             String pluralLikes = context.getResources().getQuantityString(R.plurals.numberOfLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost());
             String pluralComments = context.getResources().getQuantityString(R.plurals.numberOfComments, leaderBoardUserSolrObj.getSolrIgnoreNoOfCommentsOnUserPost());
-
             mDescription.setText(context.getResources().getString(R.string.leaderboard_user_like_comment, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost(), pluralLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfCommentsOnUserPost(), pluralComments));
         }
     }
@@ -97,9 +119,26 @@ public class LeaderViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
 
     @Override
     public void onClick(View view) {
-        if (viewInterface instanceof FeedItemCallback && mLeaderBoardUserSolrObj!=null) {
-            ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj);
+        if (viewInterface instanceof FeedItemCallback && mLeaderBoardUserSolrObj != null) {
+            switch (view.getId()) {
+
+                case R.id.user_pic_icon:
+                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false);
+                    break;
+                case R.id.leader_board_users_container:
+                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj);
+                    break;
+
+                case R.id.about_leaderboard:
+                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj);
+                    break;
+
+            }
         }
+    }
+
+    public void totalNumberOfUsersInLeaderBoard(int numCount) {
+        mNumCount = numCount;
     }
 
 }
