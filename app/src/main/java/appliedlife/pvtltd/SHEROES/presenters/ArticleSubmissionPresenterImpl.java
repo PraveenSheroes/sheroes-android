@@ -72,6 +72,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                                     getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isDraft);
                                     break;
                                 case AppConstants.FAILED:
+                                    getMvpView().showError(articleSubmissionResponse.getFieldErrorMessageMap().get(AppConstants.ERROR), ERROR_TAG);
                                     break;
                             }
                         }
@@ -111,6 +112,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                                     getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isDraft);
                                     break;
                                 case AppConstants.FAILED:
+                                    getMvpView().showError(articleSubmissionResponse.getFieldErrorMessageMap().get(AppConstants.ERROR), ERROR_TAG);
                                     break;
                             }
                         }

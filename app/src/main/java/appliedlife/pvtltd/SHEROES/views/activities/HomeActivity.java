@@ -480,15 +480,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.fab_filter)
     public void createPostActivity() {
-        /*String fabString = (String) mFloatActionBtn.getTag();
+        String fabString = (String) mFloatActionBtn.getTag();
         if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
             CommunityPost communityPost = new CommunityPost();
             communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
             createCommunityPostOnClick(communityPost);
 
-        }*/
-        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
+        }
+    }
 
+    private void writeAStory() {
+        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.invite)
@@ -1232,6 +1234,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (intent != null && intent.getExtras() != null) {
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
+
+                    writeAStory();
+                }
+
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
                     openArticleFragment(setCategoryIds(), false);
                 }

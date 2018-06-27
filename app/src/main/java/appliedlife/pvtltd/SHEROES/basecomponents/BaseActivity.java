@@ -109,6 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String SHARE_FACEBOOK = "Facebook";
     public static final String ANDROID_DEFAULT = "Android Default";
     public static final String BOTTOM_SHEET = "Bottom Sheet";
+    public static final String STORIES_TAB = "write a story";
 
     public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);

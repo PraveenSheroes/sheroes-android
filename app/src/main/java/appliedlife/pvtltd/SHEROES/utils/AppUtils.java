@@ -2158,12 +2158,13 @@ public class AppUtils {
         return m.find();
     }
 
-    public ArticleSubmissionRequest makeArticleDraftRequest(String articleTitle, String articleBody,String coverImageUrl) {
+    public ArticleSubmissionRequest makeArticleDraftRequest(Long articleId,String articleTitle, String articleBody,String coverImageUrl) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
         articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
         articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        articleSubmissionRequest.articleId = articleId;
         articleSubmissionRequest.isPublish = false;
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;

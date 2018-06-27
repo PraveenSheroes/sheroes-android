@@ -279,6 +279,10 @@ public class AppConstants {
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
+    public static final String WRITE_STORY_URL = "https://sheroes.in/write_story";
+    public static final String WRITE_STORY_URL_COM = "https://sheroes.com/write_story";
+    public static final String MY_STORY_URL = "https://sheroes.in/my_story";
+    public static final String MY_STORY_URL_COM = "https://sheroes.com/my_story";
     public static final String CHALLENGE_NEW_URL = "https://sheroes.in/sheroes-challenge";
     public static final String CHALLENGE_NEW_URL_COM = "https://sheroes.com/sheroes-challenge";
     public static final String MY_CHALLENGE_NEW_URL = "https://sheroes.in/my-challenges";

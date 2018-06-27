@@ -164,7 +164,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
-    private static final String STORIES_TAB = "write a story";
 
     private static final float ORIGINAL_SIZE = 1.0f;
     private static final float EXPANDED_SIZE = 1.02f;
@@ -1934,7 +1933,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.putExtra(STORIES_TAB, isWriteAStory);
+        intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (notificationId != -1) {

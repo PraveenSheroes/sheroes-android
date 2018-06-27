@@ -345,7 +345,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mArticleSolrObj != null) {
             loadArticleImage(mArticleSolrObj);
         }
-        fetchArticle(mArticleSolrObj == null ? mArticleId : (int) mArticleSolrObj.getIdOfEntityOrParticipant(), mArticleSolrObj != null,mArticleSolrObj);
+        fetchArticle(mArticleSolrObj == null ? mArticleId : (int) mArticleSolrObj.getIdOfEntityOrParticipant(), mArticleSolrObj != null, mArticleSolrObj);
 
         mCommentBody.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -768,8 +768,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         spamReasonsDialog.show();
     }
 
-    private void fetchArticle(int articleId, boolean isImageLoaded,ArticleSolrObj articleSolrObj) {
-        mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded,articleSolrObj);
+    private void fetchArticle(int articleId, boolean isImageLoaded, ArticleSolrObj articleSolrObj) {
+        mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded, articleSolrObj);
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
@@ -880,10 +880,15 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
 
         loadUserViews(articleSolrObj);
-        if (!CommonUtil.isNotEmpty(articleSolrObj.getListDescription())) {
-            return;
+        if (articleSolrObj.isUserStory()) {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getDescription())) {
+                return;
+            }
+        } else {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getListDescription())) {
+                return;
+            }
         }
-
         webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText);
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
             @Override
@@ -906,13 +911,23 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 }
             }
         });
-
-        if (!CommonUtil.isNotEmpty(articleSolrObj.getListDescription())) {
-            return;
+        String htmlData;
+        if (articleSolrObj.isUserStory()) {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getDescription())) {
+                return;
+            }
+            final String webViewStyle = getStyleFromConfig();
+            htmlData = articleSolrObj.getDescription() == null ? "" : articleSolrObj.getDescription();
+            htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
+        } else {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getListDescription())) {
+                return;
+            }
+            final String webViewStyle = getStyleFromConfig();
+            htmlData = articleSolrObj.getListDescription() == null ? "" : articleSolrObj.getListDescription();
+            htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
         }
-        final String webViewStyle = getStyleFromConfig();
-        String htmlData = articleSolrObj.getListDescription() == null ? "" : articleSolrObj.getListDescription();
-        htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
+
         webViewText.getSettings().setJavaScriptEnabled(true);
         webViewText.setWebChromeClient(webChromeClient);
         webViewText.setVerticalScrollBarEnabled(false);

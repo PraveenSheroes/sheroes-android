@@ -85,8 +85,6 @@
         android:id="@+id/li_feed_article_images"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_180"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_8"
         android:background="@drawable/ic_image_holder"
         android:orientation="vertical" />

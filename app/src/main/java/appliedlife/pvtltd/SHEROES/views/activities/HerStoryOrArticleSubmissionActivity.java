@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +22,9 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -206,14 +210,12 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isDraft) {
-        if (!isDraft) {
-            boolean isMentor = false;
-            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
-                isMentor = true;
-            }
-            ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor, -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL,true);
-            finish();
+        boolean isMentor = false;
+        if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            isMentor = true;
         }
+        ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor, -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, true);
+        finish();
     }
 
     @Override
@@ -473,7 +475,8 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Override
     public void onEditorFragmentInitialized() {
-        mEditorFragment.setTitlePlaceholder("Title");
+        String message =  "<font color='#dc4541'>" + "Title" + "</font>";;
+        mEditorFragment.setTitlePlaceholder(Html.fromHtml(message));
         String hintText = "Your story...";
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
@@ -568,7 +571,12 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(articleTitle, articleBody, mCoverImageUrl), true);
+        if (null != mIdOfEntityOrParticipantArticle) {
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(mIdOfEntityOrParticipantArticle,articleTitle, articleBody, mCoverImageUrl), true);
+        } else {
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(null,articleTitle, articleBody, mCoverImageUrl), true);
+           }
+
         HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
         AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
     }
@@ -587,9 +595,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             tagList.add(articleTagName.getId());
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
         }
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY);
         AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);
@@ -623,9 +631,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                if (validateFields(true, true)) {
-
-                }
+                onDraftClick();
             }
         });
 
