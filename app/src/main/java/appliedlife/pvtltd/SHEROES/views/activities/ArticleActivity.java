@@ -280,6 +280,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private boolean hasMentions = false;
     private String mSourceScreen;
     private HashMap<String, Object> mProperties;
+    private boolean isUserStory;
     //endregion
 
     //region Activity methods
@@ -296,7 +297,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (getIntent() != null && getIntent().getExtras() != null) {
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
             mProperties = (HashMap<String, Object>) getIntent().getExtras().getSerializable(BaseActivity.SOURCE_PROPERTIES);
-
+            isUserStory=getIntent().getBooleanExtra(USER_STORY, false);
             Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
             mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
             mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
@@ -345,7 +346,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mArticleSolrObj != null) {
             loadArticleImage(mArticleSolrObj);
         }
-        fetchArticle(mArticleSolrObj == null ? mArticleId : (int) mArticleSolrObj.getIdOfEntityOrParticipant(), mArticleSolrObj != null, mArticleSolrObj);
+        fetchArticle(mArticleSolrObj == null ? mArticleId : (int) mArticleSolrObj.getIdOfEntityOrParticipant(), mArticleSolrObj != null, isUserStory);
 
         mCommentBody.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -768,10 +769,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         spamReasonsDialog.show();
     }
 
-    private void fetchArticle(int articleId, boolean isImageLoaded, ArticleSolrObj articleSolrObj) {
-        if (null != articleSolrObj) {
-            mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded, articleSolrObj);
-        }
+    private void fetchArticle(int articleId, boolean isImageLoaded, boolean isUserStory) {
+            mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded, isUserStory);
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
@@ -1008,8 +1007,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
         }
         authorDesName.setText(articleSolrObj.getAuthorName());
-        if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getAuthorShortDescription()))
+        if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getAuthorShortDescription())) {
             authorDescription.setText(Html.fromHtml(articleSolrObj.getAuthorShortDescription()));
+        }
 
         title.setText(articleSolrObj.getNameOrTitle());
     }
@@ -1193,12 +1193,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     // region Static methods
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode,boolean isUserStory) {
         Intent intent = new Intent(fromActivity, ArticleActivity.class);
         ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
         Parcelable parcelable = Parcels.wrap(articleSolrObj);
         intent.putExtra(ArticleSolrObj.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(BaseActivity.USER_STORY, isUserStory);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }

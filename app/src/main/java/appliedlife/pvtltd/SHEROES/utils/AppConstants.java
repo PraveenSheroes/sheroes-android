@@ -270,6 +270,8 @@ public class AppConstants {
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
     public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
+    public static final String STORIES_URL = "https://sheroes.in/stories";
+    public static final String STORIES_URL_COM = "https://sheroes.com/stories";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String EVENT_URL = "https://sheroes.in/event";

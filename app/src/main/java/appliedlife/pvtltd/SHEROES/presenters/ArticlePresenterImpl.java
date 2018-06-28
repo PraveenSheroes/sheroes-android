@@ -65,13 +65,13 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     //region IArticlePresenter methods
 
-    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded, final ArticleSolrObj articleSolrObj) {
+    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded, final boolean isUserStory) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo, articleSolrObj)
+        getFeedFromModel(feedRequestPojo, isUserStory)
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
                     @Override
@@ -107,8 +107,8 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     }
 
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, ArticleSolrObj articleSolrObj) {
-        if (articleSolrObj.isUserStory()) {
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, boolean isUserStory) {
+        if (isUserStory) {
             return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo);
         } else {
             return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo);

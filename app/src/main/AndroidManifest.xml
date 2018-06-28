@@ -270,6 +270,7 @@
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs" />
                 <data android:pathPrefix="/articles" />
+                <data android:pathPrefix="/stories" />
                 <data android:pathPrefix="/champions" />
                 <data android:pathPrefix="/communities" />
                 <data android:pathPrefix="/event" />

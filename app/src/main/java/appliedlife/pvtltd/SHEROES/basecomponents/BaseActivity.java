@@ -110,6 +110,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String ANDROID_DEFAULT = "Android Default";
     public static final String BOTTOM_SHEET = "Bottom Sheet";
     public static final String STORIES_TAB = "write a story";
+    public static final String USER_STORY = "USER_STORY";
 
     public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
@@ -609,7 +610,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj) mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
                 } else if (mFeedDetail instanceof ArticleSolrObj) {
-                    ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                    ArticleSolrObj articleSolrObj=(ArticleSolrObj)mFeedDetail;
+                    ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
                 }
                 break;
 
@@ -628,12 +630,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
 
             case R.id.li_feed_article_images:
-                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                ArticleSolrObj articleSolrObj=(ArticleSolrObj)mFeedDetail;
+                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
                 break;
 
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
-                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+                ArticleSolrObj articleObj=(ArticleSolrObj)mFeedDetail;
+                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleObj.isUserStory());
 
                 break;
             case R.id.li_featured_community_images:
@@ -972,7 +976,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         if (feedDetail instanceof UserPostSolrObj) {
             PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj) feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
         } else if (feedDetail instanceof ArticleSolrObj) {
-            ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+            ArticleSolrObj articleSolrObj=(ArticleSolrObj)feedDetail;
+            ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
         }
     }
 

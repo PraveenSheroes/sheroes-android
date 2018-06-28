@@ -316,6 +316,31 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
             }
+        } else if (AppConstants.STORIES_URL.equalsIgnoreCase(baseUrl) || AppConstants.STORIES_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.STORIES_URL.length() < fullLength) {
+            try {
+                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
+                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
+                byte[] id1 = Base64.decode(id, Base64.DEFAULT);
+                dataIdString = new String(id1, AppConstants.UTF_8);
+                Intent articleDetail = new Intent(SheroesDeepLinkingActivity.this, ArticleActivity.class);
+                articleDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                articleDetail.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
+                articleDetail.putExtra(BaseActivity.USER_STORY, true);
+                articleDetail.putExtra(AppConstants.ARTICLE_ID, Long.parseLong(dataIdString));
+                articleDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                addShareLink(mIntent, articleDetail);
+                startActivity(articleDetail);
+                finish();
+                if (mFromNotification > 0) {
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_ARTICLE, AppConstants.EMPTY_STRING);
+
+                } else {
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_ARTICLE, AppConstants.EMPTY_STRING);
+                }
+            } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
+                homeActivityCall("");
+            }
         }
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {

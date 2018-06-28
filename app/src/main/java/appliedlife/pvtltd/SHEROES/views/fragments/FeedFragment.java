@@ -593,7 +593,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onArticleItemClicked(ArticleSolrObj articleSolrObj) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleSolrObj.getItemPosition()));
-        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
     }
 
     @Override
@@ -1487,7 +1487,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
             screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
         }
-        ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL);
+
+        ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleObj.isUserStory());
+
     }
     //endregion
 
