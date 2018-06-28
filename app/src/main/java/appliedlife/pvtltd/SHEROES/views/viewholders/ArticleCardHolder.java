@@ -38,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -172,11 +171,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             ClickableSpan authorTitle = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
-                    userPostSolrObj.setCreatedBy(dataItem.getIdOfEntityOrParticipant());
-                    userPostSolrObj.setItemPosition(dataItem.getItemPosition());
-
-                    viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+                    viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
                 }
 
                 @Override
@@ -298,12 +293,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.iv_article_circle_icon)
     public void articleAuthorImageClick() {
-
-        UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
-        userPostSolrObj.setCreatedBy(dataItem.getIdOfEntityOrParticipant());
-        userPostSolrObj.setItemPosition(dataItem.getItemPosition());
-
-        viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+        viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
 
         //  viewInterface.handleOnClick(dataItem, ivArticleCircleIcon);
         //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);

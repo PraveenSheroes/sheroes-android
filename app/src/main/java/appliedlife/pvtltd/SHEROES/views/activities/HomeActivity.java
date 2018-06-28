@@ -167,6 +167,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
@@ -1075,7 +1076,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+        if (mValue == REQUEST_CODE_FOR_USER_PROFILE_DETAIL) {
+            ArticleSolrObj articleSolrObj = (ArticleSolrObj) baseResponse;
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
+            }
+            championDetailActivity(articleSolrObj.getCreatedBy(), 1, isMentor, ArticlesFragment.SCREEN_LABEL); //self profile
+        } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;

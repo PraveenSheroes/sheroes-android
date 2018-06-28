@@ -855,7 +855,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mViewPager.setAdapter(mViewPagerAdapter);
 
         if (isWriteAStory) {
-            mViewPager.setCurrentItem(mViewPagerAdapter.getCount()-1);
+            mViewPager.setCurrentItem(mViewPagerAdapter.getCount() - 1);
         } else {
             if (isOwnProfile) {
                 createPost.setVisibility(View.VISIBLE);
@@ -1129,7 +1129,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             createPost.setVisibility(View.GONE);
             clStoryFooter.setVisibility(View.GONE);
         } else if (fragment instanceof FeedFragment) {
-            clStoryFooter.setVisibility(View.VISIBLE);
+            if (isOwnProfile) {
+                clStoryFooter.setVisibility(View.VISIBLE);
+            } else {
+                clStoryFooter.setVisibility(View.GONE);
+            }
             createPost.setVisibility(View.GONE);
         } else {
             clStoryFooter.setVisibility(View.GONE);
