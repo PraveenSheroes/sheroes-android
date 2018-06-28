@@ -484,7 +484,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             hintText = mConfiguration.get().configData.mHerStoryHintText;
         }
         mEditorFragment.setContentPlaceholder(hintText);
-        mEditorFragment.setContent(hintText);
         mEditorFragment.setLocalDraft(true);
         mEditorFragment.isActionInProgress();
     }
