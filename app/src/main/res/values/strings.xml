@@ -1,6 +1,7 @@
 <resources>
     <string name="ID_APP_NAME">SHEROES</string>
     <string name="ID_PROJECT_ID">409228886131</string>
+    <string name="ID_CLEVER_TAP_PROJECT_ID">id:409228886131</string>
     <string name="ID_APPS_FLYER_DEV_ID">CDkJAsj9hBUkp2V6ERGWd9</string>
     <string name="ID_ROBOTO_REGULAR">sans-serif</string>
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>

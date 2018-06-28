@@ -68,6 +68,9 @@
         <meta-data
             android:name="SENDER_ID"
             android:value="@string/ID_PROJECT_ID" />
+
+        <meta-data android:name="GCM_SENDER_ID" android:value="@string/ID_CLEVER_TAP_PROJECT_ID"/>
+
         <meta-data
             android:name="io.branch.sdk.BranchKey"
             android:value="key_live_kdBTwNxOeTMdqEi8nsWj2ogeABiIJMY9" />
@@ -101,6 +104,18 @@
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="com.facebook.app.FacebookContentProvider994271980664614"
             android:exported="true" />
+
+        <!-- ClearTap -->
+        <meta-data
+            android:name="CLEVERTAP_ACCOUNT_ID"
+            android:value="${cleverTapAccountID}"/>
+        <meta-data
+            android:name="CLEVERTAP_TOKEN"
+            android:value="${CleverTapToken}"/>
+        <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
+        <meta-data
+            android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
+            android:value="1"/>
 
         <activity
             android:name="com.moe.pushlibrary.activities.MoEActivity"
@@ -369,6 +384,33 @@
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="com.clevertap.android.sdk.GcmMessageListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+
+        <service android:name="com.clevertap.android.sdk.GcmTokenListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID"/>
+            </intent-filter>
+        </service>
+
+        <!-- CleverTap In-app notifications -->
+        <activity
+            android:name="com.clevertap.android.sdk.InAppNotificationActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="orientation|keyboardHidden"/>
+
+        <!-- specify activities where In-app notifications should not be shown -->
+        <!-- pretend there is a SplashActivity in this project
+        <meta-data
+            android:name="CLEVERTAP_INAPP_EXCLUDE"
+            android:value="SplashActivity"/-->
 
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
 

@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import javax.inject.Singleton;
 
+import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
@@ -323,6 +324,7 @@ public interface SheroesAppComponent {
 
     void inject(WebViewActivity webViewActivity);
 
+    void inject(CleverTapHelper cleverTapHelper);
 }
 
 

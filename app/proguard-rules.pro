@@ -235,6 +235,9 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
     <methods>;
 }
 
+# For CleverTap SDK
+-dontwarn com.clevertap.android.sdk.**
+
 #apptimize
 -keep class com.apptimize.** { *; }
 
