@@ -971,15 +971,24 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, articleSolrObj.getNoOfViews());
         long createdDate = mDateUtil.getTimeInMillis(articleSolrObj.getPostedDate(), AppConstants.DATE_FORMAT);
         String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+        if(!dateInWord.equalsIgnoreCase(getString(R.string.ID_JUST_NOW)))
+        {
+            dateInWord=dateInWord + " ago ";
+        }
+        String minRead="";
+        if(articleSolrObj.getCharCount()>0)
+        {
+            minRead=articleSolrObj.getCharCount()+" "+getString(R.string.ID_MIN_READ);
+        }
         String likesViews = "";
         if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             if (mConfiguration.get().configData.showArticleViews) {
-                likesViews = dateInWord + " ago " + "\u2022" + " " + articleSolrObj.getCharCount() + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(articleSolrObj.getNoOfViews()) + " " + pluralViews;
+                likesViews = dateInWord + "\u2022" + " " + minRead + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(articleSolrObj.getNoOfViews()) + " " + pluralViews;
             } else {
-                likesViews = dateInWord + " ago " + "\u2022" + " " + articleSolrObj.getCharCount();
+                likesViews = dateInWord  + "\u2022" + " " + minRead;
             }
         } else {
-            likesViews = dateInWord + " ago " + "\u2022" + " " + articleSolrObj.getCharCount();
+            likesViews = dateInWord  + "\u2022" + " " + minRead;
         }
         mLikesViewsComments.setText(likesViews);
         if (CommonUtil.isNotEmpty(articleSolrObj.getAuthorImageUrl())) {

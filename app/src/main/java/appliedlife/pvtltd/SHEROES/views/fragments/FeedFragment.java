@@ -236,8 +236,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             emptyView.setVisibility(View.VISIBLE);
             loadEmptyView();
         } else {
-             mFeedRecyclerView.setVisibility(View.VISIBLE);
-             emptyView.setVisibility(View.GONE);
+            mFeedRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
         }
 
         if (showUpdateCard()) {
@@ -300,13 +300,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else {
                 emptyImage.setVisibility(View.GONE);
             }
-        }else
-        {
-            if(isHomeFeed)
-            {
+        } else {
+            if (isHomeFeed) {
                 emptyImage.setVisibility(View.GONE);
-            }else
-            {
+            } else {
                 emptyImage.setImageResource(R.drawable.ic_story_blank);
                 emptyText.setText("No Stories Yet");
             }
