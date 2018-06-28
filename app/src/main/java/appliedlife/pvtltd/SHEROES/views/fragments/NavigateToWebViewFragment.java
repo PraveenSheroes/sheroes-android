@@ -34,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -105,12 +104,15 @@ public class NavigateToWebViewFragment extends BaseFragment {
         webPagesView.setVerticalScrollBarEnabled(false);
         webPagesView.setFocusable(true);
         webPagesView.requestFocusFromTouch();
+        webPagesView.setHapticFeedbackEnabled(false);
+
 
         CookieManager cookieManager = CookieManager.getInstance();
         cookieManager.setAcceptCookie(true);
 
         WebSettings webSettings = webPagesView.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
 
@@ -120,22 +122,22 @@ public class NavigateToWebViewFragment extends BaseFragment {
             String mWebHtml = getArguments().getString(WEB_HTML);
             boolean hasFooter = getArguments().getBoolean(HAS_FOOTER, false);
             mForceCustomTab = getArguments().getBoolean(FORCE_CUSTOM_TAB, false);
-            if(!hasFooter){
-                mMainContainer.setPadding(0, 0,0 ,0);
-            }else {
+            if (!hasFooter) {
+                mMainContainer.setPadding(0, 0, 0, 0);
+            } else {
                 mMainContainer.setPadding(0, 0, 0, CommonUtil.navHeight(getActivity()));
             }
             currentSelectedItemName = getArguments().getString(AppConstants.SELECTED_MENU_NAME);
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
-                    String token = mUserPreference.get().getToken();
-                    if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
-                        webPagesView.loadUrl(mWebUrl, getCustomHeaders(mWebUrl));
-                    }
-
-                    if (StringUtil.isNotNullOrEmptyString(token) && mWebHtml != null) {
-                        webPagesView.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, mWebHtml, "text/html", "UTF-8", null);
-                    }
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get()) {
+                String token = mUserPreference.get().getToken();
+                if (StringUtil.isNotNullOrEmptyString(token) && mWebUrl != null) {
+                    webPagesView.loadUrl(mWebUrl, getCustomHeaders(mWebUrl));
                 }
+
+                if (StringUtil.isNotNullOrEmptyString(token) && mWebHtml != null) {
+                    webPagesView.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, mWebHtml, "text/html", "UTF-8", null);
+                }
+            }
         }
 
         webPagesView.setWebViewClient(new WebViewClient() {
@@ -150,20 +152,20 @@ public class NavigateToWebViewFragment extends BaseFragment {
             }
 
             public boolean shouldOverrideUrlLoading(WebView view, String url) { //Handle hyperlinks here
-                if(mForceCustomTab){
+                if (mForceCustomTab) {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     startActivity(intent);
                     return true;
                 }
 
                 if (StringUtil.isNotNullOrEmptyString(url)) {
-                    if(url.startsWith("whatsapp://")) { //Share on WhatsApp
+                    if (url.startsWith("whatsapp://")) { //Share on WhatsApp
                         CommonUtil.shareLinkToWhatsApp(getContext(), url);
-                    } else if(url.startsWith("http://www.facebook.com") ) { //Share on Facebook
+                    } else if (url.startsWith("http://www.facebook.com")) { //Share on Facebook
                         CommonUtil.shareLinkToFaceBook(getContext(), url);
-                    } else if(url.startsWith("http://twitter.com")) { //share on twitter
+                    } else if (url.startsWith("http://twitter.com")) { //share on twitter
                         CommonUtil.shareLinkToTwitter(getContext(), url);
-                    }else if(CommonUtil.isBranchLink(Uri.parse(url))){
+                    } else if (CommonUtil.isBranchLink(Uri.parse(url))) {
                         if (StringUtil.isNotNullOrEmptyString(url)) {
                             Uri uri = Uri.parse(url);
                             Intent intent = new Intent();
@@ -171,9 +173,8 @@ public class NavigateToWebViewFragment extends BaseFragment {
                             intent.setData(uri);
                             startActivity(intent);
                         }
-                    }
-                     else {
-                            webPagesView.loadUrl(url, getCustomHeaders(url));
+                    } else {
+                        webPagesView.loadUrl(url, getCustomHeaders(url));
                     }
                     return true;
                 } else {
@@ -182,7 +183,7 @@ public class NavigateToWebViewFragment extends BaseFragment {
             }
         });
 
-        webPagesView.setOnKeyListener(new View.OnKeyListener(){
+        webPagesView.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) { //handle back press
                 if (keyCode == KeyEvent.KEYCODE_BACK
                         && event.getAction() == MotionEvent.ACTION_UP
@@ -227,13 +228,18 @@ public class NavigateToWebViewFragment extends BaseFragment {
         return SCREEN_LABEL;
     }
 
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
     private Map<String, String> getCustomHeaders(String url) {
-        String token = "",userId="";
+        String token = "", userId = "";
         if (null != mUserPreference && mUserPreference.isSet()) {
             token = mUserPreference.get().getToken();
-            userId=String.valueOf(mUserPreference.get().getUserSummary().getUserId());
+            userId = String.valueOf(mUserPreference.get().getUserSummary().getUserId());
         }
-        if (CommonUtil.isNotEmpty(url) && (CommonUtil.isSheroesValidLink(Uri.parse(url))||url.contains("52.71.218.71"))) {
+        if (CommonUtil.isNotEmpty(url) && (CommonUtil.isSheroesValidLink(Uri.parse(url)) || url.contains("52.71.218.71"))) {
             Map<String, String> headers = new HashMap<>();
             headers.put("Authorization", token);
             headers.put("userId", userId);
@@ -241,6 +247,14 @@ public class NavigateToWebViewFragment extends BaseFragment {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        webPagesView.destroy();
+
+
     }
 
 }

@@ -39,6 +39,8 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     TextView mTvBellNotiTime;
     @Bind(R.id.iv_bell_noti_circle_icon)
     CircleImageView mIvNotificationImage;
+    @Bind(R.id.iv_bell_circle_icon_verified)
+    ImageView ivBellCircleIconVerified;
     @Bind(R.id.cl_notification)
     ConstraintLayout mClNotification;
     @Bind(R.id.iv_bell_reaction)
@@ -70,11 +72,16 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
         mBellNotification = belNotificationListResponse.getNotification();
         mContext = context;
         if (null != mBellNotification) {
+            if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.CHAMPION.toString())) {
+                ivBellCircleIconVerified.setVisibility(View.VISIBLE);
+            } else {
+                ivBellCircleIconVerified.setVisibility(View.GONE);
+            }
             if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.FOLLOW.toString())) {
                 mTvBellViewProfile.setText("view her profile");
                 mTvBellViewProfile.setVisibility(View.VISIBLE);
-                mTvDot.setVisibility(View.GONE);
-                mIvBellReaction.setVisibility(View.GONE);
+                mTvDot.setVisibility(View.VISIBLE);
+                mIvBellReaction.setVisibility(View.VISIBLE);
             } else if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.JOIN.toString())) {
                 mTvBellViewProfile.setText("view your profile");
                 mTvBellViewProfile.setVisibility(View.VISIBLE);
@@ -152,6 +159,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     }
 
     enum NotificationCategoryEnum {
+        CHAMPION("CHAMPION"),
         FOLLOW("FOLLOW"),
         JOIN("JOINED");
 

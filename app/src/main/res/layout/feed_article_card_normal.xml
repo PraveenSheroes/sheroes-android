@@ -15,12 +15,24 @@
         android:gravity="top"
         android:orientation="horizontal"
         android:weightSum="1">
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:id="@+id/iv_feed_article_card_circle_icon"
-            android:layout_width="@dimen/feed_profile_icon_size"
-            android:layout_height="@dimen/feed_profile_icon_size"
-            android:layout_gravity="top" />
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_feed_article_card_circle_icon"
+                android:layout_width="@dimen/feed_profile_icon_size"
+                android:layout_height="@dimen/feed_profile_icon_size"
+                android:layout_gravity="top" />
+
+            <ImageView
+                android:id="@+id/iv_feed_article_card_circle_icon_verified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/ic_verified"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"

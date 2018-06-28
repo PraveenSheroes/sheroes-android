@@ -378,7 +378,32 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         }
         if (id == R.id.post_article_submit) {
             if (validateFields(false, true)) {
-                addEditArticle();
+                if (StringUtil.isNotNullOrEmptyString(mCoverImageUrl)) {
+                    addEditArticle();
+                } else {
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(HerStoryOrArticleSubmissionActivity.this);
+
+                    builder.setTitle(R.string.dialog_title_image);
+                    builder.setMessage(R.string.dialog_image);
+                    builder.setNegativeButton("Add Image", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int i) {
+                            dialog.dismiss();
+                        }
+                    });
+                    builder.setPositiveButton("Post Anyway", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            addEditArticle();
+                        }
+                    });
+
+                    builder.create();
+                    builder.show();
+
+                }
             }
         }
 
@@ -588,7 +613,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             articleTitle = mEditorFragment.getTitle().toString();
             articleBody = mEditorFragment.getContent().toString();
             //TODO: for beta release its fix for preview in Article detail.
-            articleBody=articleBody.replaceAll("\n","<br />");
+            articleBody = articleBody.replaceAll("\n", "<br />");
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }

@@ -17,6 +17,8 @@ import android.widget.TextView;
 import java.util.HashMap;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -45,6 +47,7 @@ public class WebViewActivity extends BaseActivity {
     //region Member variables
     private int mFromNotification;
     private String url, menuItem;
+    private String mSourceScreen;
     //endregion
 
     //region Activity method
@@ -64,11 +67,17 @@ public class WebViewActivity extends BaseActivity {
         if (null != getIntent() && null != getIntent().getExtras()) {
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             url = getIntent().getExtras().getString(SCREEN_URL);
+            mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
             menuItem = getIntent().getExtras().getString(MENU_ITEM_NAME);
         }
         setPagerAndLayouts();
         setupToolbar();
         invalidateOptionsMenu();
+        HashMap<String, Object> properties = new EventProperty.Builder()
+                .title(menuItem)
+                .build();
+        properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
+        AnalyticsManager.trackScreenView(getScreenName(), mSourceScreen, properties);
     }
 
     private void setupToolbar() {
@@ -115,10 +124,9 @@ public class WebViewActivity extends BaseActivity {
         }
         finish();
     }
-
     @Override
     public String getScreenName() {
-        return menuItem + SCREEN_LABEL;
+        return SCREEN_LABEL;
     }
 
     @Override

@@ -104,7 +104,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserMenu;
     @Bind(R.id.spam_article_comment_menu)
     TextView spamCommentMenu;
-
+    @Bind(R.id.iv_feed_article_card_circle_icon_verified)
+    ImageView ivFeedArticleCardCircleIconVerified;
     @Bind(R.id.tv_feed_article_user_reaction)
     TextView tvFeedArticleUserReaction;
     @Bind(R.id.tv_feed_article_user_comment)
@@ -278,6 +279,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
+        if (articleObj.isAuthorMentor()) {
+            ivFeedArticleCardCircleIconVerified.setVisibility(View.VISIBLE);
+        } else {
+            ivFeedArticleCardCircleIconVerified.setVisibility(View.GONE);
+        }
         if (isWhatappShareOption) {
             tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
             tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));

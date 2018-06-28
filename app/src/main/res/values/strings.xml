@@ -644,6 +644,8 @@
     <string name="article.status.published">published</string>
     <string name="untited_article">Untitled Article</string>
 
+    <string name="dialog.title_image">Cover Image Missing</string>
+    <string name="dialog.image">Stories with a cover image get 10 times higher views!</string>
     <string name="dialog.title_draft">Save as draft?</string>
     <string name="dialog.body_draft">Do you want to save the changes as draft?</string>
     <string name="error.draft">Error saving in draft. Story is empty</string>
