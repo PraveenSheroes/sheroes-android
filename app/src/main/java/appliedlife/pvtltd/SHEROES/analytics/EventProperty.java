@@ -61,7 +61,8 @@ public enum EventProperty {
     BRANCH_LINK("Branch link"),
     OPENED_FROM_EXTERNAL_APP("Opened from external app"),
     SHARED_FROM_EXTERNAL_APP("Shared From External App"),
-    PROFILE_STRENGTH("Profile Strength");
+    PROFILE_STRENGTH("Profile Strength"),
+    IS_ACTIVE("Badge State");
 
     private final String string;
 
@@ -284,6 +285,11 @@ public enum EventProperty {
 
         public Builder isChecked(final boolean isChecked){
             put(IS_CHECKED, isChecked);
+            return this;
+        }
+
+        public Builder isBadgeActive(final boolean isActive) {
+            put(IS_ACTIVE, isActive);
             return this;
         }
 

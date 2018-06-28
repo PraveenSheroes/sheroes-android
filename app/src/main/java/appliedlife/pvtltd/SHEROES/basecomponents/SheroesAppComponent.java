@@ -50,7 +50,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.LeaderBoardBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
@@ -322,7 +322,7 @@ public interface SheroesAppComponent {
 
     void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
 
-    void inject(LeaderBoardBottomSheetFragment leaderBoardBottomSheetFragment);
+    void inject(SuperSheroesCriteriaFragment superSheroesCriteriaFragment);
 
     void inject(LeaderBoardViewHolder leaderBoardViewHolder);
 }

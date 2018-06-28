@@ -87,11 +87,10 @@
         android:layout_marginRight="@dimen/dp_size_24"
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_8"
-        android:fontFamily="sans-serif"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="8sp"
         android:textColor="#878787"
         android:textSize="16sp"
-        android:textStyle="bold"
         tools:text="Anupriya was a Super SHEROES in Money Matters" />
 
     <FrameLayout

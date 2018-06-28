@@ -65,23 +65,19 @@
 
             <ImageView
                 android:id="@+id/user_pic_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="39dp"
+                android:layout_height="39dp"
                 android:layout_marginLeft="@dimen/dp_size_28"
-                android:layout_marginStart="@dimen/dp_size_28"
-                android:src="@drawable/circular_background_grey" />
+                android:layout_marginStart="@dimen/dp_size_28" />
 
             <ImageView
                 android:id="@+id/badge_icon"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/circular_background_yellow"
-                android:padding="@dimen/dp_size_2" />
+                android:layout_height="40dp" />
 
         </FrameLayout>
 
         <LinearLayout
-            android:id="@+id/winner_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -97,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:lineSpacingExtra="2sp"
-                android:textColor="@color/gray_light"
+                android:textColor="@color/leaderboard_user"
                 android:textSize="@dimen/sp_size_16"
                 tools:text="Champa Roy" />
 
@@ -106,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/gray_light"
+                android:textColor="@color/leaderboard_user"
                 android:textSize="14sp"
                 tools:text="158 Posts · 168 Likes · 140 Comments" />
         </LinearLayout>

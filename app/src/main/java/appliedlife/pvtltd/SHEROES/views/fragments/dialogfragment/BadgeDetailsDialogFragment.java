@@ -33,10 +33,13 @@ import org.w3c.dom.Text;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -183,9 +186,6 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
                 String mutualCommunityText = getResources().getString(R.string.badge_desc, mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle(), mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName());
                 badgeDesc.setText(mutualCommunityText);
-
-
-
             }
         }
         return view;
@@ -219,6 +219,20 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         shareBadgeCard();
     }
 
+    @OnClick(R.id.view_profile)
+    protected void openUserProfile() {
+        dismiss();
+        ProfileActivity.navigateTo(getActivity(), mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+    }
+
+    @OnClick(R.id.show_leaderBoard)
+    protected void showLeaderBaord() {
+        dismiss();
+        if(getActivity().isFinishing()) return;
+        CommunityDetailActivity.navigateTo(getActivity(), mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId(), SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+    //endregion
+
     private void shareBadgeCard() {
         if (getActivity()==null && getActivity().isFinishing()) return;
 
@@ -240,21 +254,21 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         headerContainer.setBackgroundColor(Color.parseColor(backgroundColor));
 
         if (StringUtil.isNotNullOrEmptyString(badgeUrl)) {
-           Glide.with(getActivity())
+            Glide.with(getActivity())
                     .asBitmap()
                     .load(badgeUrl)
-                   .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
                     .into(new BitmapImageViewTarget(badgeIcon) {
 
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             super.onResourceReady(resource, transition);
-                            dismiss();
                             badgeIcon.setImageBitmap(resource);
 
                             Bitmap bitmap = CommonUtil.getViewBitmap(cardContainer);
                             Uri contentUri = CommonUtil.getContentUriFromBitmap(getActivity(), bitmap);
                             if (contentUri != null) {
+                                dismiss();
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                                 String badgeShareMsg = new ConfigData().mBadgeShareMsg;
@@ -270,18 +284,4 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                     });
         }
     }
-
-    @OnClick(R.id.view_profile)
-    protected void openUserProfile() {
-        dismiss();
-        ProfileActivity.navigateTo(getActivity(), mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-    }
-
-    @OnClick(R.id.show_leaderBoard)
-    protected void showLeaderBaord() {
-        dismiss();
-        if(getActivity().isFinishing()) return;
-        CommunityDetailActivity.navigateTo(getActivity(), mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId(), SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-    }
-    //endregion
 }

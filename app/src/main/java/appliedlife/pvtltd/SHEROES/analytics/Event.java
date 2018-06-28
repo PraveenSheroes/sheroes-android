@@ -186,6 +186,10 @@ public enum Event {
     WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
     // endregion
 
+    //region leaderBoard
+    BADGE_CLICKED(AnalyticsEventType.LEADER_BOARD, "Badge Clicked"),
+    //endregion
+
     //region onboarding
     ONBOARDING_SKIPPED(AnalyticsEventType.ON_BOARDING, "Skipped"),
     //end region

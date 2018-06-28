@@ -137,5 +137,6 @@
     <color name="lighter_grey">#E4E4E4</color>
     <color name="mentor_green">#6bba29</color>
     <color name="mentor_profession">#686868</color>
+    <color name="leaderboard_user">#3c3c3c</color>
 
 </resources>

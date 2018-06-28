@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Praveen on 18/09/17.
- * Updated by Ravi on 27/06/18.
  * Leader board holder
  */
 
@@ -148,6 +147,13 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             }
             itemContainer.setLayoutParams(layoutParams);
             mProfilePic.setLayoutParams(profilePicParams);
+
+            if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive()) {
+                badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
+            } else {
+                badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
+            }
+            mProfilePic.setBackgroundResource(R.drawable.circular_background_grey);
         }
     }
 

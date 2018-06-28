@@ -5,10 +5,11 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_size_16"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:text="Add the content how can a user be on leader board here" />
+        />
 
 </LinearLayout>

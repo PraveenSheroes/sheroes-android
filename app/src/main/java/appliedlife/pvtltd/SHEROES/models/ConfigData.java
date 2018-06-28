@@ -63,4 +63,8 @@ public class ConfigData {
     @SerializedName("badge_share_msg")
     public String mBadgeShareMsg = "I won the exciting new Super SHEROES badge on the SHEROES Community. It\'s a women only app where you can share anything without hesitation and win these badges. Check out mine here:\nCommunity URL :" ;
 
+    @SerializedName("super_sheroes_criteria_msg")
+    public String superSheroesCriteriaMsg = "Write super engaging content and you will get listed in Leaderbaord" ;
+
+
 }

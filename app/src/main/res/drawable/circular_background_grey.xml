@@ -15,4 +15,10 @@
         android:width="40dp"
         android:height="40dp" />
 
+    <padding
+        android:bottom="@dimen/dp_size_1"
+        android:left="@dimen/dp_size_1"
+        android:right="@dimen/dp_size_1"
+        android:top="@dimen/dp_size_1" />
+
 </shape>

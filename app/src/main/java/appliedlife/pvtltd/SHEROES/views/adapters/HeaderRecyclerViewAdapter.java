@@ -13,7 +13,6 @@ public abstract class HeaderRecyclerViewAdapter extends RecyclerView.Adapter<Rec
     private String headers = null;
     public static final String header = "HEADER";
     private static final int TYPE_HEADER = -100;
-    private static final int LEADER_BOARD_TYPE_HEADER = -150;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

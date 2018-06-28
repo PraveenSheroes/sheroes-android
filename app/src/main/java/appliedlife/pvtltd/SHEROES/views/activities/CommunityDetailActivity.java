@@ -631,16 +631,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             List<CommunityTab> communityTabs = new ArrayList<>();
             communityTabs = mCommunityFeedSolrObj.communityTabs;
 
-            //mock data added for leaDERBAORD
-           /* CommunityTab communityTab1 = new CommunityTab();
-            communityTab1.communityId = 252;
-            communityTab1.createdBy =123212;
-            communityTab1.title ="LeaderBoard";
-            communityTab1.key = "LeaderBoard";
-            communityTab1.dataUrl = AppConstants.LEADERBOARD_URL;
-            communityTab1.type = TabType.FRAGMENT.getName();
-            communityTabs.add(communityTab1);*/
-
             for (CommunityTab communityTab : communityTabs) {
                 if (communityTab.type.equalsIgnoreCase(TabType.NAVTIVE.getName())) {
                     FeedFragment feedFragment = new FeedFragment();
@@ -677,16 +667,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         mAdapter.addFragment(helplineFragment, communityTab.title);
                         mTabFragments.add(helplineFragment);
                     }
-                    /*else if(communityTab.dataUrl.equalsIgnoreCase(AppConstants.LEADERBOARD_URL)) { //Leaderboard
-
-                        mDefaultTabKey = "LeaderBoard";
-                        CommunityLeaderBoardFragment communityLeaderBoardFragment = CommunityLeaderBoardFragment.getInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putInt(CommunityLeaderBoardFragment.COMMUNITY_ID, communityTab.communityId);
-                        communityLeaderBoardFragment.setArguments(bundle);
-                        mAdapter.addFragment(communityLeaderBoardFragment, communityTab.title);
-                        mTabFragments.add(communityLeaderBoardFragment);
-                    }*/
                 }
             }
         }

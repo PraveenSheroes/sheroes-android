@@ -1060,12 +1060,31 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
         if(getActivity()!=null && getActivity().isFinishing()) return;
+
+        if(leaderBoardUserSolrObj!=null) {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
+                            .isBadgeActive(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
+                            .name(mUserPreference.get().getUserSummary().getFirstName())
+                            .build();
+            trackEvent(Event.BADGE_CLICKED, properties);
+        }
+
         BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, getScreenName(), true);
     }
 
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
-        LeaderBoardBottomSheetFragment.showDialog((AppCompatActivity) getActivity());
+        if(leaderBoardUserSolrObj!=null) {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId()))
+                            .name(mUserPreference.get().getUserSummary().getFirstName())
+                            .build();
+            trackEvent(Event.BADGE_CLICKED, properties);
+        }
+        SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity());
     }
 
     @Override
