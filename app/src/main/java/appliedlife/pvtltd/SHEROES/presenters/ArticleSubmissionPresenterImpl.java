@@ -120,61 +120,6 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                 });
     }
 
-   /* public void uploadFile(Uri fullPath, Context applicationContext) {
-        final String reportImagePath = FileUtil.getExternalStorageDirectory() + File.separator + new Date().getTime() + Math.floor(Math.random() * 10000) + ".jpg";
-        if (fullPath != null) {
-            // Generate slide
-            Observable<UpLoadImageResponse> observable = CompressImageUtil.compressImage(applicationContext, fullPath,
-                    reportImagePath, 816)
-                    .flatMap(new Function<Boolean, Observable<UpLoadImageResponse>>() {
-                        @Override
-                        public Observable<UpLoadImageResponse> apply(Boolean success) {
-                            if (!success) {
-                                Observable.just(new UpLoadImageResponse());
-                            }
-
-                            File file = new File(reportImagePath);
-                            Bitmap photo = CompressImageUtil.decodeFile(file);
-                            String encodedImageUrl = CompressImageUtil.setImageOnHolder(photo);
-
-                            UploadImageRequest uploadImageRequest = new UploadImageRequest();
-                            uploadImageRequest.images = new ArrayList<>();
-                            uploadImageRequest.images.add(encodedImageUrl);
-
-                            return mSheroesAppServiceApi.uploadImage(uploadImageRequest);
-                        }
-                    })
-                    .map(new Function<UpLoadImageResponse, UpLoadImageResponse>() {
-                        @Override
-                        public UpLoadImageResponse apply(UpLoadImageResponse upLoadImageResponse) {
-                            FileUtil.deleteFile(reportImagePath);
-                            return upLoadImageResponse;
-                        }
-                    })
-                    .compose(this.<UpLoadImageResponse>bindToLifecycle())
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .cache();
-            observable.subscribe(new DisposableObserver<UpLoadImageResponse>() {
-                @Override
-                public void onNext(UpLoadImageResponse upLoadImageResponse) {
-                    String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
-                    getMvpView().showImage(finalImageUrl);
-                }
-
-                @Override
-                public void onError(Throwable e) {
-
-                }
-
-                @Override
-                public void onComplete() {
-
-                }
-            });
-        }
-    }*/
-
     public void uploadFile(String encodedImage, Context applicationContext) {
         UploadImageRequest uploadImageRequest = new UploadImageRequest();
         uploadImageRequest.images = new ArrayList<>();

@@ -69,7 +69,7 @@ public class PushNotificationService extends GcmListenerService {
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         String message = "";
-        String imageUrl="";
+        String imageUrl = "";
         if (null == data) return;
         String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
         String action = data.getString("action");
@@ -158,13 +158,14 @@ public class PushNotificationService extends GcmListenerService {
 
     private void sendNotification(String title, String body, String urlText, String imageUrl) {
         Context context = getBaseContext();
-        new NotificationImageLoader(context,title,body,urlText,imageUrl).execute();
+        new NotificationImageLoader(context, title, body, urlText, imageUrl).execute();
     }
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
         return useWhiteIcon ? R.drawable.ic_push_notification_icon : R.drawable.ic_push_notification_icon;
     }
+
     private class NotificationImageLoader extends AsyncTask<String, Void, Bitmap> {
 
         Context ctx;
@@ -173,13 +174,13 @@ public class PushNotificationService extends GcmListenerService {
         String urlText;
         String imageUrl;
 
-        public NotificationImageLoader(Context context,String title,String body,String urlText,String imageUrl) {
+        public NotificationImageLoader(Context context, String title, String body, String urlText, String imageUrl) {
             super();
             this.ctx = context;
-            this.title=title;
-            this.body=body;
-            this.urlText=urlText;
-            this.imageUrl=imageUrl;
+            this.title = title;
+            this.body = body;
+            this.urlText = urlText;
+            this.imageUrl = imageUrl;
         }
 
         @Override
@@ -240,32 +241,21 @@ public class PushNotificationService extends GcmListenerService {
                 Random random = new Random();
                 int randomId = random.nextInt(9999 - 1000) + 1000;
                 PendingIntent pIntent = stackBuilder.getPendingIntent(randomId, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-
-                // RemoteViews smallNotificationLayout = new RemoteViews(getPackageName(), R.layout.notification_small_view_layout);
-                //   smallNotificationLayout.setImageViewResource(R.id.iv_icon, R.mipmap.ic_sheroes_launcher);
-                //  smallNotificationLayout.setTextViewText(R.id.title, title);
-                //  smallNotificationLayout.setTextViewText(R.id.text, body);
-                // RemoteViews largeNotificationLayoutExpanded = new RemoteViews(getPackageName(), R.layout.notification_large_view_layout);
-
                 Notification notification = new NotificationCompat.Builder(PushNotificationService.this, relatedChannelId)
                         .setContentTitle(title)
                         .setTicker(AppConstants.TICKER)
                         .setWhen(System.currentTimeMillis() + AppConstants.NOT_TIME)
-                        //  .setCustomContentView(smallNotificationLayout)
-                        //   .setCustomBigContentView(largeNotificationLayoutExpanded)
                         .setContentText(body)
                         .setContentIntent(pIntent)
-                        .setDefaults(NotificationCompat.DEFAULT_SOUND| NotificationCompat.DEFAULT_VIBRATE)
+                        .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
                         .setContentIntent(pIntent).setAutoCancel(true)
                         .setColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text))
-                        //.setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_sheroes_launcher))
                         .setLargeIcon(result)
                         .setChannelId(relatedChannelId)
                         .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
                         .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                         .setSmallIcon(getNotificationIcon()).build();
                 notificationManager.notify(Integer.parseInt(randomId + ""), notification);
-
 
 
             } catch (Exception e) {

@@ -1242,7 +1242,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
-
                     writeAStory();
                 }
 

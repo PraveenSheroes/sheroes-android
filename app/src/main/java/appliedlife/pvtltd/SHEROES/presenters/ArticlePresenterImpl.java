@@ -120,24 +120,21 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
-        //  getMvpView().startProgressBar();
         editCommentListFromModel(commentReactionRequestPojo)
                 .compose(this.<CommentAddDelete>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommentAddDelete>() {
                     @Override
                     public void onComplete() {
-                        // getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        //   getMvpView().stopProgressBar();
                         getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
                     }
 
                     @Override
                     public void onNext(CommentAddDelete commentResponsePojo) {
-                        //  getMvpView().stopProgressBar();
+
                         if (null != commentResponsePojo) {
                             getMvpView().removeAndNotifyComment(position);
                             getMvpView().showMessage(R.string.comment_deleted);

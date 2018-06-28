@@ -608,8 +608,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (!handled) {
             try {
                 super.startActivity(intent);
-            }catch (Exception e)
-            {
+            } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
                 //Toast.makeText(getContext(),"Please goto playstore and download request Url app ",Toast.LENGTH_SHORT).show();
             }
