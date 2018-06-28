@@ -587,6 +587,8 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         try {
             articleTitle = mEditorFragment.getTitle().toString();
             articleBody = mEditorFragment.getContent().toString();
+            //TODO: for beta release its fix for preview in Article detail.
+            articleBody=articleBody.replaceAll("\n","<br />");
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
