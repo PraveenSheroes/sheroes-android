@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -133,18 +132,18 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 final String backgroundColor = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor();
                 itemContainer.setBackgroundColor(Color.parseColor(backgroundColor));
                 badgeIcon.setVisibility(View.GONE);
-                mDescription.setTextColor(ContextCompat.getColor(context,R.color.white_color));
-                mName.setTextColor(ContextCompat.getColor(context,R.color.white_color));
+                mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
+                mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 itemContainer.setBackground(ContextCompat.getDrawable(context, R.drawable.border_new_feature));
                 layoutParams.setMargins(CommonUtil.convertDpToPixel(16, context), 0, CommonUtil.convertDpToPixel(16, context), 0);
-                profilePicParams.setMargins(CommonUtil.convertDpToPixel(8, context), 0 , 0, 0);
+                profilePicParams.setMargins(CommonUtil.convertDpToPixel(8, context), 0, 0, 0);
             } else {
                 itemContainer.setBackgroundColor(Color.WHITE);
-                mDescription.setTextColor(ContextCompat.getColor(context,R.color.gray_light));
-                mName.setTextColor(ContextCompat.getColor(context,R.color.gray_light));
+                mDescription.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
+                mName.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
                 itemContainer.setBackground(null);
                 badgeIcon.setVisibility(View.VISIBLE);
-                profilePicParams.setMargins(CommonUtil.convertDpToPixel(28, context), 0 , 0, 0);
+                profilePicParams.setMargins(CommonUtil.convertDpToPixel(28, context), 0, 0, 0);
                 layoutParams.setMargins(0, 0, 0, 0);
             }
             itemContainer.setLayoutParams(layoutParams);

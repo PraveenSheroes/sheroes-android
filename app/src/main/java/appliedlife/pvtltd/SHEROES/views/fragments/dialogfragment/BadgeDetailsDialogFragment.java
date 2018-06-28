@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -72,10 +73,14 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
     //region private member variable
     private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
+    private long mLoggedInUserId = -1;
     //endregion
 
     @Inject
     Preference<Configuration> mConfiguration;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
 
     //region Bind view variables
 
@@ -100,6 +105,12 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     @Bind(R.id.show_leaderBoard)
     TextView showLeaderBoard;
 
+    @Bind(R.id.ok)
+    TextView okButton;
+
+    @Bind(R.id.share)
+    TextView shareButton;
+
     //endregion
 
     //region Fragment methods
@@ -113,7 +124,6 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.community_badge_detail, container, false);
         ButterKnife.bind(this, view);
-
         if (getArguments() != null) {
             isLeaderBoard = getArguments().getBoolean(IS_LEADER_BOARD);
             SCREEN_NAME = getArguments().getString(BaseActivity.SOURCE_SCREEN);
@@ -124,12 +134,25 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             }
         }
 
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            mLoggedInUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
+
         if (!isLeaderBoard) {
             showLeaderBoard.setVisibility(View.VISIBLE);
             viewProfile.setVisibility(View.GONE);
         } else {
             showLeaderBoard.setVisibility(View.GONE);
             viewProfile.setVisibility(View.VISIBLE);
+        }
+
+        //Enable share for own badge
+        if(mLoggedInUserId == mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant()) {
+            okButton.setVisibility(View.GONE);
+            shareButton.setVisibility(View.VISIBLE);
+        } else {
+            okButton.setVisibility(View.VISIBLE);
+            shareButton.setVisibility(View.GONE);
         }
 
         if(mLeaderBoardUserSolrObj!=null && mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null) {
@@ -160,6 +183,9 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
                 String mutualCommunityText = getResources().getString(R.string.badge_desc, mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle(), mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName());
                 badgeDesc.setText(mutualCommunityText);
+
+
+
             }
         }
         return view;
@@ -183,7 +209,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     }
 
     //region onclick method
-    @OnClick(R.id.cross)
+    @OnClick({R.id.cross, R.id.ok})
     protected void crossClick() {
         dismiss();
     }
