@@ -18,7 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
 @Parcel(analyze = {FeedDetail.class, BaseResponse.class})
 public class FeedDetail extends BaseResponse implements Cloneable{
     public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
-    public static final String FEED_DETAIL_ID = "FEED_DETAIL_ID";
+
     @SerializedName(value = "id")
     private String id;
 

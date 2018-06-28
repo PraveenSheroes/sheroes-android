@@ -56,7 +56,7 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
     private final List<Suggestible> mSuggestions;
 
     // Map from a given bucket (defined by a unique string) to the latest query result for that bucket
-    // Example buckets: "Person-Database", "Person-Network", "Companies-Database", "Companies-Network"
+    // Example buckets: "ArticleTagName-Database", "ArticleTagName-Network", "Companies-Database", "Companies-Network"
     private final Map<String, UserTagSuggestionsResult> mResultMap = new HashMap<>();
     private final Map<QueryToken, Set<String>> mWaitingForResults = new HashMap<>();
 

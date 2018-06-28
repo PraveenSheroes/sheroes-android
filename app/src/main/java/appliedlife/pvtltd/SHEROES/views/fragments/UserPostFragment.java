@@ -147,7 +147,7 @@ public class UserPostFragment extends BaseFragment {
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet()&& null != mUserPreference.get().getUserSummary()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
         }
 

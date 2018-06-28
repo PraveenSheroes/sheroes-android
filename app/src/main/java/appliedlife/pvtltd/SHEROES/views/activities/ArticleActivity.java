@@ -91,8 +91,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
-import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
@@ -105,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.utils.ScrimUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
@@ -127,6 +126,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
 public class ArticleActivity extends BaseActivity implements IArticleView, NestedScrollView.OnScrollChangeListener, AppBarLayout.OnOffsetChangedListener {
 
     public static final String SCREEN_LABEL = "Article Activity";
+    public static final String SCREEN_LABEL_STORY = "Story Details Screen";
     public static final String IMAGE_WIDTH = "IMAGE_WIDTH";
     public static final String IMAGE_HEIGHT = "IMAGE_HEIGHT";
     private static final String NOTIFICATION_SCREEN = "Push Notification";
@@ -147,7 +147,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private int mImageHeight;
     private int mArticleId;
     private int mFeedPosition;
-    public Article mArticle;
+    public ArticleSolrObj mArticleSolrObj;
     private long mScrollPercentage = 0;
     private boolean isScrollingDown = false;
 
@@ -278,6 +278,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     private String streamType;
     private List<MentionSpan> mentionSpanList;
     private boolean hasMentions = false;
+    private String mSourceScreen;
+    private HashMap<String, Object> mProperties;
     //endregion
 
     //region Activity methods
@@ -291,20 +293,23 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mArticlePresenter.attachView(this);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Parcelable parcelable = getIntent().getParcelableExtra(Article.ARTICLE_OBJ);
-        mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
-        mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
-        if (parcelable != null) {
-            mArticle = Parcels.unwrap(parcelable);
-            if (mArticle != null) {
-                mCommentCount = mArticle.commentsCount;
-                updateTitleCommentCountView();
-                mImageWidth = mArticle.featureImageWidth;
-                mImageHeight = mArticle.featureImageHeight;
-                streamType = mArticle.streamType;
-            }
-        } else {
-            if (getIntent().getExtras() != null) {
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
+            mProperties = (HashMap<String, Object>) getIntent().getExtras().getSerializable(BaseActivity.SOURCE_PROPERTIES);
+
+            Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
+            mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
+            mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
+            if (parcelable != null) {
+                mArticleSolrObj = Parcels.unwrap(parcelable);
+                if (mArticleSolrObj != null) {
+                    mCommentCount = mArticleSolrObj.getNoOfComments();
+                    updateTitleCommentCountView();
+                    mImageWidth = mArticleSolrObj.getHighresImageWidth();
+                    mImageHeight = mArticleSolrObj.getHighresImageHeight();
+                    streamType = mArticleSolrObj.getStreamType();
+                }
+            } else {
                 String notificationId = getIntent().getExtras().getString("notificationId");
                 Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
@@ -313,17 +318,15 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 }
                 mImageWidth = getIntent().getExtras().getInt(IMAGE_WIDTH);
                 mImageHeight = getIntent().getExtras().getInt(IMAGE_HEIGHT);
-            } else {
-                finish();
+
             }
         }
-
         mScrimView.setBackground(ScrimUtil.makeCubicGradientScrimDrawable(
                 0xaa000000, 8, Gravity.TOP));
 
         setupToolbarItemsColor();
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
@@ -339,10 +342,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
         initializeCommentsAdapter();
         mAppBarLayout.addOnOffsetChangedListener(this);
-        if (mArticle != null) {
-            loadArticleImage(mArticle);
+        if (mArticleSolrObj != null) {
+            loadArticleImage(mArticleSolrObj);
         }
-        fetchArticle(mArticle == null ? mArticleId : (int) mArticle.id, mArticle != null);
+        fetchArticle(mArticleSolrObj == null ? mArticleId : (int) mArticleSolrObj.getIdOfEntityOrParticipant(), mArticleSolrObj != null, mArticleSolrObj);
 
         mCommentBody.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -352,7 +355,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     fab.hide();
                     mSubmitButton.setVisibility(View.VISIBLE);
                     mCancelButton.setVisibility(View.VISIBLE);
-                    mArticleLayout.smoothScrollTo(0, mAuthorDesView.getBottom());
+                    //mArticleLayout.smoothScrollTo(0, mAuthorDesView.getBottom());
 
                 } else {
                     mHasFocus = false;
@@ -368,6 +371,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 toolTipForShareArticle();
             }
         }
+
     }
 
     private void setupToolbarItemsColor() {
@@ -463,8 +467,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         MenuItem itemLike = menu.findItem(R.id.like);
         MenuItem itemBookmark = menu.findItem(R.id.bookmark);
         if (itemLike != null && itemBookmark != null) {
-            menu.findItem(R.id.like).setIcon(mArticlePresenter.getLikeDrawable(mArticle));
-            menu.findItem(R.id.bookmark).setIcon(mArticlePresenter.getBookmarkDrawable(mArticle));
+            menu.findItem(R.id.like).setIcon(mArticlePresenter.getLikeDrawable(mArticleSolrObj));
+            menu.findItem(R.id.bookmark).setIcon(mArticlePresenter.getBookmarkDrawable(mArticleSolrObj));
 
             if (mCurrentState == State.COLLAPSED) {
                 menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.menu_icon), PorterDuff.Mode.SRC_IN);
@@ -480,8 +484,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 getSupportActionBar().setHomeAsUpIndicator(upArrow);
             }
 
-            itemLike.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
-            itemBookmark.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticle));
+            itemLike.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticleSolrObj));
+            itemBookmark.setVisible(mArticlePresenter.getMenuItemsVisibility(mArticleSolrObj));
         }
     }
 
@@ -493,10 +497,26 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 onBackPressed();
                 break;
             case R.id.like:
-                mArticlePresenter.prepareLike(mArticle);
+                mArticlePresenter.prepareLike(mArticleSolrObj);
+                if (mArticleSolrObj.isUserStory()) {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, getScreenName());
+                    if (mArticleSolrObj.isLiked) {
+                        AnalyticsManager.trackEvent(Event.STORY_LIKED, getScreenName(), properties);
+                    } else {
+                        AnalyticsManager.trackEvent(Event.STORY_UN_LIKED, getScreenName(), properties);
+                    }
+                }
                 break;
             case R.id.bookmark:
-                mArticlePresenter.prepareBookmark(mArticle);
+                mArticlePresenter.prepareBookmark(mArticleSolrObj);
+                if (mArticleSolrObj.isUserStory()) {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, getScreenName());
+                    if (mArticleSolrObj.isBookmarked()) {
+                        AnalyticsManager.trackEvent(Event.STORY_BOOKMARKED, getScreenName(), properties);
+                    } else {
+                        AnalyticsManager.trackEvent(Event.STORY_UN_BOOKMARKED, getScreenName(), properties);
+                    }
+                }
                 break;
         }
         return true;
@@ -549,10 +569,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     protected Map<String, Object> getExtraPropertiesToTrack() {
         final EventProperty.Builder builder = new EventProperty.Builder();
-        if (mArticle != null) {
-            builder.title(mArticle.title)
-                    .id(Integer.toString(mArticle.remote_id))
-                    .streamType(mArticle.streamType);
+        if (mArticleSolrObj != null) {
+            builder.title(mArticleSolrObj.getNameOrTitle())
+                    .id(Long.toString(mArticleSolrObj.getEntityOrParticipantId()))
+                    .streamType(mArticleSolrObj.getStreamType());
 
         }
 
@@ -748,8 +768,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         spamReasonsDialog.show();
     }
 
-    private void fetchArticle(int articleId, boolean isImageLoaded) {
-        mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded);
+    private void fetchArticle(int articleId, boolean isImageLoaded, ArticleSolrObj articleSolrObj) {
+        if (null != articleSolrObj) {
+            mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded, articleSolrObj);
+        }
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
@@ -762,7 +784,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     private boolean validateData() {
-        if (mArticle == null) {
+        if (mArticleSolrObj == null) {
             Crashlytics.getInstance().core.logException(new IllegalStateException("Article is null"));
             return false;
         }
@@ -783,7 +805,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     void onFabClick() {
         if (mFeedDetail != null) {
             AnalyticsManager.trackPostAction(Event.POST_SHARED_CLICKED, mFeedDetail, getScreenName());
-            ShareBottomSheetFragment.showDialog(this, mArticle.deepLink, null, mArticle.deepLink, SCREEN_LABEL, false, mArticle.deepLink, false, Event.POST_SHARED, MixpanelHelper.getPostProperties(mFeedDetail, getScreenName()));
+            ShareBottomSheetFragment.showDialog(this, mArticleSolrObj.getDeepLinkUrl(), null, mArticleSolrObj.getDeepLinkUrl(), SCREEN_LABEL, false, mArticleSolrObj.getDeepLinkUrl(), false, Event.POST_SHARED, MixpanelHelper.getPostProperties(mFeedDetail, getScreenName()));
         }
     }
 
@@ -791,7 +813,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public void onSubmitClicked() {
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
-            mArticlePresenter.postComment(postCommentRequestBuilder(mArticle.remote_id, commentBody, false, hasMentions, mentionSpanList));
+            mArticlePresenter.postComment(postCommentRequestBuilder(mArticleSolrObj.getEntityOrParticipantId(), commentBody, false, hasMentions, mentionSpanList), mArticleSolrObj);
         }
         mCommentBody.setText("");
         mCommentBody.clearFocus();
@@ -828,23 +850,22 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void showArticle(final Article article, boolean imageLoaded) {
-        streamType = article.streamType;
-        mImageHeight = article.featureImageHeight;
-        mImageWidth = article.featureImageWidth;
-
-        mArticle = article;
+    public void showArticle(final ArticleSolrObj articleSolrObj, boolean imageLoaded) {
+        streamType = articleSolrObj.getStreamType();
+        mImageHeight = articleSolrObj.getHighresImageHeight();
+        mImageWidth = articleSolrObj.getHighresImageWidth();
+        mArticleSolrObj = articleSolrObj;
         invalidateOptionsMenu();
-        mCommentCount = article.commentsCount;
+        mCommentCount = articleSolrObj.getNoOfComments();
         if (!validateData()) {
             onBackPressed();
         }
-        if (mArticle.isThreadClosed) {
+        if (mArticleSolrObj.isThreadClosed) {
             mCommentBody.setVisibility(View.GONE);
         } else {
             mCommentBody.setVisibility(View.VISIBLE);
         }
-        if (mArticle.showComments) {
+        if (mArticleSolrObj.showComments) {
             mComments.setVisibility(View.VISIBLE);
             mCommentList.setVisibility(View.VISIBLE);
         } else {
@@ -853,14 +874,19 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         }
 
         if (!imageLoaded) {
-            loadArticleImage(article);
+            loadArticleImage(articleSolrObj);
         }
 
-        loadUserViews(article);
-        if (!CommonUtil.isNotEmpty(article.body)) {
-            return;
+        loadUserViews(articleSolrObj);
+        if (articleSolrObj.isUserStory()) {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getDescription())) {
+                return;
+            }
+        } else {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getListDescription())) {
+                return;
+            }
         }
-
         webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText);
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
             @Override
@@ -883,13 +909,23 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 }
             }
         });
-
-        if (!CommonUtil.isNotEmpty(article.body)) {
-            return;
+        String htmlData;
+        if (articleSolrObj.isUserStory()) {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getDescription())) {
+                return;
+            }
+            final String webViewStyle = getStyleFromConfig();
+            htmlData = articleSolrObj.getDescription() == null ? "" : articleSolrObj.getDescription();
+            htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
+        } else {
+            if (!CommonUtil.isNotEmpty(articleSolrObj.getListDescription())) {
+                return;
+            }
+            final String webViewStyle = getStyleFromConfig();
+            htmlData = articleSolrObj.getListDescription() == null ? "" : articleSolrObj.getListDescription();
+            htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
         }
-        final String webViewStyle = getStyleFromConfig();
-        String htmlData = article.body == null ? "" : article.body;
-        htmlData = "<style>" + webViewStyle + " </style> <body> " + getJavaScriptFromConfig() + htmlData + " </body>";
+
         webViewText.getSettings().setJavaScriptEnabled(true);
         webViewText.setWebChromeClient(webChromeClient);
         webViewText.setVerticalScrollBarEnabled(false);
@@ -921,53 +957,65 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             webViewText.addJavascriptInterface(webViewClickListener, "video");
         }
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
+
+        if (null != mArticleSolrObj && mArticleSolrObj.isUserStory()) {
+            AnalyticsManager.trackScreenView(SCREEN_LABEL_STORY, mSourceScreen, mProperties);
+        } else {
+            AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        }
     }
 
 
-    private void loadUserViews(Article article) {
-        if (article.author != null) {
-            author.setText(article.author.name);
-            String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
-            mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
-            String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, article.totalViews);
-            long createdDate = mDateUtil.getTimeInMillis(article.createdAt, AppConstants.DATE_FORMAT);
-            String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
-            String likesViews = "";
-            if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                if (mConfiguration.get().configData.showArticleViews) {
-                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.readingTime + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(article.totalViews) + " " + pluralViews;
-                } else {
-                    likesViews = dateInWord + " ago " + "\u2022" + " " + article.readingTime;
-                }
+    private void loadUserViews(ArticleSolrObj articleSolrObj) {
+        author.setText(articleSolrObj.getAuthorName());
+        String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, articleSolrObj.likesCount);
+        mLikeCount.setText(CommonUtil.getRoundedMetricFormat(articleSolrObj.likesCount) + " " + pluralLikes);
+        String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, articleSolrObj.getNoOfViews());
+        long createdDate = mDateUtil.getTimeInMillis(articleSolrObj.getPostedDate(), AppConstants.DATE_FORMAT);
+        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+        if (!dateInWord.equalsIgnoreCase(getString(R.string.ID_JUST_NOW))) {
+            dateInWord = dateInWord + " ago ";
+        }
+        String minRead = "";
+        if (articleSolrObj.getCharCount() > 0) {
+            minRead = articleSolrObj.getCharCount() + " " + getString(R.string.ID_MIN_READ);
+        }
+        String likesViews = "";
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            if (mConfiguration.get().configData.showArticleViews) {
+                likesViews = dateInWord + "\u2022" + " " + minRead + " " + "\u2022" + " " + CommonUtil.getRoundedMetricFormat(articleSolrObj.getNoOfViews()) + " " + pluralViews;
             } else {
-                likesViews = dateInWord + " ago " + "\u2022" + " " + article.readingTime;
+                likesViews = dateInWord + "\u2022" + " " + minRead;
             }
-            mLikesViewsComments.setText(likesViews);
-            if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
-                Glide.with(this)
-                        .load(authorImage)
-                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
-                        .into(authorPic);
-
-            }
-            if (article.author.thumbUrl != null && CommonUtil.isNotEmpty(article.author.thumbUrl)) {
-                String authorImage = CommonUtil.getThumborUri(article.author.thumbUrl, authorPicSize, authorPicSize);
-                Glide.with(this)
-                        .load(authorImage)
-                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
-                        .into(authorDesPic);
-
-            }
-            authorDesName.setText(article.author.name);
-            authorDescription.setText(Html.fromHtml(article.author.shortDescription));
+        } else {
+            likesViews = dateInWord + "\u2022" + " " + minRead;
+        }
+        mLikesViewsComments.setText(likesViews);
+        if (CommonUtil.isNotEmpty(articleSolrObj.getAuthorImageUrl())) {
+            String authorImage = CommonUtil.getThumborUri(articleSolrObj.getAuthorImageUrl(), authorPicSize, authorPicSize);
+            Glide.with(this)
+                    .load(authorImage)
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
+                    .into(authorPic);
 
         }
-        title.setText(article.title);
+        if (CommonUtil.isNotEmpty(articleSolrObj.getAuthorImageUrl())) {
+            String authorImage = CommonUtil.getThumborUri(articleSolrObj.getAuthorImageUrl(), authorPicSize, authorPicSize);
+            Glide.with(this)
+                    .load(authorImage)
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
+                    .into(authorDesPic);
+
+        }
+        authorDesName.setText(articleSolrObj.getAuthorName());
+        if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getAuthorShortDescription()))
+            authorDescription.setText(Html.fromHtml(articleSolrObj.getAuthorShortDescription()));
+
+        title.setText(articleSolrObj.getNameOrTitle());
     }
 
-    private void loadArticleImage(Article article) {
-        String imageUri = article.featureImage;
+    private void loadArticleImage(ArticleSolrObj articleSolrObj) {
+        String imageUri = articleSolrObj.getImageUrl();
         int imageNewHeight;
         if (mImageWidth != 0 && mImageHeight != 0) {
             imageNewHeight = (int) (((float) mImageHeight / (float) mImageWidth) * CommonUtil.getWindowWidth(this));
@@ -975,38 +1023,38 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             imageNewHeight = articleImageHeight;
         }
         image.getLayoutParams().height = imageNewHeight;
-        if (CommonUtil.isNotEmpty(article.featureImage)) {
+        if (CommonUtil.isNotEmpty(articleSolrObj.getImageUrl())) {
             String finalImageUri = CommonUtil.getThumborUri(imageUri, CommonUtil.getWindowWidth(this), imageNewHeight);
             Glide.with(ArticleActivity.this)
                     .asBitmap()
                     .load(finalImageUri)
                     .into(image);
         }
-        loadUserViews(article);
+        loadUserViews(articleSolrObj);
     }
 
     @Override
-    public void invalidateBookmark(Article article) {
+    public void invalidateBookmark(ArticleSolrObj articleSolrObj) {
         if (mFeedDetail != null) {
-            mFeedDetail.setBookmarked(article.isBookmarked);
+            mFeedDetail.setBookmarked(articleSolrObj.isBookmarked());
         }
-        mArticle = article;
+        mArticleSolrObj = articleSolrObj;
         invalidateOptionsMenu();
     }
 
     @Override
-    public void invalidateLike(Article article) {
+    public void invalidateLike(ArticleSolrObj articleSolrObj) {
         if (mFeedDetail != null) {
-            mFeedDetail.setReactionValue(article.isLiked ? AppConstants.HEART_REACTION_CONSTANT : AppConstants.NO_REACTION_CONSTANT);
+            mFeedDetail.setReactionValue(articleSolrObj.isLiked ? AppConstants.HEART_REACTION_CONSTANT : AppConstants.NO_REACTION_CONSTANT);
         }
-        mArticle = article;
-        String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, article.likesCount);
-        mLikeCount.setText(CommonUtil.getRoundedMetricFormat(article.likesCount) + " " + pluralLikes);
+        mArticleSolrObj = articleSolrObj;
+        String pluralLikes = getResources().getQuantityString(R.plurals.numberOfLikes, articleSolrObj.likesCount);
+        mLikeCount.setText(CommonUtil.getRoundedMetricFormat(articleSolrObj.likesCount) + " " + pluralLikes);
         invalidateOptionsMenu();
     }
 
     @Override
-    public void showComments(ArrayList<Comment> comments, int commentsCount) {
+    public void showComments(List<Comment> comments, int commentsCount) {
         mCommentCount = commentsCount;
         updateTitleCommentCountView();
         if (CommonUtil.isEmpty(comments)) {
@@ -1028,7 +1076,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             public void onClick(View textView) {
                 CommonUtil.hideKeyboard(ArticleActivity.this);
                 mCommentsAdapter.showMoreItem(true);
-                mArticlePresenter.fetchAllComments(getCommentRequestBuilder(mArticle.remote_id, 1, 100));
+                mArticlePresenter.fetchAllComments(getCommentRequestBuilder(mArticleSolrObj.getEntityOrParticipantId(), 1, 100));
                 mMoreComments.setVisibility(View.GONE);
                 mBorder.setVisibility(View.GONE);
             }
@@ -1102,6 +1150,12 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
     //endregion
 
     //region OnScroll methods
@@ -1141,32 +1195,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ArticleActivity.class);
-        Article article = new Article();
         ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
-        article.title = articleSolrObj.getNameOrTitle();
-        article.id = articleSolrObj.getIdOfEntityOrParticipant();
-        article.featureImage = articleSolrObj.getImageUrl();
-        article.commentsCount = articleSolrObj.getNoOfComments();
-        article.likesCount = articleSolrObj.getNoOfLikes();
-        article.author = new UserProfile();
-        article.creatorId = articleSolrObj.getAuthorId();
-        article.isCreatorMentor = articleSolrObj.isAuthorMentor();
-        article.author.name = articleSolrObj.getAuthorName();
-        article.author.shortDescription = articleSolrObj.getAuthorShortDescription();
-        article.author.thumbUrl = articleSolrObj.getAuthorImageUrl();
-        article.isBookmarked = articleSolrObj.isBookmarked();
-        article.streamType = articleSolrObj.getStreamType();
-        article.isLiked = articleSolrObj.getLastReactionValue() > 0;
-        article.thumbImageWidth = articleSolrObj.getThumbImageWidth();
-        article.thumbImageHeight = articleSolrObj.getThumbImageHeight();
-        article.featureImageHeight = articleSolrObj.getHighresImageHeight();
-        article.featureImageWidth = articleSolrObj.getHighresImageWidth();
-        article.createdAt = articleSolrObj.getPostedDate();
-        article.totalViews = articleSolrObj.getNoOfViews();
-        article.readingTime = articleSolrObj.getCharCount();
-        article.entityId = articleSolrObj.getEntityOrParticipantId();
-        Parcelable parcelable = Parcels.wrap(article);
-        intent.putExtra(Article.ARTICLE_OBJ, parcelable);
+        Parcelable parcelable = Parcels.wrap(articleSolrObj);
+        intent.putExtra(ArticleSolrObj.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
@@ -1209,7 +1240,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 mArticlePresenter.getSpamCommentApproveOrDeleteByAdmin(mAppUtils.spamCommentApprovedRequestBuilder(comment, true, true, false), position, comment);
             }
 
-            if (ArticleActivity.this == null || ArticleActivity.this.isFinishing()) return;
+            if (ArticleActivity.this.isFinishing()) return;
 
             if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
@@ -1231,7 +1262,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @OnClick(R.id.like_count)
     public void onLikeCountClicked() {
-        LikeListBottomSheetFragment.showDialog(this, "", mArticle.entityId);
+        LikeListBottomSheetFragment.showDialog(this, "", mArticleSolrObj.getEntityOrParticipantId());
     }
 
     @Override

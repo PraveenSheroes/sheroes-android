@@ -60,4 +60,10 @@ public class ConfigData {
     @SerializedName("promoCardUrl")
     public String mPromoCardUrl = "Quiz";
 
+    @SerializedName("articleGuideline")
+    public String articleGuideline;
+
+    @SerializedName("herStoryHintText")
+    public String mHerStoryHintText = "Begin your story here...";
+
 }

@@ -1,57 +1,19 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.ClipData;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.share.model.SharePhoto;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
-
-import org.parceler.Parcels;
-
-import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Ujjwal on 20-13-2018.
@@ -106,6 +68,9 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         if(getActivity() instanceof ProfileActivity){
             ((ProfileActivity) getActivity()).selectImageFrmCamera();
         }
+        if(getActivity() instanceof HerStoryOrArticleSubmissionActivity){
+            ((HerStoryOrArticleSubmissionActivity) getActivity()).selectImageFrmCamera();
+        }
         dismiss();
     }
 
@@ -116,6 +81,10 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         }
         if(getActivity() instanceof ProfileActivity){
             ((ProfileActivity) getActivity()).selectImageFrmGallery();
+        }
+
+        if(getActivity() instanceof HerStoryOrArticleSubmissionActivity){
+            ((HerStoryOrArticleSubmissionActivity) getActivity()).selectImageFrmGallery();
         }
         dismiss();
     }

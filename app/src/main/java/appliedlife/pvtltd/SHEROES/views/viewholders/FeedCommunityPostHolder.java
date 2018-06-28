@@ -985,6 +985,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
             Glide.with(context)
                     .load(firstThumborUrl)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(ivFirst);
         }
 

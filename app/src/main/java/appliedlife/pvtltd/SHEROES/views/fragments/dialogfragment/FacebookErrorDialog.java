@@ -16,6 +16,8 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.crashlytics.android.Crashlytics;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
@@ -62,25 +64,29 @@ public class FacebookErrorDialog extends BaseDialogFragment {
             mUserName = getArguments().getString(BaseDialogFragment.USER_NAME);
         }
         if (StringUtil.isNotNullOrEmptyString(message)) {
+            try {
+                if (StringUtil.isNotNullOrEmptyString(mUserName)) {
+                    tvUserNameMaleError.setVisibility(View.VISIBLE);
+                    tvUserNameMaleError.setText(mUserName);
 
-            if (StringUtil.isNotNullOrEmptyString(mUserName)) {
-                tvUserNameMaleError.setVisibility(View.VISIBLE);
-                tvUserNameMaleError.setText(mUserName);
-
-            } /*else {
+                } /*else {
                 SpannableString spannableString = new SpannableString(message);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 0, message.length(), 0);
                 tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
                 tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
                 tvDescriptionMaleError.setSelected(true);
             }*/
-            SpannableString spannableString = new SpannableString(message);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
-            tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-            tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-            tvDescriptionMaleError.setSelected(true);
+                SpannableString spannableString = new SpannableString(message);
+                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
+                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+                tvDescriptionMaleError.setSelected(true);
+            } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
+            }
+
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
@@ -122,11 +128,15 @@ public class FacebookErrorDialog extends BaseDialogFragment {
 
     @OnClick(R.id.tv_share_sheroes_app)
     public void tvShareSheroesAppClick() {
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_with_friend_for_download_app) + GENDER_SHARE_LINK);
-        startActivity(intent);
+        try {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType(AppConstants.SHARE_MENU_TYPE);
+            intent.setPackage(AppConstants.WHATS_APP);
+            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_with_friend_for_download_app) + GENDER_SHARE_LINK);
+            startActivity(intent);
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
     }
     //endregion
 

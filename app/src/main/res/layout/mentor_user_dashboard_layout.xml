@@ -149,5 +149,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom" />
+    <include
+        layout="@layout/write_a_story_footer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_gravity="end|bottom" />
 
 </android.support.design.widget.CoordinatorLayout>

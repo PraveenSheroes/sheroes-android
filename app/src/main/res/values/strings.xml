@@ -45,7 +45,6 @@
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
-    <string name="ID_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
     <string name="ID_FOLLOWING_LISTING">Following listing</string>
@@ -410,9 +409,11 @@
     <string name="add_photo">Add Photo</string>
     <string name="post_anonymous">Post as Anonymous</string>
     <string name="action.post">Post</string>
+    <string name="action.next">Next</string>
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Write a Post</string>
     <string name="title.ask_question">Ask a Question</string>
+    <string name="title.article_submit">Write a Story</string>
     <string name="anonymous">Anonymous</string>
     <string name="choose_community_option">Choose your community</string>
     <string name="image_count">%1$d/%2$d</string>
@@ -629,6 +630,37 @@
     <string name="others">Others</string>
     <string name="home_label">Home</string>
     <string name="youtube">Youtube.com</string>
+
+
+
+    <string name="action_draft">Draft</string>
+    <string name="action_info">Info</string>
+
+    <string name="article.status.submitted">submitted</string>
+    <string name="article.status.draft">draft</string>
+    <string name="article.status.under_review">under-review</string>
+    <string name="article.status.rejected">rejected</string>
+    <string name="article.status.scheduled">scheduled</string>
+    <string name="article.status.published">published</string>
+    <string name="untited_article">Untitled Article</string>
+
+    <string name="dialog.title_image">Cover Image Missing</string>
+    <string name="dialog.image">Stories with a cover image get 10 times higher views!</string>
+    <string name="dialog.title_draft">Save as draft?</string>
+    <string name="dialog.body_draft">Do you want to save the changes as draft?</string>
+    <string name="error.draft">Error saving in draft. Story is empty</string>
+    <string name="error.title">Story title cannot be blank</string>
+    <string name="error.body">Story content cannot be blank</string>
+    <string name="error.draft.title">Story title can\'t be blank</string>
+    <string name="error.tag.max">Tags can\'t be more than 5</string>
+    <string name="error.tag.min">Minimum 1 tag required</string>
+    <string name="error.tag.found">No tag found</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="no_tag_found">No</string>
+    <string name="write_a_story">Write a story</string>
+
+
 
 
 </resources>

@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
@@ -505,7 +506,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 
@@ -605,7 +606,13 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             }
         }
         if (!handled) {
-            super.startActivity(intent);
+            try {
+                super.startActivity(intent);
+            } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
+                //Toast.makeText(getContext(),"Please goto playstore and download request Url app ",Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 

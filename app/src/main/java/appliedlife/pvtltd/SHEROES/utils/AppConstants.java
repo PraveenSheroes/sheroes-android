@@ -93,6 +93,7 @@ public class AppConstants {
     public static final String HOME_FRAGMENT = "home";
     public static final String ON_BOARDING_COMMUNITIES = "on_boarding_communities";
     public static final String MENTOR_LISTING = "mentor_listing";
+    public static final String BELL_NOTIFICATION_LISTING = "bell_notification_listing";
     public static final String PROFILE_COMMUNITY_LISTING = "profile_community_listing";
     public static final String PROFILE_CHAMPION = "profile_champion";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
@@ -121,6 +122,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
     public static final int REQUEST_CODE_FOR_INVITE_FRIEND = 1601;
     public static final int REQUEST_CODE_FOR_SELF_PROFILE_DETAIL = 1502;
+    public static final int REQUEST_CODE_FOR_USER_PROFILE_DETAIL = 1600;
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE = 1506;
@@ -212,6 +214,7 @@ public class AppConstants {
     public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
+    public static final String GUIDELINE_SHARE_PREF = "GUIDELINE";
     public static final String NEW_TAG_FOR_RIGHT_SWIP = "NEW_TAG";
     public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";
     public static final String PICTURE_SHARE_PREF = "PICTURE_SHARE_PREF";
@@ -277,6 +280,10 @@ public class AppConstants {
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String USER_URL_COM = "https://sheroes.com/users";
     public static final String CHALLENGE_URL = "https://sheroes.in/feed";
+    public static final String WRITE_STORY_URL = "https://sheroes.in/write_story";
+    public static final String WRITE_STORY_URL_COM = "https://sheroes.com/write_story";
+    public static final String MY_STORY_URL = "https://sheroes.in/my_story";
+    public static final String MY_STORY_URL_COM = "https://sheroes.com/my_story";
     public static final String CHALLENGE_NEW_URL = "https://sheroes.in/sheroes-challenge";
     public static final String CHALLENGE_NEW_URL_COM = "https://sheroes.com/sheroes-challenge";
     public static final String MY_CHALLENGE_NEW_URL = "https://sheroes.in/my-challenges";
@@ -423,5 +430,7 @@ public class AppConstants {
     public static final int USER_MENTION_HEADER = 1;
     public static final int USER_MENTION_NO_RESULT_FOUND = 0;
 
+
+    public static final String ARTICLE_GUIDELINE = "<h3> Hello! Here are 7 things to keep in mind when writing a story on SHEROES </h3><p>1. We welcome you to share your experiences and expertise with the SHEROES community. If you think you can help the women on the SHEROES platform in some way or have a really interesting story to tell, do write a story on SHEROES.</p><p>2. Word length for a story should be between 200 words to 1000 words.</p><p>3. By submitting a story you grant us a license to re-use, edit, and modify the content, if need be.</p><p>4. Please ensure the content you submit is your original work.</p><p>5. Promotional or Spammy content in any form will not be accepted.</p><p>6. Email us at care@sheroes.in in case you have any further queries regarding submitting a story.</p><p>7. All the best!</p>";
 
 }

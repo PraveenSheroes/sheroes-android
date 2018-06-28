@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -29,8 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
-import appliedlife.pvtltd.SHEROES.models.entities.post.UserProfile;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -38,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,92 +65,54 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     //region IArticlePresenter methods
 
-    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded) {
+    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded, final ArticleSolrObj articleSolrObj) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo)
+        getFeedFromModel(feedRequestPojo, articleSolrObj)
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
-                //getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                //getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), null);
-
-            }
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                //getMvpView().stopProgressBar();
-                // LogUtils.info(TAG, "********response***********");
-                FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
-                ArticleSolrObj articleObj = new ArticleSolrObj();
-                if(feedDetail instanceof ArticleSolrObj){
-                    articleObj = (ArticleSolrObj) feedDetail;
-                    if(CommonUtil.isNotEmpty(getMvpView().getStreamType())){
-                        articleObj.setStreamType(getMvpView().getStreamType());
-                        feedDetail.setStreamType(getMvpView().getStreamType());
-                    }
-                }
-                getMvpView().setFeedDetail(feedDetail);
-                if (null != feedResponsePojo) {
-                    Article article = new Article();
-                    article.createdAt = articleObj.getPostedDate();
-                    article.title = articleObj.getNameOrTitle();
-                    article.body = articleObj.getListDescription();
-                    article.remote_id = (int) articleObj.getEntityOrParticipantId();
-                    article.featureImage = articleObj.getImageUrl();
-                    article.commentsCount = articleObj.getNoOfComments();
-                    article.totalViews = articleObj.getNoOfViews();
-                    article.likesCount = articleObj.getNoOfLikes();
-                    article.deepLink = articleObj.getDeepLinkUrl();
-                    article.author = new UserProfile();
-                    article.author.name = articleObj.getAuthorName();
-                    article.author.shortDescription = articleObj.getAuthorShortDescription();
-                    article.author.thumbUrl = articleObj.getAuthorImageUrl();
-                    article.isBookmarked = articleObj.isBookmarked();
-                    article.streamType = articleObj.getStreamType();
-                    article.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
-                    article.thumbImageWidth = articleObj.getThumbImageWidth();
-                    article.thumbImageHeight = articleObj.getThumbImageHeight();
-                    article.featureImageHeight = articleObj.getHighresImageHeight();
-                    article.featureImageWidth = articleObj.getHighresImageWidth();
-                    article.readingTime = articleObj.getCharCount();
-                    article.entityId = articleObj.getEntityOrParticipantId();
-                    if (!CommonUtil.isEmpty(feedDetail.getLastComments())) {
-                        article.comments = new ArrayList<>(feedDetail.getLastComments());
-                    }
-                    getMvpView().showArticle(article, isImageLoaded);
-                    getMvpView().showComments(article.comments, article.commentsCount);
-                }
-            }
-        });
-
-    }
-
-    public void fetchArticle(Article article) {
-        getMvpView().showArticle(article, false);
-    }
-
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        //  LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
+                    public void onComplete() {
+
                     }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), null);
+
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
+                        ArticleSolrObj articleObj = new ArticleSolrObj();
+                        if (feedDetail instanceof ArticleSolrObj) {
+                            articleObj = (ArticleSolrObj) feedDetail;
+                            articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
+                            articleObj.likesCount = articleObj.getNoOfLikes();
+                            if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                                articleObj.setStreamType(getMvpView().getStreamType());
+                                feedDetail.setStreamType(getMvpView().getStreamType());
+                            }
+                            getMvpView().setFeedDetail(feedDetail);
+                            getMvpView().showArticle(articleObj, isImageLoaded);
+                            getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
+                        }
+                    }
+                });
+
+    }
+
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, ArticleSolrObj articleSolrObj) {
+        if (articleSolrObj.isUserStory()) {
+            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo);
+        } else {
+            return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo);
+        }
     }
 
     public void onDeleteCommentClicked(final int position, CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -158,39 +120,36 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
-        //  getMvpView().startProgressBar();
         editCommentListFromModel(commentReactionRequestPojo)
                 .compose(this.<CommentAddDelete>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommentAddDelete>() {
-            @Override
-            public void onComplete() {
-                // getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                //   getMvpView().stopProgressBar();
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
+                    }
 
-            @Override
-            public void onNext(CommentAddDelete commentResponsePojo) {
-                //  getMvpView().stopProgressBar();
-                if (null != commentResponsePojo) {
-                    getMvpView().removeAndNotifyComment(position);
-                    getMvpView().showMessage(R.string.comment_deleted);
-                    HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
-                                    .postType(AnalyticsEventType.ARTICLE.toString())
-                                    .body(commentResponsePojo.getCommentReactionModel().getComment())
-                                    .streamType(getMvpView().getStreamType())
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_DELETED,ArticleActivity.SOURCE_SCREEN, properties);
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CommentAddDelete commentResponsePojo) {
+
+                        if (null != commentResponsePojo) {
+                            getMvpView().removeAndNotifyComment(position);
+                            getMvpView().showMessage(R.string.comment_deleted);
+                            HashMap<String, Object> properties =
+                                    new EventProperty.Builder()
+                                            .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
+                                            .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                            .postType(AnalyticsEventType.ARTICLE.toString())
+                                            .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                            .streamType(getMvpView().getStreamType())
+                                            .build();
+                            AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
+                        }
+                    }
+                });
 
     }
 
@@ -203,39 +162,39 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
         editCommentListFromModel(commentReactionRequestPojo)
                 .compose(this.<CommentAddDelete>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommentAddDelete>() {
-            @Override
-            public void onComplete() {
-                //getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        //getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                // getMvpView().stopProgressBar();
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        // getMvpView().stopProgressBar();
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_EDIT_DELETE), ERROR_COMMENT_REACTION);
+                    }
 
-            @Override
-            public void onNext(CommentAddDelete commentResponsePojo) {
-                //  getMvpView().stopProgressBar();
-                if (null != commentResponsePojo) {
-                    Comment comment = commentResponsePojo.getCommentReactionModel();
-                    getMvpView().setAndNotify(position, comment);
-                    HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
-                                    .postType(AnalyticsEventType.ARTICLE.toString())
-                                    .body(commentResponsePojo.getCommentReactionModel().getComment())
-                                    .streamType(getMvpView().getStreamType())
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_EDITED, ArticleActivity.SCREEN_LABEL, properties);
-                }
-            }
-        });
+                    @Override
+                    public void onNext(CommentAddDelete commentResponsePojo) {
+                        //  getMvpView().stopProgressBar();
+                        if (null != commentResponsePojo) {
+                            Comment comment = commentResponsePojo.getCommentReactionModel();
+                            getMvpView().setAndNotify(position, comment);
+                            HashMap<String, Object> properties =
+                                    new EventProperty.Builder()
+                                            .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
+                                            .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                            .postType(AnalyticsEventType.ARTICLE.toString())
+                                            .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                            .streamType(getMvpView().getStreamType())
+                                            .build();
+                            AnalyticsManager.trackEvent(Event.REPLY_EDITED, ArticleActivity.SCREEN_LABEL, properties);
+                        }
+                    }
+                });
 
     }
 
-    public void postComment(final CommentReactionRequestPojo commentReactionRequestPojo) {
+    public void postComment(final CommentReactionRequestPojo commentReactionRequestPojo, final ArticleSolrObj articleSolrObj) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
@@ -244,37 +203,42 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
         addCommentListFromModel(commentReactionRequestPojo)
                 .compose(this.<CommentAddDelete>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommentAddDelete>() {
-            @Override
-            public void onComplete() {
-                // getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_COMMENT), ERROR_COMMENT_REACTION);
-            }
-
-            @Override
-            public void onNext(CommentAddDelete commentResponsePojo) {
-                //getMvpView().stopProgressBar();
-                if (null != commentResponsePojo) {
-                    if (commentResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                        Comment comment = new Comment();
-                        comment = commentResponsePojo.getCommentReactionModel();
-                        getMvpView().addAndNotifyComment(comment);
-                        HashMap<String, Object> properties =
-                                new EventProperty.Builder()
-                                        .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                        .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
-                                        .postType(AnalyticsEventType.ARTICLE.toString())
-                                        .body(commentResponsePojo.getCommentReactionModel().getComment())
-                                        .streamType(getMvpView().getStreamType())
-                                        .build();
-                        AnalyticsManager.trackEvent(Event.REPLY_CREATED, ArticleActivity.SCREEN_LABEL, properties);
+                    @Override
+                    public void onComplete() {
+                        // getMvpView().stopProgressBar();
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_UNABLE_TO_COMMENT), ERROR_COMMENT_REACTION);
+                    }
+
+                    @Override
+                    public void onNext(CommentAddDelete commentResponsePojo) {
+                        //getMvpView().stopProgressBar();
+                        if (null != commentResponsePojo) {
+                            if (commentResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                                Comment comment = commentResponsePojo.getCommentReactionModel();
+                                getMvpView().addAndNotifyComment(comment);
+                                if (articleSolrObj.isUserStory()) {
+                                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, HerStoryOrArticleSubmissionActivity.SCREEN_LABEL);
+                                    AnalyticsManager.trackEvent(Event.STORY_REPLY_CREATED, HerStoryOrArticleSubmissionActivity.SCREEN_LABEL, properties);
+                                } else {
+                                    HashMap<String, Object> properties =
+                                            new EventProperty.Builder()
+                                                    .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
+                                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                                    .postType(AnalyticsEventType.ARTICLE.toString())
+                                                    .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                                    .streamType(getMvpView().getStreamType())
+                                                    .build();
+                                    AnalyticsManager.trackEvent(Event.REPLY_CREATED, ArticleActivity.SCREEN_LABEL, properties);
+
+                                }
+                            }
+                        }
+                    }
+                });
 
     }
 
@@ -302,179 +266,179 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void prepareBookmark(Article article) {
-        if (!article.isBookmarked) {
-            article.isBookmarked = true;
-            getMvpView().invalidateBookmark(article);
-            postBookMark(article, AppUtils.getInstance().bookMarkRequestBuilder(article.remote_id), false);
+    public void prepareBookmark(ArticleSolrObj articleSolrObj) {
+        if (!articleSolrObj.isBookmarked()) {
+            articleSolrObj.setBookmarked(true);
+            getMvpView().invalidateBookmark(articleSolrObj);
+            postBookMark(articleSolrObj, AppUtils.getInstance().bookMarkRequestBuilder(articleSolrObj.getEntityOrParticipantId()), false);
         } else {
-            article.isBookmarked = false;
-            getMvpView().invalidateBookmark(article);
-            postBookMark(article, AppUtils.getInstance().bookMarkRequestBuilder(article.remote_id), true);
+            articleSolrObj.setBookmarked(false);
+            getMvpView().invalidateBookmark(articleSolrObj);
+            postBookMark(articleSolrObj, AppUtils.getInstance().bookMarkRequestBuilder(articleSolrObj.getEntityOrParticipantId()), true);
         }
     }
 
-    public void prepareLike(Article article) {
-        if (!article.isLiked) {
-            article.isLiked = true;
-            article.likesCount++;
-            getMvpView().invalidateLike(article);
-            postLike(article, AppUtils.getInstance().likeRequestBuilder(article.remote_id, AppConstants.HEART_REACTION_CONSTANT), false);
+    public void prepareLike(ArticleSolrObj articleSolrObj) {
+        if (!articleSolrObj.isLiked) {
+            articleSolrObj.isLiked = true;
+            articleSolrObj.likesCount++;
+            getMvpView().invalidateLike(articleSolrObj);
+            postLike(articleSolrObj, AppUtils.getInstance().likeRequestBuilder(articleSolrObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), false);
         } else {
-            article.isLiked = false;
-            article.likesCount--;
-            getMvpView().invalidateLike(article);
-            postLike(article, AppUtils.getInstance().likeRequestBuilder(article.remote_id, AppConstants.HEART_REACTION_CONSTANT), true);
+            articleSolrObj.isLiked = false;
+            articleSolrObj.likesCount--;
+            getMvpView().invalidateLike(articleSolrObj);
+            postLike(articleSolrObj, AppUtils.getInstance().likeRequestBuilder(articleSolrObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), true);
         }
     }
 
-    private void postBookMark(final Article article, BookmarkRequestPojo bookmarkRequestPojo, final boolean isBookMarked) {
+    private void postBookMark(final ArticleSolrObj articleSolrObj, BookmarkRequestPojo bookmarkRequestPojo, final boolean isBookMarked) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
-            article.isBookmarked = isBookMarked;
-            getMvpView().invalidateBookmark(article);
+            articleSolrObj.setBookmarked(isBookMarked);
+            getMvpView().invalidateBookmark(articleSolrObj);
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
         }
         addBookmarkFromModel(bookmarkRequestPojo, isBookMarked)
                 .compose(this.<BookmarkResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
-            @Override
-            public void onComplete() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                article.isBookmarked = isBookMarked;
-                getMvpView().invalidateBookmark(article);
-                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
-
-            }
-
-            @Override
-            public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
-                if (bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    getMvpView().invalidateBookmark(article);
-                    if(article.isBookmarked){
-                        getMvpView().trackEvent(Event.POST_BOOKMARKED);
-                    }else {
-                        getMvpView().trackEvent(Event.POST_UNBOOKMARKED);
+                    @Override
+                    public void onComplete() {
                     }
-                } else {
-                    article.isBookmarked = isBookMarked;
-                    getMvpView().invalidateBookmark(article);
-                }
-                getMvpView().invalidateBookmark(article);
-            }
-        });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        articleSolrObj.setBookmarked(isBookMarked);
+                        getMvpView().invalidateBookmark(articleSolrObj);
+                        getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+
+                    }
+
+                    @Override
+                    public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                        if (bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().invalidateBookmark(articleSolrObj);
+                            if (articleSolrObj.isBookmarked()) {
+                                getMvpView().trackEvent(Event.POST_BOOKMARKED);
+                            } else {
+                                getMvpView().trackEvent(Event.POST_UNBOOKMARKED);
+                            }
+                        } else {
+                            articleSolrObj.setBookmarked(isBookMarked);
+                            getMvpView().invalidateBookmark(articleSolrObj);
+                        }
+                        getMvpView().invalidateBookmark(articleSolrObj);
+                    }
+                });
 
     }
 
-    private void postLike(final Article article, LikeRequestPojo likeRequestPojo, final boolean isLiked) {
+    private void postLike(final ArticleSolrObj articleSolrObj, LikeRequestPojo likeRequestPojo, final boolean isLiked) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             if (!isLiked) {
-                article.isLiked = false;
-                article.likesCount--;
+                articleSolrObj.isLiked = false;
+                articleSolrObj.likesCount--;
             } else {
-                article.isLiked = true;
-                article.likesCount++;
+                articleSolrObj.isLiked = true;
+                articleSolrObj.likesCount++;
             }
-            getMvpView().invalidateLike(article);
+            getMvpView().invalidateLike(articleSolrObj);
             return;
         }
         //  getMvpView().startProgressBar();
         addLikeFromModel(likeRequestPojo, isLiked)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                //  getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                //   getMvpView().stopProgressBar();
-                if (!isLiked) {
-                    article.isLiked = false;
-                    article.likesCount--;
-                } else {
-                    article.isLiked = true;
-                    article.likesCount++;
-                }
-                getMvpView().invalidateLike(article);
-                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
-
-            }
-
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    getMvpView().invalidateLike(article);
-                    if (article.isLiked) {
-                        getMvpView().trackEvent(Event.POST_LIKED);
-                    } else {
-                        getMvpView().trackEvent(Event.POST_UNLIKED);
+                    @Override
+                    public void onComplete() {
+                        //  getMvpView().stopProgressBar();
                     }
-                } else {
-                    if (!isLiked) {
-                        article.isLiked = false;
-                        article.likesCount--;
-                    } else {
-                        article.isLiked = true;
-                        article.likesCount++;
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        //   getMvpView().stopProgressBar();
+                        if (!isLiked) {
+                            articleSolrObj.isLiked = false;
+                            articleSolrObj.likesCount--;
+                        } else {
+                            articleSolrObj.isLiked = true;
+                            articleSolrObj.likesCount++;
+                        }
+                        getMvpView().invalidateLike(articleSolrObj);
+                        getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+
                     }
-                    getMvpView().invalidateLike(article);
-                }
-            }
-        });
+
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().invalidateLike(articleSolrObj);
+                            if (articleSolrObj.isLiked) {
+                                getMvpView().trackEvent(Event.POST_LIKED);
+                            } else {
+                                getMvpView().trackEvent(Event.POST_UNLIKED);
+                            }
+                        } else {
+                            if (!isLiked) {
+                                articleSolrObj.isLiked = false;
+                                articleSolrObj.likesCount--;
+                            } else {
+                                articleSolrObj.isLiked = true;
+                                articleSolrObj.likesCount++;
+                            }
+                            getMvpView().invalidateLike(articleSolrObj);
+                        }
+                    }
+                });
 
     }
 
-    public int getBookmarkDrawable(Article article) {
-        if (article != null) {
-            return article.getBookmarkActivityDrawable();
+    public int getBookmarkDrawable(ArticleSolrObj articleSolrObj) {
+        if (articleSolrObj != null) {
+            return articleSolrObj.getBookmarkActivityDrawable();
         } else {
             return R.drawable.vector_unbookmarked;
         }
     }
 
-    public int getLikeDrawable(Article article) {
-        if (article != null) {
-            return article.getLikeActivityDrawable();
+    public int getLikeDrawable(ArticleSolrObj articleSolrObj) {
+        if (articleSolrObj != null) {
+            return articleSolrObj.getLikeActivityDrawable();
         } else {
             return R.drawable.vector_unlike;
         }
     }
 
-    public boolean getMenuItemsVisibility(Article article) {
-        return article != null;
+    public boolean getMenuItemsVisibility(ArticleSolrObj articleSolrObj) {
+        return articleSolrObj != null;
     }
 
     public void fetchAllComments(CommentReactionRequestPojo commentRequestBuilder) {
         getAllCommentListFromModel(commentRequestBuilder)
                 .compose(this.<CommentReactionResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<CommentReactionResponsePojo>() {
-            @Override
-            public void onComplete() {
-                // getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        // getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                //   getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(),ERROR_COMMENT_REACTION);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        //   getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_COMMENT_REACTION);
+                    }
 
-            @Override
-            public void onNext(CommentReactionResponsePojo commentResponsePojo) {
-                //     getMvpView().stopProgressBar();
-                getMvpView().showComments(new ArrayList<Comment>(commentResponsePojo.getCommentList()), commentResponsePojo.getCommentList().size());
-            }
-        });
+                    @Override
+                    public void onNext(CommentReactionResponsePojo commentResponsePojo) {
+                        //     getMvpView().stopProgressBar();
+                        getMvpView().showComments(new ArrayList<Comment>(commentResponsePojo.getCommentList()), commentResponsePojo.getCommentList().size());
+                    }
+                });
 
     }
 
@@ -578,37 +542,37 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 .compose(this.<SpamResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<BaseResponse>() {
 
-            @Override
-            public void onComplete() {
-            }
+                    @Override
+                    public void onComplete() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
+                    }
 
-            @Override
-            public void onNext(BaseResponse approveSpamPostResponse) {
-                getMvpView().stopProgressBar();
-                if (null != approveSpamPostResponse) {
-                    getMvpView().removeAndNotifyComment(position);
-                    getMvpView().showMessage(R.string.comment_deleted);
+                    @Override
+                    public void onNext(BaseResponse approveSpamPostResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != approveSpamPostResponse) {
+                            getMvpView().removeAndNotifyComment(position);
+                            getMvpView().showMessage(R.string.comment_deleted);
 
-                    //Event for the article comment deleted by admin
-                    HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(comment.getId()))
-                                    .postId(Long.toString(comment.getEntityId()))
-                                    .postType(AnalyticsEventType.ARTICLE.toString())
-                                    .body(comment.getComment())
-                                    .streamType(getMvpView().getStreamType())
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.REPLY_DELETED,ArticleActivity.SOURCE_SCREEN, properties);
-                }
-            }
-        });
+                            //Event for the article comment deleted by admin
+                            HashMap<String, Object> properties =
+                                    new EventProperty.Builder()
+                                            .id(Long.toString(comment.getId()))
+                                            .postId(Long.toString(comment.getEntityId()))
+                                            .postType(AnalyticsEventType.ARTICLE.toString())
+                                            .body(comment.getComment())
+                                            .streamType(getMvpView().getStreamType())
+                                            .build();
+                            AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
+                        }
+                    }
+                });
 
     }
 

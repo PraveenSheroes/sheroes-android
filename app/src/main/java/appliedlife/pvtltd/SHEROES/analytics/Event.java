@@ -20,9 +20,27 @@ public enum Event {
     //endregion
 
     //region post related events
+    ARTICLE_LIKED(AnalyticsEventType.ARTICLE, "Liked"),
+    ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
+    STORY_SHARED(AnalyticsEventType.STORY, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     POST_SHARED(AnalyticsEventType.POST, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
+    ARTICLE_SHARED(AnalyticsEventType.ARTICLE, "Shared"){
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
             return analyticsProvider == AnalyticsProvider.FACEBOOK ||
@@ -216,7 +234,14 @@ public enum Event {
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
     FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, ""),
-    USER_TAGGED(AnalyticsEventType.USER, "Tagged");
+    USER_TAGGED(AnalyticsEventType.USER, "Tagged"),
+    STORY_DRAFT_SAVED(AnalyticsEventType.STORY, "Draft Saved"),
+    STORY_CREATED(AnalyticsEventType.STORY, "Created"),
+    STORY_BOOKMARKED(AnalyticsEventType.STORY, "Bookmarked"),
+    STORY_UN_BOOKMARKED(AnalyticsEventType.STORY, "UnBookmarked"),
+    STORY_LIKED(AnalyticsEventType.STORY, "Liked"),
+    STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
+    STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created");
     //endregion
 
     public final AnalyticsEventType type;

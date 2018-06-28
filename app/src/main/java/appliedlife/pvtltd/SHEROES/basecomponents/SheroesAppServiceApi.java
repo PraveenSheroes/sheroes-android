@@ -9,6 +9,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollow
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
@@ -34,6 +37,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
@@ -94,7 +99,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequ
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HTTP;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -329,4 +336,21 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/deactivate_or_reactivate")
     Observable<BaseResponse> deactivateUser(@Body DeactivateUserRequest deactivateUserRequest);
 
+    @POST("participation/image/add")
+    Observable<UpLoadImageResponse> uploadImage(@Body UploadImageRequest uploadImageRequest);
+
+    @POST("participation/article/story/add")
+    Observable<ArticleSubmissionResponse> submitArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
+
+    @POST("participation/article/story/edit")
+    Observable<ArticleSubmissionResponse> editArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
+
+    @POST("participation/article/story/delete")
+    Observable<ArticleSubmissionResponse> deleteArticle(@Body ArticleSubmissionRequest articleSubmissionRequest);
+
+    @GET("entity/master/get_tags")
+    Observable<ArticleTagResponse> getArticleTags();
+
+    @POST("participant/feed/stream?setOrderKey=UserStoryStream")
+    Observable<FeedResponsePojo> getUserStory(@Query("id") String article_id, @Body FeedRequestPojo feedRequestPojo);
 }

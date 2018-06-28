@@ -102,7 +102,7 @@ public enum HolderMapping {
             return new GetAllDataBoardingSearchHolder(view, viewInterface);
         }
     },
-    BELL_NOTIFICATION(R.layout.bel_notification_card) {
+    BELL_NOTIFICATION(R.layout.bell_notification_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new BellNotificationHolder(view, viewInterface);
