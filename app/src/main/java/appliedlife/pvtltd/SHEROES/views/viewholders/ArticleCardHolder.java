@@ -6,6 +6,10 @@ import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,7 +25,6 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences2.Preference;
 
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -92,10 +96,11 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     String mViewMoreDescription;
     @Inject
     Preference<LoginResponse> mUserPreference;
-    private boolean isWhatappShareOption=false;
+    private boolean isWhatappShareOption = false;
 
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+
     public ArticleCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -106,47 +111,43 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareOption)) {
                 if (shareOption.equalsIgnoreCase("true")) {
-                    isWhatappShareOption=true;
+                    isWhatappShareOption = true;
                 }
             }
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
-        this.dataItem = (ArticleSolrObj)item;
+        this.dataItem = (ArticleSolrObj) item;
         dataItem.setItemPosition(position);
         mContext = context;
         tvArticleBookmark.setEnabled(true);
-        if(!dataItem.isLongPress()) {
+        if (!dataItem.isLongPress()) {
             imageOperations(context);
         }
         textRelatedOperation();
         onBookMarkClick();
     }
+
     private void onBookMarkClick() {
-        if(dataItem.isBookmarked())
-        {
-            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_active, 0);
-        }
-        else
-        {
-            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0,R.drawable.ic_bookmark_in_active, 0);
+        if (dataItem.isBookmarked()) {
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+        } else {
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
         }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void textRelatedOperation()
-    {
-        if(isWhatappShareOption) {
+    private void textRelatedOperation() {
+        if (isWhatappShareOption) {
             tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null);
-        }
-        else
-        {
+        } else {
             tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null);
         }
 
-        mViewMoreDescription = dataItem.getShortDescription();
+        mViewMoreDescription = dataItem.getDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvArticleDescriptionText.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -155,26 +156,44 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
             ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4, AppConstants.VIEW_MORE_TEXT, true);
-        }
-        else
-        {
+        } else {
             tvArticleDescriptionText.setVisibility(View.GONE);
         }
-        if(dataItem.isTrending())
-        {
+        if (dataItem.isTrending()) {
             tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING));
-        }
-        else
-        {
+        } else {
             tvArticleTrendingLabel.setText(AppConstants.EMPTY_STRING);
         }
 
         if (StringUtil.isNotNullOrEmptyString(dataItem.getAuthorName())) {
             tvArticleCardTitle.setText(dataItem.getAuthorName());
+            String articleObjAuthorName = dataItem.getAuthorName();
+            SpannableString SpanString = new SpannableString(articleObjAuthorName);
+            ClickableSpan authorTitle = new ClickableSpan() {
+                @Override
+                public void onClick(View textView) {
+                    UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
+                    userPostSolrObj.setCreatedBy(dataItem.getIdOfEntityOrParticipant());
+                    userPostSolrObj.setItemPosition(dataItem.getItemPosition());
+
+                    viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+                }
+
+                @Override
+                public void updateDrawState(final TextPaint textPaint) {
+                    textPaint.setUnderlineText(false);
+                }
+            };
+
+            SpanString.setSpan(authorTitle, 0, articleObjAuthorName.length(), 0);
+            tvArticleCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
+            tvArticleCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
+            tvArticleCardTitle.setSelected(true);
+
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
-            StringBuilder stringBuilder=new StringBuilder();
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
             if (dataItem.getCharCount() > 0) {
                 stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_MIN_READ));
@@ -188,9 +207,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             List<String> tags = dataItem.getTags();
             String mergeTags = AppConstants.EMPTY_STRING;
             for (String tag : tags) {
-                mergeTags += tag + AppConstants.COMMA+AppConstants.SPACE;
+                mergeTags += tag + AppConstants.COMMA + AppConstants.SPACE;
             }
-            mergeTags=mergeTags.substring(0,mergeTags.length()-2);
+            mergeTags = mergeTags.substring(0, mergeTags.length() - 2);
             String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + RIGHT_HTML_TAG;
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.COLON + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
@@ -199,6 +218,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             }
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void imageOperations(Context context) {
         liArticleCoverImage.removeAllViews();
@@ -217,7 +237,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
             final TextView tvFeedArticleTotalViews = backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = backgroundImage.findViewById(R.id.rl_gradiant);
-            final ProgressBar pbImage= backgroundImage.findViewById(R.id.pb_article_image);
+            final ProgressBar pbImage = backgroundImage.findViewById(R.id.pb_article_image);
             StringBuilder stringBuilder = new StringBuilder();
             if (dataItem.getNoOfViews() > 1) {
                 stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
@@ -249,7 +269,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                     .priority(Priority.HIGH);
 
             int imageWidth = CommonUtil.getWindowWidth(context);
-            int imageHeight = CommonUtil.getWindowWidth(context)/2;
+            int imageHeight = CommonUtil.getWindowWidth(context) / 2;
             String thumborFeatureImageUrl = CommonUtil.getThumborUri(backgrndImageUrl, imageWidth, imageHeight);
             Glide.with(mContext)
                     .asBitmap()
@@ -278,31 +298,38 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.iv_article_circle_icon)
     public void articleAuthorImageClick() {
-        viewInterface.handleOnClick(dataItem, ivArticleCircleIcon);
-     //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+
+        UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
+        userPostSolrObj.setCreatedBy(dataItem.getIdOfEntityOrParticipant());
+        userPostSolrObj.setItemPosition(dataItem.getItemPosition());
+
+        viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL);
+
+        //  viewInterface.handleOnClick(dataItem, ivArticleCircleIcon);
+        //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_article_card_title)
     public void articleAuthorNameClick() {
         viewInterface.handleOnClick(dataItem, tvArticleCardTitle);
-     //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+        //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_article_share)
     public void tvMenuClick() {
-        if(viewInterface instanceof FeedItemCallback){
+        if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onPostShared(dataItem);
-        }else {
+        } else {
             viewInterface.handleOnClick(dataItem, tvArticleShare);
         }
-        ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick({R.id.li_article_cover_image, R.id.li_article_decription, R.id.tv_article_description_text})
     public void articleCoverImageClick() {
-        if(viewInterface instanceof FeedItemCallback){
+        if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onArticleItemClicked(dataItem);
-        }else {
+        } else {
             viewInterface.handleOnClick(dataItem, liArticleCoverImage);
         }
     }
@@ -312,19 +339,19 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         dataItem.setLongPress(true);
         dataItem.setItemPosition(getAdapterPosition());
         if (dataItem.isBookmarked()) {
-            if(viewInterface instanceof FeedItemCallback){
+            if (viewInterface instanceof FeedItemCallback) {
                 ((FeedItemCallback) viewInterface).onArticleUnBookMarkClicked(dataItem);
-            }else {
+            } else {
                 viewInterface.handleOnClick(dataItem, tvArticleBookmark);
             }
-            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
+            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
-            if(viewInterface instanceof FeedItemCallback){
+            if (viewInterface instanceof FeedItemCallback) {
                 ((FeedItemCallback) viewInterface).onArticleBookMarkClicked(dataItem);
-            }else {
+            } else {
                 viewInterface.handleOnClick(dataItem, tvArticleBookmark);
             }
-            ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
+            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (!dataItem.isBookmarked()) {
             dataItem.setBookmarked(true);
@@ -333,7 +360,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         }
         onBookMarkClick();
     }
-
 
 
     @Override
