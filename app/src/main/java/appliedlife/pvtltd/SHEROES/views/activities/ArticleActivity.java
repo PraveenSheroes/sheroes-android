@@ -811,15 +811,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public void onSubmitClicked() {
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
-            mArticlePresenter.postComment(postCommentRequestBuilder(mArticleSolrObj.getEntityOrParticipantId(), commentBody, false, hasMentions, mentionSpanList));
+            mArticlePresenter.postComment(postCommentRequestBuilder(mArticleSolrObj.getEntityOrParticipantId(), commentBody, false, hasMentions, mentionSpanList),mArticleSolrObj);
         }
         mCommentBody.setText("");
         mCommentBody.clearFocus();
         CommonUtil.hideKeyboard(ArticleActivity.this);
-        if (mArticleSolrObj.isUserStory()) {
-            HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, getScreenName());
-            AnalyticsManager.trackEvent(Event.STORY_REPLY_CREATED, getScreenName(), properties);
-        }
     }
 
     @OnClick(R.id.cancel)

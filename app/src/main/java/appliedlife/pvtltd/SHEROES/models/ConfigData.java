@@ -64,6 +64,6 @@ public class ConfigData {
     public String articleGuideline;
 
     @SerializedName("herStoryHintText")
-    public String mHerStoryHintText = "Your story";
+    public String mHerStoryHintText = "Begin your story here...";
 
 }

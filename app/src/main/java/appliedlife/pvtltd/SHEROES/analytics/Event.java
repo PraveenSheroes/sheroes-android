@@ -20,9 +20,27 @@ public enum Event {
     //endregion
 
     //region post related events
+    ARTICLE_LIKED(AnalyticsEventType.ARTICLE, "Liked"),
+    ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
+    STORY_SHARED(AnalyticsEventType.STORY, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     POST_SHARED(AnalyticsEventType.POST, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
+    ARTICLE_SHARED(AnalyticsEventType.ARTICLE, "Shared"){
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
             return analyticsProvider == AnalyticsProvider.FACEBOOK ||

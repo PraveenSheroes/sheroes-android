@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -36,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,13 +65,13 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     //region IArticlePresenter methods
 
-    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded,final ArticleSolrObj articleSolrObj) {
+    public void fetchArticle(final FeedRequestPojo feedRequestPojo, final boolean isImageLoaded, final ArticleSolrObj articleSolrObj) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo,articleSolrObj)
+        getFeedFromModel(feedRequestPojo, articleSolrObj)
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
                     @Override
@@ -105,11 +107,10 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     }
 
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo,ArticleSolrObj articleSolrObj) {
-        if(articleSolrObj.isUserStory())
-        {
-            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()),feedRequestPojo);
-        }else {
+    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, ArticleSolrObj articleSolrObj) {
+        if (articleSolrObj.isUserStory()) {
+            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo);
+        } else {
             return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo);
         }
     }
@@ -196,7 +197,7 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
     }
 
-    public void postComment(final CommentReactionRequestPojo commentReactionRequestPojo) {
+    public void postComment(final CommentReactionRequestPojo commentReactionRequestPojo, final ArticleSolrObj articleSolrObj) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
@@ -220,18 +221,23 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                         //getMvpView().stopProgressBar();
                         if (null != commentResponsePojo) {
                             if (commentResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                                Comment comment = new Comment();
-                                comment = commentResponsePojo.getCommentReactionModel();
+                                Comment comment = commentResponsePojo.getCommentReactionModel();
                                 getMvpView().addAndNotifyComment(comment);
-                                HashMap<String, Object> properties =
-                                        new EventProperty.Builder()
-                                                .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                                .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
-                                                .postType(AnalyticsEventType.ARTICLE.toString())
-                                                .body(commentResponsePojo.getCommentReactionModel().getComment())
-                                                .streamType(getMvpView().getStreamType())
-                                                .build();
-                                AnalyticsManager.trackEvent(Event.REPLY_CREATED, ArticleActivity.SCREEN_LABEL, properties);
+                                if (articleSolrObj.isUserStory()) {
+                                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, HerStoryOrArticleSubmissionActivity.SCREEN_LABEL);
+                                    AnalyticsManager.trackEvent(Event.STORY_REPLY_CREATED, HerStoryOrArticleSubmissionActivity.SCREEN_LABEL, properties);
+                                } else {
+                                    HashMap<String, Object> properties =
+                                            new EventProperty.Builder()
+                                                    .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
+                                                    .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
+                                                    .postType(AnalyticsEventType.ARTICLE.toString())
+                                                    .body(commentResponsePojo.getCommentReactionModel().getComment())
+                                                    .streamType(getMvpView().getStreamType())
+                                                    .build();
+                                    AnalyticsManager.trackEvent(Event.REPLY_CREATED, ArticleActivity.SCREEN_LABEL, properties);
+
+                                }
                             }
                         }
                     }

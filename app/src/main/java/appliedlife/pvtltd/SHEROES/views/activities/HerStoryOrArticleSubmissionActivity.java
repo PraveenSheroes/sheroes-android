@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,10 +21,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -82,7 +77,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
@@ -206,7 +200,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
-        // AnalyticsManager.trackScreenView(SCREEN_LABEL);
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
 
@@ -218,6 +211,14 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         }
         ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor, -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, true);
         finish();
+        if (isDraft) {
+            HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, SCREEN_LABEL);
+            AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
+        } else {
+            AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);
+            HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, SCREEN_LABEL);
+            AnalyticsManager.trackEvent(Event.STORY_CREATED, SCREEN_LABEL_SUBMIT_STORY, properties);
+        }
     }
 
     @Override
@@ -477,9 +478,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message = "Title" ;
+        String message = "Story Title";
         mEditorFragment.setTitlePlaceholder(message);
-        String hintText = "Your story...";
+        String hintText = "Begin your story here...";
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
         }
@@ -574,13 +575,10 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             Crashlytics.getInstance().core.logException(e);
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.makeArticleDraftRequest(mIdOfEntityOrParticipantArticle,articleTitle, articleBody, mCoverImageUrl), true);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.makeArticleDraftRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, mCoverImageUrl), true);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(null,articleTitle, articleBody, mCoverImageUrl), true);
-           }
-
-        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
-        AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(null, articleTitle, articleBody, mCoverImageUrl), true);
+        }
     }
 
     private void addEditArticle() {
@@ -601,10 +599,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         } else {
             mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
         }
-        AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY);
-        AnalyticsManager.trackScreenView(SCREEN_LABEL_SUBMIT_STORY, SCREEN_LABEL, null);
-        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, SCREEN_LABEL);
-        AnalyticsManager.trackEvent(Event.STORY_CREATED, SCREEN_LABEL_SUBMIT_STORY, properties);
     }
 
     private void onBackPress() {
@@ -674,6 +668,10 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
                 showMessage(R.string.error_tag_min);
                 tvTagLable.setVisibility(View.VISIBLE);
             }
+            return false;
+        }
+        if (isDraft && !CommonUtil.isNotEmpty(articleTitle) && CommonUtil.isNotEmpty(articleBody)) {
+            showMessage(R.string.error_draft_title);
             return false;
         }
         return true;

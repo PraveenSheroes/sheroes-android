@@ -646,9 +646,10 @@
 
     <string name="dialog.title_draft">Save as draft?</string>
     <string name="dialog.body_draft">Do you want to save the changes as draft?</string>
-    <string name="error.draft">Error saving in draft. Article is empty</string>
-    <string name="error.title">Article title cannot be blank</string>
-    <string name="error.body">Article content cannot be blank</string>
+    <string name="error.draft">Error saving in draft. Story is empty</string>
+    <string name="error.title">Story title cannot be blank</string>
+    <string name="error.body">Story content cannot be blank</string>
+    <string name="error.draft.title">Story title can\'t be blank</string>
     <string name="error.tag.max">Tags can\'t be more than 5</string>
     <string name="error.tag.min">Minimum 1 tag required</string>
     <string name="error.tag.found">No tag found</string>

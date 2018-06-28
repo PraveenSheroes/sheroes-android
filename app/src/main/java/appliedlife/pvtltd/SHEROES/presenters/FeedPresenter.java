@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -35,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequ
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -880,8 +882,20 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                     getMvpView().invalidateItem(feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, FeedFragment.SCREEN_LABEL);
                 getMvpView().invalidateItem(feedDetail);
+                if (feedDetail instanceof ArticleSolrObj) {
+                    ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+                    if (articleSolrObj.isUserStory()) {
+                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
+                        AnalyticsManager.trackEvent(Event.STORY_LIKED, FeedFragment.SCREEN_LABEL, properties);
+                    } else {
+                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
+                        AnalyticsManager.trackEvent(Event.ARTICLE_LIKED, FeedFragment.SCREEN_LABEL, properties);
+                    }
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, FeedFragment.SCREEN_LABEL);
+                }
+
             }
         });
 
@@ -935,8 +949,19 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                     //  mBaseResponseList.set(0, userPostSolrObj);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, FeedFragment.SCREEN_LABEL);
                 getMvpView().invalidateItem(feedDetail);
+                if (feedDetail instanceof ArticleSolrObj) {
+                    ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+                    if (articleSolrObj.isUserStory()) {
+                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
+                        AnalyticsManager.trackEvent(Event.STORY_UN_LIKED, FeedFragment.SCREEN_LABEL, properties);
+                    } else {
+                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
+                        AnalyticsManager.trackEvent(Event.ARTICLE_UNLIKED, FeedFragment.SCREEN_LABEL, properties);
+                    }
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, FeedFragment.SCREEN_LABEL);
+                }
             }
         });
 

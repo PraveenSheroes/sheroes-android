@@ -7,6 +7,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -37,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -255,8 +260,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags));// or for older api
             }
-        }else
-        {
+        } else {
             tvFeedArticleTag.setVisibility(View.GONE);
         }
         // TODO : ujjwal
@@ -302,82 +306,115 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
+
+
         if (StringUtil.isNotNullOrEmptyString(articleObj.getAuthorName())) {
             tvFeedArticleCardTitle.setText(articleObj.getAuthorName());
         }
-        if (StringUtil.isNotNullOrEmptyString(articleObj.getCreatedDate())) {
-            long createdDate = mDateUtil.getTimeInMillis(articleObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
-            if (articleObj.getCharCount() > 0) {
-                stringBuilder.append(AppConstants.DOT).append(articleObj.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
-            }
-            tvFeedArticleTitleLabel.setText(stringBuilder);
-        }
-        if (StringUtil.isNotNullOrEmptyString(articleObj.getNameOrTitle())) {
-            tvFeedArticleHeader.setText(articleObj.getNameOrTitle());
-        }
-        if (articleObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && articleObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
-            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
-            rlFeedArticleNoReactionComment.setVisibility(View.GONE);
-            lineForNoImage.setVisibility(View.GONE);
-        }
-        tvFeedArticleReaction1.setVisibility(View.VISIBLE);
-        switch (articleObj.getNoOfLikes()) {
-            case AppConstants.NO_REACTION_CONSTANT:
-                if (articleObj.getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
-                    rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
-                    lineForNoImage.setVisibility(View.GONE);
-                    tvFeedArticleTotalReactions.setVisibility(View.GONE);
-                    tvFeedArticleReaction1.setVisibility(View.INVISIBLE);
 
-                    tvFeedArticleTotalReplies.setVisibility(View.VISIBLE);
-                } else {
-                    rlFeedArticleNoReactionComment.setVisibility(View.GONE);
-                    lineForNoImage.setVisibility(View.GONE);
+        if (StringUtil.isNotNullOrEmptyString(articleObj.getAuthorName())) {
+            String articleObjAuthorName = articleObj.getAuthorName();
+            if (StringUtil.isNotNullOrEmptyString(articleObjAuthorName)) {
+
+                SpannableString SpanString = new SpannableString(articleObjAuthorName);
+
+                ClickableSpan authorTitle = new ClickableSpan() {
+                    @Override
+                    public void onClick(View textView) {
+                        if (viewInterface instanceof FeedItemCallback) {
+                            UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
+                            userPostSolrObj.setCreatedBy(articleObj.getCreatedBy());
+                            userPostSolrObj.setItemPosition(articleObj.getItemPosition());
+                            ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                        }
+                    }
+
+                    @Override
+                    public void updateDrawState(final TextPaint textPaint) {
+                        textPaint.setUnderlineText(false);
+                    }
+                };
+
+                SpanString.setSpan(authorTitle, 0, articleObjAuthorName.length(), 0);
+                tvFeedArticleCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
+                tvFeedArticleCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
+                tvFeedArticleCardTitle.setSelected(true);
+            }
+
+            if (StringUtil.isNotNullOrEmptyString(articleObj.getCreatedDate())) {
+                long createdDate = mDateUtil.getTimeInMillis(articleObj.getCreatedDate(), AppConstants.DATE_FORMAT);
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+                if (articleObj.getCharCount() > 0) {
+                    stringBuilder.append(AppConstants.DOT).append(articleObj.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
                 }
-                userLike();
-                break;
-            case AppConstants.ONE_CONSTANT:
-                tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
-                rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
-                lineForNoImage.setVisibility(View.VISIBLE);
-                userLike();
-                break;
-            default:
-                tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
-                rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
-                lineForNoImage.setVisibility(View.VISIBLE);
-                userLike();
-        }
-        String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, articleObj.getNoOfLikes());
-        tvFeedArticleTotalReactions.setText(String.valueOf(articleObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
-        switch (articleObj.getNoOfComments()) {
-            case AppConstants.NO_REACTION_CONSTANT:
-                if (articleObj.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
+                tvFeedArticleTitleLabel.setText(stringBuilder);
+            }
+            if (StringUtil.isNotNullOrEmptyString(articleObj.getNameOrTitle())) {
+                tvFeedArticleHeader.setText(articleObj.getNameOrTitle());
+            }
+            if (articleObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && articleObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                rlFeedArticleNoReactionComment.setVisibility(View.GONE);
+                lineForNoImage.setVisibility(View.GONE);
+            }
+            tvFeedArticleReaction1.setVisibility(View.VISIBLE);
+            switch (articleObj.getNoOfLikes()) {
+                case AppConstants.NO_REACTION_CONSTANT:
+                    if (articleObj.getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
+                        rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
+                        lineForNoImage.setVisibility(View.GONE);
+                        tvFeedArticleTotalReactions.setVisibility(View.GONE);
+                        tvFeedArticleReaction1.setVisibility(View.INVISIBLE);
+
+                        tvFeedArticleTotalReplies.setVisibility(View.VISIBLE);
+                    } else {
+                        rlFeedArticleNoReactionComment.setVisibility(View.GONE);
+                        lineForNoImage.setVisibility(View.GONE);
+                    }
+                    userLike();
+                    break;
+                case AppConstants.ONE_CONSTANT:
+                    tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
                     rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
                     lineForNoImage.setVisibility(View.VISIBLE);
+                    userLike();
+                    break;
+                default:
                     tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
-                    tvFeedArticleReaction1.setVisibility(View.VISIBLE);
-                    tvFeedArticleTotalReplies.setVisibility(View.INVISIBLE);
-                } else {
-                    rlFeedArticleNoReactionComment.setVisibility(View.GONE);
-                    lineForNoImage.setVisibility(View.GONE);
-                }
-                userComments();
-                break;
-            case AppConstants.ONE_CONSTANT:
-                tvFeedArticleTotalReplies.setVisibility(View.VISIBLE);
-                liFeedArticleUserComments.setVisibility(View.VISIBLE);
-                userComments();
-                break;
-            default:
-                tvFeedArticleTotalReplies.setVisibility(View.VISIBLE);
-                liFeedArticleUserComments.setVisibility(View.VISIBLE);
-                userComments();
+                    rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
+                    lineForNoImage.setVisibility(View.VISIBLE);
+                    userLike();
+            }
+            String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, articleObj.getNoOfLikes());
+            tvFeedArticleTotalReactions.setText(String.valueOf(articleObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
+            switch (articleObj.getNoOfComments()) {
+                case AppConstants.NO_REACTION_CONSTANT:
+                    if (articleObj.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
+                        rlFeedArticleNoReactionComment.setVisibility(View.VISIBLE);
+                        lineForNoImage.setVisibility(View.VISIBLE);
+                        tvFeedArticleTotalReactions.setVisibility(View.VISIBLE);
+                        tvFeedArticleReaction1.setVisibility(View.VISIBLE);
+                        tvFeedArticleTotalReplies.setVisibility(View.INVISIBLE);
+                    } else {
+                        rlFeedArticleNoReactionComment.setVisibility(View.GONE);
+                        lineForNoImage.setVisibility(View.GONE);
+                    }
+                    userComments();
+                    break;
+                case AppConstants.ONE_CONSTANT:
+                    tvFeedArticleTotalReplies.setVisibility(View.VISIBLE);
+                    liFeedArticleUserComments.setVisibility(View.VISIBLE);
+                    userComments();
+                    break;
+                default:
+                    tvFeedArticleTotalReplies.setVisibility(View.VISIBLE);
+                    liFeedArticleUserComments.setVisibility(View.VISIBLE);
+                    userComments();
+            }
+            String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfComments, articleObj.getNoOfComments());
+            tvFeedArticleTotalReplies.setText(String.valueOf(articleObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
         }
-        String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfComments, articleObj.getNoOfComments());
-        tvFeedArticleTotalReplies.setText(String.valueOf(articleObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
     }
 
     private void userLike() {
