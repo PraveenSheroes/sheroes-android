@@ -133,6 +133,9 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.ripple_feed_article_comment)
     RippleView rippleView;
 
+    @Bind(R.id.tv_feed_article_tag)
+    TextView tvFeedArticleTag;
+
     @Bind(R.id.tv_feed_article_draft)
     TextView tvFeedArticleDraft;
 
@@ -179,7 +182,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = first + AppConstants.SPACE + last;
             }
         }
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareOption = "";
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareOption)) {
@@ -190,6 +193,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         }
     }
 
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         articleObj = new ArticleSolrObj();
@@ -237,7 +241,24 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             lineForNoImage.setVisibility(View.VISIBLE);
             rlFeedArticleJoinConversation.setVisibility(View.VISIBLE);
         }
-
+        if (StringUtil.isNotEmptyCollection(articleObj.getTags())) {
+            tvFeedArticleTag.setVisibility(View.VISIBLE);
+            List<String> tags = articleObj.getTags();
+            StringBuilder mergeTags = new StringBuilder(AppConstants.EMPTY_STRING);
+            for (String tag : tags) {
+                mergeTags.append(tag).append(AppConstants.COMMA).append(AppConstants.SPACE);
+            }
+            mergeTags = new StringBuilder(mergeTags.substring(0, mergeTags.length() - 2));
+            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + AppConstants.COLON + RIGHT_HTML_TAG;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+            } else {
+                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags));// or for older api
+            }
+        }else
+        {
+            tvFeedArticleTag.setVisibility(View.GONE);
+        }
         // TODO : ujjwal
        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
             tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
