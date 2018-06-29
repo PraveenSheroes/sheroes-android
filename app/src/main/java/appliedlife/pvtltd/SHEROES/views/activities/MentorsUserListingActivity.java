@@ -139,7 +139,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 refreshFeedMethod();
             }
         });
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_CHAMPION_LISTING));
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
     }
 
     private void refreshFeedMethod() {
@@ -349,7 +349,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 

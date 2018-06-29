@@ -8,8 +8,10 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -22,6 +24,11 @@ import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 import com.moengage.pushbase.push.MoEngageNotificationUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -62,6 +69,7 @@ public class PushNotificationService extends GcmListenerService {
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         String message = "";
+        String imageUrl = "";
         if (null == data) return;
         String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
         String action = data.getString("action");
@@ -86,6 +94,9 @@ public class PushNotificationService extends GcmListenerService {
 
         if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
             message = data.getString(AppConstants.MESSAGE);
+        }
+        if (StringUtil.isNotNullOrEmptyString(data.getString("left_image_icon"))) {
+            imageUrl = data.getString("left_image_icon");
         }
         if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
             from = data.getString("title");
@@ -115,7 +126,7 @@ public class PushNotificationService extends GcmListenerService {
         } else {
             if (StringUtil.isNotNullOrEmptyString(url)) {
                 if (StringUtil.isNotNullOrEmptyString(url)) {
-                    sendNotification(from, message, url);
+                    sendNotification(from, message, url, imageUrl);
                 }
 
                 String entityId = "";
@@ -145,68 +156,112 @@ public class PushNotificationService extends GcmListenerService {
     }
 
 
-    private void sendNotification(String title, String body, String urltext) {
+    private void sendNotification(String title, String body, String urlText, String imageUrl) {
         Context context = getBaseContext();
-
-        Uri url = Uri.parse(urltext);
-
-        mCount++;
-
-        NotificationManager notificationManager = (NotificationManager) PushNotificationService.this
-                .getSystemService(Activity.NOTIFICATION_SERVICE);
-
-        String relatedChannelId = getString(R.string.sheroesRelatedChannelID);
-        CharSequence channelName = getString(R.string.sheroesRelatedChannelName);
-        int importance = NotificationManagerCompat.IMPORTANCE_HIGH;
-        NotificationChannel notificationChannel = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            notificationChannel = new NotificationChannel(relatedChannelId, channelName, importance);
-            notificationChannel.enableLights(true);
-            notificationChannel.setShowBadge(true);
-            notificationChannel.setImportance(importance);
-            notificationChannel.enableVibration(true);
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
-
-        notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        notificationIntent.setData(url);
-        notificationIntent.putExtra(AppConstants.IS_MOENGAGE, false);
-        notificationIntent.putExtra(BaseActivity.SOURCE_SCREEN, "From Push Notification");
-        notificationIntent.putExtra(AppConstants.TITLE, title);
-        notificationIntent.putExtra(AppConstants.BODY, body);
-
-        notificationIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, 1);
-        notificationIntent.putExtra(AppConstants.IS_FROM_PUSH, true);
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
-        stackBuilder.addNextIntentWithParentStack(notificationIntent);
-        notificationIntent.setAction(AppConstants.SHEROES + mCount);
-        Random random = new Random();
-        int randomId = random.nextInt(9999 - 1000) + 1000;
-        PendingIntent pIntent = stackBuilder.getPendingIntent(randomId, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
-        Notification notification = new NotificationCompat.Builder(PushNotificationService.this, relatedChannelId)
-                .setContentTitle(title)
-                .setTicker(AppConstants.TICKER)
-                .setWhen(System.currentTimeMillis() + AppConstants.NOT_TIME)
-                .setContentText(AppConstants.CHECK_OUT)
-                .setContentText(body)
-                .setContentIntent(pIntent)
-                .setDefaults(
-                        NotificationCompat.DEFAULT_SOUND
-                                | NotificationCompat.DEFAULT_VIBRATE)
-                .setContentIntent(pIntent).setAutoCancel(true)
-                .setColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text))
-                .setLargeIcon(BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_combined_shape))
-                .setChannelId(relatedChannelId)
-                .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
-                .setSmallIcon(getNotificationIcon()).build();
-        notificationManager.notify(Integer.parseInt(randomId + ""), notification);
+        new NotificationImageLoader(context, title, body, urlText, imageUrl).execute();
     }
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_combined_shape : R.drawable.ic_combined_shape;
+        return useWhiteIcon ? R.drawable.ic_push_notification_icon : R.drawable.ic_push_notification_icon;
     }
 
+    private class NotificationImageLoader extends AsyncTask<String, Void, Bitmap> {
+
+        Context ctx;
+        String title;
+        String body;
+        String urlText;
+        String imageUrl;
+
+        public NotificationImageLoader(Context context, String title, String body, String urlText, String imageUrl) {
+            super();
+            this.ctx = context;
+            this.title = title;
+            this.body = body;
+            this.urlText = urlText;
+            this.imageUrl = imageUrl;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... params) {
+
+            InputStream in;
+            try {
+                URL url = new URL(this.imageUrl);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setDoInput(true);
+                connection.connect();
+                in = connection.getInputStream();
+                return BitmapFactory.decodeStream(in);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            super.onPostExecute(result);
+            try {
+
+                Uri url = Uri.parse(urlText);
+                mCount++;
+
+                NotificationManager notificationManager = (NotificationManager) PushNotificationService.this.getSystemService(Activity.NOTIFICATION_SERVICE);
+
+                String relatedChannelId = getString(R.string.sheroesRelatedChannelID);
+                CharSequence channelName = getString(R.string.sheroesRelatedChannelName);
+                int importance = NotificationManagerCompat.IMPORTANCE_HIGH;
+                NotificationChannel notificationChannel = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    notificationChannel = new NotificationChannel(relatedChannelId, channelName, importance);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setShowBadge(true);
+                    notificationChannel.setImportance(importance);
+                    notificationChannel.enableVibration(true);
+                    notificationManager.createNotificationChannel(notificationChannel);
+                }
+
+                notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                        Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                notificationIntent.setData(url);
+                notificationIntent.putExtra(AppConstants.IS_MOENGAGE, false);
+                notificationIntent.putExtra(BaseActivity.SOURCE_SCREEN, "From Push Notification");
+                notificationIntent.putExtra(AppConstants.TITLE, title);
+                notificationIntent.putExtra(AppConstants.BODY, body);
+
+                notificationIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+                notificationIntent.putExtra(AppConstants.IS_FROM_PUSH, true);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(PushNotificationService.this);
+                stackBuilder.addNextIntentWithParentStack(notificationIntent);
+                notificationIntent.setAction(AppConstants.SHEROES + mCount);
+                Random random = new Random();
+                int randomId = random.nextInt(9999 - 1000) + 1000;
+                PendingIntent pIntent = stackBuilder.getPendingIntent(randomId, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+                Notification notification = new NotificationCompat.Builder(PushNotificationService.this, relatedChannelId)
+                        .setContentTitle(title)
+                        .setTicker(AppConstants.TICKER)
+                        .setWhen(System.currentTimeMillis() + AppConstants.NOT_TIME)
+                        .setContentText(body)
+                        .setContentIntent(pIntent)
+                        .setDefaults(NotificationCompat.DEFAULT_SOUND | NotificationCompat.DEFAULT_VIBRATE)
+                        .setContentIntent(pIntent).setAutoCancel(true)
+                        .setColor(ContextCompat.getColor(getApplication(), R.color.footer_icon_text))
+                        .setLargeIcon(result)
+                        .setChannelId(relatedChannelId)
+                        .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
+                        .setSmallIcon(getNotificationIcon()).build();
+                notificationManager.notify(Integer.parseInt(randomId + ""), notification);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

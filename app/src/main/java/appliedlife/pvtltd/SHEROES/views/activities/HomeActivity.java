@@ -103,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotification;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -146,7 +147,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -167,6 +167,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
@@ -460,10 +461,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItemName, true);
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
+        WebViewActivity.navigateTo(this, getScreenName(), null, url, menuItemName);
         DrawerViewHolder.selectedOptionName = menuItemName;
         setAppBarElevation();
     }
@@ -490,7 +488,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             createCommunityPostOnClick(communityPost);
 
         }
+    }
 
+    private void writeAStory() {
+        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.invite)
@@ -519,20 +520,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
         } else if (baseResponse instanceof BellNotificationResponse) {
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
-            if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getScreenName())) {
-                if (StringUtil.isNotNullOrEmptyString(bellNotificationResponse.getSolrIgnoreDeepLinkUrl())) {
-                    String urlStr = bellNotificationResponse.getSolrIgnoreDeepLinkUrl();
-                    challengeIdHandle(urlStr);
-                } else if (bellNotificationResponse.getScreenName().contains(AppConstants.COMMUNITY_URL)) {
-                    mTitleText.setText("");
-                    communityOnClick();
-                } else {
-                    mTitleText.setText("");
-                    homeOnClick();
-                }
-            }
-            if (null != bellNotificationDialogFragment) {
-                bellNotificationDialogFragment.dismiss();
+            BellNotification bellNotification = bellNotificationResponse.getNotification();
+            if (StringUtil.isNotNullOrEmptyString(bellNotification.getDeepLinkUrl())) {
+                challengeIdHandle(bellNotification.getDeepLinkUrl());
+            } else {
+                mTitleText.setText("");
+                homeOnClick();
             }
         }
     }
@@ -572,7 +565,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             AppUtils.hideKeyboard(mTvUserName, TAG);
-            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES),getScreenName(),null);
+            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), getScreenName(), null);
         }
     }
 
@@ -960,7 +953,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
     }
 
@@ -1083,7 +1076,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
+        if (mValue == REQUEST_CODE_FOR_USER_PROFILE_DETAIL) {
+            ArticleSolrObj articleSolrObj = (ArticleSolrObj) baseResponse;
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
+            }
+            championDetailActivity(articleSolrObj.getCreatedBy(), 1, isMentor, ArticlesFragment.SCREEN_LABEL); //self profile
+        } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
@@ -1242,6 +1241,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (intent != null && intent.getExtras() != null) {
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
+                    writeAStory();
+                }
+
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
                     openArticleFragment(setCategoryIds(), false);
                 }

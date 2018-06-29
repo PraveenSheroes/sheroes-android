@@ -1,16 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
-import android.support.annotation.StringRes;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Article;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 
 /**
@@ -18,13 +15,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
  */
 public interface IArticleView extends BaseMvpView {
 
-    void showArticle(Article article, boolean imageLoaded);
+    void showArticle(ArticleSolrObj article, boolean imageLoaded);
 
-    void invalidateLike(Article mArticle);
+    void invalidateLike(ArticleSolrObj mArticle);
 
-    void invalidateBookmark(Article mArticle);
+    void invalidateBookmark(ArticleSolrObj mArticle);
 
-    void showComments(ArrayList<Comment> comments, int commentsCount);
+    void showComments(List<Comment> comments, int commentsCount);
 
     void addAndNotifyComment(Comment comment);
 

@@ -1,6 +1,6 @@
 def versionMajor = 6
-def versionMinor = 7
-def versionPatch = 5
+def versionMinor = 8
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -77,7 +77,7 @@ android {
             buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
           //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
-           //  buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
            // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
            // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
            
@@ -135,6 +135,9 @@ repositories {
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.google.com'}
+    flatDir {
+        dirs 'libs'
+    }
 }
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -170,7 +173,7 @@ dependencies {
     compile 'com.android.support:customtabs:27.0.2'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     compile 'io.branch.sdk.android:library:2.8.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support.constraint:constraint-layout:1.1.2'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'
     //compile 'org.jsoup:jsoup:1.7.3'
@@ -193,6 +196,9 @@ dependencies {
     compile('com.trello.rxlifecycle2:rxlifecycle:2.0.1')
     compile('com.trello.rxlifecycle2:rxlifecycle-android:2.0.1')
     compile 'com.github.vihtarb:tooltip:0.1.9'
+    compile(name: 'WordPress-Editor-Android-develop-0.2-g60e13dd-1461-release', ext: 'aar')
+    compile('org.wordpress:utils:1.17.1')
+    compile "com.splitwise:tokenautocomplete:2.0.8@aar"
     apt 'org.parceler:parceler:1.1.6'
 }
 apply plugin: 'com.google.gms.google-services'

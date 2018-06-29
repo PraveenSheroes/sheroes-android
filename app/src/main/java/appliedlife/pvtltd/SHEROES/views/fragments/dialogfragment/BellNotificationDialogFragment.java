@@ -15,20 +15,27 @@ import android.widget.TextView;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,31 +66,53 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
-    private long startedTime;
+    private SwipPullRefreshList mPullRefreshList;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private int mPageNo;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View v = inflater.inflate(R.layout.community_bell_notification_list, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, v);
+        mHomePresenter.attachView(this);
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        startedTime=System.currentTimeMillis();
         tvTitle.setText(getString(R.string.ID_NOTIFICATION));
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        bellNotificationListPagination();
+        moEngageUtills.entityMoEngageNotification(getActivity(), mMoEHelper, payloadBuilder, 0);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
+        return v;
+    }
+
+    private void bellNotificationListPagination() {
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.BELL_NOTIFICATION_LISTING, AppConstants.NO_REACTION_CONSTANT);
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
         mLinearLayoutmanager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutmanager);
         mRecyclerView.setAdapter(mAdapter);
-        mHomePresenter.attachView(this);
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLinearLayoutmanager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        startProgressBar();
         mHomePresenter.getBellNotificationFromPresenter(mAppUtils.getBellNotificationRequest());
-        long timeSpent=System.currentTimeMillis()-startedTime;
-        moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_NOTIFICATION_SCREEN));
-        AnalyticsManager.trackScreenView(SCREEN_LABEL);
-        return v;
-        }
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -95,43 +124,64 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
     }
 
     @Override
-    public void getNotificationListSuccess(BelNotificationListResponse bellNotificationResponse) {
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
         switch (bellNotificationResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (null != bellNotificationResponse.getBellNotificationResponses()) {
-                    mAdapter.setSheroesGenericListData(bellNotificationResponse.getBellNotificationResponses());
+                List<BellNotificationResponse> bellNotificationResponseList = bellNotificationResponse.getBellNotificationResponses();
+                if (StringUtil.isNotEmptyCollection(bellNotificationResponseList)) {
+                    stopProgressBar();
+                    mPageNo = mFragmentListRefreshData.getPageNo();
+                    mFragmentListRefreshData.setPageNo(++mPageNo);
+                    mPullRefreshList.allListData(bellNotificationResponseList);
+                    List<FeedDetail> data = null;
+                    FeedDetail feedProgressBar = new FeedDetail();
+                    feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+                    data = mPullRefreshList.getFeedResponses();
+                    int position = data.size() - bellNotificationResponseList.size();
+                    if (position > 0) {
+                        data.remove(position - 1);
+                    }
+                    data.add(feedProgressBar);
+                    mAdapter.setSheroesGenericListData(data);
+                    mAdapter.notifyDataSetChanged();
+                } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mAdapter != null) {
+                    List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+                    data.remove(data.size() - 1);
                     mAdapter.notifyDataSetChanged();
                 }
                 break;
             case AppConstants.FAILED:
-                ((HomeActivity)getActivity()).onShowErrorDialog(bellNotificationResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),ERROR_FEED_RESPONSE);
+                ((HomeActivity) getActivity()).onShowErrorDialog(bellNotificationResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_FEED_RESPONSE);
                 break;
             default:
-                ((HomeActivity)getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR),ERROR_FEED_RESPONSE);
+                ((HomeActivity) getActivity()).onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_FEED_RESPONSE);
 
         }
     }
+
     @OnClick(R.id.iv_back_setting)
-    public void backClick()
-    {
+    public void backClick() {
         dismiss();
     }
+
     @Override
     public void startProgressBar() {
         mProgressBar.setVisibility(View.VISIBLE);
         mProgressBar.bringToFront();
     }
+
     @Override
     public void stopProgressBar() {
         mProgressBar.setVisibility(View.GONE);
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-        long timeSpent=System.currentTimeMillis()-startedTime;
-        moEngageUtills.entityMoEngageNotification(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        moEngageUtills.entityMoEngageNotification(getActivity(), mMoEHelper, payloadBuilder, 0);
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {

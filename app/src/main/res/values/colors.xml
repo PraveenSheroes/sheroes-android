@@ -15,6 +15,7 @@
     <color name="secondary_text_disabled_dark">#36FFFFFF</color>
     <color name="secondary_text_default_dark">#B3FFFFFF</color>
     <color name="white">#ffffff</color>
+    <color name="transparent_darker">#d9000000</color>
     <color name="grey8">#fafafa</color>
     <color name="challenge_post">#ff4531</color>
     <color name="carousel_card_bg">#F9F9F9</color>
@@ -70,6 +71,8 @@
     <color name="posted_in">#90949c</color>
     <color name="menu_icon">#90949c</color>
     <color name="search_tab_text">#3949ab</color>
+    <color name="fb_Color">#3B5998</color>
+
 
     <color name="search_tab_unselected_text">#bec5cc</color>
     <color name="search_shortcut_icon_color">#f8f8f8</color>

@@ -62,6 +62,9 @@ public enum EventProperty {
     OPENED_FROM_EXTERNAL_APP("Opened from external app"),
     SHARED_FROM_EXTERNAL_APP("Shared From External App"),
     PROFILE_STRENGTH("Profile Strength"),
+    IS_STORY("Is a Story"),
+    AUTHOR_ID("Author Id"),
+    AUTHOR_NAME("Author Name"),
     IS_ACTIVE("Badge State");
 
     private final String string;
@@ -121,6 +124,16 @@ public enum EventProperty {
 
         public Builder title(String value){
             put(TITLE, value);
+            return this;
+        }
+
+        public Builder authorId(String value){
+            put(AUTHOR_ID, value);
+            return this;
+        }
+
+        public Builder authorName(String value){
+            put(AUTHOR_NAME, value);
             return this;
         }
 

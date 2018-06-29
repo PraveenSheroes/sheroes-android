@@ -255,7 +255,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/submit"
                 android:layout_marginTop="15dp"
-                android:visibility="gone"></android.support.v7.widget.RecyclerView>
+                android:visibility="gone"/>
 
             <View
                 android:id="@+id/border"

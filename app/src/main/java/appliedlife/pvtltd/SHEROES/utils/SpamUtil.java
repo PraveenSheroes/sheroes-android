@@ -28,9 +28,9 @@ public class SpamUtil {
     /**
      * Add the Deactivation options to radio group
      *
-     * @param context     context
+     * @param context             context
      * @param deactivationReasons deactivation reasons
-     * @param radioGroup  radio Group
+     * @param radioGroup          radio Group
      */
     public static void addDeactivationReasonsToRadioGroup(Context context, List<DeactivationReason> deactivationReasons, RadioGroup radioGroup) {
         if (deactivationReasons != null) {
@@ -101,7 +101,7 @@ public class SpamUtil {
         SpamPostRequest spamPostRequest = new SpamPostRequest();
         spamPostRequest.setModelId(comment.getCommentsId());
         spamPostRequest.setSpamReportedBy(currentUserId);
-        if(StringUtil.isNotNullOrEmptyString(comment.getCommunityId())) {
+        if (StringUtil.isNotNullOrEmptyString(comment.getCommunityId())) {
             spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
         }
         spamPostRequest.setModelType(SpamContentType.COMMENT.name());
@@ -125,9 +125,10 @@ public class SpamUtil {
         if (isComment) {
             if (userPostSolrObj.getLastComments().size() > 0) {
                 Comment comment = userPostSolrObj.getLastComments().get(0);
-
                 spamPostRequest.setModelId(comment.getCommentsId());
-                spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
+                if (StringUtil.isNotNullOrEmptyString(comment.getCommunityId())) {
+                    spamPostRequest.setCommunityId(Long.valueOf(comment.getCommunityId()));
+                }
                 spamPostRequest.setModelType(SpamContentType.COMMENT.name());
                 spamPostRequest.setSpamReportedOn(comment.getParticipantUserId());
             }
