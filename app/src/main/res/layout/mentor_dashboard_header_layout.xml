@@ -26,7 +26,7 @@
             android:layout_marginTop="@dimen/dp_size_16"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_gravity="end|right"
+            android:layout_gravity="end|bottom"
             android:src="@drawable/ic_edit_pic"
             android:visibility="gone" />
 

@@ -544,11 +544,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (isOwnProfile) {
             verifiedIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.GONE);
             editIcon.setVisibility(View.VISIBLE);
         } else {
             editIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.GONE);
         }
 
         updateProfileInfo();

@@ -11,13 +11,9 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
@@ -40,9 +36,6 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
 
     @Inject
     Preference<Configuration> mConfiguration;
-
-    private String mSourceScreenName ;
-    private Long mCommunityId;
 
     //region Fragment LifeCycle Methods
     @NonNull
@@ -74,20 +67,12 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
             contentText.setText(howToBeSuperSheroesContent);
         }
 
-        if(getArguments()!=null) {
-            if(getArguments().getString(AppConstants.SOURCE_NAME)!=null)
-            mSourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
-
-            getArguments().getLong(AppConstants.COMMUNITY_ID);
-        }
-
-        if(mSourceScreenName!=null && mCommunityId!=null) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .communityId(String.valueOf(mCommunityId))
-                            .build();
-            AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreenName, properties);
-        }
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity()){
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
     }
 
     @Override
@@ -100,12 +85,8 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
 
 
     //region Public Static methods
-    public static SuperSheroesCriteriaFragment showDialog(AppCompatActivity activity, Long communityId, String sourceScreen) {
+    public static SuperSheroesCriteriaFragment showDialog(AppCompatActivity activity) {
         SuperSheroesCriteriaFragment postBottomSheetFragment = new SuperSheroesCriteriaFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.SOURCE_NAME, sourceScreen);
-        bundle.putLong(AppConstants.COMMUNITY_ID, communityId);
-        postBottomSheetFragment.setArguments(bundle);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
     }

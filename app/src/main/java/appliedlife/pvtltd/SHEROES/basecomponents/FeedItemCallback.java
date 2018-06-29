@@ -111,7 +111,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj);
 
-    void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String sourceScreen);
+    void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj);
 
     void onLeaderBoardUserClick(long userId, boolean isMentor);
 }
