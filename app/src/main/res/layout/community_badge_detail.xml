@@ -7,7 +7,7 @@
     <FrameLayout
         android:id="@+id/header_container"
         android:layout_width="match_parent"
-        android:layout_height="140dp">
+        android:layout_height="@dimen/badge_header_height">
 
         <ImageView
             android:id="@+id/cross"
@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/badge_icon"
-            android:layout_width="108dp"
-            android:layout_height="108dp"
+            android:layout_width="@dimen/badge_icon_size"
+            android:layout_height="@dimen/badge_icon_size"
             android:layout_gravity="center_vertical"
             android:layout_margin="@dimen/dp_size_16" />
 
@@ -52,11 +52,10 @@
         android:layout_marginRight="@dimen/dp_size_24"
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_21"
-        android:fontFamily="sans-serif-medium"
-        android:lineSpacingExtra="8sp"
-        android:textColor="#de3c3c3c"
-        android:textSize="20sp"
-        android:textStyle="normal"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:lineSpacingExtra="@dimen/sp_size_8"
+        android:textColor="@color/leader_board_dialog_badge_title"
+        android:textSize="@dimen/sp_size_20"
         tools:text="Wealth Creators Badge" />
 
     <TextView
@@ -69,11 +68,10 @@
         android:layout_marginRight="@dimen/dp_size_24"
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_8"
-        android:fontFamily="sans-serif"
-        android:lineSpacingExtra="8sp"
-        android:textColor="#878787"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:lineSpacingExtra="@dimen/sp_size_8"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/sp_size_16"
         tools:text="Won Latest on : 21-29 Feb’18" />
 
     <TextView
@@ -87,9 +85,9 @@
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:lineSpacingExtra="8sp"
-        android:textColor="#878787"
-        android:textSize="16sp"
+        android:lineSpacingExtra="@dimen/sp_size_8"
+        android:textColor="@color/leader_board_badge_sub_text"
+        android:textSize="@dimen/sp_size_16"
         tools:text="Anupriya was a Super SHEROES in Money Matters" />
 
     <FrameLayout
@@ -104,15 +102,14 @@
             android:id="@+id/share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_horizontal"
             android:letterSpacing="0.04"
             android:padding="@dimen/dp_size_16"
             android:text="@string/ID_SHARE"
             android:textAllCaps="true"
-            android:textColor="#dc4541"
-            android:textSize="14sp"
-            android:textStyle="normal"
+            android:textColor="@color/leader_board_dialog_button"
+            android:textSize="@dimen/sp_size_14"
             android:visibility="gone" />
 
 
@@ -120,16 +117,15 @@
             android:id="@+id/ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_horizontal"
             android:letterSpacing="0.04"
             android:padding="@dimen/dp_size_16"
             android:text="@string/ID_OK"
             android:textAllCaps="true"
-            android:textColor="#dc4541"
-            android:visibility="gone"
-            android:textSize="14sp"
-            android:textStyle="normal" />
+            android:textColor="@color/leader_board_dialog_button"
+            android:textSize="@dimen/sp_size_14"
+            android:visibility="gone" />
 
     </FrameLayout>
 
@@ -139,17 +135,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/badge_desc"
         android:layout_toLeftOf="@id/button_container"
-        android:fontFamily="sans-serif-medium"
+        android:layout_toStartOf="@id/button_container"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center_horizontal"
         android:letterSpacing="0.04"
         android:paddingBottom="@dimen/dp_size_16"
         android:paddingEnd="@dimen/dp_size_8"
         android:paddingRight="@dimen/dp_size_8"
+        android:paddingStart="@dimen/dp_size_8"
         android:paddingTop="@dimen/dp_size_16"
         android:text="@string/show_leaderboard"
-        android:textColor="#dc4541"
-        android:textSize="14sp"
-        android:textStyle="normal"
+        android:textColor="@color/leader_board_dialog_button"
+        android:textSize="@dimen/sp_size_14"
         android:visibility="gone" />
 
     <TextView
@@ -158,17 +155,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/badge_desc"
         android:layout_toLeftOf="@id/button_container"
-        android:fontFamily="sans-serif-medium"
+        android:layout_toStartOf="@id/button_container"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center_horizontal"
         android:letterSpacing="0.04"
         android:paddingBottom="@dimen/dp_size_16"
+        android:paddingEnd="@dimen/dp_size_8"
         android:paddingRight="@dimen/dp_size_8"
         android:paddingTop="@dimen/dp_size_16"
         android:text="@string/view_profile"
         android:textAllCaps="true"
-        android:textColor="#dc4541"
-        android:textSize="14sp"
-        android:textStyle="normal"
+        android:textColor="@color/leader_board_dialog_button"
+        android:textSize="@dimen/sp_size_14"
         android:visibility="gone" />
 
 </RelativeLayout>

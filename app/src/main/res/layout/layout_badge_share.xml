@@ -6,19 +6,19 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="320dp"
+        android:layout_width="@dimen/dp_size_320"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
         <FrameLayout
             android:id="@+id/header_container"
             android:layout_width="match_parent"
-            android:layout_height="140dp">
+            android:layout_height="@dimen/badge_share_header_size">
 
             <ImageView
                 android:id="@+id/badge_icon"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="@dimen/badge_share_icon_size"
+                android:layout_height="@dimen/badge_share_icon_size"
                 android:layout_gravity="center_vertical"
                 android:layout_margin="@dimen/dp_size_16" />
 
@@ -45,13 +45,11 @@
             android:layout_below="@id/header_container"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_size_16"
-            android:fontFamily="sans-serif-medium"
-            android:lineSpacingExtra="8sp"
-            android:textColor="#de3c3c3c"
-            android:textSize="20sp"
-            android:textStyle="normal"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:lineSpacingExtra="@dimen/sp_size_8"
+            android:textColor="@color/leader_board_dialog_badge_title"
+            android:textSize="@dimen/sp_size_20"
             tools:text="Magic Pen Badge" />
-
 
         <TextView
             android:id="@+id/badge_des_prefix"
@@ -65,8 +63,8 @@
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
             android:text="@string/yay"
-            android:textColor="#878787"
-            android:textSize="22sp" />
+            android:textColor="@color/leader_board_badge_sub_text"
+            android:textSize="@dimen/sp_size_22" />
 
         <TextView
             android:id="@+id/badge_desc"
@@ -80,20 +78,20 @@
             android:layout_marginTop="@dimen/dp_size_8"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="2sp"
-            android:textColor="#878787"
-            android:textSize="16sp" />
+            android:textColor="@color/leader_board_badge_sub_text"
+            android:textSize="@dimen/sp_size_16" />
 
         <ImageView
             android:id="@+id/playstore_icon"
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/dp_size_100"
+            android:layout_height="@dimen/dp_size_50"
             android:layout_below="@id/badge_desc"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_playstore" />
 
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/dp_size_100"
+            android:layout_height="@dimen/dp_size_50"
             android:layout_below="@id/playstore_icon"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_sheroes_header" />

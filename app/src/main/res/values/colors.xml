@@ -144,6 +144,8 @@
     <color name="earned_badge_count">#dc4541</color>
     <color name="badge_text">#3c3c3c</color>
     <color name="leader_board_badge_sub_text">#878787</color>
+    <color name="leader_board_dialog_badge_title">#de3c3c3c</color>
+    <color name="leader_board_dialog_button">#dc4541</color>
 
 
 </resources>

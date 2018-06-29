@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Praveen on 18/09/17.
- * Leader board holder
+ * LeaderBoard view holder
  */
 
 public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj> {
@@ -68,6 +68,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
 
     private int mNumCount = 10;
     private long mLoggedInUserId = -1;
+    private float mPaddingLeftForSelectedRow = 14.0f;
     private BaseHolderInterface viewInterface;
     private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
 
@@ -131,7 +132,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 itemContainer.setBackground(ContextCompat.getDrawable(context, R.drawable.border_new_feature));
-                layoutParams.setMargins(CommonUtil.convertDpToPixel(14, context), 0, CommonUtil.convertDpToPixel(14, context), 0);
+                layoutParams.setMargins(CommonUtil.convertDpToPixel(mPaddingLeftForSelectedRow, context), 0, CommonUtil.convertDpToPixel(mPaddingLeftForSelectedRow, context), 0);
             } else {
                 itemContainer.setBackgroundColor(Color.WHITE);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.leader_board_badge_sub_text));

@@ -5,11 +5,13 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+
 /**
  * Created by ravi on 26/06/18.
  */
 
-@Parcel
+@Parcel(analyze = BadgeDetails.class)
 public class BadgeDetails {
 
     @SerializedName("id")
