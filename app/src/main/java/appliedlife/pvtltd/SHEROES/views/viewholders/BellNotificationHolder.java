@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.drawable.PictureDrawable;
 import android.os.Build;
 import android.support.constraint.ConstraintLayout;
 import android.text.Html;
@@ -10,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -18,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotification;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
+import appliedlife.pvtltd.SHEROES.svg.SvgSoftwareLayerSetter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -57,6 +60,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     int authorPicSizeFourty;
     private BellNotification mBellNotification;
     private BellNotificationResponse mBelNotificationListResponse;
+    private RequestBuilder<PictureDrawable> requestBuilder;
 
     public BellNotificationHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -96,7 +100,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getTitle())) {
                 String title = mBellNotification.getTitle();
                 if (StringUtil.isNotNullOrEmptyString(mBellNotification.getMessage())) {
-                    title = title + " " + mBellNotification.getMessage();
+                    title = title + "  " + mBellNotification.getMessage();
                 } else {
                     title = title;
                 }
@@ -117,12 +121,10 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                 String authorThumborUrl = CommonUtil.getThumborUri(mBellNotification.getLeftImageIcon(), authorPicSizeFourty, authorPicSizeFourty);
                 mIvNotificationImage.bindImage(authorThumborUrl);
             }
-
-            if (StringUtil.isNotNullOrEmptyString(mBellNotification.getIcon())) {
-                Glide.with(mContext)
-                        .load(mBellNotification.getIcon())
-                        .into(mIvBellReaction);
+            if (CommonUtil.isNotEmpty(mBellNotification.getIcon())) {
+                setImageBackgroundSvg(context, mBellNotification.getIcon());
             }
+
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getRightImageIcon())) {
                 Glide.with(context)
                         .load(mBellNotification.getRightImageIcon())
@@ -131,6 +133,13 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
             }
 
         }
+    }
+
+    private void setImageBackgroundSvg(Context context, String url) {
+        requestBuilder = Glide.with(context)
+                .as(PictureDrawable.class)
+                .listener(new SvgSoftwareLayerSetter());
+        requestBuilder.load(url).into(mIvBellReaction);
     }
 
     @Override
