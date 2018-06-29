@@ -38,6 +38,7 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
@@ -68,13 +69,10 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.DATE_FORMAT;
 public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
     //region private member variable
-    public static String SCREEN_NAME = "Badge Dialog Screen";
+    public static String SCREEN_NAME = "Badge Details Dialog Screen";
     private static final String IS_LEADER_BOARD = "IS_LEADER_BOARD";
     private static final String LEADER_BOARD_DETAILS = "LeaderBoard_Details";
     private boolean isLeaderBoard = false;
-    //endregion
-
-    //region private member variable
     private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
     private long mLoggedInUserId = -1;
     //endregion
@@ -269,6 +267,16 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                             Uri contentUri = CommonUtil.getContentUriFromBitmap(getActivity(), bitmap);
                             if (contentUri != null) {
                                 dismiss();
+
+                                //Analytics for Badge Shared
+                                HashMap<String, Object> properties =
+                                        new EventProperty.Builder()
+                                                .id(String.valueOf(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
+                                                .isBadgeActive(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
+                                                .name(mUserPreference.get().getUserSummary().getFirstName())
+                                                .build();
+                                AnalyticsManager.trackEvent(Event.BADGE_CLICKED, SCREEN_NAME, properties);
+
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType(AppConstants.SHARE_MENU_TYPE);
                                 String badgeShareMsg = new ConfigData().mBadgeShareMsg;

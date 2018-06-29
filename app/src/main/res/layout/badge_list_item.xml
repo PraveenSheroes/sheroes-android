@@ -13,8 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/dp_size_18"
         android:layout_marginStart="@dimen/dp_size_18"
-        android:layout_marginTop="@dimen/dp_size_18"
-        android:src="@drawable/ic_community_badge" />
+        android:layout_marginTop="@dimen/dp_size_18" />
 
     <TextView
         android:id="@+id/earned_badge_count"
@@ -22,14 +21,12 @@
         android:layout_height="@dimen/dp_size_36"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:textSize="14sp"
-        android:fontFamily="sans-serif"
-        android:textStyle="bold"
-        android:text="5"
+        android:textSize="@dimen/sp_size_14"
+        android:fontFamily="@string/ID_ROBOTO_BOLD"
         android:gravity="center"
         android:layout_marginEnd="@dimen/dp_size_24"
         android:layout_marginRight="@dimen/dp_size_24"
-        android:textColor="#dc4541"
+        android:textColor="@color/earned_badge_count"
         android:layout_marginTop="@dimen/dp_size_21"
         android:background="@drawable/ic_active_badge_blank" />
 
@@ -49,24 +46,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_16"
-            android:fontFamily="sans-serif"
-            android:lineSpacingExtra="8sp"
-            android:textColor="#3c3c3c"
-            android:textSize="16sp"
-            android:textStyle="normal"
-            android:text="Magic Pen Badge" />
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="@dimen/sp_size_8"
+            android:textColor="@color/badge_text"
+            android:textSize="@dimen/sp_size_16"
+            tools:text="Magic Pen Badge" />
 
         <TextView
             android:id="@+id/bade_won_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_size_3"
-            android:fontFamily="sans-serif"
-            android:lineSpacingExtra="6sp"
-            android:textColor="#878787"
-            android:textSize="14sp"
-            android:textStyle="normal"
-            android:text="Won this week" />
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="@dimen/sp_size_6"
+            android:textColor="@color/badge_text_date"
+            android:textSize="@dimen/sp_size_14"
+            tools:text="Won this week" />
 
     </LinearLayout>
 </RelativeLayout>

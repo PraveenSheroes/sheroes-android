@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -124,29 +125,21 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-            FrameLayout.LayoutParams profilePicParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-
             if (mLoggedInUserId != -1 && mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant() == mLoggedInUserId) {
                 final String backgroundColor = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor();
                 itemContainer.setBackgroundColor(Color.parseColor(backgroundColor));
-                badgeIcon.setVisibility(View.GONE);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 itemContainer.setBackground(ContextCompat.getDrawable(context, R.drawable.border_new_feature));
-                layoutParams.setMargins(CommonUtil.convertDpToPixel(16, context), 0, CommonUtil.convertDpToPixel(16, context), 0);
-                profilePicParams.setMargins(CommonUtil.convertDpToPixel(8, context), 0, 0, 0);
+                layoutParams.setMargins(CommonUtil.convertDpToPixel(R.dimen.dp_size_15, context), 0, CommonUtil.convertDpToPixel(R.dimen.dp_size_15, context), 0);
             } else {
                 itemContainer.setBackgroundColor(Color.WHITE);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
                 itemContainer.setBackground(null);
-                badgeIcon.setVisibility(View.VISIBLE);
-                profilePicParams.setMargins(CommonUtil.convertDpToPixel(28, context), 0, 0, 0);
                 layoutParams.setMargins(0, 0, 0, 0);
             }
             itemContainer.setLayoutParams(layoutParams);
-            mProfilePic.setLayoutParams(profilePicParams);
 
             if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive()) {
                 badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
@@ -169,10 +162,10 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false);
                     break;
                 case R.id.leader_board_users_container:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);
                     break;
                 case R.id.about_leaderboard:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);
                     break;
             }
         }

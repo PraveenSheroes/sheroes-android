@@ -772,17 +772,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    @OnClick(R.id.badge_details)
-    protected void openBadgeDetailsDialog() {
-        if (ProfileActivity.this.isFinishing()) return;
-       // BadgeDetailsDialogFragment.showDialog(ProfileActivity.this, BadgeDetailsDialogFragment.SCREEN_NAME, false);
-    }
-
-    @OnClick(R.id.more_badges)
-    protected void launchUserBadgesActivity() {
-        //CommunitiesBadgesActivity.navigateTo(this, loggedInUserId, false, SCREEN_LABEL, null);
-    }
-
     private void openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType profileLevelType) {
 
         if (mUserSolarObject == null) return;

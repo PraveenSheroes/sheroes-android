@@ -1163,7 +1163,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
+    public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
         if(getActivity()!=null && getActivity().isFinishing()) return;
 
         if(leaderBoardUserSolrObj!=null) {
@@ -1172,6 +1172,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
                             .isBadgeActive(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
                             .name(mUserPreference.get().getUserSummary().getFirstName())
+                            .sourceScreenId(screenName)
                             .build();
             trackEvent(Event.BADGE_CLICKED, properties);
         }
@@ -1180,16 +1181,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj) {
+    public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
         if(leaderBoardUserSolrObj!=null) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
-                            .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId()))
+                            .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
+                            .isBadgeActive(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
                             .name(mUserPreference.get().getUserSummary().getFirstName())
+                            .sourceScreenId(screenName)
                             .build();
-            trackEvent(Event.BADGE_CLICKED, properties);
+            trackEvent(Event.BADGE_SHARED, properties);
+
+            SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity());
         }
-        SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity());
     }
 
     @Override

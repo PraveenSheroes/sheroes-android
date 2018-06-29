@@ -24,8 +24,7 @@
             android:layout_width="108dp"
             android:layout_height="108dp"
             android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/dp_size_16"
-            tools:src="@drawable/ic_community_badge" />
+            android:layout_margin="@dimen/dp_size_16" />
 
         <ImageView
             android:id="@+id/user_image"

@@ -6,14 +6,14 @@
         android:color="@color/golden_color" />
 
     <corners
-        android:bottomLeftRadius="40dp"
-        android:bottomRightRadius="40dp"
-        android:topLeftRadius="40dp"
-        android:topRightRadius="40dp" />
+        android:bottomLeftRadius="@dimen/dp_size_40"
+        android:bottomRightRadius="@dimen/dp_size_40"
+        android:topLeftRadius="@dimen/dp_size_40"
+        android:topRightRadius="@dimen/dp_size_40" />
 
     <size
-        android:width="40dp"
-        android:height="40dp" />
+        android:width="@dimen/dp_size_40"
+        android:height="@dimen/dp_size_40" />
 
     <padding
         android:bottom="@dimen/dp_size_2"

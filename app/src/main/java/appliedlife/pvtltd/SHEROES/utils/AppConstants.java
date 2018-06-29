@@ -160,7 +160,7 @@ public class AppConstants {
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
-    public static final String PROFILE_FOLLOWING = "Following";
+    public static final String LEADER_BOARD_SCREEN = "Leaderboard Screen";
 
     public static final String EMAIL = "email";
 
