@@ -143,7 +143,7 @@
     <color name="leaderboard_user">#3c3c3c</color>
     <color name="earned_badge_count">#dc4541</color>
     <color name="badge_text">#3c3c3c</color>
-    <color name="badge_text_date">#878787</color>
+    <color name="leader_board_badge_sub_text">#878787</color>
 
 
 </resources>

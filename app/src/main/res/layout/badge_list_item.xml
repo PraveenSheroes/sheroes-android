@@ -59,7 +59,7 @@
             android:layout_marginTop="@dimen/dp_size_3"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/sp_size_6"
-            android:textColor="@color/badge_text_date"
+            android:textColor="@color/leader_board_badge_sub_text"
             android:textSize="@dimen/sp_size_14"
             tools:text="Won this week" />
 

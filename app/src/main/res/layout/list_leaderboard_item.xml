@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/leaderboard_user"
+                android:textColor="@color/leader_board_badge_sub_text"
                 android:textSize="14sp"
                 tools:text="158 Posts · 168 Likes · 140 Comments" />
         </LinearLayout>

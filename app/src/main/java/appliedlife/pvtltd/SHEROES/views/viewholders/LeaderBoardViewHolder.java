@@ -131,10 +131,10 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 itemContainer.setBackground(ContextCompat.getDrawable(context, R.drawable.border_new_feature));
-                layoutParams.setMargins(CommonUtil.convertDpToPixel(R.dimen.dp_size_15, context), 0, CommonUtil.convertDpToPixel(R.dimen.dp_size_15, context), 0);
+                layoutParams.setMargins(CommonUtil.convertDpToPixel(14, context), 0, CommonUtil.convertDpToPixel(14, context), 0);
             } else {
                 itemContainer.setBackgroundColor(Color.WHITE);
-                mDescription.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
+                mDescription.setTextColor(ContextCompat.getColor(context, R.color.leader_board_badge_sub_text));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
                 itemContainer.setBackground(null);
                 layoutParams.setMargins(0, 0, 0, 0);
