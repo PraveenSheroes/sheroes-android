@@ -1183,16 +1183,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
         if(leaderBoardUserSolrObj!=null) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
-                            .isBadgeActive(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
-                            .name(mUserPreference.get().getUserSummary().getFirstName())
-                            .sourceScreenId(screenName)
-                            .build();
-            trackEvent(Event.BADGE_SHARED, properties);
-
-            SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity());
+            SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
         }
     }
 

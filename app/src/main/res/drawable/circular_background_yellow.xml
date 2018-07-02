@@ -5,6 +5,8 @@
         android:width="1.5dp"
         android:color="@color/golden_color" />
 
+    <solid android:color="@color/white"/>
+
     <corners
         android:bottomLeftRadius="@dimen/dp_size_40"
         android:bottomRightRadius="@dimen/dp_size_40"

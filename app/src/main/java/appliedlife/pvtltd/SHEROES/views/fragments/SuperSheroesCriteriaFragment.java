@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -11,12 +12,19 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import org.parceler.Parcels;
+
+import java.util.HashMap;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import butterknife.Bind;
@@ -30,6 +38,9 @@ import butterknife.ButterKnife;
 public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
 
     private static final String SCREEN_LABEL = "SuperSHEROES Criteria Screen";
+    private static final String LEADER_BOARD_DETAILS = "LeaderBoard_Details";
+    private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
+    private String previousScreenName;
 
     @Bind(R.id.content)
     TextView contentText;
@@ -67,6 +78,26 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
             contentText.setText(howToBeSuperSheroesContent);
         }
 
+        if (getArguments()!=null ) {
+            if(getArguments().getParcelable(LEADER_BOARD_DETAILS) != null) {
+                Parcelable parcelable = getArguments().getParcelable(LEADER_BOARD_DETAILS);
+                mLeaderBoardUserSolrObj = Parcels.unwrap(parcelable);
+            }
+
+            if(getArguments().getString(AppConstants.SCREEN_NAME) !=null) {
+                previousScreenName = getArguments().getString(AppConstants.SCREEN_NAME);
+            }
+        }
+
+        if(mLeaderBoardUserSolrObj!=null && previousScreenName!=null) {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(String.valueOf(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
+                            .isBadgeActive(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
+                            .build();
+            AnalyticsManager.trackScreenView(SCREEN_LABEL, previousScreenName,  properties);
+        }
+
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity()){
             @Override
             public boolean canScrollVertically() {
@@ -85,8 +116,14 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
 
 
     //region Public Static methods
-    public static SuperSheroesCriteriaFragment showDialog(AppCompatActivity activity) {
+    public static SuperSheroesCriteriaFragment showDialog(AppCompatActivity activity, LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
         SuperSheroesCriteriaFragment postBottomSheetFragment = new SuperSheroesCriteriaFragment();
+
+        Bundle args = new Bundle();
+        Parcelable parcelable = Parcels.wrap(leaderBoardUserSolrObj);
+        args.putParcelable(LEADER_BOARD_DETAILS, parcelable);
+        args.putString(AppConstants.SCREEN_NAME, screenName);
+        postBottomSheetFragment.setArguments(args);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
     }

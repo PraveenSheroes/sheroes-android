@@ -16,7 +16,7 @@
             android:layout_height="@dimen/badge_share_header_size">
 
             <ImageView
-                android:id="@+id/badge_icon"
+                android:id="@+id/card_badge_icon"
                 android:layout_width="@dimen/badge_share_icon_size"
                 android:layout_height="@dimen/badge_share_icon_size"
                 android:layout_gravity="center_vertical"

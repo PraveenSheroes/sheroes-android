@@ -195,10 +195,10 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         BadgeDetailsDialogFragment badgeDetailsDialogFragment = new BadgeDetailsDialogFragment();
         Bundle args = new Bundle();
         args.putBoolean(IS_LEADER_BOARD, isLeaderBaord);
-        badgeDetailsDialogFragment.setArguments(args);
         Parcelable parcelable = Parcels.wrap(leaderBoardUserSolrObj);
         args.putParcelable(LEADER_BOARD_DETAILS, parcelable);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        badgeDetailsDialogFragment.setArguments(args);
         badgeDetailsDialogFragment.setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, 0);
         badgeDetailsDialogFragment.show(activity.getFragmentManager(), SCREEN_NAME);
 
@@ -239,6 +239,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         final FrameLayout headerContainer = view.findViewById(R.id.header_container);
         final TextView badgeTitle = view.findViewById(R.id.badge_title);
         final TextView badgeDesc = view.findViewById(R.id.badge_desc);
+        final ImageView badgeIcon = view.findViewById(R.id.card_badge_icon);
 
         final String badgeUrl = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl();
         final String backgroundColor = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor();
@@ -262,12 +263,10 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             super.onResourceReady(resource, transition);
                             badgeIcon.setImageBitmap(resource);
-
                             Bitmap bitmap = CommonUtil.getViewBitmap(cardContainer);
                             Uri contentUri = CommonUtil.getContentUriFromBitmap(getActivity(), bitmap);
+                            dismiss();
                             if (contentUri != null) {
-                                dismiss();
-
                                 //Analytics for Badge Shared
                                 HashMap<String, Object> properties =
                                         new EventProperty.Builder()
@@ -275,7 +274,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                                                 .isBadgeActive(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
                                                 .name(mUserPreference.get().getUserSummary().getFirstName())
                                                 .build();
-                                AnalyticsManager.trackEvent(Event.BADGE_CLICKED, SCREEN_NAME, properties);
+                                AnalyticsManager.trackEvent(Event.BADGE_SHARED, SCREEN_NAME, properties);
 
                                 Intent intent = new Intent(Intent.ACTION_SEND);
                                 intent.setType(AppConstants.SHARE_MENU_TYPE);
