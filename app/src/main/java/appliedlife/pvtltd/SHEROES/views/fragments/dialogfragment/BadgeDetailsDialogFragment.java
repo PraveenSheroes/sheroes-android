@@ -189,14 +189,15 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String endDateText = dateFormat.format(endDateObj);
             badgeWonPeriod.setText(getActivity().getResources().getString(R.string.badge_period_date_text, day, endDateText));
 
-            String mutualCommunityText = getResources().getString(R.string.badge_desc, mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle(), mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName());
+            String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle()),  CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName()));
             badgeDesc.setText(mutualCommunityText);
 
-
+            //Analytics
             if (mLeaderBoardUserSolrObj != null && previousScreenName != null) {
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
                                 .id(String.valueOf(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
+                                .communityId(String.valueOf(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId()))
                                 .isBadgeActive(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
                                 .build();
                 AnalyticsManager.trackEvent(Event.BADGE_CLICKED, previousScreenName, properties);

@@ -92,8 +92,7 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
         if(mLeaderBoardUserSolrObj!=null && previousScreenName!=null) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
-                            .id(String.valueOf(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
-                            .isBadgeActive(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
+                            .communityId(String.valueOf(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityId()))
                             .build();
             AnalyticsManager.trackScreenView(SCREEN_LABEL, previousScreenName,  properties);
         }
