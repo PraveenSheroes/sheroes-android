@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -97,16 +96,16 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             mLeaderBoardUserSolrObj = leaderBoardUserSolrObj;
 
             mProfilePic.setOnClickListener(this);
+            mName.setOnClickListener(this);
             topHeaderView.setOnClickListener(this);
             itemContainer.setOnClickListener(this);
 
-            if (CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
+            if (leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null && CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
                 String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mUserPicSize, mUserPicSize);
                 Glide.with(badgeIcon.getContext())
                         .load(trophyImageUrl)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(badgeIcon.getContext())))
                         .into(badgeIcon);
-                badgeIcon.setBackgroundResource(R.drawable.circle);
             }
             mName.setText(leaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle());
 
@@ -143,10 +142,12 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             }
             itemContainer.setLayoutParams(layoutParams);
 
-            if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive()) {
-                badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
-            } else {
-                badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
+            if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null) {
+                if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive()) {
+                    badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
+                } else {
+                    badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
+                }
             }
             mProfilePic.setBackgroundResource(R.drawable.circular_background_grey);
         }
@@ -160,8 +161,9 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     public void onClick(View view) {
         if (viewInterface instanceof FeedItemCallback && mLeaderBoardUserSolrObj != null) {
             switch (view.getId()) {
+                case R.id.name:
                 case R.id.user_pic_icon:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), false);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), AppConstants.LEADER_BOARD_SCREEN);
                     break;
                 case R.id.leader_board_users_container:
                     ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);

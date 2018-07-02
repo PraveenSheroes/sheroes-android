@@ -1167,17 +1167,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if(getActivity()!=null && getActivity().isFinishing()) return;
 
         if(leaderBoardUserSolrObj!=null) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(String.valueOf(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getId()))
-                            .isBadgeActive(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive())
-                            .name(mUserPreference.get().getUserSummary().getFirstName())
-                            .sourceScreenId(screenName)
-                            .build();
-            trackEvent(Event.BADGE_CLICKED, properties);
+            BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, screenName, true);
         }
-
-        BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, getScreenName(), true);
     }
 
     @Override
@@ -1188,8 +1179,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onLeaderBoardUserClick(long userId, boolean isMentor) {
-        ProfileActivity.navigateTo(getActivity(), userId, isMentor, PROFILE_NOTIFICATION_ID, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    public void onLeaderBoardUserClick(long userId, String sourceScreenName) {
+        ProfileActivity.navigateTo(getActivity(), userId, false, PROFILE_NOTIFICATION_ID, sourceScreenName, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

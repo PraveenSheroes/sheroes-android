@@ -66,11 +66,11 @@ public class ConfigData {
     @SerializedName("herStoryHintText")
     public String mHerStoryHintText = "Begin your story here...";
 
-    @SerializedName("badge_share_msg")
+    @SerializedName("badgeShareMsg")
     public String mBadgeShareMsg = "I won the exciting new Super SHEROES badge on the SHEROES Community. It\'s a women only app where you can share anything without hesitation and win these badges. Check out mine here:\n" ;
 
-    @SerializedName("super_sheroes_criteria_msg")
-    public String superSheroesCriteriaMsg = "Write super engaging content and you will get listed in Leaderboard" ;
+    @SerializedName("superSheroesCriteriaMsg")
+    public String superSheroesCriteriaMsg = "The Super SHEROES Leaderboard in every community is a way of recognizing and gratifying the top users from the community who are posting the highest quality content and are engaging the maximum number of users on their post. \\n \\n How to become a Super SHEROES? \\n The simplest way to become a Super SHEROES is by posting and sharing valuable content in the community which engages other users. The users who get maximum likes and comments on their posts every week will get the title of Super SHEROES and are reflected on the leaderboard tab.\\n \\n When is the Super SHEROES Leaderboard updated? \\n The Super SHEROES Leaderboard is updated every Monday morning. The list denotes the top 10 users from previous week who got maximum engagement on their posts in this community.\\n \\n What does the Super SHEROES get? \\n Super SHEROES are gratified with their name on leaderboard and unique community badge. Soon, their profiles and profile picture will reflect all the badges that they earned." ;
 
 
 }

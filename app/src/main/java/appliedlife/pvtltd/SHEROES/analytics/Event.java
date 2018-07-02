@@ -205,8 +205,8 @@ public enum Event {
     // endregion
 
     //region leaderBoard
-    BADGE_CLICKED(AnalyticsEventType.LEADER_BOARD, "Badge Clicked"),
-    BADGE_SHARED(AnalyticsEventType.LEADER_BOARD, "Badge Shared"),
+    BADGE_CLICKED(AnalyticsEventType.BADGE, "Clicked"),
+    BADGE_SHARED(AnalyticsEventType.BADGE, "Shared"),
     //endregion
 
     //region onboarding
