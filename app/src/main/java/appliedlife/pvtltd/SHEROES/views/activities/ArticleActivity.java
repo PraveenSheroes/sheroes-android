@@ -1007,8 +1007,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
         }
         authorDesName.setText(articleSolrObj.getAuthorName());
-        if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getAuthorShortDescription())) {
-            authorDescription.setText(Html.fromHtml(articleSolrObj.getAuthorShortDescription()));
+        if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getDescription())) {
+            authorDescription.setText(Html.fromHtml(articleSolrObj.getDescription()));
         }
 
         title.setText(articleSolrObj.getNameOrTitle());

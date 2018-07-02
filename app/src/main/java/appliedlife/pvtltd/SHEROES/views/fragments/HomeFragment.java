@@ -171,7 +171,7 @@ public class HomeFragment extends BaseFragment {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
-                bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
+                bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
                 bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
                 mFragmentAdapter.addFragment(feedFragment, TabType.TRENDING.getName());
@@ -186,14 +186,31 @@ public class HomeFragment extends BaseFragment {
         viewPager.addOnPageChangeListener(pageChangeListener = new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
             }
 
             @Override
             public void onPageSelected(int position) {
+                switch (position) {
+                    case 0:
+                        Fragment feedFragment =mTabFragments.get(0);
+                        if (AppUtils.isFragmentUIActive(feedFragment)) {
+                            ((FeedFragment) feedFragment).setScreenNameOnTabSelection(FEED_SCREEN_LABEL);
+                        }
+                        break;
+                    case 1:
+                        Fragment trendingFragment =mTabFragments.get(1);
+                        if (AppUtils.isFragmentUIActive(trendingFragment)) {
+                            ((FeedFragment) trendingFragment).setScreenNameOnTabSelection(TRENDING_FEED_SCREEN_LABEL);
+                        }
+                        break;
+                    default:
+                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
             }
         });
 
@@ -226,22 +243,11 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
-                switch (tab.getPosition()) {
-                    case 0:
-                        AnalyticsManager.trackScreenView(FEED_SCREEN_LABEL);
-                        break;
-                    case 1:
-                        AnalyticsManager.trackScreenView(TRENDING_FEED_SCREEN_LABEL);
-                        break;
-                    case 2:
-                        break;
-                    default:
-                }
-
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+
             }
 
             @Override

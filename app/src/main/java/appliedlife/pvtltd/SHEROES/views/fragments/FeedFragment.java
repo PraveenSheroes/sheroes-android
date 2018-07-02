@@ -89,7 +89,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -195,6 +194,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -786,18 +786,29 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public boolean shouldTrackScreen() {
-        return true;
+        return false;
     }
 
     @Override
     protected boolean trackScreenTime() {
-        return true;
+        return false;
+    }
+    public void setScreenNameOnTabSelection(String screenName)
+    {
+        mScreenLabel=screenName;
     }
     @Override
     public void onResume() {
         super.onResume();
         AnalyticsManager.timeScreenView(mScreenLabel);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+    }
+
     @Override
     protected SheroesPresenter getPresenter() {
         return mFeedPresenter;
@@ -1648,14 +1659,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
-        String setOrderKey = feedResponsePojo.getSetOrderKey();
-        String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
-        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
-        editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
-        editor.apply();
-        AnalyticsManager.initializeMixpanel(getActivity(), false);
+        if(isHomeFeed) {
+            String setOrderKey = feedResponsePojo.getSetOrderKey();
+            String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
+            editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
+            editor.apply();
+            AnalyticsManager.initializeMixpanel(getActivity(), false);
+        }
     }
 
     public int findPositionById(long id) { //TODO - move to presenter
