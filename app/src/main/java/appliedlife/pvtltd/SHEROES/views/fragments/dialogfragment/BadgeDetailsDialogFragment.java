@@ -127,7 +127,6 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         ButterKnife.bind(this, view);
         if (getArguments() != null) {
             isLeaderBoard = getArguments().getBoolean(IS_LEADER_BOARD);
-            SCREEN_NAME = getArguments().getString(BaseActivity.SOURCE_SCREEN);
 
             if (getArguments().getParcelable(LEADER_BOARD_DETAILS) != null) {
                 Parcelable parcelable = getArguments().getParcelable(LEADER_BOARD_DETAILS);
@@ -165,6 +164,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                 String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUser.getImageUrl(), 108 , 108);
                 Glide.with(badgeIcon.getContext())
                         .load(trophyImageUrl)
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
                         .into(badgeIcon);
 
                 String startDate = mLeaderBoardUserSolrObj.getSolrIgnoreStartDate();

@@ -104,6 +104,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mUserPicSize, mUserPicSize);
                 Glide.with(badgeIcon.getContext())
                         .load(trophyImageUrl)
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(badgeIcon.getContext())))
                         .into(badgeIcon);
                 badgeIcon.setBackgroundResource(R.drawable.circle);
             }
