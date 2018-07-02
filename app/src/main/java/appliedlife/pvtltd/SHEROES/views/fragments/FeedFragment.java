@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -194,7 +195,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -593,7 +593,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onArticleItemClicked(ArticleSolrObj articleSolrObj) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleSolrObj.getItemPosition()));
-        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
+        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
     }
 
     @Override
@@ -786,14 +786,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public boolean shouldTrackScreen() {
-        return false;
+        return true;
     }
 
     @Override
     protected boolean trackScreenTime() {
         return true;
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        AnalyticsManager.timeScreenView(mScreenLabel);
+    }
     @Override
     protected SheroesPresenter getPresenter() {
         return mFeedPresenter;
