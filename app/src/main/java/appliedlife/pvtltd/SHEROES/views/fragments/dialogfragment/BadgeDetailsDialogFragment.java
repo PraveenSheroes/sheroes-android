@@ -189,7 +189,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String endDateText = dateFormat.format(endDateObj);
             badgeWonPeriod.setText(getActivity().getResources().getString(R.string.badge_period_date_text, day, endDateText));
 
-            String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle()),  CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName()));
+            String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle().toLowerCase()),  CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName().toLowerCase()));
             badgeDesc.setText(mutualCommunityText);
 
             //Analytics
