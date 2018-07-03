@@ -46,9 +46,9 @@
                 android:id="@+id/tv_feed_article_card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/sp_size_14"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"/>
 
             <TextView
                 android:id="@+id/tv_feed_article_title_label"
@@ -114,7 +114,7 @@
         android:maxLines="4"
         android:minLines="1"
         android:textColor="@color/feed_article_label"
-        android:textSize="@dimen/sp_size_16" />
+        android:textSize="@dimen/sp_size_18" />
 
     <TextView
         android:id="@+id/tv_feed_article_header_lebel"

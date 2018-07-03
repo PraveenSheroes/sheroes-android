@@ -596,6 +596,8 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         try {
             articleTitle = mEditorFragment.getTitle().toString();
             articleBody = mEditorFragment.getContent().toString();
+            articleBody = articleBody.replaceAll("\n", "<br />");
+            articleBody = articleBody.replaceAll("<img", "<br /><img");
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -612,8 +614,8 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         try {
             articleTitle = mEditorFragment.getTitle().toString();
             articleBody = mEditorFragment.getContent().toString();
-            //TODO: for beta release its fix for preview in Article detail.
             articleBody = articleBody.replaceAll("\n", "<br />");
+            articleBody = articleBody.replaceAll("<img", "<br /><img");
         } catch (EditorFragment.IllegalEditorStateException e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -781,7 +783,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
         intent.putExtra("aspectX", 2);
         intent.putExtra("aspectY", 1);
-        intent.putExtra("scale", true);
+        intent.putExtra("scale", false);
         if (StringUtil.isNotEmptyCollection(list)) {
             Intent i = new Intent(intent);
             ResolveInfo res = (ResolveInfo) list.get(0);
