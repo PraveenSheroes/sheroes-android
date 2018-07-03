@@ -35,6 +35,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -262,6 +263,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.tv_mentor_description)
     TextView userDescription;
 
+    @Bind(R.id.description_view_more)
+    TextView viewMoreOnDescription;
+
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
 
@@ -312,11 +316,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.tv_mentor_dashboard_follow)
     TextView tvMentorDashBoardFollow;
 
-    @Bind(R.id.edit_overlay_container)
-    LinearLayout editProfileOverlayContainer;
-
     @Bind(R.id.edit_icon)
     ImageView editIcon;
+
+    @Bind(R.id.user_badge)
+    ImageView userBadgeIcon;
 
     @Bind(R.id.share_profile)
     TextView shareProfile;
@@ -540,11 +544,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (isOwnProfile) {
             verifiedIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.GONE);
             editIcon.setVisibility(View.VISIBLE);
         } else {
             editIcon.setVisibility(View.GONE);
-            editProfileOverlayContainer.setVisibility(View.GONE);
         }
 
         updateProfileInfo();
@@ -1037,7 +1039,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    @OnClick({R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description})
+    @OnClick({R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description, R.id.description_view_more})
     public void navigateToProfileEditing() {
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
@@ -2035,7 +2037,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     //Check if user have filled its details in profile
     private boolean isUserOrChampionDetailsFilled() {
-        return mUserSolarObject.getProfileCompletionWeight() >= 90;
+        return mUserSolarObject.getProfileCompletionWeight() >= 85;
     }
 
     private void deactivateUser(final UserSolrObj userSolrObj) {

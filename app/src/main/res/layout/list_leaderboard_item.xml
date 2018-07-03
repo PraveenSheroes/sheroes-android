@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/top_header_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/about_leaderboard"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_45"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:drawableLeft="@drawable/ic_idea"
+            android:drawablePadding="@dimen/dp_size_16"
+            android:drawableStart="@drawable/ic_idea"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center_vertical"
+            android:text="@string/how_do_i_become_a_supersheroes"
+            android:textColor="#3c3c3c"
+            android:textSize="13sp"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_size_1"
+            android:background="@color/lighter_gray" />
+
+        <TextView
+            android:id="@+id/top_user_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginStart="@dimen/dp_size_16"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:paddingBottom="@dimen/dp_size_8"
+            android:paddingTop="@dimen/dp_size_14"
+            android:text="@string/leaderbaord_top_10_user"
+            android:textAllCaps="true"
+            android:textColor="@color/leader_board_badge_sub_text"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/leader_board_users_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_size_16">
+
+        <FrameLayout
+            android:id="@+id/icon_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/user_pic_icon"
+                android:layout_width="@dimen/dp_size_39"
+                android:layout_height="@dimen/dp_size_39"
+                android:layout_marginLeft="@dimen/dp_size_28"
+                android:layout_marginStart="@dimen/dp_size_28" />
+
+            <ImageView
+                android:id="@+id/badge_icon"
+                android:layout_width="@dimen/dp_size_40"
+                android:layout_height="@dimen/dp_size_40" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_size_10"
+            android:layout_marginStart="@dimen/dp_size_10"
+            android:layout_toEndOf="@id/icon_container"
+            android:layout_toRightOf="@id/icon_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:lineSpacingExtra="2sp"
+                android:textColor="@color/leaderboard_user"
+                android:textSize="@dimen/sp_size_16"
+                tools:text="Champa Roy" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:textColor="@color/leader_board_badge_sub_text"
+                android:textSize="@dimen/sp_size_14"
+                tools:text="158 Posts · 168 Likes · 140 Comments" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

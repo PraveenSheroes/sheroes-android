@@ -66,4 +66,16 @@ public class ConfigData {
     @SerializedName("herStoryHintText")
     public String mHerStoryHintText = "Begin your story here...";
 
+    @SerializedName("badgeShareMsg")
+    public String mBadgeShareMsg = "I won the exciting new Super SHEROES badge on the SHEROES Community. It\'s a women only app where you can share anything without hesitation and win these badges. Check out mine here:" ;
+
+    @SerializedName("superSheroesCriteriaMsg")
+    public String superSheroesCriteriaMsg = "<p>The Super SHEROES Leaderboard in every community is a way of recognizing and gratifying the top users from the community who are posting the highest quality content and are engaging the maximum number of users on their post.</p>\n" +
+            "<p><strong>How to become a Super SHEROES?</strong></p>\n" +
+            "<p>The simplest way to become a Super SHEROES is by posting and sharing valuable content in the community which engages other users. The users who get maximum likes and comments on their posts every week will get the title of Super SHEROES and are reflected on the leaderboard tab.</p>\n" +
+            "<p><strong>When is the Super SHEROES Leaderboard updated?</strong></p>\n" +
+            "<p>The Super SHEROES Leaderboard is updated every Monday morning. The list denotes the top 10 users from previous week who got maximum engagement on their posts in this community.</p>\n" +
+            "<p><strong>What does the Super SHEROES get?</strong></p>\n" +
+            "<p>Super SHEROES are gratified with their name on leaderboard and unique community badge. Soon, their profiles and profile picture will reflect all the badges that they earned.</p>";
+
 }
