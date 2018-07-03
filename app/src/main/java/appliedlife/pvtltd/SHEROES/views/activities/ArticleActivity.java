@@ -998,14 +998,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     .into(authorPic);
 
         }
-        if (CommonUtil.isNotEmpty(articleSolrObj.getAuthorImageUrl())) {
-            String authorImage = CommonUtil.getThumborUri(articleSolrObj.getAuthorImageUrl(), authorPicSize, authorPicSize);
-            Glide.with(this)
-                    .load(authorImage)
-                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
-                    .into(authorDesPic);
 
-        }
         authorDesName.setText(articleSolrObj.getAuthorName());
         if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getDescription())) {
             authorDescription.setText(Html.fromHtml(articleSolrObj.getDescription()));
