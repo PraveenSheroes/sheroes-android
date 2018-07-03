@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="@dimen/dp_size_320"
+        android:layout_width="@dimen/dp_size_300"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
@@ -72,9 +72,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_des_prefix"
             android:layout_marginEnd="@dimen/dp_size_16"
+            android:layout_centerHorizontal="true"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="2sp"
@@ -84,14 +84,14 @@
         <ImageView
             android:id="@+id/playstore_icon"
             android:layout_width="@dimen/dp_size_100"
-            android:layout_height="@dimen/dp_size_50"
+            android:layout_height="@dimen/dp_size_35"
             android:layout_below="@id/badge_desc"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_playstore" />
 
         <ImageView
             android:layout_width="@dimen/dp_size_100"
-            android:layout_height="@dimen/dp_size_50"
+            android:layout_height="@dimen/dp_size_40"
             android:layout_below="@id/playstore_icon"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_sheroes_header" />

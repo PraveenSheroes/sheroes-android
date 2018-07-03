@@ -30,6 +30,7 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.parceler.Parcels;
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -189,7 +190,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String endDateText = dateFormat.format(endDateObj);
             badgeWonPeriod.setText(getActivity().getResources().getString(R.string.badge_period_date_text, day, endDateText));
 
-            String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle().toLowerCase()),  CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName().toLowerCase()));
+            String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle().trim().toLowerCase()),  CommonUtil.camelCaseString(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getCommunityName().toLowerCase()));
             badgeDesc.setText(mutualCommunityText);
 
             //Analytics
@@ -300,7 +301,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                                 if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
                                     badgeShareMsg = mConfiguration.get().configData.mBadgeShareMsg;
                                 }
-                                intent.putExtra(Intent.EXTRA_TEXT, badgeShareMsg + mLeaderBoardUserSolrObj.getUserSolrObj().getPostShortBranchUrls());
+                                intent.putExtra(Intent.EXTRA_TEXT, badgeShareMsg +"\n"+mLeaderBoardUserSolrObj.getUserSolrObj().getPostShortBranchUrls());
                                 intent.putExtra(Intent.EXTRA_STREAM, contentUri);
                                 intent.setType("image/*");
                                 startActivity(Intent.createChooser(intent, AppConstants.SHARE));

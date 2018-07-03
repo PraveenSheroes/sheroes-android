@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.view.View;
 import android.widget.TextView;
 
@@ -75,7 +76,12 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
             howToBeSuperSheroesContent = mConfiguration.get().configData.superSheroesCriteriaMsg;
         }
         if(CommonUtil.isNotEmpty(howToBeSuperSheroesContent)) {
-            contentText.setText(howToBeSuperSheroesContent);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                contentText.setText(Html.fromHtml(howToBeSuperSheroesContent));
+            } else {
+                contentText.setText(Html.fromHtml(howToBeSuperSheroesContent));
+            }
         }
 
         if (getArguments()!=null ) {
