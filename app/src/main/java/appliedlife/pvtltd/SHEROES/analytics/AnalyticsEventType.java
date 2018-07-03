@@ -11,6 +11,7 @@ public enum AnalyticsEventType {
     APP("App"),
     POST("Post"),
     PROFILE("Profile"),
+    BADGE("Badge"),
     REPLY("Reply"),
     JOB("Job"),
     HELPLINE_MESSAGE("Helpline Message "),

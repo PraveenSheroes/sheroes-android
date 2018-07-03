@@ -118,6 +118,7 @@
     <color name="blue_light">#b9f2ff</color>
     <!--colors close trough priyanka-->
 
+    <color name="golden_color">#FFC961</color>
     <color name="white_color">#FFFFFF</color>
 
     <color name="image_upload_bg_color">#d9000000</color>
@@ -139,5 +140,12 @@
     <color name="lighter_grey">#E4E4E4</color>
     <color name="mentor_green">#6bba29</color>
     <color name="mentor_profession">#686868</color>
+    <color name="leaderboard_user">#3c3c3c</color>
+    <color name="earned_badge_count">#dc4541</color>
+    <color name="badge_text">#3c3c3c</color>
+    <color name="leader_board_badge_sub_text">#878787</color>
+    <color name="leader_board_dialog_badge_title">#de3c3c3c</color>
+    <color name="leader_board_dialog_button">#dc4541</color>
+
 
 </resources>

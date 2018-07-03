@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <stroke
+        android:width="@dimen/dp_size_1"
+        android:color="@color/on_board_work" />
+
+    <corners
+        android:bottomLeftRadius="@dimen/dp_size_40"
+        android:bottomRightRadius="@dimen/dp_size_40"
+        android:topLeftRadius="@dimen/dp_size_40"
+        android:topRightRadius="@dimen/dp_size_40" />
+
+    <size
+        android:width="@dimen/dp_size_40"
+        android:height="@dimen/dp_size_40" />
+
+    <padding
+        android:bottom="@dimen/dp_size_1"
+        android:left="@dimen/dp_size_1"
+        android:right="@dimen/dp_size_1"
+        android:top="@dimen/dp_size_1" />
+
+</shape>
