@@ -75,6 +75,10 @@
             android:name="SENDER_ID"
             android:value="@string/ID_PROJECT_ID" />
 
+        <meta-data
+            android:name="CLEVERTAP_NOTIFICATION_ICON"
+            android:value="@drawable/ic_push_notification_icon"/>
+
         <meta-data android:name="GCM_SENDER_ID" android:value="@string/ID_CLEVER_TAP_PROJECT_ID"/>
 
         <meta-data
