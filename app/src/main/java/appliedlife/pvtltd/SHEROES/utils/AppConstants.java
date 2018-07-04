@@ -325,6 +325,11 @@ public class AppConstants {
     public static final String TOOLBAR_TITTE = "toolbar_title";
     public static final String SCREEN_NAME = "screen_name";
 
+    //Clever tap notification keys
+    public static final String CLEVER_TAP_IS_PRESENT = "wzrk_pn";
+    public static final String CLEVER_TAP_TITLE = "nt";
+    public static final String CLEVER_TAP_BODY = "nm";
+    public static final String CLEVER_TAP_DEEP_LINK_URL = "wzrk_dl";
 
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
@@ -435,4 +440,8 @@ public class AppConstants {
 
     public static final String ARTICLE_GUIDELINE = "<h3> Hello! Here are 7 things to keep in mind when writing a story on SHEROES </h3><p>1. We welcome you to share your experiences and expertise with the SHEROES community. If you think you can help the women on the SHEROES platform in some way or have a really interesting story to tell, do write a story on SHEROES.</p><p>2. Word length for a story should be between 200 words to 1000 words.</p><p>3. By submitting a story you grant us a license to re-use, edit, and modify the content, if need be.</p><p>4. Please ensure the content you submit is your original work.</p><p>5. Promotional or Spammy content in any form will not be accepted.</p><p>6. Email us at care@sheroes.in in case you have any further queries regarding submitting a story.</p><p>7. All the best!</p>";
 
+    //Push provider name
+    public static final String PUSH_PROVIDER_SHEROES = "Sheroes";
+    public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
+    public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
 }

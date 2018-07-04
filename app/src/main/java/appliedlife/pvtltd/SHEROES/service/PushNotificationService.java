@@ -17,6 +17,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 
+import com.clevertap.android.sdk.CleverTapAPI;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.moe.pushlibrary.MoEHelper;
@@ -65,96 +66,115 @@ public class PushNotificationService extends GcmListenerService {
     @Override
     public void onMessageReceived(String from, Bundle data) {
         SheroesApplication.getAppComponent(this).inject(this);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
-        String message = "";
-        String imageUrl = "";
         if (null == data) return;
-        String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
-        String action = data.getString("action");
-        String secret = data.getString("secret");
-        if (action != null) {
-            action = action.toLowerCase();
-            if (action.equalsIgnoreCase("logout") && secret != null && secret.equalsIgnoreCase("avadakedavra")) {
-                if (mUserPreference != null) {
-                    mUserPreference.delete();
-                }
-                MoEHelper.getInstance(getApplicationContext()).logoutUser();
-                MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
-                ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
-                return;
-            }
 
-            if (action.equalsIgnoreCase("nothing")) {
-                return;
-            }
-        }
-
-        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
-            message = data.getString(AppConstants.MESSAGE);
-        }
-        if (StringUtil.isNotNullOrEmptyString(data.getString("left_image_icon"))) {
-            imageUrl = data.getString("left_image_icon");
-        }
-        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
-            from = data.getString("title");
-        }
-        if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
-            url = data.getString(AppConstants.DEEP_LINK_URL);
-        }
-
-        if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
-            //If the message is not sent from MoEngage it will be rejected
+        String isCleverTapNotification = data.getString(AppConstants.CLEVER_TAP_IS_PRESENT);
+        if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
+            String cleverTypeTitle = data.getString(AppConstants.CLEVER_TAP_TITLE);
+            String cleverTypeBody = data.getString(AppConstants.CLEVER_TAP_BODY);
+            String cleverTypeDeepLink = data.getString(AppConstants.CLEVER_TAP_DEEP_LINK_URL);
+            CleverTapAPI.createNotification(this, data);
             final HashMap<String, Object> properties = new EventProperty.Builder()
-                    .id(MoEngageNotificationUtils.getCampaignIdIfAny(data))
-                    .url(MoEngageNotificationUtils.getDeeplinkURIStringIfAny(data))
-                    .isMonengage(true)
-                    .activityName(MoEngageNotificationUtils.getRedirectActivityNameIfAny(data))
-                    .title(MoEngageNotificationUtils.getNotificationTitleIfAny(data))
-                    .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
+                    .url(cleverTypeDeepLink)
+                    .title(cleverTypeTitle)
+                    .isMonengage(false)
+                    .pushProvider(AppConstants.PUSH_PROVIDER_CLEVER_TAP)
+                    .body(cleverTypeBody)
                     .build();
             AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN, "", properties);
-            data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
-            data.putBoolean(AppConstants.IS_MOENGAGE, true);
-            data.putString(AppConstants.TITLE, MoEngageNotificationUtils.getNotificationTitleIfAny(data));
-            data.putString(AppConstants.NOTIFICATION_ID, MoEngageNotificationUtils.getCampaignIdIfAny(data));
-            data.putString(BaseActivity.SOURCE_SCREEN, "From Push Notification");
-            data.putBoolean(AppConstants.IS_FROM_PUSH, true);
-            PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
         } else {
-            if (StringUtil.isNotNullOrEmptyString(url)) {
-                if (StringUtil.isNotNullOrEmptyString(url)) {
-                    sendNotification(from, message, url, imageUrl);
+            mMoEHelper = MoEHelper.getInstance(this);
+            payloadBuilder = new PayloadBuilder();
+            moEngageUtills = MoEngageUtills.getInstance();
+            String message = "";
+            String imageUrl = "";
+            String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
+            String action = data.getString("action");
+            String secret = data.getString("secret");
+            if (action != null) {
+                action = action.toLowerCase();
+                if (action.equalsIgnoreCase("logout") && secret != null && secret.equalsIgnoreCase("avadakedavra")) {
+                    if (mUserPreference != null) {
+                        mUserPreference.delete();
+                    }
+                    MoEHelper.getInstance(getApplicationContext()).logoutUser();
+                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+                    return;
                 }
 
-                String entityId = "";
-                if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
-                    entityId = data.getString(this.getString(R.string.ID_ARTICLE));
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
-                } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
-                    entityId = data.getString(this.getString(R.string.ID_COMMUNITIY));
-                    moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
-                } else if (url.contains(AppConstants.HELPLINE_URL) || url.contains(AppConstants.HELPLINE_URL_COM)) {
-                    Intent intent = new Intent();
-                    intent.setAction("BroadCastReceiver");
-                    intent.putExtra(AppConstants.HELPLINE_CHAT, message);
-                    sendBroadcast(intent);
+                if (action.equalsIgnoreCase("nothing")) {
+                    return;
                 }
+            }
+
+            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.MESSAGE))) {
+                message = data.getString(AppConstants.MESSAGE);
+            }
+            if (StringUtil.isNotNullOrEmptyString(data.getString("left_image_icon"))) {
+                imageUrl = data.getString("left_image_icon");
+            }
+            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.TITLE))) {
+                from = data.getString("title");
+            }
+            if (StringUtil.isNotNullOrEmptyString(data.getString(AppConstants.DEEP_LINK_URL))) {
+                url = data.getString(AppConstants.DEEP_LINK_URL);
+            }
+
+            if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
+                //If the message is not sent from MoEngage it will be rejected
                 final HashMap<String, Object> properties = new EventProperty.Builder()
-                        .id(notificationId)
-                        .url(url)
-                        .entityId(entityId)
-                        .title(from)
-                        .isMonengage(false)
-                        .body(message)
+                        .id(MoEngageNotificationUtils.getCampaignIdIfAny(data))
+                        .url(MoEngageNotificationUtils.getDeeplinkURIStringIfAny(data))
+                        .isMonengage(true)
+                        .pushProvider(AppConstants.PUSH_PROVIDER_MOENGAGE)
+                        .activityName(MoEngageNotificationUtils.getRedirectActivityNameIfAny(data))
+                        .title(MoEngageNotificationUtils.getNotificationTitleIfAny(data))
+                        .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
                         .build();
                 AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN, "", properties);
+                data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+                data.putBoolean(AppConstants.IS_MOENGAGE, true);
+                data.putString(AppConstants.TITLE, MoEngageNotificationUtils.getNotificationTitleIfAny(data));
+                data.putString(AppConstants.NOTIFICATION_ID, MoEngageNotificationUtils.getCampaignIdIfAny(data));
+                data.putString(BaseActivity.SOURCE_SCREEN, "From Push Notification");
+                data.putBoolean(AppConstants.IS_FROM_PUSH, true);
+                PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
+            } else {
+                if (StringUtil.isNotNullOrEmptyString(url)) {
+                    if (StringUtil.isNotNullOrEmptyString(url)) {
+                        sendNotification(from, message, url, imageUrl);
+                    }
+
+                    String entityId = "";
+                    if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
+                        entityId = data.getString(this.getString(R.string.ID_ARTICLE));
+                        moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
+                    } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
+                        entityId = data.getString(this.getString(R.string.ID_COMMUNITIY));
+                        moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
+                    } else if (url.contains(AppConstants.HELPLINE_URL) || url.contains(AppConstants.HELPLINE_URL_COM)) {
+                        Intent intent = new Intent();
+                        intent.setAction("BroadCastReceiver");
+                        intent.putExtra(AppConstants.HELPLINE_CHAT, message);
+                        sendBroadcast(intent);
+                    }
+                    final HashMap<String, Object> properties = new EventProperty.Builder()
+                            .id(notificationId)
+                            .url(url)
+                            .entityId(entityId)
+                            .title(from)
+                            .isMonengage(false)
+                            .pushProvider(AppConstants.PUSH_PROVIDER_SHEROES)
+                            .body(message)
+                            .build();
+                    AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN, "", properties);
+                }
             }
         }
-    }
 
+    }
 
     private void sendNotification(String title, String body, String urlText, String imageUrl) {
         Context context = getBaseContext();

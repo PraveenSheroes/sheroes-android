@@ -24,6 +24,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.clevertap.android.sdk.CleverTapAPI;
+import com.clevertap.android.sdk.exceptions.CleverTapMetaDataNotFoundException;
+import com.clevertap.android.sdk.exceptions.CleverTapPermissionsNotSatisfied;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.AccessToken;
@@ -811,6 +814,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
+                   /* try {
+                        CleverTapAPI.getInstance(SheroesApplication.mContext).data.pushGcmRegistrationId(mGcmId, true);
+                    } catch (CleverTapMetaDataNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (CleverTapPermissionsNotSatisfied cleverTapPermissionsNotSatisfied) {
+                        cleverTapPermissionsNotSatisfied.printStackTrace();
+                    }*/
                     fbLogin.setEnabled(true);
                     checkSignUpCall(gcmForGoogleAndFacebook);
                 } else {
