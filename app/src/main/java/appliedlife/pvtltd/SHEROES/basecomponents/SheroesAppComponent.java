@@ -104,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesDrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
@@ -333,6 +334,8 @@ public interface SheroesAppComponent {
     void inject(SuperSheroesCriteriaFragment superSheroesCriteriaFragment);
 
     void inject(LeaderBoardViewHolder leaderBoardViewHolder);
+
+    void inject(NoStoriesHolder noStoriesHolder);
 }
 
 

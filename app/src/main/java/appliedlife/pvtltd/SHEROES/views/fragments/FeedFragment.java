@@ -302,14 +302,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else {
                 emptyImage.setVisibility(View.GONE);
             }
-        } else {
-            if (isHomeFeed) {
-                emptyImage.setVisibility(View.GONE);
-            } else {
-                emptyImage.setImageResource(R.drawable.ic_story_blank);
-                emptyText.setText("No Stories Yet");
-            }
-
         }
     }
 
@@ -795,10 +787,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     protected boolean trackScreenTime() {
         return false;
     }
-    public void setScreenNameOnTabSelection(String screenName)
-    {
-        mScreenLabel=screenName;
+
+    public void setScreenNameOnTabSelection(String screenName) {
+        mScreenLabel = screenName;
     }
+
     @Override
     public void onResume() {
         super.onResume();
@@ -1179,16 +1172,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if(getActivity()!=null && getActivity().isFinishing()) return;
+        if (getActivity() != null && getActivity().isFinishing()) return;
 
-        if(leaderBoardUserSolrObj!=null) {
+        if (leaderBoardUserSolrObj != null) {
             BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, screenName, true);
         }
     }
 
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if(leaderBoardUserSolrObj!=null) {
+        if (leaderBoardUserSolrObj != null) {
             SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
         }
     }
@@ -1682,7 +1675,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
-        if(isHomeFeed) {
+        if (isHomeFeed) {
             String setOrderKey = feedResponsePojo.getSetOrderKey();
             String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();

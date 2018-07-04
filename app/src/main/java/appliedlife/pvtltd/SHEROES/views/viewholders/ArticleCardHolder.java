@@ -233,27 +233,34 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             final TextView tvFeedArticleTotalViews = backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = backgroundImage.findViewById(R.id.rl_gradiant);
             final ProgressBar pbImage = backgroundImage.findViewById(R.id.pb_article_image);
-            StringBuilder stringBuilder = new StringBuilder();
-            if (dataItem.getNoOfViews() > 1) {
-                stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
-                tvFeedArticleTotalViews.setText(stringBuilder.toString());
-                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            } else if (dataItem.getNoOfViews() == 1) {
-                stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
-                tvFeedArticleTotalViews.setText(stringBuilder.toString());
-                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            } else {
-                tvFeedArticleTotalViews.setVisibility(View.GONE);
-            }
 
             if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 if (mConfiguration.get().configData.showArticleViews) {
                     tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                    rlFeedArticleViews.setVisibility(View.VISIBLE);
+
+                    StringBuilder stringBuilder = new StringBuilder();
+                    if (dataItem.getNoOfViews() > 1) {
+                        stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                        tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                        tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                        rlFeedArticleViews.setVisibility(View.VISIBLE);
+                    } else if (dataItem.getNoOfViews() == 1) {
+                        stringBuilder.append(dataItem.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
+                        tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                        tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                        rlFeedArticleViews.setVisibility(View.VISIBLE);
+                    } else {
+                        tvFeedArticleTotalViews.setVisibility(View.GONE);
+                        rlFeedArticleViews.setVisibility(View.GONE);
+                    }
                 } else {
                     tvFeedArticleTotalViews.setVisibility(View.GONE);
+                    rlFeedArticleViews.setVisibility(View.GONE);
                 }
             } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
+                rlFeedArticleViews.setVisibility(View.GONE);
             }
 
 
@@ -274,7 +281,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                         @Override
                         public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
                             ivFirstLandscape.setImageBitmap(profileImage);
-                            rlFeedArticleViews.setVisibility(View.VISIBLE);
                             pbImage.setVisibility(View.GONE);
                         }
                     });
@@ -290,7 +296,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-    @OnClick({R.id.tv_article_card_title,R.id.iv_article_circle_icon})
+    @OnClick({R.id.tv_article_card_title, R.id.iv_article_circle_icon})
     public void articleAuthorNameClick() {
         viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
         //viewInterface.handleOnClick(dataItem, tvArticleCardTitle);

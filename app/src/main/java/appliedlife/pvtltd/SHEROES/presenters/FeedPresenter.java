@@ -210,6 +210,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         FeedDetail homeFeedHeader = new FeedDetail();
                                         homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
                                         feedList.add(0, homeFeedHeader);
+                                    } else {
+                                        if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                            FeedDetail noStoryFeed = new FeedDetail();
+                                            noStoryFeed.setSubType(AppConstants.NO_STORIES);
+                                            feedList.add(noStoryFeed);
+                                        }
                                     }
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);

@@ -144,6 +144,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     @Bind(R.id.tv_tag_lable)
     TextView tvTagLable;
 
+    @Bind(R.id.iv_close_img)
+    ImageView ivCloseImg;
+
 
     //endregion
 
@@ -353,11 +356,13 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
                                 ivAddPhoto.setVisibility(View.VISIBLE);
                                 ivAddPhoto.setImageBitmap(profileImage);
                                 tvAddCover.setVisibility(View.GONE);
+                                ivCloseImg.setVisibility(View.VISIBLE);
                             }
                         });
             } else {
                 tvAddCover.setVisibility(View.VISIBLE);
                 ivAddPhoto.setVisibility(View.GONE);
+                ivCloseImg.setVisibility(View.GONE);
             }
         } else {
             MediaFile mediaFile = new MediaFile();
@@ -379,7 +384,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         if (id == R.id.post_article_submit) {
             if (validateFields(false, true)) {
                 if (StringUtil.isNotNullOrEmptyString(mCoverImageUrl)) {
-                    addEditArticle();
+                    draftAndSubmitStoryArticle(true);
                 } else {
                     AlertDialog.Builder builder =
                             new AlertDialog.Builder(HerStoryOrArticleSubmissionActivity.this);
@@ -396,7 +401,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            addEditArticle();
+                            draftAndSubmitStoryArticle(false);
                         }
                     });
 
@@ -414,6 +419,13 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         return super.onOptionsItemSelected(item);
     }
 
+    @OnClick(R.id.iv_close_img)
+    public void onImageCloseClick() {
+        ivAddPhoto.setVisibility(View.GONE);
+        tvAddCover.setVisibility(View.VISIBLE);
+        ivCloseImg.setVisibility(View.GONE);
+    }
+
     @OnClick(R.id.guideline)
     public void onGuidelineClick() {
         showGuideLineView();
@@ -422,7 +434,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     @OnClick(R.id.tv_draft)
     public void onDraftClick() {
         if (validateFields(true, true)) {
-            draftArticle();
+            draftAndSubmitStoryArticle(false);
         }
     }
 
@@ -590,25 +602,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         });
     }
 
-    private void draftArticle() {
-        String articleTitle = null;
-        String articleBody = null;
-        try {
-            articleTitle = mEditorFragment.getTitle().toString();
-            articleBody = mEditorFragment.getContent().toString();
-            articleBody = articleBody.replaceAll("\n", "<br />");
-            articleBody = articleBody.replaceAll("<img", "<br /><img");
-        } catch (EditorFragment.IllegalEditorStateException e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-        if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.makeArticleDraftRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, mCoverImageUrl), true);
-        } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.makeArticleDraftRequest(null, articleTitle, articleBody, mCoverImageUrl), true);
-        }
-    }
-
-    private void addEditArticle() {
+    private void draftAndSubmitStoryArticle(boolean isPublish) {
         String articleTitle = null;
         String articleBody = null;
         try {
@@ -624,12 +618,11 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             tagList.add(articleTagName.getId());
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), true);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleAddEditRequest(null, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl), false);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), true);
         }
     }
-
     private void onBackPress() {
         if (isNextPage) {
             hideNextPage();
