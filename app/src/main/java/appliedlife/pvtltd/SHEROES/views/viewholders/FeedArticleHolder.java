@@ -12,8 +12,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -70,7 +68,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
  * Created by Praveen_Singh on 23-01-2017.
  */
 
-public class FeedArticleHolder extends BaseViewHolder<FeedDetail>implements Html.ImageGetter {
+public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(FeedArticleHolder.class);
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
@@ -226,7 +224,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail>implements Html
         tvFeedArticleUserReaction.setTag(true);
         articleObj.setItemPosition(position);
         articleObj.setLastReactionValue(articleObj.getReactionValue());
-        articleObj.setListDescription(null);
         allTextViewStringOperations(context);
         onBookMarkClick();
         if (!articleObj.isTrending()) {
@@ -309,27 +306,15 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail>implements Html
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
         }
-        mViewMoreDescription = articleObj.getDescription();
+        mViewMoreDescription = articleObj.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-           /* tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
+            tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
             ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 4, AppConstants.VIEW_MORE_TEXT, true);
-*/
-            if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
-                if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                    Spanned spanned = Html.fromHtml(mViewMoreDescription, this, null);
-                    tvFeedArticleHeaderLebel.setText(spanned);
-                } else {
-                    Spanned spanned = Html.fromHtml(mViewMoreDescription, this, null);
-                    tvFeedArticleHeaderLebel.setText(spanned);// or for older api
-                }
-                tvFeedArticleHeaderLebel.setMovementMethod(LinkMovementMethod.getInstance());
-                ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 4, AppConstants.VIEW_MORE_TEXT, true);
-            }
         } else {
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
@@ -808,68 +793,5 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail>implements Html
             return string;
         }
     }
-    @Override
-    public Drawable getDrawable(String source) {
-        LevelListDrawable d = new LevelListDrawable();
-        Drawable empty = mContext.getResources().getDrawable(R.drawable.ic_image_holder);
-        d.addLevel(0, 0, empty);
-        d.setBounds(0, 0, empty.getIntrinsicWidth(), empty.getIntrinsicHeight());
 
-        new LoadImage().execute(source, d);
-
-        return d;
-    }
-    class LoadImage extends AsyncTask<Object, Void, Bitmap> {
-
-
-        private LevelListDrawable mDrawable;
-
-        @Override
-        protected Bitmap doInBackground(Object... params) {
-            String source = (String) params[0];
-            mDrawable = (LevelListDrawable) params[1];
-            try {
-                LogUtils.info("url=",source);
-                is = new URL(source).openStream();
-                return BitmapFactory.decodeStream(is);
-            }
-            catch (OutOfMemoryError oom) {
-                // System.gc();
-                try {
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-
-                    options.inSampleSize = 2;
-                    Bitmap bitmapFactory = BitmapFactory.decodeStream(is, null, options);
-                    return BitmapFactory.decodeStream(is, null, options);
-                }
-                catch (Exception e){
-
-                }
-            }
-
-            catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap bitmap) {
-            if (bitmap != null) {
-                BitmapDrawable d = new BitmapDrawable(bitmap);
-                mDrawable.addLevel(1, 1, d);
-                mDrawable.setBounds(0, 0, bitmap.getWidth(), bitmap.getHeight());
-                mDrawable.setLevel(1);
-                // i don't know yet a better way to refresh TextView
-                // mTv.invalidate() doesn't work as expected
-                CharSequence t =   tvFeedArticleHeaderLebel.getText();
-                tvFeedArticleHeaderLebel.setText(t);
-            }
-        }
-
-    }
 }

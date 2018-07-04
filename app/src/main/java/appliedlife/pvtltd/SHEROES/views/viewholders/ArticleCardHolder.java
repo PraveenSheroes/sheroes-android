@@ -146,7 +146,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null);
         }
 
-        mViewMoreDescription = dataItem.getDescription();
+        mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvArticleDescriptionText.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -290,18 +290,10 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     }
 
-
-    @OnClick(R.id.iv_article_circle_icon)
-    public void articleAuthorImageClick() {
-        viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
-
-        //  viewInterface.handleOnClick(dataItem, ivArticleCircleIcon);
-        //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
-    }
-
-    @OnClick(R.id.tv_article_card_title)
+    @OnClick({R.id.tv_article_card_title,R.id.iv_article_circle_icon})
     public void articleAuthorNameClick() {
-        viewInterface.handleOnClick(dataItem, tvArticleCardTitle);
+        viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
+        //viewInterface.handleOnClick(dataItem, tvArticleCardTitle);
         //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
