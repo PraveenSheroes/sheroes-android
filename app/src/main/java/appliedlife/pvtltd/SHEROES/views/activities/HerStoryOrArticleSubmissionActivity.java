@@ -421,6 +421,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     @OnClick(R.id.iv_close_img)
     public void onImageCloseClick() {
+        mCoverImageUrl="";
         ivAddPhoto.setVisibility(View.GONE);
         tvAddCover.setVisibility(View.VISIBLE);
         ivCloseImg.setVisibility(View.GONE);
