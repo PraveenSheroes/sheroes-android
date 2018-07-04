@@ -22,7 +22,8 @@ public enum SuperProperty {
     EMAIL_ID("Email Id"),
     CONFIG_TYPE("Config Type"),
     CONFIG_VERSION("Config Version"),
-    APPSFLYER_ID("Appsflyer_id");
+    APPSFLYER_ID("Appsflyer_id"),
+    APP_VERSION("App Version");
 
     private final String string;
 
