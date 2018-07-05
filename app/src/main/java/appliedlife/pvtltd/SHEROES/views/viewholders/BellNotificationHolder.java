@@ -126,10 +126,14 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
             }
 
             if (StringUtil.isNotNullOrEmptyString(mBellNotification.getRightImageIcon())) {
+                mIvBellNotiImage.setVisibility(View.VISIBLE);
                 Glide.with(context)
                         .load(mBellNotification.getRightImageIcon())
                         .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                         .into(mIvBellNotiImage);
+            }else
+            {
+                mIvBellNotiImage.setVisibility(View.GONE);
             }
 
         }

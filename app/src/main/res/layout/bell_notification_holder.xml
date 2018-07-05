@@ -51,6 +51,7 @@
             android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="6sp"
+            android:text="Hi j[njsd  kkdj jjdd jdjkd kkkdmj i"
             android:textColor="@color/comment_text"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -59,8 +60,10 @@
             android:id="@+id/iv_bell_noti_image"
             android:layout_width="@dimen/feed_profile_icon_size"
             android:layout_height="@dimen/feed_profile_icon_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_editor_absoluteY="16dp" />
+            android:visibility="gone"
+            android:layout_marginStart="@dimen/dp_size_8"
+            android:layout_marginLeft="@dimen/dp_size_8"
+            app:layout_constraintEnd_toEndOf="parent" />
     </LinearLayout>
 
 

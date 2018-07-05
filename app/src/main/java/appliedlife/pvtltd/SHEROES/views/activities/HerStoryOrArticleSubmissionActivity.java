@@ -704,8 +704,6 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         isGuidelineVisible = true;
         mGuidelineContainer.setVisibility(View.VISIBLE);
         mGuidelineContainer.requestFocusFromTouch();
-        mArticleNextPageContainer.setVisibility(View.GONE);
-        mEditorContainer.setVisibility(View.VISIBLE);
         hideKeyboard(mToolbar);
     }
 
@@ -778,6 +776,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         intent.putExtra("aspectX", 2);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", false);
+        intent.putExtra("return-data", true);
         if (StringUtil.isNotEmptyCollection(list)) {
             Intent i = new Intent(intent);
             ResolveInfo res = (ResolveInfo) list.get(0);
