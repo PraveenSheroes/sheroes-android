@@ -1119,7 +1119,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 .tabTitle(tabName)
                 .isOwnProfile(isOwnProfile)
                 .build();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+        AnalyticsManager.trackScreenView(getScreenName(), properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof UserPostFragment) {
             if (tabName.equalsIgnoreCase("Profile - Posts") && isOwnProfile) {

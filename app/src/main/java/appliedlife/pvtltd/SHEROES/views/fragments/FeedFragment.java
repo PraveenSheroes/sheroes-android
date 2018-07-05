@@ -320,6 +320,37 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void likeUnlikeResponse(FeedDetail feedDetail, boolean isLike) {
+        if (isLike) {
+            if (feedDetail instanceof ArticleSolrObj) {
+                ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+                if (articleSolrObj.isUserStory()) {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.STORY_LIKED, getScreenName(), properties);
+                } else {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.ARTICLE_LIKED, getScreenName(), properties);
+                }
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, getScreenName());
+            }
+        } else {
+            if (feedDetail instanceof ArticleSolrObj) {
+                ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+                if (articleSolrObj.isUserStory()) {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.STORY_UN_LIKED, getScreenName(), properties);
+                } else {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.ARTICLE_UNLIKED, getScreenName(), properties);
+                }
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName());
+            }
+        }
+    }
+
+    @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
             ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
