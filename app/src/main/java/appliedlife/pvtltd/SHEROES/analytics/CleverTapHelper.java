@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
 import android.content.Context;
+import android.location.Location;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -24,9 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
  * Created by ravi on 21/06/18.
@@ -140,7 +139,11 @@ public class CleverTapHelper {
                 profileUpdate.put(LOCATION, userSummary.getUserBO().getCityMaster());
             }
 
-            profileUpdate.put("MSG-sms", true);                      // Enable email notifications
+            //requires Location Permission in AndroidManifest e.g. "android.permission.ACCESS_COARSE_LOCATION"
+            Location location = cleverTapAPI.getLocation();
+            cleverTapAPI.setLocation(location);
+
+            profileUpdate.put("MSG-sms", true);                         // Enable email notifications
             profileUpdate.put("MSG-push", true);                        // Enable push notifications
             profileUpdate.put("MSG-sms", true);                        // Enable SMS notifications
 
@@ -167,6 +170,9 @@ public class CleverTapHelper {
 
     //region private method
     private Map<String, Object> addExtraPropertiesToEvent(Context context, Map<String, Object> properties) {
+        if(properties == null) {
+            properties = new HashMap<>();
+        }
         properties = getSuperProperties(context, properties);
         properties = getSystemProperties(context, properties);
         return properties;
@@ -191,8 +197,6 @@ public class CleverTapHelper {
             }
             String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
             String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
-            AppUtils appUtils = AppUtils.getInstance();
-            String version = appUtils.getAppVersionName();
 
             properties.put(SuperProperty.USER_ID.getString(), Long.toString(userSummary.getUserId()));
             properties.put(SuperProperty.USER_NAME.getString(), userSummary.getFirstName() + " " + userSummary.getLastName());
@@ -205,9 +209,6 @@ public class CleverTapHelper {
             properties.put(SuperProperty.CONFIG_TYPE.getString(), mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
             properties.put(SuperProperty.CONFIG_VERSION.getString(), mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
             properties.put(SuperProperty.EMAIL_ID.getString(), userSummary.getEmailId());
-            if (StringUtil.isNotNullOrEmptyString(version)) {
-                properties.put(SuperProperty.APP_VERSION.getString(), version);
-            }
 
             return properties;
         }

@@ -73,7 +73,15 @@ public class PushNotificationService extends GcmListenerService {
             String cleverTypeTitle = data.getString(AppConstants.CLEVER_TAP_TITLE);
             String cleverTypeBody = data.getString(AppConstants.CLEVER_TAP_BODY);
             String cleverTypeDeepLink = data.getString(AppConstants.CLEVER_TAP_DEEP_LINK_URL);
-            CleverTapAPI.createNotification(this, data);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                String relatedChannelId = getString(R.string.sheroesRelatedChannelID);
+                CharSequence channelName = getString(R.string.sheroesRelatedChannelName);
+                String channelDescription = getString(R.string.sheroesRelatedChannelDesc);
+                CleverTapAPI.createNotificationChannel(getApplicationContext(), relatedChannelId, channelName, channelDescription, NotificationManager.IMPORTANCE_MAX, true);
+            }
+            CleverTapAPI.createNotification(getApplicationContext(), data);
+
             final HashMap<String, Object> properties = new EventProperty.Builder()
                     .url(cleverTypeDeepLink)
                     .title(cleverTypeTitle)
