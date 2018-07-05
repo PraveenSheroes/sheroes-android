@@ -1041,7 +1041,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     public void navigateToProfileEditing() {
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                EditUserProfileActivity.navigateTo(ProfileActivity.this, SOURCE_SCREEN, mUserSolarObject.getImageUrl(), null, 1);
+                EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
                 HashMap<String, Object> properties =
                         new EventProperty.Builder()
                                 .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
@@ -1064,7 +1064,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                             .name(mUserPreference.get().getUserSummary().getFirstName())
                             .build();
             trackEvent(Event.PROFILE_PIC_EDIT_CLICKED, properties);
-            CameraBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+            CameraBottomSheetFragment.showDialog(this, SCREEN_LABEL);
         }
     }
 

@@ -930,6 +930,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         loginResponse.setGcmId(mGcmId);
         mUserPreference.set(loginResponse);
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
+        AnalyticsManager.initializeCleverTap(WelcomeActivity.this);
         moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
 
         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {

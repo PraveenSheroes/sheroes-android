@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -155,6 +156,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
+                        AnalyticsManager.initializeCleverTap(getContext());
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         ((LoginActivity) getActivity()).onLoginAuthToken();
@@ -180,6 +182,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     AnalyticsManager.initializeMixpanel(getContext());
+                    AnalyticsManager.initializeCleverTap(getContext());
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     ((LoginActivity) getActivity()).onLoginAuthToken();
