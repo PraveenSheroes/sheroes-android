@@ -402,7 +402,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
-                            draftAndSubmitStoryArticle(false);
+                            draftAndSubmitStoryArticle(true);
                         }
                     });
 
