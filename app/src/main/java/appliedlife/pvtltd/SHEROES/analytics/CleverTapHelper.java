@@ -88,7 +88,8 @@ public class CleverTapHelper {
         return cleverTapAPI;
     }
 
-     void setupUser(Context context) {
+     void setupUser(Context context, boolean isNewUser) {
+
         UserSummary userSummary = null;
         UserBO userBio;
         if (mUserPreference == null) {
@@ -149,7 +150,11 @@ public class CleverTapHelper {
 
             profileUpdate = getSuperProperties(context, profileUpdate);
 
-            cleverTapAPI.onUserLogin(profileUpdate);
+            if(isNewUser) {
+                cleverTapAPI.onUserLogin(profileUpdate);
+            } else {
+                cleverTapAPI.profile.push(profileUpdate);
+            }
         }
     }
 

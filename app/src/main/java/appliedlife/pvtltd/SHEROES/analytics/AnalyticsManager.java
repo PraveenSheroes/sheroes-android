@@ -46,11 +46,11 @@ public class AnalyticsManager {
         initializeMixpanel(context, true);
     }
 
-    public static void initializeCleverTap(Context context) {
+    public static void initializeCleverTap(Context context, boolean isNewUser) {
         sAppContext = context;
         CleverTapHelper cleverTapHelper = new CleverTapHelper();
         cleverTapHelper.setupCleverTap(context);
-        cleverTapHelper.setupUser(context);
+        cleverTapHelper.setupUser(context, isNewUser);
     }
 
     public static void initializeFbAnalytics(Context context){

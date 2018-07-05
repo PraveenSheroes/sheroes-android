@@ -75,6 +75,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class LoginFragment extends BaseFragment implements LoginView {
     private static final String SCREEN_LABEL = "Email Login Screen";
     public static final int LOGGING_IN_DIALOG = 1;
+    private long currentTime;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -156,8 +158,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
-                        AnalyticsManager.initializeCleverTap(getContext());
-                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
+
+                        long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+                        AnalyticsManager.initializeCleverTap(getContext(), currentTime < createdDate);
+                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         ((LoginActivity) getActivity()).onLoginAuthToken();
                         break;
@@ -182,8 +186,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     AnalyticsManager.initializeMixpanel(getContext());
-                    AnalyticsManager.initializeCleverTap(getContext());
-                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(false).authProvider("Email").build();
+                    long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+                    AnalyticsManager.initializeCleverTap(getContext(), currentTime < createdDate);
+                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     ((LoginActivity) getActivity()).onLoginAuthToken();
 
@@ -278,6 +283,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 loginRequest.setUsername(email);
                 loginRequest.setPassword(password);
                 loginRequest.setGcmorapnsid(mGcmId);
+                currentTime = System.currentTimeMillis();
                 mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
             } else {
                 if (!NetworkUtil.isConnected(getContext())) {

@@ -70,7 +70,7 @@ public class SheroesApplication extends MultiDexApplication  {
         AnalyticsManager.initializeMixpanel(mContext);
         AnalyticsManager.initializeFbAnalytics(mContext);
         //cleverTap
-        AnalyticsManager.initializeCleverTap(this);
+        AnalyticsManager.initializeCleverTap(this, false);
         Stetho.initializeWithDefaults(this);
     }
 
