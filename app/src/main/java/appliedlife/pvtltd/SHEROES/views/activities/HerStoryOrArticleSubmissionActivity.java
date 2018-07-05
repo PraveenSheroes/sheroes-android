@@ -344,8 +344,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         if (mIsCoverPhoto) {
             if (StringUtil.isNotNullOrEmptyString(finalImageUrl)) {
                 mCoverImageUrl = finalImageUrl;
-                int imageHeight = CommonUtil.getWindowWidth(this) / 2;
-                finalImageUrl = CommonUtil.getThumborUri(finalImageUrl, CommonUtil.getWindowWidth(this), imageHeight);
+                int width=CommonUtil.getWindowWidth(this);
+                int imageHeight = width / 2;
+                finalImageUrl = CommonUtil.getThumborUri(finalImageUrl, width, imageHeight);
                 Glide.with(this)
                         .asBitmap()
                         .load(finalImageUrl)

@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -172,7 +173,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView, ProgressbarView {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
@@ -463,7 +464,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         WebViewActivity.navigateTo(this, getScreenName(), null, url, menuItemName);
         DrawerViewHolder.selectedOptionName = menuItemName;
-        setAppBarElevation();
     }
 
     @OnClick(R.id.tv_drawer_navigation)
@@ -675,7 +675,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
-        setAppBarElevation();
+
     }
 
     public void communityButton() {
@@ -706,7 +706,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
-        setAppBarElevation();
+
     }
 
     public void inviteMyCommunityDialog() {
@@ -726,7 +726,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
-        setAppBarElevation();
+
     }
 
     @Override
@@ -982,26 +982,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void fetchAllCommunity() {
         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
     }
-
-    @Override
-    public void onViewRendered(float dashWidth) {
-        ConfigData configData = new ConfigData();
-        int beginnerTickIndex = configData.beginnerStartIndex;
-        int intermediateTickIndex = configData.intermediateStartIndex;
-
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
-            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
-        }
-        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
-        beginnerTick.setLayoutParams(buttonLayoutParams);
-
-        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
-        intermediateTick.setLayoutParams(intermediateLayoutParams);
-    }
-
     @Override
     public void onCancelDone(int pressedEvent) {
         if (AppConstants.ONE_CONSTANT == pressedEvent) {
@@ -1738,7 +1718,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
-        setAppBarElevation();
+
     }
 
     private void renderICCMemberListView() {
@@ -1752,7 +1732,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
-        setAppBarElevation();
+
     }
 
     private void initHomeViewPagerAndTabs() {
@@ -1831,7 +1811,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        setAppBarElevation();
     }
 
     private void removeItem(FeedDetail feedDetail) {
@@ -2013,13 +1992,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         });
     }
 
-    private void setAppBarElevation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mAppBarLayout.setElevation(APP_BAR_ELEVATION);
-        } else {
-            ViewCompat.setElevation(mAppBarLayout, APP_BAR_ELEVATION);
-        }
-    }
     //endregion
 
 }
