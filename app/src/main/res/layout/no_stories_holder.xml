@@ -20,7 +20,7 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:layout_gravity="center"
-        android:text="No stories yet"
+        android:text="@string/no_story"
         android:textColor="@color/recent_post_comment"
         android:textSize="16sp" />
 </LinearLayout>
