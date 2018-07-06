@@ -335,7 +335,7 @@ public class CleverTapHelper {
 
         final Boolean isBluetoothEnabled = systemInformation.isBluetoothEnabled();
         if (isBluetoothEnabled != null)
-            properties.put("$bluetooth_enabled", isBluetoothEnabled);
+            properties.put("$bluetooth_enabled", isBluetoothEnabled.booleanValue());
 
         final String bluetoothVersion = systemInformation.getBluetoothVersion();
         if (bluetoothVersion != null)

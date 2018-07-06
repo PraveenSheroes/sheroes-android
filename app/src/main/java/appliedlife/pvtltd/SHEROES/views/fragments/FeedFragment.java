@@ -74,6 +74,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -103,6 +104,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
@@ -1158,6 +1160,27 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         AnalyticsManager.trackEvent(Event.APP_UPDATE_NO, getScreenName(), null);
         CommonUtil.saveReminderForTomorrow();
         mAdapter.removeHeader(HeaderRecyclerViewAdapter.header);
+    }
+
+    @Override
+    public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
+        if(getActivity()!=null && getActivity().isFinishing()) return;
+
+        if(leaderBoardUserSolrObj!=null) {
+            BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, screenName, true);
+        }
+    }
+
+    @Override
+    public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
+        if(leaderBoardUserSolrObj!=null) {
+            SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
+        }
+    }
+
+    @Override
+    public void onLeaderBoardUserClick(long userId, String sourceScreenName) {
+        ProfileActivity.navigateTo(getActivity(), userId, false, PROFILE_NOTIFICATION_ID, sourceScreenName, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     @Override

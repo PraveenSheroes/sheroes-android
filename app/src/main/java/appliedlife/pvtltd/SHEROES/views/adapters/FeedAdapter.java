@@ -27,7 +27,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -43,7 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.Bind;
@@ -67,6 +67,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
     @Inject
     Preference<Configuration> mConfiguration;
+
     //endregion
 
     //region Constructor
@@ -102,7 +103,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_MENTOR_COMPACT:
                 return new MentorCard(mInflater.inflate(R.layout.feed_mentor_card, parent, false), mBaseHolderInterface);
             case TYPE_LEADER:
-                return new LeaderViewHolder(mInflater.inflate(R.layout.list_leader_item, parent, false), mBaseHolderInterface);
+                return new LeaderBoardViewHolder(mInflater.inflate(R.layout.list_leaderboard_item, parent, false), mBaseHolderInterface);
             case TYPE_COMMUNITY:
                 return new CommunityFlatViewHolder(mInflater.inflate(R.layout.community_flat_layout, parent, false), mBaseHolderInterface);
             case TYPE_HOME_FEED_HEADER:
@@ -167,9 +168,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 communityFlatViewHolder.bindData(communityFeedSolrObj, mContext, position);
                 break;
             case TYPE_LEADER:
-                LeaderViewHolder leaderViewHolder = (LeaderViewHolder) holder;
-                LeaderObj leaderObj = (LeaderObj) mFeedDetailList.get(position);
-                leaderViewHolder.bindData(leaderObj, mContext, position);
+                LeaderBoardViewHolder leaderBoardViewHolder = (LeaderBoardViewHolder) holder;
+                LeaderBoardUserSolrObj leaderBoardUserSolrObj = (LeaderBoardUserSolrObj) mFeedDetailList.get(position);
+                leaderBoardViewHolder.totalNumberOfUsersInLeaderBoard(mFeedDetailList.size());
+                leaderBoardViewHolder.bindData(leaderBoardUserSolrObj, mContext, position);
                 break;
 
             case TYPE_HOME_FEED_HEADER:
@@ -208,6 +210,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail instanceof ArticleSolrObj) {
                 return TYPE_ARTICLE;
             }
+
+            if (feedDetail instanceof LeaderBoardUserSolrObj) {
+                return TYPE_LEADER;
+            }
+
             if (feedDetail instanceof UserPostSolrObj) {
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                 if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
@@ -241,10 +248,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
             if (feedDetail instanceof CommunityFeedSolrObj) {
                 return TYPE_COMMUNITY;
-            }
-
-            if (feedDetail instanceof LeaderObj) {
-                return TYPE_LEADER;
             }
 
             if (feedDetail instanceof ImageSolrObj) {

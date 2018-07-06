@@ -10,6 +10,7 @@
     <dimen name="dp_size_22">22dp</dimen>
     <dimen name="dp_size_25">25dp</dimen>
     <dimen name="dp_size_28">28dp</dimen>
+    <dimen name="dp_size_39">39dp</dimen>
     <dimen name="dp_size_48">48dp</dimen>
     <dimen name="dp_size_98">98dp</dimen>
     <dimen name="dp_size_90">90dp</dimen>
@@ -160,5 +161,9 @@
     <dimen name="invite_btn_height">30dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="drawer_width">220dp</dimen>
+    <dimen name="badge_header_height">140dp</dimen>
+    <dimen name="badge_icon_size">108dp</dimen>
+    <dimen name="badge_share_header_size">140dp</dimen>
+    <dimen name="badge_share_icon_size">100dp</dimen>
 </resources>
 

@@ -17,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -26,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestListActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -63,8 +64,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserMentorCommunity;
+import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -96,6 +98,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ICCMemberViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesDrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
@@ -119,6 +122,7 @@ import dagger.Component;
 @Singleton
 @Component(modules = {SheroesAppModule.class})
 public interface SheroesAppComponent {
+
     void inject(MixpanelHelper mixpanelHelper);
 
     void inject(HomeActivity homeActivity);
@@ -133,7 +137,7 @@ public interface SheroesAppComponent {
 
     void inject(CommunitiesListFragment myCommunitiesFragment);
 
-    void inject(UserMentorCommunity userMentorCommunity);
+    void inject(FollowedCommunitiesFragment userMentorCommunity);
 
     void inject(FollowingFragment followingFragment);
 
@@ -299,7 +303,6 @@ public interface SheroesAppComponent {
 
     void inject(SuggestedContactCardHolder suggestedContactCardHolder);
 
-
     void inject(UserMentionCardHolder userMentionCardHolder);
 
     void inject(HeaderTaggedUserViewHolder headerTaggedUserViewHolder);
@@ -325,6 +328,12 @@ public interface SheroesAppComponent {
     void inject(WebViewActivity webViewActivity);
 
     void inject(CleverTapHelper cleverTapHelper);
+
+    void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
+
+    void inject(SuperSheroesCriteriaFragment superSheroesCriteriaFragment);
+
+    void inject(LeaderBoardViewHolder leaderBoardViewHolder);
 }
 
 

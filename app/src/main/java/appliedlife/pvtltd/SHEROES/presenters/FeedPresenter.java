@@ -1270,7 +1270,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                     }
                 });
-
     }
 
     public void deleteArticle(final ArticleSubmissionRequest articleSubmissionRequest) {

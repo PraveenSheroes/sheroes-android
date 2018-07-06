@@ -630,6 +630,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (!CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)) {
             List<CommunityTab> communityTabs = new ArrayList<>();
             communityTabs = mCommunityFeedSolrObj.communityTabs;
+
             for (CommunityTab communityTab : communityTabs) {
                 if (communityTab.type.equalsIgnoreCase(TabType.NAVTIVE.getName())) {
                     FeedFragment feedFragment = new FeedFragment();

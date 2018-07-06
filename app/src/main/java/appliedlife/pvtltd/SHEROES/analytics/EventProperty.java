@@ -65,7 +65,8 @@ public enum EventProperty {
     PROFILE_STRENGTH("Profile Strength"),
     IS_STORY("Is a Story"),
     AUTHOR_ID("Author Id"),
-    AUTHOR_NAME("Author Name");
+    AUTHOR_NAME("Author Name"),
+    IS_ACTIVE("Badge State");
 
     private final String string;
 
@@ -301,6 +302,11 @@ public enum EventProperty {
 
         public Builder isChecked(final boolean isChecked){
             put(IS_CHECKED, isChecked);
+            return this;
+        }
+
+        public Builder isBadgeActive(final boolean isActive) {
+            put(IS_ACTIVE, isActive);
             return this;
         }
 
