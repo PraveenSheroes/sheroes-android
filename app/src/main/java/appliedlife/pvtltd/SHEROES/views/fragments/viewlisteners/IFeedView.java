@@ -42,4 +42,6 @@ public interface IFeedView extends BaseMvpView {
     void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo);
 
     void onSpamPostOrCommentReported(SpamResponse baseResponse, UserPostSolrObj userPostSolrObj);
+
+    void likeUnlikeResponse(FeedDetail feedDetail,boolean isLike);
 }

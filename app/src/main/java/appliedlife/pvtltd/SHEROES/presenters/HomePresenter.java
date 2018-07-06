@@ -759,20 +759,16 @@ public class HomePresenter extends BasePresenter<HomeView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        getMvpView().startProgressBar();
         mHomeModel.getConfig()
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ConfigurationResponse>() {
                     @Override
                     public void onComplete() {
-                        getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(e.getMessage(), ERROR_MEMBER);
-                        getMvpView().stopProgressBar();
                     }
 
                     @Override
@@ -789,7 +785,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                 getMvpView().onConfigFetched();
                             }
                         }
-                        getMvpView().stopProgressBar();
                     }
                 });
     }

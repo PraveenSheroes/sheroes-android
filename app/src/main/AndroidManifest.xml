@@ -168,7 +168,7 @@
             android:windowSoftInputMode="stateHidden" />
 
         <activity
-            android:name=".views.activities.HerStoryOrArticleSubmissionActivity"
+            android:name=".views.activities.CreateStoryActivity"
             android:exported="true"
             android:configChanges="keyboardHidden"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -213,8 +213,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".views.activities.WebViewActivity"
-            android:parentActivityName=".views.activities.WebViewActivity"
-            android:screenOrientation="portrait" />
+            android:parentActivityName=".views.activities.WebViewActivity" />
         <activity
             android:name=".views.activities.AllContactActivity"
             android:parentActivityName=".views.activities.HomeActivity"

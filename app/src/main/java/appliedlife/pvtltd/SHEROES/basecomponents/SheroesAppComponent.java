@@ -16,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -47,8 +47,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -104,6 +102,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesDrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
@@ -314,7 +313,7 @@ public interface SheroesAppComponent {
 
     void inject(AppInstallationHelper appInstallationHelper);
 
-    void inject(HerStoryOrArticleSubmissionActivity herStoryOrArticleSubmissionActivity);
+    void inject(CreateStoryActivity createStoryActivity);
 
     void inject(FeedAdapter feedAdapter);
 
@@ -333,6 +332,8 @@ public interface SheroesAppComponent {
     void inject(SuperSheroesCriteriaFragment superSheroesCriteriaFragment);
 
     void inject(LeaderBoardViewHolder leaderBoardViewHolder);
+
+    void inject(NoStoriesHolder noStoriesHolder);
 }
 
 

@@ -98,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
@@ -302,14 +302,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else {
                 emptyImage.setVisibility(View.GONE);
             }
-        } else {
-            if (isHomeFeed) {
-                emptyImage.setVisibility(View.GONE);
-            } else {
-                emptyImage.setImageResource(R.drawable.ic_story_blank);
-                emptyText.setText("No Stories Yet");
-            }
-
         }
     }
 
@@ -324,6 +316,55 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail);
         } else {
             updateItem(feedDetail);
+        }
+    }
+
+    @Override
+    public void likeUnlikeResponse(FeedDetail feedDetail, boolean isLike) {
+        if (isLike) {
+            if (feedDetail instanceof ArticleSolrObj) {
+                ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+                if (articleSolrObj.isUserStory()) {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.STORY_LIKED, getScreenName(), properties);
+                } else {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.ARTICLE_LIKED, getScreenName(), properties);
+                }
+            } else {
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, getScreenName(), properties);
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, getScreenName());
+                }
+            }
+        } else {
+            if (feedDetail instanceof ArticleSolrObj) {
+                ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+                if (articleSolrObj.isUserStory()) {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.STORY_UN_LIKED, getScreenName(), properties);
+                } else {
+                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
+                    AnalyticsManager.trackEvent(Event.ARTICLE_UNLIKED, getScreenName(), properties);
+                }
+            } else {
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName(), properties);
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName());
+                }
+            }
         }
     }
 
@@ -533,6 +574,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
         properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        if (mCommunityTab != null) {
+            HashMap<String, Object> propertiesMap = new EventProperty.Builder()
+                    .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                    .sourceTabKey(mCommunityTab.key)
+                    .sourceTabTitle(mCommunityTab.title)
+                    .build();
+            properties.putAll(propertiesMap);
+        }
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
@@ -595,7 +644,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onArticleItemClicked(ArticleSolrObj articleSolrObj) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(articleSolrObj.getItemPosition()));
-        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
+        ArticleActivity.navigateTo(getActivity(), articleSolrObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
     }
 
     @Override
@@ -646,6 +695,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else {
                 HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
                 properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> propertiesMap = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    properties.putAll(propertiesMap);
+                }
                 AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
             }
         }
@@ -793,7 +850,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     protected boolean trackScreenTime() {
-        return true;
+        return false;
+    }
+
+    public void setScreenNameOnTabSelection(String screenName) {
+        mScreenLabel = screenName;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AnalyticsManager.timeScreenView(mScreenLabel);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
     }
 
     @Override
@@ -877,8 +950,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
-        AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
         mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked());
+        if (userPostObj.isBookmarked()) {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+            }
+        } else {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
+            }
+        }
     }
 
     @Override
@@ -1133,7 +1228,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
             screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
         }
-        HerStoryOrArticleSubmissionActivity.navigateTo(getActivity(), articleObj, getScreenName(), null);
+        CreateStoryActivity.navigateTo(getActivity(), articleObj, getScreenName(), null);
     }
 
     public void onHerStoryDelete(ArticleSolrObj articleObj) {
@@ -1164,16 +1259,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if(getActivity()!=null && getActivity().isFinishing()) return;
+        if (getActivity() != null && getActivity().isFinishing()) return;
 
-        if(leaderBoardUserSolrObj!=null) {
+        if (leaderBoardUserSolrObj != null) {
             BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, screenName, true);
         }
     }
 
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if(leaderBoardUserSolrObj!=null) {
+        if (leaderBoardUserSolrObj != null) {
             SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
         }
     }
@@ -1667,14 +1762,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
-        String setOrderKey = feedResponsePojo.getSetOrderKey();
-        String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
-        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
-        editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
-        editor.apply();
-        AnalyticsManager.initializeMixpanel(getActivity(), false);
+        if (isHomeFeed) {
+            String setOrderKey = feedResponsePojo.getSetOrderKey();
+            String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
+            editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
+            editor.apply();
+            AnalyticsManager.initializeMixpanel(getActivity(), false);
+        }
     }
 
     public int findPositionById(long id) { //TODO - move to presenter

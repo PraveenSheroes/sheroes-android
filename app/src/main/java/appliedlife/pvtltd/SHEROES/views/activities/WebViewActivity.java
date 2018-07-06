@@ -98,8 +98,7 @@ public class WebViewActivity extends BaseActivity {
     }
 
     public void openWebUrlFragment() { //To open the web-pages in app
-
-        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItem, true);
+        NavigateToWebViewFragment navigateToWebViewFragment = NavigateToWebViewFragment.newInstance(url, null, menuItem, false);
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(NavigateToWebViewFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_web_view, navigateToWebViewFragment, NavigateToWebViewFragment.class.getName()).addToBackStack(NavigateToWebViewFragment.class.getName()).commitAllowingStateLoss();
@@ -124,6 +123,7 @@ public class WebViewActivity extends BaseActivity {
         }
         finish();
     }
+
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;

@@ -165,5 +165,26 @@
     <dimen name="badge_icon_size">108dp</dimen>
     <dimen name="badge_share_header_size">140dp</dimen>
     <dimen name="badge_share_icon_size">100dp</dimen>
+    <dimen name="bell_notification_mai_left_margin">16dp</dimen>
+    <dimen name="bell_notification_mai_right_margin">16dp</dimen>
+    <dimen name="bell_notification_mai_top_margin">16dp</dimen>
+    <dimen name="bell_notification_fl_circle_icon_left_margin">16dp</dimen>
+    <dimen name="bell_notification_li_title_left_margin">16dp</dimen>
+    <dimen name="bell_notification_li_title_right_margin">16dp</dimen>
+    <dimen name="bell_notification_iv_bell_noti_image_left_margin">8dp</dimen>
+    <dimen name="bell_notification_tv_bell_view_profile_right_margin">16dp</dimen>
+    <dimen name="bell_notification_tv_bell_view_profile_left_margin">16dp</dimen>
+    <dimen name="bell_notification_tv_bell_view_profile_top_margin">16dp</dimen>
+    <dimen name="bell_notification_tv_bell_view_profile_padding_margin">10dp</dimen>
+    <dimen name="bell_notification_iv_bell_reaction_left_margin">16dp</dimen>
+    <dimen name="bell_notification_iv_bell_reaction_right_margin">16dp</dimen>
+    <dimen name="bell_notification_iv_bell_reaction_top_margin">12dp</dimen>
+    <dimen name="bell_notification_dot_top_margin">7dp</dimen>
+    <dimen name="bell_notification_dot_right_margin">8dp</dimen>
+    <dimen name="bell_notification_tv_bell_noti_time_right_margin">8dp</dimen>
+    <dimen name="bell_notification_tv_bell_noti_time_left_margin">8dp</dimen>
+    <dimen name="bell_notification_view_left_margin">52dp</dimen>
+    <dimen name="bell_notification_view_top_margin">18dp</dimen>
+
 </resources>
 

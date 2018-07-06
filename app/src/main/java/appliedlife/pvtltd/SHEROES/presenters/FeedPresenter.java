@@ -210,6 +210,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         FeedDetail homeFeedHeader = new FeedDetail();
                                         homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
                                         feedList.add(0, homeFeedHeader);
+                                    } else {
+                                        if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                            FeedDetail noStoryFeed = new FeedDetail();
+                                            noStoryFeed.setSubType(AppConstants.NO_STORIES);
+                                            feedList.add(noStoryFeed);
+                                        }
                                     }
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);
@@ -883,19 +889,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     getMvpView().invalidateItem(feedDetail);
                 }
                 getMvpView().invalidateItem(feedDetail);
-                if (feedDetail instanceof ArticleSolrObj) {
-                    ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
-                    if (articleSolrObj.isUserStory()) {
-                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
-                        AnalyticsManager.trackEvent(Event.STORY_LIKED, FeedFragment.SCREEN_LABEL, properties);
-                    } else {
-                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
-                        AnalyticsManager.trackEvent(Event.ARTICLE_LIKED, FeedFragment.SCREEN_LABEL, properties);
-                    }
-                } else {
-                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, FeedFragment.SCREEN_LABEL);
-                }
-
+                getMvpView().likeUnlikeResponse(feedDetail,true);
             }
         });
 
@@ -950,18 +944,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     //  mBaseResponseList.set(0, userPostSolrObj);
                 }
                 getMvpView().invalidateItem(feedDetail);
-                if (feedDetail instanceof ArticleSolrObj) {
-                    ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
-                    if (articleSolrObj.isUserStory()) {
-                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
-                        AnalyticsManager.trackEvent(Event.STORY_UN_LIKED, FeedFragment.SCREEN_LABEL, properties);
-                    } else {
-                        HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, FeedFragment.SCREEN_LABEL);
-                        AnalyticsManager.trackEvent(Event.ARTICLE_UNLIKED, FeedFragment.SCREEN_LABEL, properties);
-                    }
-                } else {
-                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, FeedFragment.SCREEN_LABEL);
-                }
+                getMvpView().likeUnlikeResponse(feedDetail,false);
             }
         });
 

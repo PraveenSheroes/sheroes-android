@@ -99,7 +99,7 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.SheroesWelcomeViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.FacebookErrorDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -197,7 +197,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        checkAuthTokenExpireOrNot();
+        if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
+            showMaleError(getString(R.string.sheroes_gender_error), "");
+        } else {
+            checkAuthTokenExpireOrNot();
+        }
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
         appInstallationHelper.setupAndSaveInstallation(false);
     }
@@ -304,7 +308,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             }
                         }
                         setUpView();
-
                     }
                 });
             }
@@ -330,6 +333,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             AnalyticsManager.trackScreenView(getScreenName());
         }
         mLoginPresenter.getMasterDataToPresenter();
+        mLoginPresenter.queryConfig();
     }
 
     private void loginSetUp() {
@@ -584,10 +588,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    public void showFaceBookError(String message, String userName) {
-        FacebookErrorDialog fragment = (FacebookErrorDialog) getFragmentManager().findFragmentByTag(FacebookErrorDialog.class.getName());
+    public void showMaleError(String message, String userName) {
+        MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
         if (fragment == null) {
-            fragment = new FacebookErrorDialog();
+            fragment = new MaleErrorDialog();
             Bundle b = new Bundle();
             b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
             b.putString(BaseDialogFragment.USER_NAME, userName);
@@ -595,7 +599,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), FacebookErrorDialog.class.getName());
+            fragment.show(getFragmentManager(), MaleErrorDialog.class.getName());
         }
     }
 
@@ -873,7 +877,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             mUserPreference.delete();
                             LoginManager.getInstance().logOut();
                             signOut();
-                            showFaceBookError(AppConstants.EMPTY_STRING, "");
+                            showMaleError(AppConstants.EMPTY_STRING, "");
                         }
                         break;
                     case AppConstants.INVALID:
@@ -892,11 +896,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
                             } else {
 
-                                showFaceBookError(errorMessage, "");
+                                showMaleError(errorMessage, "");
                             }
                         } else {
                             errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
-                            showFaceBookError(errorMessage, "");
+                            showMaleError(errorMessage, "");
                         }
                         break;
                 }

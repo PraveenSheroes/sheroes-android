@@ -21,6 +21,17 @@
             android:textSize="16sp"
             android:textStyle="normal" />
 
+        <ImageView
+            android:id="@+id/iv_close_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/upload_photo_text_view"
+            android:layout_marginRight="@dimen/dp_size_8"
+            android:layout_marginTop="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_cross_16dp" />
 
         <RelativeLayout
             android:id="@+id/add_photo_container"
@@ -38,7 +49,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
                 android:visibility="gone" />
 
             <TextView
@@ -88,8 +98,8 @@
             android:text="(Add minimum 1 tag to post a story)"
             android:textColor="@color/footer_icon_text"
             android:textSize="14sp"
-            android:visibility="gone"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/share_social_title_text_view"
@@ -100,20 +110,20 @@
             android:layout_marginTop="26dp"
             android:fontFamily="sans-serif"
             android:lineSpacingExtra="8sp"
-            android:visibility="gone"
             android:text="Share via social media"
             android:textColor="@color/toolbar_title"
             android:textSize="16sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/fb_share_container"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:visibility="gone"
             android:layout_below="@id/share_social_title_text_view"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp">
+            android:layout_marginTop="16dp"
+            android:visibility="gone">
 
 
             <android.support.v7.widget.SwitchCompat

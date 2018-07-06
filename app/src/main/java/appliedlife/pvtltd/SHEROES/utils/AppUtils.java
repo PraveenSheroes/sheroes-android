@@ -2158,21 +2158,7 @@ public class AppUtils {
         return m.find();
     }
 
-    public ArticleSubmissionRequest makeArticleDraftRequest(Long articleId,String articleTitle, String articleBody,String coverImageUrl) {
-        AppUtils appUtils = AppUtils.getInstance();
-        ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
-        articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
-        articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        articleSubmissionRequest.articleId = articleId;
-        articleSubmissionRequest.isPublish = false;
-        articleSubmissionRequest.storyTitle = articleTitle;
-        articleSubmissionRequest.storyContent = articleBody;
-        articleSubmissionRequest.coverImageUrl=coverImageUrl;
-        return articleSubmissionRequest;
-    }
-
-    public ArticleSubmissionRequest articleAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj,String coverImageUrl) {
+    public ArticleSubmissionRequest articleDraftAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj,String coverImageUrl,boolean isPublish) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2201,7 +2187,7 @@ public class AppUtils {
                 articleSubmissionRequest.deletedTagIds = deletedTagList;
             }
         }
-        articleSubmissionRequest.isPublish = true;
+        articleSubmissionRequest.isPublish = isPublish;
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;
         articleSubmissionRequest.tagIds = tagList;

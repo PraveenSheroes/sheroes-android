@@ -35,7 +35,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -857,6 +856,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mViewPager.setAdapter(mViewPagerAdapter);
 
         if (isWriteAStory) {
+            clStoryFooter.setVisibility(View.VISIBLE);
             mViewPager.setCurrentItem(mViewPagerAdapter.getCount() - 1);
         } else {
             if (isOwnProfile) {
@@ -941,7 +941,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.cl_story_footer)
     public void writeAStory() {
-        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
+        CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.li_follower)
@@ -1118,7 +1118,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 .tabTitle(tabName)
                 .isOwnProfile(isOwnProfile)
                 .build();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+        AnalyticsManager.trackScreenView(getScreenName(), properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof UserPostFragment) {
             if (tabName.equalsIgnoreCase("Profile - Posts") && isOwnProfile) {
@@ -1884,7 +1884,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, int askinQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         Bundle bundle = new Bundle();
         Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
         bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
@@ -1905,7 +1904,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         Bundle bundle = new Bundle();
         dataItem.setIdOfEntityOrParticipant(mChampionId);
         dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
@@ -1925,7 +1923,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (notificationId != -1) {
@@ -1940,7 +1937,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -1956,7 +1953,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, ProfileProgressDialog.ProfileLevelType profileLevelType, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (profileLevelType != null) {
