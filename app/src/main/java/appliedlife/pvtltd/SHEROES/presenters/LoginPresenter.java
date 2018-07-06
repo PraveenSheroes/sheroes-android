@@ -112,21 +112,17 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        getMvpView().startProgressBar();
         mSheroesAppServiceApi.
                 getConfig()
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ConfigurationResponse>() {
                     @Override
                     public void onComplete() {
-                        getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().showError(e.getMessage(), ERROR_MEMBER);
-                        getMvpView().stopProgressBar();
                     }
 
                     @Override
@@ -136,7 +132,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                                 mConfiguration.set(configurationResponse.configuration);
                             }
                         }
-                        getMvpView().stopProgressBar();
                     }
                 });
     }
