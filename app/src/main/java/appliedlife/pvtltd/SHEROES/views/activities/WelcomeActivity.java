@@ -333,6 +333,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             AnalyticsManager.trackScreenView(getScreenName());
         }
         mLoginPresenter.getMasterDataToPresenter();
+        mLoginPresenter.queryConfig();
     }
 
     private void loginSetUp() {

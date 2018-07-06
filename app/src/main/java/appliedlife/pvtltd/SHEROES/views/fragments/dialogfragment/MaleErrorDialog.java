@@ -28,7 +28,8 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -42,11 +43,10 @@ import butterknife.OnClick;
 
 public class MaleErrorDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Male User Message Screen";
-    public static final String GENDER_SHARE_LINK = " https://shrs.me/xtap573vXM";
     //region Inject variables
 
     @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region View variables
@@ -100,9 +100,10 @@ public class MaleErrorDialog extends BaseDialogFragment {
             }
 
         }
-
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.MALE_ERROR_SHARE_PREF))) {
-            mSharedText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.MALE_ERROR_SHARE_PREF).get(0).getLabel();
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            mSharedText = mConfiguration.get().configData.mMaleErrorText;
+        } else {
+            mSharedText = new ConfigData().mMaleErrorText;
         }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
@@ -141,14 +142,11 @@ public class MaleErrorDialog extends BaseDialogFragment {
 
     @OnClick(R.id.tv_share_sheroes_app)
     public void tvShareSheroesAppClick() {
-        if (!StringUtil.isNotNullOrEmptyString(mSharedText)) {
-            mSharedText = getString(R.string.share_with_friend_for_download_app);
-        }
         try {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(AppConstants.SHARE_MENU_TYPE);
             intent.setPackage(AppConstants.WHATS_APP);
-            intent.putExtra(Intent.EXTRA_TEXT, mSharedText + GENDER_SHARE_LINK);
+            intent.putExtra(Intent.EXTRA_TEXT, mSharedText);
             startActivity(intent);
             HashMap<String, Object> properties = new EventProperty.Builder().build();
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
@@ -156,7 +154,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
         } catch (Exception e) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(AppConstants.SHARE_MENU_TYPE);
-            intent.putExtra(Intent.EXTRA_TEXT, mSharedText + GENDER_SHARE_LINK);
+            intent.putExtra(Intent.EXTRA_TEXT, mSharedText);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
             HashMap<String, Object> properties = new EventProperty.Builder().build();
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
