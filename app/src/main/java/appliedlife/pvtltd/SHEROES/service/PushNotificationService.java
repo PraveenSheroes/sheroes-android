@@ -80,6 +80,13 @@ public class PushNotificationService extends GcmListenerService {
                 String channelDescription = getString(R.string.sheroesRelatedChannelDesc);
                 CleverTapAPI.createNotificationChannel(getApplicationContext(), relatedChannelId, channelName, channelDescription, NotificationManager.IMPORTANCE_MAX, true);
             }
+
+            data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+            data.putBoolean(AppConstants.IS_MOENGAGE, false);
+            data.putString(AppConstants.TITLE, cleverTypeTitle);
+            data.putString(BaseActivity.SOURCE_SCREEN, AppConstants.FROM_PUSH_NOTIFICATION);
+            data.putBoolean(AppConstants.IS_FROM_PUSH, true);
+
             CleverTapAPI.createNotification(getApplicationContext(), data);
 
             final HashMap<String, Object> properties = new EventProperty.Builder()

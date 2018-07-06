@@ -36,10 +36,13 @@ public class CleverTapHelper {
 
     //region private variable
     private static CleverTapHelper mCleverTapHelper;
+    private static long mSessionStartTime = 0;
+    private static boolean isScreenTracked;
     //endregion
 
     //region private constants
     private static final String SCREEN_OPEN = "Screen open";
+    private static final String SESSION_DURATION = "Duration";
     private static final String NAME = "Name";
     private static final String PHOTO = "Photo";
     private static final String DATE_OF_BIRTH = "DOB";
@@ -71,12 +74,12 @@ public class CleverTapHelper {
      *
      * @param context context
      */
-     void setupCleverTap(Context context) {
+    void setupCleverTap(Context context) {
         SheroesApplication.getAppComponent(context).inject(this);
         getCleverTapInstance(context);
     }
 
-     private static CleverTapAPI getCleverTapInstance(Context context) {
+    private static CleverTapAPI getCleverTapInstance(Context context) {
         CleverTapAPI cleverTapAPI;
         try {
             cleverTapAPI = CleverTapAPI.getInstance(context);
@@ -88,7 +91,7 @@ public class CleverTapHelper {
         return cleverTapAPI;
     }
 
-     void setupUser(Context context, boolean isNewUser) {
+    void setupUser(Context context, boolean isNewUser) {
 
         UserSummary userSummary = null;
         UserBO userBio;
@@ -150,7 +153,7 @@ public class CleverTapHelper {
 
             profileUpdate = getSuperProperties(context, profileUpdate);
 
-            if(isNewUser) {
+            if (isNewUser) {
                 cleverTapAPI.onUserLogin(profileUpdate);
             } else {
                 cleverTapAPI.profile.push(profileUpdate);
@@ -161,21 +164,32 @@ public class CleverTapHelper {
     //Track screen
     static void trackScreen(Context sAppContext, Map<String, Object> properties) {
         properties = getInstance().addExtraPropertiesToEvent(sAppContext, properties);
-        if (properties != null && getCleverTapInstance(sAppContext) != null)
+
+        if (isScreenTracked && mSessionStartTime > 0) { //Session duration for tracked screen
+            long duration = sessionDuration();
+            if (properties != null) {
+                properties.put(SESSION_DURATION, duration);
+            }
+            isScreenTracked = false;
+            mSessionStartTime = 0;
+        }
+
+        if (getCleverTapInstance(sAppContext) != null) {
             getCleverTapInstance(sAppContext).event.push(CleverTapHelper.SCREEN_OPEN, properties);
+        }
     }
 
     //Track event
-     static void trackEvent(Context sAppContext, Event event, Map<String, Object> properties) {
+    static void trackEvent(Context sAppContext, Event event, Map<String, Object> properties) {
         properties = mCleverTapHelper.addExtraPropertiesToEvent(sAppContext, properties);
-        if (properties != null && getCleverTapInstance(sAppContext) != null)
+        if (getCleverTapInstance(sAppContext) != null)
             getCleverTapInstance(sAppContext).event.push(event.getFullName(), properties);
     }
     //endregion
 
     //region private method
     private Map<String, Object> addExtraPropertiesToEvent(Context context, Map<String, Object> properties) {
-        if(properties == null) {
+        if (properties == null) {
             properties = new HashMap<>();
         }
         properties = getSuperProperties(context, properties);
@@ -218,6 +232,12 @@ public class CleverTapHelper {
             return properties;
         }
         return null;
+    }
+
+    //Get the session total
+    private static long sessionDuration() {
+        long currentTime = System.currentTimeMillis();
+        return (currentTime - mSessionStartTime) / 1000L;
     }
 
     //Add additional properties like os, build version etc
@@ -310,4 +330,10 @@ public class CleverTapHelper {
     }
     //endregion
 
+    //region default specifier method
+    void timeScreenOpen() {
+        mSessionStartTime = System.currentTimeMillis();
+        isScreenTracked = true;
+    }
+    //endregion
 }

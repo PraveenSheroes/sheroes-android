@@ -105,6 +105,7 @@ public class AnalyticsManager {
         }
 
         MixpanelHelper.timeScreenOpen(sAppContext, screenName);
+        CleverTapHelper.getInstance().timeScreenOpen();
     }
 
     @Deprecated
