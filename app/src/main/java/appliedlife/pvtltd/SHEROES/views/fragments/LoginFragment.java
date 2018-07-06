@@ -142,6 +142,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mEmailSign.setEnabled(true);
         checkDialogDismiss();
         if (null != loginResponse) {
+            long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
                 switch (loginResponse.getStatus()) {
                     case AppConstants.SUCCESS:
@@ -159,7 +161,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
 
-                        long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
                         AnalyticsManager.initializeCleverTap(getContext(), currentTime < createdDate);
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
@@ -186,8 +187,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     AnalyticsManager.initializeMixpanel(getContext());
-                    long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-                    AnalyticsManager.initializeCleverTap(getContext(), currentTime < createdDate);
+                    AnalyticsManager.initializeCleverTap(getApplicationContext(), currentTime < createdDate);
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     ((LoginActivity) getActivity()).onLoginAuthToken();

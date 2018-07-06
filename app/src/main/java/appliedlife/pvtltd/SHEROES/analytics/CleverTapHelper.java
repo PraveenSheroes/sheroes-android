@@ -246,7 +246,16 @@ public class CleverTapHelper {
         if (properties == null) {
             properties = new HashMap<>();
         }
+        properties = getDeviceDetails(properties);
+        properties = getGooglePlayService(context, properties);
 
+        SystemInformation systemInformation = SystemInformation.getInstance(context);
+        properties = getSystemInformation(systemInformation, properties);
+
+        return properties;
+    }
+
+    private Map<String, Object>  getDeviceDetails(Map<String, Object> properties) {
         properties.put("$os", "Android");
         properties.put("$os_version", Build.VERSION.RELEASE == null ? "UNKNOWN" : Build.VERSION.RELEASE);
 
@@ -254,6 +263,10 @@ public class CleverTapHelper {
         properties.put("$brand", Build.BRAND == null ? "UNKNOWN" : Build.BRAND);
         properties.put("$model", Build.MODEL == null ? "UNKNOWN" : Build.MODEL);
 
+        return properties;
+    }
+
+    private Map<String, Object> getGooglePlayService(Context context, Map<String, Object> properties) {
         try {
             try {
                 final int servicesAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
@@ -283,46 +296,48 @@ public class CleverTapHelper {
         } catch (NoClassDefFoundError e) {
             properties.put("$google_play_services", "not included");
         }
+        return properties;
+    }
 
-        SystemInformation mSystemInformation = SystemInformation.getInstance(context);
-        final DisplayMetrics displayMetrics = mSystemInformation.getDisplayMetrics();
+    private Map<String, Object> getSystemInformation(SystemInformation systemInformation, Map<String, Object> properties) {
+        final DisplayMetrics displayMetrics = systemInformation.getDisplayMetrics();
         properties.put("$screen_dpi", displayMetrics.densityDpi);
         properties.put("$screen_height", displayMetrics.heightPixels);
         properties.put("$screen_width", displayMetrics.widthPixels);
 
-        final String applicationVersionName = mSystemInformation.getAppVersionName();
+        final String applicationVersionName = systemInformation.getAppVersionName();
         if (null != applicationVersionName) {
             properties.put("$app_version", applicationVersionName);
             properties.put("$app_version_string", applicationVersionName);
         }
 
-        final Integer applicationVersionCode = mSystemInformation.getAppVersionCode();
+        final Integer applicationVersionCode = systemInformation.getAppVersionCode();
         if (null != applicationVersionCode) {
             properties.put("$app_release", applicationVersionCode);
             properties.put("$app_build_number", applicationVersionCode);
         }
 
-        final Boolean hasNFC = mSystemInformation.hasNFC();
+        final Boolean hasNFC = systemInformation.hasNFC();
         if (null != hasNFC)
             properties.put("$has_nfc", hasNFC.booleanValue());
 
-        final Boolean hasTelephony = mSystemInformation.hasTelephony();
+        final Boolean hasTelephony = systemInformation.hasTelephony();
         if (null != hasTelephony)
             properties.put("$has_telephone", hasTelephony.booleanValue());
 
-        final String carrier = mSystemInformation.getCurrentNetworkOperator();
+        final String carrier = systemInformation.getCurrentNetworkOperator();
         if (null != carrier)
             properties.put("$carrier", carrier);
 
-        final Boolean isWifi = mSystemInformation.isWifiConnected();
+        final Boolean isWifi = systemInformation.isWifiConnected();
         if (null != isWifi)
             properties.put("$wifi", isWifi.booleanValue());
 
-        final Boolean isBluetoothEnabled = mSystemInformation.isBluetoothEnabled();
+        final Boolean isBluetoothEnabled = systemInformation.isBluetoothEnabled();
         if (isBluetoothEnabled != null)
             properties.put("$bluetooth_enabled", isBluetoothEnabled);
 
-        final String bluetoothVersion = mSystemInformation.getBluetoothVersion();
+        final String bluetoothVersion = systemInformation.getBluetoothVersion();
         if (bluetoothVersion != null)
             properties.put("$bluetooth_version", bluetoothVersion);
 

@@ -814,13 +814,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
-                   /* try {
-                        CleverTapAPI.getInstance(SheroesApplication.mContext).data.pushGcmRegistrationId(mGcmId, true);
-                    } catch (CleverTapMetaDataNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (CleverTapPermissionsNotSatisfied cleverTapPermissionsNotSatisfied) {
-                        cleverTapPermissionsNotSatisfied.printStackTrace();
-                    }*/
                     fbLogin.setEnabled(true);
                     checkSignUpCall(gcmForGoogleAndFacebook);
                 } else {

@@ -42,7 +42,6 @@ public class AnalyticsManager {
     }
 
     public static void initializeMixpanel(Context context){
-        sAppContext = context;
         initializeMixpanel(context, true);
     }
 
