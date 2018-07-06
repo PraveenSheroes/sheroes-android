@@ -1213,7 +1213,7 @@ public class CommonUtil {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
             if (prefs != null) {
-                prefs.edit().putBoolean(key, true).commit();
+                prefs.edit().putBoolean(key, true).apply();
             }
         }catch (Exception e) {
             LogUtils.error(TAG, e.toString());

@@ -974,6 +974,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
 
         if (null != mArticleSolrObj && mArticleSolrObj.isUserStory()) {
+            mProperties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, mSourceScreen);
             AnalyticsManager.trackScreenView(SCREEN_LABEL_STORY, mSourceScreen, mProperties);
         } else {
             AnalyticsManager.trackScreenView(SCREEN_LABEL);

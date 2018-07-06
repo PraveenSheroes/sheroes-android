@@ -6,7 +6,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -85,14 +84,12 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -491,7 +488,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void writeAStory() {
-        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
+        CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.invite)
@@ -982,6 +979,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void fetchAllCommunity() {
         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
     }
+
     @Override
     public void onCancelDone(int pressedEvent) {
         if (AppConstants.ONE_CONSTANT == pressedEvent) {
@@ -1271,7 +1269,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             .setGravity(Gravity.BOTTOM)
                             .setText(R.string.tool_tip_notification);
                     builder.show();
-
                 }
             }
         } catch (Exception e) {
@@ -1754,13 +1751,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putString(AppConstants.SCREEN_NAME, "Home Screen");
         homeFragment.setArguments(bundle);
         mFragmentOpen.setFeedFragment(true);
-        /*FeedFragment feedFragment = new FeedFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
-        bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
-        bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
-        feedFragment.setArguments(bundle);
-        mFragmentOpen.setFeedFragment(true);*/
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
 

@@ -90,7 +90,7 @@ import butterknife.OnClick;
  */
 
 
-public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
+public class CreateStoryActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
     private static int flagActivity = 0;
@@ -207,14 +207,14 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     }
 
     @Override
-    public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isDraft) {
+    public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isStoryPost) {
         boolean isMentor = false;
         if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
             isMentor = true;
         }
         ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor, -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, true);
         finish();
-        if (isDraft) {
+        if (!isStoryPost) {
             HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, SCREEN_LABEL);
             AnalyticsManager.trackEvent(Event.STORY_DRAFT_SAVED, SCREEN_LABEL, properties);
         } else {
@@ -388,7 +388,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
                     draftAndSubmitStoryArticle(true);
                 } else {
                     AlertDialog.Builder builder =
-                            new AlertDialog.Builder(HerStoryOrArticleSubmissionActivity.this);
+                            new AlertDialog.Builder(CreateStoryActivity.this);
 
                     builder.setTitle(R.string.dialog_title_image);
                     builder.setMessage(R.string.dialog_image);
@@ -620,9 +620,9 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
             tagList.add(articleTagName.getId());
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), true);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), isPublish);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), true);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), isPublish);
         }
     }
     private void onBackPress() {
@@ -636,7 +636,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
         }
 
         AlertDialog.Builder builder =
-                new AlertDialog.Builder(HerStoryOrArticleSubmissionActivity.this);
+                new AlertDialog.Builder(CreateStoryActivity.this);
 
         builder.setTitle(R.string.dialog_title_draft);
         builder.setMessage(R.string.dialog_body_draft);
@@ -719,8 +719,8 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
     //region static methods
     public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
 
-        Intent intent = new Intent(fromActivity, HerStoryOrArticleSubmissionActivity.class);
-        HerStoryOrArticleSubmissionActivity.flagActivity = flagActivity;
+        Intent intent = new Intent(fromActivity, CreateStoryActivity.class);
+        CreateStoryActivity.flagActivity = flagActivity;
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
 
         if (!CommonUtil.isEmpty(screenProperties)) {
@@ -732,7 +732,7 @@ public class HerStoryOrArticleSubmissionActivity extends BaseActivity implements
 
     public static void navigateTo(Activity fromActivity, ArticleSolrObj article, String sourceScreen, HashMap<String, Object> screenProperties) {
 
-        Intent intent = new Intent(fromActivity, HerStoryOrArticleSubmissionActivity.class);
+        Intent intent = new Intent(fromActivity, CreateStoryActivity.class);
         Parcelable parcelable = Parcels.wrap(article);
         intent.putExtra(ArticleSolrObj.ARTICLE_OBJ, parcelable);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);

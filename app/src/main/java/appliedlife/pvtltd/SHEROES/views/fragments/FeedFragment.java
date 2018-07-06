@@ -98,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
@@ -332,7 +332,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     AnalyticsManager.trackEvent(Event.ARTICLE_LIKED, getScreenName(), properties);
                 }
             } else {
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, getScreenName());
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, getScreenName(), properties);
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, getScreenName());
+                }
             }
         } else {
             if (feedDetail instanceof ArticleSolrObj) {
@@ -345,7 +354,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     AnalyticsManager.trackEvent(Event.ARTICLE_UNLIKED, getScreenName(), properties);
                 }
             } else {
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName());
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName(), properties);
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName());
+                }
             }
         }
     }
@@ -556,6 +574,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
         properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+        if (mCommunityTab != null) {
+            HashMap<String, Object> propertiesMap = new EventProperty.Builder()
+                    .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                    .sourceTabKey(mCommunityTab.key)
+                    .sourceTabTitle(mCommunityTab.title)
+                    .build();
+            properties.putAll(propertiesMap);
+        }
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
@@ -669,6 +695,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else {
                 HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
                 properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> propertiesMap = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    properties.putAll(propertiesMap);
+                }
                 AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
             }
         }
@@ -916,8 +950,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
-        AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
         mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked());
+        if (userPostObj.isBookmarked()) {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+            }
+        } else {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
+            }
+        }
     }
 
     @Override
@@ -1172,7 +1228,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
             screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
         }
-        HerStoryOrArticleSubmissionActivity.navigateTo(getActivity(), articleObj, getScreenName(), null);
+        CreateStoryActivity.navigateTo(getActivity(), articleObj, getScreenName(), null);
     }
 
     public void onHerStoryDelete(ArticleSolrObj articleObj) {

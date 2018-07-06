@@ -17,12 +17,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
+import com.f2prateek.rx.preferences2.Preference;
+
+import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,9 +40,15 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 03-04-2017.
  */
 
-public class FacebookErrorDialog extends BaseDialogFragment {
+public class MaleErrorDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Male User Message Screen";
     public static final String GENDER_SHARE_LINK = " https://shrs.me/xtap573vXM";
+    //region Inject variables
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    //endregion
+
     //region View variables
     @Bind(R.id.iv_close)
     ImageView mTvCacel;
@@ -50,13 +64,15 @@ public class FacebookErrorDialog extends BaseDialogFragment {
     private int callFor = 0;
 
     private String message, mUserName;
+
+    private String mSharedText;
     //endregion
 
     //region overridden variables
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.facebook_error_dialog, container, false);
+        View view = inflater.inflate(R.layout.male_error_dialog, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             callFor = getArguments().getInt(AppConstants.FACEBOOK_VERIFICATION);
@@ -69,28 +85,28 @@ public class FacebookErrorDialog extends BaseDialogFragment {
                     tvUserNameMaleError.setVisibility(View.VISIBLE);
                     tvUserNameMaleError.setText(mUserName);
 
-                } /*else {
-                SpannableString spannableString = new SpannableString(message);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 0, message.length(), 0);
-                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-                tvDescriptionMaleError.setSelected(true);
-            }*/
-                SpannableString spannableString = new SpannableString(message);
-                spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
-                tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-                tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-                tvDescriptionMaleError.setSelected(true);
+                }
+                if (message.length() > 69) {
+                    SpannableString spannableString = new SpannableString(message);
+                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
+                    tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
+                    tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
+                    tvDescriptionMaleError.setSelected(true);
+                }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
             }
 
         }
+
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.MALE_ERROR_SHARE_PREF))) {
+            mSharedText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.MALE_ERROR_SHARE_PREF).get(0).getLabel();
+        }
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
+        CommonUtil.setPrefValue(AppConstants.MALE_ERROR_SHARE_PREF);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
@@ -119,23 +135,32 @@ public class FacebookErrorDialog extends BaseDialogFragment {
     //region onclick methods
     @OnClick(R.id.iv_close)
     public void tryAgainClick() {
-        if (callFor == AppConstants.NO_REACTION_CONSTANT) {
-
-        } else {
-            dismiss();
-        }
+        dismiss();
+        getActivity().finish();
     }
 
     @OnClick(R.id.tv_share_sheroes_app)
     public void tvShareSheroesAppClick() {
+        if (!StringUtil.isNotNullOrEmptyString(mSharedText)) {
+            mSharedText = getString(R.string.share_with_friend_for_download_app);
+        }
         try {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(AppConstants.SHARE_MENU_TYPE);
             intent.setPackage(AppConstants.WHATS_APP);
-            intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_with_friend_for_download_app) + GENDER_SHARE_LINK);
+            intent.putExtra(Intent.EXTRA_TEXT, mSharedText + GENDER_SHARE_LINK);
             startActivity(intent);
+            HashMap<String, Object> properties = new EventProperty.Builder().build();
+            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+            AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
         } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType(AppConstants.SHARE_MENU_TYPE);
+            intent.putExtra(Intent.EXTRA_TEXT, mSharedText + GENDER_SHARE_LINK);
+            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+            HashMap<String, Object> properties = new EventProperty.Builder().build();
+            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
+            AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
         }
     }
     //endregion

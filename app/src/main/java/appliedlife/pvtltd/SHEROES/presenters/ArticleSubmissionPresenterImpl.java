@@ -40,7 +40,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
         this.mSheroesApplication = sheroesApplication;
     }
 
-    public void submitAndDraftArticle(final ArticleSubmissionRequest articleSubmissionRequest, final boolean isDraft) {
+    public void submitAndDraftArticle(final ArticleSubmissionRequest articleSubmissionRequest, final boolean isStoryPost) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
@@ -69,7 +69,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                         if (null != articleSubmissionResponse) {
                             switch (articleSubmissionResponse.getStatus()) {
                                 case AppConstants.SUCCESS:
-                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isDraft);
+                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isStoryPost);
                                     break;
                                 case AppConstants.FAILED:
                                     getMvpView().showError(articleSubmissionResponse.getFieldErrorMessageMap().get(AppConstants.ERROR), ERROR_TAG);
@@ -80,7 +80,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                 });
     }
 
-    public void editArticle(final ArticleSubmissionRequest articleSubmissionRequest, final boolean isDraft) {
+    public void editArticle(final ArticleSubmissionRequest articleSubmissionRequest, final boolean isStoryPost) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
@@ -109,7 +109,7 @@ public class ArticleSubmissionPresenterImpl extends BasePresenter<IArticleSubmis
                         if (null != articleSubmissionResponse) {
                             switch (articleSubmissionResponse.getStatus()) {
                                 case AppConstants.SUCCESS:
-                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isDraft);
+                                    getMvpView().articleSubmitResponse(articleSubmissionResponse.getArticleSolrObj(), isStoryPost);
                                     break;
                                 case AppConstants.FAILED:
                                     getMvpView().showError(articleSubmissionResponse.getFieldErrorMessageMap().get(AppConstants.ERROR), ERROR_TAG);

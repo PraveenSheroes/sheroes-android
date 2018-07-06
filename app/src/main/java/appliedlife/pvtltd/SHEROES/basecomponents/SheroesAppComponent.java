@@ -16,7 +16,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -47,8 +47,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
@@ -315,7 +313,7 @@ public interface SheroesAppComponent {
 
     void inject(AppInstallationHelper appInstallationHelper);
 
-    void inject(HerStoryOrArticleSubmissionActivity herStoryOrArticleSubmissionActivity);
+    void inject(CreateStoryActivity createStoryActivity);
 
     void inject(FeedAdapter feedAdapter);
 

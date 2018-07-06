@@ -35,7 +35,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -942,7 +941,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.cl_story_footer)
     public void writeAStory() {
-        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
+        CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.li_follower)

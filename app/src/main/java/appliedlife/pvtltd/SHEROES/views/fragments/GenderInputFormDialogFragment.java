@@ -127,7 +127,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
     public void getStartedClick() {
         if (isMaleSelected) {
             String description = getString(R.string.sheroes_gender_error);
-            ((WelcomeActivity) getActivity()).showFaceBookError(description, mUserName);
+            ((WelcomeActivity) getActivity()).showMaleError(description, mUserName);
             dismiss();
         } else {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {

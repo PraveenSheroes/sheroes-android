@@ -215,6 +215,7 @@ public class AppConstants {
     public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
+    public static final String MALE_ERROR_SHARE_PREF = "MALE_USER_ERROR";
     public static final String GUIDELINE_SHARE_PREF = "GUIDELINE";
     public static final String NEW_TAG_FOR_RIGHT_SWIP = "NEW_TAG";
     public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";

@@ -944,7 +944,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     //  mBaseResponseList.set(0, userPostSolrObj);
                 }
                 getMvpView().invalidateItem(feedDetail);
-                getMvpView().likeUnlikeResponse(feedDetail,true);
+                getMvpView().likeUnlikeResponse(feedDetail,false);
             }
         });
 
