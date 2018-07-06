@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
+import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -58,10 +57,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
     //region private variables
     public static final String TAG = "feedAdapter";
-    public static final String LIST_FEED = "FEED";
     private final Context mContext;
     private List<FeedDetail> mFeedDetailList;
-    private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
 
@@ -110,6 +107,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new HomeHeaderViewHolder(mInflater.inflate(R.layout.header_view_layout, parent, false), mBaseHolderInterface);
             case TYPE_IMAGE:
                 return new ImageViewHolder(mInflater.inflate(R.layout.image_item, parent, false), mBaseHolderInterface);
+            case TYPE_NO_STORIES:
+                return new NoStoriesHolder(mInflater.inflate(R.layout.no_stories_holder, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -185,12 +184,17 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 FeedDetail feedDetail2 = mFeedDetailList.get(position);
                 imageViewHolder.bindData(feedDetail2, mContext, position);
                 break;
+
+            case TYPE_NO_STORIES:
+                NoStoriesHolder noStoriesHolder = (NoStoriesHolder) holder;
+                FeedDetail noStoryFeed = mFeedDetailList.get(position);
+                noStoriesHolder.bindData(noStoryFeed, mContext, position);
+                break;
         }
     }
 
     private static final int TYPE_ARTICLE = 1;
     private static final int TYPE_USER_POST = 2;
-    private static final int TYPE_CAROUSEL = 3;
     private static final int TYPE_CHALLENGE = 5;
     private static final int TYPE_EVENT = 6;
     private static final int TYPE_ORGANIZATION = 7;
@@ -201,6 +205,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_COMMUNITY = 12;
     private static final int TYPE_HOME_FEED_HEADER = 13;
     private static final int TYPE_IMAGE = 14;
+    private static final int TYPE_NO_STORIES = 15;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -256,6 +261,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)) {
                 return TYPE_HOME_FEED_HEADER;
+            }
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.NO_STORIES)) {
+                return TYPE_NO_STORIES;
             }
         }
         return TYPE_LOADER;

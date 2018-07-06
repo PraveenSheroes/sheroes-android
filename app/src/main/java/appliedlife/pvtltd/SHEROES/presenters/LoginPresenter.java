@@ -2,12 +2,14 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
@@ -16,19 +18,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.login.UserFromReferralResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
-
-
+import io.reactivex.observers.DisposableObserver;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 
 /**
  * Created by Praveen_Singh on 04-01-2017.
@@ -43,19 +42,25 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     private final String TAG = LogUtils.makeLogTag(LoginPresenter.class);
     LoginModel mLoginModel;
     SheroesApplication mSheroesApplication;
+    SheroesAppServiceApi mSheroesAppServiceApi;
     @Inject
     Preference<LoginResponse> userPreference;
     MasterDataModel mMasterDataModel;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+    @Inject
+    Preference<Configuration> mConfiguration;
+
 
     @Inject
-    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi, Preference<Configuration> mConfiguration) {
         this.mMasterDataModel = masterDataModel;
         this.mLoginModel = mLoginModel;
         this.mSheroesApplication = mSheroesApplication;
         this.userPreference = userPreference;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
+        this.mSheroesAppServiceApi = sheroesAppServiceApi;
+        this.mConfiguration = mConfiguration;
     }
 
     public void getMasterDataToPresenter() {
@@ -81,10 +86,10 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         mLoginModel.getLoginAuthTokenFromModel(loginRequest, isSignUp)
                 .compose(this.<LoginResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LoginResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
             @Override
             public void onError(Throwable e) {
@@ -102,35 +107,33 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     }
 
-    public void getFBVerificationInPresenter(LoginRequest loginRequest) {
+    public void queryConfig() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        getMvpView().startProgressBar();
-        mLoginModel.getFBVerificationFromModel(loginRequest)
-                .compose(this.<LoginResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LoginResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+        mSheroesAppServiceApi.
+                getConfig()
+                .compose(this.<ConfigurationResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ConfigurationResponse>() {
+                    @Override
+                    public void onComplete() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_AUTH_TOKEN);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
 
-            @Override
-            public void onNext(LoginResponse loginResponse) {
-                getMvpView().stopProgressBar();
-                if (null != loginResponse)
-                    getMvpView().getLogInResponse(loginResponse);
-            }
-        });
-
+                    @Override
+                    public void onNext(ConfigurationResponse configurationResponse) {
+                        if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            if (configurationResponse.configuration != null) {
+                                mConfiguration.set(configurationResponse.configuration);
+                            }
+                        }
+                    }
+                });
     }
 
 

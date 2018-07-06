@@ -78,4 +78,6 @@ public class ConfigData {
             "<p><strong>What does the Super SHEROES get?</strong></p>\n" +
             "<p>Super SHEROES are gratified with their name on leaderboard and unique community badge. Soon, their profiles and profile picture will reflect all the badges that they earned.</p>";
 
+    @SerializedName("maleUserShareText")
+    public String mMaleErrorText = "Hi, I found this women only app for you. Its name is SHEROES (Women Heroes). You can talk about and ask anything (even anonymously) without hesitation and help other women by giving them good advice. https://shrs.me/xtap573vXM";
 }

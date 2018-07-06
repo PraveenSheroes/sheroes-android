@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.f2prateek.rx.preferences2.Preference;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -161,6 +162,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     private String loggedInUser;
     private Handler mHandler;
     private boolean isWhatappShareOption = false;
+    Bitmap bitmap;
+    InputStream is;
 
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -212,7 +215,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         tvFeedArticleUserReaction.setTag(true);
         articleObj.setItemPosition(position);
         articleObj.setLastReactionValue(articleObj.getReactionValue());
-        articleObj.setListDescription(null);
         allTextViewStringOperations(context);
         onBookMarkClick();
         if (!articleObj.isTrending()) {
@@ -295,7 +297,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
         }
-        mViewMoreDescription = articleObj.getDescription();
+        mViewMoreDescription = articleObj.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvFeedArticleHeaderLebel.setVisibility(View.VISIBLE);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
@@ -527,27 +529,32 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             final ImageView ivFirstLandscape = backgroundImage.findViewById(R.id.iv_feed_article_single_image);
             final TextView tvFeedArticleTotalViews = backgroundImage.findViewById(R.id.tv_feed_article_total_views);
             final RelativeLayout rlFeedArticleViews = backgroundImage.findViewById(R.id.rl_gradiant);
-            StringBuilder stringBuilder = new StringBuilder();
-            if (articleObj.getNoOfViews() > 1) {
-                stringBuilder.append(numericToThousand(articleObj.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
-                tvFeedArticleTotalViews.setText(stringBuilder.toString());
-                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            } else if (articleObj.getNoOfViews() == 1) {
-                stringBuilder.append(articleObj.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
-                tvFeedArticleTotalViews.setText(stringBuilder.toString());
-                tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
-            } else {
-                tvFeedArticleTotalViews.setVisibility(View.GONE);
-            }
-
             if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 if (mConfiguration.get().configData.showArticleViews) {
                     tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                    rlFeedArticleViews.setVisibility(View.VISIBLE);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    if (articleObj.getNoOfViews() > 1) {
+                        stringBuilder.append(numericToThousand(articleObj.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                        tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                        tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                        rlFeedArticleViews.setVisibility(View.VISIBLE);
+                    } else if (articleObj.getNoOfViews() == 1) {
+                        stringBuilder.append(articleObj.getNoOfViews()).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEW));
+                        tvFeedArticleTotalViews.setText(stringBuilder.toString());
+                        tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
+                        rlFeedArticleViews.setVisibility(View.VISIBLE);
+                    } else {
+                        tvFeedArticleTotalViews.setVisibility(View.GONE);
+                        rlFeedArticleViews.setVisibility(View.GONE);
+                    }
                 } else {
                     tvFeedArticleTotalViews.setVisibility(View.GONE);
+                    rlFeedArticleViews.setVisibility(View.GONE);
                 }
             } else {
                 tvFeedArticleTotalViews.setVisibility(View.GONE);
+                rlFeedArticleViews.setVisibility(View.GONE);
             }
 
             RequestOptions requestOptions = new RequestOptions()
@@ -567,7 +574,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                         @Override
                         public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
                             ivFirstLandscape.setImageBitmap(profileImage);
-                            rlFeedArticleViews.setVisibility(View.VISIBLE);
                         }
                     });
             liFeedArticleImages.addView(backgroundImage);

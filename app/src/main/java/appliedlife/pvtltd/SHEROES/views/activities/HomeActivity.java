@@ -84,14 +84,12 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
-import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -172,7 +170,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView, ProgressbarView {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
@@ -463,7 +461,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         WebViewActivity.navigateTo(this, getScreenName(), null, url, menuItemName);
         DrawerViewHolder.selectedOptionName = menuItemName;
-        setAppBarElevation();
     }
 
     @OnClick(R.id.tv_drawer_navigation)
@@ -491,7 +488,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void writeAStory() {
-        HerStoryOrArticleSubmissionActivity.navigateTo(this, 1, getScreenName(), null);
+        CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
     @OnClick(R.id.invite)
@@ -675,7 +672,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
-        setAppBarElevation();
+
     }
 
     public void communityButton() {
@@ -706,7 +703,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
-        setAppBarElevation();
+
     }
 
     public void inviteMyCommunityDialog() {
@@ -726,7 +723,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mInvite.setVisibility(View.VISIBLE);
-        setAppBarElevation();
+
     }
 
     @Override
@@ -981,25 +978,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void fetchAllCommunity() {
         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
-    }
-
-    @Override
-    public void onViewRendered(float dashWidth) {
-        ConfigData configData = new ConfigData();
-        int beginnerTickIndex = configData.beginnerStartIndex;
-        int intermediateTickIndex = configData.intermediateStartIndex;
-
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
-            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
-        }
-        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
-        beginnerTick.setLayoutParams(buttonLayoutParams);
-
-        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
-        intermediateTick.setLayoutParams(intermediateLayoutParams);
     }
 
     @Override
@@ -1291,7 +1269,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             .setGravity(Gravity.BOTTOM)
                             .setText(R.string.tool_tip_notification);
                     builder.show();
-
                 }
             }
         } catch (Exception e) {
@@ -1738,7 +1715,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
-        setAppBarElevation();
+
     }
 
     private void renderICCMemberListView() {
@@ -1752,7 +1729,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
-        setAppBarElevation();
+
     }
 
     private void initHomeViewPagerAndTabs() {
@@ -1774,13 +1751,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putString(AppConstants.SCREEN_NAME, "Home Screen");
         homeFragment.setArguments(bundle);
         mFragmentOpen.setFeedFragment(true);
-        /*FeedFragment feedFragment = new FeedFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
-        bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
-        bundle.putString(AppConstants.SCREEN_NAME, "Feed Screen");
-        feedFragment.setArguments(bundle);
-        mFragmentOpen.setFeedFragment(true);*/
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
 
@@ -1831,7 +1801,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-        setAppBarElevation();
     }
 
     private void removeItem(FeedDetail feedDetail) {
@@ -2013,13 +1982,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         });
     }
 
-    private void setAppBarElevation() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mAppBarLayout.setElevation(APP_BAR_ELEVATION);
-        } else {
-            ViewCompat.setElevation(mAppBarLayout, APP_BAR_ELEVATION);
-        }
-    }
     //endregion
 
 }

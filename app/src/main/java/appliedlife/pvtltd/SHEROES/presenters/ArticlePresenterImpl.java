@@ -37,7 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.HerStoryOrArticleSubmissionActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -221,8 +221,8 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                 Comment comment = commentResponsePojo.getCommentReactionModel();
                                 getMvpView().addAndNotifyComment(comment);
                                 if (articleSolrObj.isUserStory()) {
-                                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, HerStoryOrArticleSubmissionActivity.SCREEN_LABEL);
-                                    AnalyticsManager.trackEvent(Event.STORY_REPLY_CREATED, HerStoryOrArticleSubmissionActivity.SCREEN_LABEL, properties);
+                                    HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, CreateStoryActivity.SCREEN_LABEL);
+                                    AnalyticsManager.trackEvent(Event.STORY_REPLY_CREATED, CreateStoryActivity.SCREEN_LABEL, properties);
                                 } else {
                                     HashMap<String, Object> properties =
                                             new EventProperty.Builder()

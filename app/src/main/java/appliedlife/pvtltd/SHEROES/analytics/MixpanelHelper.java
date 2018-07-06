@@ -61,7 +61,7 @@ public class MixpanelHelper {
         if (mUserPreference == null) {
             return;
         }
-        if (mUserPreference.isSet()&& mUserPreference.get().getUserSummary() != null) {
+        if (mUserPreference.isSet() && mUserPreference.get().getUserSummary() != null) {
             userSummary = mUserPreference.get().getUserSummary();
         }
         if (userSummary == null) {
@@ -72,7 +72,7 @@ public class MixpanelHelper {
 
         MixpanelAPI mixpanel = MixpanelHelper.getInstance(context);
 
-        if (mixpanel!=null && userSummary != null) {
+        if (mixpanel != null && userSummary != null) {
             mixpanel.identify(Long.toString(userSummary.getUserId()));
             mixpanel.getPeople().identify(Long.toString(userSummary.getUserId()));
 
@@ -93,8 +93,8 @@ public class MixpanelHelper {
                     .setOrderKey(setOrderKey)
                     .feedConfigVersion(feedConfigVersion)
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
-                    .configType(mConfiguration!=null&&mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
-                    .configVersion(mConfiguration!=null&&mConfiguration.isSet()&& mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
+                    .configType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
+                    .configVersion(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
                     .emailId(userSummary.getEmailId());
 
         /*int year = YearClass.get(CareApplication.getAppContext());
@@ -211,16 +211,16 @@ public class MixpanelHelper {
         }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             UserPostSolrObj userPostSolrObj = null;
-            if(feedDetail instanceof UserPostSolrObj){
+            if (feedDetail instanceof UserPostSolrObj) {
                 userPostSolrObj = (UserPostSolrObj) feedDetail;
             }
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
-                            .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
+                            .communityName(userPostSolrObj != null ? userPostSolrObj.getPostCommunityName() : "")
                             .title(feedDetail.getNameOrTitle())
-                            .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
+                            .communityId(userPostSolrObj != null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
                             .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
                             .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
@@ -231,21 +231,48 @@ public class MixpanelHelper {
         }
     }
 
-    public static HashMap<String, Object> getPostProperties(FeedDetail feedDetail, String screenName) {
+    public static void trackPostActionEvent(Event event, FeedDetail feedDetail, String screenName, HashMap<String, Object> passedProperties) {
         if (feedDetail == null) {
-            return null;
+            return;
         }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
             UserPostSolrObj userPostSolrObj = null;
-            if(feedDetail instanceof UserPostSolrObj){
+            if (feedDetail instanceof UserPostSolrObj) {
                 userPostSolrObj = (UserPostSolrObj) feedDetail;
             }
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
                             .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
-                            .communityName(userPostSolrObj!=null ? userPostSolrObj.getPostCommunityName() : "")
-                            .communityId(userPostSolrObj!=null ? Long.toString(userPostSolrObj.getCommunityId()): "not defined")
+                            .communityName(userPostSolrObj != null ? userPostSolrObj.getPostCommunityName() : "")
+                            .title(feedDetail.getNameOrTitle())
+                            .communityId(userPostSolrObj != null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
+                            .type(getTypeFromSubtype(feedDetail.getSubType()))
+                            .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
+                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
+                            .positionInList(feedDetail.getItemPosition())
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+            properties.putAll(passedProperties);
+            AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
+        }
+    }
+
+    public static HashMap<String, Object> getPostProperties(FeedDetail feedDetail, String screenName) {
+        if (feedDetail == null) {
+            return null;
+        }
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
+            UserPostSolrObj userPostSolrObj = null;
+            if (feedDetail instanceof UserPostSolrObj) {
+                userPostSolrObj = (UserPostSolrObj) feedDetail;
+            }
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(feedDetail.getEntityOrParticipantId()))
+                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .communityName(userPostSolrObj != null ? userPostSolrObj.getPostCommunityName() : "")
+                            .communityId(userPostSolrObj != null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
                             .title(feedDetail.getNameOrTitle())
                             .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
                             .type(getTypeFromSubtype(feedDetail.getSubType()))
@@ -253,7 +280,7 @@ public class MixpanelHelper {
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
             return properties;
-        }else {
+        } else {
             return null;
         }
     }
@@ -262,15 +289,15 @@ public class MixpanelHelper {
         if (articleSolrObj == null) {
             return null;
         }
-            final HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(articleSolrObj.getEntityOrParticipantId()))
-                            .title(articleSolrObj.getNameOrTitle())
-                            .authorId(String.valueOf(articleSolrObj.getCreatedBy()))
-                            .authorName(articleSolrObj.getAuthorName())
-                            .build();
-            properties.put(EventProperty.SOURCE.getString(), screenName);
-            return properties;
+        final HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(articleSolrObj.getEntityOrParticipantId()))
+                        .title(articleSolrObj.getNameOrTitle())
+                        .authorId(String.valueOf(articleSolrObj.getCreatedBy()))
+                        .authorName(articleSolrObj.getAuthorName())
+                        .build();
+        properties.put(EventProperty.SOURCE.getString(), screenName);
+        return properties;
 
     }
 

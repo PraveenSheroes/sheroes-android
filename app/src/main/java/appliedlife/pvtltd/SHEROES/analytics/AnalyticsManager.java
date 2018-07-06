@@ -168,6 +168,12 @@ public class AnalyticsManager {
         }
         MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName);
     }
+    public static void trackPostAction(Event event, FeedDetail feedDetail, String screenName,HashMap<String, Object> properties) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName,properties);
+    }
 
 
     //------------TODO- fix with ujjwal

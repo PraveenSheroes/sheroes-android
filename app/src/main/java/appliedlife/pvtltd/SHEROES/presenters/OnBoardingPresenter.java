@@ -205,21 +205,17 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        getMvpView().startProgressBar();
         onBoardingModel.
                 getConfig()
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ConfigurationResponse>() {
             @Override
             public void onComplete() {
-                getMvpView().stopProgressBar();
             }
 
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
-                getMvpView().stopProgressBar();
             }
 
             @Override
@@ -230,7 +226,6 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                         getMvpView().onConfigFetched();
                     }
                 }
-                getMvpView().stopProgressBar();
             }
         });
     }

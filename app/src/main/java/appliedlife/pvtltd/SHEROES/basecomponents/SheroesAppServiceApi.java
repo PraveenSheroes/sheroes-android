@@ -37,10 +37,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -55,6 +51,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UpdateInviteUrlResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -94,14 +94,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
-import io.reactivex.Observable;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.HTTP;
 import retrofit2.http.POST;
-import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -299,15 +297,17 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/challenge/add/winner/address")
     Observable<BaseResponse> updateAddress(@Body Address address);
+
     @POST()
     Observable<AllContactListResponse> getUserDetailList(@Url String url, @Body ContactListSyncRequest co);
+
     @POST()
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 
     @POST("participant/feed/community_category_home")
     Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
 
-    @GET("participant/remote_config/?config_type=AppConfig")
+    @GET("participant/remote_config/AppConfig")
     Observable<ConfigurationResponse> getConfig();
 
     @GET("participant/feed/community_feed?")

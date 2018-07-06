@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -117,6 +118,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
 
@@ -297,7 +299,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (getIntent() != null && getIntent().getExtras() != null) {
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
             mProperties = (HashMap<String, Object>) getIntent().getExtras().getSerializable(BaseActivity.SOURCE_PROPERTIES);
-            isUserStory=getIntent().getBooleanExtra(USER_STORY, false);
+            isUserStory = getIntent().getBooleanExtra(USER_STORY, false);
             Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
             mIsTransition = getIntent().getBooleanExtra(TRANSITION, false);
             mFeedPosition = getIntent().getIntExtra(FEED_POSITION, -1);
@@ -770,7 +772,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     private void fetchArticle(int articleId, boolean isImageLoaded, boolean isUserStory) {
-            mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded, isUserStory);
+        mArticlePresenter.fetchArticle(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_ARTICLE, AppConstants.ONE_CONSTANT, articleId), isImageLoaded, isUserStory);
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
@@ -806,6 +808,20 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             AnalyticsManager.trackPostAction(Event.POST_SHARED_CLICKED, mFeedDetail, getScreenName());
             ShareBottomSheetFragment.showDialog(this, mArticleSolrObj.getDeepLinkUrl(), null, mArticleSolrObj.getDeepLinkUrl(), SCREEN_LABEL, false, mArticleSolrObj.getDeepLinkUrl(), false, Event.POST_SHARED, MixpanelHelper.getPostProperties(mFeedDetail, getScreenName()));
         }
+    }
+
+    @OnClick({R.id.author_pic, R.id.author, R.id.author_description__pic, R.id.author_description_name})
+    public void onUserDetailClick() {
+        boolean isMentor = false;
+        if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            isMentor = true;
+        }
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(mArticleSolrObj.getCreatedBy());
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        mFeedDetail = communityFeedSolrObj;
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, mArticleSolrObj.getCreatedBy(), isMentor, mArticleSolrObj.getItemPosition(), getScreenName(), null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
     }
 
     @OnClick(R.id.submit)
@@ -958,6 +974,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
 
         if (null != mArticleSolrObj && mArticleSolrObj.isUserStory()) {
+            mProperties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, mSourceScreen);
             AnalyticsManager.trackScreenView(SCREEN_LABEL_STORY, mSourceScreen, mProperties);
         } else {
             AnalyticsManager.trackScreenView(SCREEN_LABEL);
@@ -996,16 +1013,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     .load(authorImage)
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                     .into(authorPic);
-
-        }
-        if (CommonUtil.isNotEmpty(articleSolrObj.getAuthorImageUrl())) {
-            String authorImage = CommonUtil.getThumborUri(articleSolrObj.getAuthorImageUrl(), authorPicSize, authorPicSize);
             Glide.with(this)
                     .load(authorImage)
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                     .into(authorDesPic);
 
         }
+
         authorDesName.setText(articleSolrObj.getAuthorName());
         if (StringUtil.isNotNullOrEmptyString(articleSolrObj.getAuthorShortDescription())) {
             authorDescription.setText(Html.fromHtml(articleSolrObj.getAuthorShortDescription()));
@@ -1100,7 +1114,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     List<Comment> comments = new ArrayList<>();
                     comments.add(comment);
                     mFeedDetail.setLastComments(comments);
-                    ;
                 } else {
                     mFeedDetail.getLastComments().add(comment);
                 }
@@ -1193,7 +1206,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     // region Static methods
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode,boolean isUserStory) {
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isUserStory) {
         Intent intent = new Intent(fromActivity, ArticleActivity.class);
         ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
         Parcelable parcelable = Parcels.wrap(articleSolrObj);
