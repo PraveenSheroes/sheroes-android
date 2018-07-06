@@ -89,8 +89,7 @@ android {
             signingConfig signingConfigs.debug
             ext.crashlyticsApiSecret = "c8e9927007c169ba7b17261a41984f3d63d39fe5cda3e9c42234990e04cec4ae"
             ext.crashlyticsApiKey = "6f53a2cf9e2249594beb5d245e04eb8094f6a56e"
-            manifestPlaceholders = [branchTestMode: true]
-
+            manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
         }
@@ -100,7 +99,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-
+            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
 
@@ -145,6 +144,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-analytics:11.8.0'
     compile 'com.google.android.gms:play-services-auth:11.8.0'
     compile 'com.google.android.gms:play-services-gcm:11.8.0'
+    compile 'com.clevertap.android:clevertap-android-sdk:3.1.10'
     compile 'com.google.android.gms:play-services-location:11.8.0'
     compile 'com.android.support:mediarouter-v7:27.0.2'
     compile 'com.android.support:multidex:1.0.1'

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
 
+import com.clevertap.android.sdk.ActivityLifecycleCallback;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
@@ -51,6 +52,7 @@ public class SheroesApplication extends MultiDexApplication  {
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate() {
+        ActivityLifecycleCallback.register(this);
         super.onCreate();
         mContext = this;
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
@@ -67,6 +69,8 @@ public class SheroesApplication extends MultiDexApplication  {
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
         AnalyticsManager.initializeFbAnalytics(mContext);
+        //cleverTap
+        AnalyticsManager.initializeCleverTap(this, false);
         Stetho.initializeWithDefaults(this);
     }
 

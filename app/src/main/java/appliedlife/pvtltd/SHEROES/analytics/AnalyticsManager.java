@@ -1,10 +1,7 @@
-
 package appliedlife.pvtltd.SHEROES.analytics;
-
 
 import android.content.Context;
 import android.text.TextUtils;
-
 
 import com.appsflyer.AppsFlyerLib;
 import com.moe.pushlibrary.MoEHelper;
@@ -14,25 +11,26 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
-
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.isNotNullOrEmptyString;
-
 
 /**
  * Created by ujjwal on 27/09/17.
  */
 public class AnalyticsManager {
 
+    //region private variable & constants
     private static final String TAG = "AnalyticsManager";
     private static Context sAppContext = null;
+    //endregion
 
+    //region private method
     private static boolean canSend() {
         return sAppContext != null;
     }
+    //endregion
 
     // region Individual Analytics Initializers
 
@@ -47,13 +45,18 @@ public class AnalyticsManager {
         initializeMixpanel(context, true);
     }
 
+    public static void initializeCleverTap(Context context, boolean isNewUser) {
+        sAppContext = context;
+        CleverTapHelper cleverTapHelper = new CleverTapHelper();
+        cleverTapHelper.setupCleverTap(context);
+        cleverTapHelper.setupUser(context, isNewUser);
+    }
+
     public static void initializeFbAnalytics(Context context){
         FBAnalyticsHelper.initializeAnalyticsTracker(context);
     }
 
     //endregion
-
-    // endregion
 
     // region Primary Event Methods
     public static void trackAppOpen(Context context){
@@ -86,14 +89,13 @@ public class AnalyticsManager {
         }
         MixpanelHelper.trackScreenOpen(sAppContext, screenName, properties);
 
-        if (properties == null) {
-            properties = new HashMap<>();
-        }
-
         // track all event to Moengage
         properties.put(MixpanelHelper.SCREEN_NAME, screenName);
         JSONObject jsonObj = new JSONObject(properties);
         MoEHelper.getInstance(sAppContext).trackEvent(MixpanelHelper.SCREEN_OPEN, jsonObj);
+
+        //CleverTap
+        CleverTapHelper.trackScreen(sAppContext, properties);
     }
 
     public static void timeScreenView(String screenName) {
@@ -102,6 +104,7 @@ public class AnalyticsManager {
         }
 
         MixpanelHelper.timeScreenOpen(sAppContext, screenName);
+        CleverTapHelper.getInstance().timeScreenOpen();
     }
 
     @Deprecated
@@ -153,6 +156,9 @@ public class AnalyticsManager {
         // track all event to Moengage
         JSONObject jsonObj = new JSONObject(properties);
         MoEHelper.getInstance(sAppContext).trackEvent(event.getFullName(), jsonObj);
+
+        //track all event to CleverTap
+        CleverTapHelper.trackEvent(sAppContext,event, properties);
 
     }
 
