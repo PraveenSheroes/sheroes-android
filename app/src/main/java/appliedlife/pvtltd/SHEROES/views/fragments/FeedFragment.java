@@ -127,6 +127,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
     public static final String IS_HOME_FEED = "Is Home Feed";
+    public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
 
@@ -187,6 +188,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     HashMap<String, Object> mProperties;
     private boolean isWhatsappShare = false;
     private boolean isHomeFeed;
+    private String mStreamName;
     private String mScreenLabel;
     private boolean mControlsVisible = true;
     private int mScrolledDistance = 0;
@@ -214,7 +216,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setupRecyclerScrollListener();
         showGifLoader();
 
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
 
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
@@ -451,6 +453,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     mFeedPresenter.setEndpointUrl(dataUrl);
                 }
                 isHomeFeed = getArguments().getBoolean(IS_HOME_FEED, false);
+                mStreamName = getArguments().getString(FeedFragment.STREAM_NAME, "");
                 mFeedPresenter.setIsHomeFeed(isHomeFeed);
                 mScreenProperties = new EventProperty.Builder()
                         .sourceCollectionName(screenName)
@@ -524,7 +527,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         mAdapter.feedStartedLoading();
                     }
                 });
-                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST);
+                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST,mStreamName);
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
@@ -545,7 +548,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
+                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
@@ -1822,7 +1825,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void refreshList() {
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
         if (getActivity() != null && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
         }

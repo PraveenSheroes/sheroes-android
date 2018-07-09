@@ -616,8 +616,10 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             Crashlytics.getInstance().core.logException(e);
         }
         List<Long> tagList = new ArrayList<>();
-        for (ArticleTagName articleTagName : completionView.getObjects()) {
-            tagList.add(articleTagName.getId());
+        if(null!=completionView) {
+            for (ArticleTagName articleTagName : completionView.getObjects()) {
+                tagList.add(articleTagName.getId());
+            }
         }
         if (null != mIdOfEntityOrParticipantArticle) {
             mArticleSubmissionPresenter.editArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), isPublish);

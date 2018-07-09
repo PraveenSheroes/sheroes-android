@@ -15,8 +15,12 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -88,6 +92,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return v;
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
@@ -125,16 +130,26 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
 
     @OnClick(R.id.tv_gender_select_finish)
     public void getStartedClick() {
+        String gender = "Male";
         if (isMaleSelected) {
+            gender = "Male";
             String description = getString(R.string.sheroes_gender_error);
             ((WelcomeActivity) getActivity()).showMaleError(description, mUserName);
             dismiss();
         } else {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {
+                gender = "Female";
                 ((WelcomeActivity) getActivity()).getTokenFromGoogleAuth(mPersonnelEmailId);
                 dismiss();
             }
         }
+        final HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .gender(gender)
+                        .build();
+        properties.put(EventProperty.SOURCE.getString(), SCREEN_LABEL);
+
+        AnalyticsManager.trackEvent(Event.GENDER_SELECTED, SCREEN_LABEL, properties);
     }
     //endregion
 }

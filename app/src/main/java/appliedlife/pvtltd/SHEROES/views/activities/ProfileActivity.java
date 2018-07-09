@@ -851,6 +851,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
         bundle.putString(AppConstants.SCREEN_NAME, "Profile Stories Screen");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
+        bundle.putString(FeedFragment.STREAM_NAME, AppConstants.STORY_STREAM);
         feedFragment.setArguments(bundle);
         mViewPagerAdapter.addFragment(feedFragment, screenName);
         mViewPager.setAdapter(mViewPagerAdapter);
@@ -1376,7 +1377,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mUserSolarObject = new UserSolrObj();
         mUserSolarObject.setIdOfEntityOrParticipant(userId);
         mUserSolarObject.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        ProfileActivity.navigateTo(this, mUserSolarObject, userId, true, -1, AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserSolarObject, userId, isMentor, -1, AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     private void shareCardViaSocial() {
@@ -1499,7 +1500,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (baseResponse instanceof Comment) {
             Comment comment = (Comment) baseResponse;
             if (!comment.isAnonymous()) {
-                championDetailActivity(comment.getParticipantId(), comment.isVerifiedMentor());
+                championDetailActivity(comment.getParticipantUserId(), comment.isVerifiedMentor());
             }
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
             if (mLoggedInUserId != -1) {

@@ -15,7 +15,6 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -36,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequ
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -66,7 +64,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -136,7 +133,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         return super.isViewAttached();
     }
 
-    public void fetchFeed(final int feedState) {
+    public void fetchFeed(final int feedState, final String streamName) {
         if (mIsFeedLoading) {
             return;
         }
@@ -210,12 +207,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         FeedDetail homeFeedHeader = new FeedDetail();
                                         homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
                                         feedList.add(0, homeFeedHeader);
-                                    } else {
-                                        if (!StringUtil.isNotEmptyCollection(feedList)) {
-                                            FeedDetail noStoryFeed = new FeedDetail();
-                                            noStoryFeed.setSubType(AppConstants.NO_STORIES);
-                                            feedList.add(noStoryFeed);
-                                        }
+                                    } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
+                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM))
+                                            if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                                FeedDetail noStoryFeed = new FeedDetail();
+                                                noStoryFeed.setSubType(AppConstants.NO_STORIES);
+                                                feedList.add(noStoryFeed);
+                                            }
                                     }
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);
@@ -889,7 +887,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     getMvpView().invalidateItem(feedDetail);
                 }
                 getMvpView().invalidateItem(feedDetail);
-                getMvpView().likeUnlikeResponse(feedDetail,true);
+                getMvpView().likeUnlikeResponse(feedDetail, true);
             }
         });
 
@@ -944,7 +942,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     //  mBaseResponseList.set(0, userPostSolrObj);
                 }
                 getMvpView().invalidateItem(feedDetail);
-                getMvpView().likeUnlikeResponse(feedDetail,false);
+                getMvpView().likeUnlikeResponse(feedDetail, false);
             }
         });
 
