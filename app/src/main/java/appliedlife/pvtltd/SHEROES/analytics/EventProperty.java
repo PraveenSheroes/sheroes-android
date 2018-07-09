@@ -19,6 +19,7 @@ public enum EventProperty {
     NAME("Name"),
     SOURCE("Source"),
     TITLE("Title"),
+    GENDER("Gender"),
     TYPE("Type"),
     URL("Url"),
     SOURCE_URL("Source Url"),
@@ -125,6 +126,11 @@ public enum EventProperty {
 
         public Builder title(String value){
             put(TITLE, value);
+            return this;
+        }
+
+        public Builder gender(String value){
+            put(GENDER, value);
             return this;
         }
 

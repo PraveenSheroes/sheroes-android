@@ -246,7 +246,8 @@ public enum Event {
     STORY_UN_BOOKMARKED(AnalyticsEventType.STORY, "UnBookmarked"),
     STORY_LIKED(AnalyticsEventType.STORY, "Liked"),
     STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
-    STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created");
+    STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created"),
+    GENDER_SELECTED(AnalyticsEventType.GENDER_SELECTED, "");
     //endregion
 
     public final AnalyticsEventType type;
