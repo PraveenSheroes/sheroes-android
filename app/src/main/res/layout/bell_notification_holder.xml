@@ -87,6 +87,7 @@
                     android:layout_width="@dimen/bell_notification_reaction_icon_size"
                     android:layout_height="@dimen/bell_notification_reaction_icon_size"
                     android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/dp_size_2"
                     android:src="@drawable/ic_heart_active"
                     android:visibility="visible" />
 
