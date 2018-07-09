@@ -185,6 +185,7 @@
     <dimen name="bell_notification_tv_bell_noti_time_left_margin">8dp</dimen>
     <dimen name="bell_notification_view_left_margin">52dp</dimen>
     <dimen name="bell_notification_view_top_margin">18dp</dimen>
+    <dimen name="bell_notification_reaction_icon_size">14dp</dimen>
 
 </resources>
 

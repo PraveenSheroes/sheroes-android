@@ -51,6 +51,7 @@
             android:layout_weight="@integer/int_value_for_line_1"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="6sp"
+            android:layout_gravity="center"
             android:textColor="@color/comment_text"
             android:textSize="14sp"
             android:textStyle="normal" />
@@ -59,7 +60,7 @@
             android:id="@+id/iv_bell_noti_image"
             android:layout_width="@dimen/feed_profile_icon_size"
             android:layout_height="@dimen/feed_profile_icon_size"
-            android:visibility="gone"
+            android:visibility="visible"
             android:layout_marginStart="@dimen/bell_notification_iv_bell_noti_image_left_margin"
             android:layout_marginLeft="@dimen/bell_notification_iv_bell_noti_image_left_margin"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -89,8 +90,8 @@
 
     <ImageView
         android:id="@+id/iv_bell_reaction"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="@dimen/bell_notification_reaction_icon_size"
+        android:layout_height="@dimen/bell_notification_reaction_icon_size"
         android:layout_marginLeft="@dimen/bell_notification_iv_bell_reaction_left_margin"
         android:layout_marginStart="@dimen/bell_notification_iv_bell_reaction_left_margin"
         android:layout_marginTop="@dimen/bell_notification_iv_bell_reaction_top_margin"

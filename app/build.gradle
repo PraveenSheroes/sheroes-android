@@ -190,7 +190,7 @@ dependencies {
     compile 'com.mixpanel.android:mixpanel-android:5.1.2'
     compile 'com.squareup:pollexor:2.0.4'
     compile 'org.parceler:parceler-api:1.1.6'
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.+'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.12'
     compile 'com.github.amlcurran.showcaseview:library:5.4.3'
     compile('com.github.JakeWharton.RxBinding:rxbinding:d7774aae78')
     compile('com.trello.rxlifecycle2:rxlifecycle:2.0.1')

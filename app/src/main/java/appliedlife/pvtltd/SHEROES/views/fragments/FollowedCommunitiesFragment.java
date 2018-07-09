@@ -186,7 +186,7 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
 
     @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
-        if(userCommunities.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+        if (userCommunities.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(0, 0);
             mProgressBar.setLayoutParams(params);
 
@@ -195,32 +195,16 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
                 int mPageNo = mFragmentListRefreshData.getPageNo();
                 mFragmentListRefreshData.setPageNo(++mPageNo);
                 mPullRefreshList.allListData(otherCommunities);
-                List<CommunityFeedSolrObj> data = null;
-                 CommunityFeedSolrObj feedProgressBar = new CommunityFeedSolrObj();
-                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-                data = mPullRefreshList.getFeedResponses();
-                int position = data.size() - otherCommunities.size();
-                if (position > 0) {
-                    data.remove(position - 1);
-                }
-                data.add(feedProgressBar);
-                mAdapter.setData(data);
-                mSwipeView.setRefreshing(false);
-
-            } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mAdapter != null) {
-                List<CommunityFeedSolrObj> data = mPullRefreshList.getFeedResponses();
-                data.remove(data.size() - 1);
-
-                mSwipeView.setRefreshing(false);
-            } else {
-                // mBadgeRecycler.setEmptyViewWithImage(emptyView, R.string.empty_mentor_text, R.drawable.vector_emoty_challenge, R.string.empty_challenge_sub_text);
+                mAdapter.setData(mPullRefreshList.getFeedResponses());
             }
+            mSwipeView.setRefreshing(false);
             mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj) {}
+    public void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj) {
+    }
 
     @Override
     public void onUserDeactivation(BaseResponse baseResponse) {
@@ -268,7 +252,7 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
 
 
     @Override
-    public void onItemClick( CommunityFeedSolrObj communityFeedSolrObj) {
+    public void onItemClick(CommunityFeedSolrObj communityFeedSolrObj) {
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 }

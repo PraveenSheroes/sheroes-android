@@ -27,9 +27,8 @@
 
     <permission
         android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE"
-        android:protectionLevel="signature"/>
-    <uses-permission
-        android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE"/>
+        android:protectionLevel="signature" />
+    <uses-permission android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE" />
 
     <!-- Required to show current location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -77,9 +76,11 @@
 
         <meta-data
             android:name="CLEVERTAP_NOTIFICATION_ICON"
-            android:value="ic_push_notification_icon"/>
+            android:value="ic_push_notification_icon" />
 
-        <meta-data android:name="GCM_SENDER_ID" android:value="@string/ID_CLEVER_TAP_PROJECT_ID"/>
+        <meta-data
+            android:name="GCM_SENDER_ID"
+            android:value="@string/ID_CLEVER_TAP_PROJECT_ID" />
 
         <meta-data
             android:name="io.branch.sdk.BranchKey"
@@ -118,14 +119,14 @@
         <!-- ClearTap -->
         <meta-data
             android:name="CLEVERTAP_ACCOUNT_ID"
-            android:value="${cleverTapAccountID}"/>
+            android:value="${cleverTapAccountID}" />
         <meta-data
             android:name="CLEVERTAP_TOKEN"
-            android:value="${CleverTapToken}"/>
+            android:value="${CleverTapToken}" />
         <!-- IMPORTANT: To force use Google AD ID to uniquely identify  users, use the following meta tag. GDPR mandates that if you are using this tag, there is prominent disclousure to your end customer in their application. Read more about GDPR here - https://clevertap.com/blog/in-preparation-of-gdpr-compliance/ -->
         <meta-data
             android:name="CLEVERTAP_USE_GOOGLE_AD_ID"
-            android:value="1"/>
+            android:value="1" />
 
         <activity
             android:name="com.moe.pushlibrary.activities.MoEActivity"
@@ -194,12 +195,11 @@
 
         <activity
             android:name=".views.activities.CreateStoryActivity"
-            android:exported="true"
             android:configChanges="keyboardHidden"
+            android:exported="true"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
-            tools:ignore="GoogleAppIndexingDeepLinkError">
-        </activity>
+            tools:ignore="GoogleAppIndexingDeepLinkError"></activity>
         <activity
             android:name=".views.activities.ContestActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -231,7 +231,7 @@
         <activity
             android:name=".views.activities.CommunityPostActivity"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -304,11 +304,11 @@
                 <data android:pathPrefix="/users/" />
                 <data android:pathPrefix="/sheroes-challenge" />
                 <data android:pathPrefix="/my-challenges" />
-                <data android:pathPrefix="/articleSubmission/"/>
+                <data android:pathPrefix="/articleSubmission/" />
                 <data android:pathPrefix="/faq" />
                 <data android:pathPrefix="/invite-friends" />
-                <data android:pathPrefix="/write_story"/>
-                <data android:pathPrefix="/my_story"/>
+                <data android:pathPrefix="/write_story" />
+                <data android:pathPrefix="/my_story" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
@@ -336,13 +336,21 @@
             android:name=".imageops.CropImageActivity"
             android:screenOrientation="portrait" />
 
-        <activity android:name=".views.activities.EditUserProfileActivity"  android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".views.activities.EditUserProfileActivity"
+            android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".views.activities.CollectionActivity" />
+        <activity
+            android:name=".views.activities.CollectionActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".views.activities.ProfileCommunitiesActivity" />
+        <activity
+            android:name=".views.activities.ProfileCommunitiesActivity"
+            android:screenOrientation="portrait" />
 
-        <activity android:name=".views.activities.FollowingActivity" />
+        <activity
+            android:name=".views.activities.FollowingActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.PushNotificationService"
@@ -390,30 +398,32 @@
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+
                 <category android:name="appliedlife.pvtltd.SHEROES.service" />
             </intent-filter>
         </receiver>
 
         <service
             android:name="com.clevertap.android.sdk.GcmMessageListenerService"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
 
-        <service android:name="com.clevertap.android.sdk.GcmTokenListenerService"
+        <service
+            android:name="com.clevertap.android.sdk.GcmTokenListenerService"
             android:exported="false">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID"/>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
             </intent-filter>
         </service>
 
         <!-- CleverTap In-app notifications -->
         <activity
             android:name="com.clevertap.android.sdk.InAppNotificationActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:configChanges="orientation|keyboardHidden"/>
+            android:configChanges="orientation|keyboardHidden"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <!-- specify activities where In-app notifications should not be shown -->
         <!-- pretend there is a SplashActivity in this project
