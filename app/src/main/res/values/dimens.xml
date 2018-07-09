@@ -176,9 +176,9 @@
     <dimen name="bell_notification_tv_bell_view_profile_left_margin">16dp</dimen>
     <dimen name="bell_notification_tv_bell_view_profile_top_margin">16dp</dimen>
     <dimen name="bell_notification_tv_bell_view_profile_padding_margin">10dp</dimen>
-    <dimen name="bell_notification_iv_bell_reaction_left_margin">16dp</dimen>
+    <dimen name="bell_notification_li_reaction_left_margin">16dp</dimen>
     <dimen name="bell_notification_iv_bell_reaction_right_margin">16dp</dimen>
-    <dimen name="bell_notification_iv_bell_reaction_top_margin">12dp</dimen>
+    <dimen name="bell_notification_iv_bell_reaction_top_margin">10dp</dimen>
     <dimen name="bell_notification_dot_top_margin">7dp</dimen>
     <dimen name="bell_notification_dot_right_margin">8dp</dimen>
     <dimen name="bell_notification_tv_bell_noti_time_right_margin">8dp</dimen>

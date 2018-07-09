@@ -8,6 +8,7 @@ import android.support.constraint.ConstraintLayout;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -44,8 +45,11 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
     CircleImageView mIvNotificationImage;
     @Bind(R.id.iv_bell_circle_icon_verified)
     ImageView ivBellCircleIconVerified;
-    @Bind(R.id.cl_notification)
-    ConstraintLayout mClNotification;
+    @Bind(R.id.ll_notification)
+    LinearLayout mClNotification;
+    @Bind(R.id.li_reaction)
+    LinearLayout liReaction;
+
     @Bind(R.id.iv_bell_reaction)
     ImageView mIvBellReaction;
     @Bind(R.id.iv_bell_noti_image)
@@ -156,7 +160,7 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
         mViewInterface.handleOnClick(mBelNotificationListResponse, mClNotification);
     }
 
-    @OnClick(R.id.cl_notification)
+    @OnClick(R.id.ll_notification)
     public void onViewClick() {
         mViewInterface.handleOnClick(mBelNotificationListResponse, mClNotification);
     }
