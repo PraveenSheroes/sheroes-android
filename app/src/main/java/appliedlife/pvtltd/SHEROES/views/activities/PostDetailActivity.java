@@ -1131,7 +1131,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
-                                        AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                        AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
 
                                 } else {
@@ -1149,7 +1149,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                             } else if (spamContentType == SpamContentType.COMMENT) {
-                                AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                             }
                         }
                     }

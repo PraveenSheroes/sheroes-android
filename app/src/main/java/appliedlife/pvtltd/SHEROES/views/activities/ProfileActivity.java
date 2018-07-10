@@ -1087,10 +1087,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             } else {
                 isFollowEvent = true;
                 mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
+                addAnalyticsEvents(Event.PROFILE_FOLLOWED);
             }
-
-            Event event = isFollowEvent ? Event.PROFILE_FOLLOWED : Event.PROFILE_UNFOLLOWED;
-            addAnalyticsEvents(event);
         }
     }
 

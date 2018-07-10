@@ -318,7 +318,7 @@ public class AppConstants {
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String CHAMPION_ID = "champion_id";
-    public static final String IS_MENTOR_ID = "is_";
+    public static final String IS_MENTOR_ID = "is_mentor";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";

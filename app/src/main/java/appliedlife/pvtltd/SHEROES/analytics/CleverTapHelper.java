@@ -308,12 +308,10 @@ public class CleverTapHelper {
         final String applicationVersionName = systemInformation.getAppVersionName();
         if (null != applicationVersionName) {
             properties.put("$app_version", applicationVersionName);
-            properties.put("$app_version_string", applicationVersionName);
         }
 
         final Integer applicationVersionCode = systemInformation.getAppVersionCode();
         if (null != applicationVersionCode) {
-            properties.put("$app_release", applicationVersionCode);
             properties.put("$app_build_number", applicationVersionCode);
         }
 
