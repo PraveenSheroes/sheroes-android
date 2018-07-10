@@ -98,7 +98,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         ButterKnife.bind(this, itemView);
         this.mCommentCallback = commentCallBack;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
             if (null != userPreference.get().getUserSummary().getUserBO()) {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
@@ -116,8 +116,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         } else {
             mCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
-
-        mCommentAuthorName.setText(mComment.getParticipantName());
+        if (StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
+            mCommentAuthorName.setText(mComment.getParticipantName());
+            mCommentAuthorName.setVisibility(View.VISIBLE);
+        } else {
+            mCommentAuthorName.setVisibility(View.INVISIBLE);
+        }
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(item);
 
@@ -139,12 +143,15 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
                     if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                         showUserMentionName(mComment.getComment(), mentionSpanList);
+                    } else {
+                        mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                     }
                 } else {
                     mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                 }
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);
+                mUserComment.setVisibility(View.VISIBLE);
             } else {
                 if (StringUtil.isNotNullOrEmptyString(mComment.getComment()) && StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                     String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
@@ -153,11 +160,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                         List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                             showUserMentionName(mComment.getComment(), mentionSpanList);
+                        } else {
+                            mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                         }
                     } else {
                         mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                     }
-                    ;
                     linkifyURLs(mUserComment);
                     if (!mComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (mComment.isVerifiedMentor()) {
@@ -167,6 +175,24 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                         }
                     } else {
                         mProfileVerfied.setVisibility(View.GONE);
+                    }
+                    mUserComment.setVisibility(View.VISIBLE);
+                } else {
+                    if (StringUtil.isNotNullOrEmptyString(mComment.getComment())) {
+                        if (mComment.isHasCommentMention()) {
+                            List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
+                            if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                                showUserMentionName(mComment.getComment(), mentionSpanList);
+                            } else {
+                                mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
+                            }
+                        } else {
+                            mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
+                        }
+                        linkifyURLs(mUserComment);
+                        mUserComment.setVisibility(View.VISIBLE);
+                    } else {
+                        mUserComment.setVisibility(View.GONE);
                     }
                 }
             }
@@ -229,13 +255,6 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mCommentCallback.onCommentMenuClicked(mComment, mUserCommentListMenu);
     }
 
-    @OnClick(R.id.tv_list_user_comment)
-    public void onCommentWithNameClick() {
-       /* if (mComment.isVerifiedMentor()) {
-            viewInterface.navigateToProfileView(mComment, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }*/
-    }
-
     @OnClick(R.id.like)
     public void onCommentLikeClicked() {
         if (mComment.isLiked) {
@@ -292,7 +311,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     }
                 };
 
-                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <=spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <= spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
                     int start = mentionSpan.getMention().getStartIndex() + i;
                     int end = mentionSpan.getMention().getEndIndex() + i;
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
@@ -304,6 +323,5 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
         mUserComment.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
 
-        // tvMention.setSelected(true);
     }
 }

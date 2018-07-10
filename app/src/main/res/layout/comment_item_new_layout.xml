@@ -56,8 +56,7 @@
             android:lineSpacingExtra="4sp"
             android:textColor="#3c3c3c"
             android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="Anupriya Udai" />
+            android:textStyle="bold"/>
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
             android:id="@+id/tv_list_user_comment"
@@ -72,8 +71,7 @@
             android:lineSpacingExtra="4sp"
             android:textColor="#3c3c3c"
             android:textColorLink="@color/view_more"
-            android:textSize="@dimen/sp_size_14"
-            tools:text="Anyone on the other end who is interviewing you or trying to recruit you\nlooks for honesty and zeal to learn and adapt. Be honest ..." />
+            android:textSize="@dimen/sp_size_14" />
 
         <TextView
             android:id="@+id/like"
