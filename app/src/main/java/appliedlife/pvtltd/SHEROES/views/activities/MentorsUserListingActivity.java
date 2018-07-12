@@ -57,6 +57,7 @@ import butterknife.ButterKnife;
 
 public class MentorsUserListingActivity extends BaseActivity implements HomeView {
     private static final String SCREEN_LABEL = "Mentors Listing Screen";
+    public static final String CHAMPION_SUBTYPE = "C";
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -314,7 +315,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .isMentor(mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -325,7 +326,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .isMentor(mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
