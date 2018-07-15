@@ -163,7 +163,7 @@ public class CleverTapHelper {
 
     //Track screen
     static void trackScreen(Context sAppContext, Map<String, Object> properties) {
-        properties = getInstance().addExtraPropertiesToEvent(sAppContext, properties);
+        properties = CleverTapHelper.getInstance().addExtraPropertiesToEvent(sAppContext, properties);
 
         if (isScreenTracked && mSessionStartTime > 0) { //Session duration for tracked screen
             long duration = sessionDuration();
@@ -181,7 +181,7 @@ public class CleverTapHelper {
 
     //Track event
     static void trackEvent(Context sAppContext, Event event, Map<String, Object> properties) {
-        properties = mCleverTapHelper.addExtraPropertiesToEvent(sAppContext, properties);
+        properties = CleverTapHelper.getInstance().addExtraPropertiesToEvent(sAppContext, properties);
         if (getCleverTapInstance(sAppContext) != null)
             getCleverTapInstance(sAppContext).event.push(event.getFullName(), properties);
     }
