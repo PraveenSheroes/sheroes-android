@@ -1105,7 +1105,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -1115,7 +1115,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1528,7 +1528,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1537,7 +1537,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);

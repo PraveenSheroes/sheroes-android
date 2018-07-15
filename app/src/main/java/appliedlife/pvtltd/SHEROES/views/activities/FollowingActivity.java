@@ -19,7 +19,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -27,8 +26,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWED_CHAMPION_LABEL;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING;
 
 /**
  * Created by ravi on 03/01/18.
@@ -36,6 +33,9 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING;
  */
 
 public class FollowingActivity extends BaseActivity {
+
+    public static final String Followers_Screen = "Followers Screen";
+    public static final String Following_Screen = "Following Screen";
 
     public static final String MEMBERS_TYPE = "TYPE";
     private long userMentorId;
@@ -65,17 +65,15 @@ public class FollowingActivity extends BaseActivity {
 
         if (mMembersType == null) return;
 
-        String type = mMembersType.name();
-        if (type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION)) {
+        if (mMembersType == FollowingEnum.FOLLOWED_CHAMPIONS) {
             titleName.setText(R.string.champions_followed);
-        } else if (type.equalsIgnoreCase(AppConstants.FOLLOWERS)) {
+        } else if (mMembersType == FollowingEnum.FOLLOWERS) {
             if(isSelfProfile) {
                 titleName.setText(R.string.follower_toolbar_title);
             } else{
                 titleName.setText(R.string.follower_public_profile_toolbar_title);
             }
-        }
-        else if (type.equalsIgnoreCase(AppConstants.FOLLOWING)) {
+        } else if (mMembersType == FollowingEnum.FOLLOWING) {
             if(isSelfProfile) {
                 titleName.setText(R.string.following_toolbar_title);
             } else{
@@ -135,13 +133,12 @@ public class FollowingActivity extends BaseActivity {
     public String getScreenName() {
         String screenLabel = "";
         if(mMembersType!=null) {
-            String type = mMembersType.name();
-            if (type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION)) {
+            if (mMembersType == FollowingEnum.FOLLOWED_CHAMPIONS) {
                 screenLabel = FOLLOWED_CHAMPION_LABEL;
-            } else if (type.equalsIgnoreCase(AppConstants.FOLLOWERS)) {
-                screenLabel = FOLLOWERS;
-            } else {
-                screenLabel = FOLLOWING;
+            } else if (mMembersType == FollowingEnum.FOLLOWERS) {
+                screenLabel = Followers_Screen;
+            } else if (mMembersType == FollowingEnum.FOLLOWING) {
+                screenLabel = Following_Screen;
             }
         }
         return screenLabel;

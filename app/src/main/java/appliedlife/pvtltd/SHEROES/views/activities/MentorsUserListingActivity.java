@@ -315,7 +315,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -326,7 +326,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }

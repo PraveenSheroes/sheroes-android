@@ -207,7 +207,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         String strengthLevel = userLevel(mUserSolrObj).name();
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .isMentor(mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .profileStrength(strengthLevel)
                         .build();
         EditUserProfileActivity.navigateTo(getActivity(), SCREEN_NAME, mUserSolrObj.getImageUrl(), properties, 1);
@@ -271,7 +271,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         String strengthLevel = userLevel(mUserSolrObj).name();
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .isMentor(mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .profileStrength(strengthLevel)
                         .build();
         if (hasSource && getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {

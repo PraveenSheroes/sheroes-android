@@ -379,8 +379,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
-        LogUtils.info(TAG, "Community count:" + userCommunities.getStatus());
-
         List<CommunityFeedSolrObj> mutualCommunity = userCommunities.getMutualCommunities();
         List<CommunityFeedSolrObj> otherCommunity = userCommunities.getOtherCommunities();
         if (!isSelfProfile) {

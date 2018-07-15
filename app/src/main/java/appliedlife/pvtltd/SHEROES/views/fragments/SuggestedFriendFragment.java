@@ -241,7 +241,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -252,7 +252,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }

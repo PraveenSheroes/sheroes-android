@@ -43,6 +43,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
+import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
@@ -58,8 +59,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     private long userMentorId;
     private boolean isSelfProfile;
-    private int mPageNo = AppConstants.ONE_CONSTANT;
-    private LinearLayoutManager mLayoutManager;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FollowerFollowingAdapter mAdapter;
     private SwipPullRefreshList mPullRefreshList;
@@ -128,7 +127,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     }
 
     private void followedListPagination(FragmentListRefreshData mFragmentListRefreshData) {
-        mLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new FollowerFollowingAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
@@ -155,17 +154,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
                 refreshFeedMethod();
             }
         });
-
-        if(mode!=null) {
-            String type = mode.name();
-             if(type.equalsIgnoreCase(AppConstants.FOLLOWED_CHAMPION))
-                ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWED_CHAMPION_LISTING));
-            else if(type.equalsIgnoreCase(AppConstants.FOLLOWERS))
-                ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWERS_LISTING));
-            else if(type.equalsIgnoreCase(AppConstants.FOLLOWING))
-                ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_FOLLOWING_LISTING));
-        }
-
     }
 
     private void refreshFeedMethod() {
@@ -192,7 +180,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
         mProgressBar.setVisibility(View.GONE);
 
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
-            mPageNo = mFragmentListRefreshData.getPageNo();
+            int mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
             List<UserSolrObj> data = null;
@@ -224,9 +212,9 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     }
 
     @Override
-    public void onItemClick(UserSolrObj mentor) {
-        boolean isChampion = mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID;
-        long id = mentor.getIdOfEntityOrParticipant();
+    public void onItemClick(UserSolrObj userSolrObj) {
+        boolean isChampion = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+        long id = userSolrObj.getIdOfEntityOrParticipant();
         ProfileActivity.navigateTo(getActivity(), id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
