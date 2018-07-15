@@ -1,11 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -75,10 +72,10 @@ public class CircleImageView extends AppCompatImageView {
     if(!isCircularImage) {
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.default_img;
+          errorPlaceHolderDrawableId = R.drawable.ic_default_img;
         }
         if(placeHolderDrawableId == 0){
-          placeHolderDrawableId = R.drawable.default_img;
+          placeHolderDrawableId = R.drawable.ic_default_img;
         }
         Glide.with(this.getContext()).load(imageUrl)
                 .apply(new RequestOptions().placeholder(placeHolderDrawableId)
@@ -87,7 +84,7 @@ public class CircleImageView extends AppCompatImageView {
                 .into(this);
       } else {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.default_img;
+          errorPlaceHolderDrawableId = R.drawable.ic_default_img;
         }
         Glide.with(this.getContext())
             .load(errorPlaceHolderDrawableId)
@@ -96,10 +93,10 @@ public class CircleImageView extends AppCompatImageView {
     }else{
       if (imageUrl != null && !imageUrl.isEmpty()) {
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.default_img;
+          errorPlaceHolderDrawableId = R.drawable.ic_default_img;
         }
         if(placeHolderDrawableId == 0){
-          placeHolderDrawableId = R.drawable.default_img;
+          placeHolderDrawableId = R.drawable.ic_default_img;
         }
           Glide.with(this.getContext())
                   .asBitmap()
@@ -116,10 +113,10 @@ public class CircleImageView extends AppCompatImageView {
                   });
       } else {
         if(placeHolderDrawableId==0){
-          placeHolderDrawableId = R.drawable.default_img;
+          placeHolderDrawableId = R.drawable.ic_default_img;
         }
         if(errorPlaceHolderDrawableId == 0){
-          errorPlaceHolderDrawableId = R.drawable.default_img;
+          errorPlaceHolderDrawableId = R.drawable.ic_default_img;
         }
         Glide.with(this.getContext()).load(placeHolderDrawableId)
                 .apply(new RequestOptions().error(errorPlaceHolderDrawableId))

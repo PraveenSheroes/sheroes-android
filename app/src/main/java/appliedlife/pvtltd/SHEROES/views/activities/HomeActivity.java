@@ -1475,8 +1475,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             if (null != profile) {
                 ivDrawerProfileCircleIcon.setCircularImage(true);
-                ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.default_img);
-                ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.default_img);
+                ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.ic_default_img);
+                ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.ic_default_img);
                 String authorThumborUrl = CommonUtil.getThumborUri(profile, navProfileSize, navProfileSize);
                 ivDrawerProfileCircleIcon.bindImage(authorThumborUrl);
             }

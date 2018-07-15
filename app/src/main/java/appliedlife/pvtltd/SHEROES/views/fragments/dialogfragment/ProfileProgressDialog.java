@@ -261,13 +261,13 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
 
         if (StringUtil.isNotNullOrEmptyString(fields)) {
             filledLeft.setText(fields);
-            addIcon.setImageResource(R.drawable.ic_add);
+            addIcon.setImageResource(R.drawable.vector_add);
             addIcon.setEnabled(true);
             addIcon.setClickable(true);
             isAllFieldsDone = false;
             levelAchieved.setVisibility(View.INVISIBLE);
         } else {
-            addIcon.setImageResource(R.drawable.green_tick);
+            addIcon.setImageResource(R.drawable.ic_green_tick);
             String names = filledFieldsMessage(profileLevelType);
             filledLeft.setText(names);
             addIcon.setEnabled(false);

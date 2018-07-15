@@ -143,9 +143,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
                 return;
             }
             showAlbum(mAlbum);
-        } /*else if (CommonUtil.isNotEmpty(mAlbumId)) {
-            mAlbumPresenter.fetchAlbum(mAlbumId);
-        } */ else {
+        } else {
             return;
         }
         if (CommonUtil.forGivenCountOnly(AppConstants.PICTURE_SHARE_SESSION_PREF, AppConstants.ALBUM_SESSION) == AppConstants.ALBUM_SESSION) {
@@ -155,24 +153,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         }
     }
 
-   /* @Override
-    public void onStart() {
-        super.onStart();
-        PermissionBus.getInstance().register(this).add(PermissionBus.getInstance().toObserveable().subscribe(new Consumer<Object>() {
-            @Override
-            public void accept(Object event) {
-                if (event instanceof CameraEvent) {
-                    onSaveToGallery((CameraEvent) event);
-                }
-            }
-        }));
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        PermissionBus.getInstance().unregister(this);
-    }*/
 
     private void initViewPager() {
         CommonUtil.Callback callback = new CommonUtil.Callback() {
@@ -239,12 +219,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (item.getItemId() == android.R.id.home) {
-            /*Intent upIntent = NavUtils.getParentActivityIntent(this);
-            if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-                TaskStackBuilder.create(this)
-                        .addNextIntentWithParentStack(upIntent)
-                        .startActivities();
-            }*/
             onBackPressed();
         } else if (id == R.id.share) {
             if (CommonUtil.isNotEmpty(mAlbum.deepLinkUrl)) {
@@ -255,9 +229,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
                                 .url(shareText)
                                 .build();
                 CommonUtil.shareImageWhatsApp(this, shareText, mMainImageUrl, "Album Screen", true, Event.IMAGE_SHARED, properties);
-                //Not removed because we have added whatsapp share feature for experiment and if in future we want roll back then we can use this code.
-
-                //  ShareBottomSheetFragment.showDialog(AlbumActivity.this, shareText, mMainImageUrl, mAlbum.deepLinkUrl, getPreviousScreenName(), true, mMainImageUrl, false);
             }
         }
         return true;
@@ -361,24 +332,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
-  /*  public void onSaveToGallery(CameraEvent event) {
-        if (event.isPermissionAllowed) {
-            final String newPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + Globals.GALLERY_FOLDER_NAME + File.separator + "IMG_" + new Date().getTime() + Math.floor(Math.random() * 10000) + ".jpg";
-            mAlbumPresenter.onSaveImage(mMainImageUrl, newPath, getApplicationContext());
-        } else {
-            Snackbar snackbar = Snackbar
-                    .make(mToolbar, R.string.save_to_gallery_permission, Snackbar.LENGTH_LONG)
-                    .setAction("Try Now", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            RxUtil.requestPermission(AlbumActivity.this, CareApplication.getAppContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE, Globals.STORAGE_PERMISSION);
-                        }
-                    });
-
-            snackbar.show();
-        }
-    }*/
-
     @Override
     public void showAlbum(Album album) {
         if (CommonUtil.isEmpty(album.photos)) {
@@ -434,11 +387,7 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
     @Override
     public void trackSaveImageEvent(String fullPath) {
-/*        EventProperty.Builder mToolTip = new EventProperty.Builder().sharedTo(SAVE_TO_GALLERY);
-        final HashMap<String, Object> properties = mToolTip.build();
-        properties.put(EventProperty.SOURCE.getString(), getPreviousScreenName());
-        properties.put(EventProperty.URL.getString(), fullPath);
-        AnalyticsManager.trackEvent(Event.IMAGE_SHARED, properties);*/
+
     }
 
     @Override

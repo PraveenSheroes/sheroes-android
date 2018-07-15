@@ -44,8 +44,7 @@
                 android:textAllCaps="true"
                 android:textColor="#ffffff"
                 android:textSize="16sp"
-                android:textStyle="normal"
-                tools:text="Sheroes" />
+                android:textStyle="normal" />
 
             <ImageView
                 android:id="@+id/share"
@@ -88,8 +87,7 @@
                 android:maxLines="2"
                 android:textColor="#3c3c3c"
                 android:textSize="16sp"
-                android:textStyle="normal"
-                tools:text="Showcase your workspace. Share your workspace photo that motivate you to work daily." />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/contest_end_text"
@@ -102,8 +100,7 @@
                 android:letterSpacing="0.07"
                 android:textColor="#90949c"
                 android:textSize="12sp"
-                android:textStyle="normal"
-                tools:text="Ends in: 4 Days" />
+                android:textStyle="normal" />
 
             <TextView
                 android:id="@+id/contest_status"
@@ -179,8 +176,7 @@
                 android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:textColor="#90949c"
-                android:textSize="14sp"
-                tools:text="198 responses  ·  235 views" />
+                android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -197,7 +193,6 @@
                 android:textColor="#90949c"
                 android:textSize="12sp"
                 android:textStyle="normal"
-                android:visibility="gone"
-                tools:text="Not Interested" />
+                android:visibility="gone" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

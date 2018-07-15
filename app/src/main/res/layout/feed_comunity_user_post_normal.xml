@@ -177,7 +177,7 @@
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
                     android:visibility="visible"
-                    android:src="@drawable/ic_video_play_icon" />/>
+                    android:src="@drawable/vector_video_play_icon" />/>
 
                 <ProgressBar
                     android:id="@+id/progress_bar_post_link"

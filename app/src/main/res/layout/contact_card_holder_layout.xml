@@ -11,7 +11,7 @@
         android:layout_marginTop="@dimen/dp_size_8"
         android:layout_marginBottom="@dimen/dp_size_8"
         android:layout_gravity="center"
-        android:src="@drawable/default_img"
+        android:src="@drawable/ic_default_img"
         android:layout_marginLeft="@dimen/dp_size_16"/>
     <TextView
         android:id="@+id/tv_contact_name"
