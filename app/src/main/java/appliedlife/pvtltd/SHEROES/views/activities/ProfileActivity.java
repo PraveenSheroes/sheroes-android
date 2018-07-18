@@ -872,6 +872,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
         }
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.addOnPageChangeListener(this);
         if (askingQuestionCode == AppConstants.ASKING_QUESTION_CALL) {
             mViewPager.setCurrentItem(AppConstants.ONE_CONSTANT);
@@ -1017,14 +1018,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                                .name(mUserSolarObject.getNameOrTitle())
-                                .isMentor(isMentor)
-                                .isOwnProfile(isOwnProfile)
-                                .build();
-                AnalyticsManager.trackEvent(Event.PROFILE_EDIT_CLICKED, getScreenName(), properties);
             }
         }
     }
@@ -1071,24 +1064,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Override
     public void onPageSelected(int position) {
-
-        String tabName = "";
-        if (isMentor) {
-            if (position == 0) tabName = "Profile - Posts";
-            if (position == 1) tabName = "Profile - Q&A";
-        } else {
-            if (position == 0) tabName = "Profile - About";
-            if (position == 1) tabName = "Profile - Posts";
-        }
-        HashMap<String, Object> properties = new
-                EventProperty.Builder()
-                .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                .isMentor(isMentor)
-                .tabTitle(tabName)
-                .isOwnProfile(isOwnProfile)
-                .build();
-        AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
-
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof UserPostFragment) {
             if (isOwnProfile) {
@@ -1367,7 +1342,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
                         .isOwnProfile(isOwnProfile)
-                        .sharedTo(AppConstants.SHARE_CHOOSER)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
 

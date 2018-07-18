@@ -16,11 +16,15 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -54,6 +58,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.isFragmentUIActive;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
 import static butterknife.ButterKnife.findById;
 
@@ -184,6 +189,15 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     public void onStart() {
         super.onStart();
         populateUserProfileDetails();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        boolean isActive = isFragmentUIActive(ProfileDetailsFragment.this);
+        if(isActive && isVisibleToUser) {
+            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        }
     }
 
     @Override
@@ -500,6 +514,27 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
         if((getActivity()) == null || getActivity().isFinishing()) return;
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return false;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraProperties() {
+            HashMap<String, Object> properties = new
+                    EventProperty.Builder()
+                    .id(Long.toString(userId))
+                    .isMentor(false)
+                    .isOwnProfile(isSelfProfile)
+                    .build();
+            return properties;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
     }
 
     @Override

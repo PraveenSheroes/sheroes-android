@@ -727,7 +727,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
@@ -777,7 +776,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 

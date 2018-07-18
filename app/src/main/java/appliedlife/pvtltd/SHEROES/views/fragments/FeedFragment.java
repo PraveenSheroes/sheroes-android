@@ -50,7 +50,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -116,6 +115,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.isFragmentUIActive;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
@@ -132,6 +132,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
+    private boolean isFragmentLoaded=false;
 
     @Inject
     AppUtils mAppUtils;
@@ -400,6 +401,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        isFragmentLoaded = isVisibleToUser;
+    }
 
     @Override
     public List getListData() {
@@ -449,7 +455,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 String sourceScreenId = mProperties != null && mProperties.get(EventProperty.ID.getString()) != null ? ((String) mProperties.get(EventProperty.ID.getString())) : "";
                 if (CommonUtil.isNotEmpty(screenName)) {
                     mScreenLabel = screenName;
-                    AnalyticsManager.trackScreenView(mScreenLabel);
+                    if(isFragmentLoaded && isFragmentUIActive(FeedFragment.this)) {
+                        AnalyticsManager.trackScreenView(mScreenLabel);
+                    }
                 }
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
@@ -578,7 +586,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
 
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         if (mCommunityTab != null) {
             HashMap<String, Object> propertiesMap = new EventProperty.Builder()
                     .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
@@ -603,7 +610,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         if (articleSolrObj.subType.equalsIgnoreCase(AppConstants.FEED_ARTICLE)) {
             HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
-            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
             if (articleSolrObj.isUserStory()) {
                 AnalyticsManager.trackEvent(Event.STORY_SHARED, getScreenName(), properties);
             } else {
@@ -611,7 +617,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         } else {
             HashMap<String, Object> properties = MixpanelHelper.getPostProperties(articleSolrObj, getScreenName());
-            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
             AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
         }
     }
@@ -871,7 +876,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onPause() {
         super.onPause();
-        AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+        if(isFragmentLoaded) {
+            AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+        }
     }
 
     @Override

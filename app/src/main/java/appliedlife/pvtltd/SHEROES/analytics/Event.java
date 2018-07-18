@@ -182,7 +182,6 @@ public enum Event {
 
     PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),
     PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
-    PROFILE_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Edit Clicked"),
     PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited"){
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
