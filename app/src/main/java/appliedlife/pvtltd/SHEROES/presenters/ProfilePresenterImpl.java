@@ -17,11 +17,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesRespon
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.BadgesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserBadgeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
@@ -34,6 +36,7 @@ import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BADGES_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 
@@ -266,6 +269,40 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
                     public void onNext(BaseResponse spamPostOrCommentResponse) {
                         getMvpView().stopProgressBar();
                         getMvpView().onUserDeactivation(spamPostOrCommentResponse);
+                    }
+                });
+    }
+
+
+    //User badge list
+    public void getUserBadgesList(UserBadgeRequest userBadgeRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        profileModel.getBadgesList(userBadgeRequest)
+                .subscribeOn(Schedulers.io())
+                .compose(this.<BadgesResponse>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<BadgesResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_BADGES_RESPONSE);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(BadgesResponse badgesResponse) {
+                        getMvpView().getBadgesList(badgesResponse);
+                        getMvpView().stopProgressBar();
                     }
                 });
     }
