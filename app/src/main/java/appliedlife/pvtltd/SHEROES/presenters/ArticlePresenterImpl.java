@@ -83,7 +83,6 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), null);
-
                     }
 
                     @Override
@@ -106,13 +105,17 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 });
 
     }
-
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, boolean isUserStory) {
         if (isUserStory) {
-            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo);
+            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
         } else {
-            return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo);
+            return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
         }
+
     }
 
     public void onDeleteCommentClicked(final int position, CommentReactionRequestPojo commentReactionRequestPojo) {
