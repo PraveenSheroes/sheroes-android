@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
@@ -73,7 +74,9 @@ public class MentorPresenter extends BasePresenter<MentorView> {
             return;
         }
         getMvpView().startProgressBar();
-        mentorApiPresenterModel.getMentorInsightFromModel(mentorFollowerRequest).subscribe(new DisposableObserver<MentorInsightResponse>() {
+        mentorApiPresenterModel.getMentorInsightFromModel(mentorFollowerRequest)
+                .compose(this.<MentorInsightResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorInsightResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

@@ -542,7 +542,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     public void getSpamCommentApproveOrDeleteByAdmin(final ApproveSpamPostRequest approveSpamPostRequest, final int position, final Comment comment) {
         getMvpView().startProgressBar();
         sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+                .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<BaseResponse>() {
 
                     @Override

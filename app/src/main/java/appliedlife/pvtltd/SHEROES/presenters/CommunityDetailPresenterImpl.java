@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -109,7 +110,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        removeMember(removeMemberRequest).subscribe(new DisposableObserver<MemberListResponse>() {
+        removeMember(removeMemberRequest)
+                .compose(this.<MemberListResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MemberListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
