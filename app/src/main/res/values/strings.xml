@@ -407,7 +407,7 @@
     <string name="comment_deleted">Your comment has been deleted</string>
     <string name="choose_community">Choose your community to post in</string>
     <string name="other_community">Other Communities</string>
-    <string name="add_photo">Add Photo</string>
+    <string name="add_photo">Add to your Post</string>
     <string name="post_anonymous">Post as Anonymous</string>
     <string name="action.post">Post</string>
     <string name="action.next">Next</string>
