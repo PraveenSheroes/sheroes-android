@@ -68,6 +68,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
@@ -818,6 +819,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
+                    //Refresh GCM token
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(getApplicationContext());
+                    if(cleverTapAPI!=null) {
+                        cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
+                    }
                     fbLogin.setEnabled(true);
                     checkSignUpCall(gcmForGoogleAndFacebook);
                 } else {
@@ -932,10 +938,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
+            AnalyticsManager.initializeCleverTap(WelcomeActivity.this, currentTime < createdDate);
 
             final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK) ? "Facebook" : "Google").build();
             AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-            AnalyticsManager.initializeCleverTap(WelcomeActivity.this, currentTime < createdDate);
+
             if (createdDate < currentTime) {
                 moEngageUtills.entityMoEngageLoggedIn(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
                 if (loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK)) {
@@ -1130,7 +1137,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     }
                 });
             }
-            return;
         }
     }
 
