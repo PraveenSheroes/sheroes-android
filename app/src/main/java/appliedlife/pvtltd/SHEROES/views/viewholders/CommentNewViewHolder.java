@@ -139,12 +139,15 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
                     if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                         showUserMentionName(mComment.getComment(), mentionSpanList);
+                    } else {
+                        mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                     }
                 } else {
                     mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                 }
                 linkifyURLs(mUserComment);
                 mProfileVerfied.setVisibility(View.GONE);
+                mUserComment.setVisibility(View.VISIBLE);
             } else {
                 if (StringUtil.isNotNullOrEmptyString(mComment.getComment()) && StringUtil.isNotNullOrEmptyString(mComment.getParticipantName())) {
                     String authorThumborUrl = CommonUtil.getThumborUri(mComment.getParticipantImageUrl(), authorProfileSize, authorProfileSize);
@@ -153,11 +156,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                         List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
                         if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                             showUserMentionName(mComment.getComment(), mentionSpanList);
+                        } else {
+                            mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                         }
                     } else {
                         mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
                     }
-                    ;
                     linkifyURLs(mUserComment);
                     if (!mComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (mComment.isVerifiedMentor()) {
@@ -168,10 +172,29 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     } else {
                         mProfileVerfied.setVisibility(View.GONE);
                     }
+                    mUserComment.setVisibility(View.VISIBLE);
+                } else {
+                    if (StringUtil.isNotNullOrEmptyString(mComment.getComment())) {
+                        if (mComment.isHasCommentMention()) {
+                            List<MentionSpan> mentionSpanList = mComment.getCommentUserMentionList();
+                            if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+                                showUserMentionName(mComment.getComment(), mentionSpanList);
+                            } else {
+                                mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
+                            }
+                        } else {
+                            mUserComment.setText(hashTagColorInString(mComment.getComment()), TextView.BufferType.SPANNABLE);
+                        }
+                        linkifyURLs(mUserComment);
+                        mUserComment.setVisibility(View.VISIBLE);
+                    } else {
+                        mUserComment.setVisibility(View.GONE);
+                    }
                 }
             }
         }
     }
+
 
     private void invalidateSpamComment(Comment item) {
         if (item.isSpamComment()) {
@@ -292,7 +315,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     }
                 };
 
-                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <=spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <= spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
                     int start = mentionSpan.getMention().getStartIndex() + i;
                     int end = mentionSpan.getMention().getEndIndex() + i;
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
