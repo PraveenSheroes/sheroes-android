@@ -68,6 +68,7 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.isFragmentUIActive;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /**
@@ -121,6 +122,7 @@ public class UserPostFragment extends BaseFragment {
     private long mUserId = -1;
     private Comment mComment;
     private boolean hideAnonymousPost = true;
+    private boolean isOwnProfile;
 
     public static UserPostFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId, String sourceName) {
         UserPostFragment communitiesDetailFragment = new UserPostFragment();
@@ -167,6 +169,7 @@ public class UserPostFragment extends BaseFragment {
 
                 if (mUserMentorObj.getIdOfEntityOrParticipant() == mUserId) {
                     hideAnonymousPost = false;
+                    isOwnProfile = true;
                 }
                 // communityFeedSolrObj.setIdOfEntityOrParticipant(mUserMentorObj.getSolrIgnoreMentorCommunityId());
                 communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
@@ -195,6 +198,11 @@ public class UserPostFragment extends BaseFragment {
         if (isVisibleToUser) {
             AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
         }
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return false;
     }
 
     private void networkAndListenerData() {
@@ -549,6 +557,8 @@ public class UserPostFragment extends BaseFragment {
             HashMap<String, Object> properties = new
                     EventProperty.Builder()
                     .id(Long.toString(mCommunityFeedObj.getIdOfEntityOrParticipant()))
+                    .isOwnProfile(isOwnProfile)
+                    .isMentor(isMentor)
                     .build();
             return properties;
         }
