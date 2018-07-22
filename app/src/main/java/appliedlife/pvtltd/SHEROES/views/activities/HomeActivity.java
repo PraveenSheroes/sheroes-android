@@ -1697,7 +1697,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openProfileActivity(ProfileProgressDialog.ProfileLevelType profileLevelType) {
-        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.NAV_PROFILE, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, getString(R.string.ID_DRAWER_NAVIGATION), null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
