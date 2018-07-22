@@ -115,7 +115,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.isFragmentUIActive;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
@@ -132,7 +131,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
-    private boolean isFragmentLoaded=false;
 
     @Inject
     AppUtils mAppUtils;
@@ -196,6 +194,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private boolean mControlsVisible = true;
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
+    private boolean isActiveTabFragment;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -211,7 +210,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         mFeedPresenter.attachView(this);
-
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
@@ -234,6 +232,33 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         //fetch latest all communities and save it in sharePref
         mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {  //When UI is visible to user
+            isActiveTabFragment = true;
+            if (getParentFragment() instanceof HomeFragment) {
+                String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
+                AnalyticsManager.timeScreenView(mScreenLabel);
+            } else if (getActivity() instanceof ContestActivity) {
+                AnalyticsManager.timeScreenView(mScreenLabel);
+            }
+
+        } else { //When UI is not visible to user
+            //Capture the screen event of the tab got unselected
+            if(isActiveTabFragment && mScreenLabel!=null && !(getActivity() instanceof HomeActivity)) {
+                AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+            }
+            isActiveTabFragment = false;
+        }
     }
 
     @Override
@@ -401,11 +426,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        isFragmentLoaded = isVisibleToUser;
-    }
 
     @Override
     public List getListData() {
@@ -455,9 +475,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 String sourceScreenId = mProperties != null && mProperties.get(EventProperty.ID.getString()) != null ? ((String) mProperties.get(EventProperty.ID.getString())) : "";
                 if (CommonUtil.isNotEmpty(screenName)) {
                     mScreenLabel = screenName;
-                    if(isFragmentLoaded && isFragmentUIActive(FeedFragment.this)) {
-                        AnalyticsManager.trackScreenView(mScreenLabel);
-                    }
                 }
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
@@ -863,20 +880,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return false;
     }
 
-    public void setScreenNameOnTabSelection(String screenName) {
-        mScreenLabel = screenName;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        AnalyticsManager.timeScreenView(mScreenLabel);
+        if (isActiveTabFragment) {
+            AnalyticsManager.timeScreenView(mScreenLabel);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if(isFragmentLoaded) {
+        if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
         }
     }
