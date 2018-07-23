@@ -34,8 +34,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 
 public class CleverTapHelper {
 
-    public static final String CLEVERTAP_ATTRIBUTION_ID = "$clevertap_attribution_id";
-
     //region private variable
     private static CleverTapHelper mCleverTapHelper;
     private static long mSessionStartTime = 0;
@@ -81,7 +79,7 @@ public class CleverTapHelper {
         getCleverTapInstance(context);
     }
 
-    public static CleverTapAPI getCleverTapInstance(Context context) {
+    private static CleverTapAPI getCleverTapInstance(Context context) {
         CleverTapAPI cleverTapAPI;
         try {
             cleverTapAPI = CleverTapAPI.getInstance(context);

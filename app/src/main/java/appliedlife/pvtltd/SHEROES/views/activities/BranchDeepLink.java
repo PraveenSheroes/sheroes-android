@@ -23,7 +23,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -65,10 +64,6 @@ public class BranchDeepLink extends BaseActivity {
     private void routeDeepLink() {
         Branch branch = Branch.getInstance();
         branch.resetUserSession();
-        if(CleverTapHelper.getCleverTapInstance(getApplicationContext())!=null) {
-            branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
-                    CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
-        }
         branch.initSession(new Branch.BranchReferralInitListener() {
                                @Override
                                public void onInitFinished(JSONObject referringParams, BranchError error) {
