@@ -269,6 +269,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             } else {
                 final Branch branch = Branch.getInstance();
                 branch.resetUserSession();
+                if(CleverTapHelper.getCleverTapInstance(getApplicationContext())!=null) {
+                    branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
+                            CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
+                }
                 branch.initSession(new Branch.BranchReferralInitListener() {
                     @Override
                     public void onInitFinished(JSONObject sessionParams, BranchError error) {

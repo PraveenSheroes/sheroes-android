@@ -669,11 +669,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         HashMap<String, Object> propertiesDelete =
                 new EventProperty.Builder()
                         .id(Long.toString(comment.getId()))
+                        .postType(getStreamType())
                         .postId(Long.toString(comment.getEntityId()))
-                        .postType(AnalyticsEventType.COMMUNITY.toString())
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
-                        .streamType(streamType)
                         .build();
         trackEvent(Event.REPLY_REPORTED, propertiesDelete);
     }
@@ -744,7 +743,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                                     spamReasonsDialog.dismiss();
 
                                     if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
-                                        onCommentReported(comment);   //report the article comment deleted by admin comment
+                                        onCommentReported(comment);   //report the article comment
                                     }
 
                                 } else {
@@ -760,7 +759,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             spamReasonsDialog.dismiss();
 
                             if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
-                                onCommentReported(comment);   //report the article comment deleted by admin comment
+                                onCommentReported(comment);   //report the article comment
                             }
                         }
                     }
@@ -977,7 +976,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             mProperties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, mSourceScreen);
             AnalyticsManager.trackScreenView(SCREEN_LABEL_STORY, mSourceScreen, mProperties);
         } else {
-            AnalyticsManager.trackScreenView(SCREEN_LABEL);
+            AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, mProperties);
         }
     }
 

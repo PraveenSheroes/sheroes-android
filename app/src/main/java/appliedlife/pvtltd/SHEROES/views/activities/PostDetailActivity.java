@@ -727,7 +727,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
@@ -777,7 +776,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 
@@ -1131,7 +1129,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
-                                        AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                        AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
 
                                 } else {
@@ -1149,7 +1147,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                             } else if (spamContentType == SpamContentType.COMMENT) {
-                                AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                             }
                         }
                     }

@@ -56,7 +56,7 @@
     <string name="ID_CHAMPION">Champion</string>
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
-    <string name="ID_DRAWER_NAVIGATION">drawer navigation</string>
+    <string name="ID_DRAWER_NAVIGATION">Drawer navigation</string>
     <string name="ID_DRAWER_NAVIGATION_COMMUNITIES">Right Swipe Navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
