@@ -123,6 +123,7 @@ public class UserPostFragment extends BaseFragment {
     private Comment mComment;
     private boolean hideAnonymousPost = true;
     private boolean isOwnProfile;
+    private boolean isFragmentVisible = false;
 
     public static UserPostFragment createInstance(FeedDetail feedDetail, CommunityEnum communityEnum, long communityPostId, String sourceName) {
         UserPostFragment communitiesDetailFragment = new UserPostFragment();
@@ -196,7 +197,13 @@ public class UserPostFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            isFragmentVisible = true;
+            AnalyticsManager.timeScreenView(getScreenName());
+        } else {
+            if (isFragmentVisible) {
+                isFragmentVisible = false;
+                AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            }
         }
     }
 

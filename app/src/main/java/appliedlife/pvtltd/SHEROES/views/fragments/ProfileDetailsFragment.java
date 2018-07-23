@@ -78,6 +78,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private boolean isSelfProfile;
     private List<CommunityFeedSolrObj> profileCommunities;
     private List<UserSolrObj> followedChampions;
+    private boolean isFragmentVisible = false;
 
     @Bind(R.id.user_communities)
     GridLayout userCommunityLayout;
@@ -194,9 +195,14 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        boolean isActive = isFragmentUIActive(ProfileDetailsFragment.this);
-        if(isActive && isVisibleToUser) {
-            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+        if (isVisibleToUser) {
+            isFragmentVisible = true;
+            AnalyticsManager.timeScreenView(getScreenName());
+        } else {
+            if (isFragmentVisible) {
+                isFragmentVisible = false;
+                AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            }
         }
     }
 

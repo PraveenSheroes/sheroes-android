@@ -67,6 +67,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     //endregion
 
     //region private methods
+    private boolean isFragmentVisible = false;
     private WinnerListAdapter mWinnerListAdapter;
     private Contest mContest;
     //endregion
@@ -130,7 +131,13 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            isFragmentVisible = true;
+            AnalyticsManager.timeScreenView(getScreenName());
+        } else {
+            if (isFragmentVisible) {
+                isFragmentVisible = false;
+                AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            }
         }
     }
 
@@ -148,7 +155,12 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
 
     @Override
     public boolean shouldTrackScreen() {
-        return false;
+        return true;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
     }
 
     //endregion

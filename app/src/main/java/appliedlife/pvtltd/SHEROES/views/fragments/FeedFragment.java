@@ -238,6 +238,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
+
             isActiveTabFragment = true;
             if (getParentFragment() instanceof HomeFragment) {
                 String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
@@ -248,13 +249,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
                 AnalyticsManager.timeScreenView(mScreenLabel);
-            } else if (getActivity() instanceof ContestActivity) {
-                AnalyticsManager.timeScreenView(mScreenLabel);
             }
-
         } else { //When UI is not visible to user
+
             //Capture the screen event of the tab got unselected
-            if(isActiveTabFragment && mScreenLabel!=null && !(getActivity() instanceof HomeActivity)) {
+            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
             isActiveTabFragment = false;
@@ -394,6 +393,35 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 } else {
                     AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, getScreenName());
                 }
+            }
+        }
+    }
+
+    @Override
+    public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
+        if(userPostObj == null) return;
+
+        if (userPostObj.isBookmarked()) {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+            }
+        } else {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
             }
         }
     }
@@ -897,6 +925,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        isActiveTabFragment = false;
+    }
+
+    @Override
     protected SheroesPresenter getPresenter() {
         return mFeedPresenter;
     }
@@ -977,35 +1011,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
-        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked());
-        if (userPostObj.isBookmarked()) {
-            if (mCommunityTab != null) {
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
-                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
-            } else {
-                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
-            }
-        } else {
-            if (mCommunityTab != null) {
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
-                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
-            } else {
-                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
-            }
-        }
+        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked(), userPostObj);
     }
 
     @Override
     public void onLikesCountClicked(long postId) {
-        LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
+        if(getActivity()!=null) {
+            LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
+        }
     }
 
     @Override
@@ -1219,8 +1232,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onHerStoryPostMenuClicked(final ArticleSolrObj articleObj, final View view) {
         if (getActivity() == null || getActivity().isFinishing()) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
-        popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
-        popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
+                popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+                popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            }
+        }
         if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
             popup.getMenu().add(0, R.id.share, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
         }

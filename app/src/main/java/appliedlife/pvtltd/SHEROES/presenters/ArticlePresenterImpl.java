@@ -83,7 +83,6 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), null);
-
                     }
 
                     @Override
@@ -108,13 +107,17 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                 });
 
     }
-
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, boolean isUserStory) {
         if (isUserStory) {
-            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo);
+            return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
         } else {
-            return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo);
+            return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
         }
+
     }
 
     public void onDeleteCommentClicked(final int position, CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -231,6 +234,8 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                                     .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
                                                     .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                                     .postType(AnalyticsEventType.ARTICLE.toString())
+                                                    .authorId(String.valueOf(articleSolrObj.getAuthorId()))
+                                                    .authorName(articleSolrObj.getAuthorName())
                                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                                     .streamType(getMvpView().getStreamType())
                                                     .build();
@@ -541,7 +546,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     public void getSpamCommentApproveOrDeleteByAdmin(final ApproveSpamPostRequest approveSpamPostRequest, final int position, final Comment comment) {
         getMvpView().startProgressBar();
         sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+                .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<BaseResponse>() {
 
                     @Override

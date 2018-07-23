@@ -11,6 +11,7 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -156,7 +157,9 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MASTER_DATA);
             return;
         }
-        masterDataModel.getMasterDataFromModel().subscribe(new DisposableObserver<MasterDataResponse>() {
+        masterDataModel.getMasterDataFromModel()
+                .compose(this.<MasterDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MasterDataResponse>() {
             @Override
             public void onComplete() {
             }
