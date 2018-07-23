@@ -79,7 +79,7 @@ public class CleverTapHelper {
         getCleverTapInstance(context);
     }
 
-    private static CleverTapAPI getCleverTapInstance(Context context) {
+    public static CleverTapAPI getCleverTapInstance(Context context) {
         CleverTapAPI cleverTapAPI;
         try {
             cleverTapAPI = CleverTapAPI.getInstance(context);
