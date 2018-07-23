@@ -238,6 +238,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
+
             isActiveTabFragment = true;
             if (getParentFragment() instanceof HomeFragment) {
                 String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
@@ -248,13 +249,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
                 AnalyticsManager.timeScreenView(mScreenLabel);
-            } else if (getActivity() instanceof ContestActivity) {
-                AnalyticsManager.timeScreenView(mScreenLabel);
             }
-
         } else { //When UI is not visible to user
+
             //Capture the screen event of the tab got unselected
-            if(isActiveTabFragment && mScreenLabel!=null && !(getActivity() instanceof HomeActivity)) {
+            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
             isActiveTabFragment = false;
@@ -400,29 +399,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
-        if(userPostObj.isBookmarked()) {
-            if (userPostObj.isBookmarked()) {
-                if (mCommunityTab != null) {
                     HashMap<String, Object> properties = new EventProperty.Builder()
-                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                            .sourceTabKey(mCommunityTab.key)
-                            .sourceTabTitle(mCommunityTab.title)
-                            .build();
-                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
-                } else {
-                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
-                }
+        if(userPostObj == null) return;
+
+        if (userPostObj.isBookmarked()) {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
             } else {
-                if (mCommunityTab != null) {
-                    HashMap<String, Object> properties = new EventProperty.Builder()
-                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                            .sourceTabKey(mCommunityTab.key)
-                            .sourceTabTitle(mCommunityTab.title)
-                            .build();
-                    AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
-                } else {
-                    AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
-                }
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+            }
+        } else {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
             }
         }
     }
