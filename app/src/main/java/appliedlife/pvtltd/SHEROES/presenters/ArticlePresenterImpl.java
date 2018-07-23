@@ -232,6 +232,8 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                                     .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
                                                     .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                                     .postType(AnalyticsEventType.ARTICLE.toString())
+                                                    .authorId(String.valueOf(articleSolrObj.getAuthorId()))
+                                                    .authorName(articleSolrObj.getAuthorName())
                                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                                     .streamType(getMvpView().getStreamType())
                                                     .build();

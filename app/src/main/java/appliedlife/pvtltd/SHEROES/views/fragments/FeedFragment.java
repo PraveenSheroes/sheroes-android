@@ -925,6 +925,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        isActiveTabFragment = false;
+    }
+
+    @Override
     protected SheroesPresenter getPresenter() {
         return mFeedPresenter;
     }
