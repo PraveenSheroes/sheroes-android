@@ -177,8 +177,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void removeData(int index) {
-        mFeedDetail.remove(index);
-        notifyItemRemoved(index);
+        if (index < mFeedDetail.size()) {
+            mFeedDetail.remove(index);
+            notifyItemRemoved(index);
+        }
     }
 
     public void setData(int index, BaseResponse baseResponse) {

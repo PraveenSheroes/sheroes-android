@@ -1114,12 +1114,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    private Bitmap decodeFile(File f) {
+    private Bitmap decodeFile(File file) {
         try {
             // decode image size
+            if(file == null) return null;
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
+            BitmapFactory.decodeStream(new FileInputStream(file), null, o);
 
             // Find the correct scale value. It should be the power of 2.
             final int REQUIRED_SIZE = 512;
@@ -1134,7 +1135,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
             BitmapFactory.Options o2 = new BitmapFactory.Options();
             o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
+            return BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
         } catch (FileNotFoundException e) {
             Crashlytics.getInstance().core.logException(e);
         }
