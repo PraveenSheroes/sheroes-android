@@ -696,24 +696,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
-                if (!mUserPostObj.isTextExpanded) {
-                    linkifyDescriptionWithUserMention(listDescription);
-                    if (tvFeedCommunityPostText.getLineCount() > 4) {
-                        collapseFeedPostText();
-                    } else {
-                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                    }
+                linkifyDescriptionWithUserMention(listDescription);
+                if (tvFeedCommunityPostText.getLineCount() > 4) {
+                    collapseFeedPostText();
                 } else {
-                    linkifyDescriptionWithUserMention(listDescription);
-                    if (tvFeedCommunityPostText.getLineCount() > 4) {
-                        collapseFeedPostText();
+                    tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                    if (!mUserPostObj.isTextExpanded) {
+                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                     } else {
-                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
                         tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                     }
                 }
-
             }
         });
     }
