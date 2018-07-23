@@ -399,7 +399,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
-                    HashMap<String, Object> properties = new EventProperty.Builder()
         if(userPostObj == null) return;
 
         if (userPostObj.isBookmarked()) {
