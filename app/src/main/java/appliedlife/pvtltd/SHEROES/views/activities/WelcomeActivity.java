@@ -68,6 +68,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
@@ -268,6 +269,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             } else {
                 final Branch branch = Branch.getInstance();
                 branch.resetUserSession();
+                if(CleverTapHelper.getCleverTapInstance(getApplicationContext())!=null) {
+                    branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
+                            CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
+                }
                 branch.initSession(new Branch.BranchReferralInitListener() {
                     @Override
                     public void onInitFinished(JSONObject sessionParams, BranchError error) {
