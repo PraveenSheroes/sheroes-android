@@ -399,6 +399,35 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
+        if(userPostObj.isBookmarked()) {
+            if (userPostObj.isBookmarked()) {
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+                }
+            } else {
+                if (mCommunityTab != null) {
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                            .sourceTabKey(mCommunityTab.key)
+                            .sourceTabTitle(mCommunityTab.title)
+                            .build();
+                    AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
+                } else {
+                    AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
+                }
+            }
+        }
+    }
+
+    @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
             ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
@@ -977,35 +1006,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
-        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked());
-        if (userPostObj.isBookmarked()) {
-            if (mCommunityTab != null) {
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
-                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
-            } else {
-                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
-            }
-        } else {
-            if (mCommunityTab != null) {
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
-                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
-            } else {
-                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
-            }
-        }
+        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked(), userPostObj);
     }
 
     @Override
     public void onLikesCountClicked(long postId) {
-        LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
+        if(getActivity()!=null) {
+            LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
+        }
     }
 
     @Override

@@ -823,7 +823,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     }
 
 
-    public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
+    public void addBookMarkFromPresenter(final BookmarkRequestPojo bookmarkRequestPojo, final boolean isBookmarked, final UserPostSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
             return;
@@ -846,7 +846,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             @Override
             public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                 getMvpView().stopProgressBar();
-                //getMvpView().getFollowUnfollowResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
+
+                if (bookmarkResponsePojo.getStatus() != null && bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                    userSolrObj.setBookmarked(!isBookmarked);
+                    getMvpView().bookmarkedUnBookMarkedResponse(userSolrObj);
+                }
             }
         });
 

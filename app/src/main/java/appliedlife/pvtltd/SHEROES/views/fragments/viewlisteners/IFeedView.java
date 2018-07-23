@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 
@@ -44,4 +45,6 @@ public interface IFeedView extends BaseMvpView {
     void onSpamPostOrCommentReported(SpamResponse baseResponse, UserPostSolrObj userPostSolrObj);
 
     void likeUnlikeResponse(FeedDetail feedDetail,boolean isLike);
+
+    void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostSolrObj);
 }
