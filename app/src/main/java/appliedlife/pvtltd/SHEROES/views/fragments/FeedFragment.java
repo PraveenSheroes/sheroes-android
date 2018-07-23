@@ -1195,8 +1195,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onHerStoryPostMenuClicked(final ArticleSolrObj articleObj, final View view) {
         if (getActivity() == null || getActivity().isFinishing()) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
-        popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
-        popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
+                popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+                popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            }
+        }
         if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
             popup.getMenu().add(0, R.id.share, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
         }

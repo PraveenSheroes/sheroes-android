@@ -83,19 +83,7 @@ public class LoginModel {
         }
 
     }
-    public Observable<LoginResponse> getFBVerificationFromModel(LoginRequest loginRequest) {
-        LogUtils.info(TAG,"*******************"+new Gson().toJson(loginRequest));
-            return sheroesAppServiceApi.getFBVerification(loginRequest)
-                    .map(new Function<LoginResponse, LoginResponse>() {
-                        @Override
-                        public LoginResponse apply(LoginResponse loginResponse) {
-                            return loginResponse;
-                        }
-                    })
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread());
 
-    }
 
     public Observable<ExpireInResponse> getGoogleTokenExpireInFromModel(String expireInUrl) {
         return sheroesAppServiceApi.getGoogleTokenExpire(expireInUrl)
