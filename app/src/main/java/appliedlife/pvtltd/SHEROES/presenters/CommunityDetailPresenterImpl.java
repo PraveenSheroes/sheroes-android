@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.text.TextUtils;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
@@ -149,6 +151,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
 
 
     public void fetchCommunity(String communityId) {
+        if(!TextUtils.isDigitsOnly(communityId)) return;
         FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, 1, Long.valueOf(communityId));
         getFeedFromPresenter(feedRequestPojo);
     }

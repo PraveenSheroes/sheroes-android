@@ -810,7 +810,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
 

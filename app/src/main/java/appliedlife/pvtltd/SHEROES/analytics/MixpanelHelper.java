@@ -21,6 +21,7 @@ import javax.inject.Singleton;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -231,6 +232,27 @@ public class MixpanelHelper {
         }
     }
 
+    public static void trackCommentActionEvent(Event event, FeedDetail feedDetail, String screenName) {
+        if (feedDetail == null) {
+            return;
+        }
+        if (StringUtil.isNotEmptyCollection(feedDetail.getLastComments())) {
+
+            Comment comment = feedDetail.getLastComments().get(0);
+            final HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(comment.getId()))
+                            .postType(getTypeFromSubtype(feedDetail.getSubType()))
+                            .postId(Long.toString(comment.getEntityId()))
+                            .communityId(comment.getCommunityId())
+                            .body(comment.getComment())
+                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
+                            .build();
+            properties.put(EventProperty.SOURCE.getString(), screenName);
+            AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
+        }
+    }
+
     public static void trackPostActionEvent(Event event, FeedDetail feedDetail, String screenName, HashMap<String, Object> passedProperties) {
         if (feedDetail == null) {
             return;
@@ -293,7 +315,7 @@ public class MixpanelHelper {
                 new EventProperty.Builder()
                         .id(Long.toString(articleSolrObj.getEntityOrParticipantId()))
                         .title(articleSolrObj.getNameOrTitle())
-                        .authorId(String.valueOf(articleSolrObj.getCreatedBy()))
+                        .authorId(String.valueOf(articleSolrObj.getAuthorId()))
                         .authorName(articleSolrObj.getAuthorName())
                         .build();
         properties.put(EventProperty.SOURCE.getString(), screenName);

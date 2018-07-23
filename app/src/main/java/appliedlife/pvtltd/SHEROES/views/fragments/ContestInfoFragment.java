@@ -102,6 +102,7 @@ public class ContestInfoFragment extends BaseFragment {
     private Contest mContest;
     private WebViewClickListener webViewClickListener = null;
     private boolean showFeatureImage = true;
+    private boolean isFragmentVisible = false;
     ValueAnimator mAlphaAnimator;
     //endregion
 
@@ -145,7 +146,13 @@ public class ContestInfoFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {
-            AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            isFragmentVisible = true;
+            AnalyticsManager.timeScreenView(getScreenName());
+        } else {
+            if (isFragmentVisible) {
+                isFragmentVisible = false;
+                AnalyticsManager.trackScreenView(getScreenName(), getExtraProperties());
+            }
         }
     }
 
@@ -169,8 +176,13 @@ public class ContestInfoFragment extends BaseFragment {
     }
 
     @Override
-    public boolean shouldTrackScreen() {
+    protected boolean trackScreenTime() {
         return false;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
     }
 
     private void showContest(Contest contest) {
