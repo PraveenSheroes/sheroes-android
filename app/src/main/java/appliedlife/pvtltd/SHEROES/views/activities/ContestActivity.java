@@ -284,10 +284,13 @@ public class ContestActivity extends BaseActivity implements IContestView {
                     if (userPostSolrObj == null) {
                         break;
                     }
-                    if (isPostDeleted) {
-                        mFeedFragment.removeItem(userPostSolrObj);
-                    } else {
-                        mFeedFragment.updateItem(userPostSolrObj);
+
+                    if (mFeedFragment != null) {
+                        if (isPostDeleted) {
+                            mFeedFragment.removeItem(userPostSolrObj);
+                        } else {
+                            mFeedFragment.updateItem(userPostSolrObj);
+                        }
                     }
                     break;
             }
