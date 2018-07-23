@@ -88,19 +88,21 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
 
                     @Override
                     public void onNext(FeedResponsePojo feedResponsePojo) {
-                        FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
-                        ArticleSolrObj articleObj = new ArticleSolrObj();
-                        if (feedDetail instanceof ArticleSolrObj) {
-                            articleObj = (ArticleSolrObj) feedDetail;
-                            articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
-                            articleObj.likesCount = articleObj.getNoOfLikes();
-                            if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-                                articleObj.setStreamType(getMvpView().getStreamType());
-                                feedDetail.setStreamType(getMvpView().getStreamType());
+                        if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                            FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
+                            ArticleSolrObj articleObj = new ArticleSolrObj();
+                            if (feedDetail instanceof ArticleSolrObj) {
+                                articleObj = (ArticleSolrObj) feedDetail;
+                                articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
+                                articleObj.likesCount = articleObj.getNoOfLikes();
+                                if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                                    articleObj.setStreamType(getMvpView().getStreamType());
+                                    feedDetail.setStreamType(getMvpView().getStreamType());
+                                }
+                                getMvpView().setFeedDetail(feedDetail);
+                                getMvpView().showArticle(articleObj, isImageLoaded);
+                                getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
                             }
-                            getMvpView().setFeedDetail(feedDetail);
-                            getMvpView().showArticle(articleObj, isImageLoaded);
-                            getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
                         }
                     }
                 });
