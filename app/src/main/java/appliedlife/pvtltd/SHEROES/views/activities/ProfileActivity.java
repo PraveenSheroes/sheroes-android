@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,7 +36,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -116,6 +119,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.BadgesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserBadgesList;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
@@ -322,6 +326,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Bind(R.id.user_badge)
     ImageView userBadgeIcon;
+
+    @Bind(R.id.badges_container)
+    LinearLayout badgeContainer;
 
     @Bind(R.id.share_profile)
     TextView shareProfile;
@@ -1289,7 +1296,60 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Override
     public void getBadgesList(BadgesResponse badgesResponse) {
-        LogUtils.info(TAG, badgesResponse.getStatus());
+        invalidateBadge(mUserSolarObject); //Update She badge
+
+        invalidateBadgesList(badgesResponse);
+    }
+
+    private void invalidateBadgesList(BadgesResponse badgesResponse) {
+
+        if (badgesResponse == null || badgesResponse.getUserBadgesList() == null || badgesResponse.getUserBadgesList().size() <= 0)
+            return;
+
+        badgeContainer.setVisibility(View.VISIBLE);
+        badgesResponse.getUserBadgesList().addAll(badgesResponse.getUserBadgesList()); //added repeat items again
+
+        int length = badgesResponse.getUserBadgesList().size();
+        for (int i = 0; i < length; i++) {
+            ImageView badge = new ImageView(this);
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(38, this), CommonUtil.convertDpToPixel(38, this));
+            layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, this), 0);
+            badge.setLayoutParams(layoutParams);
+            UserBadgesList userBadgesList = badgesResponse.getUserBadgesList().get(i);
+            Glide.with(badge.getContext())
+                    .load(userBadgesList.getBadgeImageUrl())
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                    .into(badge);
+
+            if (userBadgesList.isBadgeActive()) {
+                badge.setBackgroundResource(R.drawable.circular_background_yellow);
+            } else {
+                badge.setBackgroundResource(R.drawable.circular_background_grey);
+            }
+            badgeContainer.addView(badge);
+            if(i == 4) break;
+        }
+
+        if (length > 4) {
+            TextView badgeCount = new TextView(this);
+            badgeCount.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+            badgeCount.setTextSize(14);
+            badgeCount.setLayoutParams(new android.view.ViewGroup.LayoutParams(CommonUtil.convertDpToPixel(38, this), CommonUtil.convertDpToPixel(38, this)));
+            badgeCount.setText(String.valueOf(length - 4));
+            badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_yellow));
+            badgeCount.setGravity(Gravity.CENTER);
+            badgeContainer.addView(badgeCount);
+        }
+    }
+
+
+    private void invalidateBadge(UserSolrObj userSolrObj) {
+        if(userSolrObj.isSheBadgeActive() && TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
+                    Glide.with(userBadgeIcon.getContext())
+                    .load(userSolrObj.getProfileBadgeUrl())
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                    .into(userBadgeIcon);
+        }
     }
 
     @Override

@@ -98,7 +98,7 @@ public class UserBadgesList {
         this.badgeImageUrl = badgeImageUrl;
     }
 
-    public boolean isIsActive() {
+    public boolean isBadgeActive() {
         return isActive;
     }
 

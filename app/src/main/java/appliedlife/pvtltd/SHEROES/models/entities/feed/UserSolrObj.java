@@ -178,6 +178,12 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_profile_unfilled_fields_name")
     private String unfilledProfileFields;
 
+    @SerializedName("solr_ignore_show_profile_badge")
+    private boolean isSheBadgeActive;
+
+    @SerializedName("solr_ignore_profile_badge_url")
+    private String profileBadgeUrl;
+
     public int getTotalExperience() {
         return totalExperience;
     }
@@ -634,5 +640,21 @@ public class UserSolrObj extends FeedDetail {
 
     public void setFilledProfileFields(String filledProfileFields) {
         this.filledProfileFields = filledProfileFields;
+    }
+
+    public boolean isSheBadgeActive() {
+        return isSheBadgeActive;
+    }
+
+    public void setSheBadgeActive(boolean sheBadgeActive) {
+        isSheBadgeActive = sheBadgeActive;
+    }
+
+    public String getProfileBadgeUrl() {
+        return profileBadgeUrl;
+    }
+
+    public void setProfileBadgeUrl(String profileBadgeUrl) {
+        this.profileBadgeUrl = profileBadgeUrl;
     }
 }
