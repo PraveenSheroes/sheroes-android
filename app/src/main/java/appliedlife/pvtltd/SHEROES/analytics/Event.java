@@ -182,8 +182,6 @@ public enum Event {
 
     PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),
     PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
-    PROFILE_POST_COUNT(AnalyticsEventType.PROFILE, "Post Count Clicked"),
-    PROFILE_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Edit Clicked"),
     PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited"){
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
@@ -193,8 +191,6 @@ public enum Event {
         }
     },
     PROFILE_PIC_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Picture Edit Clicked"),
-    PROFILE_FOLLOWER_COUNT(AnalyticsEventType.PROFILE, "Followers Count Clicked"),
-    PROFILE_FOLLOWING_COUNT(AnalyticsEventType.PROFILE, "Following Count Clicked"),
     PROFILE_REPORTED(AnalyticsEventType.PROFILE, "Reported"),
     PROFILE_DEACTIVATE(AnalyticsEventType.PROFILE, "Deactivated"),
     //region Image related events

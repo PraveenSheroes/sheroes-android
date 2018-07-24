@@ -152,7 +152,7 @@ public class AppConstants {
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
     public static final String FOLLOWED_CHAMPION_LABEL = "Followed Champions Screen";
     public static final String FOLLOWERS = "FOLLOWERS";
-    public static final String FOLLOWING = "FOLLOWING";
+    public static final String FOLLOWING= "FOLLOWING";
     public static final String FOLLOWING_COUNT_CLICK = "Following Count Click";
     public static final String FOLLOWERS_COUNT_CLICK = "Followers Count Click";
     public static final String SHARE_PROFILE = "Share profile";
@@ -318,7 +318,7 @@ public class AppConstants {
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String CHAMPION_ID = "champion_id";
-    public static final String IS_MENTOR_ID = "is_";
+    public static final String IS_MENTOR_ID = "is_mentor";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";

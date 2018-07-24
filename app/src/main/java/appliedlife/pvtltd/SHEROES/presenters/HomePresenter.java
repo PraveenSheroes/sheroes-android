@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesRespon
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -406,7 +407,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getPersonalUserSummaryDetails(userSummaryRequest).subscribe(new DisposableObserver<BoardingDataResponse>() {
+        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+                .compose(this.<BoardingDataResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
 

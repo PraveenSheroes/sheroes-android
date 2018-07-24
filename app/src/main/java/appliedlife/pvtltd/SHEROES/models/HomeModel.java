@@ -123,65 +123,6 @@ public class HomeModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-        /*for  user profile education details */
-
-
-
-    public Observable<FeedResponsePojo> getNewFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
-        return sheroesAppServiceApi.getNewFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Observable<List<FeedDetail>> getNewHomeFeedFromModel(final FeedRequestPojo feedRequestPojo, AppIntroScreenRequest appIntroScreenRequest, final FragmentListRefreshData fragmentListRefreshData) {
-        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
-        Observable<FeedResponsePojo> feedResponsePojoObservable = getNewFeedFromModel(feedRequestPojo);
-        Observable<AppIntroScreenResponse> appIntroScreenResponseObservable = getAppIntroFromModel(appIntroScreenRequest);
-
-        Observable<List<FeedDetail>> combined = Observable.zip(feedResponsePojoObservable, appIntroScreenResponseObservable, new BiFunction<FeedResponsePojo, AppIntroScreenResponse, List<FeedDetail>>() {
-            @Override
-            public List<FeedDetail> apply(FeedResponsePojo feedResponsePojo, AppIntroScreenResponse appIntroScreenResponse) {
-                ArrayList<FeedDetail> feedDetails = new ArrayList<>();
-                if (StringUtil.isNotEmptyCollection(appIntroScreenResponse.getData())) {
-                    FeedDetail appIntroFeedCard = new FeedDetail();
-                    appIntroFeedCard.setSubType(AppConstants.APP_INTRO_SUB_TYPE);
-                    AppIntroData appIntroData = appIntroScreenResponse.getData().get(0);
-                    appIntroFeedCard.setAppIntroDataItems(appIntroData);
-                    feedDetails.add(appIntroFeedCard);
-                }
-                if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
-                    List<FeedDetail> feedDetailsFromServer = new ArrayList<>(feedResponsePojo.getFeedDetails());
-                    if(feedRequestPojo.getPageNo() == 1){
-                        fragmentListRefreshData.setPostedDate(feedDetailsFromServer.get(0).getPostedDate());
-                    }
-                    feedDetails.addAll(feedDetailsFromServer);
-                }
-
-                return  feedDetails;
-            }
-        });
-        return combined;
-    }
-
-    public Observable<FeedResponsePojo> getMyCommunityFromModel(MyCommunityRequest myCommunityRequest) {
-
-        return sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest).map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-            @Override
-            public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-
-                return feedResponsePojo;
-            }
-        })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
     public Observable<AllCommunitiesResponse> getAllCommunityFromModel(MyCommunityRequest myCommunityRequest) {
 

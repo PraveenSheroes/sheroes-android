@@ -45,6 +45,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendVie
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
+
 /**
  * Created by Praveen on 13/02/18.
  */
@@ -239,7 +241,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -250,7 +252,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
