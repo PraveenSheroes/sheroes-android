@@ -22,6 +22,7 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -158,13 +159,21 @@ public class NavigateToWebViewFragment extends BaseFragment {
                     return true;
                 }
 
-                if (StringUtil.isNotNullOrEmptyString(url)) {
+                if (getContext()!=null && StringUtil.isNotNullOrEmptyString(url)) {
                     if (url.startsWith("whatsapp://")) { //Share on WhatsApp
-                        CommonUtil.shareLinkToWhatsApp(getContext(), url);
+                        Uri uri = Uri.parse(url);
+                        Set<String> args = uri.getQueryParameterNames();
+                        if(args!=null && uri.getQueryParameter("text")!=null) {
+                            CommonUtil.shareLinkToWhatsApp(getContext(), uri.getQueryParameter("text"));
+                        }
                     } else if (url.startsWith("http://www.facebook.com")) { //Share on Facebook
                         CommonUtil.shareLinkToFaceBook(getContext(), url);
                     } else if (url.startsWith("http://twitter.com")) { //share on twitter
-                        CommonUtil.shareLinkToTwitter(getContext(), url);
+                        Uri uri = Uri.parse(url);
+                        Set<String> args = uri.getQueryParameterNames();
+                        if(args!=null && uri.getQueryParameter("status")!=null) {
+                            CommonUtil.shareLinkToTwitter(getContext(), uri.getQueryParameter("status"));
+                        }
                     } else if (CommonUtil.isBranchLink(Uri.parse(url))) {
                         if (StringUtil.isNotNullOrEmptyString(url)) {
                             Uri uri = Uri.parse(url);
