@@ -38,7 +38,7 @@
             android:paddingLeft="@dimen/dp_size_8"
             android:paddingRight="@dimen/dp_size_1"
             android:paddingStart="@dimen/dp_size_8"
-            android:src="@drawable/ic_badge_dialog_girl" />
+            android:src="@drawable/vector_badge_dialog_girl" />
 
     </FrameLayout>
 

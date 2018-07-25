@@ -42,7 +42,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
-                    android:background="@drawable/ic_verified"
+                    android:background="@drawable/vector_verified"
                     android:visibility="gone" />
             </FrameLayout>
 
@@ -94,7 +94,7 @@
                     android:ellipsize="end"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:layout_marginLeft="@dimen/dp_size_16"
-                    android:drawableLeft="@drawable/ic_mentor_follower"
+                    android:drawableLeft="@drawable/vector_mentor_follower"
                     android:drawablePadding="@dimen/dp_size_6"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/grey_600"
@@ -105,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_size_8"
-                    android:drawableLeft="@drawable/ic_mentor_answered"
+                    android:drawableLeft="@drawable/vector_mentor_answered"
                     android:drawablePadding="@dimen/dp_size_6"
                     android:ellipsize="end"
                     android:maxLines="@integer/int_value_for_line_1"
@@ -138,7 +138,7 @@
                     android:layout_marginBottom="@dimen/dp_size_8"
                     android:layout_marginLeft="@dimen/dp_size_16"
                     android:layout_marginTop="@dimen/dp_size_8"
-                    android:src="@drawable/ic_mentor_profession" />
+                    android:src="@drawable/vector_mentor_profession" />
 
                 <TextView
                     android:id="@+id/tv_feed_mentor_first_profession"
@@ -168,7 +168,7 @@
                     android:layout_marginBottom="@dimen/dp_size_8"
                     android:layout_marginLeft="@dimen/dp_size_8"
                     android:layout_marginTop="@dimen/dp_size_8"
-                    android:src="@drawable/ic_mentor_profession" />
+                    android:src="@drawable/vector_mentor_profession" />
 
                 <TextView
                     android:id="@+id/tv_feed_mentor_second_profession"
@@ -199,7 +199,7 @@
                     android:layout_marginBottom="@dimen/dp_size_8"
                     android:layout_marginLeft="@dimen/dp_size_8"
                     android:layout_marginTop="@dimen/dp_size_8"
-                    android:src="@drawable/ic_mentor_profession" />
+                    android:src="@drawable/vector_mentor_profession" />
 
                 <TextView
                     android:id="@+id/tv_feed_mentor_third_profession"

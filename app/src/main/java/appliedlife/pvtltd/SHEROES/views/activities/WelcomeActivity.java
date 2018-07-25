@@ -480,9 +480,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList, this, screenText);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(WelcomeActivity.this);
-        ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
-        ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-        ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+        ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
+        ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
+        ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
         mHandler = new Handler();
         mRunnable = new Runnable() {
             public void run() {
@@ -564,19 +564,19 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onPageSelected(int position) {
         switch (position) {
             case AppConstants.NO_REACTION_CONSTANT:
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
+                ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
                 break;
             case AppConstants.ONE_CONSTANT:
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeSecond.setImageResource(R.drawable.vector_circle_red);
+                ivWelcomeFirst.setImageResource(R.drawable.vector_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
                 break;
             case AppConstants.TWO_CONSTANT:
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.vector_circle_red);
+                ivWelcomeFirst.setImageResource(R.drawable.vector_circle_w);
+                ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
                 break;
         }
     }

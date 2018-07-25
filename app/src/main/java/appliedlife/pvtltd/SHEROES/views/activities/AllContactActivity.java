@@ -174,7 +174,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
             searchIcon.setImageDrawable(null);
             
             ImageView searchClose = etInviteSearchBox.findViewById(R.id.search_close_btn);
-            searchClose.setImageResource(R.drawable.ic_clear_black_24dp);
+            searchClose.setImageResource(R.drawable.vector_clear_black_24dp);
             View v = etInviteSearchBox.findViewById(R.id.search_plate);
             v.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.fully_transparent));
             searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {

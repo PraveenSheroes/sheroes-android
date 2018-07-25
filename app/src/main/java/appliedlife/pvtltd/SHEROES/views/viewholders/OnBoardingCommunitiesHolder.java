@@ -59,8 +59,8 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
         this.mContext = context;
         if (StringUtil.isNotNullOrEmptyString(communityFeedObj.getThumbnailImageUrl())) {
             ivBoardingCircleIcon.setCircularImage(true);
-            ivBoardingCircleIcon.setPlaceHolderId(R.drawable.ic_community_selected_icon);
-            ivBoardingCircleIcon.setErrorPlaceHolderId(R.drawable.ic_community_selected_icon);
+            ivBoardingCircleIcon.setPlaceHolderId(R.drawable.vector_community_selected_icon);
+            ivBoardingCircleIcon.setErrorPlaceHolderId(R.drawable.vector_community_selected_icon);
             String authorThumborUrl = CommonUtil.getThumborUri(communityFeedObj.getThumbnailImageUrl(), authorProfilePicSize, authorProfilePicSize);
             ivBoardingCircleIcon.bindImage(authorThumborUrl);
         }

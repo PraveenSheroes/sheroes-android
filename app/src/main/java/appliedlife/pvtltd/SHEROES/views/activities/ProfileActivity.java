@@ -144,8 +144,6 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS_COUNT_CLICK;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -714,34 +712,34 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             profileLevel.setText(R.string.progress_status_beginner);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.BEGINNER_END_LIMIT) {
-                beginnerTick.setImageResource(R.drawable.ic_level_complete);
+                beginnerTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                beginnerTick.setImageResource(R.drawable.ic_level_incomplete);
+                beginnerTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
-            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+            intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
+            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
 
         } else if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
             profileLevel.setText(R.string.progress_status_all_star);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
-                allStarTick.setImageResource(R.drawable.ic_all_level_complete);
+                allStarTick.setImageResource(R.drawable.vector_all_level_complete);
             } else {
-                allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+                allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
             }
-            beginnerTick.setImageResource(R.drawable.ic_level_complete);
-            intermediateTick.setImageResource(R.drawable.ic_level_complete);
+            beginnerTick.setImageResource(R.drawable.vector_level_complete);
+            intermediateTick.setImageResource(R.drawable.vector_level_complete);
 
         } else {
             profileLevel.setText(R.string.progress_level_status_intermediate);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setImageResource(R.drawable.ic_level_complete);
+                intermediateTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
+                intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
-            beginnerTick.setImageResource(R.drawable.ic_level_complete);
+            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+            beginnerTick.setImageResource(R.drawable.vector_level_complete);
 
         }
     }
@@ -898,10 +896,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         //admin and community moderator have feature to share profile and deactivate user
         if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (mLoggedInUserIdTypeId == ADMIN_TYPE_ID || mLoggedInUserIdTypeId == COMMUNITY_MODERATOR_TYPE_ID)) {
-            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.SHARE_PROFILE)));
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.SHARE_PROFILE)));
             popup.getMenu().add(0, R.id.deactivate_user, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_deactivate_user), getResources().getString(R.string.deactivate_user)));
         } else if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
-            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -1942,7 +1940,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 tvMentorDashBoardFollow.setText("");
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.ic_profile_edit_icon);
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.vector_profile_edit_icon);
                 tvMentorDashBoardFollow.setLayoutParams(params1);
             } else {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -1960,7 +1958,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 shareProfile.setText("");
-                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
+                shareProfile.setBackgroundResource(R.drawable.vector_share_profile);
                 shareProfile.setLayoutParams(params1);
             }
         } else {

@@ -243,7 +243,7 @@
             android:layout_height="wrap_content"
             android:rotation="180"
             android:layout_gravity="center"
-            android:src="@drawable/ic_spinner_icon"/>
+            android:src="@drawable/vector_spinner_icon"/>
         <RelativeLayout
             android:id="@+id/anonymous"
             android:layout_width="match_parent"

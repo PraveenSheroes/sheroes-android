@@ -156,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/ic_menu_dashboard"
+                android:src="@drawable/vector_menu_dashboard"
                 android:padding="@dimen/dp_size_16" />
 
 
@@ -164,7 +164,7 @@
                 android:id="@+id/spam_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_spam_post_message" />
+                android:src="@drawable/vector_spam_post_message" />
 
             <TextView
                 android:id="@+id/tv_review_description"
@@ -187,8 +187,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:drawableRight="@drawable/ic_menu_dashboard"
-            android:drawableEnd="@drawable/ic_menu_dashboard"
+            android:drawableRight="@drawable/vector_menu_dashboard"
+            android:drawableEnd="@drawable/vector_menu_dashboard"
             android:padding="@dimen/dp_size_8" />
     </LinearLayout>
 

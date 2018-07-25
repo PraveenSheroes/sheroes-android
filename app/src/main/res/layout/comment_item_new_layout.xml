@@ -23,14 +23,14 @@
                 android:id="@+id/user_profile_pic"
                 android:layout_width="@dimen/user_comment_icon"
                 android:layout_height="@dimen/user_comment_icon"
-                android:src="@drawable/ic_createc_ommunity_icon" />
+                android:src="@drawable/vector_create_community_icon" />
 
             <ImageView
                 android:id="@+id/profile_verified"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_menu_dashboard"
+            android:src="@drawable/vector_menu_dashboard"
             android:padding="@dimen/dp_size_16" />
 
         <ImageView
@@ -130,7 +130,7 @@
             android:layout_marginLeft="@dimen/dp_size_8"
             android:layout_marginStart="@dimen/dp_size_8"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_spam_post_message"
+            android:src="@drawable/vector_spam_post_message"
             android:layout_height="wrap_content" />
 
         <TextView

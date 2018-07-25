@@ -1488,7 +1488,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(this)))
                     .into(mUserPicView);
         } else {
-            mUserPicView.setImageResource(R.drawable.ic_anonomous);
+            mUserPicView.setImageResource(R.drawable.vector_anonymous);
         }
     }
 

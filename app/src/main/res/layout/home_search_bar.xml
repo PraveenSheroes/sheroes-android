@@ -8,7 +8,7 @@
         android:id="@+id/tv_drawer_navigation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_nav_setting"
+        android:drawableLeft="@drawable/vector_nav_setting"
         android:paddingBottom="@dimen/dp_size_10"
         android:paddingRight="@dimen/dp_size_20"
         android:paddingTop="@dimen/dp_size_10"
@@ -37,7 +37,7 @@
         android:layout_gravity="center|bottom"
         android:layout_marginLeft="@dimen/dp_size_60"
         android:layout_marginTop="@dimen/dp_size_16"
-        android:background="@drawable/ic_sheroes_header" />
+        android:background="@drawable/vector_sheroes_header" />
 
 
     <ImageView
@@ -73,7 +73,7 @@
         android:layout_marginTop="-8dp"
         android:layout_toEndOf="@+id/tv_home_notification_icon"
         android:layout_toRightOf="@+id/tv_home_notification_icon"
-        android:src="@drawable/ic_new_tag"
+        android:src="@drawable/vector_new_tag"
         android:visibility="gone" />
 
     <TextView
@@ -83,7 +83,7 @@
         android:layout_alignBottom="@+id/fl_nav_communities"
         android:layout_toLeftOf="@+id/fl_nav_communities"
         android:layout_toStartOf="@+id/fl_nav_communities"
-        android:drawableLeft="@drawable/ic_notification"
+        android:drawableLeft="@drawable/vector_notification"
         android:paddingBottom="@dimen/dp_size_10"
         android:paddingLeft="@dimen/dp_size_10"
         android:paddingRight="@dimen/dp_size_10"

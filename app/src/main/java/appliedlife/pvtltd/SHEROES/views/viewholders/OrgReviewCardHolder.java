@@ -223,11 +223,11 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         }
         switch (userPostObj.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
-                upvoteReacted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_upvote_inactive, 0, 0, 0);
+                upvoteReacted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_upvote_inactive, 0, 0, 0);
                 tvNoOfUpVotes.setText(upvoteText);
                 break;
             default:
-                upvoteReacted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_upvote_active, 0, 0, 0);
+                upvoteReacted.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_upvote_active, 0, 0, 0);
                 tvNoOfUpVotes.setText(upvoteText);
         }
     }
