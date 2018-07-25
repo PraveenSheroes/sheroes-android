@@ -324,7 +324,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                         sendIntent.putExtra(Intent.EXTRA_TEXT, mSmsShareLink);
                         startActivityForResult(sendIntent, 1);
                         //startActivity(sendIntent);
-                        moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", "Invite Friend", Long.parseLong(isWhatsAppNumber), contactDetail.getName(), getScreenName(), "", contactDetail.getName(), getScreenName(), contactDetail.getItemPosition());
+                        moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", "Invite Friend", Long.parseLong(PhoneNumberUtils.stripSeparators(isWhatsAppNumber)), contactDetail.getName(), getScreenName(), "", contactDetail.getName(), getScreenName(), contactDetail.getItemPosition());
                         HashMap<String, Object> properties = new EventProperty.Builder().id(isWhatsAppNumber).sharedTo("Whatsapp").build();
                         AnalyticsManager.trackEvent(Event.FRIEND_INVITED, getScreenName(), properties);
 

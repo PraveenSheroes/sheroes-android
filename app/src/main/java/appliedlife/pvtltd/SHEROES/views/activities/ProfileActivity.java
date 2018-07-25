@@ -531,7 +531,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             followUnFollowMentor();
         }
 
-        if (userSolrObj.isAuthorMentor()) isMentor = true;
+        if ((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(MentorsUserListingActivity.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())  {
+            isMentor = true;
+        }
 
         if (isMentor) {
             verifiedIcon.setVisibility(View.VISIBLE);
@@ -870,6 +872,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
         }
         mTabLayout.setupWithViewPager(mViewPager);
+        mViewPager.setOffscreenPageLimit(1);
         mViewPager.addOnPageChangeListener(this);
         if (askingQuestionCode == AppConstants.ASKING_QUESTION_CALL) {
             mViewPager.setCurrentItem(AppConstants.ONE_CONSTANT);
@@ -947,17 +950,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.li_follower)
     public void followerClick() {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isMentor)
-                        .name(FOLLOWERS_COUNT_CLICK)
-                        .sourceScreenId(mSourceName)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWER_COUNT, getScreenName(), properties);
-
         if (StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
             FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWERS, null);
         }
@@ -965,15 +957,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @OnClick(R.id.li_following)
     public void followingClick() {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .name(FOLLOWING_COUNT_CLICK)
-                        .isMentor(isMentor)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWING_COUNT, getScreenName(), properties);
         if (StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
             FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING, null);
         }
@@ -998,16 +981,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             mViewPager.setCurrentItem(1);
         }
         mAppBarLayout.setExpanded(false);
-
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isMentor)
-                        .sourceScreenId(SCREEN_LABEL)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        AnalyticsManager.trackEvent(Event.PROFILE_POST_COUNT, getScreenName(), properties);
     }
 
     @OnClick(R.id.tv_mentor_see_insight)
@@ -1045,15 +1018,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                                .name(mUserSolarObject.getNameOrTitle())
-                                .isMentor(isMentor)
-                                .sourceScreenId(mSourceName)
-                                .isOwnProfile(isOwnProfile)
-                                .build();
-                AnalyticsManager.trackEvent(Event.PROFILE_EDIT_CLICKED, getScreenName(), properties);
             }
         }
     }
@@ -1087,10 +1051,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             } else {
                 isFollowEvent = true;
                 mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
+                addAnalyticsEvents(Event.PROFILE_FOLLOWED);
             }
-
-            Event event = isFollowEvent ? Event.PROFILE_FOLLOWED : Event.PROFILE_UNFOLLOWED;
-            addAnalyticsEvents(event);
         }
     }
 
@@ -1102,27 +1064,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Override
     public void onPageSelected(int position) {
-        String tabName = "";
-        if (isMentor) {
-            if (position == 0) tabName = "Profile - Posts";
-            if (position == 1) tabName = "Profile - Q&A";
-        } else {
-            if (position == 0) tabName = "Profile - Profile";
-            if (position == 1) tabName = "Profile - Posts";
-        }
-
-        HashMap<String, Object> properties = new
-                EventProperty.Builder()
-                .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                .isMentor(isMentor)
-                .title(tabName)
-                .tabTitle(tabName)
-                .isOwnProfile(isOwnProfile)
-                .build();
-        AnalyticsManager.trackScreenView(getScreenName(), properties);
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof UserPostFragment) {
-            if (tabName.equalsIgnoreCase("Profile - Posts") && isOwnProfile) {
+            if (isOwnProfile) {
                 createPost.setVisibility(View.VISIBLE);
             } else {
                 createPost.setVisibility(View.GONE);
@@ -1397,9 +1341,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
                         .isMentor(isMentor)
-                        .sourceScreenId(SCREEN_LABEL)
                         .isOwnProfile(isOwnProfile)
-                        .sharedTo(AppConstants.SHARE_CHOOSER)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
 
@@ -1764,7 +1706,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 EventProperty.Builder()
                 .id(String.valueOf(mChampionId))
                 .isMentor(isMentor)
-                .sourceScreenId(mSourceName)
                 .isOwnProfile(isOwnProfile)
                 .build();
         return properties;

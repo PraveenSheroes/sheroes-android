@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
+import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -53,7 +54,9 @@ public class AddressPresenterImpl extends BasePresenter<IAddressView> {
             return;
         }
         getMvpView().startProgressBar();
-        updateAddress(address).subscribe(new DisposableObserver<BaseResponse>() {
+        updateAddress(address)
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

@@ -117,6 +117,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MEN
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -193,6 +194,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private boolean mControlsVisible = true;
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
+    private boolean isActiveTabFragment;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -208,7 +210,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         mFeedPresenter.attachView(this);
-
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
@@ -231,6 +232,32 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         //fetch latest all communities and save it in sharePref
         mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {  //When UI is visible to user
+
+            isActiveTabFragment = true;
+            if (getParentFragment() instanceof HomeFragment) {
+                String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
+                AnalyticsManager.timeScreenView(mScreenLabel);
+            }
+        } else { //When UI is not visible to user
+
+            //Capture the screen event of the tab got unselected
+            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+                AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+            }
+            isActiveTabFragment = false;
+        }
     }
 
     @Override
@@ -371,6 +398,35 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
+        if(userPostObj == null) return;
+
+        if (userPostObj.isBookmarked()) {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+            }
+        } else {
+            if (mCommunityTab != null) {
+                HashMap<String, Object> properties = new EventProperty.Builder()
+                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
+                        .sourceTabKey(mCommunityTab.key)
+                        .sourceTabTitle(mCommunityTab.title)
+                        .build();
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
+            } else {
+                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
+            }
+        }
+    }
+
+    @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
             ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
@@ -447,7 +503,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 String sourceScreenId = mProperties != null && mProperties.get(EventProperty.ID.getString()) != null ? ((String) mProperties.get(EventProperty.ID.getString())) : "";
                 if (CommonUtil.isNotEmpty(screenName)) {
                     mScreenLabel = screenName;
-                    AnalyticsManager.trackScreenView(mScreenLabel);
                 }
                 if (CommonUtil.isNotEmpty(dataUrl)) {
                     mFeedPresenter.setEndpointUrl(dataUrl);
@@ -576,7 +631,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
 
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
-        properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
         if (mCommunityTab != null) {
             HashMap<String, Object> propertiesMap = new EventProperty.Builder()
                     .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
@@ -601,7 +655,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         if (articleSolrObj.subType.equalsIgnoreCase(AppConstants.FEED_ARTICLE)) {
             HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
-            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
             if (articleSolrObj.isUserStory()) {
                 AnalyticsManager.trackEvent(Event.STORY_SHARED, getScreenName(), properties);
             } else {
@@ -609,7 +662,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         } else {
             HashMap<String, Object> properties = MixpanelHelper.getPostProperties(articleSolrObj, getScreenName());
-            properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
             AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
         }
     }
@@ -856,20 +908,26 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return false;
     }
 
-    public void setScreenNameOnTabSelection(String screenName) {
-        mScreenLabel = screenName;
-    }
-
     @Override
     public void onResume() {
         super.onResume();
-        AnalyticsManager.timeScreenView(mScreenLabel);
+        if (isActiveTabFragment) {
+            AnalyticsManager.timeScreenView(mScreenLabel);
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+        if (isActiveTabFragment) {
+            AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        isActiveTabFragment = false;
     }
 
     @Override
@@ -953,35 +1011,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
-        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked());
-        if (userPostObj.isBookmarked()) {
-            if (mCommunityTab != null) {
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
-                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName(), properties);
-            } else {
-                AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
-            }
-        } else {
-            if (mCommunityTab != null) {
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
-                        .sourceTabKey(mCommunityTab.key)
-                        .sourceTabTitle(mCommunityTab.title)
-                        .build();
-                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName(), properties);
-            } else {
-                AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
-            }
-        }
+        mFeedPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked(), userPostObj);
     }
 
     @Override
     public void onLikesCountClicked(long postId) {
-        LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
+        if(getActivity()!=null) {
+            LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
+        }
     }
 
     @Override
@@ -1031,7 +1068,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (mCommunityFeedObj.isMember()) {
             mCommunityFeedObj.setMember(false);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
-            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 mFeedPresenter.leaveCommunity(removeMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), mCommunityFeedObj);
@@ -1039,7 +1076,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else {
             mCommunityFeedObj.setMember(true);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
-            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
@@ -1103,7 +1140,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(false)
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -1113,7 +1150,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(false)
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1195,8 +1232,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onHerStoryPostMenuClicked(final ArticleSolrObj articleObj, final View view) {
         if (getActivity() == null || getActivity().isFinishing()) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
-        popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
-        popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
+                popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
+                popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+            }
+        }
         if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
             popup.getMenu().add(0, R.id.share, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
         }
@@ -1489,7 +1530,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
-                                        AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                        AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
 
                                 } else {
@@ -1506,7 +1547,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                             } else if (spamContentType == SpamContentType.COMMENT) {
-                                AnalyticsManager.trackPostAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
+                                AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                             }
                         }
                     }
@@ -1526,7 +1567,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(true)
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1535,7 +1576,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor(true)
+                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1566,7 +1607,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
         if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
-            boolean isMentor = userSolrObj.isAuthorMentor();
+            boolean isMentor = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
             ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
 

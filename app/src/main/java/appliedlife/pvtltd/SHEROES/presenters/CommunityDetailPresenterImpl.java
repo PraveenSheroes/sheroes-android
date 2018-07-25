@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.text.TextUtils;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 
@@ -20,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -109,7 +112,9 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        removeMember(removeMemberRequest).subscribe(new DisposableObserver<MemberListResponse>() {
+        removeMember(removeMemberRequest)
+                .compose(this.<MemberListResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MemberListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -146,6 +151,7 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
 
 
     public void fetchCommunity(String communityId) {
+        if(!TextUtils.isDigitsOnly(communityId)) return;
         FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, 1, Long.valueOf(communityId));
         getFeedFromPresenter(feedRequestPojo);
     }

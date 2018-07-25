@@ -696,24 +696,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void run() {
                 tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
-                if (!mUserPostObj.isTextExpanded) {
-                    linkifyDescriptionWithUserMention(listDescription);
-                    if (tvFeedCommunityPostText.getLineCount() > 4) {
-                        collapseFeedPostText();
-                    } else {
-                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
-                    }
+                linkifyDescriptionWithUserMention(listDescription);
+                if (tvFeedCommunityPostText.getLineCount() > 4) {
+                    collapseFeedPostText();
                 } else {
-                    linkifyDescriptionWithUserMention(listDescription);
-                    if (tvFeedCommunityPostText.getLineCount() > 4) {
-                        collapseFeedPostText();
+                    tvFeedCommunityPostText.setVisibility(View.VISIBLE);
+                    if (!mUserPostObj.isTextExpanded) {
+                        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
                     } else {
-                        tvFeedCommunityPostText.setVisibility(View.VISIBLE);
                         tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
                     }
                 }
-
             }
         });
     }
@@ -1293,8 +1286,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             } else if (viewInterface instanceof FeedItemCallback) {
                 ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-            } else {
-                // viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_CHAMPION_TITLE);
             }
         }
     }

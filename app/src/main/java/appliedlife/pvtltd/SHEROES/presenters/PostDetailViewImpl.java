@@ -195,7 +195,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        editPostCommunity(communityTopPostRequest).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        editPostCommunity(communityTopPostRequest)
+                .compose(this.<CreateCommunityResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
@@ -859,6 +861,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
         sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
                 .subscribeOn(Schedulers.io())
+                .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<SpamResponse>() {
                     @Override
@@ -885,7 +888,11 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     //Spam Comment for admin
     public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final Comment comment) {
         getMvpView().startProgressBar();
-        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest).subscribe(new DisposableObserver<BaseResponse>() {
+        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+                .subscribeOn(Schedulers.io())
+                .compose(this.<SpamResponse>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<BaseResponse>() {
 
             @Override
             public void onComplete() {

@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +73,6 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
             return;
         }
         getMvpView().startProgressBar();
-        Log.e("Data", "########## object request" + new Gson().toJson(feedRequestPojo) + "---user tsory--" + isUserStory);
         getFeedFromModel(feedRequestPojo, isUserStory)
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
@@ -87,25 +85,25 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), null);
-                        Log.e("Data", "########## object zError----" + e);
                     }
 
                     @Override
                     public void onNext(FeedResponsePojo feedResponsePojo) {
-                        Log.e("Data", "########## object response" + new Gson().toJson(feedResponsePojo.getFeedDetails()));
-                        FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
-                        ArticleSolrObj articleObj = new ArticleSolrObj();
-                        if (feedDetail instanceof ArticleSolrObj) {
-                            articleObj = (ArticleSolrObj) feedDetail;
-                            articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
-                            articleObj.likesCount = articleObj.getNoOfLikes();
-                            if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-                                articleObj.setStreamType(getMvpView().getStreamType());
-                                feedDetail.setStreamType(getMvpView().getStreamType());
+                        if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                            FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
+                            ArticleSolrObj articleObj = new ArticleSolrObj();
+                            if (feedDetail instanceof ArticleSolrObj) {
+                                articleObj = (ArticleSolrObj) feedDetail;
+                                articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
+                                articleObj.likesCount = articleObj.getNoOfLikes();
+                                if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                                    articleObj.setStreamType(getMvpView().getStreamType());
+                                    feedDetail.setStreamType(getMvpView().getStreamType());
+                                }
+                                getMvpView().setFeedDetail(feedDetail);
+                                getMvpView().showArticle(articleObj, isImageLoaded);
+                                getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
                             }
-                            getMvpView().setFeedDetail(feedDetail);
-                            getMvpView().showArticle(articleObj, isImageLoaded);
-                            getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
                         }
                     }
                 });
@@ -114,22 +112,10 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo, boolean isUserStory) {
         if (isUserStory) {
             return sheroesAppServiceApi.getUserStory(String.valueOf(feedRequestPojo.getIdForFeedDetail()), feedRequestPojo)
-                    .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                        @Override
-                        public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                            return feedResponsePojo;
-                        }
-                    })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         } else {
             return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                    .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                        @Override
-                        public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                            return feedResponsePojo;
-                        }
-                    })
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
@@ -250,6 +236,8 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                                                     .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
                                                     .postId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                                     .postType(AnalyticsEventType.ARTICLE.toString())
+                                                    .authorId(String.valueOf(articleSolrObj.getAuthorId()))
+                                                    .authorName(articleSolrObj.getAuthorName())
                                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
                                                     .streamType(getMvpView().getStreamType())
                                                     .build();
@@ -560,7 +548,9 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
     public void getSpamCommentApproveOrDeleteByAdmin(final ApproveSpamPostRequest approveSpamPostRequest, final int position, final Comment comment) {
         getMvpView().startProgressBar();
         sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+                .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<BaseResponse>() {
 
                     @Override

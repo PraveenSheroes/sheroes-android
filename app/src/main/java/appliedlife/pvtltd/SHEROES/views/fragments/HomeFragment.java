@@ -15,16 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -50,6 +47,7 @@ public class HomeFragment extends BaseFragment {
     private List<Fragment> mTabFragments = new ArrayList<>();
     private String mDefaultTabKey = "My Feed";
     private List<String> homeTabs = new ArrayList<>();
+    private String mUnSelectedFragment;
     //endregion
 
     // region Enum
@@ -115,6 +113,10 @@ public class HomeFragment extends BaseFragment {
         if (AppUtils.isFragmentUIActive(activeFragment)) {
             ((FeedFragment) activeFragment).refreshList();
         }
+    }
+
+    public String getInactiveTabFragmentName() {
+        return mUnSelectedFragment;
     }
     //endregion
 
@@ -191,21 +193,7 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        Fragment feedFragment =mTabFragments.get(0);
-                        if (AppUtils.isFragmentUIActive(feedFragment)) {
-                            ((FeedFragment) feedFragment).setScreenNameOnTabSelection(FEED_SCREEN_LABEL);
-                        }
-                        break;
-                    case 1:
-                        Fragment trendingFragment =mTabFragments.get(1);
-                        if (AppUtils.isFragmentUIActive(trendingFragment)) {
-                            ((FeedFragment) trendingFragment).setScreenNameOnTabSelection(TRENDING_FEED_SCREEN_LABEL);
-                        }
-                        break;
-                    default:
-                }
+
             }
 
             @Override
@@ -247,7 +235,15 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                switch (tab.getPosition()) {
+                    case 0:
+                        setInactiveTabFragmentName(FEED_SCREEN_LABEL);
+                        break;
+                    case 1:
+                        setInactiveTabFragmentName(TRENDING_FEED_SCREEN_LABEL);
+                        break;
+                    default:
+                }
             }
 
             @Override
@@ -255,6 +251,10 @@ public class HomeFragment extends BaseFragment {
 
             }
         });
+    }
+
+    private void setInactiveTabFragmentName(String active) {
+        mUnSelectedFragment = active;
     }
     //endregion
 

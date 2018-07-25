@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.SHEModel;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -61,7 +62,9 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_GET_FAQS);
             return;
         }
-        mSheModel.getAllFAQS(faqsRequest).subscribe(new DisposableObserver<FAQSResponse>() {
+        mSheModel.getAllFAQS(faqsRequest)
+                .compose(this.<FAQSResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<FAQSResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();
@@ -89,7 +92,9 @@ public class SHEPresenter extends BasePresenter<SHEView> {
             return;
         }
         getMvpView().startProgressBar();
-        mSheModel.getAllICCMembers(iccMemberRequest).subscribe(new DisposableObserver<ICCMemberListResponse>() {
+        mSheModel.getAllICCMembers(iccMemberRequest)
+                .compose(this.<ICCMemberListResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ICCMemberListResponse>() {
             @Override
             public void onComplete() {
                 getMvpView().stopProgressBar();

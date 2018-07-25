@@ -142,11 +142,13 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mEmailSign.setEnabled(true);
         checkDialogDismiss();
         if (null != loginResponse) {
-            long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
-
             if (StringUtil.isNotNullOrEmptyString(loginResponse.getStatus())) {
                 switch (loginResponse.getStatus()) {
                     case AppConstants.SUCCESS:
+                        if (loginResponse.getUserSummary() == null || loginResponse.getUserSummary().getUserBO() == null)
+                            return;
+
+                        long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                         loginResponse.setGcmId(mGcmId);
@@ -174,6 +176,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 }
             } else {
                 if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken()) && null != loginResponse.getUserSummary()) {
+                    long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
                     AnalyticsManager.initializeMixpanel(getContext());
                     AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
                     appInstallationHelper.setupAndSaveInstallation(true);
@@ -183,14 +186,17 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
-                    if(getActivity()!=null)
-                    ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
-                    ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
+                    if(getActivity()!=null) {
+                        ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
+                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
+                    }
                     AnalyticsManager.initializeMixpanel(getContext());
                     AnalyticsManager.initializeCleverTap(getApplicationContext(), currentTime < createdDate);
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-                    ((LoginActivity) getActivity()).onLoginAuthToken();
+                    if(getActivity()!=null && !getActivity().isFinishing()) {
+                        ((LoginActivity) getActivity()).onLoginAuthToken();
+                    }
 
                 } else {
                     LoginManager.getInstance().logOut();
@@ -231,9 +237,10 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @OnClick(R.id.forgot_password)
     public void onForgotPasswordClick() {
         ResetPasswordFragment resetPasswordFragment = new ResetPasswordFragment();
-        this.getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_login, resetPasswordFragment, ResetPasswordFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
-
+        if (getFragmentManager() != null) {
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_login, resetPasswordFragment, ResetPasswordFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        }
     }
 
     /**

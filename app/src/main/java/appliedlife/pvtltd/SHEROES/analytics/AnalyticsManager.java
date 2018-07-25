@@ -162,6 +162,13 @@ public class AnalyticsManager {
 
     }
 
+    public static void trackCommentAction(Event event, FeedDetail feedDetail, String screenName) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackCommentActionEvent(event, feedDetail, screenName);
+    }
+
     public static void trackPostAction(Event event, FeedDetail feedDetail, String screenName) {
         if (!canSend()) {
             return;

@@ -110,8 +110,12 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
                     resetPasswordSuccessFragment.setArguments(bundle);
                 }
 
-                this.getFragmentManager().beginTransaction()
-                        .replace(R.id.fragment_login, resetPasswordSuccessFragment, ResetPasswordSuccessFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+                if (getFragmentManager() != null) {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_login, resetPasswordSuccessFragment, ResetPasswordSuccessFragment.class.getName())
+                            .addToBackStack(null)
+                            .commitAllowingStateLoss();
+                }
 
             } else {
                 tvPwdStatus.setText(getString(R.string.ID_RESET_PASSWORD_FAILURE_TEXT));
@@ -126,6 +130,7 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
 
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
+        if(getActivity() == null || getActivity().isFinishing())  return;
         ((LoginActivity)getActivity()).renderLoginFragmentView();
     }
 

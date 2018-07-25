@@ -37,6 +37,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
+
 /**
  * Created by ravi on 02/05/18.
  * Dialog to display the different profile completion level
@@ -145,19 +147,8 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
 
             invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
 
-            invalidateUserDetails(mProfileLevelType);
+            invalidateUserDetails(mProfileLevelType, true);
 
-            //Add analytics screen open Event
-            if (getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {
-                String strengthLevel = userLevel(mUserSolrObj).name();
-                String sourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .isMentor(mUserSolrObj.isAuthorMentor())
-                                .profileStrength(strengthLevel)
-                                .build();
-                AnalyticsManager.trackScreenView(SCREEN_NAME, sourceScreenName, properties);
-            }
         }
 
         return view;
@@ -175,10 +166,10 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
 
         if (mProfileLevelType == ProfileLevelType.BEGINNER) {
             mProfileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(mProfileLevelType);
+            invalidateUserDetails(mProfileLevelType, false);
         } else if (mProfileLevelType == ProfileLevelType.INTERMEDIATE) {
             mProfileLevelType = ProfileLevelType.ALLSTAR;
-            invalidateUserDetails(mProfileLevelType);
+            invalidateUserDetails(mProfileLevelType, false);
         } else {
             dismiss();
         }
@@ -188,7 +179,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     protected void openBeginnerDialog() {
         if (mProfileLevelType != ProfileLevelType.BEGINNER) {
             mProfileLevelType = ProfileLevelType.BEGINNER;
-            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.BEGINNER, false);
         }
     }
 
@@ -196,7 +187,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     protected void openIntermediateProgressDialog() {
         if (mProfileLevelType != ProfileLevelType.INTERMEDIATE) {
             mProfileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE, false);
         }
     }
 
@@ -204,7 +195,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     protected void openAllStarProgressDialog() {
         if (mProfileLevelType != ProfileLevelType.ALLSTAR) {
             mProfileLevelType = ProfileLevelType.ALLSTAR;
-            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.ALLSTAR, false);
         }
     }
 
@@ -216,7 +207,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         String strengthLevel = userLevel(mUserSolrObj).name();
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .isMentor(mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .profileStrength(strengthLevel)
                         .build();
         EditUserProfileActivity.navigateTo(getActivity(), SCREEN_NAME, mUserSolrObj.getImageUrl(), properties, 1);
@@ -254,7 +245,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         }
     }
 
-    private void invalidateUserDetails(ProfileLevelType profileLevelType) {
+    private void invalidateUserDetails(ProfileLevelType profileLevelType, boolean hasSource) {
         String fields = unfilledFields(profileLevelType);
 
         boolean isAllFieldsDone;
@@ -277,14 +268,17 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
         }
 
         //Add analytics screen open Event
-        if (getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {
-            String strengthLevel = userLevel(mUserSolrObj).name();
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .isMentor(mUserSolrObj.isAuthorMentor())
-                            .profileStrength(strengthLevel)
-                            .build();
-            AnalyticsManager.trackScreenView(SCREEN_NAME, properties);
+        String strengthLevel = userLevel(mUserSolrObj).name();
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
+                        .profileStrength(strengthLevel)
+                        .build();
+        if (hasSource && getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {
+            String sourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
+            AnalyticsManager.trackScreenView(SCREEN_NAME, sourceScreenName, properties);
+        } else {
+            AnalyticsManager.trackScreenView(SCREEN_NAME, SCREEN_NAME, properties); //Moving next stage on same screen
         }
 
         updateDetails(profileLevelType, isAllFieldsDone);
