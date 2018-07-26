@@ -46,6 +46,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -123,7 +124,6 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.slidinglayout.SlidingUpPanelLayout;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
@@ -230,19 +230,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     TextView mImageCount;
 
     @Bind(R.id.image_upload_view)
-    RelativeLayout mImageUploadView;
+    LinearLayout mImageUploadView;
 
     @Bind(R.id.et_view)
     RichEditorView etView;
 
     @Bind(R.id.suggestions_list)
     RecyclerView mSuggestionList;
-
-    @Bind(R.id.sliding_layout)
-    SlidingUpPanelLayout mSlidingLayout;
-
-    @Bind(R.id.iv_sliding_arrow)
-    ImageView ivSlidingArrow;
 
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
@@ -302,13 +296,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mIsFromBranch = getIntent().getBooleanExtra(IS_FROM_BRANCH, false);
 
         }
-        etView.getEditText().setHint("Testjsjsj");
         if (mIsFromBranch) {
             branchUrlHandle();
         } else {
             isSharedFromOtherApp = false;
-            mSlidingLayout.setAnchorPoint(0.4f);
-            mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
             if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 etView.getEditText().setHint(mConfiguration.get().configData.mCreatePostText);
                 mUserTagCreatePostText = mConfiguration.get().configData.mUserTagCreatePostInfoText;
@@ -406,7 +397,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupToolbarItemsColor();
             externalImageWithTextShare();
             setupToolBarItem();
-            initializeSlidingPanel();
 
         }
         etView.onReceiveSuggestionsListView(mSuggestionList);
@@ -422,26 +412,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
 
         mCreatePostPresenter.getUserMentionSuggestion(etView, mCommunityPost);
-    }
-
-    private void initializeSlidingPanel() {
-        mSlidingLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                ivSlidingArrow.setRotation(360f);
-            }
-        });
-        mSlidingLayout.setFadeOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-            }
-        });
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
@@ -1528,7 +1498,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case AppConstants.SUCCESS:
                     isLinkRendered = true;
                     cardViewLinkRender.setVisibility(View.VISIBLE);
-                    // disableEditTextForLinks();
+                   // disableEditTextForLinks();
                     mLinkRenderResponse = linkRenderResponse;
                     if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgTitleS())) {
                         tvLinkTitle.setText(linkRenderResponse.getOgTitleS());
@@ -1572,29 +1542,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
                 mMentionList = searchUserDataResponse.getParticipantList();
                 mMentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-                Mention mention = new Mention(1, "Hi", "abc", "abc", 123);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-                mMentionList.add(mention);
-
-
                 etView.notifyData(mMentionList);
-                mSlidingLayout.setAnchorPoint(0.4f);
-                mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.ANCHORED);
-
             } else {
                 List<Mention> mentionList = new ArrayList<>();
                 mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
@@ -1602,7 +1550,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 etView.notifyData(mentionList);
             }
         }
-
     }
 
 
@@ -1649,7 +1596,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
     }
 
-    @OnClick({R.id.user_drop_down,R.id.community_name})
+    @OnClick(R.id.user_drop_down)
     public void onUserDropDownClicked() {
         PopupMenu popup = new PopupMenu(CommunityPostActivity.this, mUserDropDownView);
         popup.getMenuInflater().inflate(R.menu.menu_user_spinner, popup.getMenu());
@@ -1744,7 +1691,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             case R.id.li_social_user:
                 mMentionList.clear();
                 etView.displayHide();
-                mSlidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
                 Mention mention = (Mention) suggestible;
                 etView.setInsertion(mention);
                 final HashMap<String, Object> properties =
@@ -1786,13 +1732,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         }
                     }
                 }
-              /*  if (editTextDescription.contains("@")) {
+                if (editTextDescription.contains("@")) {
                     mAnonymousView.setVisibility(View.GONE);
                     mImageUploadView.setVisibility(View.GONE);
                 } else {
                     mAnonymousView.setVisibility(View.VISIBLE);
                     setImageCount();
-                }*/
+                }
             }
 
         }
