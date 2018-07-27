@@ -177,13 +177,11 @@ dependencies {
     implementation('com.jakewharton:butterknife:7.0.1')
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:customtabs:27.1.1'
-    implementation 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
     implementation 'io.branch.sdk.android:library:2.14.3'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.4'
-    //compile 'org.jsoup:jsoup:1.7.3'
-    annotationProcessor 'org.glassfish:javax.annotation:10.0-b28'
+
     implementation 'javax.annotation:jsr250-api:1.0'
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
