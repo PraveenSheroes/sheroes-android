@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_size_72"
+    android:background="@color/white"
     android:orientation="horizontal">
 
     <ImageView
@@ -28,7 +29,7 @@
         android:layout_marginRight="@dimen/dp_size_24"
         android:textColor="@color/earned_badge_count"
         android:layout_marginTop="@dimen/dp_size_21"
-        android:background="@drawable/ic_active_badge_blank" />
+        tools:background="@drawable/ic_active_badge_blank" />
 
     <LinearLayout
         android:layout_width="match_parent"

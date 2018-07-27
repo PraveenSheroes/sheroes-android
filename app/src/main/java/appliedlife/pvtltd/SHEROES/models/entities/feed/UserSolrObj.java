@@ -1,11 +1,14 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
 import java.util.Date;
 import java.util.List;
+
+import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 
 /**
  * Created by ujjwal on 26/11/17.
@@ -183,6 +186,18 @@ public class UserSolrObj extends FeedDetail {
 
     @SerializedName("solr_ignore_profile_badge_url")
     private String profileBadgeUrl;
+
+    @SerializedName("solr_ignore_user_badges_list")
+    @Expose
+    private List<BadgeDetails> userBadgesList = null;
+
+    public List<BadgeDetails> getUserBadgesList() {
+        return userBadgesList;
+    }
+
+    public void setUserBadgesList(List<BadgeDetails> userBadgesList) {
+        this.userBadgesList = userBadgesList;
+    }
 
     public int getTotalExperience() {
         return totalExperience;

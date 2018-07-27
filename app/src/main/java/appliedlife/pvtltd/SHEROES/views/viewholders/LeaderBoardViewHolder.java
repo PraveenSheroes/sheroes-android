@@ -143,7 +143,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             itemContainer.setLayoutParams(layoutParams);
 
             if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null) {
-                if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive()) {
+                if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isActive()) {
                     badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
                 } else {
                     badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);

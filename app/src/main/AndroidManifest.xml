@@ -424,6 +424,7 @@
             android:name="com.clevertap.android.sdk.InAppNotificationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".views.activities.BadgeClosetActivity" />
 
         <!-- specify activities where In-app notifications should not be shown -->
         <!-- pretend there is a SplashActivity in this project

@@ -34,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.BadgesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
@@ -554,11 +553,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void onUserDeactivation(BaseResponse baseResponse) {
-    }
-
-    @Override
-    public void getBadgesList(BadgesResponse badgesResponse) {
-
     }
 }
 

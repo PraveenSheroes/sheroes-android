@@ -57,6 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_title"
             android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
             android:layout_marginEnd="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
