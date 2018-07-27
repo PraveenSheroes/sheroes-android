@@ -159,6 +159,7 @@ public class AppConstants {
     public static final String EDIT_PROFILE = "Edit profile";
     public static final String HIDE_SPLASH_THEME = "hide_splash_theme";
     public static final String NETWORK_TIMEOUT = "network_timout";
+    public static final String GENDER_INPUT_DIALOG = "GenderInputDialog";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
     public static final String LEADER_BOARD_SCREEN = "Leaderboard Screen";
