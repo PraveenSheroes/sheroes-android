@@ -204,8 +204,6 @@ dependencies {
     implementation('org.wordpress:utils:1.17.1')
     implementation "com.splitwise:tokenautocomplete:2.0.8@aar"
     annotationProcessor 'org.parceler:parceler:1.1.6'
-    implementation 'com.squareup.leakcanary:leakcanary-android:1.6.1'
-    implementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.1'
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'

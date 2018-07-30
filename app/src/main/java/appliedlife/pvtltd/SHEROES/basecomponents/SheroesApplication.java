@@ -55,12 +55,6 @@ public class SheroesApplication extends MultiDexApplication  {
     public void onCreate() {
         ActivityLifecycleCallback.register(this);
         super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            // This process is dedicated to LeakCanary for heap analysis.
-            // You should not init your app in this process.
-            return;
-        }
-        LeakCanary.install(this);
         mContext = this;
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
