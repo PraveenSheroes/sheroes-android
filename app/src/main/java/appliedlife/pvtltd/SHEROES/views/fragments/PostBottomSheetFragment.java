@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
@@ -77,20 +78,17 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (getArguments() != null) {
-
-        }
         return super.onCreateDialog(savedInstanceState);
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof CommunityPostActivity) {
-            mCommunityPostActivity = (CommunityPostActivity) activity;
+    public void onAttach(Context context) {
+        if (context instanceof CommunityPostActivity) {
+            mCommunityPostActivity = (CommunityPostActivity) context;
         } else {
-            mCreateStoryActivity = (CreateStoryActivity) activity;
+            mCreateStoryActivity = (CreateStoryActivity) context;
         }
-        super.onAttach(activity);
+        super.onAttach(context);
     }
 
     @Override
@@ -149,6 +147,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mHomePresenter.detachView();
     }
 
     @Override
