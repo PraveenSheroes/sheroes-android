@@ -169,9 +169,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private int gcmForGoogleAndFacebook;
     public static final int GOOGLE_CALL = 101;
     public static final int FACEBOOK_CALL = 201;
-    public static final int NORMAL_CALL = 301;
-    private static final int REQUEST_PERMISSION_EMAIL = 1100;
-    private GooglePlusHelper mGooglePlusHelper;
     private GoogleSignInOptions gso;
     private ProgressDialog mProgressDialog, mLoggingProgressDialog;
     //google api client
@@ -499,9 +496,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     protected void onDestroy() {
-        if (mGooglePlusHelper != null) {
-            mGooglePlusHelper.signOut();
-        }
         if (null != mGoogleApiClient) {
             mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
             mGoogleApiClient.disconnect();
@@ -1118,9 +1112,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void userLoggedIn(SocialPerson person) {
         if (person == null) {
-            if (mGooglePlusHelper != null) {
-                mGooglePlusHelper.dismissDialog();
-            }
             WelcomeActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(AppUtils.getInstance().getApplicationContext(), getString(R.string.ID_GENERIC_ERROR), Toast.LENGTH_SHORT).show();
@@ -1129,11 +1120,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             return;
         }
         if (StringUtil.isNotNullOrEmptyString(person.getEmail())) {
-            if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
-                if (mGooglePlusHelper != null) {
-                    mGooglePlusHelper.signOut();
-                }
-            }
             if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
                 this.runOnUiThread(new Runnable() {
                     public void run() {

@@ -105,7 +105,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareOption = "";
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareOption)) {

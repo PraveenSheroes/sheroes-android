@@ -217,7 +217,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setupRecyclerScrollListener();
         showGifLoader();
 
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
 
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
@@ -230,7 +230,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         tvGoToSetting.setText(content);
 
         //fetch latest all communities and save it in sharePref
-        mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+        if (isHomeFeed) {
+            mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+        }
         return view;
     }
 
@@ -399,7 +401,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
-        if(userPostObj == null) return;
+        if (userPostObj == null) return;
 
         if (userPostObj.isBookmarked()) {
             if (mCommunityTab != null) {
@@ -582,7 +584,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         mAdapter.feedStartedLoading();
                     }
                 });
-                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST,mStreamName);
+                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
@@ -603,7 +605,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
+                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
@@ -1016,7 +1018,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLikesCountClicked(long postId) {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
         }
     }
@@ -1140,7 +1142,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -1150,7 +1152,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1233,7 +1235,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (getActivity() == null || getActivity().isFinishing()) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
+            if (articleObj.getCreatedBy() == mUserPreference.get().getUserSummary().getUserId()) {
                 popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
                 popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             }
@@ -1567,7 +1569,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1576,7 +1578,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1607,7 +1609,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
         if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
-            boolean isMentor = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+            boolean isMentor = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
             ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
 
@@ -1866,7 +1868,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void refreshList() {
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         if (getActivity() != null && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
         }

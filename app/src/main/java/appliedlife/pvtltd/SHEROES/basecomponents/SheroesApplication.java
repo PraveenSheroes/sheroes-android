@@ -15,6 +15,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 import com.moe.pushlibrary.MoEHelper;
+import com.squareup.leakcanary.LeakCanary;
 
 import java.io.File;
 
@@ -54,6 +55,12 @@ public class SheroesApplication extends MultiDexApplication  {
     public void onCreate() {
         ActivityLifecycleCallback.register(this);
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
         mContext = this;
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
