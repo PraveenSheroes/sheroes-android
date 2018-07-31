@@ -194,7 +194,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
@@ -315,7 +315,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -326,7 +326,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -359,3 +359,4 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
 
     }
 }
+
