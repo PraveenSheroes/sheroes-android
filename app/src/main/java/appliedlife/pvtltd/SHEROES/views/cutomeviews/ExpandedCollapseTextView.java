@@ -11,14 +11,14 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.basecomponents.TextExpandCollapseCallback;
 
 /**
- * This class provide functionality to expand and collpase the text view with see more or see less.
+ * This class provide functionality to expand and collapsed the text view with see more or see less.
  *
  * @author ravi
  */
 public class ExpandedCollapseTextView {
 
-    public static final String SEE_MORE_TEXT = ".. See More";
-    private static final String SEE_LESS_TEXT = "See Less";
+    public static final String VIEW_MORE_TEXT = "View More";
+    private static final String VIEW_LESS_TEXT = "View Less";
     private static ExpandedCollapseTextView expandedCollapseTextView;
 
     public static ExpandedCollapseTextView getInstance() {
@@ -35,14 +35,20 @@ public class ExpandedCollapseTextView {
         }
         ViewTreeObserver vto = tv.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @SuppressWarnings("deprecation")
             @Override
             public void onGlobalLayout() {
 
                 ViewTreeObserver obs = tv.getViewTreeObserver();
                 obs.removeGlobalOnLayoutListener(this);
-                if (maxLine > 0 && tv.getLineCount() >= maxLine) {
+                if (maxLine == 0) {
+                    int lineEndIndex = tv.getLayout().getLineEnd(0);
+                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                    tv.setText(text);
+                    tv.setMovementMethod(LinkMovementMethod.getInstance());
+                    tv.setText(
+                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                    viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
                     int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
                     String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
                     tv.setText(text);
@@ -63,8 +69,8 @@ public class ExpandedCollapseTextView {
         });
     }
 
-    private SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
-                                                                     final int maxLine, final String spanableText, final boolean viewMore, final TextExpandCollapseCallback textExpandCollapseCallback) {
+    private  SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
+                                                                      final int maxLine, final String spanableText, final boolean viewMore, final TextExpandCollapseCallback textExpandCollapseCallback) {
         String str = strSpanned.toString();
         SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
 
@@ -77,14 +83,12 @@ public class ExpandedCollapseTextView {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, -1, SEE_LESS_TEXT, false, textExpandCollapseCallback);
-
+                        makeTextViewResizable(tv, -1, VIEW_LESS_TEXT, false, textExpandCollapseCallback);
                     } else {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-
-                        makeTextViewResizable(tv, 1, SEE_MORE_TEXT, true, textExpandCollapseCallback);
+                        makeTextViewResizable(tv, 1, VIEW_MORE_TEXT, true, textExpandCollapseCallback);
                     }
                     textExpandCollapseCallback.onTextResize(viewMore);
                 }
@@ -93,5 +97,4 @@ public class ExpandedCollapseTextView {
         }
         return ssb;
     }
-
 }

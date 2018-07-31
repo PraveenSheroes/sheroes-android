@@ -158,6 +158,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity.BIO_MAX_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.ALL_STAR_END_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.BEGINNER_START_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.INTERMEDIATE_END_LIMIT;
@@ -178,8 +179,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private static final int ADMIN_TYPE_ID = 2;
     private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
     private static final int MAX_BADGE_COUNT = 4;
-    private static final int BADGE_TOP_MARGIN = 5;
-    private static final int BADGE_RIGHT_MARGIN = 7;
+    private static final int BADGE_RIGHT_MARGIN = 8;
     private static final int BADGE_COUNTER_TEXT_SIZE = 14;
     private static final int BADGE_ICON_SIZE = 38;
     private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
@@ -599,11 +599,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
-            Spanned description = StringUtil.fromHtml(mUserSolarObject.getDescription());
-            if(isOwnProfile) {
+
+            String description = mUserSolarObject.getDescription();
+            description = StringUtil.fromHtml(description).toString();
+            if (description.length() > BIO_MAX_LIMIT) {
+                description = description.substring(0, BIO_MAX_LIMIT);
+            }
+
+            if (isOwnProfile) {
                 userDescription.setText(description);
                 ExpandedCollapseTextView expandedCollapseTextView = ExpandedCollapseTextView.getInstance();
-                expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.SEE_MORE_TEXT, true, this);
+                expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.VIEW_MORE_TEXT, true, this);
             } else {
                 userDescription.setText(description);
             }
@@ -1325,7 +1331,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         for (int i = 0; i < length; i++) {
             final ImageView badge = new ImageView(this);
             LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
-            layoutParams.setMargins(0, BADGE_TOP_MARGIN, BADGE_RIGHT_MARGIN, 0);
+            layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(BADGE_RIGHT_MARGIN, this), 0);
             badge.setLayoutParams(layoutParams);
             final BadgeDetails badgeDetails = userSolrObj.getUserBadgesList().get(i);
             Glide.with(badge.getContext())
@@ -1357,7 +1363,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             badgeCount.setTextSize(BADGE_COUNTER_TEXT_SIZE);
             badgeCount.setTextColor(Color.RED);
             LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
-            layoutParams.setMargins(0, BADGE_TOP_MARGIN, BADGE_TOP_MARGIN, 0);
             badgeCount.setLayoutParams(layoutParams);
             badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
             badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
@@ -1775,7 +1780,15 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
 
         if (StringUtil.isNotNullOrEmptyString(userBio)) {
-            userDescription.setText(userBio);
+            String description = mUserSolarObject.getDescription();
+            description = StringUtil.fromHtml(description).toString();
+            if (description.length() > BIO_MAX_LIMIT) {
+                description = description.substring(0, BIO_MAX_LIMIT);
+            }
+            userDescription.setText(description);
+            ExpandedCollapseTextView expandedCollapseTextView = ExpandedCollapseTextView.getInstance();
+            expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.VIEW_MORE_TEXT, true, this);
+
             mUserSolarObject.setDescription(userBio);
         }
 

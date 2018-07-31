@@ -59,10 +59,26 @@
         tools:text="Wealth Creators Badge" />
 
     <TextView
-        android:id="@+id/bade_won_date_label"
+        android:id="@+id/bade_won_count_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/badge_title"
+        android:layout_marginEnd="@dimen/dp_size_24"
+        android:layout_marginLeft="@dimen/dp_size_24"
+        android:layout_marginRight="@dimen/dp_size_24"
+        android:layout_marginStart="@dimen/dp_size_24"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:lineSpacingExtra="@dimen/sp_size_8"
+        android:textColor="@color/light_grey"
+        android:textSize="@dimen/sp_size_16"
+        tools:text="Won 5 times" />
+
+    <TextView
+        android:id="@+id/bade_won_date_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bade_won_count_label"
         android:layout_marginEnd="@dimen/dp_size_24"
         android:layout_marginLeft="@dimen/dp_size_24"
         android:layout_marginRight="@dimen/dp_size_24"
@@ -76,11 +92,12 @@
 
     <TextView
         android:id="@+id/badge_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/bade_won_date_label"
         android:layout_marginEnd="@dimen/dp_size_24"
         android:layout_marginLeft="@dimen/dp_size_24"
+        android:layout_centerHorizontal="true"
         android:layout_marginRight="@dimen/dp_size_24"
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_8"
@@ -111,7 +128,6 @@
             android:textColor="@color/leader_board_dialog_button"
             android:textSize="@dimen/sp_size_14"
             android:visibility="gone" />
-
 
         <TextView
             android:id="@+id/ok"

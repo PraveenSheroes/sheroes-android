@@ -242,8 +242,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_mentor_name"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_marginStart="@dimen/dp_size_10">
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16">
 
     </LinearLayout>
 
@@ -253,7 +254,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/badges_container"
         android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_4"
+        android:layout_marginTop="@dimen/dp_size_8"
         android:orientation="horizontal"
         android:weightSum="@integer/int_value_for_line_1">
 
@@ -319,9 +320,9 @@
             android:layout_alignParentStart="true"
             android:layout_marginTop="@dimen/dp_size_8"
             android:ellipsize="end"
+            android:maxLines="@integer/int_value_for_line_4"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:lineSpacingExtra="@dimen/sp_size_8"
-            android:maxLength="@integer/int_value_for_line_140"
             android:textColor="@color/recent_post_comment"
             android:textSize="@dimen/sp_size_14" />
 
