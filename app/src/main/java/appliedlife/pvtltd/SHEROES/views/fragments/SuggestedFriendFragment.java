@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
@@ -63,6 +64,8 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
     @Inject
     AppUtils mAppUtils;
+    @Inject
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region View variables
@@ -282,7 +285,14 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             mInviteFriendSuggestedAdapter.notifyDataSetChanged();
             if (null != getActivity() && getActivity() instanceof AllContactActivity) {
                 ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
-                ((AllContactActivity) getActivity()).mViewPager.setCurrentItem(0);
+                boolean showInviteFriendTab=false;
+                if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                    showInviteFriendTab = mConfiguration.get().configData.showInviteFriendTab;
+                }
+                if(!showInviteFriendTab)
+                {
+                    ((AllContactActivity) getActivity()).mViewPager.setCurrentItem(0);
+                }
             }
             isUserList=true;
         } else {
