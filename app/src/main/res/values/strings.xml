@@ -136,6 +136,7 @@
     <string name="ID_FOLLOWER">Follower</string>
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
+    <string name="BadgeCounter">+%1$d</string>
     <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\nHelp us personalize SHEROES for you by joining some communities of your interests.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>

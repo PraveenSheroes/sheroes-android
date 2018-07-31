@@ -178,6 +178,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private static final int ADMIN_TYPE_ID = 2;
     private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
     private static final int MAX_BADGE_COUNT = 4;
+    private static final int BADGE_TOP_MARGIN = 5;
+    private static final int BADGE_RIGHT_MARGIN = 7;
+    private static final int BADGE_COUNTER_TEXT_SIZE = 14;
+    private static final int BADGE_ICON_SIZE = 38;
+    private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
 
     private Long mChampionId;
     private boolean isMentor;
@@ -1314,14 +1319,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             return;
 
         badgeContainer.setVisibility(View.VISIBLE);
-        userSolrObj.getUserBadgesList().addAll(userSolrObj.getUserBadgesList()); //added repeat items again
 
         int length = userSolrObj.getUserBadgesList().size();
         int counter = 0;
         for (int i = 0; i < length; i++) {
             final ImageView badge = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(38, this), CommonUtil.convertDpToPixel(38, this));
-            layoutParams.setMargins(0, 5, 7, 0);
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
+            layoutParams.setMargins(0, BADGE_TOP_MARGIN, BADGE_RIGHT_MARGIN, 0);
             badge.setLayoutParams(layoutParams);
             final BadgeDetails badgeDetails = userSolrObj.getUserBadgesList().get(i);
             Glide.with(badge.getContext())
@@ -1349,13 +1353,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         if (length > MAX_BADGE_COUNT) {
             TextView badgeCount = new TextView(this);
-            badgeCount.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-            badgeCount.setTextSize(14);
+            badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
+            badgeCount.setTextSize(BADGE_COUNTER_TEXT_SIZE);
             badgeCount.setTextColor(Color.RED);
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(38, this), CommonUtil.convertDpToPixel(38, this));
-            layoutParams.setMargins(0, 5, 5, 0);
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
+            layoutParams.setMargins(0, BADGE_TOP_MARGIN, BADGE_TOP_MARGIN, 0);
             badgeCount.setLayoutParams(layoutParams);
-            badgeCount.setText("+"+ (length - MAX_BADGE_COUNT));
+            badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
             badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
             badgeCount.setGravity(Gravity.CENTER);
             badgeContainer.addView(badgeCount);
