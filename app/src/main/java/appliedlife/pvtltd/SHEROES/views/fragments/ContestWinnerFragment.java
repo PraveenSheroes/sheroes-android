@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -43,9 +42,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.WinnerListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -135,12 +131,14 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     //region IContestWinnerView
     @Override
     public void showPrizes(List<Winner> winners) {
-        for (Winner winnerObj : winners) {
-            long winnerId = Long.parseLong(winnerObj.userId);
-            Long challengeId = Long.parseLong(winnerObj.challengeId);
-            if (mUserId == winnerId) {
-                mContestWinnerPresenter.getChallengeWinnerPostResponse(mAppUtills.winnerPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mUserId, challengeId));
-                break;
+        if (!CommonUtil.getPrefValue(AppConstants.APP_REVIEW_PLAY_STORE)) {
+            for (Winner winnerObj : winners) {
+                long winnerId = Long.parseLong(winnerObj.userId);
+                Long challengeId = Long.parseLong(winnerObj.challengeId);
+                if (mUserId == winnerId) {
+                    mContestWinnerPresenter.getChallengeWinnerPostResponse(mAppUtills.winnerPostRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mUserId, challengeId));
+                    break;
+                }
             }
         }
         Winner winner = new Winner();
@@ -245,7 +243,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
 
     @Override
     public void showChallengeWinnerPostResponse(FeedDetail feedDetail) {
-        if(getActivity() instanceof ContestActivity) {
+        if (getActivity() instanceof ContestActivity) {
             ((ContestActivity) getActivity()).openChallengeWinnerPopUpDialog(feedDetail);
         }
     }

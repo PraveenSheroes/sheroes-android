@@ -28,6 +28,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -101,6 +104,7 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
     @OnClick(R.id.iv_winner_dialog_close)
     protected void crossClick() {
         dismiss();
+      CommonUtil.setPrefValue(AppConstants.APP_REVIEW_PLAY_STORE);
     }
 
     @OnClick(R.id.tv_copy)
@@ -118,6 +122,7 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
         } catch (android.content.ActivityNotFoundException anfe) {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
         }
+        CommonUtil.setPrefValue(AppConstants.APP_REVIEW_PLAY_STORE);
         AnalyticsManager.trackEvent(Event.APP_REVIEW_CLICKED, SCREEN_LABLE, null);
     }
     //endregion
