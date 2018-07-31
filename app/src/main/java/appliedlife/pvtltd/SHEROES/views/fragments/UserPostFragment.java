@@ -278,7 +278,7 @@ public class UserPostFragment extends BaseFragment {
                     mFragmentListRefreshData.setSearchStringName(AppConstants.COMMUNITY_POST_FRAGMENT);
                     FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
                     feedRequestPojo.setIdForFeedDetail(null);
-                    Integer autherId = (int) mCommunityFeedObj.getIdOfEntityOrParticipant();
+                    long autherId = mCommunityFeedObj.getIdOfEntityOrParticipant();
                     feedRequestPojo.setAutherId(autherId);
                     feedRequestPojo.setAnonymousPostHide(hideAnonymousPost);
 
@@ -316,7 +316,7 @@ public class UserPostFragment extends BaseFragment {
         if (null != mCommunityFeedObj && StringUtil.isNotNullOrEmptyString(mCommunityFeedObj.getCallFromName()) && mCommunityFeedObj.getCallFromName().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
             FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mCommunityPostId);
             feedRequestPojo.setIdForFeedDetail(null);
-            Integer autherId = (int) mCommunityFeedObj.getIdOfEntityOrParticipant();
+            long autherId =mCommunityFeedObj.getIdOfEntityOrParticipant();
             feedRequestPojo.setAutherId(autherId);
             feedRequestPojo.setAnonymousPostHide(hideAnonymousPost);
             feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);

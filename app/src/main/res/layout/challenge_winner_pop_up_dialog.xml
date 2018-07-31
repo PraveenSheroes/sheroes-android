@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/fully_transparent"
+    android:minWidth="@dimen/winner_min_width"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_winner_dialog_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/ic_cross" />
+
+    <LinearLayout
+        android:id="@+id/li_winner_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_winner_dialog_close"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_winner_dialog_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_BOLD"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/winner_title_margin"
+            android:layout_marginRight="@dimen/winner_title_margin"
+            android:lineSpacingExtra="@dimen/sp_size_winner_dialog_title_line_space"
+            android:textColor="@color/comment_text"
+            android:textSize="@dimen/sp_size_winner_dialog_title"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_winner_dialog_intro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/winner_intro_margin"
+            android:layout_marginRight="@dimen/winner_intro_margin"
+            android:layout_marginTop="@dimen/winner_intro_margin"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="@dimen/sp_size_winner_dialog_intro_line_space"
+            android:textColor="@color/comment_text"
+            android:textSize="@dimen/sp_size_winner_dialog_intro"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:layout_width="@dimen/winner_heart_height_width"
+            android:layout_height="@dimen/winner_heart_height_width"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:src="@drawable/ic_heart_active" />
+
+        <TextView
+            android:id="@+id/tv_winner_dialog_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/winner_msg_margin"
+            android:layout_marginRight="@dimen/winner_msg_margin"
+            android:layout_marginTop="@dimen/winner_msg_margin"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="@dimen/sp_size_winner_dialog_intro_line_space"
+            android:text="@string/winner_msg"
+            android:textColor="@color/comment_text"
+            android:textSize="@dimen/sp_size_winner_dialog_msg"
+            android:textStyle="normal" />
+
+        <TextView
+            android:id="@+id/tv_cover_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/winner_copy_text_margin"
+            android:layout_marginRight="@dimen/winner_copy_text_margin"
+            android:layout_marginTop="@dimen/winner_copy_text_margin"
+            android:background="@drawable/dash_border"
+            android:drawablePadding="@dimen/winner_copy_text_padding"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/winner_copy_text_padding"
+            android:textColor="@color/posted_in"
+            android:textSize="@dimen/sp_size_winner_copy_text"
+            android:textStyle="normal"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/winner_copy_margin"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:text="Copy"
+            android:textAllCaps="true"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/sp_size_winner_copy_text"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_winner_dialog_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/winner_play_store_height"
+            android:layout_marginBottom="@dimen/dp_size_16"
+            android:layout_marginEnd="@dimen/winner_play_store_margin"
+            android:layout_marginLeft="@dimen/winner_play_store_margin"
+            android:layout_marginRight="@dimen/winner_play_store_margin"
+            android:layout_marginStart="@dimen/winner_play_store_margin"
+            android:layout_marginTop="@dimen/winner_play_store_margin"
+            android:background="@drawable/rectangle_grey_winner_dialog"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:text="@string/paste_on_playstore"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_size_winner_button" />
+    </LinearLayout>
+
+</RelativeLayout>

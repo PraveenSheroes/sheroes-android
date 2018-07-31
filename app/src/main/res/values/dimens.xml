@@ -186,6 +186,27 @@
     <dimen name="bell_notification_view_left_margin">52dp</dimen>
     <dimen name="bell_notification_view_top_margin">18dp</dimen>
     <dimen name="bell_notification_reaction_icon_size">14dp</dimen>
+    <dimen name="winner_dp_size_16">16dp</dimen>
+    <dimen name="winner_min_width">280dp</dimen>
+    <dimen name="winner_play_store_height">36dp</dimen>
+    <dimen name="winner_play_store_margin">16dp</dimen>
+    <dimen name="winner_copy_margin">16dp</dimen>
+    <dimen name="winner_copy_text_margin">16dp</dimen>
+    <dimen name="winner_intro_margin">16dp</dimen>
+    <dimen name="winner_title_margin">16dp</dimen>
+    <dimen name="winner_msg_margin">16dp</dimen>
+    <dimen name="winner_copy_text_padding">8dp</dimen>
+    <dimen name="winner_heart_height_width">24dp</dimen>
+
+
+
+    <dimen name="sp_size_winner_dialog_title">20sp</dimen>
+    <dimen name="sp_size_winner_dialog_intro">16sp</dimen>
+    <dimen name="sp_size_winner_dialog_msg">14sp</dimen>
+    <dimen name="sp_size_winner_copy_text">14sp</dimen>
+    <dimen name="sp_size_winner_button">14sp</dimen>
+    <dimen name="sp_size_winner_dialog_intro_line_space">7sp</dimen>
+    <dimen name="sp_size_winner_dialog_title_line_space">6sp</dimen>
 
 </resources>
 

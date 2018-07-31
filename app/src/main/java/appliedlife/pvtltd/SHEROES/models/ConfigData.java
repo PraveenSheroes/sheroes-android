@@ -83,4 +83,7 @@ public class ConfigData {
 
     @SerializedName("showInviteFriendTab")
     public boolean showInviteFriendTab;
+
+    @SerializedName("challengeWinnerDailogMessage")
+    public String challengeWinnerDialogMassage="You have won the Invitation to SHEROES Summit 2018. We loved your response to our Challenge.";
 }

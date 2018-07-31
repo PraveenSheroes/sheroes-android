@@ -1575,10 +1575,10 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
-        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
-        feedRequestPojo.setAutherId((int) idForDetail);
-        feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
+    public FeedRequestPojo winnerPostRequestBuilder(String typeOfFeed, Long userId, Long challengeId) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, 1);
+        feedRequestPojo.setAutherId(userId);
+        feedRequestPojo.setSourceEntityId(challengeId);
         return feedRequestPojo;
     }
 
@@ -1629,7 +1629,7 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public static FeedRequestPojo makeChallengeResponseRequest(String typeOfFeed, int challengeId, int pageNo) {
+    public static FeedRequestPojo makeChallengeResponseRequest(String typeOfFeed, Long challengeId, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());

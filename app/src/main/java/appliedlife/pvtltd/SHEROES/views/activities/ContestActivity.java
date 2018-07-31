@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -64,6 +65,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -133,6 +137,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     private long mUserId = -1L;
     boolean isMentor;
     private int mFromNotification;
+    private ChallengeWinnerPopUpDialog mChallengeWinnerPopUpDialog = null;
     //endregion
 
     //region Activity methods
@@ -159,7 +164,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 finish();
             }
         }
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
 
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
@@ -177,7 +182,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareText = "";
             shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareText)) {
@@ -243,7 +248,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     // Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
-                    if(null!=mContest) {
+                    if (null != mContest) {
                         mContest.submissionCount++;
                         mContest.hasMyPost = true;
                         mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
@@ -260,7 +265,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
                 case AppConstants.REQUEST_CODE_FOR_ADDRESS:
                     Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
-                    if(null!=mContest) {
+                    if (null != mContest) {
                         mContest.mWinnerAddress = "not empty";
                         mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                         mContestInfoFragment.setContest(mContest);
@@ -583,7 +588,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         }
         if (baseResponse instanceof Comment) {
             // setAllValues(mFragmentOpen);
-             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
+            /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
@@ -727,5 +732,19 @@ public class ContestActivity extends BaseActivity implements IContestView {
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    public void openChallengeWinnerPopUpDialog(FeedDetail feedDetail) {
+        mChallengeWinnerPopUpDialog = (ChallengeWinnerPopUpDialog) getFragmentManager().findFragmentByTag(ChallengeWinnerPopUpDialog.class.getName());
+        if (mChallengeWinnerPopUpDialog == null) {
+            mChallengeWinnerPopUpDialog = new ChallengeWinnerPopUpDialog();
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            bundle.putParcelable(BaseDialogFragment.CHALLENGE_WINNER, parcelable);
+            mChallengeWinnerPopUpDialog.setArguments(bundle);
+        }
+        if (!mChallengeWinnerPopUpDialog.isVisible() && !mChallengeWinnerPopUpDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mChallengeWinnerPopUpDialog.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
+        }
     }
 }
