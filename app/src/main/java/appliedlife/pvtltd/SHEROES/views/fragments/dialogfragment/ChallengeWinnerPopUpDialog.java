@@ -87,7 +87,8 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
                 tvWinnerDialogTitle.setText("Congratulations " + mFeedDetail.getAuthorName() + "!");
             }
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
-                tvCoverText.setText("\"" + mFeedDetail.getDescription() + "\"");
+               // tvCoverText.setText("\"" + mFeedDetail.getDescription() + "\"");
+                tvCoverText.setText("Data hddl jdjdjjd kjadkkd kdkkd kdkdkd kdkdkdnnkdkd kkdn k d knkdk  knkdnkd kndkndk kndkndknd kdkndkndk  kdnkdndk  dkdnkndkdnkdndkd ldmdlmdldmldmdlmdldmd dld  dld  ldmd  d d d dmdld d  dld mddm kdkdkd kdkdkdnnkdkd kkdn k d knkdk  knkdnkd kndkndk kndkndknd kdkndkndk  kdnkdndk  dkdnkndkdnkdndkd ldmdlmdldmldmdlmdldmd dld  dld  ldmd  d d d dmdld d  dld mddm");
             }
             if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 tvWinnerDialogIntro.setText(mConfiguration.get().configData.challengeWinnerDialogMassage);

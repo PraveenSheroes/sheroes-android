@@ -191,6 +191,7 @@
     <dimen name="winner_play_store_height">36dp</dimen>
     <dimen name="winner_play_store_margin">16dp</dimen>
     <dimen name="winner_copy_margin">16dp</dimen>
+    <dimen name="winner_copy_scroll_height">60dp</dimen>
     <dimen name="winner_copy_text_margin">16dp</dimen>
     <dimen name="winner_intro_margin">16dp</dimen>
     <dimen name="winner_title_margin">16dp</dimen>
