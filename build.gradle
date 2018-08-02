@@ -2,10 +2,10 @@
 
 buildscript {
     repositories {
+        google()
         jcenter()
         maven { url 'https://maven.fabric.io/public' }
 
-        google()
     }
 
     dependencies {
@@ -25,9 +25,9 @@ task clean(type: Delete) {
 
 allprojects {
     repositories {
+        google()
         mavenLocal()
         jcenter()
         mavenCentral()
-        google()
     }
 }
