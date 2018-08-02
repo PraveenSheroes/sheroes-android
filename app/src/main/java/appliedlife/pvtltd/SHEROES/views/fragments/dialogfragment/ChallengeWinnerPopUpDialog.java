@@ -38,7 +38,7 @@ import butterknife.OnClick;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
-    public static final String SCREEN_LABEL = "Challenge Winner Ratting Dialog";
+    public static final String SCREEN_LABEL = "Challenge Winner Rating Dialog";
     //region Inject
     @Inject
     Preference<Configuration> mConfiguration;
