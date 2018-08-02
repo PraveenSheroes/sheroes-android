@@ -11,6 +11,8 @@ package appliedlife.pvtltd.SHEROES.utils;
 public class AppConstants {
     public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk";
 
+    public static final String PLAY_STORE_ID_URL = "market://details?id=";
+    public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
@@ -219,6 +221,7 @@ public class AppConstants {
     public static final String MALE_ERROR_SHARE_PREF = "MALE_USER_ERROR";
     public static final String GUIDELINE_SHARE_PREF = "GUIDELINE";
     public static final String NEW_TAG_FOR_RIGHT_SWIP = "NEW_TAG";
+    public static final String APP_REVIEW_PLAY_STORE = "REVIEW_PLAY_STORE";
     public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";
     public static final String PICTURE_SHARE_PREF = "PICTURE_SHARE_PREF";
     public static final String PICTURE_SHARE_SESSION_PREF = "PICTURE_SHARE_SESSION_PREF";
