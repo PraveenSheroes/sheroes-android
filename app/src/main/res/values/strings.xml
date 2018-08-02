@@ -671,7 +671,10 @@
     <string name="no_story">No stories yet</string>
     <string name="paste_on_playstore">Paste as Review on Playstore</string>
     <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
-
+    <string name="congratulation">Congratulations</string>
+    <string name="copied">Copied</string>
+    <string name="message">message</string>
+    <string name="your_response_copied">Your response copied</string>
 
 
 

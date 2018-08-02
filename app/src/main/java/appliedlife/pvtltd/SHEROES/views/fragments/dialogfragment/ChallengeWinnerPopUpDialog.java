@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -39,7 +38,7 @@ import butterknife.OnClick;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
-    public static final String SCREEN_LABLE = "Challenge Winner Ratting Dialog";
+    public static final String SCREEN_LABEL = "Challenge Winner Ratting Dialog";
     //region Inject
     @Inject
     Preference<Configuration> mConfiguration;
@@ -84,7 +83,7 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
         }
         if (null != mFeedDetail) {
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getAuthorName())) {
-                tvWinnerDialogTitle.setText("Congratulations " + mFeedDetail.getAuthorName() + "!");
+                tvWinnerDialogTitle.setText(getString(R.string.congratulation) + " " + mFeedDetail.getAuthorName() + "!");
             }
             if (StringUtil.isNotNullOrEmptyString(mFeedDetail.getDescription())) {
                 tvCoverText.setText("\"" + mFeedDetail.getDescription() + "\"");
@@ -95,7 +94,7 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
                 tvWinnerDialogIntro.setText(new ConfigData().challengeWinnerDialogMassage);
             }
         }
-        AnalyticsManager.trackScreenView(SCREEN_LABLE);
+        AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
     //endregion
@@ -104,26 +103,26 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
     @OnClick(R.id.iv_winner_dialog_close)
     protected void crossClick() {
         dismiss();
-      CommonUtil.setPrefValue(AppConstants.APP_REVIEW_PLAY_STORE);
+        CommonUtil.setPrefValue(AppConstants.APP_REVIEW_PLAY_STORE);
     }
 
     @OnClick(R.id.tv_copy)
     public void copyClick() {
         copyToClipboard(tvCoverText.getText().toString());
         tvWinnerButton.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        tvCopy.setText("Copied");
+        tvCopy.setText(getString(R.string.copied));
     }
 
     @OnClick(R.id.tv_winner_dialog_button)
     public void redirectToPlayStoreClick() {
         final String appPackageName = getApplicationContext().getPackageName();
         try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.PLAY_STORE_ID_URL + appPackageName)));
         } catch (android.content.ActivityNotFoundException anfe) {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.PLAY_STORE_URL_PATH + appPackageName)));
         }
         CommonUtil.setPrefValue(AppConstants.APP_REVIEW_PLAY_STORE);
-        AnalyticsManager.trackEvent(Event.APP_REVIEW_CLICKED, SCREEN_LABLE, null);
+        AnalyticsManager.trackEvent(Event.APP_REVIEW_CLICKED, SCREEN_LABEL, null);
     }
     //endregion
 
@@ -131,15 +130,14 @@ public class ChallengeWinnerPopUpDialog extends BaseDialogFragment {
 
     public void copyToClipboard(String copyText) {
         int sdk = android.os.Build.VERSION.SDK_INT;
+        ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
         if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-            ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
             clipboard.setText(copyText);
         } else {
-            ClipboardManager clipboard = (ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
-            ClipData clip = android.content.ClipData.newPlainText("message", copyText);
+            ClipData clip = android.content.ClipData.newPlainText(getString(R.string.message), copyText);
             clipboard.setPrimaryClip(clip);
         }
-        Toast.makeText(getApplicationContext(), "Your response copied", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.your_response_copied), Toast.LENGTH_SHORT).show();
 
     }
     //endregion
