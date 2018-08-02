@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
@@ -60,6 +62,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadReq
 
 public class HelplineFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Helpline Screen";
+    private String mSpeechAppPackageName = "com.google.android.googlequicksearchbox";
     private final String TAG = LogUtils.makeLogTag(HelplineFragment.class);
     @Inject
     HelplinePresenter mHelplinePresenter;
@@ -159,13 +162,19 @@ public class HelplineFragment extends BaseFragment {
     }
 
     private void promptSpeechInput() {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-                getString(R.string.ID_SPEECH_PROMPT));
-        startActivityForResult(intent, AppConstants.REQ_CODE_SPEECH_INPUT);
+        try {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ID_SPEECH_PROMPT));
+            startActivityForResult(intent, AppConstants.REQ_CODE_SPEECH_INPUT);
+        } catch(ActivityNotFoundException e) {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + mSpeechAppPackageName)));
+            } catch (android.content.ActivityNotFoundException exc) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + mSpeechAppPackageName)));
+            }
+        }
     }
 
     @Override

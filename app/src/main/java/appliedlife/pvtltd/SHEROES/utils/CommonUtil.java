@@ -915,18 +915,9 @@ public class CommonUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, mShareText);
-        // See if official Facebook app is found
-        boolean facebookAppFound = false;
-        List<ResolveInfo> matches = context.getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.FACEBOOK_SHARE)) {
-                intent.setPackage(info.activityInfo.packageName);
-                facebookAppFound = true;
-                break;
-            }
-        }
+
         // As fallback, launch sharer.php in a browser
-        if (!facebookAppFound) {
+        if (isPackageInstalled(context, AppConstants.FACEBOOK_SHARE)) {
             String sharerUrl = AppConstants.FACEBOOK_SHARE_VIA_BROSWER + mShareText;
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
         }
@@ -937,21 +928,23 @@ public class CommonUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, mShareText);
-        boolean twitterAppFound = false; // See if official twitter app is found
-        List<ResolveInfo> matches = context.getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith(AppConstants.TWITTER_SHARE)) {
-                intent.setPackage(info.activityInfo.packageName);
-                twitterAppFound = true;
-                break;
-            }
-        }
 
-        if (!twitterAppFound) { //if twitter app not installed
+        if (isPackageInstalled(context, AppConstants.TWITTER_SHARE)) { //if twitter app not installed
             String sharerUrl = AppConstants.TWITTER_SHARE_VIA_BROWSER + mShareText;
             intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
         }
         context.startActivity(intent);
+    }
+
+    // See if official app is found
+    private static boolean isPackageInstalled(Context c, String targetPackage) {
+        PackageManager pm = c.getPackageManager();
+        try {
+            pm.getPackageInfo(targetPackage, PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            return true;
+        }
+        return false;
     }
 
 
