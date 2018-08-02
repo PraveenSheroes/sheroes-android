@@ -36,6 +36,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     public static final String USER_DEACTIVATED = "user_deactivate";
     public static final String USER_NAME = "user_name";
     public static final String EMAIL_ID = "email_id";
+    public static final String CHALLENGE_WINNER = "challenge_winner";
 
     @Override
     public void onStart() {

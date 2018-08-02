@@ -243,7 +243,8 @@ public enum Event {
     STORY_LIKED(AnalyticsEventType.STORY, "Liked"),
     STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
     STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created"),
-    GENDER_SELECTED(AnalyticsEventType.GENDER_SELECTED, "");
+    GENDER_SELECTED(AnalyticsEventType.GENDER_SELECTED, ""),
+    APP_REVIEW_CLICKED(AnalyticsEventType.APP_REVIEW_CLICKED, "");
     //endregion
 
     public final AnalyticsEventType type;

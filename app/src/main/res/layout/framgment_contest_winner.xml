@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"/>
 
-    <include layout="@layout/empty_list_view" />
+    <include layout="@layout/empty_list_view"/>
 
 </RelativeLayout>

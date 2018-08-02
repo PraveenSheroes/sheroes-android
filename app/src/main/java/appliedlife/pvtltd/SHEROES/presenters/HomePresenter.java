@@ -220,44 +220,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
     }
 
-
-    public void getChallengeResponse(final FeedRequestPojo feedRequestPojo, final FragmentListRefreshData mFragmentListRefreshData) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getFeedFromModel(feedRequestPojo)
-                .compose(this.<FeedResponsePojo>bindToLifecycle())
-                .subscribe(new DisposableObserver<FeedResponsePojo>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
-
-                    }
-
-                    @Override
-                    public void onNext(FeedResponsePojo feedResponsePojo) {
-                        LogUtils.info(TAG, "********response***********");
-                        getMvpView().stopProgressBar();
-                        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-                        if (!CommonUtil.isEmpty(feedDetailList) && feedRequestPojo.getPageNo() == 1) {
-                            mFragmentListRefreshData.setPostedDate(feedDetailList.get(0).getPostedDate());
-                        }
-                        getMvpView().showHomeFeedList(feedDetailList);
-                    }
-                });
-
-    }
-
-
     public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);
