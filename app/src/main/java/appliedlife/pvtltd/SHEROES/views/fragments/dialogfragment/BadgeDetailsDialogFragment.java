@@ -200,14 +200,14 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             if (!isLeaderBoard) {
                 if (mBadgeDetails.isActive()) {
                     showLeaderBoard.setVisibility(View.VISIBLE);
-                    badgeWonPeriod.setText(getActivity().getResources().getString(R.string.badge_period_date_text, day, endDateText));
+                    badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
                 } else {
                     showLeaderBoard.setVisibility(View.GONE);
-                    badgeWonPeriod.setText(getActivity().getResources().getString(R.string.badge_inactive_period_date_text, day, endDateText));
+                    badgeWonPeriod.setText(getResources().getString(R.string.badge_inactive_period_date_text, day, endDateText));
                 }
             } else {
                 showLeaderBoard.setVisibility(View.GONE);
-                badgeWonPeriod.setText(getActivity().getResources().getString(R.string.badge_period_date_text, day, endDateText));
+                badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
             }
 
             String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));

@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
+import android.os.Build;
 import android.text.Html;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -33,44 +34,44 @@ public class ExpandedCollapseTextView {
         if (tv.getTag() == null) {
             tv.setTag(tv.getText());
         }
-        ViewTreeObserver vto = tv.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+
+        tv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                int totalLine = tv.getLayout().getLineCount();
+                if (totalLine > 1) {
+                    if (maxLine > 0 && tv.getLineCount() >= maxLine) {
+                        int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
 
-                ViewTreeObserver obs = tv.getViewTreeObserver();
-                obs.removeGlobalOnLayoutListener(this);
-                if (maxLine == 0) {
-                    int lineEndIndex = tv.getLayout().getLineEnd(0);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
-                                    viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
-                } else if (maxLine > 0 && tv.getLineCount() >= maxLine) {
-                    int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
-                    String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
-                                    viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
+                        tv.setText(text);
+                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+                        tv.setText(
+                                addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                        viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                    } else {
+                        int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                        String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+                        tv.setText(text);
+                        tv.setMovementMethod(LinkMovementMethod.getInstance());
+                        tv.setText(
+                                addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
+                                        viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                    }
+                }
+
+                ViewTreeObserver viewTreeObserver = tv.getViewTreeObserver();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    viewTreeObserver.removeOnGlobalLayoutListener(this);
                 } else {
-                    int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
-                    String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
-                    tv.setText(text);
-                    tv.setMovementMethod(LinkMovementMethod.getInstance());
-                    tv.setText(
-                            addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
-                                    viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                    viewTreeObserver.removeGlobalOnLayoutListener(this);
                 }
             }
         });
     }
 
-    private  SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
-                                                                      final int maxLine, final String spanableText, final boolean viewMore, final TextExpandCollapseCallback textExpandCollapseCallback) {
+    private SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
+                                                                     final int maxLine, final String spanableText, final boolean viewMore, final TextExpandCollapseCallback textExpandCollapseCallback) {
         String str = strSpanned.toString();
         SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
 

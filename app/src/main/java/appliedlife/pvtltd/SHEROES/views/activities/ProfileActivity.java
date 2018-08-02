@@ -6,6 +6,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -1361,7 +1362,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             TextView badgeCount = new TextView(this);
             badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
             badgeCount.setTextSize(BADGE_COUNTER_TEXT_SIZE);
-            badgeCount.setTextColor(Color.RED);
+            badgeCount.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.badge_counter)));
             LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
             badgeCount.setLayoutParams(layoutParams);
             badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
@@ -1780,7 +1781,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
 
         if (StringUtil.isNotNullOrEmptyString(userBio)) {
-            String description = mUserSolarObject.getDescription();
+            String description = userBio;
             description = StringUtil.fromHtml(description).toString();
             if (description.length() > BIO_MAX_LIMIT) {
                 description = description.substring(0, BIO_MAX_LIMIT);
@@ -1789,7 +1790,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             ExpandedCollapseTextView expandedCollapseTextView = ExpandedCollapseTextView.getInstance();
             expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.VIEW_MORE_TEXT, true, this);
 
-            mUserSolarObject.setDescription(userBio);
+            mUserSolarObject.setDescription(description);
         }
 
         if (progressPercentage != -1) {

@@ -642,9 +642,9 @@
     <string name="how_do_i_become_a_supersheroes">How do I become a SuperSheroes?</string>
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
-    <string name="badge_period_date_text">Won Latest on : %1$s - %2$s</string>
-    <string name="badge_inactive_period_date_text">Won Last on : %1$s - %2$s</string>
-    <string name="badge_closet_won_date_text">Won on : %1$s</string>
+    <string name="badge_active_period_date_text">Won this week : %1$s - %2$s</string>
+    <string name="badge_inactive_period_date_text">Won latest on : %1$s - %2$s</string>
+    <string name="badge_closet_won_date_text">Won latest on : %1$s</string>
     <string name="badge_closet_won_this_week_text">Won this week</string>
     <string name="badge_desc">%1$s is a Super SHEROES in %2$s.</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>

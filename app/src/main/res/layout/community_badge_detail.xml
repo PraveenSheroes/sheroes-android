@@ -69,8 +69,9 @@
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:textStyle="bold"
         android:lineSpacingExtra="@dimen/sp_size_8"
-        android:textColor="@color/light_grey"
+        android:textColor="@color/gray_light"
         android:textSize="@dimen/sp_size_16"
         tools:text="Won 5 times" />
 
@@ -85,8 +86,9 @@
         android:layout_marginStart="@dimen/dp_size_24"
         android:layout_marginTop="@dimen/dp_size_8"
         android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:textStyle="bold"
         android:lineSpacingExtra="@dimen/sp_size_8"
-        android:textColor="@color/light_grey"
+        android:textColor="@color/gray_light"
         android:textSize="@dimen/sp_size_16"
         tools:text="Won Latest on : 21-29 Feb’18" />
 

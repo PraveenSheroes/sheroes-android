@@ -186,6 +186,7 @@
     <dimen name="bell_notification_view_left_margin">52dp</dimen>
     <dimen name="bell_notification_view_top_margin">18dp</dimen>
     <dimen name="bell_notification_reaction_icon_size">14dp</dimen>
+    <dimen name="badge_counter_icon">34dp</dimen>
 
 </resources>
 
