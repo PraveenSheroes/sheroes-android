@@ -2,8 +2,8 @@
 
 buildscript {
     repositories {
-        google()
         jcenter()
+        google()
         maven { url 'https://maven.fabric.io/public' }
 
     }
@@ -25,9 +25,13 @@ task clean(type: Delete) {
 
 allprojects {
     repositories {
-        google()
         mavenLocal()
         jcenter()
         mavenCentral()
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url "$rootDir/../node_modules/react-native/android"
+        }
+        google()
     }
 }
