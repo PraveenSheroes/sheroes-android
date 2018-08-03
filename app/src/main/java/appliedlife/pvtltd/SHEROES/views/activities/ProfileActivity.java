@@ -3,12 +3,10 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -182,7 +180,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private static final int MAX_BADGE_COUNT = 4;
     private static final int BADGE_RIGHT_MARGIN = 8;
     private static final int BADGE_COUNTER_TEXT_SIZE = 14;
-    private static final int BADGE_ICON_SIZE = 38;
+    private static final int BADGE_ICON_SIZE = 40;
     private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
 
     private Long mChampionId;
@@ -269,8 +267,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.profession_container)
     RelativeLayout skillContainer;
 
+    @Bind(R.id.li_loc_profession)
+    LinearLayout locationViewContainer;
+
     @Bind(R.id.tv_loc)
     TextView tvLoc;
+
+    @Bind(R.id.description_container)
+    RelativeLayout descriptionContainer;
 
     @Bind(R.id.tv_mentor_description)
     TextView userDescription;
@@ -586,6 +590,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 tvLoc.setText(R.string.add_location);
             } else {
                 tvLoc.setVisibility(View.GONE);
+                //For public profile if location is unfilled hide the container
+                if(!isMentor) {
+                    locationViewContainer.setVisibility(View.GONE);
+                } else {
+                    locationViewContainer.setVisibility(View.VISIBLE);
+                }
             }
         }
         if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) {
@@ -600,7 +610,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
-
+            //For public profile if description is unfilled hide the container
             String description = mUserSolarObject.getDescription();
             description = StringUtil.fromHtml(description).toString();
             if (description.length() > BIO_MAX_LIMIT) {
@@ -617,6 +627,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         } else {
             if (isOwnProfile) {
                 userDescription.setText(R.string.add_desc);
+            }  else {
+                descriptionContainer.setVisibility(View.GONE);
             }
         }
 
@@ -665,12 +677,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     private void toolTipForAskQuestion() {
+        if(ProfileActivity.this.isFinishing()) return;
+
         try {
             toolTipProfile.setVisibility(View.INVISIBLE);
             final View askQuesToolTip;
             final PopupWindow popupWindowAnswerQuestionTooTip;
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            askQuesToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+            askQuesToolTip = LayoutInflater.from(this).inflate(R.layout.tool_tip_arrow_down_side, null);
             popupWindowAnswerQuestionTooTip = new PopupWindow(askQuesToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindowAnswerQuestionTooTip.setOutsideTouchable(true);
             popupWindowAnswerQuestionTooTip.showAsDropDown(toolTipProfile, 0, 0);
@@ -1787,6 +1800,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 description = description.substring(0, BIO_MAX_LIMIT);
             }
             userDescription.setText(description);
+            userDescription.setTag(null);
             ExpandedCollapseTextView expandedCollapseTextView = ExpandedCollapseTextView.getInstance();
             expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.VIEW_MORE_TEXT, true, this);
 

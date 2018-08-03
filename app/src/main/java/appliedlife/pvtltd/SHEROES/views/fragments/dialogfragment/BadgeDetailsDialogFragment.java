@@ -67,6 +67,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     public static String SCREEN_NAME = "Badge Details Dialog Screen";
     private static String DAY_DATE_FORMATTER = "dd";
     private static String DAY_MONTH_YEAR_DATE_FORMATTER = "dd MMM yyyy";
+    private static String LEADERBOARD_DEFAULT_TAB = "leaderboard";
     private static final String IS_LEADER_BOARD = "IS_LEADER_BOARD";
     private static final String BADGE_DETAILS = "Badge_Details";
     private static final String USER_DETAILS = "user_Details";
@@ -282,7 +283,13 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     protected void showLeaderBaord() {
         dismiss();
         if (getActivity().isFinishing()) return;
-        CommunityDetailActivity.navigateTo(getActivity(), mBadgeDetails.getCommunityId(), SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+
+        //Navigate to community screen with leader_board as default tab
+        Intent intent = new Intent(getActivity(), CommunityDetailActivity.class);
+        intent.putExtra(AppConstants.COMMUNITY_ID, Long.toString(mBadgeDetails.getCommunityId()));
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, SCREEN_NAME);
+        intent.putExtra(CommunityDetailActivity.TAB_KEY, LEADERBOARD_DEFAULT_TAB);
+        startActivity(intent);
     }
     //endregion
 

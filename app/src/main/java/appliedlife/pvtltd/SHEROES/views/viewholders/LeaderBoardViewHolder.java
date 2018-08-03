@@ -62,6 +62,9 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     @BindDimen(R.dimen.dp_size_40)
     int mUserPicSize;
 
+    @BindDimen(R.dimen.dp_size_40)
+    int mBadgeIconSize;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -101,7 +104,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             itemContainer.setOnClickListener(this);
 
             if (leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null && CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
-                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mUserPicSize, mUserPicSize);
+                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mBadgeIconSize, mBadgeIconSize);
                 Glide.with(badgeIcon.getContext())
                         .load(trophyImageUrl)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(badgeIcon.getContext())))
@@ -149,7 +152,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
                 }
             }
-            mProfilePic.setBackgroundResource(R.drawable.circular_background_grey);
+            mProfilePic.setBackgroundResource(R.drawable.circular_leaderbaord_user_icon_background_grey);
         }
     }
 

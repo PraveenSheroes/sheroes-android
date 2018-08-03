@@ -90,7 +90,7 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="2sp"
                 android:textColor="@color/leaderboard_user"
                 android:textSize="@dimen/sp_size_16"
