@@ -25,6 +25,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -92,6 +93,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.PollTypeCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -108,6 +110,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
+import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
@@ -122,6 +125,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.adapters.PollSurveyTypeAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -131,6 +135,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
@@ -141,7 +146,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.schedulePost;
  * Created by ujjwal on 28/10/17.
  */
 
-public class CommunityPostActivity extends BaseActivity implements ICommunityPostView, QueryTokenReceiver {
+public class CommunityPostActivity extends BaseActivity implements ICommunityPostView, QueryTokenReceiver, PollTypeCallBack {
     public static final String SCREEN_LABEL = "Create Communities Post Screen";
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
     public static final String IS_FROM_COMMUNITY = "Is from community";
@@ -159,6 +164,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Inject
     Preference<LoginResponse> mUserPreference;
 
+    @Inject
+    Preference<Configuration> mConfiguration;
 
     @Inject
     CreatePostPresenter mCreatePostPresenter;
@@ -203,10 +210,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     TextView mCommunityName;
 
     @Bind(R.id.add_image)
-    RippleViewLinear rippleViewLinearAddImage;
+    RippleViewLinear mRippleViewLinearAddImage;
 
     @Bind(R.id.camera)
-    RippleViewLinear rippleViewLinearCamera;
+    RippleViewLinear mRippleViewLinearCamera;
+
+    @Bind(R.id.poll_survey)
+    RippleViewLinear mRippleViewLinearPollSurvey;
 
     @Bind(R.id.progress_bar_link)
     ProgressBar pbLink;
@@ -237,6 +247,27 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.suggestions_list)
     RecyclerView mSuggestionList;
+
+    @Bind(R.id.tv_add_photo_lable)
+    TextView tvAddPhotoLable;
+
+    @Bind(R.id.tv_photo_lable)
+    TextView tvPhotoLable;
+
+    @Bind(R.id.tv_camera_lable)
+    TextView tvCameraLable;
+
+    @Bind(R.id.tv_poll_survey_lable)
+    TextView tvPollSurveyLable;
+
+    @Bind(R.id.li_upload_image_container)
+    LinearLayout liUploadImageContainer;
+
+    @Bind(R.id.li_choose_poll_type)
+    LinearLayout liChoosePollType;
+
+    @Bind(R.id.rv_poll_type_list)
+    RecyclerView mRvPollTypeList;
 
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
@@ -276,9 +307,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //new images and deleted images are send when user edit the post
     private List<String> mNewEncodedImages = new ArrayList<>();
     private List<Long> mDeletedImageIdList = new ArrayList<>();
-    List<Mention> mMentionList;
-    @Inject
-    Preference<Configuration> mConfiguration;
+    private List<Mention> mMentionList;
+    private boolean mIsPollClicked;
+
     //endregion
 
     //region Activity methods
@@ -333,10 +364,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag, 0);
                     }
                 }
-               /* RelativeLayout.LayoutParams layoutParams =
-                        (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
-                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                mUserName.setLayoutParams(layoutParams);*/
             }
             if (mIsEditPost) {
                 fbShareContainer.setVisibility(View.GONE);
@@ -399,6 +426,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupToolBarItem();
 
         }
+
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -407,11 +435,32 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (!keyboardShown(etView.getRootView())) {
                     setImageCount();
                     mAnonymousView.setVisibility(View.VISIBLE);
+                } else {
+                    if (!mIsPollClicked) {
+                        liChoosePollType.setVisibility(View.GONE);
+                    } else {
+                        mIsPollClicked = false;
+                    }
+                    bottomSheetCollapsed();
                 }
             }
         });
 
         mCreatePostPresenter.getUserMentionSuggestion(etView, mCommunityPost);
+    }
+
+    private void bottomSheetCollapsed() {
+        mImageUploadView.setOrientation(LinearLayout.HORIZONTAL);
+        tvPhotoLable.setVisibility(View.GONE);
+        tvCameraLable.setVisibility(View.GONE);
+        tvPollSurveyLable.setVisibility(View.GONE);
+    }
+
+    private void bottomSheetExpanded() {
+        mImageUploadView.setOrientation(LinearLayout.VERTICAL);
+        tvPhotoLable.setVisibility(View.VISIBLE);
+        tvCameraLable.setVisibility(View.VISIBLE);
+        tvPollSurveyLable.setVisibility(View.VISIBLE);
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
@@ -1117,7 +1166,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private Bitmap decodeFile(File file) {
         try {
             // decode image size
-            if(file == null) return null;
+            if (file == null) return null;
             BitmapFactory.Options o = new BitmapFactory.Options();
             o.inJustDecodeBounds = true;
             BitmapFactory.decodeStream(new FileInputStream(file), null, o);
@@ -1572,7 +1621,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @OnClick(R.id.add_image)
     void onAddImageClick() {
-        rippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+        mRippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
                 CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
@@ -1584,7 +1633,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @OnClick(R.id.camera)
     void onCameraClick() {
-        rippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+        mRippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
                 StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
@@ -1592,6 +1641,35 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
                         .setRequestedSize(1200, 1200)
                         .start(CommunityPostActivity.this);
+            }
+        });
+    }
+
+    @OnClick(R.id.poll_survey)
+    void onPollClick() {
+        mRippleViewLinearPollSurvey.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                if (mImageUploadView.getOrientation() == LinearLayout.HORIZONTAL) {
+                    mIsPollClicked = true;
+                }
+                CommonUtil.hideKeyboard(CommunityPostActivity.this);
+                bottomSheetCollapsed();
+                liChoosePollType.setVisibility(View.VISIBLE);
+                List<PollType> pollTypeList = new ArrayList<>();
+                PollType pollType = new PollType();
+                pollType.title = "Text Poll";
+                pollType.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
+                pollTypeList.add(pollType);
+                pollTypeList.add(pollType);
+                pollTypeList.add(pollType);
+                pollTypeList.add(pollType);
+                pollTypeList.add(pollType);
+                PollSurveyTypeAdapter pollSurveyTypeAdapter = new PollSurveyTypeAdapter(CommunityPostActivity.this, CommunityPostActivity.this);
+                GridLayoutManager gridLayoutManager = new GridLayoutManager(CommunityPostActivity.this, 2);
+                mRvPollTypeList.setLayoutManager(gridLayoutManager);
+                mRvPollTypeList.setAdapter(pollSurveyTypeAdapter);
+                pollSurveyTypeAdapter.setData(pollTypeList);
             }
         });
     }
@@ -1614,6 +1692,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         });
         popup.show();
+    }
+
+    @OnTouch({R.id.tv_add_photo_lable, R.id.image_upload_view})
+    public boolean onAddPhotoClicked() {
+        liChoosePollType.setVisibility(View.GONE);
+        bottomSheetExpanded();
+        CommonUtil.hideKeyboard(this);
+        return true;
     }
     //endregion
 
@@ -1746,4 +1832,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
 
+    @Override
+    public void onPollTypeClicked(PollType pollType) {
+        mTitleToolbar.setText(R.string.title_create_poll);
+    }
 }

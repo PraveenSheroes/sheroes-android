@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@color/background_color_project_number"
+    android:orientation="vertical"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="80dp"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/suggestions_list"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/user_tagg_border"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/anonymous"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <CheckBox
+            android:id="@+id/anonymous_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/post_anonymous_check_margin"
+            android:layout_marginStart="@dimen/post_anonymous_check_margin"
+            android:defaultValue="true"
+            android:text="@string/post_anonymous"
+            android:textColor="#878787"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/anonymous_select"
+            android:layout_marginEnd="@dimen/post_anonymous_margin"
+            android:layout_marginLeft="@dimen/post_anonymous_margin"
+            android:layout_marginRight="@dimen/post_anonymous_margin"
+            android:layout_marginStart="@dimen/post_anonymous_margin"
+            android:layout_marginTop="@dimen/dp_size_12"
+            android:background="@color/on_board_work" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/image_upload_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_add_photo_lable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/add_photo_width"
+            android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
+            android:layout_marginRight="@dimen/add_photo_width"
+            android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
+            android:layout_marginTop="@dimen/photo_poll_icon_container_margin"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/add_photo"
+            android:textColor="@color/comment_text"
+            android:textSize="14sp" />
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
+            android:id="@+id/add_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
+            android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vector_photo_grey_24dp" />
+
+            <TextView
+                android:id="@+id/tv_photo_lable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/post_icon_lable_margin"
+                android:layout_marginStart="@dimen/post_icon_lable_margin"
+                android:gravity="center"
+                android:text="@string/photo_video"
+                android:textAllCaps="true"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/phot_poll_lable_text_size" />
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
+
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
+            android:id="@+id/camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
+            android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vector_camera_grey_24dp"
+                android:tint="@color/grey_600" />
+
+            <TextView
+                android:id="@+id/tv_camera_lable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/post_icon_lable_margin"
+                android:layout_marginStart="@dimen/post_icon_lable_margin"
+                android:gravity="center"
+                android:text="@string/camera"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/phot_poll_lable_text_size" />
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
+            android:id="@+id/poll_survey"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
+            android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vector_poll"
+                android:tint="@color/grey_600" />
+
+            <TextView
+                android:id="@+id/tv_poll_survey_lable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/post_icon_lable_margin"
+                android:layout_marginStart="@dimen/post_icon_lable_margin"
+                android:gravity="center"
+                android:text="@string/poll"
+                android:textAllCaps="true"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/phot_poll_lable_text_size" />
+        </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/li_choose_poll_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="@drawable/vector_poll_type_bg"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_choose_poll_lable"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/choose_poll_type_margin"
+            android:layout_marginStart="@dimen/choose_poll_type_margin"
+            android:layout_marginTop="@dimen/choose_poll_type_margin"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="@string/choose_poll"
+            android:textColor="@color/recent_post_comment"
+            android:textSize="16sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_poll_type_list"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/poll_type_height"
+            android:layout_marginLeft="@dimen/choose_poll_type_margin"
+            android:layout_marginStart="@dimen/choose_poll_type_margin"
+            android:layout_marginTop="@dimen/choose_poll_type_margin" />
+    </LinearLayout>
+
+</LinearLayout>
+

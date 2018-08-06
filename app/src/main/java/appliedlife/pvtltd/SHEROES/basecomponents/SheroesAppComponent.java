@@ -107,6 +107,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.PollTypesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserMentionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
@@ -337,6 +338,8 @@ public interface SheroesAppComponent {
     void inject(LeaderBoardViewHolder leaderBoardViewHolder);
 
     void inject(NoStoriesHolder noStoriesHolder);
+
+    void inject(PollTypesViewHolder pollTypesViewHolder);
 }
 
 
