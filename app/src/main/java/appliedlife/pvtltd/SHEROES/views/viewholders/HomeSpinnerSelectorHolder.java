@@ -10,7 +10,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -21,7 +21,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 13-01-2017.
  */
 
-public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
+public class HomeSpinnerSelectorHolder extends BaseViewHolder<ArticleCategory> {
     private final String TAG = LogUtils.makeLogTag(HomeSpinnerSelectorHolder.class);
     @Bind(R.id.li_article_spinner_iten)
     LinearLayout liSpinnerItem;
@@ -30,7 +30,7 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
     @Bind(R.id.checkbox_spinner)
     CheckBox cbSpinner;
     BaseHolderInterface viewInterface;
-    private HomeSpinnerItem dataItem;
+    private ArticleCategory dataItem;
 
     public HomeSpinnerSelectorHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -40,7 +40,7 @@ public class HomeSpinnerSelectorHolder extends BaseViewHolder<HomeSpinnerItem> {
     }
 
     @Override
-    public void bindData(HomeSpinnerItem item, Context context, int position) {
+    public void bindData(ArticleCategory item, Context context, int position) {
         this.dataItem = item;
         cbSpinner.setEnabled(false);
         if(StringUtil.isNotNullOrEmptyString(dataItem.getName())) {
