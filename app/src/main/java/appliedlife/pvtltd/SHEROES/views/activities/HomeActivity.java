@@ -1276,7 +1276,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 setArticleCategoryFilterValues(categoryId);
                 if(StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
                     articleCategorySelected();
-                    //  openArticleFragment(setCategoryIds(), false);
                 }
             }
         } else {
