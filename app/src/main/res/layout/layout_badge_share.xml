@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="@dimen/dp_size_300"
+        android:layout_width="@dimen/badge_share_card_width"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
@@ -74,6 +74,7 @@
             android:layout_below="@id/badge_des_prefix"
             android:layout_marginEnd="@dimen/dp_size_16"
             android:layout_centerHorizontal="true"
+            android:gravity="center_horizontal"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
@@ -84,15 +85,15 @@
 
         <ImageView
             android:id="@+id/playstore_icon"
-            android:layout_width="@dimen/dp_size_100"
-            android:layout_height="@dimen/dp_size_35"
+            android:layout_width="@dimen/badge_share_playstore_icon_width"
+            android:layout_height="@dimen/badge_share_playstore_icon_height"
             android:layout_below="@id/badge_desc"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_playstore" />
 
         <ImageView
-            android:layout_width="@dimen/dp_size_100"
-            android:layout_height="@dimen/dp_size_40"
+            android:layout_width="@dimen/badge_share_sheroes_icon_width"
+            android:layout_height="@dimen/badge_share_sheroes_icon_height"
             android:layout_below="@id/playstore_icon"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_sheroes_header" />
