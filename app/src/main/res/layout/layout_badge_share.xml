@@ -57,36 +57,38 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_title"
             android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
             android:layout_marginEnd="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="@dimen/dp_size_2"
+            android:gravity="center_horizontal"
             android:text="@string/yay"
-            android:textColor="@color/leader_board_badge_sub_text"
-            android:textSize="@dimen/sp_size_22" />
+            android:textColor="@color/badge_text"
+            android:textSize="@dimen/sp_size_14" />
 
         <TextView
             android:id="@+id/badge_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_des_prefix"
-            android:layout_marginEnd="@dimen/dp_size_16"
             android:layout_centerHorizontal="true"
-            android:gravity="center_horizontal"
+            android:layout_marginEnd="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_8"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center_horizontal"
             android:lineSpacingExtra="2sp"
-            android:textColor="@color/leader_board_badge_sub_text"
-            android:textSize="@dimen/sp_size_16" />
+            android:textColor="@color/badge_text"
+            android:textSize="@dimen/sp_size_14" />
 
         <ImageView
             android:id="@+id/playstore_icon"
             android:layout_width="@dimen/badge_share_playstore_icon_width"
             android:layout_height="@dimen/badge_share_playstore_icon_height"
+            android:layout_marginTop="@dimen/dp_size_5"
             android:layout_below="@id/badge_desc"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_playstore" />
@@ -95,6 +97,7 @@
             android:layout_width="@dimen/badge_share_sheroes_icon_width"
             android:layout_height="@dimen/badge_share_sheroes_icon_height"
             android:layout_below="@id/playstore_icon"
+            android:layout_marginTop="@dimen/dp_size_1"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_sheroes_header" />
 

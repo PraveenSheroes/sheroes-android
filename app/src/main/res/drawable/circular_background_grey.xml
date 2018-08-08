@@ -3,7 +3,7 @@
 
     <stroke
         android:width="1.5dp"
-        android:color="@color/text_grey" />
+        android:color="@color/badge_inactive_circle" />
 
     <solid android:color="@color/white"/>
 

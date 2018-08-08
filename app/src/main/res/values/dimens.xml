@@ -220,8 +220,8 @@
     <dimen name="badge_share_card_width">300dp</dimen>
     <dimen name="badge_share_playstore_icon_width">100dp</dimen>
     <dimen name="badge_share_playstore_icon_height">35dp</dimen>
-    <dimen name="badge_share_sheroes_icon_height">300dp</dimen>
-    <dimen name="badge_share_sheroes_icon_width">40dp</dimen>
+    <dimen name="badge_share_sheroes_icon_height">40dp</dimen>
+    <dimen name="badge_share_sheroes_icon_width">100dp</dimen>
 
 
 </resources>
