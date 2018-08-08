@@ -39,12 +39,15 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
 
 public class BadgeClosetActivity extends BaseActivity {
 
+    //region constant declaration
     public static final String SCREEN_LABEL = "Badge Closet Screen";
     private static final String TITLE_NAME = "Badget Closet";
     public static final String BADGE_CLOSET_LIST = "Badge_closet_list";
     public static final String USER_DETAILS = "User_details";
     private static final String SOURCE_SCREEN = "Source_Screen_Name";
+    //endregion
 
+    //region binding view variables
     @Bind(R.id.title_toolbar)
     TextView titleName;
 
@@ -53,10 +56,14 @@ public class BadgeClosetActivity extends BaseActivity {
 
     @Bind(R.id.badges_list)
     RecyclerView mRecyclerView;
+    //endregion
 
+    //region private variables
     private List<BadgeDetails> badgeDetailsList;
     private UserSolrObj mUserSolrObj;
+    //endregion
 
+    //region activity life cycle method
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +78,7 @@ public class BadgeClosetActivity extends BaseActivity {
                     badgeDetailsList = Parcels.unwrap(parcelable);
                 }
 
-                if (getIntent().getExtras() != null && getIntent().getParcelableExtra(USER_DETAILS) != null) {
+                if (getIntent().getParcelableExtra(USER_DETAILS) != null) {
                     Parcelable userDetailsParcelable = getIntent().getParcelableExtra(USER_DETAILS);
                     if (parcelable != null) {
                         mUserSolrObj = Parcels.unwrap(userDetailsParcelable);
@@ -98,8 +105,9 @@ public class BadgeClosetActivity extends BaseActivity {
         });
         mRecyclerView.setAdapter(mAdapter);
     }
+    //endregion
 
-
+    //region private method
     private void trackEvent(String sourceScreenName) {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
@@ -117,7 +125,9 @@ public class BadgeClosetActivity extends BaseActivity {
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleName.setText(TITLE_NAME);
     }
+    //endregion
 
+    //region override method
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
@@ -147,6 +157,7 @@ public class BadgeClosetActivity extends BaseActivity {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+    //endregion
 
     //region static methods
     public static void navigateTo(Activity fromActivity, List<BadgeDetails> badgeDetails, UserSolrObj userSolrObj, String sourceScreen) {
@@ -158,5 +169,5 @@ public class BadgeClosetActivity extends BaseActivity {
         intent.putExtra(SOURCE_SCREEN, sourceScreen);
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
-
+    //endregion
 }

@@ -210,6 +210,10 @@
     <dimen name="sp_size_winner_dialog_intro_line_space">7sp</dimen>
     <dimen name="sp_size_winner_dialog_title_line_space">6sp</dimen>
     <dimen name="badge_counter_icon">34dp</dimen>
+    <dimen name="badge_dialog_cross">20dp</dimen>
+    <dimen name="badge_dialog_width">280dp</dimen>
+    <dimen name="badge_list_icon">40dp</dimen>
+    <dimen name="badge_list_height">72dp</dimen>
 
 </resources>
 

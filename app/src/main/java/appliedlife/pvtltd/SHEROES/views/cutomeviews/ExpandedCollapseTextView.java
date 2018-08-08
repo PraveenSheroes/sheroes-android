@@ -18,7 +18,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.TextExpandCollapseCallback;
  */
 public class ExpandedCollapseTextView {
 
-    public static final String VIEW_MORE_TEXT = "..View More";
+    public static final String VIEW_MORE_TEXT = "...View More";
     private static final String VIEW_LESS_TEXT = "View Less";
     private static ExpandedCollapseTextView expandedCollapseTextView;
 
@@ -43,7 +43,8 @@ public class ExpandedCollapseTextView {
                     if (maxLine > 0 && tv.getLineCount() >= maxLine) {
                         int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
 
-                        String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() -2) + expandText;
+                        int indexPosition = lineEndIndex > expandText.length() + 2 ? lineEndIndex - expandText.length() - 2 : lineEndIndex;
+                        String text = tv.getText().subSequence(0, indexPosition) + expandText;
                         tv.setText(text);
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         tv.setText(

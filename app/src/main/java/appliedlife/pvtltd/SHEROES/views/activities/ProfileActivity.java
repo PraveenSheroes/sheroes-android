@@ -1335,7 +1335,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private void invalidateBadgesList(final UserSolrObj userSolrObj) {
 
-        if (userSolrObj == null || userSolrObj.getUserBadgesList() == null || userSolrObj.getUserBadgesList().size() <= 0)
+        if (userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList()))
             return;
 
         badgeContainer.setVisibility(View.VISIBLE);
@@ -1348,10 +1348,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(BADGE_RIGHT_MARGIN, this), 0);
             badge.setLayoutParams(layoutParams);
             final BadgeDetails badgeDetails = userSolrObj.getUserBadgesList().get(i);
-            Glide.with(badge.getContext())
-                    .load(badgeDetails.getImageUrl())
-                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
-                    .into(badge);
+            if(StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
+                Glide.with(badge.getContext())
+                        .load(badgeDetails.getImageUrl())
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                        .into(badge);
+            }
 
             if (badgeDetails.isActive()) {
                 badge.setBackgroundResource(R.drawable.circular_background_yellow);

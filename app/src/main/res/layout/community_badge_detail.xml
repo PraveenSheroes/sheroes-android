@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minWidth="@dimen/dp_size_280">
+    android:minWidth="@dimen/badge_dialog_width">
 
     <FrameLayout
         android:id="@+id/header_container"
@@ -12,8 +12,8 @@
 
         <ImageView
             android:id="@+id/cross"
-            android:layout_width="@dimen/dp_size_20"
-            android:layout_height="@dimen/dp_size_20"
+            android:layout_width="@dimen/badge_dialog_cross"
+            android:layout_height="@dimen/badge_dialog_cross"
             android:layout_gravity="right|end"
             android:layout_marginEnd="@dimen/dp_size_12"
             android:layout_marginRight="@dimen/dp_size_12"
