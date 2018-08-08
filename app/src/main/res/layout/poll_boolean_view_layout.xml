@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_boolean_poll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_boolean_poll_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/vector_poll_thumbs_up" />
+
+    <ImageView
+        android:id="@+id/iv_boolean_poll_down"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/boolean_poll_margin_left"
+        android:layout_marginStart="@dimen/boolean_poll_margin_left"
+        android:src="@drawable/vector_poll_thumbs_down" />
+
+
+</LinearLayout>

@@ -203,13 +203,17 @@
     <dimen name="option_poll_padding">9dp</dimen>
     <dimen name="add_option_poll_label_text">14sp</dimen>
     <dimen name="add_option_poll_label_text_margin">8dp</dimen>
-    <dimen name="add_option_poll_day_selection_margin">24dp</dimen>
+    <dimen name="add_option_poll_day_selection_margin">20dp</dimen>
     <dimen name="add_option_poll_day_selection_margin_left">4dp</dimen>
     <dimen name="option_poll_delete_padding">8dp</dimen>
     <dimen name="image_poll_edit_text_margin">8dp</dimen>
     <dimen name="image_poll_image_height">100dp</dimen>
     <dimen name="image_poll_image_width">120dp</dimen>
     <dimen name="image_poll_text_or">16sp</dimen>
+    <dimen name="boolean_poll_margin_left">50dp</dimen>
+    <dimen name="rating_poll_margin_left">48dp</dimen>
+    <dimen name="poll_spinner_day_padding">8dp</dimen>
+    <dimen name="poll_spinner_day_text">16sp</dimen>
 
 </resources>
 

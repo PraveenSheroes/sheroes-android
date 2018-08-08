@@ -277,6 +277,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.li_main_poll_view)
     LinearLayout mLiMainPollView;
 
+    @Bind(R.id.rl_Add_option_poll)
+    RelativeLayout rlAddOptionPoll;
+
     @Bind(R.id.iv_add_poll_img)
     ImageView mAddPollImg;
 
@@ -285,6 +288,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.rl_image_list)
     RelativeLayout mRlImageList;
+
+    @Bind(R.id.tv_day_selector)
+    TextView tvDaySelector;
 
 
     @BindDimen(R.dimen.authorPicSize)
@@ -1765,9 +1771,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @OnClick(R.id.tv_day_selector)
-    public void onDaySelectorClicked() {
-
+    public void onTvDaySelectorClicked() {
+        addPollSelectionDay();
     }
+
 
     //endregion
 
@@ -1911,22 +1918,51 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
         mRlImageList.setVisibility(View.GONE);
+        String[] pollTime = getResources().getStringArray(R.array.poll_time);
         switch (pollType.id) {
             case 1:
                 for (int i = 0; i <= 1; i++) {
                     mPollOptionCount++;
                     addTextPollOptionView();
                 }
+                tvDaySelector.setText(pollTime[0]);
                 break;
             case 2:
                 addImagePollView();
+                tvDaySelector.setText(pollTime[0]);
                 break;
             case 3:
+                addRatingPollView();
+                tvDaySelector.setText(pollTime[0]);
                 break;
             case 4:
+                addBooleanPollView();
                 break;
         }
 
+    }
+
+    private void addPollSelectionDay() {
+        String[] pollTime = getResources().getStringArray(R.array.poll_time);
+        PopupMenu popup = new PopupMenu(this, tvDaySelector);
+        for(int i = 1; i<= pollTime.length; i++)
+        {
+            popup.getMenu().add(0, i, i, menuWithText(pollTime[i-1]));
+        }
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                tvDaySelector.setText(item.getTitle());
+                return true;
+            }
+        });
+        popup.show();
+
+    }
+
+    private CharSequence menuWithText(String title) {
+        SpannableString spannableString = new SpannableString(title);
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.footer_icon_text)), 0, spannableString.length(), 0);
+        return spannableString;
     }
 
     private void addTextPollOptionView() {
@@ -1988,5 +2024,71 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liImagePollRow.setLayoutParams(params);
         mLiPollContainer.addView(liImagePollRow);
+    }
+
+    private void addRatingPollView() {
+        mAddPollImg.setVisibility(View.GONE);
+        mAddPollText.setVisibility(View.GONE);
+        final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_rating_view_layout, null);
+        final LinearLayout liImageRatingRow = pollLayout.findViewById(R.id.li_rating_poll_view);
+
+        ImageView mIvFirstRating = pollLayout.findViewById(R.id.iv_first_rating);
+        mIvFirstRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        ImageView mIvSecondRating = pollLayout.findViewById(R.id.iv_second_rating);
+        mIvSecondRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        ImageView mIvThirdRating = pollLayout.findViewById(R.id.iv_third_rating);
+        mIvThirdRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        ImageView mIvFourthRating = pollLayout.findViewById(R.id.iv_fourth_rating);
+        mIvFourthRating.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
+        liImageRatingRow.setLayoutParams(params);
+        mLiPollContainer.addView(liImageRatingRow);
+    }
+
+    private void addBooleanPollView() {
+        rlAddOptionPoll.setVisibility(View.GONE);
+        final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_boolean_view_layout, null);
+        final LinearLayout liBooleanPollRow = pollLayout.findViewById(R.id.li_boolean_poll_view);
+        ImageView ivBooleanPollUp = pollLayout.findViewById(R.id.iv_boolean_poll_up);
+        ivBooleanPollUp.setTag(false);
+        ivBooleanPollUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        ImageView ivBooleanPollDown = pollLayout.findViewById(R.id.iv_boolean_poll_down);
+        ivBooleanPollDown.setTag(false);
+        ivBooleanPollDown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
+        liBooleanPollRow.setLayoutParams(params);
+        mLiPollContainer.addView(liBooleanPollRow);
     }
 }

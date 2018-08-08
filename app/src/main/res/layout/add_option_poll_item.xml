@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_Add_option_poll"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -39,9 +40,7 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:text="@string/poll_option_end_text"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/add_option_poll_label_text"
-        app:layout_constraintStart_toStartOf="@+id/iv_add_poll_img"
-        app:layout_editor_absoluteY="31dp" />
+        android:textSize="@dimen/add_option_poll_label_text" />
 
     <TextView
         android:id="@+id/tv_day_selector"
@@ -53,11 +52,12 @@
         android:layout_marginTop="@dimen/add_option_poll_day_selection_margin"
         android:layout_toRightOf="@+id/tv_add_poll_ends_label"
         android:drawablePadding="@dimen/add_option_poll_day_selection_margin_left"
+        android:paddingStart="@dimen/poll_spinner_day_padding"
+        android:paddingLeft="@dimen/poll_spinner_day_padding"
+        android:paddingRight="@dimen/poll_spinner_day_padding"
+        android:paddingEnd="@dimen/poll_spinner_day_padding"
         android:drawableRight="@drawable/vector_spinner_red"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:text="1 Day"
         android:textColor="@color/footer_icon_text"
-        android:textSize="@dimen/add_option_poll_label_text"
-        app:layout_constraintLeft_toRightOf="@id/tv_add_poll_ends_label"
-        app:layout_editor_absoluteY="31dp" />
+        android:textSize="@dimen/poll_spinner_day_text" />
 </RelativeLayout>
