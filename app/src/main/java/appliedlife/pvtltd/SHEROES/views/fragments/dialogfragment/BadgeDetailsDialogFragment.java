@@ -213,14 +213,15 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
             if (!isLeaderBoard) {
                 if (mBadgeDetails.isActive()) {
-                    String mutualCommunityText = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
-                    badgeDesc.setText(mutualCommunityText);
+                    String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
+                    badgeDesc.setText(badgeDescription);
                 } else {
-                    String mutualCommunityText = getResources().getString(R.string.inactive_badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
-                    badgeDesc.setText(mutualCommunityText);
+                    String badgeDescription = getResources().getString(R.string.inactive_badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
+                    badgeDesc.setText(badgeDescription);
                 }
             } else {
-                badgeDesc.setText(mutualCommunityText);
+                String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
+                badgeDesc.setText(badgeDescription);
             }
 
 
