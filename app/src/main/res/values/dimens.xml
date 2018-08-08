@@ -214,6 +214,10 @@
     <dimen name="badge_dialog_width">280dp</dimen>
     <dimen name="badge_list_icon">40dp</dimen>
     <dimen name="badge_list_height">72dp</dimen>
+    <dimen name="leaderboard_user_icon">39dp</dimen>
+    <dimen name="leaderboard_badge_icon">40dp</dimen>
+    <dimen name="leaderboard_about_header_height">45dp</dimen>
+
 
 </resources>
 
