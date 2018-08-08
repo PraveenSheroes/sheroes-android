@@ -39,6 +39,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -46,6 +47,7 @@ import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -239,7 +241,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.image_count)
     TextView mImageCount;
 
-    @Bind(R.id.image_upload_view)
+    @Bind(R.id.li_image_upload_view)
     LinearLayout mImageUploadView;
 
     @Bind(R.id.et_view)
@@ -269,14 +271,37 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.rv_poll_type_list)
     RecyclerView mRvPollTypeList;
 
+    @Bind(R.id.li_poll_container)
+    LinearLayout mLiPollContainer;
+
+    @Bind(R.id.li_main_poll_view)
+    LinearLayout mLiMainPollView;
+
+    @Bind(R.id.iv_add_poll_img)
+    ImageView mAddPollImg;
+
+    @Bind(R.id.tv_add_poll_text)
+    TextView mAddPollText;
+
+    @Bind(R.id.rl_image_list)
+    RelativeLayout mRlImageList;
+
+
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
+
+    @BindDimen(R.dimen.option_poll_margintop)
+    int mPollMarginTop;
+
+    @BindDimen(R.dimen.option_poll_margin_left_right)
+    int mPollMarginLeftRight;
+
+    private int mPollOptionCount;
     //endregion
 
     //region member variable
     private UserSummary mUserSummary;
     private boolean mIsAnonymous;
-    private boolean mIsCommunityOwner;
     private boolean mIsCompanyAdmin;
     private boolean isSharedFromOtherApp;
     private PostPhotoAdapter mPostPhotoAdapter;
@@ -309,6 +334,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<Long> mDeletedImageIdList = new ArrayList<>();
     private List<Mention> mMentionList;
     private boolean mIsPollClicked;
+    private boolean mPollOptionClicked;
+    private ImageView mIvImagePollLeft, mIvImagePollRight;
 
     //endregion
 
@@ -917,14 +944,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                     CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                     if (resultCode == RESULT_OK) {
-                        // ((ImageView) findViewById(R.id.quick_start_cropped_image)).setImageURI(result.getUri());
                         try {
                             Photo photo = new Photo();
                             photo.isNew = true;
                             File file = new File(result.getUri().getPath());
                             photo.file = file;
-                            mImageList.add(photo);
-                            setImageCount();
                             if (mIsEditPost) {
                                 Bitmap bitmap = decodeFile(photo.file);
                                 byte[] buffer = new byte[4096];
@@ -938,7 +962,28 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                     }
                                 }
                             }
-                            mPostPhotoAdapter.addPhoto(photo);
+                            if (mIvImagePollLeft != null && mIvImagePollRight != null) {
+                                if ((Boolean) mIvImagePollLeft.getTag()) {
+                                    mImageList.add(photo);
+                                    mLiMainPollView.setVisibility(View.VISIBLE);
+                                    mRlImageList.setVisibility(View.GONE);
+                                    if (photo.file != null) {
+                                        Bitmap bitmap = decodeFile(photo.file);
+                                        mIvImagePollLeft.setImageBitmap(bitmap);
+                                    }
+                                } else if ((Boolean) mIvImagePollRight.getTag()) {
+                                    mImageList.add(photo);
+                                    if (photo.file != null) {
+                                        Bitmap bitmap = decodeFile(photo.file);
+                                        mIvImagePollRight.setImageBitmap(bitmap);
+                                    }
+                                } else {
+                                    postPicsAndCountView(photo);
+                                }
+                            } else {
+                                postPicsAndCountView(photo);
+                            }
+                            stopProgressBar();
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();
@@ -954,6 +999,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
 
+    }
+
+    private void postPicsAndCountView(Photo photo) {
+        mImageList.add(photo);
+        mLiMainPollView.setVisibility(View.GONE);
+        mRlImageList.setVisibility(View.VISIBLE);
+        setImageCount();
+        mPostPhotoAdapter.addPhoto(photo);
     }
 
     @Override
@@ -1435,10 +1488,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void setImageCount() {
         mImageCount.setText(getString(R.string.image_count, mImageList.size(), MAX_IMAGE));
-        if (mImageList.size() == MAX_IMAGE) {
+        if (mImageList.size() == MAX_IMAGE || mPollOptionClicked) {
             mImageUploadView.setVisibility(View.GONE);
         } else {
+            mPollOptionClicked = false;
             mImageUploadView.setVisibility(View.VISIBLE);
+        }
+        if (mImageList.size() > 0) {
+            mImageCount.setVisibility(View.VISIBLE);
+        } else {
+            mImageCount.setVisibility(View.GONE);
         }
     }
 
@@ -1477,11 +1536,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         } else {
             mCommunityName.setVisibility(View.VISIBLE);
-            /*if (mIsChallengePost) {
-                mCommunityName.setVisibility(View.GONE);
-            } else {
-                mCommunityName.setVisibility(View.VISIBLE);
-            }*/
             if (mIsAnonymous) {
                 mUserName.setText("Anonymous");
                 mShareToFacebook.setChecked(false);
@@ -1629,6 +1683,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         .start(CommunityPostActivity.this);
             }
         });
+
     }
 
     @OnClick(R.id.camera)
@@ -1643,6 +1698,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         .start(CommunityPostActivity.this);
             }
         });
+
     }
 
     @OnClick(R.id.poll_survey)
@@ -1657,14 +1713,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 bottomSheetCollapsed();
                 liChoosePollType.setVisibility(View.VISIBLE);
                 List<PollType> pollTypeList = new ArrayList<>();
-                PollType pollType = new PollType();
-                pollType.title = "Text Poll";
-                pollType.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
-                pollTypeList.add(pollType);
-                pollTypeList.add(pollType);
-                pollTypeList.add(pollType);
-                pollTypeList.add(pollType);
-                pollTypeList.add(pollType);
+                for (int i = 1; i < 5; i++) {
+                    PollType pollType = new PollType();
+                    pollType.id = i;
+                    pollType.title = "Text Poll";
+                    pollType.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
+                    pollTypeList.add(pollType);
+                }
                 PollSurveyTypeAdapter pollSurveyTypeAdapter = new PollSurveyTypeAdapter(CommunityPostActivity.this, CommunityPostActivity.this);
                 GridLayoutManager gridLayoutManager = new GridLayoutManager(CommunityPostActivity.this, 2);
                 mRvPollTypeList.setLayoutManager(gridLayoutManager);
@@ -1672,6 +1727,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 pollSurveyTypeAdapter.setData(pollTypeList);
             }
         });
+
     }
 
     @OnClick(R.id.user_drop_down)
@@ -1694,13 +1750,25 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         popup.show();
     }
 
-    @OnTouch({R.id.tv_add_photo_lable, R.id.image_upload_view})
+    @OnTouch({R.id.tv_add_photo_lable, R.id.li_image_upload_view})
     public boolean onAddPhotoClicked() {
         liChoosePollType.setVisibility(View.GONE);
         bottomSheetExpanded();
         CommonUtil.hideKeyboard(this);
         return true;
     }
+
+    @OnClick({R.id.iv_add_poll_img, R.id.tv_add_poll_text})
+    public void onAddMoreOptionClicked() {
+        mPollOptionCount++;
+        addTextPollOptionView();
+    }
+
+    @OnClick(R.id.tv_day_selector)
+    public void onDaySelectorClicked() {
+
+    }
+
     //endregion
 
     private void setupToolbarItemsColor() {
@@ -1834,6 +1902,91 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void onPollTypeClicked(PollType pollType) {
+        mImageList.clear();
+        mPollOptionClicked = true;
+        liChoosePollType.setVisibility(View.GONE);
+        mImageUploadView.setVisibility(View.GONE);
+        CommonUtil.hideKeyboard(this);
         mTitleToolbar.setText(R.string.title_create_poll);
+        etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
+        mLiMainPollView.setVisibility(View.VISIBLE);
+        mRlImageList.setVisibility(View.GONE);
+        switch (pollType.id) {
+            case 1:
+                for (int i = 0; i <= 1; i++) {
+                    mPollOptionCount++;
+                    addTextPollOptionView();
+                }
+                break;
+            case 2:
+                addImagePollView();
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+        }
+
+    }
+
+    private void addTextPollOptionView() {
+        final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_option_type_layout, null);
+        final LinearLayout liTextPollRow = pollLayout.findViewById(R.id.li_text_poll_row);
+        final EditText etTextPoll = pollLayout.findViewById(R.id.et_text_poll);
+        etTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount);
+        if (mPollOptionCount > 2) {
+            final ImageView ivDeleteTextPoll = pollLayout.findViewById(R.id.iv_delete_text_poll);
+            ivDeleteTextPoll.setVisibility(View.VISIBLE);
+            ivDeleteTextPoll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mLiPollContainer.removeView(pollLayout);
+                }
+            });
+        }
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
+        liTextPollRow.setLayoutParams(params);
+        mLiPollContainer.addView(liTextPollRow);
+    }
+
+    private void addImagePollView() {
+        mAddPollImg.setVisibility(View.GONE);
+        mAddPollText.setVisibility(View.GONE);
+        final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_image_view_layout, null);
+        final LinearLayout liImagePollRow = pollLayout.findViewById(R.id.li_image_poll_view);
+        final EditText etImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
+        etImagePollLeft.setHint(getString(R.string.poll_option) + 1);
+        final EditText etImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
+        etImagePollRight.setHint(getString(R.string.poll_option) + 2);
+        mIvImagePollLeft = pollLayout.findViewById(R.id.iv_image_poll_left);
+        mIvImagePollLeft.setTag(false);
+        mIvImagePollLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mIvImagePollLeft.setTag(true);
+                mIvImagePollRight.setTag(false);
+                CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setRequestedSize(1200, 1200)
+                        .start(CommunityPostActivity.this);
+            }
+        });
+        mIvImagePollRight = pollLayout.findViewById(R.id.iv_image_poll_right);
+        mIvImagePollRight.setTag(false);
+        mIvImagePollRight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mIvImagePollRight.setTag(true);
+                mIvImagePollLeft.setTag(false);
+                CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setRequestedSize(1200, 1200)
+                        .start(CommunityPostActivity.this);
+            }
+        });
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
+        liImagePollRow.setLayoutParams(params);
+        mLiPollContainer.addView(liImagePollRow);
     }
 }

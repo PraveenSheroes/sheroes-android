@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_text_poll_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <EditText
+        android:id="@+id/et_text_poll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="@integer/int_value_for_line_1"
+        android:background="@drawable/rectangle_border"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:padding="@dimen/option_poll_padding"
+        android:textColor="@color/comment_text"
+        android:textColorHint="@color/on_board_work"
+        android:textSize="@dimen/option_poll_text_size" />
+
+    <ImageView
+        android:id="@+id/iv_delete_text_poll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/option_poll_delete_padding"
+        android:paddingBottom="@dimen/option_poll_delete_padding"
+        android:paddingRight="@dimen/option_poll_delete_padding"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_cross" />
+</LinearLayout>
+

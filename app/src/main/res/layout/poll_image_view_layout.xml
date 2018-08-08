@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_image_poll_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center|left"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="@dimen/image_poll_image_width"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_image_poll_left"
+            android:layout_width="@dimen/image_poll_image_width"
+            android:layout_height="@dimen/image_poll_image_height"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/vector_image_poll" />
+
+        <EditText
+            android:id="@+id/et_image_poll_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/image_poll_edit_text_margin"
+            android:background="@drawable/rectangle_border"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/option_poll_padding"
+            android:textColor="@color/comment_text"
+            android:textColorHint="@color/on_board_work"
+            android:textSize="@dimen/option_poll_text_size" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/image_poll_edit_text_margin"
+        android:layout_marginLeft="@dimen/image_poll_edit_text_margin"
+        android:layout_marginRight="@dimen/image_poll_edit_text_margin"
+        android:layout_marginStart="@dimen/image_poll_edit_text_margin"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="Or"
+        android:textAllCaps="true"
+        android:textColor="@color/comment_text"
+        android:textSize="@dimen/image_poll_text_or" />
+
+    <LinearLayout
+        android:layout_width="@dimen/image_poll_image_width"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_image_poll_right"
+            android:layout_width="@dimen/image_poll_image_width"
+            android:layout_height="@dimen/image_poll_image_height"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:src="@drawable/vector_image_poll" />
+
+        <EditText
+            android:id="@+id/et_image_poll_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/image_poll_edit_text_margin"
+            android:background="@drawable/rectangle_border"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:padding="@dimen/option_poll_padding"
+            android:textColor="@color/comment_text"
+            android:textColorHint="@color/on_board_work"
+            android:textSize="@dimen/option_poll_text_size" />
+    </LinearLayout>
+</LinearLayout>
