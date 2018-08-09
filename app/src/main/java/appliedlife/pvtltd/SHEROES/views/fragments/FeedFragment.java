@@ -75,6 +75,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -1338,35 +1339,34 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
-        if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
-                    Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    intent.setData(url);
-                    startActivity(intent);
+    public void onCommunityTitleClicked(FeedDetail feedDetail) {
+        if(feedDetail instanceof UserPostSolrObj) {
+            UserPostSolrObj userPostObj=(UserPostSolrObj)feedDetail;
+            if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
+                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+                    if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
+                        Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
+                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                        intent.setData(url);
+                        startActivity(intent);
+                    }
+
                 }
-
-            }
-        } else {
-            if (userPostObj.getCommunityId() == 0) {
-                ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), mScreenProperties);
-
             } else {
-                HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
-                screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostObj.getItemPosition()));
-                CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-               /* Intent intentFromCommunityPost = new Intent(getActivity(), CommunitiesDetailActivity.class);
-                Bundle bundleFromPost = new Bundle();
-                bundleFromPost.putBoolean(AppConstants.COMMUNITY_POST_ID, true);
-                Parcelable parcelablesss = Parcels.wrap(userPostObj);
-                bundleFromPost.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelablesss);
-                bundleFromPost.putLong(AppConstants.COMMUNITY_ID, userPostObj.getCommunityId());
-                bundleFromPost.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.MY_COMMUNITY);
-                intentFromCommunityPost.putExtras(bundleFromPost);
-                startActivityForResult(intentFromCommunityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
+                if (userPostObj.getCommunityId() == 0) {
+                    ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), mScreenProperties);
+
+                } else {
+                    HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+                    screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostObj.getItemPosition()));
+                    CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                }
             }
+        }else if(feedDetail instanceof PollSolarObj)
+        {
+            PollSolarObj pollSolarObj=(PollSolarObj)feedDetail;
+            HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+            CommunityDetailActivity.navigateTo(getActivity(), pollSolarObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
         }
     }
 

@@ -88,6 +88,7 @@ public class AppConstants {
     public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
     public static final String FEATURED_COMMUNITY = "T";
+    public static final String FEED_POLL = "PL";
     public static final String BOOKMARKS = "bookmarks";
     public static final String COMMENT_REACTION_FRAGMENT = "comment_reaction_fragment";
     public static final String HOME_FRAGMENT = "home";

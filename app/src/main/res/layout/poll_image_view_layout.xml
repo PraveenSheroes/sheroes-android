@@ -21,12 +21,15 @@
 
         <EditText
             android:id="@+id/et_image_poll_left"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/image_poll_image_width"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/image_poll_edit_text_margin"
             android:background="@drawable/rectangle_border"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/option_poll_padding"
+            android:inputType="textMultiLine"
+            android:maxLength="@integer/image_poll_char_limit"
+            android:scrollbars="vertical"
             android:textColor="@color/comment_text"
             android:textColorHint="@color/on_board_work"
             android:textSize="@dimen/option_poll_text_size" />
@@ -61,12 +64,15 @@
 
         <EditText
             android:id="@+id/et_image_poll_right"
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/image_poll_image_width"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/image_poll_edit_text_margin"
             android:background="@drawable/rectangle_border"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/option_poll_padding"
+            android:maxLength="@integer/image_poll_char_limit"
+            android:inputType="textMultiLine"
+            android:scrollbars="vertical"
             android:textColor="@color/comment_text"
             android:textColorHint="@color/on_board_work"
             android:textSize="@dimen/option_poll_text_size" />

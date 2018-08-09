@@ -6,7 +6,7 @@
   <integer name="int_value_for_line_4">4</integer>
   <integer name="int_value_for_line_14">14</integer>
   <integer name="int_value_for_line_160">160</integer>
-
+  <integer name="image_poll_char_limit">25</integer>
     <!--Search View Integers -->
     <integer name="int_value_for_line_140">140</integer>
     <integer name="name_char_limit">99</integer>

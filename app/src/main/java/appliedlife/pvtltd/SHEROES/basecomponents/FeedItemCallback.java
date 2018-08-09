@@ -47,7 +47,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail);
 
-    void onCommunityTitleClicked(UserPostSolrObj userPostObj);
+    void onCommunityTitleClicked(FeedDetail feedDetail);
 
     void userCommentLikeRequest(UserPostSolrObj comment, boolean isLikedAction, int adapterPosition);
 
@@ -114,4 +114,5 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName);
 
     void onLeaderBoardUserClick(long userId, String screenName);
+
 }

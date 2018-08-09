@@ -347,6 +347,13 @@
         <item quantity="one">Comment</item>
         <item quantity="other">Comments</item>
     </plurals>
+
+    <plurals name="numberOfVotes">
+        <item quantity="zero">Votes</item>
+        <item quantity="one">Vote</item>
+        <item quantity="other">Votes</item>
+    </plurals>
+
     <plurals name="numberOfQuestions">
         <item quantity="zero">Question</item>
         <item quantity="one">Question</item>
@@ -682,6 +689,7 @@
         <item>1 week</item>
         <item>1 month</item>
     </string-array>
+    <string name="created_poll">created a Poll</string>
 
 
 

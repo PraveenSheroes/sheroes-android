@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_feed_text_poll_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="@integer/int_value_for_line_1">
+        <ProgressBar
+            android:id="@+id/pb_poll_percent"
+            style="@style/PollProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:theme="@style/PollProgressBar" />
+        <ImageView
+            android:id="@+id/iv_percent_verified"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|right"
+            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:src="@drawable/vector_poll_percent_verified"/>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_poll_percent_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginStart="@dimen/dp_size_16"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:textColor="@color/comment_text"
+        android:textSize="14sp" />
+
+</LinearLayout>
