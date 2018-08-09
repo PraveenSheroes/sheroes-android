@@ -242,9 +242,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/tv_mentor_name"
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginStart="@dimen/dp_size_16">
+        android:layout_marginTop="@dimen/profile_badge_container_top_margin"
+        android:layout_marginLeft="@dimen/profile_badge_container_top_left"
+        android:layout_marginStart="@dimen/profile_badge_container_top_left">
 
     </LinearLayout>
 
@@ -318,13 +318,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginTop="@dimen/profile_desc_margin_top"
             android:ellipsize="end"
-            android:maxLines="@integer/int_value_for_line_4"
+            android:maxLines="@integer/profile_desc_max_line_limit"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="@dimen/sp_size_8"
+            android:lineSpacingExtra="@dimen/profile_desc_line_space"
             android:textColor="@color/recent_post_comment"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/profile_desc_text" />
 
     </RelativeLayout>
 

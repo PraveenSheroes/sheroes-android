@@ -44,7 +44,6 @@ public class BadgeClosetActivity extends BaseActivity {
     private static final String TITLE_NAME = "Badget Closet";
     public static final String BADGE_CLOSET_LIST = "Badge_closet_list";
     public static final String USER_DETAILS = "User_details";
-    private static final String SOURCE_SCREEN = "Source_Screen_Name";
     //endregion
 
     //region binding view variables
@@ -85,10 +84,6 @@ public class BadgeClosetActivity extends BaseActivity {
                     }
                 }
             }
-
-            if(getIntent().getExtras().getString(SOURCE_SCREEN)!=null) {
-                trackEvent(getIntent().getExtras().getString(SOURCE_SCREEN));
-            }
         }
 
         setupToolbarItemsColor();
@@ -106,16 +101,6 @@ public class BadgeClosetActivity extends BaseActivity {
         mRecyclerView.setAdapter(mAdapter);
     }
     //endregion
-
-    //region private method
-    private void trackEvent(String sourceScreenName) {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(String.valueOf(mUserSolrObj.getIdOfEntityOrParticipant()))
-                        .isMentor((mUserSolrObj.getUserSubType() != null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
-                        .build();
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, sourceScreenName, properties);
-    }
 
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
@@ -144,13 +129,8 @@ public class BadgeClosetActivity extends BaseActivity {
     }
 
     @Override
-    protected boolean trackScreenTime() {
-        return false;
-    }
-
-    @Override
     public boolean shouldTrackScreen() {
-        return false;
+        return true;
     }
 
     @Override
@@ -166,7 +146,7 @@ public class BadgeClosetActivity extends BaseActivity {
         intent.putExtra(BADGE_CLOSET_LIST, parcelable);
         Parcelable userDetailsParcelable = Parcels.wrap(userSolrObj);
         intent.putExtra(USER_DETAILS, userDetailsParcelable);
-        intent.putExtra(SOURCE_SCREEN, sourceScreen);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
     //endregion

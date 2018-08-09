@@ -9,27 +9,27 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.TextExpandCollapseCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
 
 /**
  * This class provide functionality to expand and collapsed the text view with see more or see less.
  *
  * @author ravi
  */
-public class ExpandedCollapseTextView {
+public class ExpandableTextView {
 
     public static final String VIEW_MORE_TEXT = "...View More";
     private static final String VIEW_LESS_TEXT = "View Less";
-    private static ExpandedCollapseTextView expandedCollapseTextView;
+    private static ExpandableTextView expandableTextView;
 
-    public static ExpandedCollapseTextView getInstance() {
-        if (expandedCollapseTextView == null) {
-            expandedCollapseTextView = new ExpandedCollapseTextView();
+    public static ExpandableTextView getInstance() {
+        if (expandableTextView == null) {
+            expandableTextView = new ExpandableTextView();
         }
-        return expandedCollapseTextView;
+        return expandableTextView;
     }
 
-    public void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore, final TextExpandCollapseCallback textExpandCollapseCallback) {
+    public void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore, final ExpandableTextCallback expandableTextCallback) {
 
         if (tv.getTag() == null) {
             tv.setTag(tv.getText());
@@ -49,7 +49,7 @@ public class ExpandedCollapseTextView {
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         tv.setText(
                                 addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
-                                        viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                                        viewMore, expandableTextCallback), TextView.BufferType.SPANNABLE);
                     } else {
                         int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
                         String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
@@ -57,7 +57,7 @@ public class ExpandedCollapseTextView {
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         tv.setText(
                                 addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
-                                        viewMore, textExpandCollapseCallback), TextView.BufferType.SPANNABLE);
+                                        viewMore, expandableTextCallback), TextView.BufferType.SPANNABLE);
                     }
                 }
 
@@ -72,7 +72,7 @@ public class ExpandedCollapseTextView {
     }
 
     private SpannableStringBuilder addClickablePartTextViewResizable(final Spanned strSpanned, final TextView tv,
-                                                                     final int maxLine, final String spanableText, final boolean viewMore, final TextExpandCollapseCallback textExpandCollapseCallback) {
+                                                                     final int maxLine, final String spanableText, final boolean viewMore, final ExpandableTextCallback expandableTextCallback) {
         String str = strSpanned.toString();
         SpannableStringBuilder ssb = new SpannableStringBuilder(strSpanned);
 
@@ -85,14 +85,14 @@ public class ExpandedCollapseTextView {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, -1, VIEW_LESS_TEXT, false, textExpandCollapseCallback);
+                        makeTextViewResizable(tv, -1, VIEW_LESS_TEXT, false, expandableTextCallback);
                     } else {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, 1, VIEW_MORE_TEXT, true, textExpandCollapseCallback);
+                        makeTextViewResizable(tv, 1, VIEW_MORE_TEXT, true, expandableTextCallback);
                     }
-                    textExpandCollapseCallback.onTextResize(viewMore);
+                    expandableTextCallback.onTextResize(viewMore);
                 }
             }, str.indexOf(spanableText), str.indexOf(spanableText) + spanableText.length(), 0);
 

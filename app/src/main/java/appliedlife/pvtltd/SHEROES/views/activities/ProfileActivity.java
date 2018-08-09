@@ -86,7 +86,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.TextExpandCollapseCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
@@ -134,7 +134,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandedCollapseTextView;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
@@ -166,7 +166,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileP
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, ProgressbarView, TextExpandCollapseCallback {
+public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, ProgressbarView, ExpandableTextCallback {
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
@@ -178,9 +178,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private static final int ADMIN_TYPE_ID = 2;
     private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
     private static final int MAX_BADGE_COUNT = 4;
-    private static final int BADGE_RIGHT_MARGIN = 8;
-    private static final int BADGE_COUNTER_TEXT_SIZE = 14;
-    private static final int BADGE_ICON_SIZE = 40;
     private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
 
     private Long mChampionId;
@@ -380,6 +377,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.cl_story_footer)
     CardView clStoryFooter;
 
+    @BindDimen(R.dimen.profile_badge_icon)
+    int badgeIconSize;
+
+    @BindDimen(R.dimen.profile_badge_margin_right)
+    int bageIconMargin;
+
+    @BindDimen(R.dimen.profile_badge_counter_text)
+    int badgeCounterTextSize;
 
     @BindDimen(R.dimen.dp_size_90)
     int profileSize;
@@ -619,8 +624,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
             if (isOwnProfile) {
                 userDescription.setText(description);
-                ExpandedCollapseTextView expandedCollapseTextView = ExpandedCollapseTextView.getInstance();
-                expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.VIEW_MORE_TEXT, true, this);
+                ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
+                expandableTextView.makeTextViewResizable(userDescription, 1, ExpandableTextView.VIEW_MORE_TEXT, true, this);
             } else {
                 userDescription.setText(description);
             }
@@ -1328,12 +1333,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     public void invalidateProfileBadge(UserSolrObj userSolrObj) {
-        invalidateProfilePicBadge(userSolrObj); //Update She badge
+        setupSheBadge(userSolrObj); //setup She badge
 
-        invalidateBadgesList(userSolrObj);
+        setupProfileBadges(userSolrObj); //horizontal badge list on profile
     }
 
-    private void invalidateBadgesList(final UserSolrObj userSolrObj) {
+    private void setupProfileBadges(final UserSolrObj userSolrObj) {
 
         if (userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList()))
             return;
@@ -1342,12 +1347,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         int length = userSolrObj.getUserBadgesList().size();
         int counter = 0;
-        for (int i = 0; i < length; i++) {
+        for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
             final ImageView badge = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
-            layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(BADGE_RIGHT_MARGIN, this), 0);
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(badgeIconSize, this), CommonUtil.convertDpToPixel(badgeIconSize, this));
+            layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(bageIconMargin, this), 0);
             badge.setLayoutParams(layoutParams);
-            final BadgeDetails badgeDetails = userSolrObj.getUserBadgesList().get(i);
             if(StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
                 Glide.with(badge.getContext())
                         .load(badgeDetails.getImageUrl())
@@ -1376,9 +1380,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         if (length > MAX_BADGE_COUNT) {
             TextView badgeCount = new TextView(this);
             badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
-            badgeCount.setTextSize(BADGE_COUNTER_TEXT_SIZE);
+            badgeCount.setTextSize(badgeCounterTextSize);
             badgeCount.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.badge_counter)));
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this), CommonUtil.convertDpToPixel(BADGE_ICON_SIZE, this));
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(bageIconMargin, this), CommonUtil.convertDpToPixel(bageIconMargin, this));
             badgeCount.setLayoutParams(layoutParams);
             badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
             badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
@@ -1394,7 +1398,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    private void invalidateProfilePicBadge(UserSolrObj userSolrObj) {
+    private void setupSheBadge(UserSolrObj userSolrObj) {
 
         if(userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
                     userBadgeIcon.setVisibility(View.VISIBLE);
@@ -1803,8 +1807,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
             userDescription.setText(description);
             userDescription.setTag(null);
-            ExpandedCollapseTextView expandedCollapseTextView = ExpandedCollapseTextView.getInstance();
-            expandedCollapseTextView.makeTextViewResizable(userDescription, 1, ExpandedCollapseTextView.VIEW_MORE_TEXT, true, this);
+            ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
+            expandableTextView.makeTextViewResizable(userDescription, 1, ExpandableTextView.VIEW_MORE_TEXT, true, this);
 
             mUserSolarObject.setDescription(description);
         }

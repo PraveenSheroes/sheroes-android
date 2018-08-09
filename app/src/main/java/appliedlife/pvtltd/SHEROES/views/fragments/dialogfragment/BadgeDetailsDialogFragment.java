@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -67,11 +68,14 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     public static String SCREEN_NAME = "Badge Details Dialog Screen";
     private static String DAY_DATE_FORMATTER = "dd";
     private static String DAY_MONTH_YEAR_DATE_FORMATTER = "dd MMM yyyy";
+    @SuppressLint("SimpleDateFormat")
+    private SimpleDateFormat dayFormat = new SimpleDateFormat(DAY_DATE_FORMATTER);
+    @SuppressLint("SimpleDateFormat")
+    private SimpleDateFormat dateFormat = new SimpleDateFormat(DAY_MONTH_YEAR_DATE_FORMATTER);
     private static String LEADERBOARD_DEFAULT_TAB = "leaderboard";
     private static final String IS_LEADER_BOARD = "IS_LEADER_BOARD";
     private static final String BADGE_DETAILS = "Badge_Details";
     private static final String USER_DETAILS = "user_Details";
-    private static final int BADGE_ICON_SIZE = 108;
     private boolean isLeaderBoard = false;
     private BadgeDetails mBadgeDetails;
     private UserSolrObj mUserSolrObj;
@@ -79,11 +83,13 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     private String previousScreenName;
     //endregion
 
+    //region inject variables
     @Inject
     Preference<Configuration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
+    //endregion
 
     //region Bind view variables
 
@@ -117,6 +123,8 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     @Bind(R.id.share)
     TextView shareButton;
 
+    @BindDimen(R.dimen.badge_icon_size)
+    int badgeIconSize;
     //endregion
 
     //region Fragment methods
@@ -128,7 +136,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         if (getActivity() == null) return null;
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-        View view = inflater.inflate(R.layout.community_badge_detail, container, false);
+        View view = inflater.inflate(R.layout.dialog_badge_detail, container, false);
         ButterKnife.bind(this, view);
         if (getArguments() != null) {
             isLeaderBoard = getArguments().getBoolean(IS_LEADER_BOARD);
@@ -152,14 +160,6 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             mLoggedInUserId = mUserPreference.get().getUserSummary().getUserId();
         }
 
-        if (!isLeaderBoard) {
-            showLeaderBoard.setVisibility(View.VISIBLE);
-            viewProfile.setVisibility(View.GONE);
-        } else {
-            showLeaderBoard.setVisibility(View.GONE);
-            viewProfile.setVisibility(View.VISIBLE);
-        }
-
         //Enable share for own badge
         if (mLoggedInUserId == mUserSolrObj.getIdOfEntityOrParticipant()) {
             okButton.setVisibility(View.GONE);
@@ -176,7 +176,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             badgeTitle.setText(leaderBoardUser.getName());
             badgeTitle.setTextColor(Color.parseColor(leaderBoardUser.getSecondaryColor()));
             if (CommonUtil.isNotEmpty(leaderBoardUser.getImageUrl())) {
-                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUser.getImageUrl(), BADGE_ICON_SIZE, BADGE_ICON_SIZE);
+                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUser.getImageUrl(), badgeIconSize, badgeIconSize);
                 Glide.with(badgeIcon.getContext())
                         .load(trophyImageUrl)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
@@ -187,10 +187,6 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String endDate = mBadgeDetails.getSolrIgnoreEndDate();
 
             //Start and end date for badge period.
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dayFormat = new SimpleDateFormat(DAY_DATE_FORMATTER);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat(DAY_MONTH_YEAR_DATE_FORMATTER);
             Date startDateObj = DateUtil.parseDateFormat(startDate, DATE_FORMAT);
             Date endDateObj = DateUtil.parseDateFormat(endDate, DATE_FORMAT);
 
@@ -202,31 +198,18 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                 if (mBadgeDetails.isActive()) {
                     showLeaderBoard.setVisibility(View.VISIBLE);
                     badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
-                } else {
-                    showLeaderBoard.setVisibility(View.GONE);
-                    badgeWonPeriod.setText(getResources().getString(R.string.badge_inactive_period_date_text, day, endDateText));
-                }
-            } else {
-                showLeaderBoard.setVisibility(View.GONE);
-                badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
-            }
 
-            if (!isLeaderBoard) {
-                if (mBadgeDetails.isActive()) {
                     String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
                     badgeDesc.setText(badgeDescription);
                 } else {
+                    showLeaderBoard.setVisibility(View.GONE);
+                    badgeWonPeriod.setText(getResources().getString(R.string.badge_inactive_period_date_text, day, endDateText));
+
                     String badgeDescription = getResources().getString(R.string.inactive_badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
                     badgeDesc.setText(badgeDescription);
                 }
-            } else {
-                String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
-                badgeDesc.setText(badgeDescription);
-            }
 
-
-            //check for how many times user have won the badge
-            if (!isLeaderBoard) {
+                //check for how many times user have won the badge
                 int badgeWonCount = mBadgeDetails.getBadgeCount();
                 if (badgeWonCount > 0) {
                     String badgeWonTimePlurals = getResources().getQuantityString(R.plurals.badgeWonTime, badgeWonCount);
@@ -235,8 +218,20 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                 } else {
                     badgeWonCounterText.setVisibility(View.GONE);
                 }
+
+                showLeaderBoard.setVisibility(View.VISIBLE);
+                viewProfile.setVisibility(View.GONE);
             } else {
+                showLeaderBoard.setVisibility(View.GONE);
+                badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
+
+                String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
+                badgeDesc.setText(badgeDescription);
+
                 badgeWonCounterText.setVisibility(View.GONE);
+
+                showLeaderBoard.setVisibility(View.GONE);
+                viewProfile.setVisibility(View.VISIBLE);
             }
 
             //Analytics
@@ -254,6 +249,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     }
     //endregion
 
+    //region static method
     public static BadgeDetailsDialogFragment showDialog(Activity activity, UserSolrObj userSolrObj, BadgeDetails badgeDetails, String sourceScreen, boolean isLeaderBaord) {
 
         BadgeDetailsDialogFragment badgeDetailsDialogFragment = new BadgeDetailsDialogFragment();
@@ -271,6 +267,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         return badgeDetailsDialogFragment;
 
     }
+    //endregion
 
     //region onclick method
     @OnClick({R.id.cross, R.id.ok})
@@ -303,6 +300,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     }
     //endregion
 
+    //region private method
     private void shareBadgeCard() {
         if (getActivity() == null && getActivity().isFinishing()) return;
 
@@ -363,4 +361,5 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                     });
         }
     }
+    //endregion
 }

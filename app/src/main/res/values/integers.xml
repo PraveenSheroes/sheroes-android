@@ -4,6 +4,7 @@
   <integer name="int_value_for_line_2">2</integer>
   <integer name="int_value_for_line_3">3</integer>
   <integer name="int_value_for_line_4">4</integer>
+  <integer name="profile_desc_max_line_limit">4</integer>
   <integer name="int_value_for_line_14">14</integer>
   <integer name="int_value_for_line_160">160</integer>
 
@@ -13,4 +14,6 @@
 
   <integer name="hashtag2">1000</integer>
   <integer name="hashtag3">500</integer>
+
+  <integer name="badgeIconSize">108</integer>
 </resources>

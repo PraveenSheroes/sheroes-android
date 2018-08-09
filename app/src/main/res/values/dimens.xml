@@ -25,7 +25,6 @@
     <dimen name="dp_size_14">14dp</dimen>
     <dimen name="dp_size_15">15dp</dimen>
     <dimen name="dp_size_20">20dp</dimen>
-    <dimen name="dp_size_26">26dp</dimen>
     <dimen name="dp_size_31">31dp</dimen>
     <dimen name="dp_size_32">32dp</dimen>
     <dimen name="dp_size_30">30dp</dimen>
@@ -228,8 +227,7 @@
     <dimen name="badge_user_image_padding_right">1dp</dimen>
     <dimen name="badge_user_image_padding_left">8dp</dimen>
     <dimen name="badge_title_margin_top">16dp</dimen>
-    <dimen name="badge_desc_margin_right">16dp</dimen>
-    <dimen name="badge_desc_margin_left">16dp</dimen>
+    <dimen name="badge_desc_margin">16dp</dimen>
     <dimen name="badge_desc_margin_top">8dp</dimen>
     <dimen name="badge_share_playstore_margin_top">1dp</dimen>
     <dimen name="badge_share_sheroes_margin_top">1dp</dimen>
@@ -238,7 +236,51 @@
     <dimen name="badge_desc_text">14sp</dimen>
     <dimen name="badge_desc_title_text">20sp</dimen>
 
+    <dimen name="profile_badge_icon">40dp</dimen>
+    <dimen name="profile_badge_margin_right">8dp</dimen>
+    <dimen name="profile_badge_counter_text">14sp</dimen>
 
+    <dimen name="badge_closet_icon_margin">18dp</dimen>
+    <dimen name="badge_closet_counter_text">12sp</dimen>
+    <dimen name="badge_closet_count_margin_right">24dp</dimen>
+    <dimen name="badge_closet_count_margin_top">21dp</dimen>
+    <dimen name="badge_closet_margin">16dp</dimen>
+    <dimen name="badge_closet_won_date">14sp</dimen>
+
+    <dimen name="badge_closet_won_date_margin_top">3dp</dimen>
+    <dimen name="badge_closet_won_date_line_space">6sp</dimen>
+    <dimen name="badge_closet_title_margin">16dp</dimen>
+    <dimen name="badge_closet_title_text">16sp</dimen>
+    <dimen name="badge_closet_title_line_space">8sp</dimen>
+    <dimen name="dialog_badge_details_cross_icon_margin">12dp</dimen>
+    <dimen name="dialog_badge_details_icon_margin">16dp</dimen>
+    <dimen name="dialog_badge_user_image_margin_right">35dp</dimen>
+    <dimen name="dialog_badge_user_image_margin_top">8dp</dimen>
+    <dimen name="dialog_badge_user_image_padding_left">8dp</dimen>
+    <dimen name="dialog_badge_user_image_padding_right">1dp</dimen>
+    <dimen name="dialog_badge_margin">24dp</dimen>
+    <dimen name="dialog_badge_desc_margin_right">20dp</dimen>
+    <dimen name="dialog_badge_margin_top">8dp</dimen>
+    <dimen name="dialog_badge_title_margin_top">21dp</dimen>
+    <dimen name="dialog_badge_line_space">8sp</dimen>
+    <dimen name="dialog_badge_title_text">20sp</dimen>
+    <dimen name="dialog_badge_counter_text">14sp</dimen>
+    <dimen name="dialog_badge_won_date_text">14sp</dimen>
+    <dimen name="dialog_badge_button_text">14sp</dimen>
+    <dimen name="dialog_badge_won_date_margin_left">24dp</dimen>
+    <dimen name="dialog_badge_won_date_margin_top">4dp</dimen>
+    <dimen name="dialog_badge_desc_margin_top">8dp</dimen>
+    <dimen name="dialog_badge_desc_line_space">4sp</dimen>
+    <dimen name="dialog_badge_desc_text">16sp</dimen>
+    <dimen name="dialog_badge_button_padding">16dp</dimen>
+    <dimen name="dialog_badge_button_padding_left">8dp</dimen>
+    <dimen name="dialog_badge_button_padding_right">8dp</dimen>
+    <dimen name="profile_badge_container_top_margin">8dp</dimen>
+    <dimen name="profile_badge_container_top_left">16dp</dimen>
+
+    <dimen name="profile_desc_margin_top">8dp</dimen>
+    <dimen name="profile_desc_line_space">8sp</dimen>
+    <dimen name="profile_desc_text">14sp</dimen>
 
 
 </resources>

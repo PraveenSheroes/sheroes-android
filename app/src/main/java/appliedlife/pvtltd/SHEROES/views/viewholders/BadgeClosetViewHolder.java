@@ -30,8 +30,16 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToT
 
 public class BadgeClosetViewHolder extends RecyclerView.ViewHolder {
 
+    //region constant declaration
+    @SuppressLint("SimpleDateFormat")
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    private static final String UNAVAILABLE_TEXT = "NA";
+    //endregion
+
+    //region private member declaration
     private Context mContext;
     private BadgeClosetAdapter.OnItemClickListener onItemClickListener;
+    //endregion
 
     // region Butterknife Bindings
     @Bind(R.id.badge_icon)
@@ -59,6 +67,8 @@ public class BadgeClosetViewHolder extends RecyclerView.ViewHolder {
             Glide.with(mContext)
                     .load(badgeDetails.getImageUrl())
                     .into(mBadgeIcon);
+        } else {
+            mBadgeIcon.setImageDrawable(ContextCompat.getDrawable(mContext, R.drawable.ic_empty_badge));
         }
 
         badgeTitle.setText(badgeDetails.getName());
@@ -77,12 +87,12 @@ public class BadgeClosetViewHolder extends RecyclerView.ViewHolder {
             String startDate = badgeDetails.getSolrIgnoreStartDate();
 
             if (startDate != null) {
-                @SuppressLint("SimpleDateFormat")
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
                 Date startDateObj = DateUtil.parseDateFormat(startDate, DATE_FORMAT);
                 //date when the badge won.
-                String endDateText = dateFormat.format(startDateObj);
-                badgeWonDate.setText(mContext.getResources().getString(R.string.badge_closet_won_date_text, endDateText));
+                String startDateText = dateFormat.format(startDateObj);
+                badgeWonDate.setText(mContext.getResources().getString(R.string.badge_closet_won_date_text, startDateText));
+            } else {
+                badgeWonDate.setText(mContext.getResources().getString(R.string.badge_closet_won_date_text, UNAVAILABLE_TEXT));
             }
         }
 
