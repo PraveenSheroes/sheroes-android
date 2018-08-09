@@ -188,6 +188,8 @@ public class AppConstants {
     public static final String FAILED = "FAILED";
     public static final String INVALID = "INVALID";
     public static final long SAVED_DAYS_TIME = 2246400000l;
+    public static final int COMMENT_EDIT = 1;
+    public static final int COMMENT_DELETE = 2;
     public static final int ONE_CONSTANT = 1;
     public static final int TWO_CONSTANT = 2;
     public static final int THREE_CONSTANT = 3;

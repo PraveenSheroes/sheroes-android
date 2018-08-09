@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -361,7 +362,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
                             Intent postIntent = new Intent(SheroesDeepLinkingActivity.this, PostDetailActivity.class);
                             postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
-                            postIntent.putExtra(UserPostSolrObj.USER_POST_ID, dataIdString);
+                            postIntent.putExtra(FeedDetail.FEED_OBJ_ID, dataIdString);
                             postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
                             postIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                             postIntent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);

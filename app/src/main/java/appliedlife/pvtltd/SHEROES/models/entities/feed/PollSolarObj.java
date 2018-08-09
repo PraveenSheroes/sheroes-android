@@ -14,6 +14,7 @@ public class PollSolarObj extends FeedDetail {
     }
     @SerializedName("community_i")
     public Long communityId;
+    private int isEditOrDelete;
 
     public void setAnonymous(boolean anonymous) {
         isAnonymous = anonymous;
@@ -25,4 +26,13 @@ public class PollSolarObj extends FeedDetail {
     public void setCommunityId(Long communityId) {
         this.communityId = communityId;
     }
+
+    public int getIsEditOrDelete() {
+        return isEditOrDelete;
+    }
+
+    public void setIsEditOrDelete(int isEditOrDelete) {
+        this.isEditOrDelete = isEditOrDelete;
+    }
+
 }

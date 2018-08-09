@@ -276,7 +276,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
                     UserPostSolrObj userPostSolrObj = null;
-                    Parcelable parcelableUserPost = data.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                    Parcelable parcelableUserPost = data.getParcelableExtra(FeedDetail.FEED_COMMENTS);
                     if (parcelableUserPost != null) {
                         userPostSolrObj = Parcels.unwrap(parcelableUserPost);
                         isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
@@ -607,7 +607,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, (UserPostSolrObj) feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(this, SCREEN_LABEL,feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
     }
 
 

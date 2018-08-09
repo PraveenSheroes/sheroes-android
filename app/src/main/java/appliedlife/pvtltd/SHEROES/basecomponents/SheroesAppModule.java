@@ -144,14 +144,14 @@ public class SheroesAppModule {
                 .registerSubtype(ArticleSolrObj.class, AppConstants.FEED_ARTICLE)
                 .registerSubtype(UserSolrObj.class, AppConstants.USER_SUB_TYPE)
                 .registerSubtype(CommunityFeedSolrObj.class, AppConstants.FEED_COMMUNITY)
-                .registerSubtype(UserPostSolrObj.class, AppConstants.FEED_POLL)
+                .registerSubtype(UserPostSolrObj.class, AppConstants.FEED_COMMUNITY_POST)
                 .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)
                 .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
                 .registerSubtype(LeaderBoardUserSolrObj.class, AppConstants.LEADER_SUB_TYPE)
                 .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE)
-                .registerSubtype(PollSolarObj.class, AppConstants.FEED_COMMUNITY_POST);
+                .registerSubtype(PollSolarObj.class, AppConstants.FEED_POLL);
 
         return new GsonBuilder()
                 .setDateFormat(DATE_FORMATS[0])

@@ -1180,7 +1180,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                         boolean isPostDeleted = false;
                         UserPostSolrObj userPostSolrObj = null;
-                        Parcelable parcelableUserPost = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        Parcelable parcelableUserPost = intent.getParcelableExtra(FeedDetail.FEED_COMMENTS);
                         if (parcelableUserPost != null) {
                             userPostSolrObj = Parcels.unwrap(parcelableUserPost);
                             isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);

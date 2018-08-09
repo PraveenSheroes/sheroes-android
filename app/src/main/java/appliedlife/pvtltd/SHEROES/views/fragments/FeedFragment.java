@@ -766,10 +766,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onUserPostClicked(UserPostSolrObj userPostSolrObj) {
+    public void onUserPostClicked(FeedDetail feedDetail) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
-        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(feedDetail.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
     @Override
@@ -1721,14 +1721,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
-        userPostSolrObj.setIsEditOrDelete(AppConstants.TWO_CONSTANT);
+        userPostSolrObj.setIsEditOrDelete(AppConstants.COMMENT_DELETE);
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
 
     private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
-        userPostSolrObj.setIsEditOrDelete(AppConstants.ONE_CONSTANT);
+        userPostSolrObj.setIsEditOrDelete(AppConstants.COMMENT_EDIT);
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_poll_main_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_size_10"
+    android:background="@color/white"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:id="@+id/li_poll_user_name_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/poll_user_name_header_margin_left"
+        android:layout_marginTop="@dimen/poll_user_name_header_margin_right"
+        android:gravity="top"
+        android:weightSum="1">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_feed_poll_circle_icon"
+                android:layout_width="@dimen/feed_profile_icon_size"
+                android:layout_height="@dimen/feed_profile_icon_size"
+                android:src="@drawable/vector_first_rating" />
+
+            <ImageView
+                android:id="@+id/iv_feed_poll_circle_icon_verified"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/ic_verified"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/feed_poll_card_title_li_margin_left"
+            android:layout_marginRight="@dimen/feed_poll_card_title_li_margin_right"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_feed_poll_card_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="XXXXXXXXXXXXX"
+                android:textColor="@color/comment_text"
+                android:textSize="@dimen/feed_poll_card_title_text_size" />
+
+            <TextView
+                android:id="@+id/tv_feed_poll_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/feed_poll_time_margin"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:text="XXXXXXXXXXXX"
+                android:textColor="@color/feed_card_time"
+                android:textSize="@dimen/feed_poll_time_text_size" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_feed_poll_user_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableRight="@drawable/ic_menu_dashboard"
+            android:paddingBottom="@dimen/feed_poll_user_menu_padding_bottom"
+            android:paddingLeft="@dimen/feed_poll_user_menu_padding_left"
+            android:paddingRight="@dimen/feed_poll_user_menu_padding_right"
+            android:paddingTop="@dimen/feed_poll_user_menu_padding_top" />
+    </LinearLayout>
+
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
+        android:id="@+id/tv_feed_poll_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_poll_description_margin_left_right"
+        android:layout_marginRight="@dimen/feed_poll_description_margin_left_right"
+        android:layout_marginTop="@dimen/feed_poll_description_margin_top"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:lineSpacingExtra="@dimen/feed_poll_description_line_spacing"
+        android:textColor="@color/comment_text"
+        android:textColorLink="@color/view_more"
+        android:textSize="@dimen/feed_poll_description_text_size" />
+
+    <LinearLayout
+        android:id="@+id/li_type_of_poll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"></LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_feed_poll_impression_count_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_poll_impression_count_view_margin_left_right"
+        android:layout_marginRight="@dimen/feed_poll_impression_count_view_margin_left_right"
+        android:layout_marginTop="@dimen/feed_poll_impression_count_view_margin_top">
+
+        <TextView
+            android:id="@+id/tv_feed_poll_total_reactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/feed_poll_total_reactions_margin"
+            android:layout_marginStart="@dimen/feed_poll_total_reactions_margin"
+            android:layout_toEndOf="@id/tv_feed_community_post_reaction1"
+            android:layout_toRightOf="@id/tv_feed_community_post_reaction1"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="Ends in : 1 hour "
+            android:textColor="@color/feed_card_time"
+            android:textSize="@dimen/poll_impression_text" />
+
+        <TextView
+            android:id="@+id/tv_feed_poll_total_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:text="200 votes"
+            android:textColor="@color/feed_card_time"
+            android:textSize="@dimen/poll_impression_text" />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/line_separate"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_size_0.5"
+        android:layout_marginLeft="@dimen/feed_line_margin"
+        android:layout_marginRight="@dimen/feed_line_margin"
+        android:layout_marginTop="@dimen/feed_line_margin_top"
+        android:background="@color/search_tab_unselected_text" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_feed_action_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_action_container_margin"
+        android:layout_marginRight="@dimen/feed_action_container_margin_right"
+        android:layout_marginTop="@dimen/feed_action_container_margin_top"
+        android:clickable="false"
+        android:orientation="horizontal"
+        android:saveEnabled="false">
+
+        <TextView
+            android:id="@+id/tv_feed_poll_user_reaction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_heart_in_active"
+            android:drawablePadding="@dimen/feed_poll_user_reaction_drawable_padding"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:padding="@dimen/feed_poll_user_reaction_padding"
+            android:text="@string/ID_LIKE"
+            android:textColor="@color/recent_post_comment"
+            android:textSize="@dimen/feed_poll_user_reaction_text_size" />
+
+        <TextView
+            android:id="@+id/tv_feed_poll_user_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_feed_poll_user_comment"
+            android:layout_alignBottom="@+id/tv_feed_poll_user_comment"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:drawableLeft="@drawable/ic_share_card"
+            android:drawablePadding="@dimen/feed_poll_user_share_drawable_padding_top"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:paddingBottom="@dimen/feed_poll_user_share_padding"
+            android:paddingLeft="@dimen/feed_poll_user_share_padding"
+            android:paddingRight="@dimen/feed_poll_user_share_padding"
+            android:paddingTop="@dimen/feed_poll_user_share_padding_top"
+            android:text="@string/ID_SHARE_ON_WHATS_APP"
+            android:textColor="@color/share_color"
+            android:textSize="@dimen/feed_poll_user_share_text_size" />
+
+        <TextView
+            android:id="@+id/tv_feed_poll_user_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:drawableLeft="@drawable/ic_comment_icon"
+            android:drawablePadding="@dimen/feed_poll_user_comment_padding"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:paddingBottom="@dimen/feed_poll_user_comment_padding"
+            android:paddingLeft="@dimen/feed_poll_user_comment_padding"
+            android:paddingRight="@dimen/feed_poll_user_comment_padding"
+            android:paddingTop="@dimen/feed_poll_user_comment_padding"
+            android:text="@string/comment"
+            android:textColor="@color/recent_post_comment"
+            android:textSize="@dimen/feed_poll_user_comment_text_size" />
+
+    </RelativeLayout>
+
+</LinearLayout>
+
+

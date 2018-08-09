@@ -27,7 +27,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPostShared(FeedDetail feedDetail);
 
-    void onUserPostClicked(UserPostSolrObj mUserPostObj);
+    void onUserPostClicked(FeedDetail feedDetail);
 
     void onUserPostCommentClicked(UserPostSolrObj userPostObj);
 

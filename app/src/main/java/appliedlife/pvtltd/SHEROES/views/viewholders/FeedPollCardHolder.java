@@ -10,7 +10,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.TypefaceSpan;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
@@ -68,9 +68,6 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     //endregion
 
     //region views
-
-    @Bind(R.id.card_view_poll)
-    CardView mRootLayout;
 
     @Bind(R.id.li_poll_main_layout)
     LinearLayout mLiPollMainLayout;
@@ -139,6 +136,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     //endregion
 
     private BaseHolderInterface viewInterface;
+    private PostDetailCallBack mPostDetailCallBack;
     private PollSolarObj mPollSolarObj;
     private Context mContext;
     private int mItemPosition;
@@ -153,6 +151,17 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         super(itemView);
         ButterKnife.bind(this, itemView);
         viewInterface = baseHolderInterface;
+        initPollCardHolder();
+    }
+
+    public FeedPollCardHolder(View itemView, PostDetailCallBack postDetailCallBack) {
+        super(itemView);
+        ButterKnife.bind(this, itemView);
+        mPostDetailCallBack = postDetailCallBack;
+        initPollCardHolder();
+    }
+
+    private void initPollCardHolder() {
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
@@ -212,13 +221,11 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         rgTextPollInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
-                for(int i=0;i<group.getChildCount();i++) {
-                    RadioButton radioButton =(RadioButton) group.getChildAt(i);
-                    if(radioButton.isChecked())
-                    {
+                for (int i = 0; i < group.getChildCount(); i++) {
+                    RadioButton radioButton = (RadioButton) group.getChildAt(i);
+                    if (radioButton.isChecked()) {
                         radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                    }else
-                    {
+                    } else {
                         radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                     }
                 }
@@ -420,9 +427,11 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
     //endregion
 
-    @OnClick({R.id.tv_feed_poll_user_comment})
+    @OnClick({R.id.tv_feed_poll_user_comment, R.id.li_poll_main_layout})
     public void repliesClick() {
-        // ((FeedItemCallback) viewInterface).onUserPostClicked(mPollSolarObj);
+        if (viewInterface instanceof FeedItemCallback) {
+            ((FeedItemCallback) viewInterface).onUserPostClicked(mPollSolarObj);
+        }
     }
 
 
