@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.BadgeClosetActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -330,6 +331,8 @@ public interface SheroesAppComponent {
     void inject(WebViewActivity webViewActivity);
 
     void inject(CleverTapHelper cleverTapHelper);
+
+    void inject(BadgeClosetActivity badgeClosetActivity);
 
     void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
 

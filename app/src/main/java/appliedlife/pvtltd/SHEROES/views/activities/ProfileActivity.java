@@ -3,10 +3,11 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -35,7 +36,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.style.ImageSpan;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -83,6 +86,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
@@ -98,6 +102,7 @@ import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -129,11 +134,13 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
@@ -144,14 +151,13 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.CommunityEnum.MY_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWERS_COUNT_CLICK;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWING_COUNT_CLICK;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity.BIO_MAX_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.ALL_STAR_END_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.BEGINNER_START_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.INTERMEDIATE_END_LIMIT;
@@ -160,7 +166,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileP
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, ProgressbarView {
+public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, ProgressbarView, ExpandableTextCallback {
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
@@ -171,6 +177,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private static final int ANIMATION_MAX_DURATION = 5000;
     private static final int ADMIN_TYPE_ID = 2;
     private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
+    private static final int MAX_BADGE_COUNT = 4;
+    private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
 
     private Long mChampionId;
     private boolean isMentor;
@@ -256,14 +264,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.profession_container)
     RelativeLayout skillContainer;
 
+    @Bind(R.id.li_loc_profession)
+    LinearLayout locationViewContainer;
+
     @Bind(R.id.tv_loc)
     TextView tvLoc;
 
+    @Bind(R.id.description_container)
+    RelativeLayout descriptionContainer;
+
     @Bind(R.id.tv_mentor_description)
     TextView userDescription;
-
-    @Bind(R.id.description_view_more)
-    TextView viewMoreOnDescription;
 
     @Bind(R.id.cl_home_footer_list)
     public CardView clHomeFooterList;
@@ -321,6 +332,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.user_badge)
     ImageView userBadgeIcon;
 
+    @Bind(R.id.badges_container)
+    LinearLayout badgeContainer;
+
     @Bind(R.id.share_profile)
     TextView shareProfile;
 
@@ -335,6 +349,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Bind(R.id.progress_bar_holder)
     ViewGroup progressbarContainer;
+
+    @Bind(R.id.profile_level_container)
+    LinearLayout profileStrengthViewContainer;
 
     @Bind(R.id.tv_mentor_ask_question)
     TextView tvMentorAskQuestion;
@@ -360,6 +377,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Bind(R.id.cl_story_footer)
     CardView clStoryFooter;
 
+    @BindDimen(R.dimen.profile_badge_icon)
+    int badgeIconSize;
+
+    @BindDimen(R.dimen.profile_badge_margin_right)
+    int bageIconMargin;
+
+    @BindDimen(R.dimen.profile_badge_counter_text)
+    int badgeCounterTextSize;
 
     @BindDimen(R.dimen.dp_size_90)
     int profileSize;
@@ -427,8 +452,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             mLoggedInUserIdTypeId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
         }
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
-        // long profileOwnerId = isMentor ? mUserSolarObject.getIdOfEntityOrParticipant() : mUserSolarObject.getEntityOrParticipantId();
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
+
         setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
@@ -482,7 +507,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         return true;
     }
 
-    public void setProfileNameData(UserSolrObj userSolrObj) {
+    public void setProfileDetails(UserSolrObj userSolrObj) {
         rlMentorFullViewHeader.setVisibility(View.VISIBLE);
         mFeedDetail = userSolrObj;
 
@@ -551,6 +576,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
 
         updateProfileInfo();
+
+        invalidateProfileBadge(userSolrObj);
+
         setPagerAndLayouts();
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
@@ -567,6 +595,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 tvLoc.setText(R.string.add_location);
             } else {
                 tvLoc.setVisibility(View.GONE);
+                //For public profile if location is unfilled hide the container
+                if(!isMentor) {
+                    locationViewContainer.setVisibility(View.GONE);
+                } else {
+                    locationViewContainer.setVisibility(View.VISIBLE);
+                }
             }
         }
         if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) {
@@ -581,11 +615,25 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
-            Spanned description = StringUtil.fromHtml(mUserSolarObject.getDescription());
-            userDescription.setText(description);
+            //For public profile if description is unfilled hide the container
+            String description = mUserSolarObject.getDescription();
+            description = StringUtil.fromHtml(description).toString();
+            if (description.length() > BIO_MAX_LIMIT) {
+                description = description.substring(0, BIO_MAX_LIMIT);
+            }
+
+            if (isOwnProfile) {
+                userDescription.setText(description);
+                ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
+                expandableTextView.makeTextViewResizable(userDescription, 1, ExpandableTextView.VIEW_MORE_TEXT, true, this);
+            } else {
+                userDescription.setText(description);
+            }
         } else {
             if (isOwnProfile) {
                 userDescription.setText(R.string.add_desc);
+            }  else {
+                descriptionContainer.setVisibility(View.GONE);
             }
         }
 
@@ -634,12 +682,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     private void toolTipForAskQuestion() {
+        if(ProfileActivity.this.isFinishing()) return;
+
         try {
             toolTipProfile.setVisibility(View.INVISIBLE);
             final View askQuesToolTip;
             final PopupWindow popupWindowAnswerQuestionTooTip;
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            askQuesToolTip = layoutInflater.inflate(R.layout.tool_tip_arrow_down_side, null);
+            askQuesToolTip = LayoutInflater.from(this).inflate(R.layout.tool_tip_arrow_down_side, null);
             popupWindowAnswerQuestionTooTip = new PopupWindow(askQuesToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             popupWindowAnswerQuestionTooTip.setOutsideTouchable(true);
             popupWindowAnswerQuestionTooTip.showAsDropDown(toolTipProfile, 0, 0);
@@ -1013,7 +1062,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
     }
 
-    @OnClick({R.id.tv_mentor_name, R.id.tv_loc, R.id.tv_mentor_description, R.id.description_view_more})
+    @OnClick({R.id.tv_mentor_name, R.id.tv_loc})
     public void navigateToProfileEditing() {
         if (isOwnProfile) {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
@@ -1241,7 +1290,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (isMentorQARefresh) {
                 profileActivitiesRefresh();
             } else {
-                setProfileNameData(mUserSolarObject);
+                setProfileDetails(mUserSolarObject);
             }
 
             if (isMentor) {
@@ -1281,6 +1330,91 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     public void onUserDeactivation(BaseResponse baseResponse) {
         isUserDeactivated = true;
         onBackClick();
+    }
+
+    public void invalidateProfileBadge(UserSolrObj userSolrObj) {
+        setupSheBadge(userSolrObj); //setup She badge
+
+        setupProfileBadges(userSolrObj); //horizontal badge list on profile
+    }
+
+    private void setupProfileBadges(final UserSolrObj userSolrObj) {
+
+        if (userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList()))
+            return;
+
+        badgeContainer.setVisibility(View.VISIBLE);
+
+        int length = userSolrObj.getUserBadgesList().size();
+        int counter = 0;
+        for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
+            final ImageView badge = new ImageView(this);
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(badgeIconSize, this), CommonUtil.convertDpToPixel(badgeIconSize, this));
+            layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(bageIconMargin, this), 0);
+            badge.setLayoutParams(layoutParams);
+            if(StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
+                Glide.with(badge.getContext())
+                        .load(badgeDetails.getImageUrl())
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                        .into(badge);
+            }
+
+            if (badgeDetails.isActive()) {
+                badge.setBackgroundResource(R.drawable.circular_background_yellow);
+            } else {
+                badge.setBackgroundResource(R.drawable.circular_background_grey);
+            }
+            badgeContainer.addView(badge);
+
+            badge.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BadgeDetailsDialogFragment.showDialog(ProfileActivity.this, mUserSolarObject, badgeDetails, SCREEN_LABEL, false);
+                }
+            });
+            counter++;
+
+            if(counter == MAX_BADGE_COUNT) break;
+        }
+
+        if (length > MAX_BADGE_COUNT) {
+            TextView badgeCount = new TextView(this);
+            badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
+            badgeCount.setTextSize(badgeCounterTextSize);
+            badgeCount.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.badge_counter)));
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(bageIconMargin, this), CommonUtil.convertDpToPixel(bageIconMargin, this));
+            badgeCount.setLayoutParams(layoutParams);
+            badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
+            badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
+            badgeCount.setGravity(Gravity.CENTER);
+            badgeContainer.addView(badgeCount);
+
+            badgeCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    BadgeClosetActivity.navigateTo(ProfileActivity.this, userSolrObj.getUserBadgesList() , userSolrObj, SCREEN_LABEL);
+                }
+            });
+        }
+    }
+
+    private void setupSheBadge(UserSolrObj userSolrObj) {
+
+        if(userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
+                    userBadgeIcon.setVisibility(View.VISIBLE);
+                    Glide.with(userBadgeIcon.getContext())
+                    .load(userSolrObj.getProfileBadgeUrl())
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                    .into(userBadgeIcon);
+        } else if(!userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
+            userBadgeIcon.setVisibility(View.VISIBLE);
+            Glide.with(userBadgeIcon.getContext())
+                    .load(userSolrObj.getProfileBadgeUrl())
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                    .into(userBadgeIcon);
+        } else {
+            userBadgeIcon.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -1666,8 +1800,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         }
 
         if (StringUtil.isNotNullOrEmptyString(userBio)) {
-            userDescription.setText(userBio);
-            mUserSolarObject.setDescription(userBio);
+            String description = userBio;
+            description = StringUtil.fromHtml(description).toString();
+            if (description.length() > BIO_MAX_LIMIT) {
+                description = description.substring(0, BIO_MAX_LIMIT);
+            }
+            userDescription.setText(description);
+            userDescription.setTag(null);
+            ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
+            expandableTextView.makeTextViewResizable(userDescription, 1, ExpandableTextView.VIEW_MORE_TEXT, true, this);
+
+            mUserSolarObject.setDescription(description);
         }
 
         if (progressPercentage != -1) {
@@ -2250,4 +2393,17 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         animationOnProgressBar();
     }
+
+    @Override
+    public void onTextResize(boolean isCollapsed) {
+        if (!isCollapsed) {
+            progressbarContainer.setVisibility(View.VISIBLE);
+            profileStrengthViewContainer.setVisibility(View.VISIBLE);
+        } else {
+            progressbarContainer.setVisibility(View.GONE);
+            profileStrengthViewContainer.setVisibility(View.GONE);
+        }
+    }
+
+
 }

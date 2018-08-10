@@ -62,6 +62,9 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     @BindDimen(R.dimen.dp_size_40)
     int mUserPicSize;
 
+    @BindDimen(R.dimen.dp_size_40)
+    int mBadgeIconSize;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -101,7 +104,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             itemContainer.setOnClickListener(this);
 
             if (leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null && CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
-                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mUserPicSize, mUserPicSize);
+                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mBadgeIconSize, mBadgeIconSize);
                 Glide.with(badgeIcon.getContext())
                         .load(trophyImageUrl)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(badgeIcon.getContext())))
@@ -136,20 +139,20 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             } else {
                 itemContainer.setBackgroundColor(Color.WHITE);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.leader_board_badge_sub_text));
-                mName.setTextColor(ContextCompat.getColor(context, R.color.gray_light));
+                mName.setTextColor(ContextCompat.getColor(context, R.color.leaderboard_user));
                 itemContainer.setBackground(null);
                 layoutParams.setMargins(0, 0, 0, 0);
             }
             itemContainer.setLayoutParams(layoutParams);
 
             if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null) {
-                if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isIsActive()) {
+                if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isActive()) {
                     badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
                 } else {
                     badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
                 }
             }
-            mProfilePic.setBackgroundResource(R.drawable.circular_background_grey);
+            mProfilePic.setBackgroundResource(R.drawable.circular_leaderbaord_user_icon_background_grey);
         }
     }
 

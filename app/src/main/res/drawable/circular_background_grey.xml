@@ -2,8 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
 
     <stroke
-        android:width="@dimen/dp_size_1"
-        android:color="@color/on_board_work" />
+        android:width="1.5dp"
+        android:color="@color/badge_inactive_circle" />
+
+    <solid android:color="@color/white"/>
 
     <corners
         android:bottomLeftRadius="@dimen/dp_size_40"
@@ -16,9 +18,9 @@
         android:height="@dimen/dp_size_40" />
 
     <padding
-        android:bottom="@dimen/dp_size_1"
-        android:left="@dimen/dp_size_1"
-        android:right="@dimen/dp_size_1"
-        android:top="@dimen/dp_size_1" />
+        android:bottom="@dimen/dp_size_2"
+        android:left="@dimen/dp_size_2"
+        android:right="@dimen/dp_size_2"
+        android:top="@dimen/dp_size_2" />
 
 </shape>
