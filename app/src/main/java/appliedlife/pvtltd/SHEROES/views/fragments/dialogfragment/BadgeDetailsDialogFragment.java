@@ -193,7 +193,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String day = dayFormat.format(startDateObj);
             String endDateText = dateFormat.format(endDateObj);
 
-            //For profile if badge is inactive show message "Won last on" other "Won Latest on" and hide o
+            //For profile if badge is inactive show message "Won last on" & for other "Won Latest on"
             if (!isLeaderBoard) {
                 if (mBadgeDetails.isActive()) {
                     showLeaderBoard.setVisibility(View.VISIBLE);
@@ -218,18 +218,14 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                 } else {
                     badgeWonCounterText.setVisibility(View.GONE);
                 }
-
-                showLeaderBoard.setVisibility(View.VISIBLE);
                 viewProfile.setVisibility(View.GONE);
             } else {
-                showLeaderBoard.setVisibility(View.GONE);
                 badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
 
                 String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
                 badgeDesc.setText(badgeDescription);
 
                 badgeWonCounterText.setVisibility(View.GONE);
-
                 showLeaderBoard.setVisibility(View.GONE);
                 viewProfile.setVisibility(View.VISIBLE);
             }

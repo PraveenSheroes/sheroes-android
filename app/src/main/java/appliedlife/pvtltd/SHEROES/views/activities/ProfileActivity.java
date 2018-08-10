@@ -1349,8 +1349,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         int counter = 0;
         for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
             final ImageView badge = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(badgeIconSize, this), CommonUtil.convertDpToPixel(badgeIconSize, this));
-            layoutParams.setMargins(0, 0, CommonUtil.convertDpToPixel(bageIconMargin, this), 0);
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
+            layoutParams.setMargins(0, 0, bageIconMargin, 0);
             badge.setLayoutParams(layoutParams);
             if(StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
                 Glide.with(badge.getContext())
@@ -1382,7 +1382,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
             badgeCount.setTextSize(badgeCounterTextSize);
             badgeCount.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.badge_counter)));
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(CommonUtil.convertDpToPixel(bageIconMargin, this), CommonUtil.convertDpToPixel(bageIconMargin, this));
+            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(badgeIconSize,badgeIconSize);
             badgeCount.setLayoutParams(layoutParams);
             badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
             badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
