@@ -402,7 +402,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 branch.initSession(new Branch.BranchReferralInitListener() {
                                        @Override
                                        public void onInitFinished(JSONObject referringParams, BranchError error) {
-                                           deepLinkingRedirection(referringParams);
+                                           deepLinkingRedirection();
                                        }
                                    }
                         , this.getIntent().getData(), this);
@@ -1360,9 +1360,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         ((SimpleItemAnimator) mRecyclerViewDrawerCommunities.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
-    private void deepLinkingRedirection(JSONObject sessionParams) {
+    private void deepLinkingRedirection() {
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
+        Branch branch = Branch.getInstance(getApplicationContext());
+        JSONObject sessionParams = branch.getFirstReferringParams();
         Intent intent;
         try {
             if (sessionParams.length() > 0) {
