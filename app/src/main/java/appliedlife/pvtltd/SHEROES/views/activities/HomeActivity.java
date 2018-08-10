@@ -101,12 +101,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotification;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
@@ -171,7 +171,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, ArticleCategorySpinnerFragment.HomeSpinnerFragmentListner, HomeView {
+public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
@@ -314,7 +314,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     // region member variables
     private GenericRecyclerViewAdapter mAdapter;
-    private List<HomeSpinnerItem> mHomeSpinnerItemList = new ArrayList<>();
+    private List<ArticleCategory> mArticleCategoryItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
@@ -515,7 +515,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
-             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
+            /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         } else if (baseResponse instanceof FAQS) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
@@ -560,7 +560,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public List getListData() {
-        return mHomeSpinnerItemList;
+        return mArticleCategoryItemList;
     }
 
     @Override
@@ -608,16 +608,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
         if (!AppUtils.isFragmentUIActive(fragment)) {
             mFlHomeFooterList.setVisibility(View.GONE);
-            if (!StringUtil.isNotEmptyCollection(mHomeSpinnerItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
-                setArticleCategoryFilterValues();
-                mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
-            } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getHomeSpinnerItemList())) {
-                mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
+            if (!StringUtil.isNotEmptyCollection(mArticleCategoryItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getArticleCategoryList())) {
+                // select category id when it comes from deeplinks otherwise on manual click change the selected category
+                setArticleCategoryFilterValues(-1);
+                mFragmentOpen.setArticleCategoryList(mArticleCategoryItemList);
+            } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getArticleCategoryList())) {
+                mArticleCategoryItemList = mFragmentOpen.getArticleCategoryList();
             }
             mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
-            Parcelable parcelable = Parcels.wrap(mHomeSpinnerItemList);
-            bundle.putParcelable(AppConstants.HOME_SPINNER_FRAGMENT, parcelable);
+            Parcelable parcelable = Parcels.wrap(mArticleCategoryItemList);
+            bundle.putParcelable(AppConstants.ARTICLE_CATEGORY_SPINNER_FRAGMENT, parcelable);
             mArticleCategorySpinnerFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
         }
@@ -806,27 +807,27 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Override
     public void setListData(BaseResponse data, boolean isCheked) {
-        List<HomeSpinnerItem> localList = new ArrayList<>();
-        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-            HomeSpinnerItem passedHomeItem = (HomeSpinnerItem) data;
+        List<ArticleCategory> localList = new ArrayList<>();
+        if (StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
+            ArticleCategory passedHomeItem = (ArticleCategory) data;
             if (passedHomeItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
-                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                    homeSpinnerItem.setChecked(passedHomeItem.isChecked());
-                    localList.add(homeSpinnerItem);
+                for (ArticleCategory articleCategory : mArticleCategoryItemList) {
+                    articleCategory.setChecked(passedHomeItem.isChecked());
+                    localList.add(articleCategory);
                 }
             } else {
-                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                    if (homeSpinnerItem.getId() == (passedHomeItem.getId())) {
-                        homeSpinnerItem.setChecked(passedHomeItem.isChecked());
-                        localList.add(homeSpinnerItem);
+                for (ArticleCategory articleCategory : mArticleCategoryItemList) {
+                    if (articleCategory.getId() == (passedHomeItem.getId())) {
+                        articleCategory.setChecked(passedHomeItem.isChecked());
+                        localList.add(articleCategory);
                     } else {
-                        localList.add(homeSpinnerItem);
+                        localList.add(articleCategory);
                     }
                 }
             }
         }
-        mHomeSpinnerItemList.clear();
-        mHomeSpinnerItemList.addAll(localList);
+        mArticleCategoryItemList.clear();
+        mArticleCategoryItemList.addAll(localList);
     }
 
 
@@ -985,67 +986,70 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mHomePresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
     }
 
-    @Override
     public void onCancelDone(int pressedEvent) {
-        if (AppConstants.ONE_CONSTANT == pressedEvent) {
+        if (ArticleCategorySpinnerFragment.CATEGORY_SELECTED_DONE == pressedEvent) {
             getSupportFragmentManager().popBackStack(ArticlesFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            mTvCategoryChoose.setVisibility(View.GONE);
-            StringBuilder stringBuilder = new StringBuilder();
-            mFragmentOpen.setHomeSpinnerItemList(mHomeSpinnerItemList);
-            if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-                List<Long> categoryIds = new ArrayList<>();
-                List<HomeSpinnerItem> localList = new ArrayList<>();
-                for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                    if (homeSpinnerItem.isChecked()) {
-                        categoryIds.add(homeSpinnerItem.getId());
-                        if (!homeSpinnerItem.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
-                            stringBuilder.append(homeSpinnerItem.getName());
-                            stringBuilder.append(AppConstants.COMMA);
-                        }
-                        homeSpinnerItem.setDone(true);
-                    } else {
-                        homeSpinnerItem.setDone(false);
-                    }
-                    localList.add(homeSpinnerItem);
-                }
-                if (StringUtil.isNotEmptyCollection(localList)) {
-                    mHomeSpinnerItemList.clear();
-                    mHomeSpinnerItemList.addAll(localList);
-                }
-                if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
-                    String total = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
-                    if (total.length() > 25) {
-                        total = stringBuilder.toString().substring(0, 25) + AppConstants.DOTS;
-                        mTvCategoryText.setText(total);
-                    } else {
-                        mTvCategoryText.setText(total);
-                    }
-                } else {
-                    mTvCategoryText.setText(AppConstants.EMPTY_STRING);
-                    mTvCategoryChoose.setVisibility(View.VISIBLE);
-                }
-                openArticleFragment(categoryIds, false);
-            }
+            articleCategorySelected();
         } else {
-            mHomeSpinnerItemList = mFragmentOpen.getHomeSpinnerItemList();
-            List<HomeSpinnerItem> localList = new ArrayList<>();
-            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                if (homeSpinnerItem.isDone()) {
-                    homeSpinnerItem.setChecked(true);
+            mArticleCategoryItemList = mFragmentOpen.getArticleCategoryList();
+            List<ArticleCategory> localList = new ArrayList<>();
+            for (ArticleCategory articleCategory : mArticleCategoryItemList) {
+                if (articleCategory.isDone()) {
+                    articleCategory.setChecked(true);
                 } else {
-                    homeSpinnerItem.setChecked(false);
+                    articleCategory.setChecked(false);
                 }
-                localList.add(homeSpinnerItem);
+                localList.add(articleCategory);
             }
             if (StringUtil.isNotEmptyCollection(localList)) {
-                mHomeSpinnerItemList.clear();
-                mHomeSpinnerItemList.addAll(localList);
+                mArticleCategoryItemList.clear();
+                mArticleCategoryItemList.addAll(localList);
             }
 
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
             if (AppUtils.isFragmentUIActive(fragment)) {
                 getSupportFragmentManager().popBackStackImmediate();
             }
+        }
+    }
+
+    private void articleCategorySelected() {
+        mTvCategoryChoose.setVisibility(View.GONE);
+        mFragmentOpen.setArticleCategoryList(mArticleCategoryItemList);
+        StringBuilder stringBuilder = new StringBuilder();
+        if (StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
+            List<Long> categoryIds = new ArrayList<>();
+            List<ArticleCategory> localList = new ArrayList<>();
+            for (ArticleCategory articleCategory : mArticleCategoryItemList) {
+                if (articleCategory.isChecked()) {
+                    categoryIds.add(articleCategory.getId());
+                    if (!articleCategory.getName().equalsIgnoreCase(AppConstants.FOR_ALL)) {
+                        stringBuilder.append(articleCategory.getName());
+                        stringBuilder.append(AppConstants.COMMA);
+                    }
+                    articleCategory.setDone(true);
+                } else {
+                    articleCategory.setDone(false);
+                }
+                localList.add(articleCategory);
+            }
+            if (StringUtil.isNotEmptyCollection(localList)) {
+                mArticleCategoryItemList.clear();
+                mArticleCategoryItemList.addAll(localList);
+            }
+            if (StringUtil.isNotNullOrEmptyString(stringBuilder.toString())) {
+                String total = stringBuilder.toString().substring(0, stringBuilder.length() - 1);
+                if (total.length() > 25) {
+                    total = stringBuilder.toString().substring(0, 25) + AppConstants.DOTS;
+                    mTvCategoryText.setText(total);
+                } else {
+                    mTvCategoryText.setText(total);
+                }
+            } else {
+                mTvCategoryText.setText(AppConstants.EMPTY_STRING);
+                mTvCategoryChoose.setVisibility(View.VISIBLE);
+            }
+            openArticleFragment(categoryIds, false);
         }
     }
 
@@ -1140,7 +1144,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         resetHamburgerSelectedItems();
         if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
@@ -1229,7 +1233,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
-                    openArticleFragment(setCategoryIds(), false);
+                    openArticleFragment(intent);
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
@@ -1264,6 +1268,21 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     //endregion
 
     // region Private methods
+    private void openArticleFragment(Intent intent)
+    {
+        if (intent.hasExtra(AppConstants.ARTICLE_CATEGORY_ID)) {
+            long categoryId = intent.getLongExtra(AppConstants.ARTICLE_CATEGORY_ID, -1);
+            if (categoryId > -1) {
+                setArticleCategoryFilterValues(categoryId);
+                if(StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
+                    articleCategorySelected();
+                }
+            }
+        } else {
+            openArticleFragment(setCategoryIds(), false);
+        }
+    }
+
     private void toolTipForNotification() {
         try {
             if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
@@ -1300,7 +1319,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
                 if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                     if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
-                        openArticleFragment(setCategoryIds(), false);
+                        openArticleFragment(getIntent());
                     }
                 }
                 if (CommonUtil.isNotEmpty(getIntent().getStringExtra(AppConstants.HELPLINE_CHAT)) && getIntent().getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
@@ -1495,7 +1514,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void setArticleCategoryFilterValues() {
+    private void setArticleCategoryFilterValues(long categoryId) {
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get().getData()) {
             HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
             if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
@@ -1503,18 +1522,23 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
                     List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
                     if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
-                        List<HomeSpinnerItem> homeSpinnerItemList = new ArrayList<>();
-                        HomeSpinnerItem first = new HomeSpinnerItem();
+                        List<ArticleCategory> articleCategoryList = new ArrayList<>();
+                        ArticleCategory first = new ArticleCategory();
                         first.setName(AppConstants.FOR_ALL);
-                        homeSpinnerItemList.add(first);
+                        articleCategoryList.add(first);
                         for (LabelValue lookingFor : labelValueArrayList) {
 
-                            HomeSpinnerItem homeSpinnerItem = new HomeSpinnerItem();
-                            homeSpinnerItem.setId(lookingFor.getValue());
-                            homeSpinnerItem.setName(lookingFor.getLabel());
-                            homeSpinnerItemList.add(homeSpinnerItem);
+                            ArticleCategory articleCategory = new ArticleCategory();
+                            articleCategory.setId(lookingFor.getValue());
+                            if (categoryId > 0) {
+                                if (lookingFor.getValue() == categoryId) {
+                                    articleCategory.setChecked(true);
+                                }
+                            }
+                            articleCategory.setName(lookingFor.getLabel());
+                            articleCategoryList.add(articleCategory);
                         }
-                        mHomeSpinnerItemList = homeSpinnerItemList;
+                        mArticleCategoryItemList = articleCategoryList;
                     }
                 }
             }
@@ -1859,10 +1883,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private List<Long> setCategoryIds() {
         List<Long> categoryIds = new ArrayList<>();
-        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-            for (HomeSpinnerItem homeSpinnerItem : mHomeSpinnerItemList) {
-                if (homeSpinnerItem.isChecked()) {
-                    categoryIds.add(homeSpinnerItem.getId());
+        if (StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
+            for (ArticleCategory articleCategory : mArticleCategoryItemList) {
+                if (articleCategory.isChecked()) {
+                    categoryIds.add(articleCategory.getId());
                 }
             }
         }

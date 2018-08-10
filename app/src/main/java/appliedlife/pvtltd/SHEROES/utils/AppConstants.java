@@ -52,7 +52,7 @@ public class AppConstants {
     public static final String AT_THE_RATE_OF = "@";
 
     public static final String SHARED_PREFS = "SHARED_PREFS";
-    public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
+    public static final String ARTICLE_CATEGORY_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
     public static final String HOURS = " Hrs ";
@@ -276,6 +276,8 @@ public class AppConstants {
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
     public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
+    public static final String ARTICLE_CATEGORY_URL_COM = "https://sheroes.com/articles/category";
+    public static final String ARTICLE_CATEGORY_URL_IN = "https://sheroes.in/articles/category";
     public static final String STORIES_URL = "https://sheroes.in/stories";
     public static final String STORIES_URL_COM = "https://sheroes.com/stories";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
@@ -321,6 +323,7 @@ public class AppConstants {
     public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
+    public static final String ARTICLE_CATEGORY_ID = "article_category_id";
     public static final String CHAMPION_ID = "champion_id";
     public static final String IS_MENTOR_ID = "is_mentor";
     public static final String COMMUNITY_ID = "community_id";

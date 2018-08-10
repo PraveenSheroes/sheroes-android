@@ -10,7 +10,7 @@ import java.util.List;
 @Parcel(analyze = {FragmentOpen.class})
 public class FragmentOpen {
 
-    private List<HomeSpinnerItem> homeSpinnerItemList;
+    private List<ArticleCategory> articleCategoryList;
 
     private boolean isOwner;
     private boolean isICCMemberListFragment;
@@ -20,12 +20,12 @@ public class FragmentOpen {
     public FragmentOpen() {
     }
 
-    public List<HomeSpinnerItem> getHomeSpinnerItemList() {
-        return homeSpinnerItemList;
+    public List<ArticleCategory> getArticleCategoryList() {
+        return articleCategoryList;
     }
 
-    public void setHomeSpinnerItemList(List<HomeSpinnerItem> homeSpinnerItemList) {
-        this.homeSpinnerItemList = homeSpinnerItemList;
+    public void setArticleCategoryList(List<ArticleCategory> articleCategoryList) {
+        this.articleCategoryList = articleCategoryList;
     }
 
     public boolean isOwner() {
