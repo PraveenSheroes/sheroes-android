@@ -252,6 +252,7 @@
     <dimen name="feed_imagepoll_width">155dp</dimen>
     <dimen name="feed_imagepoll_height">130dp</dimen>
     <dimen name="feed_imagepoll_margin_left">16dp</dimen>
+    <dimen name="feed_imagepoll_progress_text_margin">8dp</dimen>
 
 
 

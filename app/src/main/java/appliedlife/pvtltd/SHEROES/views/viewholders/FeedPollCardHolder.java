@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.SpannableString;
@@ -193,7 +194,8 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         this.mPollSolarObj = item;
         mContext = context;
         mPollSolarObj.setItemPosition(position);
-        addTextPollInputViews();
+        //addTextPollInputViews();
+        addImagePollViews();
         //  showPostUiFieldsWithData();
     }
 
@@ -246,6 +248,43 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         pbPollPercent.setProgress(50);
         tvPollPercentNumber.setText(50 + "%");
         ivPercentVerified.setVisibility(View.GONE);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
+        liImageRatingRow.setLayoutParams(params);
+        mLiTypeOfPollView.addView(liImageRatingRow);
+    }
+
+    private void addImagePollViews() {
+        final View pollLayout = LayoutInflater.from(mContext).inflate(R.layout.feed_poll_card_imagepoll_layout, null);
+        final LinearLayout liImageRatingRow = pollLayout.findViewById(R.id.li_feed_imagepoll_row);
+        final ConstraintLayout clImagePollLeftContainer = pollLayout.findViewById(R.id.cl_imagepoll_left_container);
+        final ConstraintLayout clImagePollRightContainer = pollLayout.findViewById(R.id.cl_imagepoll_right_container);
+        clImagePollLeftContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+        clImagePollRightContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        ProgressBar pbPollPercentLeft = pollLayout.findViewById(R.id.pb_imagepoll_percent_left);
+        ProgressBar pbPollPercentRight = pollLayout.findViewById(R.id.pb_imagepoll_percent_right);
+        TextView tvPollPercentNumberLeft = pollLayout.findViewById(R.id.tv_imagepoll_percent_count_left);
+        TextView tvPollPercentNumberRight = pollLayout.findViewById(R.id.tv_imagepoll_percent_count_right);
+        TextView tvImagePollNameLeft = pollLayout.findViewById(R.id.tv_imagepoll_name_left);
+        TextView tvImagePollNameRight = pollLayout.findViewById(R.id.tv_imagepoll_name_right);
+        ImageView ivFeedImagePollLeft = pollLayout.findViewById(R.id.iv_feed_image_poll_left);
+        ImageView ivFeedImagePollRight = pollLayout.findViewById(R.id.iv_feed_image_poll_right);
+        pbPollPercentLeft.setProgress(50);
+        pbPollPercentRight.setProgress(65);
+        tvPollPercentNumberLeft.setText(50 + "%");
+        tvPollPercentNumberRight.setText(65+ "%");
+
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liImageRatingRow.setLayoutParams(params);
