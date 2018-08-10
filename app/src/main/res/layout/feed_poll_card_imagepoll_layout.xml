@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/li_feed_imagepoll_row"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_imagepoll_left_container"
+        android:layout_width="@dimen/feed_imagepoll_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_imagepoll_margin_left"
+        android:layout_marginStart="@dimen/feed_imagepoll_margin_left">
+
+        <ImageView
+            android:id="@+id/iv_feed_image_poll_left"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_imagepoll_height"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <ProgressBar
+            android:id="@+id/pb_imagepoll_percent_left"
+            style="@style/PollProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:alpha=".7"
+            android:progress="40"
+            android:theme="@style/PollProgressBar"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_left" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_percent_count_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:text="70 % Vote"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_left" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_name_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme"
+            android:drawableRight="@drawable/vector_poll_percent_verified"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:paddingRight="@dimen/dp_size_8"
+            android:text="Tops, Jeans and data"
+            android:textColor="@color/comment_text"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_left" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_imagepoll_right_container"
+        android:layout_width="@dimen/feed_imagepoll_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_imagepoll_margin_left"
+        android:layout_marginStart="@dimen/feed_imagepoll_margin_left">
+
+        <ImageView
+            android:id="@+id/iv_feed_image_poll_right"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_imagepoll_height"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            android:src="@drawable/vector_image_poll" />
+
+        <ProgressBar
+            android:id="@+id/pb_imagepoll_percent_right"
+            style="@style/PollProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:alpha=".7"
+            android:progress="40"
+            android:theme="@style/PollProgressBar"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_right" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_percent_count_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:text="70 % Vote"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_right" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_name_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/theme"
+            android:drawableRight="@drawable/vector_poll_percent_verified"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:paddingRight="@dimen/dp_size_8"
+            android:text="Tops, Jeans and data"
+            android:textColor="@color/comment_text"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_right" />
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>
