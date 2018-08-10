@@ -80,7 +80,7 @@
 
         <meta-data
             android:name="GCM_SENDER_ID"
-            android:value="@string/ID_CLEVER_TAP_PROJECT_ID" />
+            android:value="${cleverTapSenderId}" />
 
         <meta-data
             android:name="io.branch.sdk.BranchKey"
