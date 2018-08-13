@@ -7,7 +7,7 @@
     android:background="@color/background_color_project_number"
     android:orientation="vertical"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="80dp"
+    app:behavior_peekHeight="@dimen/bottom_sheet_post_poll_height"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
     <android.support.v7.widget.RecyclerView
@@ -158,35 +158,6 @@
                 android:textColor="@color/comment_text"
                 android:textSize="@dimen/phot_poll_lable_text_size" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/li_choose_poll_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:background="@drawable/vector_poll_type_bg"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_choose_poll_lable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/choose_poll_type_margin"
-            android:layout_marginStart="@dimen/choose_poll_type_margin"
-            android:layout_marginTop="@dimen/choose_poll_type_margin"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="@string/choose_poll"
-            android:textColor="@color/recent_post_comment"
-            android:textSize="16sp" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_poll_type_list"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/poll_type_height"
-            android:layout_marginLeft="@dimen/choose_poll_type_margin"
-            android:layout_marginStart="@dimen/choose_poll_type_margin"
-            android:layout_marginTop="@dimen/choose_poll_type_margin" />
     </LinearLayout>
 
 </LinearLayout>

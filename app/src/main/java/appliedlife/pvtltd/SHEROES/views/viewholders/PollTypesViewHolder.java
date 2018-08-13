@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
+import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -27,6 +28,7 @@ public class PollTypesViewHolder extends BaseViewHolder<PollType> {
     private BaseHolderInterface viewInterface;
     private PollType mPollType;
     private Context mContext;
+    private PostBottomSheetFragment mPostBottomSheetFragment;
     //endregion
 
     //region bind variables
@@ -44,10 +46,11 @@ public class PollTypesViewHolder extends BaseViewHolder<PollType> {
     //endregion
 
     //region constructor
-    public PollTypesViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public PollTypesViewHolder(View itemView, BaseHolderInterface baseHolderInterface, PostBottomSheetFragment postBottomSheetFragment) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
+        this.mPostBottomSheetFragment = postBottomSheetFragment;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
     //endregion
@@ -91,6 +94,7 @@ public class PollTypesViewHolder extends BaseViewHolder<PollType> {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
                 if (viewInterface instanceof PollTypeCallBack) {
+                    mPostBottomSheetFragment.dismiss();
                     ((PollTypeCallBack) viewInterface).onPollTypeClicked(mPollType);
                 }
             }

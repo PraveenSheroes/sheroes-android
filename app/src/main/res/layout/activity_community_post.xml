@@ -41,7 +41,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_above="@id/li_upload_image_container"
         android:layout_below="@id/fb_share_container"
         android:background="@color/white">

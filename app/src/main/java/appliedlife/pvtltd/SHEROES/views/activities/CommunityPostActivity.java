@@ -25,7 +25,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -127,7 +126,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.adapters.PollSurveyTypeAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -265,12 +263,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.li_upload_image_container)
     LinearLayout liUploadImageContainer;
 
-    @Bind(R.id.li_choose_poll_type)
-    LinearLayout liChoosePollType;
-
-    @Bind(R.id.rv_poll_type_list)
-    RecyclerView mRvPollTypeList;
-
     @Bind(R.id.li_poll_container)
     LinearLayout mLiPollContainer;
 
@@ -339,8 +331,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<String> mNewEncodedImages = new ArrayList<>();
     private List<Long> mDeletedImageIdList = new ArrayList<>();
     private List<Mention> mMentionList;
-    private boolean mIsPollClicked;
-    private boolean mPollOptionClicked;
     private ImageView mIvImagePollLeft, mIvImagePollRight;
 
     //endregion
@@ -469,11 +459,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     setImageCount();
                     mAnonymousView.setVisibility(View.VISIBLE);
                 } else {
-                    if (!mIsPollClicked) {
-                        liChoosePollType.setVisibility(View.GONE);
-                    } else {
-                        mIsPollClicked = false;
-                    }
                     bottomSheetCollapsed();
                 }
             }
@@ -542,10 +527,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag, 0);
                 }
             }
-           /* RelativeLayout.LayoutParams layoutParams =
-                    (RelativeLayout.LayoutParams) mUserName.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-            mUserName.setLayoutParams(layoutParams);*/
+
         } else {
             fbShareContainer.setVisibility(View.GONE);
             mIsAnonymous = mCommunityPost.isAnonymous;
@@ -1494,10 +1476,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void setImageCount() {
         mImageCount.setText(getString(R.string.image_count, mImageList.size(), MAX_IMAGE));
-        if (mImageList.size() == MAX_IMAGE || mPollOptionClicked) {
+        if (mImageList.size() == MAX_IMAGE) {
             mImageUploadView.setVisibility(View.GONE);
         } else {
-            mPollOptionClicked = false;
             mImageUploadView.setVisibility(View.VISIBLE);
         }
         if (mImageList.size() > 0) {
@@ -1712,25 +1693,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearPollSurvey.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                if (mImageUploadView.getOrientation() == LinearLayout.HORIZONTAL) {
-                    mIsPollClicked = true;
-                }
                 CommonUtil.hideKeyboard(CommunityPostActivity.this);
-                bottomSheetCollapsed();
-                liChoosePollType.setVisibility(View.VISIBLE);
+                mSuggestionList.setVisibility(View.GONE);
                 List<PollType> pollTypeList = new ArrayList<>();
-                for (int i = 1; i < 5; i++) {
+                for (int i = 1; i < 3; i++) {
                     PollType pollType = new PollType();
                     pollType.id = i;
                     pollType.title = "Text Poll";
                     pollType.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
                     pollTypeList.add(pollType);
                 }
-                PollSurveyTypeAdapter pollSurveyTypeAdapter = new PollSurveyTypeAdapter(CommunityPostActivity.this, CommunityPostActivity.this);
-                GridLayoutManager gridLayoutManager = new GridLayoutManager(CommunityPostActivity.this, 2);
-                mRvPollTypeList.setLayoutManager(gridLayoutManager);
-                mRvPollTypeList.setAdapter(pollSurveyTypeAdapter);
-                pollSurveyTypeAdapter.setData(pollTypeList);
+                PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollTypeList);
             }
         });
 
@@ -1758,7 +1731,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @OnTouch({R.id.tv_add_photo_lable, R.id.li_image_upload_view})
     public boolean onAddPhotoClicked() {
-        liChoosePollType.setVisibility(View.GONE);
         bottomSheetExpanded();
         CommonUtil.hideKeyboard(this);
         return true;
@@ -1910,14 +1882,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void onPollTypeClicked(PollType pollType) {
         mImageList.clear();
-        mPollOptionClicked = true;
-        liChoosePollType.setVisibility(View.GONE);
-        mImageUploadView.setVisibility(View.GONE);
         CommonUtil.hideKeyboard(this);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
         mRlImageList.setVisibility(View.GONE);
+        liUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
         switch (pollType.id) {
             case 1:
@@ -1945,9 +1915,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void addPollSelectionDay() {
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
         PopupMenu popup = new PopupMenu(this, tvDaySelector);
-        for(int i = 1; i<= pollTime.length; i++)
-        {
-            popup.getMenu().add(0, i, i, menuWithText(pollTime[i-1]));
+        for (int i = 1; i <= pollTime.length; i++) {
+            popup.getMenu().add(0, i, i, menuWithText(pollTime[i - 1]));
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {

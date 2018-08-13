@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.viewholders.MyCommunitiesViewHolder;
+import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PollTypesViewHolder;
 
 
@@ -27,22 +27,24 @@ public class PollSurveyTypeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<PollType> mPollTypes = null;
     private final Context mContext;
     private BaseHolderInterface baseHolderInterface;
+    private PostBottomSheetFragment mPostBottomSheetFragment;
     //endregion
 
 
     //region Constructor
-    public PollSurveyTypeAdapter(Context context, BaseHolderInterface baseHolderInterface) {
+    public PollSurveyTypeAdapter(Context context, BaseHolderInterface baseHolderInterface, PostBottomSheetFragment postBottomSheetFragment) {
         mContext = context;
         this.baseHolderInterface = baseHolderInterface;
+        this.mPostBottomSheetFragment = postBottomSheetFragment;
     }
     //endregion
 
     //region Adapter method
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater mInflater = LayoutInflater.from(mContext);
+        LayoutInflater mInflater = LayoutInflater.from(mPostBottomSheetFragment.getContext());
         View view = mInflater.inflate(R.layout.poll_survey_type_holder, parent, false);
-        return new PollTypesViewHolder(view, baseHolderInterface);
+        return new PollTypesViewHolder(view, baseHolderInterface, mPostBottomSheetFragment);
 
     }
 
