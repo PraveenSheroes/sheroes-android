@@ -9,6 +9,7 @@ import android.view.View;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
@@ -71,6 +72,9 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         if(getActivity() instanceof CreateStoryActivity){
             ((CreateStoryActivity) getActivity()).selectImageFrmCamera();
         }
+        if(getActivity() instanceof CommunityPostActivity){
+            ((CommunityPostActivity) getActivity()).onCameraClick();
+        }
         dismiss();
     }
 
@@ -85,6 +89,9 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
 
         if(getActivity() instanceof CreateStoryActivity){
             ((CreateStoryActivity) getActivity()).selectImageFrmGallery();
+        }
+        if(getActivity() instanceof CommunityPostActivity){
+            ((CommunityPostActivity) getActivity()).onAddImageClick();
         }
         dismiss();
     }

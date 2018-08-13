@@ -128,6 +128,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
+import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
@@ -1661,7 +1662,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //region onclick methods
 
     @OnClick(R.id.add_image)
-    void onAddImageClick() {
+   public void onAddImageClick() {
         mRippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
@@ -1674,7 +1675,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @OnClick(R.id.camera)
-    void onCameraClick() {
+    public void onCameraClick() {
         mRippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
@@ -1972,9 +1973,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             public void onClick(View view) {
                 mIvImagePollLeft.setTag(true);
                 mIvImagePollRight.setTag(false);
-                CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                        .setRequestedSize(1200, 1200)
-                        .start(CommunityPostActivity.this);
+                CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
+
             }
         });
         mIvImagePollRight = pollLayout.findViewById(R.id.iv_image_poll_right);
@@ -1984,9 +1984,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             public void onClick(View view) {
                 mIvImagePollRight.setTag(true);
                 mIvImagePollLeft.setTag(false);
-                CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                        .setRequestedSize(1200, 1200)
-                        .start(CommunityPostActivity.this);
+                CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
             }
         });
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
