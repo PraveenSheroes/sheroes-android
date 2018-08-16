@@ -80,6 +80,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -938,11 +939,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
         if (userPostSolrObj.isAnonymous()) {
-            return AppConstants.ANONYMOUS;
+            return PostPollCreatorType.ANONYMOUS.toString();
         } else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
+            return PostPollCreatorType.COMMUNITY_OWNER.toString();
         } else {
-            return AppConstants.USER;
+            return PostPollCreatorType.USER.toString();
         }
     }
 

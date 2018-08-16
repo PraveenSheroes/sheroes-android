@@ -78,8 +78,7 @@ public class AppConstants {
     public static final String UTF_8 = "UTF-8";
 
     public static final String USER = "USER";
-    public static final String COMMUNITY_OWNER = "COMMUNITY_OWNER";
-    public static final String ANONYMOUS = "ANONYMOUS";
+
     public static final String ASKING_QUESTION = "asking_question";
     public static final int ASKING_QUESTION_CALL = 101;
 

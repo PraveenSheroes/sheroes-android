@@ -73,6 +73,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDr
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -216,6 +218,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
+    @POST("participation/poll/add")
+    Observable<CreatePollResponse> createPoll(@Body CreatePollRequest createPollRequest);
 
     @POST("participation/post/edit")
     Observable<CreateCommunityResponse> editCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);

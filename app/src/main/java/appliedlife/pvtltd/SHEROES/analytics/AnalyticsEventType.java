@@ -10,6 +10,7 @@ public enum AnalyticsEventType {
     // region Types
     APP("App"),
     POST("Post"),
+    POLL("Poll"),
     GENDER_SELECTED("Gender Selected"),
     PROFILE("Profile"),
     BADGE("Badge"),

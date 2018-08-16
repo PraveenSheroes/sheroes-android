@@ -1,19 +1,21 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.CommunityModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.ChallengePostCreateRequest;
@@ -22,6 +24,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityRespo
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
@@ -42,6 +48,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 /**
  * Created by ujjwal on 17/10/17.
@@ -53,10 +60,12 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
     private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
     @Inject
     AppUtils mAppUtils;
+    private SheroesAppServiceApi mSheroesAppServiceApi;
 
     @Inject
-    public CreatePostPresenter(AppUtils appUtils) {
+    public CreatePostPresenter(AppUtils appUtils, SheroesAppServiceApi sheroesAppServiceApi) {
         mAppUtils = appUtils;
+        mSheroesAppServiceApi = sheroesAppServiceApi;
     }
 
     public void sendPost(CommunityPostCreateRequest communityPostCreateRequest, final boolean isSharedFromExternalApp) {
@@ -84,7 +93,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                     getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
                     FeedDetail feedDetail = communityPostCreateResponse.getFeedDetail();
-                    if(feedDetail!=null) {
+                    if (feedDetail != null) {
                         feedDetail.setSharedFromExternalApp(isSharedFromExternalApp);
                         AnalyticsManager.trackPostAction(Event.POST_CREATED, feedDetail, CommunityPostActivity.SCREEN_LABEL);
                     }
@@ -270,5 +279,70 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
     }
 
+    public void createPoll(CreatePollRequest createPollRequest) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.createPoll(createPollRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CreatePollResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreatePollResponse>() {
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(CreatePollResponse communityPostCreateResponse) {
+                        if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
+                        } else {
+                            getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
+                            getMvpView().stopProgressBar();
+                        }
+                    }
+
+                });
+    }
+    public void uploadFile(String encodedImage) {
+        UploadImageRequest uploadImageRequest = new UploadImageRequest();
+        uploadImageRequest.images = new ArrayList<>();
+        uploadImageRequest.images.add(encodedImage);
+        mSheroesAppServiceApi.uploadImage(uploadImageRequest)
+                .compose(this.<UpLoadImageResponse>bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<UpLoadImageResponse>() {
+                    @Override
+                    public void onNext(UpLoadImageResponse upLoadImageResponse) {
+                        String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
+                        getMvpView().showImage(finalImageUrl);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+
+                    }
+                });
+    }
 
 }

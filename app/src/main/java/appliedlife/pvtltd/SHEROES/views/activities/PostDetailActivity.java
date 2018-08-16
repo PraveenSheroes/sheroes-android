@@ -83,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
@@ -756,11 +757,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     private String getCreatorType(UserPostSolrObj userPostSolrObj) {
         if (userPostSolrObj.isAnonymous()) {
-            return AppConstants.ANONYMOUS;
+            return PostPollCreatorType.ANONYMOUS.toString();
         } else if (userPostSolrObj.getEntityOrParticipantTypeId() == 15) {
-            return AppConstants.COMMUNITY_OWNER;
+            return PostPollCreatorType.COMMUNITY_OWNER.toString();
         } else {
-            return AppConstants.USER;
+            return PostPollCreatorType.USER.toString();
         }
     }
 

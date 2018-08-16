@@ -73,7 +73,7 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
             ((CreateStoryActivity) getActivity()).selectImageFrmCamera();
         }
         if(getActivity() instanceof CommunityPostActivity){
-            ((CommunityPostActivity) getActivity()).onCameraClick();
+            ((CommunityPostActivity) getActivity()).selectImageFrmCamera();
         }
         dismiss();
     }
@@ -91,7 +91,7 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
             ((CreateStoryActivity) getActivity()).selectImageFrmGallery();
         }
         if(getActivity() instanceof CommunityPostActivity){
-            ((CommunityPostActivity) getActivity()).onAddImageClick();
+            ((CommunityPostActivity) getActivity()).selectImageFrmGallery();
         }
         dismiss();
     }

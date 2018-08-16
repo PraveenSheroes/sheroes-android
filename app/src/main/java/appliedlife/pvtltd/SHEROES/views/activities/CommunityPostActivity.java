@@ -107,6 +107,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
@@ -124,6 +126,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
@@ -333,6 +336,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<Long> mDeletedImageIdList = new ArrayList<>();
     private List<Mention> mMentionList;
     private ImageView mIvImagePollLeft, mIvImagePollRight;
+    private EditText mEtImagePollLeft, mEtImagePollRight;
+    private String mImagePollLeftUrl, mImagePollRightUrl;
+    private boolean mIsPollOptionClicked;
+    private PollType mPollType;
 
     //endregion
 
@@ -772,32 +779,94 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public void sendPost() {
-        if (mHasPermission) {
-            if (mCommunityPost != null) {
-                final HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .id(Integer.toString(mCommunityPost.remote_id))
-                                .title(mCommunityPost.title)
-                                .build();
-                AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
+        if (mIsPollOptionClicked) {
+            List<PollOptionModel> pollOptionModelList=new ArrayList<>();
+            if (mPollType != null) {
+                switch (mPollType.id) {
+                    case 1:
+
+                        break;
+                    case 2:
+                        PollOptionModel imagePollOptionModelLeft=new PollOptionModel();
+                        imagePollOptionModelLeft.setActive(true);
+                        imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
+                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
+
+                        PollOptionModel imagePollOptionModelRight=new PollOptionModel();
+                        imagePollOptionModelRight.setActive(true);
+                        imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
+                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+                        pollOptionModelList.add(imagePollOptionModelLeft);
+                        pollOptionModelList.add(imagePollOptionModelRight);
+                        break;
+                    case 3:
+
+                        break;
+                    case 4:
+
+                        break;
+                }
+            }
+            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), pollOptionModelList, "start", "end"));
+        } else {
+            if (mHasPermission) {
+                if (mCommunityPost != null) {
+                    final HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Integer.toString(mCommunityPost.remote_id))
+                                    .title(mCommunityPost.title)
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
+                }
+            }
+
+            mMentionSpanList = etView.getMentionSpans();
+            addMentionSpanDetail();
+            if (mIsChallengePost) {
+                mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            } else if (!mIsEditPost) {
+                String accessToken = "";
+                if (AccessToken.getCurrentAccessToken() != null) {
+                    accessToken = AccessToken.getCurrentAccessToken().getToken();
+                }
+                mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
+
+            } else {
+                if (mCommunityPost != null) {
+                    mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), mNewEncodedImages, (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                }
             }
         }
+    }
 
-        mMentionSpanList = etView.getMentionSpans();
-        addMentionSpanDetail();
-        if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
-        } else if (!mIsEditPost) {
-            String accessToken = "";
-            if (AccessToken.getCurrentAccessToken() != null) {
-                accessToken = AccessToken.getCurrentAccessToken().getToken();
-            }
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
+    @Override
+    public void showImage(String imageUrl) {
 
-        } else {
-            if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), mNewEncodedImages, (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
-            }
+        if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
+            int width = CommonUtil.getWindowWidth(this);
+            int imageHeight = width / 2;
+            final String finalImageUrl = CommonUtil.getThumborUri(imageUrl, width, imageHeight);
+            Glide.with(this)
+                    .asBitmap()
+                    .load(finalImageUrl)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
+
+                            if (mIvImagePollLeft != null && mIvImagePollRight != null) {
+                                // mLiMainPollView.setVisibility(View.VISIBLE);
+                                // mRlImageList.setVisibility(View.GONE);
+                                if ((Boolean) mIvImagePollLeft.getTag()) {
+                                    mImagePollLeftUrl = finalImageUrl;
+                                    mIvImagePollLeft.setImageBitmap(bitmap);
+                                } else if ((Boolean) mIvImagePollRight.getTag()) {
+                                    mIvImagePollRight.setImageBitmap(bitmap);
+                                    mImagePollRightUrl = finalImageUrl;
+                                }
+                            }
+                        }
+                    });
         }
     }
 
@@ -952,23 +1021,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                 }
                             }
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
-                                if ((Boolean) mIvImagePollLeft.getTag()) {
-                                    mImageList.add(photo);
-                                    mLiMainPollView.setVisibility(View.VISIBLE);
-                                    mRlImageList.setVisibility(View.GONE);
-                                    if (photo.file != null) {
-                                        Bitmap bitmap = decodeFile(photo.file);
-                                        mIvImagePollLeft.setImageBitmap(bitmap);
-                                    }
-                                } else if ((Boolean) mIvImagePollRight.getTag()) {
-                                    mImageList.add(photo);
-                                    if (photo.file != null) {
-                                        Bitmap bitmap = decodeFile(photo.file);
-                                        mIvImagePollRight.setImageBitmap(bitmap);
-                                    }
-                                } else {
-                                    postPicsAndCountView(photo);
-                                }
+                                Bitmap bitmap = decodeFile(photo.file);
+                                mCreatePostPresenter.uploadFile(CompressImageUtil.setImageOnHolder(bitmap));
                             } else {
                                 postPicsAndCountView(photo);
                             }
@@ -1110,11 +1164,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //region private helper methods
     private String getCreatorType() {
         if (mPostAsCommunitySelected) {
-            return AppConstants.COMMUNITY_OWNER;
+            return PostPollCreatorType.COMMUNITY_OWNER.toString();
         } else if (mIsAnonymous) {
-            return AppConstants.ANONYMOUS;
+            return PostPollCreatorType.ANONYMOUS.toString();
         } else {
-            return AppConstants.USER;
+            return PostPollCreatorType.USER.toString();
         }
     }
 
@@ -1662,16 +1716,20 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //region onclick methods
 
     @OnClick(R.id.add_image)
-   public void onAddImageClick() {
+    public void onAddImageClick() {
         mRippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                        .setRequestedSize(1200, 1200)
-                        .start(CommunityPostActivity.this);
+                selectImageFrmGallery();
             }
         });
 
+    }
+
+    public void selectImageFrmGallery() {
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1200, 1200)
+                .start(CommunityPostActivity.this);
     }
 
     @OnClick(R.id.camera)
@@ -1679,14 +1737,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                StrictMode.setVmPolicy(builder.build());
-                CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                        .setRequestedSize(1200, 1200)
-                        .start(CommunityPostActivity.this);
+                selectImageFrmCamera();
             }
         });
 
+    }
+
+    public void selectImageFrmCamera() {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(1200, 1200)
+                .start(CommunityPostActivity.this);
     }
 
     @OnClick(R.id.poll_survey)
@@ -1882,6 +1944,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void onPollTypeClicked(PollType pollType) {
+        mPollType = pollType;
+        mIsPollOptionClicked = true;
         mImageList.clear();
         CommonUtil.hideKeyboard(this);
         mTitleToolbar.setText(R.string.title_create_poll);
@@ -1962,10 +2026,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mAddPollText.setVisibility(View.GONE);
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_image_view_layout, null);
         final LinearLayout liImagePollRow = pollLayout.findViewById(R.id.li_image_poll_view);
-        final EditText etImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
-        etImagePollLeft.setHint(getString(R.string.poll_option) + 1);
-        final EditText etImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
-        etImagePollRight.setHint(getString(R.string.poll_option) + 2);
+        mEtImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
+        mEtImagePollLeft.setHint(getString(R.string.poll_option) + 1);
+        mEtImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
+        mEtImagePollRight.setHint(getString(R.string.poll_option) + 2);
         mIvImagePollLeft = pollLayout.findViewById(R.id.iv_image_poll_left);
         mIvImagePollLeft.setTag(false);
         mIvImagePollLeft.setOnClickListener(new View.OnClickListener() {
@@ -1974,7 +2038,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mIvImagePollLeft.setTag(true);
                 mIvImagePollRight.setTag(false);
                 CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
-
             }
         });
         mIvImagePollRight = pollLayout.findViewById(R.id.iv_image_poll_right);

@@ -73,6 +73,7 @@ public enum Event {
         }
     },
     POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
+
     //endregion
 
     //region reply related events

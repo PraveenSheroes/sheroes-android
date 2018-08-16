@@ -99,6 +99,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
@@ -1880,6 +1882,20 @@ public class AppUtils {
         return communityPostCreateRequest;
     }
 
+    public CreatePollRequest createPollRequestBuilder(Long communityId, String createType, String description,List<PollOptionModel> pollOptionModelList,String startAt,String endAt) {
+        AppUtils appUtils = AppUtils.getInstance();
+        CreatePollRequest createPollRequest = new CreatePollRequest();
+        createPollRequest.setAppVersion(appUtils.getAppVersionName());
+        createPollRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        createPollRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        createPollRequest.setCommunityId(communityId);
+        createPollRequest.setPollCreatorType(createType);
+        createPollRequest.setDescription(description);
+        createPollRequest.setPollOptions(pollOptionModelList);
+        createPollRequest.setStartsAt(startAt);
+        createPollRequest.setEndsAt(endAt);
+        return createPollRequest;
+    }
 
     public static ChallengePostCreateRequest createChallengePostRequestBuilder(String createType, int challengeId, String sourceType, String description, List<String> imag, LinkRenderResponse linkRenderResponse, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
