@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
-import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
+import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -131,11 +131,11 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 mMyCommunities = Parcels.unwrap(parcelable);
                 mCommunityList = mMyCommunities.myCommunities;
                 showCommunity();
-            } else if (getArguments().getParcelable(PollType.POLL_TYPE) != null) {
+            } else if (getArguments().getParcelable(PollOptionType.POLL_TYPE) != null) {
                 mTvChooseCommunity.setText(getString(R.string.choose_poll));
-                parcelable = getArguments().getParcelable(PollType.POLL_TYPE);
-                List<PollType>pollTypeList=Parcels.unwrap(parcelable);
-                setPollTypeList(pollTypeList);
+                parcelable = getArguments().getParcelable(PollOptionType.POLL_TYPE);
+                List<PollOptionType> pollOptionTypeList =Parcels.unwrap(parcelable);
+                setPollTypeList(pollOptionTypeList);
             } else {
                 setMyCommunityList();
                 showCommunity();
@@ -165,12 +165,12 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         }
     }
 
-    private void setPollTypeList(List<PollType> pollTypeList) {
+    private void setPollTypeList(List<PollOptionType> pollOptionTypeList) {
         mPollSurveyTypeAdapter = new PollSurveyTypeAdapter(getActivity(), ((CommunityPostActivity)getActivity()),this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this.getContext(), 2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mPollSurveyTypeAdapter);
-        mPollSurveyTypeAdapter.setData(pollTypeList);
+        mPollSurveyTypeAdapter.setData(pollOptionTypeList);
         mPollSurveyTypeAdapter.notifyDataSetChanged();
     }
 
@@ -301,10 +301,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         return postBottomSheetFragment;
     }
 
-    public static PostBottomSheetFragment showDialog(AppCompatActivity activity, String sourceScreen, List<PollType> pollTypeList) {
+    public static PostBottomSheetFragment showDialog(AppCompatActivity activity, String sourceScreen, List<PollOptionType> pollOptionTypeList) {
         PostBottomSheetFragment postBottomSheetFragment = new PostBottomSheetFragment();
         Bundle args = new Bundle();
-        args.putParcelable(PollType.POLL_TYPE, Parcels.wrap(pollTypeList));
+        args.putParcelable(PollOptionType.POLL_TYPE, Parcels.wrap(pollOptionTypeList));
         postBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);

@@ -586,13 +586,13 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
 
-    public void getPostLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-            userPostSolrObj.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-            mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().setData(0, userPostSolrObj);
+            feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            mBaseResponseList.set(0, feedDetail);
+            getMvpView().setData(0, feedDetail);
             return;
         }
         getMvpView().startProgressBar();
@@ -607,10 +607,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                userPostSolrObj.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                mBaseResponseList.set(0, userPostSolrObj);
-                getMvpView().setData(0, userPostSolrObj);
+                feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                mBaseResponseList.set(0, feedDetail);
+                getMvpView().setData(0, feedDetail);
 
             }
 
@@ -618,25 +618,30 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                    userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                    userPostSolrObj.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                    mBaseResponseList.set(0, userPostSolrObj);
-                    getMvpView().setData(0, userPostSolrObj);
+                    feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                    feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                    mBaseResponseList.set(0, feedDetail);
+                    getMvpView().setData(0, feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
-                getMvpView().setData(0, userPostSolrObj);
+                if(feedDetail instanceof UserPostSolrObj) {
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                }else if(feedDetail instanceof PollSolarObj)
+                {
+                    AnalyticsManager.trackPostAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                }
+                getMvpView().setData(0, feedDetail);
             }
         });
 
     }
 
-    public void getPostUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-            userPostSolrObj.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-            mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().setData(0, userPostSolrObj);
+            feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            mBaseResponseList.set(0, feedDetail);
+            getMvpView().setData(0, feedDetail);
             return;
         }
         getMvpView().startProgressBar();
@@ -651,10 +656,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                userPostSolrObj.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                mBaseResponseList.set(0, userPostSolrObj);
-                getMvpView().setData(0, userPostSolrObj);
+                feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mBaseResponseList.set(0, feedDetail);
+                getMvpView().setData(0, feedDetail);
 
             }
 
@@ -662,16 +667,23 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                    userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                    userPostSolrObj.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                    mBaseResponseList.set(0, userPostSolrObj);
+                    feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                    feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                    mBaseResponseList.set(0, feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
-                getMvpView().setData(0, userPostSolrObj);
+                if(feedDetail instanceof UserPostSolrObj) {
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                }else if(feedDetail instanceof PollSolarObj)
+                {
+                    AnalyticsManager.trackPostAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                }
+
+                getMvpView().setData(0, feedDetail);
             }
         });
 
     }
+
 
     private Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)

@@ -101,6 +101,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
@@ -1757,6 +1758,17 @@ public class AppUtils {
         likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
         likeRequestPojo.setEntityId(entityId);
         likeRequestPojo.setReactionValue(reactionValue);
+        return likeRequestPojo;
+    }
+
+    public PollVote pollVoteRequestBuilder(Long pollId, Long pollOptionId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        PollVote likeRequestPojo = new PollVote();
+        likeRequestPojo.setAppVersion(appUtils.getAppVersionName());
+        likeRequestPojo.setDeviceUniqueId(appUtils.getDeviceId());
+        likeRequestPojo.setCloudMessagingId(appUtils.getCloudMessaging());
+        likeRequestPojo.setPollId(pollId);
+        likeRequestPojo.setPollOptionId(pollOptionId);
         return likeRequestPojo;
     }
 

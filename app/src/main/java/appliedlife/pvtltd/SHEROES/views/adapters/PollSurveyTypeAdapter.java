@@ -10,7 +10,7 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
+import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PollTypesViewHolder;
@@ -24,7 +24,7 @@ public class PollSurveyTypeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     //region Private variables & Constants
     private static final int TYPE_POLL = 0;
     private static final int TYPE_SHOW_MORE = 1;
-    private List<PollType> mPollTypes = null;
+    private List<PollOptionType> mPollOptionTypes = null;
     private final Context mContext;
     private BaseHolderInterface baseHolderInterface;
     private PostBottomSheetFragment mPostBottomSheetFragment;
@@ -50,12 +50,12 @@ public class PollSurveyTypeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (CommonUtil.isEmpty(mPollTypes)) return;
+        if (CommonUtil.isEmpty(mPollOptionTypes)) return;
 
         if (holder.getItemViewType() == TYPE_POLL) {
             PollTypesViewHolder pollTypesViewHolder = (PollTypesViewHolder) holder;
-            PollType pollType = mPollTypes.get(position);
-            pollTypesViewHolder.bindData(pollType, mContext, position);
+            PollOptionType pollOptionType = mPollOptionTypes.get(position);
+            pollTypesViewHolder.bindData(pollOptionType, mContext, position);
 
         }
     }
@@ -67,14 +67,14 @@ public class PollSurveyTypeAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public int getItemCount() {
-        return CommonUtil.isEmpty(mPollTypes) ? 0 : mPollTypes.size();
+        return CommonUtil.isEmpty(mPollOptionTypes) ? 0 : mPollOptionTypes.size();
     }
     //endregion
 
     //region Public method
-    public void setData(List<PollType> communities) {
+    public void setData(List<PollOptionType> communities) {
         if (!CommonUtil.isEmpty(communities)) {
-            this.mPollTypes = communities;
+            this.mPollOptionTypes = communities;
         }
         notifyDataSetChanged();
     }

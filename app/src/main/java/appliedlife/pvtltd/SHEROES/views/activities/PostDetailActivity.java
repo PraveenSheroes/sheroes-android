@@ -424,7 +424,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     mTitleToolbar.setText(userPostSolrObj.getAuthorName() + "'s" + " post");
                 }
             } else if (feedDetail instanceof PollSolarObj) {
-                PollSolarObj pollSolarObj=(PollSolarObj)feedDetail;
+                PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
                 mTitleToolbar.setText(pollSolarObj.getAuthorName() + "'s" + " post");
             }
         }
@@ -731,6 +731,54 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         popup.show();
     }
 
+    @Override
+    public void onPollMenuClicked(final PollSolarObj pollSolarObj, final TextView view) {
+        PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            Menu menu = popup.getMenu();
+            menu.add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+
+            //****   Hide/show options according to user
+            if (pollSolarObj.getAuthorId() == mLoggedInUser || adminId == AppConstants.TWO_CONSTANT) {
+                popup.getMenu().findItem(R.id.delete).setVisible(true);
+
+            } else {
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+
+            }
+            popup.getMenu().findItem(R.id.share).setVisible(true);
+
+
+            if (pollSolarObj.communityId == 0) {
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+            }
+            if (pollSolarObj.isSpamPost()) {
+                popup.getMenu().findItem(R.id.share).setVisible(false);
+            }
+
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.delete:
+                            mFeedDetailObjForNameUpdation = pollSolarObj;
+                            AnalyticsManager.trackPostAction(Event.POLL_DELETED, mFeedDetailObjForNameUpdation, getScreenName());
+                            mPostDetailPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(mFeedDetailObjForNameUpdation.getIdOfEntityOrParticipant()));
+                            return true;
+                        case R.id.share:
+                            shareWithMultipleOption(pollSolarObj);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+        }
+        popup.show();
+    }
+
     public void shareWithMultipleOption(BaseResponse baseResponse) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
@@ -743,8 +791,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
-        AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
+        if (feedDetail instanceof UserPostSolrObj) {
+            HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
+            AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
+        } else if (feedDetail instanceof PollSolarObj) {
+            HashMap<String, Object> properties = MixpanelHelper.getPollProperties(feedDetail, getScreenName());
+            AnalyticsManager.trackEvent(Event.POLL_SHARED, getScreenName(), properties);
+        }
     }
 
     private CharSequence menuIconWithText(Drawable r, String title) {
@@ -797,13 +850,49 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
+    public void onShareButtonClicked(PollSolarObj pollSolarObj, TextView shareView) {
+
+        String deepLinkUrl;
+        if (StringUtil.isNotNullOrEmptyString(pollSolarObj.getPostShortBranchUrls())) {
+            deepLinkUrl = pollSolarObj.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = pollSolarObj.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        if (isWhatsAppShare()) {
+            if (CommonUtil.isAppInstalled(this, "com.whatsapp")) {
+                intent.setPackage(AppConstants.WHATS_APP);
+                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+                startActivity(intent);
+            }
+        } else {
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+
+        }
+        HashMap<String, Object> properties = MixpanelHelper.getPollProperties(pollSolarObj, getScreenName());
+        AnalyticsManager.trackEvent(Event.POLL_SHARED, getScreenName(), properties);
+    }
+
+    @Override
     public void onPostLikeClicked(UserPostSolrObj userPostObj) {
-        mPostDetailPresenter.getPostLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), userPostObj);
+        mPostDetailPresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), userPostObj);
+    }
+
+    @Override
+    public void onPollLikeClicked(PollSolarObj pollSolarObj) {
+        mPostDetailPresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(pollSolarObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), pollSolarObj);
     }
 
     @Override
     public void onPostUnLikeClicked(UserPostSolrObj userPostObj) {
-        mPostDetailPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), userPostObj);
+        mPostDetailPresenter.getUnLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), userPostObj);
+    }
+
+    @Override
+    public void onPollUnLikeClicked(PollSolarObj pollSolarObj) {
+        mPostDetailPresenter.getUnLikesFromPresenter(mAppUtils.likeRequestBuilder(pollSolarObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), pollSolarObj);
     }
 
     @Override
@@ -839,13 +928,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         final EventProperty.Builder builder = new EventProperty.Builder();
         FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
         if (feedDetail != null) {
-            String communityId="";
-            if(feedDetail instanceof UserPostSolrObj)
-            {
-                communityId=Long.toString((((UserPostSolrObj)feedDetail).getCommunityId()));
-            }else if(feedDetail instanceof PollSolarObj)
-            {
-                communityId=Long.toString((((PollSolarObj)feedDetail).getCommunityId()));
+            String communityId = "";
+            if (feedDetail instanceof UserPostSolrObj) {
+                communityId = Long.toString((((UserPostSolrObj) feedDetail).getCommunityId()));
+            } else if (feedDetail instanceof PollSolarObj) {
+                communityId = Long.toString((((PollSolarObj) feedDetail).getCommunityId()));
             }
             builder.title(feedDetail.getNameOrTitle())
                     .communityId(communityId)
@@ -891,9 +978,22 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
+    public void onCommunityTitleClicked(PollSolarObj pollSolarObj) {
+        if (null != pollSolarObj) {
+            CommunityDetailActivity.navigateTo(this, pollSolarObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        }
+    }
+
+    @Override
     public void onLikeCountClicked(UserPostSolrObj userPostObj) {
         LikeListBottomSheetFragment.showDialog(this, "", userPostObj.getEntityOrParticipantId());
     }
+
+    @Override
+    public void onLikeCountClicked(PollSolarObj pollSolarObj) {
+        LikeListBottomSheetFragment.showDialog(this, "", pollSolarObj.getEntityOrParticipantId());
+    }
+
 
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj, Comment comment) {

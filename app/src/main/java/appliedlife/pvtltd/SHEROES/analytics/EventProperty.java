@@ -27,6 +27,7 @@ public enum EventProperty {
     POSITION_IN_LIST("Position in List"),
     POST_TYPE("Post Type"),
     POST_ID("Post Id"),
+    POLL_ID("Poll Id"),
     BODY("Body"),
     COMPANY_ID("Company Id"),
     LOCATION("Location"),
@@ -150,6 +151,10 @@ public enum EventProperty {
         }
         public Builder postId(String value){
             put(POST_ID, value);
+            return this;
+        }
+        public Builder pollId(String value){
+            put(POLL_ID, value);
             return this;
         }
 

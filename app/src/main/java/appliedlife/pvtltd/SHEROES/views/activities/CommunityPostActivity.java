@@ -108,12 +108,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
-import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
+import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
@@ -339,7 +340,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private EditText mEtImagePollLeft, mEtImagePollRight;
     private String mImagePollLeftUrl, mImagePollRightUrl;
     private boolean mIsPollOptionClicked;
-    private PollType mPollType;
+    private PollType mPollOptionType;
 
     //endregion
 
@@ -780,29 +781,29 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     public void sendPost() {
         if (mIsPollOptionClicked) {
-            List<PollOptionModel> pollOptionModelList=new ArrayList<>();
-            if (mPollType != null) {
-                switch (mPollType.id) {
-                    case 1:
+            List<PollOptionModel> pollOptionModelList = new ArrayList<>();
+            if (mPollOptionType != null) {
+                switch (mPollOptionType) {
+                    case TEXT:
 
                         break;
-                    case 2:
-                        PollOptionModel imagePollOptionModelLeft=new PollOptionModel();
+                    case IMAGE:
+                        PollOptionModel imagePollOptionModelLeft = new PollOptionModel();
                         imagePollOptionModelLeft.setActive(true);
                         imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
                         imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
 
-                        PollOptionModel imagePollOptionModelRight=new PollOptionModel();
+                        PollOptionModel imagePollOptionModelRight = new PollOptionModel();
                         imagePollOptionModelRight.setActive(true);
                         imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
                         imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
                         pollOptionModelList.add(imagePollOptionModelLeft);
                         pollOptionModelList.add(imagePollOptionModelRight);
                         break;
-                    case 3:
+                    case EMOJI:
 
                         break;
-                    case 4:
+                    case BOOLEAN:
 
                         break;
                 }
@@ -1758,15 +1759,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             public void onComplete(RippleViewLinear rippleView) {
                 CommonUtil.hideKeyboard(CommunityPostActivity.this);
                 mSuggestionList.setVisibility(View.GONE);
-                List<PollType> pollTypeList = new ArrayList<>();
-                for (int i = 1; i < 3; i++) {
-                    PollType pollType = new PollType();
-                    pollType.id = i;
-                    pollType.title = "Text Poll";
-                    pollType.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
-                    pollTypeList.add(pollType);
-                }
-                PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollTypeList);
+                List<PollOptionType> pollOptionTypeList = new ArrayList<>();
+
+                PollOptionType textPoll = new PollOptionType();
+                textPoll.pollType = PollType.TEXT;
+                textPoll.id = 1;
+                textPoll.title = "Text Poll";
+                textPoll.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
+                pollOptionTypeList.add(textPoll);
+                PollOptionType imagePoll = new PollOptionType();
+                imagePoll.pollType = PollType.IMAGE;
+                imagePoll.id = 2;
+                imagePoll.title = "Text Poll";
+                imagePoll.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
+                pollOptionTypeList.add(imagePoll);
+
+                PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollOptionTypeList);
             }
         });
 
@@ -1944,7 +1952,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void onPollTypeClicked(PollType pollType) {
-        mPollType = pollType;
+        mPollOptionType = pollType;
         mIsPollOptionClicked = true;
         mImageList.clear();
         CommonUtil.hideKeyboard(this);
@@ -1954,23 +1962,23 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRlImageList.setVisibility(View.GONE);
         liUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        switch (pollType.id) {
-            case 1:
+        switch (pollType) {
+            case TEXT:
                 for (int i = 0; i <= 1; i++) {
                     mPollOptionCount++;
                     addTextPollOptionView();
                 }
                 tvDaySelector.setText(pollTime[0]);
                 break;
-            case 2:
+            case IMAGE:
                 addImagePollView();
                 tvDaySelector.setText(pollTime[0]);
                 break;
-            case 3:
+            case EMOJI:
                 addRatingPollView();
                 tvDaySelector.setText(pollTime[0]);
                 break;
-            case 4:
+            case BOOLEAN:
                 addBooleanPollView();
                 break;
         }

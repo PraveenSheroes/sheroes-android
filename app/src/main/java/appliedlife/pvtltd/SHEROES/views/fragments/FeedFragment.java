@@ -80,6 +80,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -219,7 +220,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setupRecyclerScrollListener();
         showGifLoader();
 
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
 
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
@@ -362,6 +363,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
                     AnalyticsManager.trackEvent(Event.ARTICLE_LIKED, getScreenName(), properties);
                 }
+            } else if (feedDetail instanceof PollSolarObj) {
+                AnalyticsManager.trackPollAction(Event.POLL_LIKED, feedDetail, getScreenName());
             } else {
                 if (mCommunityTab != null) {
                     HashMap<String, Object> properties = new EventProperty.Builder()
@@ -384,6 +387,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     HashMap<String, Object> properties = MixpanelHelper.getArticleOrStoryProperties(articleSolrObj, getScreenName());
                     AnalyticsManager.trackEvent(Event.ARTICLE_UNLIKED, getScreenName(), properties);
                 }
+            } else if (feedDetail instanceof PollSolarObj) {
+                AnalyticsManager.trackPollAction(Event.POLL_UNLIKED, feedDetail, getScreenName());
             } else {
                 if (mCommunityTab != null) {
                     HashMap<String, Object> properties = new EventProperty.Builder()
@@ -401,7 +406,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostObj) {
-        if(userPostObj == null) return;
+        if (userPostObj == null) return;
 
         if (userPostObj.isBookmarked()) {
             if (mCommunityTab != null) {
@@ -584,7 +589,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         mAdapter.feedStartedLoading();
                     }
                 });
-                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST,mStreamName);
+                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
@@ -605,7 +610,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
+                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
@@ -642,6 +647,22 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             properties.putAll(propertiesMap);
         }
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
+    }
+
+    private void sharePollCardDetail(PollSolarObj pollSolarObj) {
+        String deepLinkUrl;
+        if (StringUtil.isNotNullOrEmptyString(pollSolarObj.getPostShortBranchUrls())) {
+            deepLinkUrl = pollSolarObj.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = pollSolarObj.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+        startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+
+        HashMap<String, Object> properties = MixpanelHelper.getPollProperties(pollSolarObj, getScreenName());
+        AnalyticsManager.trackEvent(Event.POLL_SHARED, getScreenName(), properties);
     }
 
     private void shareCardDetail(ArticleSolrObj articleSolrObj) {
@@ -734,6 +755,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 } else {
                     AnalyticsManager.trackEvent(Event.ARTICLE_SHARED, getScreenName(), properties);
                 }
+            }
+            if (feedDetail.subType.equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                HashMap<String, Object> properties = MixpanelHelper.getPollProperties(feedDetail, getScreenName());
+                properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+                AnalyticsManager.trackEvent(Event.POLL_SHARED, getScreenName(), properties);
             } else {
                 HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
                 properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
@@ -749,6 +775,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 } else {
                     AnalyticsManager.trackEvent(Event.ARTICLE_SHARED, getScreenName(), properties);
                 }
+            }
+            if (feedDetail.subType.equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                HashMap<String, Object> properties = MixpanelHelper.getPollProperties(feedDetail, getScreenName());
+                properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
+                AnalyticsManager.trackEvent(Event.POLL_SHARED, getScreenName(), properties);
             } else {
                 HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
                 properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
@@ -892,6 +923,71 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         popup.show();
     }
 
+    @Override
+    public void onPollMenuClicked(final PollSolarObj pollSolarObj, final View view) {
+        if (getActivity() == null) return;
+        PopupMenu popup = new PopupMenu(getActivity(), view);
+        long currentUserId = -1;
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+        }
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            int adminId = 0;
+            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            }
+
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+            popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+
+            //****   Hide/show options according to user
+
+
+            if (pollSolarObj.getAuthorId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
+
+                popup.getMenu().findItem(R.id.delete).setVisible(true);
+
+                if (pollSolarObj.communityId == 0 && adminId == AppConstants.TWO_CONSTANT) {
+                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+                }
+
+            } else {
+                popup.getMenu().findItem(R.id.delete).setVisible(false);
+            }
+
+            //Enable delete response for admin in challenge response
+            if (pollSolarObj.communityId == 0) {
+                if (adminId == AppConstants.TWO_CONSTANT) {
+                    popup.getMenu().findItem(R.id.delete).setVisible(true);
+                } else {
+                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+                }
+            }
+
+            if (pollSolarObj.isSpamPost()) {
+                popup.getMenu().findItem(R.id.share).setVisible(false);
+            } else {
+                popup.getMenu().findItem(R.id.share).setVisible(true);
+            }
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.share:
+                            sharePollCardDetail(pollSolarObj);
+                            return true;
+                        case R.id.delete:
+                            AnalyticsManager.trackPostAction(Event.POLL_DELETED, pollSolarObj, getScreenName());
+                            mFeedPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(pollSolarObj.getIdOfEntityOrParticipant()), pollSolarObj);
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+            });
+        }
+        popup.show();
+    }
+
     private CharSequence menuIconWithText(Drawable r, String title) {
         r.setBounds(0, 0, r.getIntrinsicWidth(), r.getIntrinsicHeight());
         SpannableString sb = new SpannableString("    " + title);
@@ -1018,9 +1114,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLikesCountClicked(long postId) {
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
         }
+    }
+    @Override
+    public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
+        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getEntityOrParticipantId(),pollOptionModel.getPollOptionId()), pollSolarObj);
     }
 
     @Override
@@ -1029,8 +1129,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onPollLiked(PollSolarObj pollSolarObj) {
+        mFeedPresenter.getPostLikesFromPresenter(mAppUtils.likeRequestBuilder(pollSolarObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), pollSolarObj);
+    }
+
+    @Override
     public void onUserPostUnLiked(UserPostSolrObj userPostObj) {
         mFeedPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(userPostObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), userPostObj);
+    }
+
+    @Override
+    public void onPollUnLiked(PollSolarObj pollSolarObj) {
+        mFeedPresenter.getPostUnLikesFromPresenter(mAppUtils.likeRequestBuilder(pollSolarObj.getEntityOrParticipantId(), AppConstants.NO_REACTION_CONSTANT), pollSolarObj);
     }
 
     @Override
@@ -1142,7 +1252,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -1152,7 +1262,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1235,7 +1345,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (getActivity() == null || getActivity().isFinishing()) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
+            if (articleObj.getCreatedBy() == mUserPreference.get().getUserSummary().getUserId()) {
                 popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_create), getResources().getString(R.string.ID_EDIT)));
                 popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
             }
@@ -1341,8 +1451,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onCommunityTitleClicked(FeedDetail feedDetail) {
-        if(feedDetail instanceof UserPostSolrObj) {
-            UserPostSolrObj userPostObj=(UserPostSolrObj)feedDetail;
+        if (feedDetail instanceof UserPostSolrObj) {
+            UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
             if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                 if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                     if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
@@ -1363,9 +1473,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 }
             }
-        }else if(feedDetail instanceof PollSolarObj)
-        {
-            PollSolarObj pollSolarObj=(PollSolarObj)feedDetail;
+        } else if (feedDetail instanceof PollSolarObj) {
+            PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
             HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
             CommunityDetailActivity.navigateTo(getActivity(), pollSolarObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
         }
@@ -1568,7 +1677,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1577,7 +1686,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -1608,7 +1717,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
         if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
-            boolean isMentor = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+            boolean isMentor = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
             ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
 
@@ -1867,7 +1976,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void refreshList() {
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST,mStreamName);
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         if (getActivity() != null && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
         }

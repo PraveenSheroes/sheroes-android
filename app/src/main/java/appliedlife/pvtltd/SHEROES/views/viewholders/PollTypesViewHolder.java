@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.PollTypeCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.post.PollType;
+import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
@@ -22,11 +22,11 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class PollTypesViewHolder extends BaseViewHolder<PollType> {
+public class PollTypesViewHolder extends BaseViewHolder<PollOptionType> {
 
     //region private variables
     private BaseHolderInterface viewInterface;
-    private PollType mPollType;
+    private PollOptionType mPollOptionType;
     private Context mContext;
     private PostBottomSheetFragment mPostBottomSheetFragment;
     //endregion
@@ -57,12 +57,12 @@ public class PollTypesViewHolder extends BaseViewHolder<PollType> {
 
     //region adapter method
     @Override
-    public void bindData(PollType pollType, Context context, int position) {
+    public void bindData(PollOptionType pollOptionType, Context context, int position) {
         mContext = context;
-        mPollType = pollType;
+        mPollOptionType = pollOptionType;
 
-        if (CommonUtil.isNotEmpty(mPollType.imgUrl)) {
-            String imageKitUrl = CommonUtil.getThumborUri(mPollType.imgUrl, iconSize, iconSize);
+        if (CommonUtil.isNotEmpty(mPollOptionType.imgUrl)) {
+            String imageKitUrl = CommonUtil.getThumborUri(mPollOptionType.imgUrl, iconSize, iconSize);
             if (CommonUtil.isNotEmpty(imageKitUrl)) {
                 Glide.with(mContext)
                         .load(imageKitUrl)
@@ -73,7 +73,7 @@ public class PollTypesViewHolder extends BaseViewHolder<PollType> {
             mPollTypeIcon.setImageResource(R.drawable.ic_image_holder);
         }
 
-        mPollTypeName.setText(mPollType.title);
+        mPollTypeName.setText(mPollOptionType.title);
     }
     //endregion
 
@@ -95,7 +95,7 @@ public class PollTypesViewHolder extends BaseViewHolder<PollType> {
             public void onComplete(RippleViewLinear rippleView) {
                 if (viewInterface instanceof PollTypeCallBack) {
                     mPostBottomSheetFragment.dismiss();
-                    ((PollTypeCallBack) viewInterface).onPollTypeClicked(mPollType);
+                    ((PollTypeCallBack) viewInterface).onPollTypeClicked(mPollOptionType.pollType);
                 }
             }
         });

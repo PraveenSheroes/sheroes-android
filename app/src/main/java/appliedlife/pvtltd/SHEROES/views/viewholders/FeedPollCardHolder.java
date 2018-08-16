@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -26,7 +25,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -36,7 +34,7 @@ import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -115,6 +113,15 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     @Bind(R.id.tv_feed_poll_user_menu)
     TextView mTvFeedPollUserMenu;
 
+    @Bind(R.id.rl_feed_poll_no_reaction_comments)
+    RelativeLayout rlFeedPollNoReactionComment;
+
+    @Bind(R.id.tv_feed_poll_total_reactions_count)
+    TextView mTvFeedPollTotalReactionCount;
+
+    @Bind(R.id.tv_feed_poll_total_replies)
+    TextView mTvFeedPollTotalReplies;
+
 
     @BindDimen(R.dimen.poll_text_input_text_size)
     int mPollTextInputTextSize;
@@ -146,7 +153,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     private int mAdminId;
     private String mPhotoUrl;
     private boolean isWhatappShareOption = false;
-    private LayoutInflater inflater = null;
+    private boolean isInstanceRecreated;
 
     public FeedPollCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -164,6 +171,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
     private void initPollCardHolder() {
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
+        isInstanceRecreated = true;
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
             if (null != mUserPreference.get().getUserSummary().getUserBO()) {
@@ -194,9 +202,20 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         this.mPollSolarObj = item;
         mContext = context;
         mPollSolarObj.setItemPosition(position);
-        //addTextPollInputViews();
-        addImagePollViews();
-        //  showPostUiFieldsWithData();
+        if (isInstanceRecreated) {
+            isInstanceRecreated = false;
+            switch (mPollSolarObj.getPollType()) {
+                case TEXT:
+                    addTextPollInputViews();
+                    break;
+                case IMAGE:
+                    addImagePollViews();
+                    break;
+            }
+        } else {
+            isInstanceRecreated = false;
+        }
+        showPollUiFieldsWithData();
     }
 
     @Override
@@ -262,13 +281,25 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         clImagePollLeftContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (viewInterface != null) {
+                    PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(0);
+                    mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
+                    ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
+                } else if (mPostDetailCallBack != null) {
 
+                }
             }
         });
         clImagePollRightContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (viewInterface != null) {
+                    PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(1);
+                    mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
+                    ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
+                } else if (mPostDetailCallBack != null) {
 
+                }
             }
         });
 
@@ -283,7 +314,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         pbPollPercentLeft.setProgress(50);
         pbPollPercentRight.setProgress(65);
         tvPollPercentNumberLeft.setText(50 + "%");
-        tvPollPercentNumberRight.setText(65+ "%");
+        tvPollPercentNumberRight.setText(65 + "%");
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
@@ -297,18 +328,23 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
      * Different Ui formats like Spam,Video and Image rendering etc.
      * Only Normal and link rendering views are handled.
      */
-    private void showPostUiFieldsWithData() {
+    private void showPollUiFieldsWithData() {
         mLiPollMainLayout.setVisibility(View.VISIBLE);
         mTvFeedPollUserReaction.setTag(true);
         mPollSolarObj.setLastReactionValue(mPollSolarObj.getReactionValue());
         populatePostedPollText();
-        postDataContentRendering();
+        pollDataContentRendering();
         likeCommentOps();
+        if (mPollSolarObj.getTotalNumberOfResponsesOnPoll() > 0) {
+            String pluralVotes = mContext.getResources().getQuantityString(R.plurals.numberOfVotes, (int) mPollSolarObj.getTotalNumberOfResponsesOnPoll());
+            mTvFeedPollTotalVotes.setText(String.valueOf(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.SPACE + pluralVotes));
+        }
+
     }
 
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void postDataContentRendering() {
+    private void pollDataContentRendering() {
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
             String feedTitle = mPollSolarObj.getAuthorName();
@@ -326,42 +362,54 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     private void likeCommentOps() {
         if (mPollSolarObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && mPollSolarObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            rlFeedPollNoReactionComment.setVisibility(View.GONE);
             mRlFeedPollImpressionCountView.setVisibility(View.GONE);
         }
         switch (mPollSolarObj.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
-
                 if (mPollSolarObj.getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
+                    rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
                     mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
                 } else {
+                    rlFeedPollNoReactionComment.setVisibility(View.GONE);
                     mRlFeedPollImpressionCountView.setVisibility(View.GONE);
                 }
                 userLike();
                 break;
             case AppConstants.ONE_CONSTANT:
+                rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
                 mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
                 userLike();
                 break;
             default:
+                rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
                 mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
                 userLike();
         }
+        String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, mPollSolarObj.getNoOfLikes());
+        mTvFeedPollTotalReactionCount.setText(String.valueOf(mPollSolarObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
         switch (mPollSolarObj.getNoOfComments()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 if (mPollSolarObj.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
-                    mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
+                    rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
+                    mLineSeparate.setVisibility(View.VISIBLE);
+                    mTvFeedPollTotalReactionCount.setVisibility(View.VISIBLE);
+                    mTvFeedPollTotalReaction.setVisibility(View.VISIBLE);
+                    mTvFeedPollTotalReplies.setVisibility(View.INVISIBLE);
                 } else {
-                    mRlFeedPollImpressionCountView.setVisibility(View.GONE);
+                    rlFeedPollNoReactionComment.setVisibility(View.GONE);
+                    mLineSeparate.setVisibility(View.GONE);
                 }
                 break;
             case AppConstants.ONE_CONSTANT:
+                mTvFeedPollTotalReplies.setVisibility(View.VISIBLE);
                 break;
             default:
-
+                mTvFeedPollTotalReplies.setVisibility(View.VISIBLE);
         }
         String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfVotes, mPollSolarObj.getNoOfComments());
 
-        mTvFeedPollTotalVotes.setText(String.valueOf(mPollSolarObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
+        mTvFeedPollTotalReplies.setText(String.valueOf(mPollSolarObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
     }
 
     private void populatePostedPollText() {
@@ -415,7 +463,11 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
+                if (viewInterface != null) {
+                    ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
+                } else if (mPostDetailCallBack != null) {
+                    mPostDetailCallBack.onCommunityTitleClicked(mPollSolarObj);
+                }
             }
 
             @Override
@@ -468,38 +520,76 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
     @OnClick({R.id.tv_feed_poll_user_comment, R.id.li_poll_main_layout})
     public void repliesClick() {
-        if (viewInterface instanceof FeedItemCallback) {
+        if (viewInterface != null) {
             ((FeedItemCallback) viewInterface).onUserPostClicked(mPollSolarObj);
+        } else if (mPostDetailCallBack != null) {
+            mPostDetailCallBack.onCommentButtonClicked();
         }
     }
 
 
-    @Override
-    public void onClick(View view) {
-
+    @OnClick(R.id.tv_feed_poll_user_reaction)
+    public void onUserReactionClick() {
+        if (viewInterface != null) {
+            if (mPollSolarObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mPollSolarObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mPollSolarObj.setNoOfLikes(mPollSolarObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                ((FeedItemCallback) viewInterface).onPollUnLiked(mPollSolarObj);
+            } else {
+                mPollSolarObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                mPollSolarObj.setNoOfLikes(mPollSolarObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                ((FeedItemCallback) viewInterface).onPollLiked(mPollSolarObj);
+            }
+            likeCommentOps();
+        } else if (mPostDetailCallBack != null) {
+            if (mPollSolarObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                mPollSolarObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                mPollSolarObj.setNoOfLikes(mPollSolarObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                mPostDetailCallBack.onPollUnLikeClicked(mPollSolarObj);
+            } else {
+                mPollSolarObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                mPollSolarObj.setNoOfLikes(mPollSolarObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                mPostDetailCallBack.onPollLikeClicked(mPollSolarObj);
+            }
+            likeCommentOps();
+        }
     }
 
 
     @OnClick(R.id.tv_feed_poll_user_share)
     public void tvShareClick() {
-        if (viewInterface instanceof FeedItemCallback) {
+        if (viewInterface != null) {
             ((FeedItemCallback) viewInterface).onPostShared(mPollSolarObj);
+        } else if (mPostDetailCallBack != null) {
+            mPostDetailCallBack.onShareButtonClicked(mPollSolarObj, mTvFeedPollUserShare);
         }
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
-
     }
 
-    @OnClick(R.id.tv_feed_poll_total_reactions)
+    @OnClick({R.id.tv_feed_poll_total_reactions_count})
     public void reactionClick() {
-        if (viewInterface instanceof FeedItemCallback) {
+        if (viewInterface != null) {
             ((FeedItemCallback) viewInterface).onLikesCountClicked(mPollSolarObj.getEntityOrParticipantId());
+        } else if (mPostDetailCallBack != null) {
+            mPostDetailCallBack.onLikeCountClicked(mPollSolarObj);
         }
     }
 
-    @OnClick(R.id.tv_feed_poll_card_title)
-    public void onCommunityNameClicked() {
-        ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
+    @OnClick(R.id.tv_feed_poll_user_menu)
+    public void userPollMenuClick() {
+        if (viewInterface != null) {
+            ((FeedItemCallback) viewInterface).onPollMenuClicked(mPollSolarObj, mTvFeedPollUserMenu);
+        } else if (mPostDetailCallBack != null) {
+            mPostDetailCallBack.onPollMenuClicked(mPollSolarObj, mTvFeedPollUserMenu);
+        }
     }
 
+    @Override
+    public void onClick(View view) {
+
+    }
 
 }

@@ -7,6 +7,7 @@ import org.parceler.Parcel;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 
 @Parcel(analyze = {PollSolarObj.class, FeedDetail.class})
 public class PollSolarObj extends FeedDetail {
@@ -15,15 +16,15 @@ public class PollSolarObj extends FeedDetail {
     private boolean isAnonymous;
 
     @SerializedName("community_i")
-    public Long communityId;
+    public long communityId;
 
     private int isEditOrDelete;
 
     @SerializedName("poll_type_s")
-    private String pollType;
+    private PollType pollType;
 
     @SerializedName("survey_id_l")
-    private Long surveyId;
+    private long surveyId;
 
     @SerializedName("show_results_b")
     private boolean showResults;
@@ -35,31 +36,31 @@ public class PollSolarObj extends FeedDetail {
     private String endsAt;
 
     @SerializedName("priority_i")
-    private Integer priority;
+    private int priority;
 
     @SerializedName("solr_ignore_poll_options")
     private List<PollOptionModel> pollOptions;
 
     @SerializedName(value = "likes_count_l")
-    private Long likesCount = 0L;
+    private long likesCount = 0L;
 
     @SerializedName(value = "comments_count_l")
-    private Long commentsCount = 0L;
+    private long commentsCount = 0L;
 
     @SerializedName("is_quiz")
-    private Boolean isQuiz;
+    private boolean isQuiz;
 
     @SerializedName("quiz_duration_seconds")
-    private Boolean quizDurationInSeconds;
+    private boolean quizDurationInSeconds;
 
     @SerializedName("solr_ignore_total_no_of_responses")
-    private Long totalNumberOfResponsesOnPoll;
+    private long totalNumberOfResponsesOnPoll;
 
     @SerializedName("solr_ignore_is_responed_on_poll")
-    private Boolean isRespondedOnPoll = false;
+    private boolean isRespondedOnPoll = false;
 
     @SerializedName("solr_ignore_is_in_survey")
-    private Boolean isInSurvey = false;
+    private boolean isInSurvey = false;
 
     @SerializedName(value = "solr_ignore_poll_community_name")
     private String pollCommunityName;
@@ -68,10 +69,10 @@ public class PollSolarObj extends FeedDetail {
     private boolean isCommunityPoll;
 
     @SerializedName(value = "community_participant_id_l")
-    private Long communityParticipantId;
+    private long communityParticipantId;
 
     @SerializedName(value = "solr_ignore_is_community_owner")
-    private Boolean isCommunityOwner;
+    private boolean isCommunityOwner;
 
     public boolean isAnonymous() {
         return isAnonymous;
@@ -81,11 +82,11 @@ public class PollSolarObj extends FeedDetail {
         isAnonymous = anonymous;
     }
 
-    public Long getCommunityId() {
+    public long getCommunityId() {
         return communityId;
     }
 
-    public void setCommunityId(Long communityId) {
+    public void setCommunityId(long communityId) {
         this.communityId = communityId;
     }
 
@@ -97,20 +98,11 @@ public class PollSolarObj extends FeedDetail {
         this.isEditOrDelete = isEditOrDelete;
     }
 
-
-    public String getPollType() {
-        return pollType;
-    }
-
-    public void setPollType(String pollType) {
-        this.pollType = pollType;
-    }
-
-    public Long getSurveyId() {
+    public long getSurveyId() {
         return surveyId;
     }
 
-    public void setSurveyId(Long surveyId) {
+    public void setSurveyId(long surveyId) {
         this.surveyId = surveyId;
     }
 
@@ -138,11 +130,11 @@ public class PollSolarObj extends FeedDetail {
         this.endsAt = endsAt;
     }
 
-    public Integer getPriority() {
+    public int getPriority() {
         return priority;
     }
 
-    public void setPriority(Integer priority) {
+    public void setPriority(int priority) {
         this.priority = priority;
     }
 
@@ -154,59 +146,59 @@ public class PollSolarObj extends FeedDetail {
         this.pollOptions = pollOptions;
     }
 
-    public Long getLikesCount() {
+    public long getLikesCount() {
         return likesCount;
     }
 
-    public void setLikesCount(Long likesCount) {
+    public void setLikesCount(long likesCount) {
         this.likesCount = likesCount;
     }
 
-    public Long getCommentsCount() {
+    public long getCommentsCount() {
         return commentsCount;
     }
 
-    public void setCommentsCount(Long commentsCount) {
+    public void setCommentsCount(long commentsCount) {
         this.commentsCount = commentsCount;
     }
 
-    public Boolean getQuiz() {
+    public boolean getQuiz() {
         return isQuiz;
     }
 
-    public void setQuiz(Boolean quiz) {
+    public void setQuiz(boolean quiz) {
         isQuiz = quiz;
     }
 
-    public Boolean getQuizDurationInSeconds() {
+    public boolean getQuizDurationInSeconds() {
         return quizDurationInSeconds;
     }
 
-    public void setQuizDurationInSeconds(Boolean quizDurationInSeconds) {
+    public void setQuizDurationInSeconds(boolean quizDurationInSeconds) {
         this.quizDurationInSeconds = quizDurationInSeconds;
     }
 
-    public Long getTotalNumberOfResponsesOnPoll() {
+    public long getTotalNumberOfResponsesOnPoll() {
         return totalNumberOfResponsesOnPoll;
     }
 
-    public void setTotalNumberOfResponsesOnPoll(Long totalNumberOfResponsesOnPoll) {
+    public void setTotalNumberOfResponsesOnPoll(long totalNumberOfResponsesOnPoll) {
         this.totalNumberOfResponsesOnPoll = totalNumberOfResponsesOnPoll;
     }
 
-    public Boolean getRespondedOnPoll() {
+    public boolean getRespondedOnPoll() {
         return isRespondedOnPoll;
     }
 
-    public void setRespondedOnPoll(Boolean respondedOnPoll) {
+    public void setRespondedOnPoll(boolean respondedOnPoll) {
         isRespondedOnPoll = respondedOnPoll;
     }
 
-    public Boolean getInSurvey() {
+    public boolean getInSurvey() {
         return isInSurvey;
     }
 
-    public void setInSurvey(Boolean inSurvey) {
+    public void setInSurvey(boolean inSurvey) {
         isInSurvey = inSurvey;
     }
 
@@ -226,19 +218,27 @@ public class PollSolarObj extends FeedDetail {
         isCommunityPoll = communityPoll;
     }
 
-    public Long getCommunityParticipantId() {
+    public long getCommunityParticipantId() {
         return communityParticipantId;
     }
 
-    public void setCommunityParticipantId(Long communityParticipantId) {
+    public void setCommunityParticipantId(long communityParticipantId) {
         this.communityParticipantId = communityParticipantId;
     }
 
-    public Boolean getCommunityOwner() {
+    public boolean getCommunityOwner() {
         return isCommunityOwner;
     }
 
-    public void setCommunityOwner(Boolean communityOwner) {
+    public void setCommunityOwner(boolean communityOwner) {
         isCommunityOwner = communityOwner;
+    }
+
+    public PollType getPollType() {
+        return pollType;
+    }
+
+    public void setPollType(PollType pollType) {
+        this.pollType = pollType;
     }
 }

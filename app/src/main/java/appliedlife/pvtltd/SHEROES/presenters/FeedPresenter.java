@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -47,6 +48,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -251,30 +254,29 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.getAllCommunityFromModel(myCommunityRequest)
                 .compose(this.<AllCommunitiesResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<AllCommunitiesResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
 
-            }
+                    }
 
-            @Override
-            public void onNext(AllCommunitiesResponse allCommunitiesResponse) {
-                getMvpView().stopProgressBar();
-                if (null != allCommunitiesResponse) {
-                    mAllCommunities.set(allCommunitiesResponse);
-                }
-            }
-        });
+                    @Override
+                    public void onNext(AllCommunitiesResponse allCommunitiesResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != allCommunitiesResponse) {
+                            mAllCommunities.set(allCommunitiesResponse);
+                        }
+                    }
+                });
 
     }
-
 
 
     public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
@@ -286,36 +288,36 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.getFollowFromModel(publicProfileListRequest)
                 .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
-                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-            }
-
-            @Override
-            public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                getMvpView().stopProgressBar();
-                if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
-                    if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
-                        userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                    } else {
-                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
-                        userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
                     }
-                    getMvpView().invalidateItem(userSolrObj);
-                } else {
-                    userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                }
-            }
-        });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                    }
+
+                    @Override
+                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        getMvpView().stopProgressBar();
+                        if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
+                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            }
+                            getMvpView().invalidateItem(userSolrObj);
+                        } else {
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                        }
+                    }
+                });
 
     }
 
@@ -328,36 +330,36 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.getUnFollowFromModel(publicProfileListRequest)
                 .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
-                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-            }
-
-            @Override
-            public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                getMvpView().stopProgressBar();
-                if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
-                    if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
-                        userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                    } else {
-                        userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
-                        userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
                     }
-                    getMvpView().invalidateItem(userSolrObj);
-                } else {
-                    userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                }
-            }
-        });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                    }
+
+                    @Override
+                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        getMvpView().stopProgressBar();
+                        if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
+                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            } else {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
+                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            }
+                            getMvpView().invalidateItem(userSolrObj);
+                        } else {
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                        }
+                    }
+                });
 
     }
 
@@ -370,25 +372,25 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.getLikesFromModel(likeRequestPojo)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
 
-            }
+                    }
 
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().invalidateItem(userPostSolrObj);
-            }
-        });
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().invalidateItem(userPostSolrObj);
+                    }
+                });
 
     }
 
@@ -401,25 +403,25 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.getUnLikesFromModel(likeRequestPojo)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
 
-            }
+                    }
 
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().invalidateItem(userPostSolrObj);
-            }
-        });
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().invalidateItem(userPostSolrObj);
+                    }
+                });
 
     }
 
@@ -432,30 +434,29 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked)
                 .compose(this.<BookmarkResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
-            }
+                    }
 
-            @Override
-            public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
-                getMvpView().stopProgressBar();
-            }
-        });
+                    @Override
+                    public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                        getMvpView().stopProgressBar();
+                    }
+                });
 
     }
 
 
-
-    public void deleteCommunityPostFromPresenter(DeleteCommunityPostRequest deleteCommunityPostRequest, final UserPostSolrObj userPostObj) {
+    public void deleteCommunityPostFromPresenter(DeleteCommunityPostRequest deleteCommunityPostRequest, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
@@ -464,25 +465,25 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.deleteCommunityPostFromModel(deleteCommunityPostRequest)
                 .compose(this.<DeleteCommunityPostResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<DeleteCommunityPostResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
 
-            }
+                    }
 
-            @Override
-            public void onNext(DeleteCommunityPostResponse deleteCommunityPostResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().notifyAllItemRemoved(userPostObj);
-            }
-        });
+                    @Override
+                    public void onNext(DeleteCommunityPostResponse deleteCommunityPostResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().notifyAllItemRemoved(feedDetail);
+                    }
+                });
 
     }
 
@@ -492,33 +493,33 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 .compose(this.<ApproveSpamPostResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ApproveSpamPostResponse>() {
 
-            @Override
-            public void onComplete() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-            }
-
-            @Override
-            public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
-                getMvpView().stopProgressBar();
-                if (null != approveSpamPostResponse) {
-                    if (!approveSpamPostRequest.isApproved() && approveSpamPostRequest.isSpam()) {
-                        // spam post was rejected
-                        getMvpView().removeItem(userPostSolrObj);
-                    } else if (approveSpamPostRequest.isApproved() && !approveSpamPostRequest.isSpam()) {
-                        // spam post was approved
-                        userPostSolrObj.setSpamPost(false);
-                        getMvpView().invalidateItem(userPostSolrObj);
+                    @Override
+                    public void onComplete() {
                     }
-                    //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
-                }
-            }
-        });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                    }
+
+                    @Override
+                    public void onNext(ApproveSpamPostResponse approveSpamPostResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != approveSpamPostResponse) {
+                            if (!approveSpamPostRequest.isApproved() && approveSpamPostRequest.isSpam()) {
+                                // spam post was rejected
+                                getMvpView().removeItem(userPostSolrObj);
+                            } else if (approveSpamPostRequest.isApproved() && !approveSpamPostRequest.isSpam()) {
+                                // spam post was approved
+                                userPostSolrObj.setSpamPost(false);
+                                getMvpView().invalidateItem(userPostSolrObj);
+                            }
+                            //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
+                        }
+                    }
+                });
 
     }
 
@@ -532,29 +533,29 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         mHomeModel.addBookmarkFromModel(bookmarkRequestPojo, isBookmarked)
                 .compose(this.<BookmarkResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
 
-            }
+                    }
 
-            @Override
-            public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
-                getMvpView().stopProgressBar();
+                    @Override
+                    public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                        getMvpView().stopProgressBar();
 
-                if (bookmarkResponsePojo.getStatus() != null && bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    userSolrObj.setBookmarked(!isBookmarked);
-                    getMvpView().bookmarkedUnBookMarkedResponse(userSolrObj);
-                }
-            }
-        });
+                        if (bookmarkResponsePojo.getStatus() != null && bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setBookmarked(!isBookmarked);
+                            getMvpView().bookmarkedUnBookMarkedResponse(userSolrObj);
+                        }
+                    }
+                });
 
     }
 
@@ -570,36 +571,81 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         getLikesFromModel(likeRequestPojo)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                getMvpView().invalidateItem(feedDetail);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                        feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                        feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                        getMvpView().invalidateItem(feedDetail);
 
-            }
+                    }
 
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                getMvpView().stopProgressBar();
-                if (likeResponse.getStatus().equals(AppConstants.FAILED)) {
-                    feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                    feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                    getMvpView().invalidateItem(feedDetail);
-                }
-                getMvpView().invalidateItem(feedDetail);
-                getMvpView().likeUnlikeResponse(feedDetail, true);
-            }
-        });
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        getMvpView().stopProgressBar();
+                        if (likeResponse.getStatus().equals(AppConstants.FAILED)) {
+                            feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                            feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                            getMvpView().invalidateItem(feedDetail);
+                        }
+                        getMvpView().invalidateItem(feedDetail);
+                        getMvpView().likeUnlikeResponse(feedDetail, true);
+                    }
+                });
 
     }
+
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+            pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+            getMvpView().invalidateItem(pollSolarObj);
+            return;
+        }
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.getPollVoteFromApi(pollVote)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<PollVoteResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<PollVoteResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                        PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+                        pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+                        getMvpView().invalidateItem(pollSolarObj);
+                    }
+
+                    @Override
+                    public void onNext(PollVoteResponse voteResponse) {
+                        getMvpView().stopProgressBar();
+                        PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+                        if (voteResponse.getStatus().equals(AppConstants.FAILED)) {
+                            pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+                            getMvpView().invalidateItem(pollSolarObj);
+                        }
+                        getMvpView().invalidateItem(pollSolarObj);
+                        getMvpView().likeUnlikeResponse(pollSolarObj, true);
+                    }
+                });
+
+    }
+
 
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
         return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
@@ -626,35 +672,35 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         getUnLikesFromModel(likeRequestPojo)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                // mBaseResponseList.set(0, userPostSolrObj);
-                getMvpView().invalidateItem(feedDetail);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                        feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                        feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                        // mBaseResponseList.set(0, userPostSolrObj);
+                        getMvpView().invalidateItem(feedDetail);
 
-            }
+                    }
 
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
-                    feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                    feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                    //  mBaseResponseList.set(0, userPostSolrObj);
-                }
-                getMvpView().invalidateItem(feedDetail);
-                getMvpView().likeUnlikeResponse(feedDetail, false);
-            }
-        });
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        getMvpView().stopProgressBar();
+                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                            feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                            feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                            //  mBaseResponseList.set(0, userPostSolrObj);
+                        }
+                        getMvpView().invalidateItem(feedDetail);
+                        getMvpView().likeUnlikeResponse(feedDetail, false);
+                    }
+                });
 
     }
 
@@ -685,43 +731,43 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         getUnLikesFromModel(likeRequestPojo)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                comment.isLiked = true;
-                comment.likeCount++;
-                userPostSolrObj.getLastComments().set(0, comment);
-                getMvpView().invalidateItem(userPostSolrObj);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                        comment.isLiked = true;
+                        comment.likeCount++;
+                        userPostSolrObj.getLastComments().set(0, comment);
+                        getMvpView().invalidateItem(userPostSolrObj);
+                    }
 
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
-                    comment.isLiked = true;
-                    comment.likeCount++;
-                }
-                userPostSolrObj.getLastComments().set(0, comment);
-                getMvpView().invalidateItem(userPostSolrObj);
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .id(Long.toString(comment.getId()))
-                                .postId(Long.toString(comment.getEntityId()))
-                                .postType(AnalyticsEventType.COMMUNITY.toString())
-                                .body(comment.getComment())
-                                .communityId(comment.getCommunityId())
-                                .streamType((userPostSolrObj != null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType() : "")
-                                .build();
-                AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
-            }
-        });
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        getMvpView().stopProgressBar();
+                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                            comment.isLiked = true;
+                            comment.likeCount++;
+                        }
+                        userPostSolrObj.getLastComments().set(0, comment);
+                        getMvpView().invalidateItem(userPostSolrObj);
+                        HashMap<String, Object> properties =
+                                new EventProperty.Builder()
+                                        .id(Long.toString(comment.getId()))
+                                        .postId(Long.toString(comment.getEntityId()))
+                                        .postType(AnalyticsEventType.COMMUNITY.toString())
+                                        .body(comment.getComment())
+                                        .communityId(comment.getCommunityId())
+                                        .streamType((userPostSolrObj != null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType() : "")
+                                        .build();
+                        AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
+                    }
+                });
 
     }
 
@@ -738,43 +784,43 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         getLikesFromModel(likeRequestPojo)
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                comment.isLiked = false;
-                comment.likeCount--;
-                userPostSolrObj.getLastComments().set(0, comment);
-                getMvpView().invalidateItem(userPostSolrObj);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                        comment.isLiked = false;
+                        comment.likeCount--;
+                        userPostSolrObj.getLastComments().set(0, comment);
+                        getMvpView().invalidateItem(userPostSolrObj);
+                    }
 
-            @Override
-            public void onNext(LikeResponse likeResponse) {
-                getMvpView().stopProgressBar();
-                if (likeResponse.getStatus() == AppConstants.FAILED) {
-                    comment.isLiked = false;
-                    comment.likeCount--;
-                    userPostSolrObj.getLastComments().set(0, comment);
-                }
-                getMvpView().invalidateItem(userPostSolrObj);
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .id(Long.toString(comment.getId()))
-                                .postId(Long.toString(comment.getEntityId()))
-                                .postType(AnalyticsEventType.COMMUNITY.toString())
-                                .body(comment.getComment())
-                                .communityId(comment.getCommunityId())
-                                .streamType((userPostSolrObj != null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType() : "")
-                                .build();
-                AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
-            }
-        });
+                    @Override
+                    public void onNext(LikeResponse likeResponse) {
+                        getMvpView().stopProgressBar();
+                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                            comment.isLiked = false;
+                            comment.likeCount--;
+                            userPostSolrObj.getLastComments().set(0, comment);
+                        }
+                        getMvpView().invalidateItem(userPostSolrObj);
+                        HashMap<String, Object> properties =
+                                new EventProperty.Builder()
+                                        .id(Long.toString(comment.getId()))
+                                        .postId(Long.toString(comment.getEntityId()))
+                                        .postType(AnalyticsEventType.COMMUNITY.toString())
+                                        .body(comment.getComment())
+                                        .communityId(comment.getCommunityId())
+                                        .streamType((userPostSolrObj != null && CommonUtil.isNotEmpty(userPostSolrObj.getStreamType())) ? userPostSolrObj.getStreamType() : "")
+                                        .build();
+                        AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
+                    }
+                });
 
     }
 
@@ -788,25 +834,25 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().invalidateItem(communityPostCreateResponse.getFeedDetail());
-            }
+                    @Override
+                    public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().invalidateItem(communityPostCreateResponse.getFeedDetail());
+                    }
 
-        });
+                });
 
     }
 

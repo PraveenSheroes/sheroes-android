@@ -75,6 +75,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -157,6 +159,9 @@ public interface SheroesAppServiceApi {
     /*Participation*/
     @POST("participation/reaction/like")
     Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
+
+    @POST("participation/reaction/poll/vote")
+    Observable<PollVoteResponse> getPollVoteFromApi(@Body PollVote pollVote);
 
     @POST("participation/reaction/unlike")
     Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo);

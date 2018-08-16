@@ -23,7 +23,9 @@ public enum Event {
     ARTICLE_LIKED(AnalyticsEventType.ARTICLE, "Liked"),
     ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
+    POLL_LIKED(AnalyticsEventType.POLL, "Liked"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
+    POLL_UNLIKED(AnalyticsEventType.POLL, "UnLiked"),
     STORY_SHARED(AnalyticsEventType.STORY, "Shared"){
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
@@ -33,6 +35,14 @@ public enum Event {
         }
     },
     POST_SHARED(AnalyticsEventType.POST, "Shared"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
+    POLL_SHARED(AnalyticsEventType.POLL, "Shared"){
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
             return analyticsProvider == AnalyticsProvider.FACEBOOK ||
@@ -61,6 +71,7 @@ public enum Event {
     POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
     POST_EDITED(AnalyticsEventType.POST, "Edited"),
     POST_DELETED(AnalyticsEventType.POST, "Deleted"),
+    POLL_DELETED(AnalyticsEventType.POLL, "Deleted"),
     POST_REPORTED(AnalyticsEventType.POST, "Reported"),
     POST_APPROVED(AnalyticsEventType.POST, "Approved"),
     POST_REJECTED(AnalyticsEventType.POST, "Rejected"),

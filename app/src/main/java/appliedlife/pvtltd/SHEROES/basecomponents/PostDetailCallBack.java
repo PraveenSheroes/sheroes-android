@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.widget.TextView;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 
 /**
@@ -34,4 +35,16 @@ public interface PostDetailCallBack {
     void onCommunityTitleClicked(UserPostSolrObj userPostObj);
 
     void onLikeCountClicked(UserPostSolrObj userPostObj);
+
+    void onPollMenuClicked(PollSolarObj pollSolarObj, TextView view);
+
+    void onCommunityTitleClicked(PollSolarObj pollSolarObj);
+
+    void onLikeCountClicked(PollSolarObj pollSolarObj);
+
+    void onShareButtonClicked(PollSolarObj pollSolarObj, TextView shareView);
+
+    void onPollUnLikeClicked(PollSolarObj pollSolarObj);
+
+    void onPollLikeClicked(PollSolarObj pollSolarObj);
 }

@@ -10,8 +10,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 
 /**
@@ -35,6 +37,8 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPostMenuClicked(UserPostSolrObj userPostObj, View tvFeedCommunityPostUserMenu);
 
+    void onPollMenuClicked(PollSolarObj pollSolarObj, View tvFeedCommunityPollMenu);
+
     void onCommentMenuClicked(UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu);
 
     void onPostBookMarkedClicked(UserPostSolrObj userPostObj);
@@ -43,7 +47,13 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onUserPostLiked(UserPostSolrObj userPostObj);
 
+    void onPollLiked(PollSolarObj pollSolarObj);
+
+    void onPollVote(PollSolarObj pollSolarObj,PollOptionModel pollOptionModel);
+
     void onUserPostUnLiked(UserPostSolrObj userPostObj);
+
+    void onPollUnLiked(PollSolarObj pollSolarObj);
 
     void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail);
 
