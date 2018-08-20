@@ -689,7 +689,15 @@
         <item>1 week</item>
         <item>1 month</item>
     </string-array>
+    <integer-array name="poll_days_count">
+        <item>1</item>
+        <item>2</item>
+        <item>7</item>
+        <item>30</item>
+    </integer-array>
     <string name="created_poll">created a Poll</string>
+
+
 
 
 

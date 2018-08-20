@@ -350,7 +350,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             updateItem(feedDetail);
         }
     }
-
+    @Override
+    public void pollVoteResponse(FeedDetail feedDetail) {
+         if (feedDetail instanceof PollSolarObj) {
+            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName());
+        }
+    }
     @Override
     public void likeUnlikeResponse(FeedDetail feedDetail, boolean isLike) {
         if (isLike) {

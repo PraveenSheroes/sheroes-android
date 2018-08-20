@@ -94,7 +94,7 @@
         android:id="@+id/li_type_of_poll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></LinearLayout>
+        android:orientation="vertical"/>
 
     <RelativeLayout
         android:id="@+id/rl_feed_poll_impression_count_view"
@@ -105,14 +105,10 @@
         android:layout_marginTop="@dimen/feed_poll_impression_count_view_margin_top">
 
         <TextView
-            android:id="@+id/tv_feed_poll_total_reactions"
+            android:id="@+id/tv_feed_poll_ends_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/feed_poll_total_reactions_margin"
-            android:layout_marginStart="@dimen/feed_poll_total_reactions_margin"
-            android:layout_toEndOf="@id/tv_feed_community_post_reaction1"
-            android:layout_toRightOf="@id/tv_feed_community_post_reaction1"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="Ends in : 1 hour "
             android:textColor="@color/feed_card_time"
@@ -130,7 +126,45 @@
             android:textColor="@color/feed_card_time"
             android:textSize="@dimen/poll_impression_text" />
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_feed_poll_no_reaction_comments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:visibility="gone">
 
+        <TextView
+            android:id="@+id/tv_feed_poll_total_reactions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_likes_heart" />
+
+        <TextView
+            android:id="@+id/tv_feed_poll_total_reactions_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/dp_size_8"
+            android:layout_marginStart="@dimen/dp_size_8"
+            android:layout_toEndOf="@id/tv_feed_poll_total_reactions"
+            android:layout_toRightOf="@id/tv_feed_poll_total_reactions"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/feed_card_time"
+            android:textSize="@dimen/sp_size_14" />
+
+        <TextView
+            android:id="@+id/tv_feed_poll_total_replies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textColor="@color/feed_card_time"
+            android:textSize="@dimen/sp_size_14" />
+    </RelativeLayout>
     <View
         android:id="@+id/line_separate"
         android:layout_width="match_parent"
@@ -169,8 +203,6 @@
             android:id="@+id/tv_feed_poll_user_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/tv_feed_poll_user_comment"
-            android:layout_alignBottom="@+id/tv_feed_poll_user_comment"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:drawableLeft="@drawable/ic_share_card"

@@ -47,4 +47,6 @@ public interface IFeedView extends BaseMvpView {
     void likeUnlikeResponse(FeedDetail feedDetail,boolean isLike);
 
     void bookmarkedUnBookMarkedResponse(UserPostSolrObj userPostSolrObj);
+
+    void pollVoteResponse(FeedDetail feedDetail);
 }

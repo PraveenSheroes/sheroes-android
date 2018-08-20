@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 @Parcel(analyze = {PollSolarObj.class, FeedDetail.class})
 public class PollSolarObj extends FeedDetail {
     public static final String POLL_OBJ = "POLL_OBJ";
+
     @SerializedName("is_anonymous_b")
     private boolean isAnonymous;
 
@@ -186,7 +187,7 @@ public class PollSolarObj extends FeedDetail {
         this.totalNumberOfResponsesOnPoll = totalNumberOfResponsesOnPoll;
     }
 
-    public boolean getRespondedOnPoll() {
+    public boolean isRespondedOnPoll() {
         return isRespondedOnPoll;
     }
 

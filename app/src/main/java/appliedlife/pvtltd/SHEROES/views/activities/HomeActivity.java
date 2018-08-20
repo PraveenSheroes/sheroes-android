@@ -1179,19 +1179,19 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
                     case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                         boolean isPostDeleted = false;
-                        UserPostSolrObj userPostSolrObj = null;
+                        FeedDetail feedDetail = null;
                         Parcelable parcelableUserPost = intent.getParcelableExtra(FeedDetail.FEED_COMMENTS);
                         if (parcelableUserPost != null) {
-                            userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                            feedDetail = Parcels.unwrap(parcelableUserPost);
                             isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                         }
-                        if (userPostSolrObj == null) {
+                        if (feedDetail == null) {
                             break;
                         }
                         if (isPostDeleted) {
-                            removeItem(userPostSolrObj);
+                            removeItem(feedDetail);
                         } else {
-                            invalidateItem(userPostSolrObj);
+                            invalidateItem(feedDetail);
                         }
                     case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                         CropImage.ActivityResult result = CropImage.getActivityResult(intent);

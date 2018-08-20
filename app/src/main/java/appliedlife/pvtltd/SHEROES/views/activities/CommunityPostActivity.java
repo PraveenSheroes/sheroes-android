@@ -128,6 +128,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
+import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
@@ -808,7 +809,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         break;
                 }
             }
-            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), pollOptionModelList, "start", "end"));
+            String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(), DateUtil.DATE_FORMAT);
+            String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
+            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
         } else {
             if (mHasPermission) {
                 if (mCommunityPost != null) {
@@ -1023,11 +1026,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             }
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
                                 Bitmap bitmap = decodeFile(photo.file);
+                                startProgressBar();
                                 mCreatePostPresenter.uploadFile(CompressImageUtil.setImageOnHolder(bitmap));
                             } else {
                                 postPicsAndCountView(photo);
                             }
-                            stopProgressBar();
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
                             e.printStackTrace();
@@ -1051,6 +1054,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRlImageList.setVisibility(View.VISIBLE);
         setImageCount();
         mPostPhotoAdapter.addPhoto(photo);
+        stopProgressBar();
     }
 
     @Override
@@ -1519,15 +1523,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private boolean isDirty() {
         if (mIsEditPost) {
-            if (isPostModified()) {
-                return true;
-            }
+            return isPostModified();
         } else {
-            if (CommonUtil.isNotEmpty(etView.getEditText().getText().toString().trim()) || !CommonUtil.isEmpty(mImageList)) {
-                return true;
-            }
+            return CommonUtil.isNotEmpty(etView.getEditText().getText().toString().trim()) || !CommonUtil.isEmpty(mImageList);
         }
-        return false;
     }
 
     private void setImageCount() {
@@ -1987,13 +1986,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void addPollSelectionDay() {
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
+        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
         PopupMenu popup = new PopupMenu(this, tvDaySelector);
         for (int i = 1; i <= pollTime.length; i++) {
-            popup.getMenu().add(0, i, i, menuWithText(pollTime[i - 1]));
+            popup.getMenu().add(0, pollDaysCount[i - 1], i, menuWithText(pollTime[i - 1]));
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 tvDaySelector.setText(item.getTitle());
+                tvDaySelector.setTag(item.getItemId());
                 return true;
             }
         });

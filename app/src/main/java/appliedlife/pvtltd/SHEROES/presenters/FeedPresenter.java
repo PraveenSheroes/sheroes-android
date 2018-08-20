@@ -229,7 +229,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
                         } else {
 
-                            if (feedResponsePojo.getStatus().equals(AppConstants.FAILED)) { //TODO -chk with ujjwal
+                            if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
                                 getMvpView().setFeedEnded(true);
@@ -304,7 +304,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
+                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
                                 userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
@@ -346,7 +346,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus() != AppConstants.SUCCESS) {
+                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
                                 userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -516,7 +516,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userPostSolrObj.setSpamPost(false);
                                 getMvpView().invalidateItem(userPostSolrObj);
                             }
-                            //getMvpView().getNotificationReadCountSuccess(approveSpamPostResponse,SPAM_POST_APPROVE);
                         }
                     }
                 });
@@ -590,7 +589,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus().equals(AppConstants.FAILED)) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                             feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                             getMvpView().invalidateItem(feedDetail);
@@ -634,13 +633,17 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(PollVoteResponse voteResponse) {
                         getMvpView().stopProgressBar();
-                        PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
-                        if (voteResponse.getStatus().equals(AppConstants.FAILED)) {
+                        PollSolarObj pollSolarObj = null;
+                        if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            pollSolarObj = voteResponse.getPollSolrObj();
+                        } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+                            pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
-                            getMvpView().invalidateItem(pollSolarObj);
                         }
-                        getMvpView().invalidateItem(pollSolarObj);
-                        getMvpView().likeUnlikeResponse(pollSolarObj, true);
+                        if (pollSolarObj != null) {
+                            getMvpView().invalidateItem(pollSolarObj);
+                            getMvpView().pollVoteResponse(pollSolarObj);
+                        }
                     }
                 });
 

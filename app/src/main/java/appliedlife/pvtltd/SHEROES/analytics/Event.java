@@ -24,6 +24,7 @@ public enum Event {
     ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
     POST_LIKED(AnalyticsEventType.POST, "Liked"),
     POLL_LIKED(AnalyticsEventType.POLL, "Liked"),
+    POLL_VOTED(AnalyticsEventType.POLL, "Voted"),
     POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
     POLL_UNLIKED(AnalyticsEventType.POLL, "UnLiked"),
     STORY_SHARED(AnalyticsEventType.STORY, "Shared"){

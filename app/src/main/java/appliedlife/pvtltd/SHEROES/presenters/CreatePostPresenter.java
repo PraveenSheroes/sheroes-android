@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-import android.content.Context;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
@@ -315,19 +314,21 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
                 });
     }
+
     public void uploadFile(String encodedImage) {
         UploadImageRequest uploadImageRequest = new UploadImageRequest();
         uploadImageRequest.images = new ArrayList<>();
         uploadImageRequest.images.add(encodedImage);
-        mSheroesAppServiceApi.uploadImage(uploadImageRequest)
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.uploadImageForAnyModule(uploadImageRequest)
                 .compose(this.<UpLoadImageResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<UpLoadImageResponse>() {
                     @Override
-                    public void onNext(UpLoadImageResponse upLoadImageResponse) {
-                        String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
-                        getMvpView().showImage(finalImageUrl);
+                    public void onComplete() {
+
+
                     }
 
                     @Override
@@ -338,10 +339,12 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                     }
 
                     @Override
-                    public void onComplete() {
-
-
+                    public void onNext(UpLoadImageResponse upLoadImageResponse) {
+                        String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
+                        getMvpView().showImage(finalImageUrl);
+                        getMvpView().stopProgressBar();
                     }
+
                 });
     }
 
