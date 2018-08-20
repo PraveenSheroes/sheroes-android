@@ -635,7 +635,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         PollSolarObj pollSolarObj = null;
                         if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            pollSolarObj = voteResponse.getPollSolrObj();
+                            pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
                         } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);

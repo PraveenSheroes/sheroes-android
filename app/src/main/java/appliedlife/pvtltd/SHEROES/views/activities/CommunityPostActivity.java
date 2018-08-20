@@ -809,7 +809,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         break;
                 }
             }
-            String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(), DateUtil.DATE_FORMAT);
+            String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(),  AppConstants.DATE_FORMAT);
             String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
             mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
         } else {

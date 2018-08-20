@@ -1125,7 +1125,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
     @Override
     public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
-        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getEntityOrParticipantId(),pollOptionModel.getPollOptionId()), pollSolarObj);
+        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(),pollOptionModel.getPollOptionId()), pollSolarObj);
     }
 
     @Override

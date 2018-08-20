@@ -45,7 +45,7 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
-        return getDateFromMillisecondsWithFormat(calendar.getTimeInMillis(), DATE_FORMAT);
+        return getDateFromMillisecondsWithFormat(calendar.getTimeInMillis(),  AppConstants.DATE_FORMAT);
     }
 
     public static String contestDate(Date date) {
