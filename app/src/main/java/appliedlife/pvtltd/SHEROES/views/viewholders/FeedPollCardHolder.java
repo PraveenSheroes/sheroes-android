@@ -343,7 +343,6 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         mRgTextPollInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
-                //  RadioButton radioButton = group.findViewById(checkedId);
                 for (int i = 0; i < group.getChildCount(); i++) {
                     RadioButton radioButton = (RadioButton) group.getChildAt(i);
                     if (radioButton.isChecked()) {

@@ -1658,7 +1658,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case AppConstants.SUCCESS:
                     isLinkRendered = true;
                     cardViewLinkRender.setVisibility(View.VISIBLE);
-                    // disableEditTextForLinks();
                     mLinkRenderResponse = linkRenderResponse;
                     if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgTitleS())) {
                         tvLinkTitle.setText(linkRenderResponse.getOgTitleS());
