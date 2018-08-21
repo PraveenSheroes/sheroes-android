@@ -236,24 +236,31 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         tvPollPercentNumberLeft.setVisibility(View.GONE);
         tvImagePollNameLeft.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
-        tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+        tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
 
 
         pbPollPercentRight.setVisibility(View.GONE);
         tvPollPercentNumberRight.setVisibility(View.GONE);
         tvImagePollNameRight.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
         tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
-        tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+        tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
     }
 
     private void imagePollViewResultView() {
         List<PollOptionModel> pollOptionModelList = mPollSolarObj.getPollOptions();
         if (StringUtil.isNotEmptyCollection(pollOptionModelList) && pollOptionModelList.size() > 1) {
+            int width = CommonUtil.getWindowWidth(mContext);
+            int imageHeight = width / 2;
+
+            // Image poll left option
+            String thumborLeftImageUrl = CommonUtil.getThumborUri(pollOptionModelList.get(0).getImageUrl(), width, imageHeight);
             Glide.with(mContext)
-                    .load(pollOptionModelList.get(0).getImageUrl())
+                    .load(thumborLeftImageUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(ivFeedImagePollLeft);
-            tvImagePollNameLeft.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_poll_percent_verified), null);
+
+            tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
+            tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
             tvImagePollNameLeft.setText(pollOptionModelList.get(0).getDescription());
 
             if (pollOptionModelList.get(0).getTotalNoOfVotesPercent() > 0) {
@@ -266,12 +273,24 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 tvPollPercentNumberLeft.setVisibility(View.GONE);
             }
 
+
+            if (pollOptionModelList.get(0).isVoted()) {
+                tvImagePollNameLeft.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_poll_percent_verified), null);
+            } else {
+                tvImagePollNameLeft.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            }
+
+
+            // Image poll right option
+            String thumborRightImageUrl = CommonUtil.getThumborUri(pollOptionModelList.get(1).getImageUrl(), width, imageHeight);
             Glide.with(mContext)
-                    .load(pollOptionModelList.get(1).getImageUrl())
+                    .load(thumborRightImageUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(ivFeedImagePollRight);
-            tvImagePollNameRight.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_poll_percent_verified), null);
             tvImagePollNameRight.setText(pollOptionModelList.get(1).getDescription());
+            tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
+            tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.comment_text));
+
             if (pollOptionModelList.get(1).getTotalNoOfVotesPercent() > 0) {
                 pbPollPercentRight.setProgress(pollOptionModelList.get(1).getTotalNoOfVotesPercent());
                 tvPollPercentNumberRight.setText(pollOptionModelList.get(1).getTotalNoOfVotesPercent() + "%");
@@ -280,6 +299,12 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             } else {
                 pbPollPercentRight.setVisibility(View.GONE);
                 tvPollPercentNumberRight.setVisibility(View.GONE);
+            }
+
+            if (pollOptionModelList.get(1).isVoted()) {
+                tvImagePollNameRight.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_poll_percent_verified), null);
+            } else {
+                tvImagePollNameRight.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
             }
 
         } else {
@@ -355,9 +380,13 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 pbPollPercent.setProgress(pollOptionModel.getTotalNoOfVotesPercent());
                 tvPollPercentNumber.setText(pollOptionModel.getTotalNoOfVotesPercent() + "%");
                 tvTextPollDesc.setText(pollOptionModel.getDescription());
+                if (pollOptionModel.isVoted()) {
+                    ivPercentVerified.setVisibility(View.VISIBLE);
+                } else {
+                    ivPercentVerified.setVisibility(View.GONE);
+                }
                 pbPollPercent.setVisibility(View.VISIBLE);
                 tvPollPercentNumber.setVisibility(View.VISIBLE);
-                ivPercentVerified.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
                 params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
                 liImageRatingRow.setLayoutParams(params);

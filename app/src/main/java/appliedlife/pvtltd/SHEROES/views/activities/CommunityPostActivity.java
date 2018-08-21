@@ -108,7 +108,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollReactionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -347,7 +346,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String mImagePollLeftUrl, mImagePollRightUrl;
     private boolean mIsPollOptionClicked;
     private PollType mPollOptionType;
-    private List<EditText> mEtTextPollList=new ArrayList<>();
+    private List<EditText> mEtTextPollList = new ArrayList<>();
     private EditText mEtTextPoll;
 
     //endregion
@@ -790,18 +789,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public void sendPost() {
         if (mIsPollOptionClicked) {
             List<PollOptionRequestModel> pollOptionModelList = new ArrayList<>();
-            PollType pollType=TEXT;
+            PollType pollType = TEXT;
             if (mPollOptionType != null) {
                 switch (mPollOptionType) {
                     case TEXT:
-                        for(int i=0;i<mEtTextPollList.size();i++)
-                        {
+                        for (int i = 0; i < mEtTextPollList.size(); i++) {
                             PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
                             imagePollOptionModel.setActive(true);
                             imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
                             pollOptionModelList.add(imagePollOptionModel);
                         }
-                        pollType=TEXT;
+                        pollType = TEXT;
                         break;
                     case IMAGE:
                         PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
@@ -816,19 +814,19 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
                         pollOptionModelList.add(imagePollOptionModelLeft);
                         pollOptionModelList.add(imagePollOptionModelRight);
-                        pollType=IMAGE;
+                        pollType = IMAGE;
                         break;
                     case EMOJI:
-                        pollType=EMOJI;
+                        pollType = EMOJI;
                         break;
                     case BOOLEAN:
-                        pollType=BOOLEAN;
+                        pollType = BOOLEAN;
                         break;
                 }
             }
-            String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(),  AppConstants.DATE_FORMAT);
+            String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(), AppConstants.DATE_FORMAT);
             String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
-            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), pollType,etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
+            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), pollType, etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
         } else {
             if (mHasPermission) {
                 if (mCommunityPost != null) {
@@ -861,12 +859,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public void showImage(String imageUrl) {
+    public void showImage(final String imageUrl) {
 
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             int width = CommonUtil.getWindowWidth(this);
             int imageHeight = width / 2;
-            final String finalImageUrl = CommonUtil.getThumborUri(imageUrl, width, imageHeight);
+            String finalImageUrl = CommonUtil.getThumborUri(imageUrl, width, imageHeight);
             Glide.with(this)
                     .asBitmap()
                     .load(finalImageUrl)
@@ -879,11 +877,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                 // mLiMainPollView.setVisibility(View.VISIBLE);
                                 // mRlImageList.setVisibility(View.GONE);
                                 if ((Boolean) mIvImagePollLeft.getTag()) {
-                                    mImagePollLeftUrl = finalImageUrl;
+                                    mImagePollLeftUrl = imageUrl;
                                     mIvImagePollLeft.setImageBitmap(bitmap);
                                 } else if ((Boolean) mIvImagePollRight.getTag()) {
                                     mIvImagePollRight.setImageBitmap(bitmap);
-                                    mImagePollRightUrl = finalImageUrl;
+                                    mImagePollRightUrl = imageUrl;
                                 }
                             }
                         }
@@ -1975,9 +1973,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
+        fbShareContainer.setVisibility(View.GONE);
         mRlImageList.setVisibility(View.GONE);
         liUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
+        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
         switch (pollType) {
             case TEXT:
                 for (int i = 0; i <= 1; i++) {
@@ -1985,14 +1985,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     addTextPollOptionView();
                 }
                 tvDaySelector.setText(pollTime[0]);
+                tvDaySelector.setTag(pollDaysCount[0]);
                 break;
             case IMAGE:
                 addImagePollView();
                 tvDaySelector.setText(pollTime[0]);
+                tvDaySelector.setTag(pollDaysCount[0]);
                 break;
             case EMOJI:
                 addRatingPollView();
                 tvDaySelector.setText(pollTime[0]);
+                tvDaySelector.setTag(pollDaysCount[0]);
                 break;
             case BOOLEAN:
                 addBooleanPollView();

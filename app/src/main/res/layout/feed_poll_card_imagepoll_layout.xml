@@ -51,7 +51,7 @@
             android:background="@drawable/rectangle_image_poll_bottom_border"
             android:paddingRight="@dimen/dp_size_8"
             android:text="Tops, Jeans and dta"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@color/comment_text"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_left" />
@@ -105,7 +105,7 @@
             android:gravity="center"
             android:paddingRight="@dimen/dp_size_8"
             android:text="Tops, Jeans and data"
-            android:textColor="@color/footer_icon_text"
+            android:textColor="@color/comment_text"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_right" />
