@@ -662,7 +662,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         PollSolarObj pollSolarObj = null;
                         if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
-                            AnalyticsManager.trackPostAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                            AnalyticsManager.trackPostAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                         } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
@@ -849,8 +849,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             if (mBaseResponseList.get(mBaseResponseList.size() - 1) instanceof Comment) {
                 comments.add((Comment) mBaseResponseList.get(mBaseResponseList.size() - 1));
             }
+            if (mFeedDetail instanceof PollSolarObj) {
+                mFeedDetail = (PollSolarObj) mBaseResponseList.get(0);
+            } else {
+                mFeedDetail.setLastComments(comments);
+            }
         }
-        mFeedDetail.setLastComments(comments);
         return mFeedDetail;
     }
 

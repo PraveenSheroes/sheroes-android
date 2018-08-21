@@ -1744,7 +1744,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public void selectImageFrmGallery() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200)
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200).setFixAspectRatio(true)
                 .start(CommunityPostActivity.this);
     }
 
@@ -1763,7 +1763,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1200, 1200)
+                .setRequestedSize(1200, 1200).setFixAspectRatio(true)
                 .start(CommunityPostActivity.this);
     }
 

@@ -340,7 +340,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
                     @Override
                     public void onNext(UpLoadImageResponse upLoadImageResponse) {
-                        String finalImageUrl = upLoadImageResponse.images.get(0).imageUrl;
+                        String finalImageUrl = upLoadImageResponse.images.get(0).uploadedImageUrl;
                         getMvpView().showImage(finalImageUrl);
                         getMvpView().stopProgressBar();
                     }

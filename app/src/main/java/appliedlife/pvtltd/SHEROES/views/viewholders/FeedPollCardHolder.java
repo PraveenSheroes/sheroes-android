@@ -443,8 +443,10 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             String pluralVotes = mContext.getResources().getQuantityString(R.plurals.numberOfVotes, (int) mPollSolarObj.getTotalNumberOfResponsesOnPoll());
             mTvFeedPollTotalVotes.setText(String.valueOf(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.SPACE + pluralVotes));
             mTvFeedPollTotalVotes.setVisibility(View.VISIBLE);
+            mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
         } else {
             mTvFeedPollTotalVotes.setVisibility(View.GONE);
+            mRlFeedPollImpressionCountView.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getEndsAt())) {
             long endDateTime = mDateUtil.getTimeInMillis(mPollSolarObj.getEndsAt(), AppConstants.DATE_FORMAT);
@@ -477,7 +479,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-            String feedTitle = mPollSolarObj.getNameOrTitle();
+            String feedTitle = mPollSolarObj.getAuthorName();
             posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.created_poll)).append(AppConstants.SPACE);
             clickOnCommunityName(posted.toString(), feedTitle, mContext.getString(R.string.created_poll));
             mTvFeedPollCardTitle.setVisibility(View.VISIBLE);
@@ -496,31 +498,24 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         if (mPollSolarObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && mPollSolarObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             rlFeedPollNoReactionComment.setVisibility(View.GONE);
-            mRlFeedPollImpressionCountView.setVisibility(View.GONE);
         }
         switch (mPollSolarObj.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 if (mPollSolarObj.getNoOfComments() > AppConstants.NO_REACTION_CONSTANT) {
                     rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
-                    mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
                 } else {
                     rlFeedPollNoReactionComment.setVisibility(View.GONE);
-                    mRlFeedPollImpressionCountView.setVisibility(View.GONE);
                 }
                 userLike();
                 break;
             case AppConstants.ONE_CONSTANT:
                 rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
-                mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
                 userLike();
                 break;
             default:
                 rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
-                mRlFeedPollImpressionCountView.setVisibility(View.VISIBLE);
                 userLike();
         }
-        String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, mPollSolarObj.getNoOfLikes());
-        mTvFeedPollTotalReactionCount.setText(String.valueOf(mPollSolarObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
         switch (mPollSolarObj.getNoOfComments()) {
             case AppConstants.NO_REACTION_CONSTANT:
                 if (mPollSolarObj.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
@@ -540,9 +535,22 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             default:
                 mTvFeedPollTotalReplies.setVisibility(View.VISIBLE);
         }
-        String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfVotes, mPollSolarObj.getNoOfComments());
-
-        mTvFeedPollTotalReplies.setText(String.valueOf(mPollSolarObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
+        if (mPollSolarObj.getNoOfLikes() > 0) {
+            String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, mPollSolarObj.getNoOfLikes());
+            mTvFeedPollTotalReactionCount.setText(String.valueOf(mPollSolarObj.getNoOfLikes() + AppConstants.SPACE + pluralLikes));
+            mTvFeedPollTotalReactionCount.setVisibility(View.VISIBLE);
+            mTvFeedPollTotalReaction.setVisibility(View.VISIBLE);
+        } else {
+            mTvFeedPollTotalReactionCount.setVisibility(View.INVISIBLE);
+            mTvFeedPollTotalReaction.setVisibility(View.INVISIBLE);
+        }
+        if (mPollSolarObj.getNoOfComments() > 0) {
+            String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfVotes, mPollSolarObj.getNoOfComments());
+            mTvFeedPollTotalReplies.setText(String.valueOf(mPollSolarObj.getNoOfComments() + AppConstants.SPACE + pluralComments));
+            mTvFeedPollTotalReplies.setVisibility(View.VISIBLE);
+        } else {
+            mTvFeedPollTotalReplies.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void populatePostedPollText() {
@@ -621,25 +629,19 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         };
         if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
             SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
-            if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                if (mPollSolarObj.isAuthorMentor()) {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
-                } else {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
-                }
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
+            if (mPollSolarObj.isAuthorMentor()) {
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
             } else {
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
-                SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, feedTitle.length(), 0);
             }
+            TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+            SpanString.setSpan(typefaceSpan, 0, feedTitle.length(), 0);
 
             if (StringUtil.isNotNullOrEmptyString(postedIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + postedIn.length() + 1, 0);
                 SpanString.setSpan(community, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                SpanString.setSpan(typefaceSpan, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
+                TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
+                SpanString.setSpan(typefaceSpanCommunity, feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + postedIn.length() + 2, nameAndCommunity.length(), 0);
             }
             mTvFeedPollCardTitle.setMovementMethod(LinkMovementMethod.getInstance());

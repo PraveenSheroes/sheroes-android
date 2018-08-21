@@ -401,7 +401,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     private void setResult() {
-
         FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
         if (feedDetail == null) {
             return;
@@ -429,7 +428,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
                     mTitleToolbar.setText(pollSolarObj.getPollCommunityName() + " post");
                 } else {
-                    mTitleToolbar.setText(pollSolarObj.getNameOrTitle() + "'s" + " post");
+                    mTitleToolbar.setText(pollSolarObj.getAuthorName() + "'s" + " post");
                 }
             }
         }
