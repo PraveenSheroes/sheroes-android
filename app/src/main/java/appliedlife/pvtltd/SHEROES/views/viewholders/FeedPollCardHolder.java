@@ -593,13 +593,13 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             mTvFeedPollUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
         }
-        final String listDescription = mPollSolarObj.getListDescription();
-        if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
-            mTvFeedPollDescription.setVisibility(View.GONE);
-        } else {
+        final String listDescription = mPollSolarObj.getDescription();
+        if (StringUtil.isNotNullOrEmptyString(listDescription)) {
             mTvFeedPollDescription.setVisibility(View.VISIBLE);
             mTvFeedPollDescription.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
             linkifyURLs(mTvFeedPollDescription);
+        } else {
+            mTvFeedPollDescription.setVisibility(View.GONE);
         }
     }
 
