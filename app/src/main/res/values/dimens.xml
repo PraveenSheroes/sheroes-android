@@ -255,6 +255,7 @@
     <dimen name="feed_imagepoll_progress_text_margin">8dp</dimen>
     <dimen name="bottom_sheet_post_poll_height">80dp</dimen>
     <dimen name="image_poll_text_height">40dp</dimen>
+    <dimen name="text_poll_result_desc_margin">16dp</dimen>
 
 
 

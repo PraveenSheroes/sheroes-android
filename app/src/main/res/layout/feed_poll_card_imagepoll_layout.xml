@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/feed_imagepoll_height"
             android:adjustViewBounds="true"
-            android:src="@drawable/vector_image_poll"
+            android:src="@drawable/vector_image_poll_holder"
             android:scaleType="centerCrop" />
 
         <ProgressBar
@@ -70,7 +70,7 @@
             android:layout_height="@dimen/feed_imagepoll_height"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/vector_image_poll" />
+            android:src="@drawable/vector_image_poll_holder" />
 
         <ProgressBar
             android:id="@+id/pb_imagepoll_percent_right"

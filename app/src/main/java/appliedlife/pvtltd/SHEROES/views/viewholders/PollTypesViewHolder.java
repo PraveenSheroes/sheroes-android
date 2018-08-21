@@ -4,16 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.PollTypeCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
@@ -60,19 +56,7 @@ public class PollTypesViewHolder extends BaseViewHolder<PollOptionType> {
     public void bindData(PollOptionType pollOptionType, Context context, int position) {
         mContext = context;
         mPollOptionType = pollOptionType;
-
-        if (CommonUtil.isNotEmpty(mPollOptionType.imgUrl)) {
-            String imageKitUrl = CommonUtil.getThumborUri(mPollOptionType.imgUrl, iconSize, iconSize);
-            if (CommonUtil.isNotEmpty(imageKitUrl)) {
-                Glide.with(mContext)
-                        .load(imageKitUrl)
-                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
-                        .into(mPollTypeIcon);
-            }
-        } else {
-            mPollTypeIcon.setImageResource(R.drawable.ic_image_holder);
-        }
-
+        mPollTypeIcon.setImageResource(mPollOptionType.imgUrl);
         mPollTypeName.setText(mPollOptionType.title);
     }
     //endregion

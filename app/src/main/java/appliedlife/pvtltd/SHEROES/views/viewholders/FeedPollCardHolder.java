@@ -165,6 +165,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     private ProgressBar pbPollPercentLeft, pbPollPercentRight;
     private TextView tvPollPercentNumberLeft, tvPollPercentNumberRight, tvImagePollNameLeft, tvImagePollNameRight;
     private ImageView ivFeedImagePollLeft, ivFeedImagePollRight;
+    private RadioGroup mRgTextPollInput;
 
     public FeedPollCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -216,7 +217,11 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         mLiTypeOfPollView.removeAllViewsInLayout();
         switch (mPollSolarObj.getPollType()) {
             case TEXT:
-                addTextPollInputViews();
+                if (mPollSolarObj.isShowResults() || mPollSolarObj.isRespondedOnPoll()) {
+                    addTextPollResultViews();
+                } else {
+                    addTextPollInputViews();
+                }
                 break;
             case IMAGE:
                 addImagePollViews();
@@ -296,52 +301,72 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     //region private methods
 
     private void addTextPollInputViews() {
-        final RadioGroup rgTextPollInput = new RadioGroup(mContext);
-        for (int i = 1; i < 5; i++) {
+        mRgTextPollInput = new RadioGroup(mContext);
+        for (int i = 1; i < mPollSolarObj.getPollOptions().size(); i++) {
             final RadioButton radioButton = new RadioButton(mContext);
             radioButton.setButtonDrawable(null);
             radioButton.setTextSize(mPollTextInputTextSize);
             radioButton.setBackgroundResource(R.drawable.selecter_text_poll_type);
             radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             radioButton.setPadding(mPollTextInputPadding, mPollTextInputPadding, mPollTextInputPadding, mPollTextInputPadding);
-            radioButton.setText("Data " + i);
+            radioButton.setText(mPollSolarObj.getPollOptions().get(i).getDescription());
             LinearLayout.LayoutParams radioParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
             radioParam.setMargins(0, mPollMarginTop, 0, mPollMarginTop);
             radioButton.setLayoutParams(radioParam);
-            rgTextPollInput.addView(radioButton);
+            mRgTextPollInput.addView(radioButton);
         }
-        rgTextPollInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        mRgTextPollInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
-                for (int i = 0; i < group.getChildCount(); i++) {
+                RadioButton radioButton = group.findViewById(checkedId);
+                if (radioButton.isChecked()) {
+                    mRgTextPollInput.setEnabled(false);
+                    radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                    PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(0);
+                    mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
+                    ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
+                }
+               /* for (int i = 0; i < group.getChildCount(); i++) {
                     RadioButton radioButton = (RadioButton) group.getChildAt(i);
                     if (radioButton.isChecked()) {
                         radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                     } else {
                         radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                     }
-                }
+                }*/
             }
         });
+        mRgTextPollInput.setEnabled(true);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
-        rgTextPollInput.setLayoutParams(params);
-        mLiTypeOfPollView.addView(rgTextPollInput);
+        mRgTextPollInput.setLayoutParams(params);
+        mLiTypeOfPollView.addView(mRgTextPollInput);
     }
 
     private void addTextPollResultViews() {
-        final View pollLayout = LayoutInflater.from(mContext).inflate(R.layout.feed_poll_card_textpoll_result_layout, null);
-        final LinearLayout liImageRatingRow = pollLayout.findViewById(R.id.li_feed_text_poll_row);
-        ProgressBar pbPollPercent = pollLayout.findViewById(R.id.pb_poll_percent);
-        TextView tvPollPercentNumber = pollLayout.findViewById(R.id.tv_poll_percent_number);
-        ImageView ivPercentVerified = pollLayout.findViewById(R.id.iv_percent_verified);
-        pbPollPercent.setProgress(50);
-        tvPollPercentNumber.setText(50 + "%");
-        ivPercentVerified.setVisibility(View.GONE);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
-        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
-        liImageRatingRow.setLayoutParams(params);
-        mLiTypeOfPollView.addView(liImageRatingRow);
+        List<PollOptionModel> pollOptionModelList = mPollSolarObj.getPollOptions();
+        if (StringUtil.isNotEmptyCollection(pollOptionModelList)) {
+            for (PollOptionModel pollOptionModel : pollOptionModelList) {
+                final View pollLayout = LayoutInflater.from(mContext).inflate(R.layout.feed_poll_card_textpoll_result_layout, null);
+                final LinearLayout liImageRatingRow = pollLayout.findViewById(R.id.li_feed_text_poll_row);
+                ProgressBar pbPollPercent = pollLayout.findViewById(R.id.pb_poll_percent);
+                TextView tvPollPercentNumber = pollLayout.findViewById(R.id.tv_poll_percent_number);
+                TextView tvTextPollDesc = pollLayout.findViewById(R.id.tv_text_poll_desc);
+                ImageView ivPercentVerified = pollLayout.findViewById(R.id.iv_percent_verified);
+                pbPollPercent.setProgress(pollOptionModel.getTotalNoOfVotesPercent());
+                tvPollPercentNumber.setText(pollOptionModel.getTotalNoOfVotesPercent() + "%");
+                tvTextPollDesc.setText(pollOptionModel.getDescription());
+                pbPollPercent.setVisibility(View.VISIBLE);
+                tvPollPercentNumber.setVisibility(View.VISIBLE);
+                ivPercentVerified.setVisibility(View.VISIBLE);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+                params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
+                liImageRatingRow.setLayoutParams(params);
+                mLiTypeOfPollView.addView(liImageRatingRow);
+            }
+        } else {
+            addTextPollInputViews();
+        }
     }
 
     private void addImagePollViews() {
@@ -424,7 +449,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getEndsAt())) {
             long endDateTime = mDateUtil.getTimeInMillis(mPollSolarObj.getEndsAt(), AppConstants.DATE_FORMAT);
-            String endsIn = "Ends in: " + mDateUtil.getRoundedDifferenceInHours(endDateTime,System.currentTimeMillis());
+            String endsIn = "Ends in: " + mDateUtil.getRoundedDifferenceInHours(endDateTime, System.currentTimeMillis());
             mTvFeedPollEndsIn.setText(endsIn);
             mTvFeedPollEndsIn.setVisibility(View.VISIBLE);
         } else {

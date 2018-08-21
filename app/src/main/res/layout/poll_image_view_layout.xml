@@ -17,7 +17,7 @@
             android:layout_height="@dimen/image_poll_image_height"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:src="@drawable/vector_image_poll" />
+            android:src="@drawable/vector_image_poll_holder" />
 
         <EditText
             android:id="@+id/et_image_poll_left"
@@ -60,7 +60,7 @@
             android:layout_gravity="center"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-            android:src="@drawable/vector_image_poll" />
+            android:src="@drawable/vector_image_poll_holder" />
 
         <EditText
             android:id="@+id/et_image_poll_right"

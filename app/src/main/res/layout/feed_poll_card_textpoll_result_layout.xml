@@ -14,6 +14,18 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:theme="@style/PollProgressBar" />
+        <TextView
+            android:id="@+id/tv_text_poll_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/comment_text"
+            android:layout_gravity="center|left"
+            android:layout_marginStart="@dimen/text_poll_result_desc_margin"
+            android:layout_marginLeft="@dimen/text_poll_result_desc_margin"
+            android:layout_marginEnd="@dimen/text_poll_result_desc_margin"
+            android:layout_marginRight="@dimen/text_poll_result_desc_margin"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:textSize="14sp"/>
         <ImageView
             android:id="@+id/iv_percent_verified"
             android:layout_width="wrap_content"
@@ -26,11 +38,10 @@
 
     <TextView
         android:id="@+id/tv_poll_percent_number"
-        android:layout_width="wrap_content"
+        android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginStart="@dimen/dp_size_16"
+        android:gravity="center"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/comment_text"
         android:textSize="14sp" />

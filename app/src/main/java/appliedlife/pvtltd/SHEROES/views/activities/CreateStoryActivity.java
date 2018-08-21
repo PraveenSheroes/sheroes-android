@@ -578,7 +578,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public void selectImageFrmCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setFixAspectRatio(true)
                 .setAllowRotation(true)
                 .start(this);
     }

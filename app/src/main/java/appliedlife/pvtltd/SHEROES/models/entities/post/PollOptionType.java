@@ -9,6 +9,6 @@ public class PollOptionType {
     public static final String POLL_TYPE = "poll_type";
     public int id;
     public String title;
-    public String imgUrl;
+    public int imgUrl;
     public PollType pollType;
 }

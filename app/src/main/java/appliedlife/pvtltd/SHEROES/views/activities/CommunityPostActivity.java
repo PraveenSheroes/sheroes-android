@@ -342,6 +342,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private String mImagePollLeftUrl, mImagePollRightUrl;
     private boolean mIsPollOptionClicked;
     private PollType mPollOptionType;
+    private List<EditText> mEtTextPollList=new ArrayList<>();
+    private EditText mEtTextPoll;
 
     //endregion
 
@@ -786,7 +788,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (mPollOptionType != null) {
                 switch (mPollOptionType) {
                     case TEXT:
-
+                        for(int i=0;i<mEtTextPollList.size();i++)
+                        {
+                            PollOptionModel imagePollOptionModel = new PollOptionModel();
+                            imagePollOptionModel.setActive(true);
+                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
+                            pollOptionModelList.add(imagePollOptionModel);
+                        }
                         break;
                     case IMAGE:
                         PollOptionModel imagePollOptionModelLeft = new PollOptionModel();
@@ -798,6 +806,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         imagePollOptionModelRight.setActive(true);
                         imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
                         imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+
                         pollOptionModelList.add(imagePollOptionModelLeft);
                         pollOptionModelList.add(imagePollOptionModelRight);
                         break;
@@ -1727,8 +1736,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public void selectImageFrmGallery() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1200, 1200)
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200)
                 .start(CommunityPostActivity.this);
     }
 
@@ -1764,13 +1772,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 textPoll.pollType = PollType.TEXT;
                 textPoll.id = 1;
                 textPoll.title = "Text Poll";
-                textPoll.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
+                textPoll.imgUrl = R.drawable.vector_text_poll;
                 pollOptionTypeList.add(textPoll);
+
                 PollOptionType imagePoll = new PollOptionType();
                 imagePoll.pollType = PollType.IMAGE;
                 imagePoll.id = 2;
-                imagePoll.title = "Text Poll";
-                imagePoll.imgUrl = "https://img.sheroes.in/img/uploads/community/logo/201802221711551578.png";
+                imagePoll.title = "Image Poll";
+                imagePoll.imgUrl = R.drawable.vector_image_poll_icon;
                 pollOptionTypeList.add(imagePoll);
 
                 PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollOptionTypeList);
@@ -2011,8 +2020,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void addTextPollOptionView() {
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_option_type_layout, null);
         final LinearLayout liTextPollRow = pollLayout.findViewById(R.id.li_text_poll_row);
-        final EditText etTextPoll = pollLayout.findViewById(R.id.et_text_poll);
-        etTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount);
+        mEtTextPoll = pollLayout.findViewById(R.id.et_text_poll);
+        mEtTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount);
         if (mPollOptionCount > 2) {
             final ImageView ivDeleteTextPoll = pollLayout.findViewById(R.id.iv_delete_text_poll);
             ivDeleteTextPoll.setVisibility(View.VISIBLE);
@@ -2020,10 +2029,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 @Override
                 public void onClick(View view) {
                     mLiPollContainer.removeView(pollLayout);
+                    mEtTextPollList.remove(mEtTextPoll);
                 }
             });
         }
-
+        mEtTextPollList.add(mEtTextPoll);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liTextPollRow.setLayoutParams(params);
