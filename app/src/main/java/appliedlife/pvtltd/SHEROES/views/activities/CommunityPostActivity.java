@@ -107,7 +107,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollReactionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -143,6 +144,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
+import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
+import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
+import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
+import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.TEXT;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
@@ -784,43 +789,46 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     public void sendPost() {
         if (mIsPollOptionClicked) {
-            List<PollOptionModel> pollOptionModelList = new ArrayList<>();
+            List<PollOptionRequestModel> pollOptionModelList = new ArrayList<>();
+            PollType pollType=TEXT;
             if (mPollOptionType != null) {
                 switch (mPollOptionType) {
                     case TEXT:
                         for(int i=0;i<mEtTextPollList.size();i++)
                         {
-                            PollOptionModel imagePollOptionModel = new PollOptionModel();
+                            PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
                             imagePollOptionModel.setActive(true);
                             imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
                             pollOptionModelList.add(imagePollOptionModel);
                         }
+                        pollType=TEXT;
                         break;
                     case IMAGE:
-                        PollOptionModel imagePollOptionModelLeft = new PollOptionModel();
+                        PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                         imagePollOptionModelLeft.setActive(true);
                         imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
                         imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
 
-                        PollOptionModel imagePollOptionModelRight = new PollOptionModel();
+                        PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
                         imagePollOptionModelRight.setActive(true);
                         imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
                         imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
 
                         pollOptionModelList.add(imagePollOptionModelLeft);
                         pollOptionModelList.add(imagePollOptionModelRight);
+                        pollType=IMAGE;
                         break;
                     case EMOJI:
-
+                        pollType=EMOJI;
                         break;
                     case BOOLEAN:
-
+                        pollType=BOOLEAN;
                         break;
                 }
             }
             String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(),  AppConstants.DATE_FORMAT);
             String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
-            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
+            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), pollType,etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
         } else {
             if (mHasPermission) {
                 if (mCommunityPost != null) {
@@ -1769,14 +1777,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 List<PollOptionType> pollOptionTypeList = new ArrayList<>();
 
                 PollOptionType textPoll = new PollOptionType();
-                textPoll.pollType = PollType.TEXT;
+                textPoll.pollType = TEXT;
                 textPoll.id = 1;
                 textPoll.title = "Text Poll";
                 textPoll.imgUrl = R.drawable.vector_text_poll;
                 pollOptionTypeList.add(textPoll);
 
                 PollOptionType imagePoll = new PollOptionType();
-                imagePoll.pollType = PollType.IMAGE;
+                imagePoll.pollType = IMAGE;
                 imagePoll.id = 2;
                 imagePoll.title = "Image Poll";
                 imagePoll.imgUrl = R.drawable.vector_image_poll_icon;

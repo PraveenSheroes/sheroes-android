@@ -83,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
@@ -768,8 +769,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     switch (item.getItemId()) {
                         case R.id.delete:
                             mFeedDetailObjForNameUpdation = pollSolarObj;
+                            mPostDetailPresenter.deletePollFromPresenter(mAppUtils.deletePollRequestBuilder(mFeedDetailObjForNameUpdation.getIdOfEntityOrParticipant()), pollSolarObj);
                             AnalyticsManager.trackPostAction(Event.POLL_DELETED, mFeedDetailObjForNameUpdation, getScreenName());
-                            mPostDetailPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(mFeedDetailObjForNameUpdation.getIdOfEntityOrParticipant()));
                             return true;
                         case R.id.share:
                             shareWithMultipleOption(pollSolarObj);
@@ -877,6 +878,11 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         HashMap<String, Object> properties = MixpanelHelper.getPollProperties(pollSolarObj, getScreenName());
         AnalyticsManager.trackEvent(Event.POLL_SHARED, getScreenName(), properties);
+    }
+
+    @Override
+    public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
+        mPostDetailPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj);
     }
 
     @Override

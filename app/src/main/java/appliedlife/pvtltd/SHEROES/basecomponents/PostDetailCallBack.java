@@ -4,6 +4,7 @@ import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 
 /**
  * Created by ujjwal on 07/12/17.
@@ -19,6 +20,8 @@ public interface PostDetailCallBack {
     void onSpamMenuClicked(UserPostSolrObj userPostObj, TextView spamPostView);
 
     void onShareButtonClicked(UserPostSolrObj userPostObj, TextView shareView);
+
+    void onPollVote(PollSolarObj pollSolarObj,PollOptionModel pollOptionModel);
 
     void onPostLikeClicked(UserPostSolrObj userPostObj);
 

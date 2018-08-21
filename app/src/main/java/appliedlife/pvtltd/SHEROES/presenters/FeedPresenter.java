@@ -48,6 +48,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -87,7 +90,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     public static final int LOAD_MORE_REQUEST = 1;
     private static final int END_REQUEST = 2;
     HomeModel mHomeModel;
-    SheroesAppServiceApi sheroesAppServiceApi;
+    SheroesAppServiceApi mSheroesAppServiceApi;
     SheroesApplication mSheroesApplication;
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -106,14 +109,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     private List<FeedDetail> mFeedDetailList = new ArrayList<>();
 
     @Inject
-    public FeedPresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi) {
+    public FeedPresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi mSheroesAppServiceApi) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
 
         this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-        this.sheroesAppServiceApi = sheroesAppServiceApi;
+        this.mSheroesAppServiceApi = mSheroesAppServiceApi;
 
     }
 
@@ -487,6 +490,41 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
+    public void deletePollFromPresenter(DeletePollRequest deletePollRequest, final PollSolarObj pollSolarObj) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.deletePoll(deletePollRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CreatePollResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreatePollResponse>() {
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(CreatePollResponse communityPostCreateResponse) {
+                        if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().notifyAllItemRemoved(pollSolarObj);
+                        }
+                        getMvpView().stopProgressBar();
+                    }
+
+                });
+    }
+
     public void getSpamPostApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final UserPostSolrObj userPostSolrObj) {
         getMvpView().startProgressBar();
         mHomeModel.getSpamPostApproveFromModel(approveSpamPostRequest)
@@ -610,7 +648,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        sheroesAppServiceApi.getPollVoteFromApi(pollVote)
+        mSheroesAppServiceApi.getPollVoteFromApi(pollVote)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<PollVoteResponse>bindToLifecycle())
@@ -651,7 +689,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
 
     public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+        return mSheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
                     public LikeResponse apply(LikeResponse likeResponse) {
@@ -709,7 +747,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
 
     public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+        return mSheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
                     public LikeResponse apply(LikeResponse likeResponse) {
@@ -861,7 +899,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
         LogUtils.info(TAG, "***************edit community Post****" + new Gson().toJson(communityPostCreateRequest));
-        return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
+        return mSheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
                     public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
@@ -894,7 +932,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
 
-        sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
+        mSheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
                 .map(new Function<CommunityResponse, CommunityResponse>() {
                     @Override
                     public CommunityResponse apply(CommunityResponse communityResponse) {
@@ -946,7 +984,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
 
-        sheroesAppServiceApi.removeMember(removeMemberRequest)
+        mSheroesAppServiceApi.removeMember(removeMemberRequest)
                 .map(new Function<MemberListResponse, MemberListResponse>() {
                     @Override
                     public MemberListResponse apply(MemberListResponse memberListResponse) {
@@ -994,7 +1032,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
 
-        sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+        mSheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<SpamResponse>bindToLifecycle())
@@ -1025,7 +1063,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        sheroesAppServiceApi.deleteArticle(articleSubmissionRequest)
+        mSheroesAppServiceApi.deleteArticle(articleSubmissionRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ArticleSubmissionResponse>bindToLifecycle())

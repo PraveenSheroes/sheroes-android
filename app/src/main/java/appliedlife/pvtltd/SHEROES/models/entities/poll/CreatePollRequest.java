@@ -18,7 +18,7 @@ public class CreatePollRequest extends BaseRequest {
 
     //Not null
     @SerializedName("type")
-    private PollType type;
+    private PollType pollType;
 
     //Not null
     @SerializedName("creator_type")
@@ -28,7 +28,7 @@ public class CreatePollRequest extends BaseRequest {
     private Long surveyId;
 
     @SerializedName("show_results")
-    private Boolean showResults;
+    private Boolean showResults=false;
 
     @SerializedName("is_anonymous")
     private Boolean isAnonymous;
@@ -47,10 +47,10 @@ public class CreatePollRequest extends BaseRequest {
     private String endsAt;
 
     @SerializedName("priority")
-    private Integer priority;
+    private Integer priority=0;
 
     @SerializedName("poll_options")
-    private List<PollOptionModel> pollOptions;
+    private List<PollOptionRequestModel> pollOptions;
 
     @SerializedName("is_quiz")
     private Boolean isQuiz;
@@ -80,14 +80,6 @@ public class CreatePollRequest extends BaseRequest {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
-    }
-
-    public PollType getType() {
-        return type;
-    }
-
-    public void setType(PollType type) {
-        this.type = type;
     }
 
     public String getPollCreatorType() {
@@ -162,14 +154,6 @@ public class CreatePollRequest extends BaseRequest {
         this.priority = priority;
     }
 
-    public List<PollOptionModel> getPollOptions() {
-        return pollOptions;
-    }
-
-    public void setPollOptions(List<PollOptionModel> pollOptions) {
-        this.pollOptions = pollOptions;
-    }
-
     public Boolean getQuiz() {
         return isQuiz;
     }
@@ -184,5 +168,21 @@ public class CreatePollRequest extends BaseRequest {
 
     public void setQuizDurationInSeconds(Boolean quizDurationInSeconds) {
         this.quizDurationInSeconds = quizDurationInSeconds;
+    }
+
+    public List<PollOptionRequestModel> getPollOptions() {
+        return pollOptions;
+    }
+
+    public void setPollOptions(List<PollOptionRequestModel> pollOptions) {
+        this.pollOptions = pollOptions;
+    }
+
+    public PollType getPollType() {
+        return pollType;
+    }
+
+    public void setPollType(PollType pollType) {
+        this.pollType = pollType;
     }
 }

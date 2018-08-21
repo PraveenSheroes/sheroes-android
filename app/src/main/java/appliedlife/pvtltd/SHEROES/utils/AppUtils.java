@@ -100,7 +100,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDrawerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
@@ -478,10 +480,10 @@ public class AppUtils {
         LogUtils.enter(TAG, LogUtils.getMethodName());
         /*
          * To convert the InputStream to String we use the
-		 * BufferedReader.readLine() method. We iterate until the BufferedReader
-		 * return null which means there's no more data to read. Each line will
-		 * appended to a StringBuilder and returned as String.
-		 */
+         * BufferedReader.readLine() method. We iterate until the BufferedReader
+         * return null which means there's no more data to read. Each line will
+         * appended to a StringBuilder and returned as String.
+         */
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
         StringBuffer sb = new StringBuffer();
 
@@ -1894,7 +1896,7 @@ public class AppUtils {
         return communityPostCreateRequest;
     }
 
-    public CreatePollRequest createPollRequestBuilder(Long communityId, String createType, String description,List<PollOptionModel> pollOptionModelList,String startAt,String endAt) {
+    public CreatePollRequest createPollRequestBuilder(Long communityId, String createType, PollType pollType, String description, List<PollOptionRequestModel> pollOptionModelList, String startAt, String endAt) {
         AppUtils appUtils = AppUtils.getInstance();
         CreatePollRequest createPollRequest = new CreatePollRequest();
         createPollRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1902,13 +1904,23 @@ public class AppUtils {
         createPollRequest.setDeviceUniqueId(appUtils.getDeviceId());
         createPollRequest.setCommunityId(communityId);
         createPollRequest.setPollCreatorType(createType);
+        createPollRequest.setPollType(pollType);
         createPollRequest.setDescription(description);
         createPollRequest.setPollOptions(pollOptionModelList);
         createPollRequest.setStartsAt(startAt);
         createPollRequest.setEndsAt(endAt);
         return createPollRequest;
     }
+    public DeletePollRequest deletePollRequestBuilder(Long pollId) {
+        AppUtils appUtils = AppUtils.getInstance();
+        DeletePollRequest deletePollRequest = new DeletePollRequest();
+        deletePollRequest.setAppVersion(appUtils.getAppVersionName());
+        deletePollRequest.setCloudMessagingId(appUtils.getCloudMessaging());
+        deletePollRequest.setDeviceUniqueId(appUtils.getDeviceId());
+        deletePollRequest.setPollId(pollId);
 
+        return deletePollRequest;
+    }
     public static ChallengePostCreateRequest createChallengePostRequestBuilder(String createType, int challengeId, String sourceType, String description, List<String> imag, LinkRenderResponse linkRenderResponse, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         ChallengePostCreateRequest challengePostCreateRequest = new ChallengePostCreateRequest();
@@ -1984,7 +1996,7 @@ public class AppUtils {
             communityPostCreateRequest.setOgVideoLinkB(false);
             communityPostCreateRequest.setOgRequestedUrlS(AppConstants.EMPTY_STRING);
         }
-              /*User tagging fields*/
+        /*User tagging fields*/
         if (StringUtil.isNotEmptyCollection(userMentionList)) {
             communityPostCreateRequest.setHasMentions(true);
             communityPostCreateRequest.setUserMentionList(userMentionList);
@@ -2186,29 +2198,26 @@ public class AppUtils {
         return m.find();
     }
 
-    public ArticleSubmissionRequest articleDraftAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj,String coverImageUrl,boolean isPublish) {
+    public ArticleSubmissionRequest articleDraftAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj, String coverImageUrl, boolean isPublish) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
         articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
         articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        if(null!=articleId) {
+        if (null != articleId) {
             articleSubmissionRequest.articleId = articleId;
             if (StringUtil.isNotEmptyCollection(articleSolrObj.getTag_ids())) {
-                for (long oldTag:articleSolrObj.getTag_ids())
-                {
-                    boolean isMatch=false;
-                    for (long deletedTag:deletedTagList) {
-                        if (oldTag== deletedTag) {
-                            isMatch=true;
+                for (long oldTag : articleSolrObj.getTag_ids()) {
+                    boolean isMatch = false;
+                    for (long deletedTag : deletedTagList) {
+                        if (oldTag == deletedTag) {
+                            isMatch = true;
                             break;
-                        }else
-                        {
-                            isMatch=false;
+                        } else {
+                            isMatch = false;
                         }
                     }
-                    if(isMatch)
-                    {
+                    if (isMatch) {
                         deletedTagList.add(oldTag);
                     }
                 }
@@ -2219,18 +2228,19 @@ public class AppUtils {
         articleSubmissionRequest.storyTitle = articleTitle;
         articleSubmissionRequest.storyContent = articleBody;
         articleSubmissionRequest.tagIds = tagList;
-        articleSubmissionRequest.coverImageUrl=coverImageUrl;
+        articleSubmissionRequest.coverImageUrl = coverImageUrl;
         return articleSubmissionRequest;
     }
-    public ArticleSubmissionRequest articleDeleteRequest( ArticleSolrObj articleSolrObj) {
+
+    public ArticleSubmissionRequest articleDeleteRequest(ArticleSolrObj articleSolrObj) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
         articleSubmissionRequest.setDeviceUniqueId(appUtils.getDeviceId());
         articleSubmissionRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        articleSubmissionRequest.articleId=articleSolrObj.getIdOfEntityOrParticipant();
-        articleSubmissionRequest.storyTitle=articleSolrObj.getNameOrTitle();
-        articleSubmissionRequest.storyContent=articleSolrObj.getDescription();
+        articleSubmissionRequest.articleId = articleSolrObj.getIdOfEntityOrParticipant();
+        articleSubmissionRequest.storyTitle = articleSolrObj.getNameOrTitle();
+        articleSubmissionRequest.storyContent = articleSolrObj.getDescription();
 
         return articleSubmissionRequest;
     }

@@ -302,7 +302,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
     private void addTextPollInputViews() {
         mRgTextPollInput = new RadioGroup(mContext);
-        for (int i = 1; i < mPollSolarObj.getPollOptions().size(); i++) {
+        for (int i = 0; i < mPollSolarObj.getPollOptions().size(); i++) {
             final RadioButton radioButton = new RadioButton(mContext);
             radioButton.setButtonDrawable(null);
             radioButton.setTextSize(mPollTextInputTextSize);
@@ -318,25 +318,24 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         mRgTextPollInput.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // checkedId is the RadioButton selected
-                RadioButton radioButton = group.findViewById(checkedId);
-                if (radioButton.isChecked()) {
-                    mRgTextPollInput.setEnabled(false);
-                    radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.white));
-                    PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(0);
-                    mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
-                    ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
-                }
-               /* for (int i = 0; i < group.getChildCount(); i++) {
+                //  RadioButton radioButton = group.findViewById(checkedId);
+                for (int i = 0; i < group.getChildCount(); i++) {
                     RadioButton radioButton = (RadioButton) group.getChildAt(i);
                     if (radioButton.isChecked()) {
                         radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+                        PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(i);
+                        mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
+                        if (viewInterface != null) {
+                            ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
+                        } else if (mPostDetailCallBack != null) {
+                            mPostDetailCallBack.onPollVote(mPollSolarObj, pollOptionModel);
+                        }
                     } else {
                         radioButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
                     }
-                }*/
+                }
             }
         });
-        mRgTextPollInput.setEnabled(true);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         mRgTextPollInput.setLayoutParams(params);
@@ -381,12 +380,12 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
                 tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(0);
+                mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
                 if (viewInterface != null) {
-                    PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(0);
-                    mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
                     ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
                 } else if (mPostDetailCallBack != null) {
-
+                    mPostDetailCallBack.onPollVote(mPollSolarObj, pollOptionModel);
                 }
             }
         });
@@ -397,12 +396,12 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
                 tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(1);
+                mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
                 if (viewInterface != null) {
-                    PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(1);
-                    mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
                     ((FeedItemCallback) viewInterface).onPollVote(mPollSolarObj, pollOptionModel);
                 } else if (mPostDetailCallBack != null) {
-
+                    mPostDetailCallBack.onPollVote(mPollSolarObj, pollOptionModel);
                 }
             }
         });
@@ -466,6 +465,8 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             mIvFeedPollCircleIcon.setCircularImage(true);
             String authorThumborUrl = CommonUtil.getThumborUri(authorImageUrl, authorPicSizeFourty, authorPicSizeFourty);
             mIvFeedPollCircleIcon.bindImage(authorThumborUrl);
+        } else {
+            mIvFeedPollCircleIcon.setBackgroundResource(R.drawable.default_img);
         }
 
         if (mPollSolarObj.isAuthorMentor()) {
@@ -474,11 +475,14 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             mIvFeedPollCircleIconVerified.setVisibility(View.GONE);
         }
 
-        if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getNameOrTitle())) {
+        if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
             String feedTitle = mPollSolarObj.getNameOrTitle();
             posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.created_poll)).append(AppConstants.SPACE);
             clickOnCommunityName(posted.toString(), feedTitle, mContext.getString(R.string.created_poll));
+            mTvFeedPollCardTitle.setVisibility(View.VISIBLE);
+        } else {
+            mTvFeedPollCardTitle.setVisibility(View.INVISIBLE);
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mPollSolarObj.getCreatedDate(), AppConstants.DATE_FORMAT);

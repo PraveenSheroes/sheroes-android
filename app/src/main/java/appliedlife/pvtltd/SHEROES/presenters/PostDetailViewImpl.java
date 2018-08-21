@@ -37,6 +37,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -75,7 +79,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
  */
 
 public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
-    SheroesAppServiceApi sheroesAppServiceApi;
+    SheroesAppServiceApi mSheroesAppServiceApi;
     private FeedDetail mFeedDetail;
     private String mFeedDetailObjId;
     private List<BaseResponse> mBaseResponseList;
@@ -90,8 +94,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     AppUtils mAppUtils;
 
     @Inject
-    public PostDetailViewImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
-        this.sheroesAppServiceApi = sheroesAppServiceApi;
+    public PostDetailViewImpl(SheroesAppServiceApi mSheroesAppServiceApi, SheroesApplication sheroesApplication) {
+        this.mSheroesAppServiceApi = mSheroesAppServiceApi;
         this.mBaseResponseList = new ArrayList<>();
         this.mSheroesApplication = sheroesApplication;
     }
@@ -239,7 +243,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
-        return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
+        return mSheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
                     public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
@@ -290,7 +294,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+        return mSheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
                 .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
@@ -303,7 +307,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
 
     private Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
-        return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
+        return mSheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
                     public CommentReactionResponsePojo apply(CommentReactionResponsePojo commentReactionResponsePojo) {
@@ -365,7 +369,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
-        return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
+        return mSheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
                     public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
@@ -418,7 +422,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
-        return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
+        return mSheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
                     public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
@@ -573,8 +577,44 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
+    public void deletePollFromPresenter(DeletePollRequest deletePollRequest, final PollSolarObj pollSolarObj) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.deletePoll(deletePollRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CreatePollResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreatePollResponse>() {
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(CreatePollResponse communityPostCreateResponse) {
+                        if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onPostDeleted();
+                        }
+                        getMvpView().stopProgressBar();
+                    }
+
+                });
+    }
+
+
     private Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
-        return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
+        return mSheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
                 .map(new Function<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
                     @Override
                     public DeleteCommunityPostResponse apply(DeleteCommunityPostResponse deleteCommunityPostResponse) {
@@ -583,6 +623,55 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+            pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+            mBaseResponseList.set(0, pollSolarObj);
+            getMvpView().setData(0, pollSolarObj);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.getPollVoteFromApi(pollVote)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<PollVoteResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<PollVoteResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+                        PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+                        pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+                        mBaseResponseList.set(0, pollSolarObj);
+                        getMvpView().setData(0, pollSolarObj);
+                    }
+
+                    @Override
+                    public void onNext(PollVoteResponse voteResponse) {
+                        getMvpView().stopProgressBar();
+                        PollSolarObj pollSolarObj = null;
+                        if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
+                            AnalyticsManager.trackPostAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                        } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+                            pollSolarObj = (PollSolarObj) feedDetail;
+                            pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+                        }
+                        mBaseResponseList.set(0, pollSolarObj);
+                        getMvpView().setData(0, pollSolarObj);
+                    }
+                });
+
     }
 
 
@@ -623,10 +712,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     mBaseResponseList.set(0, feedDetail);
                     getMvpView().setData(0, feedDetail);
                 }
-                if(feedDetail instanceof UserPostSolrObj) {
+                if (feedDetail instanceof UserPostSolrObj) {
                     AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
-                }else if(feedDetail instanceof PollSolarObj)
-                {
+                } else if (feedDetail instanceof PollSolarObj) {
                     AnalyticsManager.trackPostAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 }
                 getMvpView().setData(0, feedDetail);
@@ -671,10 +759,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                     mBaseResponseList.set(0, feedDetail);
                 }
-                if(feedDetail instanceof UserPostSolrObj) {
+                if (feedDetail instanceof UserPostSolrObj) {
                     AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
-                }else if(feedDetail instanceof PollSolarObj)
-                {
+                } else if (feedDetail instanceof PollSolarObj) {
                     AnalyticsManager.trackPostAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 }
 
@@ -686,7 +773,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
 
     private Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+        return mSheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
                     public LikeResponse apply(LikeResponse likeResponse) {
@@ -698,7 +785,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+        return mSheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
                     public LikeResponse apply(LikeResponse likeResponse) {
@@ -742,7 +829,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
-        return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
+        return mSheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
                 .map(new Function<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
                     @Override
                     public ApproveSpamPostResponse apply(ApproveSpamPostResponse approveSpamPostResponse) {
@@ -877,7 +964,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
+        return mSheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
                 .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
                     @Override
                     public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
@@ -899,7 +986,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         getMvpView().startProgressBar();
 
-        sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+        mSheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -928,7 +1015,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     //Spam Comment for admin
     public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final Comment comment) {
         getMvpView().startProgressBar();
-        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+        mSheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())

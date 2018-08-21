@@ -31,8 +31,7 @@
                 <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                     android:id="@+id/iv_feed_poll_circle_icon"
                     android:layout_width="@dimen/feed_profile_icon_size"
-                    android:layout_height="@dimen/feed_profile_icon_size"
-                    android:src="@drawable/vector_first_rating" />
+                    android:layout_height="@dimen/feed_profile_icon_size" />
 
                 <ImageView
                     android:id="@+id/iv_feed_poll_circle_icon_verified"
@@ -55,7 +54,6 @@
                     android:id="@+id/tv_feed_poll_card_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="XXXXXXXXXXXXX"
                     android:textColor="@color/comment_text"
                     android:textSize="@dimen/feed_poll_card_title_text_size" />
 
@@ -65,7 +63,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/feed_poll_time_margin"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:text="XXXXXXXXXXXX"
                     android:textColor="@color/feed_card_time"
                     android:textSize="@dimen/feed_poll_time_text_size" />
             </LinearLayout>
@@ -99,7 +96,7 @@
             android:id="@+id/li_type_of_poll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
 
         <RelativeLayout
             android:id="@+id/rl_feed_poll_impression_count_view"
@@ -115,7 +112,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="Ends in : 1 hour "
                 android:textColor="@color/feed_card_time"
                 android:textSize="@dimen/poll_impression_text" />
 
@@ -127,7 +123,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="200 votes"
                 android:textColor="@color/feed_card_time"
                 android:textSize="@dimen/poll_impression_text" />
         </RelativeLayout>

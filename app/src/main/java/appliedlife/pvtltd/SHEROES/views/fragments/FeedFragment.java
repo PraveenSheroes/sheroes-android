@@ -350,12 +350,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             updateItem(feedDetail);
         }
     }
+
     @Override
     public void pollVoteResponse(FeedDetail feedDetail) {
-         if (feedDetail instanceof PollSolarObj) {
+        if (feedDetail instanceof PollSolarObj) {
             AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName());
         }
     }
+
     @Override
     public void likeUnlikeResponse(FeedDetail feedDetail, boolean isLike) {
         if (isLike) {
@@ -981,8 +983,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             sharePollCardDetail(pollSolarObj);
                             return true;
                         case R.id.delete:
+                            mFeedPresenter.deletePollFromPresenter(mAppUtils.deletePollRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant()), pollSolarObj);
                             AnalyticsManager.trackPostAction(Event.POLL_DELETED, pollSolarObj, getScreenName());
-                            mFeedPresenter.deleteCommunityPostFromPresenter(AppUtils.deleteCommunityPostRequest(pollSolarObj.getIdOfEntityOrParticipant()), pollSolarObj);
                             return true;
                         default:
                             return false;
@@ -1123,9 +1125,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             LikeListBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), getScreenName(), postId);
         }
     }
+
     @Override
     public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
-        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(),pollOptionModel.getPollOptionId()), pollSolarObj);
+        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj);
     }
 
     @Override
