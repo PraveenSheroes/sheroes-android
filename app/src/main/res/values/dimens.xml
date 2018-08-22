@@ -199,6 +199,8 @@
     <dimen name="phot_poll_lable_text_size">14sp</dimen>
     <dimen name="option_poll_text_size">18sp</dimen>
     <dimen name="option_poll_margin_left_right">16dp</dimen>
+    <dimen name="add_icon_left_right">8dp</dimen>
+    <dimen name="add_icon_top_bottom">4dp</dimen>
     <dimen name="option_poll_margintop">6dp</dimen>
     <dimen name="option_poll_padding">9dp</dimen>
     <dimen name="add_option_poll_label_text">14sp</dimen>
@@ -251,7 +253,11 @@
     <dimen name="poll_text_input_text_size">7sp</dimen>
     <dimen name="feed_imagepoll_width">155dp</dimen>
     <dimen name="feed_imagepoll_height">130dp</dimen>
+    <dimen name="feed_imagepoll_progress_height">36dp</dimen>
+    <dimen name="feed_imagepoll_progress_count_text_size">16sp</dimen>
     <dimen name="feed_imagepoll_margin_left">16dp</dimen>
+    <dimen name="feed_imagepoll_name_text_size">14sp</dimen>
+    <dimen name="feed_imagepoll_name_left_padding_right">8dp</dimen>
     <dimen name="feed_imagepoll_progress_text_margin">8dp</dimen>
     <dimen name="bottom_sheet_post_poll_height">80dp</dimen>
     <dimen name="image_poll_text_height">40dp</dimen>

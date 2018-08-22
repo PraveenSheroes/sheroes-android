@@ -16,18 +16,17 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/feed_imagepoll_height"
             android:adjustViewBounds="true"
-            android:src="@drawable/vector_image_poll_holder"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/vector_image_poll_holder" />
 
         <ProgressBar
             android:id="@+id/pb_imagepoll_percent_left"
             style="@style/ImagePollProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="@dimen/feed_imagepoll_progress_height"
             android:alpha=".7"
-            android:visibility="gone"
-            android:progress="40"
             android:theme="@style/ImagePollProgressBar"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_left" />
 
         <TextView
@@ -36,23 +35,22 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/feed_imagepoll_progress_text_margin"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center"
-            android:text="70 % Vote"
+            android:paddingStart="@dimen/feed_imagepoll_progress_text_margin"
+            android:paddingLeft="@dimen/feed_imagepoll_progress_text_margin"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/feed_imagepoll_progress_count_text_size"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_left" />
 
         <TextView
             android:id="@+id/tv_imagepoll_name_left"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_poll_text_height"
+            android:background="@drawable/rectangle_image_poll_bottom_border"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
-            android:background="@drawable/rectangle_image_poll_bottom_border"
-            android:paddingRight="@dimen/dp_size_8"
-            android:text="Tops, Jeans and dta"
+            android:paddingRight="@dimen/feed_imagepoll_name_left_padding_right"
             android:textColor="@color/comment_text"
-            android:textSize="14sp"
+            android:textSize="@dimen/feed_imagepoll_name_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_left" />
     </android.support.constraint.ConstraintLayout>
@@ -76,11 +74,10 @@
             android:id="@+id/pb_imagepoll_percent_right"
             style="@style/ImagePollProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="@dimen/feed_imagepoll_progress_height"
             android:alpha=".7"
-            android:progress="40"
-            android:visibility="gone"
             android:theme="@style/ImagePollProgressBar"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_right" />
 
         <TextView
@@ -89,11 +86,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/feed_imagepoll_progress_text_margin"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="center"
-            android:text="40 % Vote"
-            android:visibility="gone"
+            android:paddingStart="@dimen/feed_imagepoll_progress_text_margin"
+            android:paddingLeft="@dimen/feed_imagepoll_progress_text_margin"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/feed_imagepoll_progress_count_text_size"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_right" />
 
         <TextView
@@ -103,10 +100,9 @@
             android:background="@drawable/rectangle_image_poll_bottom_border"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
-            android:paddingRight="@dimen/dp_size_8"
-            android:text="Tops, Jeans and data"
+            android:paddingRight="@dimen/feed_imagepoll_name_left_padding_right"
             android:textColor="@color/comment_text"
-            android:textSize="14sp"
+            android:textSize="@dimen/feed_imagepoll_name_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_right" />
     </android.support.constraint.ConstraintLayout>

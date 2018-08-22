@@ -69,11 +69,10 @@
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
             android:id="@+id/add_image"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
-            android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingTop="10dp">
@@ -100,11 +99,10 @@
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
             android:id="@+id/camera"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
-            android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingTop="10dp">
@@ -130,11 +128,10 @@
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
             android:id="@+id/poll_survey"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
-            android:gravity="center"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
             android:paddingTop="10dp">

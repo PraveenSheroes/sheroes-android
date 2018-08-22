@@ -695,7 +695,9 @@
         <item>7</item>
         <item>30</item>
     </integer-array>
-    <string name="created_poll">created a poll in</string>
+    <string name="created_poll">created a poll</string>
+    <string name="percent_vote">% vote</string>
+    <string name="ends_in">Ends in:</string>
     <string name="option_empty">Option can\'t be empty</string>
 
 

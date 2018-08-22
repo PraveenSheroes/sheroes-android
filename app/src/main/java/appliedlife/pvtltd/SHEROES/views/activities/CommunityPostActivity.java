@@ -38,6 +38,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -100,6 +101,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -307,6 +309,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @BindDimen(R.dimen.option_poll_margin_left_right)
     int mPollMarginLeftRight;
 
+    @BindDimen(R.dimen.add_icon_left_right)
+    int mPhotoCameraPollImageLeftRight;
+    @BindDimen(R.dimen.add_icon_top_bottom)
+    int mPhotoCameraPollImageTopBottom;
+
     private int mPollOptionCount;
     //endregion
 
@@ -376,6 +383,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 etView.getEditText().setHint(mConfiguration.get().configData.mCreatePostText);
                 mUserTagCreatePostText = mConfiguration.get().configData.mUserTagCreatePostInfoText;
+            } else {
+                etView.getEditText().setHint(new ConfigData().mCreatePostText);
             }
             if (null != getIntent() && getIntent().getExtras() != null) {
                 mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
@@ -491,6 +500,28 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         tvPhotoLable.setVisibility(View.GONE);
         tvCameraLable.setVisibility(View.GONE);
         tvPollSurveyLable.setVisibility(View.GONE);
+        tvAddPhotoLable.setVisibility(View.VISIBLE);
+
+        LinearLayout.LayoutParams photo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        photo.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        mRippleViewLinearAddImage.setLayoutParams(photo);
+        mRippleViewLinearAddImage.setGravity(Gravity.CENTER);
+
+
+        LinearLayout.LayoutParams camera = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        camera.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        mRippleViewLinearCamera.setLayoutParams(camera);
+
+        mRippleViewLinearCamera.setGravity(Gravity.CENTER);
+
+
+        LinearLayout.LayoutParams pollSurvey = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        pollSurvey.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, 0, mPhotoCameraPollImageTopBottom);
+        mRippleViewLinearPollSurvey.setLayoutParams(pollSurvey);
+
+        mRippleViewLinearPollSurvey.setGravity(Gravity.CENTER);
+
+
     }
 
     private void bottomSheetExpanded() {
@@ -498,6 +529,26 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         tvPhotoLable.setVisibility(View.VISIBLE);
         tvCameraLable.setVisibility(View.VISIBLE);
         tvPollSurveyLable.setVisibility(View.VISIBLE);
+        tvAddPhotoLable.setVisibility(View.GONE);
+
+        LinearLayout.LayoutParams photo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        photo.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        mRippleViewLinearAddImage.setLayoutParams(photo);
+        mRippleViewLinearAddImage.setGravity(Gravity.START);
+
+
+        LinearLayout.LayoutParams camera = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        camera.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        mRippleViewLinearCamera.setLayoutParams(camera);
+
+        mRippleViewLinearCamera.setGravity(Gravity.START);
+
+
+        LinearLayout.LayoutParams pollSurvey = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+        pollSurvey.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        mRippleViewLinearPollSurvey.setLayoutParams(pollSurvey);
+
+        mRippleViewLinearPollSurvey.setGravity(Gravity.START);
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
@@ -2011,12 +2062,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 tvDaySelector.setTag(pollDaysCount[0]);
                 break;
             case EMOJI:
-                addRatingPollView();
-                tvDaySelector.setText(pollTime[0]);
-                tvDaySelector.setTag(pollDaysCount[0]);
                 break;
             case BOOLEAN:
-                addBooleanPollView();
                 break;
         }
 
@@ -2058,7 +2105,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 @Override
                 public void onClick(View view) {
                     mLiPollContainer.removeView(pollLayout);
-                    mEtTextPollList.remove(mPollOptionCount-1);
+                    mEtTextPollList.remove(mPollOptionCount - 1);
                     mPollOptionCount--;
                     addOptionButtonView();
                 }
@@ -2072,7 +2119,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void addOptionButtonView() {
-        if (mPollOptionCount<=7) {
+        if (mPollOptionCount <= 7) {
             mAddPollImg.setVisibility(View.VISIBLE);
             mAddPollText.setVisibility(View.VISIBLE);
         } else {
@@ -2114,71 +2161,5 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liImagePollRow.setLayoutParams(params);
         mLiPollContainer.addView(liImagePollRow);
-    }
-
-    private void addRatingPollView() {
-        mAddPollImg.setVisibility(View.GONE);
-        mAddPollText.setVisibility(View.GONE);
-        final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_rating_view_layout, null);
-        final LinearLayout liImageRatingRow = pollLayout.findViewById(R.id.li_rating_poll_view);
-
-        ImageView mIvFirstRating = pollLayout.findViewById(R.id.iv_first_rating);
-        mIvFirstRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        ImageView mIvSecondRating = pollLayout.findViewById(R.id.iv_second_rating);
-        mIvSecondRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        ImageView mIvThirdRating = pollLayout.findViewById(R.id.iv_third_rating);
-        mIvThirdRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        ImageView mIvFourthRating = pollLayout.findViewById(R.id.iv_fourth_rating);
-        mIvFourthRating.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
-        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
-        liImageRatingRow.setLayoutParams(params);
-        mLiPollContainer.addView(liImageRatingRow);
-    }
-
-    private void addBooleanPollView() {
-        rlAddOptionPoll.setVisibility(View.GONE);
-        final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_boolean_view_layout, null);
-        final LinearLayout liBooleanPollRow = pollLayout.findViewById(R.id.li_boolean_poll_view);
-        ImageView ivBooleanPollUp = pollLayout.findViewById(R.id.iv_boolean_poll_up);
-        ivBooleanPollUp.setTag(false);
-        ivBooleanPollUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        ImageView ivBooleanPollDown = pollLayout.findViewById(R.id.iv_boolean_poll_down);
-        ivBooleanPollDown.setTag(false);
-        ivBooleanPollDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
-        params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
-        liBooleanPollRow.setLayoutParams(params);
-        mLiPollContainer.addView(liBooleanPollRow);
     }
 }
