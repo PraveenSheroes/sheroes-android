@@ -55,7 +55,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPollUnLiked(PollSolarObj pollSolarObj);
 
-    void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail);
+    void onChampionProfileClicked(FeedDetail feedDetail, int requestCodeForMentorProfileDetail);
 
     void onCommunityTitleClicked(FeedDetail feedDetail);
 

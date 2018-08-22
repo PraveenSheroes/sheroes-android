@@ -905,10 +905,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
-        long userId = userPostObj.getCreatedBy();
-        int position = userPostObj.getItemPosition();
-        boolean isMentor = userPostObj.isAuthorMentor();
+    public void onChampionProfileClicked(FeedDetail feedDetail, int requestCodeForMentorProfileDetail) {
+        long userId = feedDetail.getCreatedBy();
+        int position = feedDetail.getItemPosition();
+        boolean isMentor = feedDetail.isAuthorMentor();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);

@@ -199,7 +199,7 @@
     <dimen name="phot_poll_lable_text_size">14sp</dimen>
     <dimen name="option_poll_text_size">18sp</dimen>
     <dimen name="option_poll_margin_left_right">16dp</dimen>
-    <dimen name="option_poll_margintop">4dp</dimen>
+    <dimen name="option_poll_margintop">6dp</dimen>
     <dimen name="option_poll_padding">9dp</dimen>
     <dimen name="add_option_poll_label_text">14sp</dimen>
     <dimen name="add_option_poll_label_text_margin">8dp</dimen>

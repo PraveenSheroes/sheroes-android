@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.widget.TextView;
 
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
@@ -27,7 +28,7 @@ public interface PostDetailCallBack {
 
     void onPostUnLikeClicked(UserPostSolrObj userPostObj);
 
-    void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail);
+    void onChampionProfileClicked(FeedDetail feedDetail, int requestCodeForMentorProfileDetail);
 
     void onSpamApprovedClicked(UserPostSolrObj userPostObj, TextView view);
 

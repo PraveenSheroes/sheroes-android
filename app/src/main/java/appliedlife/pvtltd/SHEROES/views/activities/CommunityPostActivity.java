@@ -294,6 +294,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Bind(R.id.tv_day_selector)
     TextView tvDaySelector;
 
+    @Bind(R.id.rl_main_layout)
+    RelativeLayout mRlMainLayout;
+
 
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
@@ -751,12 +754,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-
         if (id == android.R.id.home) {
             onBackPress();
         }
-
         return true;
     }
 
@@ -796,7 +796,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         for (int i = 0; i < mEtTextPollList.size(); i++) {
                             PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
                             imagePollOptionModel.setActive(true);
-                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
+                            if (StringUtil.isNotNullOrEmptyString(mEtTextPollList.get(i).getText().toString())) {
+                                imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
+                            } else {
+                                Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                                return;
+                            }
                             pollOptionModelList.add(imagePollOptionModel);
                         }
                         pollType = TEXT;
@@ -805,12 +810,23 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                         imagePollOptionModelLeft.setActive(true);
                         imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
-                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
+                        if (StringUtil.isNotNullOrEmptyString(mEtImagePollLeft.getText().toString())) {
+                            imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
+                        } else {
+                            Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+
 
                         PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
                         imagePollOptionModelRight.setActive(true);
                         imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
-                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+                        if (StringUtil.isNotNullOrEmptyString(mEtImagePollRight.getText().toString())) {
+                            imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+                        } else {
+                            Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
 
                         pollOptionModelList.add(imagePollOptionModelLeft);
                         pollOptionModelList.add(imagePollOptionModelRight);
@@ -1822,8 +1838,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @OnClick({R.id.iv_add_poll_img, R.id.tv_add_poll_text})
     public void onAddMoreOptionClicked() {
-        mPollOptionCount++;
-        addTextPollOptionView();
+        if (mPollOptionCount < 8) {
+            mPollOptionCount++;
+            addTextPollOptionView();
+        }
+        addOptionButtonView();
     }
 
     @OnClick(R.id.tv_day_selector)
@@ -2039,7 +2058,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 @Override
                 public void onClick(View view) {
                     mLiPollContainer.removeView(pollLayout);
-                    mEtTextPollList.remove(mEtTextPoll);
+                    mEtTextPollList.remove(mPollOptionCount-1);
+                    mPollOptionCount--;
+                    addOptionButtonView();
                 }
             });
         }
@@ -2048,6 +2069,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liTextPollRow.setLayoutParams(params);
         mLiPollContainer.addView(liTextPollRow);
+    }
+
+    private void addOptionButtonView() {
+        if (mPollOptionCount<=7) {
+            mAddPollImg.setVisibility(View.VISIBLE);
+            mAddPollText.setVisibility(View.VISIBLE);
+        } else {
+            mAddPollImg.setVisibility(View.GONE);
+            mAddPollText.setVisibility(View.GONE);
+        }
     }
 
     private void addImagePollView() {

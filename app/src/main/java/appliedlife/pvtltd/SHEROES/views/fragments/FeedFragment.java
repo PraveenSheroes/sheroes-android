@@ -1746,14 +1746,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail) {
-        long userId = userPostObj.getCreatedBy();
-        int position = userPostObj.getItemPosition();
+    public void onChampionProfileClicked(FeedDetail feedDetail, int requestCodeForMentorProfileDetail) {
+        long userId = feedDetail.getCreatedBy();
+        int position = feedDetail.getItemPosition();
         CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
         communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
-        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, userPostObj.isAuthorMentor(), position, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, feedDetail.isAuthorMentor(), position, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }
 
     @Override
@@ -1820,14 +1820,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else if (baseResponse instanceof UserPostSolrObj && mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
             CommunityDetailActivity.navigateTo(getActivity(), postDetails.getCommunityId(), getScreenName(), null, 1);
-        } else {
-            if (baseResponse instanceof UserPostSolrObj) {
-                UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-                if (postDetails.getEntityOrParticipantTypeId() != 15) {
-                    onChampionProfileClicked(postDetails, mValue);
-                }
+        } else if (baseResponse instanceof UserPostSolrObj) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if (postDetails.getEntityOrParticipantTypeId() != 15) {
+                onChampionProfileClicked(postDetails, mValue);
             }
+        } else if (baseResponse instanceof PollSolarObj) {
+            PollSolarObj pollSolarObj = (PollSolarObj) baseResponse;
+            onChampionProfileClicked(pollSolarObj, mValue);
         }
+
     }
 
     private void openProfileScreen(Long userId, int position, boolean isMentor, String source) {
