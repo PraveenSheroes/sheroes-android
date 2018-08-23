@@ -64,6 +64,7 @@
             android:layout_marginTop="@dimen/photo_poll_icon_container_margin"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/add_photo"
+            android:visibility="gone"
             android:textColor="@color/comment_text"
             android:textSize="14sp" />
 
