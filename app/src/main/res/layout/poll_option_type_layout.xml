@@ -22,12 +22,11 @@
 
     <ImageView
         android:id="@+id/iv_delete_text_poll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/option_poll_delete_padding"
-        android:paddingBottom="@dimen/option_poll_delete_padding"
-        android:paddingRight="@dimen/option_poll_delete_padding"
+        android:layout_width="@dimen/option_delete_width_height"
+        android:layout_height="@dimen/option_delete_width_height"
+        android:layout_marginLeft="@dimen/option_poll_delete_padding"
         android:layout_gravity="center"
+        android:alpha=".4"
         android:visibility="gone"
         android:src="@drawable/ic_cross" />
 </LinearLayout>

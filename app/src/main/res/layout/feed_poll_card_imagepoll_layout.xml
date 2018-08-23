@@ -11,11 +11,16 @@
         android:layout_width="@dimen/feed_imagepoll_width"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
             android:id="@+id/iv_feed_image_poll_left"
             android:layout_width="match_parent"
             android:layout_height="@dimen/feed_imagepoll_height"
             android:adjustViewBounds="true"
+            app:riv_border_width="@dimen/image_poll_corner_width"
+            app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_bottom_left="0dp"
+            app:riv_corner_radius_bottom_right="0dp"
             android:scaleType="centerCrop"
             android:src="@drawable/vector_image_poll_holder" />
 
@@ -49,7 +54,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:paddingRight="@dimen/feed_imagepoll_name_left_padding_right"
-            android:textColor="@color/comment_text"
+            android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/feed_imagepoll_name_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_left" />
@@ -62,11 +67,16 @@
         android:layout_marginLeft="@dimen/feed_imagepoll_margin_left"
         android:layout_marginStart="@dimen/feed_imagepoll_margin_left">
 
-        <ImageView
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
             android:id="@+id/iv_feed_image_poll_right"
             android:layout_width="match_parent"
             android:layout_height="@dimen/feed_imagepoll_height"
             android:adjustViewBounds="true"
+            app:riv_border_width="@dimen/image_poll_corner_width"
+            app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_bottom_left="0dp"
+            app:riv_corner_radius_bottom_right="0dp"
             android:scaleType="centerCrop"
             android:src="@drawable/vector_image_poll_holder" />
 
@@ -101,7 +111,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:paddingRight="@dimen/feed_imagepoll_name_left_padding_right"
-            android:textColor="@color/comment_text"
+            android:textColor="@color/footer_icon_text"
             android:textSize="@dimen/feed_imagepoll_name_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_right" />

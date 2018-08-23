@@ -1601,6 +1601,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     .startActivities();
         }
         CommunityPostActivity.this.finish();
+        CommonUtil.hideKeyboard(this);
     }
 
     private boolean isDirty() {
@@ -2038,9 +2039,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPollOptionType = pollType;
         mIsPollOptionClicked = true;
         mImageList.clear();
-        CommonUtil.hideKeyboard(this);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
+        CommonUtil.showKeyboard(this);
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
         mRlImageList.setVisibility(View.GONE);
@@ -2066,7 +2067,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             case BOOLEAN:
                 break;
         }
-
     }
 
     private void addPollSelectionDay() {

@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -32,7 +33,7 @@ public class PollTypesViewHolder extends BaseViewHolder<PollOptionType> {
     RippleViewLinear pollTypeContainer;
 
     @Bind(R.id.poll_type_icon)
-    CircleImageView mPollTypeIcon;
+    ImageView mPollTypeIcon;
 
     @Bind(R.id.poll_type_name)
     TextView mPollTypeName;

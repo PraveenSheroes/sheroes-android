@@ -38,12 +38,13 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/image_poll_edit_text_margin"
-        android:layout_marginLeft="@dimen/image_poll_edit_text_margin"
-        android:layout_marginRight="@dimen/image_poll_edit_text_margin"
-        android:layout_marginStart="@dimen/image_poll_edit_text_margin"
+        android:layout_marginEnd="@dimen/image_poll_or_margin"
+        android:layout_marginLeft="@dimen/image_poll_or_margin"
+        android:layout_marginRight="@dimen/image_poll_or_margin"
+        android:layout_marginStart="@dimen/image_poll_or_margin"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="Or"
+        android:layout_marginBottom="@dimen/image_poll_or_margin"
         android:textAllCaps="true"
         android:textColor="@color/comment_text"
         android:textSize="@dimen/image_poll_text_or" />

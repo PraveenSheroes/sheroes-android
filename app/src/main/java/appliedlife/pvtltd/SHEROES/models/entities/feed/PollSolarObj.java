@@ -75,6 +75,10 @@ public class PollSolarObj extends FeedDetail {
     @SerializedName(value = "solr_ignore_is_community_owner")
     private boolean isCommunityOwner;
 
+    @SerializedName(value = "solr_ignore_is_user_authorized_to_delete")
+    private boolean isAuthorizeToDelete;
+
+
     public boolean isAnonymous() {
         return isAnonymous;
     }
@@ -241,5 +245,29 @@ public class PollSolarObj extends FeedDetail {
 
     public void setPollType(PollType pollType) {
         this.pollType = pollType;
+    }
+
+    public boolean isQuiz() {
+        return isQuiz;
+    }
+
+    public boolean isQuizDurationInSeconds() {
+        return quizDurationInSeconds;
+    }
+
+    public boolean isInSurvey() {
+        return isInSurvey;
+    }
+
+    public boolean isCommunityOwner() {
+        return isCommunityOwner;
+    }
+
+    public boolean isAuthorizeToDelete() {
+        return isAuthorizeToDelete;
+    }
+
+    public void setAuthorizeToDelete(boolean authorizeToDelete) {
+        isAuthorizeToDelete = authorizeToDelete;
     }
 }

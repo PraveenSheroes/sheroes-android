@@ -934,64 +934,35 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPollMenuClicked(final PollSolarObj pollSolarObj, final View view) {
         if (getActivity() == null) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
-        long currentUserId = -1;
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            currentUserId = mUserPreference.get().getUserSummary().getUserId();
+
+        popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
+        popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
+
+        //****   Hide/show options according to user
+
+
+        if (pollSolarObj.isAuthorizeToDelete()) {
+
+            popup.getMenu().findItem(R.id.delete).setVisible(true);
+
+        } else {
+            popup.getMenu().findItem(R.id.delete).setVisible(false);
         }
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            int adminId = 0;
-            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-            }
-
-            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.ID_SHARE)));
-            popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-
-            //****   Hide/show options according to user
-
-
-            if (pollSolarObj.getAuthorId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
-
-                popup.getMenu().findItem(R.id.delete).setVisible(true);
-
-                if (pollSolarObj.communityId == 0 && adminId == AppConstants.TWO_CONSTANT) {
-                    popup.getMenu().findItem(R.id.delete).setVisible(false);
-                }
-
-            } else {
-                popup.getMenu().findItem(R.id.delete).setVisible(false);
-            }
-
-            //Enable delete response for admin in challenge response
-            if (pollSolarObj.communityId == 0) {
-                if (adminId == AppConstants.TWO_CONSTANT) {
-                    popup.getMenu().findItem(R.id.delete).setVisible(true);
-                } else {
-                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.share:
+                        sharePollCardDetail(pollSolarObj);
+                        return true;
+                    case R.id.delete:
+                        mFeedPresenter.deletePollFromPresenter(mAppUtils.deletePollRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant()), pollSolarObj);
+                        AnalyticsManager.trackPostAction(Event.POLL_DELETED, pollSolarObj, getScreenName());
+                        return true;
+                    default:
+                        return false;
                 }
             }
-
-            if (pollSolarObj.isSpamPost()) {
-                popup.getMenu().findItem(R.id.share).setVisible(false);
-            } else {
-                popup.getMenu().findItem(R.id.share).setVisible(true);
-            }
-            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-                        case R.id.share:
-                            sharePollCardDetail(pollSolarObj);
-                            return true;
-                        case R.id.delete:
-                            mFeedPresenter.deletePollFromPresenter(mAppUtils.deletePollRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant()), pollSolarObj);
-                            AnalyticsManager.trackPostAction(Event.POLL_DELETED, pollSolarObj, getScreenName());
-                            return true;
-                        default:
-                            return false;
-                    }
-                }
-            });
-        }
+        });
         popup.show();
     }
 

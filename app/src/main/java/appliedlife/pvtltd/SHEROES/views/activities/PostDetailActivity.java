@@ -745,23 +745,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
 
             //****   Hide/show options according to user
-            if (pollSolarObj.getAuthorId() == mLoggedInUser || adminId == AppConstants.TWO_CONSTANT) {
+            if (pollSolarObj.isAuthorizeToDelete()) {
+
                 popup.getMenu().findItem(R.id.delete).setVisible(true);
 
             } else {
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
-
             }
-            popup.getMenu().findItem(R.id.share).setVisible(true);
-
-
-            if (pollSolarObj.communityId == 0) {
-                popup.getMenu().findItem(R.id.delete).setVisible(false);
-            }
-            if (pollSolarObj.isSpamPost()) {
-                popup.getMenu().findItem(R.id.share).setVisible(false);
-            }
-
 
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {

@@ -12,7 +12,7 @@
             android:id="@+id/pb_poll_percent"
             style="@style/PollProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="@dimen/text_poll_progress_height"
             android:theme="@style/PollProgressBar" />
         <TextView
             android:id="@+id/tv_text_poll_desc"
@@ -25,25 +25,25 @@
             android:layout_marginEnd="@dimen/text_poll_result_desc_margin"
             android:layout_marginRight="@dimen/text_poll_result_desc_margin"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textSize="14sp"/>
+            android:textSize="@dimen/text_pol_percent_number_text_size"/>
         <ImageView
             android:id="@+id/iv_percent_verified"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|right"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/text_poll_verified_margin"
+            android:layout_marginLeft="@dimen/text_poll_verified_margin"
             android:src="@drawable/vector_poll_percent_verified"/>
     </FrameLayout>
 
     <TextView
         android:id="@+id/tv_poll_percent_number"
-        android:layout_width="50dp"
+        android:layout_width="@dimen/text_poll_percent_number_width"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/comment_text"
-        android:textSize="14sp" />
+        android:textSize="@dimen/text_pol_percent_number_text_size" />
 
 </LinearLayout>

@@ -5,12 +5,12 @@
         <shape>
             <stroke
                 android:width="@dimen/dp_size_1"
-                android:color="@color/footer_icon_text"/>
+                android:color="@color/fully_transparent"/>
             <gradient
                 android:angle="270"
-                android:centerColor="@color/white"
-                android:endColor="@color/white"
-                android:startColor="@color/white" />
+                android:centerColor="@color/fully_transparent"
+                android:endColor="@color/fully_transparent"
+                android:startColor="@color/fully_transparent" />
         </shape>
     </item>
     <item android:id="@android:id/progress">

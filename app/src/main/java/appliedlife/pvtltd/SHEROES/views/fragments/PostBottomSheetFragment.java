@@ -11,7 +11,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -50,6 +52,7 @@ import appliedlife.pvtltd.SHEROES.views.adapters.CommunityListAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.PollSurveyTypeAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
@@ -74,6 +77,9 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Bind(R.id.tv_choose_community)
     TextView mTvChooseCommunity;
+
+    @BindDimen(R.dimen.poll_type_recyler_list_margin)
+    int mPollTypeRecyclerListMargin;
 
     // endregion
 
@@ -134,12 +140,20 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
             } else if (getArguments().getParcelable(PollOptionType.POLL_TYPE) != null) {
                 mTvChooseCommunity.setText(getString(R.string.choose_poll));
                 parcelable = getArguments().getParcelable(PollOptionType.POLL_TYPE);
-                List<PollOptionType> pollOptionTypeList =Parcels.unwrap(parcelable);
+                List<PollOptionType> pollOptionTypeList = Parcels.unwrap(parcelable);
                 setPollTypeList(pollOptionTypeList);
+                LinearLayout.LayoutParams photo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+                photo.setMargins(mPollTypeRecyclerListMargin, 0, 0, 0);
+                mRecyclerView.setLayoutParams(photo);
             } else {
+                mMyCommunities = new MyCommunities();
                 setMyCommunityList();
                 showCommunity();
             }
+        } else {
+            mMyCommunities = new MyCommunities();
+            setMyCommunityList();
+            showCommunity();
         }
     }
 
@@ -166,7 +180,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     private void setPollTypeList(List<PollOptionType> pollOptionTypeList) {
-        mPollSurveyTypeAdapter = new PollSurveyTypeAdapter(getActivity(), ((CommunityPostActivity)getActivity()),this);
+        mPollSurveyTypeAdapter = new PollSurveyTypeAdapter(getActivity(), ((CommunityPostActivity) getActivity()), this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this.getContext(), 2);
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setAdapter(mPollSurveyTypeAdapter);
