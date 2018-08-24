@@ -43,7 +43,6 @@
             android:id="@+id/iv_image_poll_right"
             android:layout_width="@dimen/feed_imagepoll_width"
             android:layout_height="@dimen/feed_imagepoll_height"
-            android:layout_gravity="center"
             android:src="@drawable/vector_image_poll_holder" />
 
         <EditText

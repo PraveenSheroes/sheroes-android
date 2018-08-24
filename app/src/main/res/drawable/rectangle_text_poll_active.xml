@@ -1,9 +1,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/white"/>
-    <stroke
-        android:width="@dimen/dp_size_1"
-        android:color="#dcdcdc"/>
+    <solid android:color="@color/footer_icon_text"/>
     <padding
         android:bottom="@dimen/text_poll_input_text_background_padding"
         android:left="@dimen/text_poll_input_text_background_padding"

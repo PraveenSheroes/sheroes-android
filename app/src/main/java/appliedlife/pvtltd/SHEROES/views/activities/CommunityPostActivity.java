@@ -359,6 +359,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<EditText> mEtTextPollList = new ArrayList<>();
     private EditText mEtTextPoll;
 
+
     //endregion
 
     //region Activity methods
@@ -931,11 +932,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             int width = CommonUtil.getWindowWidth(this);
-            int imageHeight = width / 2;
-            String finalImageUrl = CommonUtil.getThumborUri(imageUrl, width, imageHeight);
+           // int imageHeight = width / 2;
+           // String finalImageUrl = CommonUtil.getThumborUri(imageUrl, width, imageHeight);
             Glide.with(this)
                     .asBitmap()
-                    .load(finalImageUrl)
+                    .load(imageUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -2104,7 +2105,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 @Override
                 public void onClick(View view) {
                     mLiPollContainer.removeView(pollLayout);
-                    mEtTextPollList.remove(mPollOptionCount - 1);
+                    mEtTextPollList.clear();
+                    for(int i=0;i<mLiPollContainer.getChildCount();i++)
+                    {
+                       // mEtTextPollList.get(i).setHint(mEtTextPollList.get(i).getHint());
+                        View pollLayout= mLiPollContainer.getChildAt(i);
+                        EditText editText=pollLayout.findViewById(R.id.et_text_poll);
+                        int count=i+1;
+                        editText.setHint(getString(R.string.poll_option)+count);
+                        mEtTextPollList.add(mEtTextPoll);
+                    }
                     mPollOptionCount--;
                     addOptionButtonView();
                 }
