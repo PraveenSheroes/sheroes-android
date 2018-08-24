@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.List;
@@ -32,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -58,6 +61,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     // region View variables
     @Bind(R.id.profile_verified)
     ImageView mProfileVerfied;
+
+    @Bind(R.id.bade_icon)
+    ImageView badgeIcon;
 
     @Bind(R.id.user_profile_pic)
     CircleImageView mUserProfilePic;
@@ -88,6 +94,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
+
+    @BindDimen(R.dimen.user_comment_badge_icon_size)
+    int badgeIconSize;
     //endregion
 
     // region member variables
@@ -147,10 +156,23 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     } else {
                         mProfileVerfied.setVisibility(View.GONE);
                     }
+                    showHideUserBadge();
                 } else {
                     showCommentMention();
                 }
             }
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    private void showHideUserBadge() {
+        if(mComment.isBadgeShown() && !mComment.isAnonymous()) {
+            badgeIcon.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(mComment.getBadgeUrl())
+                    .into(badgeIcon);
+        } else {
+            badgeIcon.setVisibility(View.GONE);
         }
     }
 

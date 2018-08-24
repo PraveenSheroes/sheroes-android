@@ -370,6 +370,14 @@
                     android:layout_marginTop="@dimen/dp_size_15"
                     android:background="@drawable/ic_verified"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/user_badge"
+                    android:layout_width="@dimen/article_last_comment_author_pic_size"
+                    android:layout_height="@dimen/article_last_comment_author_pic_size"
+                    android:layout_gravity="end|bottom"
+                    android:visibility="gone" />
+
             </FrameLayout>
 
             <LinearLayout

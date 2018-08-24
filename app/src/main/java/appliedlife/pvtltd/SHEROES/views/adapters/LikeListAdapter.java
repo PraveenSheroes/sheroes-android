@@ -81,6 +81,9 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
 
         @Bind(R.id.user_name)
         public TextView userName;
+
+        @Bind(R.id.user_badge)
+        public ImageView userBadge;
         // endregion
 
         public LikeListItemViewHolder(View itemView) {
@@ -104,7 +107,23 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
                             .into(userPic);
                 }
                 userName.setText(comment.getParticipantName());
+
+                showHideUserBadge(comment.isAnonymous(), userBadge, comment.isBadgeShown(), comment.getBadgeUrl());
+            } else {
+                userBadge.setVisibility(View.GONE);
             }
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if(isBadgeShown && !isAnonymous) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
         }
     }
 

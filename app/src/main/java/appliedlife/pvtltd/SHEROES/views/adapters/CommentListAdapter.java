@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,7 +40,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private ArrayList<Comment> mCommentList;
     private final Context mContext;
-    private final View.OnClickListener mOnDeleteClickListener;
+    private final View.OnClickListener mOnViewClickListener;
     private final ArticlePresenterImpl mArticlePresenter;
     private boolean showMoreItem = false;
     public static final int INITIAL_ITEM_COUNT = 1;
@@ -50,7 +51,7 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public CommentListAdapter(Context context, ArticlePresenterImpl articlePresenter, View.OnClickListener onDeleteClickListener) {
         mContext = context;
         mArticlePresenter = articlePresenter;
-        mOnDeleteClickListener = onDeleteClickListener;
+        mOnViewClickListener = onDeleteClickListener;
     }
 
     //endregion
@@ -133,11 +134,17 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @Bind(R.id.comment_relative_time)
         TextView relativeTime;
 
+        @Bind(R.id.author_pic_container)
+        FrameLayout authorPicContainer;
+
         @BindDimen(R.dimen.authorPicSize)
         int authorPicSize;
 
         @Bind(R.id.author)
         TextView author;
+
+        @Bind(R.id.user_badge)
+        ImageView badgeIcon;
 
         @Bind(R.id.body)
         TextView body;
@@ -207,10 +214,11 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     author.setText("User");
                     //authorPic.setImageDrawable(ContextCompat.getDrawable(mContext, User.getAnonymousPlaceholder()));
                 }
+                showHideUserBadge(comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
                 hideEditorView(comment);
-                author.setOnClickListener(mOnDeleteClickListener);
-                authorPic.setOnClickListener(mOnDeleteClickListener);
-                delete.setOnClickListener(mOnDeleteClickListener);
+                author.setOnClickListener(mOnViewClickListener);
+                authorPicContainer.setOnClickListener(mOnViewClickListener);
+                delete.setOnClickListener(mOnViewClickListener);
                 delete.setVisibility(View.VISIBLE);
 
                 if (comment.isMyOwnParticipation()) {
@@ -286,6 +294,18 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         }
 
+    }
+
+    //Show or hide the badge icon from user pic
+    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if(!isAnonymous && isBadgeShown) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
+        }
     }
     //endregion
 }

@@ -685,10 +685,8 @@
     <string name="copied">Copied</string>
     <string name="message">message</string>
     <string name="your_response_copied">Your response copied</string>
-
-
-
-
+    <string name="list_comment_submit">Submit</string>
+    <string name="list_comment_cancel">Cancel</string>
 
 
 </resources>

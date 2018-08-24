@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.PaintDrawable;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
@@ -20,12 +22,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
+import butterknife.BindInt;
 import butterknife.ButterKnife;
 
 /**
@@ -50,6 +56,9 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     @Bind(R.id.user_pic_icon)
     ImageView mProfilePic;
 
+    @Bind(R.id.user_position)
+    TextView mUserPosition;
+
     @Bind(R.id.badge_icon)
     ImageView badgeIcon;
 
@@ -65,12 +74,22 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     @BindDimen(R.dimen.dp_size_40)
     int mBadgeIconSize;
 
+    @BindInt(R.integer.leader_board_selected_user_side_margin)
+    int selectedRowSideMargin;
+
+    @BindInt(R.integer.leader_board_selected_user_bottom_margin)
+    int selectedRowBottomMargin;
+
+    @BindDimen(R.dimen.leaderboard_selected_row_radius)
+    int mSelectedRowRadius;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
 
-    private int mNumCount = 10;
+    @Inject
+    Preference<Configuration> mConfiguration;
+
     private long mLoggedInUserId = -1;
-    private float mPaddingLeftForSelectedRow = 14.0f;
     private BaseHolderInterface viewInterface;
     private LeaderBoardUserSolrObj mLeaderBoardUserSolrObj;
 
@@ -89,8 +108,14 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     public void bindData(LeaderBoardUserSolrObj leaderBoardUserSolrObj, final Context context, int position) {
 
         if (leaderBoardUserSolrObj != null) {
-
             if (position == 0) {
+                ConfigData configData = new ConfigData();
+                int leaderBoardTopUserCount = configData.leaderBoardTopUserCount;
+                //Get the top user count in leader board
+                if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                    leaderBoardTopUserCount = mConfiguration.get().configData.leaderBoardTopUserCount;
+                }
+                topUserTitle.setText(context.getResources().getString(R.string.leaderbaord_top_10_user, leaderBoardTopUserCount));
                 topHeaderContainer.setVisibility(View.VISIBLE);
             } else {
                 topHeaderContainer.setVisibility(View.GONE);
@@ -104,9 +129,9 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             itemContainer.setOnClickListener(this);
 
             if (leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null && CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
-                String trophyImageUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mBadgeIconSize, mBadgeIconSize);
+                String badgeIconUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mBadgeIconSize, mBadgeIconSize);
                 Glide.with(badgeIcon.getContext())
-                        .load(trophyImageUrl)
+                        .load(badgeIconUrl)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(badgeIcon.getContext())))
                         .into(badgeIcon);
             }
@@ -120,7 +145,6 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                         .into(mProfilePic);
             }
 
-            topUserTitle.setText(context.getResources().getString(R.string.leaderbaord_top_10_user, mNumCount));
             String pluralLikes = context.getResources().getQuantityString(R.plurals.numberOfLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost());
             String pluralComments = context.getResources().getQuantityString(R.plurals.numberOfComments, leaderBoardUserSolrObj.getSolrIgnoreNoOfCommentsOnUserPost());
             mDescription.setText(context.getResources().getString(R.string.leaderboard_user_like_comment, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost(), pluralLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfCommentsOnUserPost(), pluralComments));
@@ -130,18 +154,35 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             if (mLoggedInUserId != -1 && mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant() == mLoggedInUserId) {
-                final String backgroundColor = mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor();
-                itemContainer.setBackgroundColor(Color.parseColor(backgroundColor));
+                //If user is not in leaderBoard top users list , show its position in the end
+                if (mLeaderBoardUserSolrObj.getLeaderBoardUserRankObj() != null && mLeaderBoardUserSolrObj.getLeaderBoardUserRankObj().getCommunityLeaderboardRank() != null) {
+                    mUserPosition.setText(String.valueOf(mLeaderBoardUserSolrObj.getLeaderBoardUserRankObj().getCommunityLeaderboardRank()));
+                    itemContainer.setOnClickListener(null);
+                    badgeIcon.setVisibility(View.GONE);
+                    mUserPosition.setVisibility(View.VISIBLE);
+                } else { //If user is in leaderBoard top users list
+                    mUserPosition.setVisibility(View.GONE);
+                    badgeIcon.setVisibility(View.VISIBLE);
+                    itemContainer.setOnClickListener(this);
+                }
+
+                //Set background color and radius to row
+                if(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails()!=null && StringUtil.isNotNullOrEmptyString(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor())) {
+                    PaintDrawable selectedRowDrawable = new PaintDrawable(Color.parseColor(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor()));
+                    selectedRowDrawable.setCornerRadius(mSelectedRowRadius);
+                    itemContainer.setBackground(selectedRowDrawable);
+                }
+
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
-                itemContainer.setBackground(ContextCompat.getDrawable(context, R.drawable.border_new_feature));
-                layoutParams.setMargins(CommonUtil.convertDpToPixel(mPaddingLeftForSelectedRow, context), 0, CommonUtil.convertDpToPixel(mPaddingLeftForSelectedRow, context), 0);
+                layoutParams.setMargins(CommonUtil.convertDpToPixel(selectedRowSideMargin, context), 0, CommonUtil.convertDpToPixel(selectedRowSideMargin, context), CommonUtil.convertDpToPixel(selectedRowBottomMargin, context));
             } else {
                 itemContainer.setBackgroundColor(Color.WHITE);
+                itemContainer.setOnClickListener(this);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.leader_board_badge_sub_text));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.leaderboard_user));
-                itemContainer.setBackground(null);
                 layoutParams.setMargins(0, 0, 0, 0);
+                mUserPosition.setVisibility(View.GONE);
             }
             itemContainer.setLayoutParams(layoutParams);
 
@@ -177,9 +218,4 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             }
         }
     }
-
-    public void totalNumberOfUsersInLeaderBoard(int numCount) {
-        mNumCount = numCount;
-    }
-
 }

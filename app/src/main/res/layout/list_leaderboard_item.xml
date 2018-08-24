@@ -74,6 +74,16 @@
                 android:layout_width="@dimen/leaderboard_badge_icon"
                 android:layout_height="@dimen/leaderboard_badge_icon" />
 
+            <TextView
+                android:id="@+id/user_position"
+                android:layout_width="@dimen/logged_in_user_position_icon"
+                android:layout_height="@dimen/logged_in_user_position_icon"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:textSize="@dimen/logged_in_user_position_text_size"
+                android:maxLines="@integer/leader_board_selected_user_position_max_line"
+                android:gravity="center_vertical"
+                android:textColor="@color/white" />
+
         </FrameLayout>
 
         <LinearLayout

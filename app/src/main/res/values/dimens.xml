@@ -282,6 +282,39 @@
     <dimen name="profile_desc_line_space">8sp</dimen>
     <dimen name="profile_desc_text">14sp</dimen>
 
+    <dimen name="logged_in_user_position_icon">40dp</dimen>
+    <dimen name="logged_in_user_position_text_size">14sp</dimen>
+
+    <dimen name="last_comment_user_badge_size">14dp</dimen>
+    <dimen name="feed_post_user_badge_size">16dp</dimen>
+
+    <dimen name="user_comment_badge_icon_size">14dp</dimen>
+    <dimen name="user_badge_icon_size">16dp</dimen>
+    <dimen name="leaderboard_selected_row_radius">4dp</dimen>
+    <dimen name="user_post_badge_icon">16dp</dimen>
+    <dimen name="like_list_user_badge_size">16dp</dimen>
+    <dimen name="like_list_user_pic_size">40dp</dimen>
+    <dimen name="user_post_container_left_margin">16dp</dimen>
+    <dimen name="article_last_comment_author_pic_size">16dp</dimen>
+    <dimen name="post_comment_badge_size">16dp</dimen>
+    <dimen name="post_user_badge_icon">16dp</dimen>
+    <dimen name="last_comment_user_badge_icon">14dp</dimen>
+    <dimen name="comment_parent_container_padding">12dp</dimen>
+    <dimen name="author_pic_container_margin_right">12dp</dimen>
+    <dimen name="author_pic_container_margin_top">10dp</dimen>
+    <dimen name="comment_list_author_pic">44dp</dimen>
+    <dimen name="comment_author_name_margin_top">6dp</dimen>
+    <dimen name="comment_author_name_text">14sp</dimen>
+    <dimen name="comment_time_margin_top">6dp</dimen>
+    <dimen name="comment_time_text">12sp</dimen>
+    <dimen name="comment_body_margin_top">4dp</dimen>
+    <dimen name="comment_edit_body_margin_right">15dp</dimen>
+    <dimen name="comment_edit_body_margin_top">8dp</dimen>
+    <dimen name="like_list_user_name_linespace">2sp</dimen>
+    <dimen name="like_list_item_padding_top">16dp</dimen>
+    <dimen name="comment_body_padding_vertical">12dp</dimen>
+    <dimen name="comment_body_padding_left">15dp</dimen>
+    <dimen name="post_comment_badge_icon">14dp</dimen>
 
 </resources>
 

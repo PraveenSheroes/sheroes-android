@@ -32,6 +32,13 @@
                 android:layout_gravity="end|bottom"
                 android:background="@drawable/ic_verified"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/bade_icon"
+                android:layout_width="@dimen/post_comment_badge_icon"
+                android:layout_height="@dimen/post_comment_badge_icon"
+                android:layout_gravity="end|bottom"
+                android:visibility="gone" />
         </FrameLayout>
 
         <TextView

@@ -125,6 +125,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserName;
     @Bind(R.id.iv_feed_article_user_verified)
     ImageView ivFeedArticleUserVerified;
+    @Bind(R.id.user_badge)
+    ImageView mLastCommentUserBadgePic;
     @Bind(R.id.tv_feed_article_comment_post_time)
     TextView tvFeedArticleCommentPostTime;
     @Bind(R.id.iv_feed_article_login_user_pic)
@@ -461,6 +463,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
+
+            showHideUserBadge(lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -698,6 +702,18 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             if ((Boolean) tvFeedArticleUserReaction.getTag()) {
                 userReactionWithOutLongPress();
             }
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if(isBadgeShown && !isAnonymous) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
         }
     }
 

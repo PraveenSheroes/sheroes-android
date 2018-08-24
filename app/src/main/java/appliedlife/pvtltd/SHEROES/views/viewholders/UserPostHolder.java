@@ -80,6 +80,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.author_pic_icon)
     CircleImageView mAuthorIcon;
 
+    @Bind(R.id.bade_icon)
+    ImageView mBadgeIcon;
+
     @Bind(R.id.author_verified_icon)
     ImageView mAuthorVerifiedIcon;
 
@@ -365,7 +368,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     mAuthorVerifiedIcon.setVisibility(View.GONE);
                 }
-
+                updateUserBadgeVisibility();
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_ASK_FEEDBACK)).append(AppConstants.SPACE).append(feedCommunityName);
@@ -415,6 +418,18 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
         } else {
             mPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    private void updateUserBadgeVisibility() {
+        if(!mUserPostObj.isAnonymous() && mUserPostObj.isBadgeShownOnPic()) {
+            mBadgeIcon.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(mUserPostObj.getProfilePicBadgeUrl())
+                    .into(mBadgeIcon);
+        } else {
+            mBadgeIcon.setVisibility(View.GONE);
         }
     }
 
