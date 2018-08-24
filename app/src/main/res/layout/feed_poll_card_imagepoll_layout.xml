@@ -15,13 +15,11 @@
             android:id="@+id/iv_feed_image_poll_left"
             android:layout_width="match_parent"
             android:layout_height="@dimen/feed_imagepoll_height"
-            android:adjustViewBounds="true"
             app:riv_border_width="@dimen/image_poll_corner_width"
             app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_bottom_left="0dp"
             app:riv_corner_radius_bottom_right="0dp"
-            android:scaleType="centerCrop"
             android:src="@drawable/vector_image_poll_holder" />
 
         <ProgressBar
@@ -71,13 +69,11 @@
             android:id="@+id/iv_feed_image_poll_right"
             android:layout_width="match_parent"
             android:layout_height="@dimen/feed_imagepoll_height"
-            android:adjustViewBounds="true"
             app:riv_border_width="@dimen/image_poll_corner_width"
             app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_bottom_left="0dp"
             app:riv_corner_radius_bottom_right="0dp"
-            android:scaleType="centerCrop"
             android:src="@drawable/vector_image_poll_holder" />
 
         <ProgressBar

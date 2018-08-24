@@ -486,6 +486,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (!keyboardShown(etView.getRootView())) {
                     setImageCount();
                     mAnonymousView.setVisibility(View.VISIBLE);
+                    bottomSheetExpanded();
                 } else {
                     bottomSheetCollapsed();
                 }
@@ -1601,7 +1602,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     .startActivities();
         }
         CommunityPostActivity.this.finish();
-        CommonUtil.hideKeyboard(this);
     }
 
     private boolean isDirty() {
@@ -2040,8 +2040,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mIsPollOptionClicked = true;
         mImageList.clear();
         mTitleToolbar.setText(R.string.title_create_poll);
+        etView.getEditText().setCursorVisible(false);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
-        CommonUtil.showKeyboard(this);
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
         mRlImageList.setVisibility(View.GONE);

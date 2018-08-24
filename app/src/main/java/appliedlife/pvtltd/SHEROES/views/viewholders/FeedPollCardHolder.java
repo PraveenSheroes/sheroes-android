@@ -281,15 +281,8 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
             tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
 
-            if (pollOptionModelList.get(1).getTotalNoOfVotesPercent() > 0) {
-                pbPollPercentRight.setProgress(pollOptionModelList.get(1).getTotalNoOfVotesPercent());
-                tvPollPercentNumberRight.setText(pollOptionModelList.get(1).getTotalNoOfVotesPercent() + mContext.getString(R.string.percent_vote));
-                pbPollPercentRight.setVisibility(View.VISIBLE);
-                tvPollPercentNumberRight.setVisibility(View.VISIBLE);
-            } else {
-                pbPollPercentRight.setVisibility(View.GONE);
-                tvPollPercentNumberRight.setVisibility(View.GONE);
-            }
+            pbPollPercentRight.setProgress(pollOptionModelList.get(1).getTotalNoOfVotesPercent());
+            tvPollPercentNumberRight.setText(pollOptionModelList.get(1).getTotalNoOfVotesPercent() + mContext.getString(R.string.percent_vote));
 
             if (pollOptionModelList.get(1).isVoted()) {
                 tvImagePollNameRight.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_poll_percent_verified), null);
@@ -303,9 +296,17 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         if (mPollSolarObj.isShowResults() || mPollSolarObj.isRespondedOnPoll()) {
             clImagePollLeftContainer.setEnabled(false);
             clImagePollRightContainer.setEnabled(false);
+            pbPollPercentLeft.setVisibility(View.VISIBLE);
+            tvPollPercentNumberLeft.setVisibility(View.VISIBLE);
+            pbPollPercentRight.setVisibility(View.VISIBLE);
+            tvPollPercentNumberRight.setVisibility(View.VISIBLE);
         } else {
             clImagePollLeftContainer.setEnabled(true);
             clImagePollRightContainer.setEnabled(true);
+            pbPollPercentLeft.setVisibility(View.GONE);
+            tvPollPercentNumberLeft.setVisibility(View.GONE);
+            pbPollPercentRight.setVisibility(View.GONE);
+            tvPollPercentNumberRight.setVisibility(View.GONE);
         }
     }
 
@@ -376,6 +377,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 }
                 pbPollPercent.setVisibility(View.VISIBLE);
                 tvPollPercentNumber.setVisibility(View.VISIBLE);
+                mLiTypeOfPollView.setOnClickListener(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
                 params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
                 liImageRatingRow.setLayoutParams(params);
@@ -629,23 +631,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (viewInterface != null) {
-                    if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
-                        ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
-                    } else {
-                        ((FeedItemCallback) viewInterface).onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                    }
-                    /*if (viewInterface instanceof FeedItemCallback) {
-                    } else {
-                        viewInterface.navigateToProfileView(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                    }*/
-                } else if (mPostDetailCallBack != null) {
-                    if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
-                        mPostDetailCallBack.onCommunityTitleClicked(mPollSolarObj);
-                    } else {
-                        mPostDetailCallBack.onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-                    }
-                }
+                profileImageClick();
             }
 
             @Override
@@ -724,6 +710,22 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
     }
 
+    @OnClick({R.id.iv_feed_poll_circle_icon})
+    public void profileImageClick() {
+        if (viewInterface != null) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+                ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
+            } else {
+                ((FeedItemCallback) viewInterface).onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }
+        } else if (mPostDetailCallBack != null) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+                mPostDetailCallBack.onCommunityTitleClicked(mPollSolarObj);
+            } else {
+                mPostDetailCallBack.onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            }
+        }
+    }
 
     @OnClick(R.id.tv_feed_poll_user_reaction)
     public void onUserReactionClick() {

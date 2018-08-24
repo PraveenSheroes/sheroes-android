@@ -7,74 +7,57 @@
     android:orientation="horizontal">
 
     <LinearLayout
-        android:layout_width="@dimen/image_poll_image_width"
+        android:layout_width="@dimen/feed_imagepoll_width"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_image_poll_left"
-            android:layout_width="@dimen/image_poll_image_width"
-            android:layout_height="@dimen/image_poll_image_height"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
+            android:layout_width="@dimen/feed_imagepoll_width"
+            android:layout_height="@dimen/feed_imagepoll_height"
             android:src="@drawable/vector_image_poll_holder" />
 
         <EditText
             android:id="@+id/et_image_poll_left"
-            android:layout_width="@dimen/image_poll_image_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/image_poll_edit_text_margin"
             android:background="@drawable/rectangle_border"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/option_poll_padding"
-            android:inputType="textMultiLine"
             android:maxLength="@integer/poll_input_option_char_limit"
-            android:scrollbars="vertical"
             android:textColor="@color/comment_text"
+            android:maxLines="@integer/int_value_for_line_1"
             android:textColorHint="@color/on_board_work"
             android:textSize="@dimen/option_poll_text_size" />
     </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/image_poll_or_margin"
-        android:layout_marginLeft="@dimen/image_poll_or_margin"
-        android:layout_marginRight="@dimen/image_poll_or_margin"
-        android:layout_marginStart="@dimen/image_poll_or_margin"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:text="Or"
-        android:layout_marginBottom="@dimen/image_poll_or_margin"
-        android:textAllCaps="true"
-        android:textColor="@color/comment_text"
-        android:textSize="@dimen/image_poll_text_or" />
-
     <LinearLayout
-        android:layout_width="@dimen/image_poll_image_width"
+        android:layout_width="@dimen/feed_imagepoll_width"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_imagepoll_margin_left"
+        android:layout_marginStart="@dimen/feed_imagepoll_margin_left"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_image_poll_right"
-            android:layout_width="@dimen/image_poll_image_width"
-            android:layout_height="@dimen/image_poll_image_height"
+            android:layout_width="@dimen/feed_imagepoll_width"
+            android:layout_height="@dimen/feed_imagepoll_height"
             android:layout_gravity="center"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
             android:src="@drawable/vector_image_poll_holder" />
 
         <EditText
             android:id="@+id/et_image_poll_right"
-            android:layout_width="@dimen/image_poll_image_width"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/image_poll_edit_text_margin"
             android:background="@drawable/rectangle_border"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:padding="@dimen/option_poll_padding"
             android:maxLength="@integer/poll_input_option_char_limit"
-            android:inputType="textMultiLine"
-            android:scrollbars="vertical"
             android:textColor="@color/comment_text"
+            android:maxLines="@integer/int_value_for_line_1"
+            android:scrollbars="horizontal"
             android:textColorHint="@color/on_board_work"
             android:textSize="@dimen/option_poll_text_size" />
     </LinearLayout>

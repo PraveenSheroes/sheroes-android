@@ -84,6 +84,14 @@ public enum Event {
                     analyticsProvider == AnalyticsProvider.APPSFLYER;
         }
     },
+    POLL_CREATED(AnalyticsEventType.POLL, "Created"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+        }
+    },
     POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
 
     //endregion

@@ -14,11 +14,11 @@
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:padding="@dimen/option_poll_padding"
         android:inputType="textMultiLine"
-        android:maxLength="@integer/poll_input_option_char_limit"
+        android:maxLength="@integer/text_poll_input_option_char_limit"
         android:scrollbars="vertical"
         android:textColor="@color/comment_text"
         android:textColorHint="@color/on_board_work"
-        android:textSize="@dimen/option_poll_text_size" />
+        android:textSize="@dimen/text_option_poll_text_size" />
 
     <ImageView
         android:id="@+id/iv_delete_text_poll"

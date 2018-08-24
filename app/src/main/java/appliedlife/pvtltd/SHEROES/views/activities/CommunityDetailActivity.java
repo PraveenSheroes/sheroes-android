@@ -460,19 +460,19 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
-                    UserPostSolrObj userPostSolrObj = null;
-                    Parcelable parcelableUserPost = data.getParcelableExtra(FeedDetail.FEED_COMMENTS);
-                    if (parcelableUserPost != null) {
-                        userPostSolrObj = Parcels.unwrap(parcelableUserPost);
+                    FeedDetail feedDetail = null;
+                    Parcelable parcelableFeedObj = data.getParcelableExtra(FeedDetail.FEED_COMMENTS);
+                    if (parcelableFeedObj != null) {
+                        feedDetail = Parcels.unwrap(parcelableFeedObj);
                         isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                     }
-                    if (userPostSolrObj == null) {
+                    if (feedDetail == null) {
                         break;
                     }
                     if (isPostDeleted) {
-                        notifyAllItemRemoved(userPostSolrObj);
+                        notifyAllItemRemoved(feedDetail);
                     } else {
-                        invalidateItem(userPostSolrObj);
+                        invalidateItem(feedDetail);
                     }
             }
         } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
