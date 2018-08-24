@@ -1854,7 +1854,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 imagePoll.title = "Image Poll";
                 imagePoll.imgUrl = R.drawable.vector_image_poll_icon;
                 pollOptionTypeList.add(imagePoll);
-
+                AnalyticsManager.trackEvent(Event.POLL_CLICKED, getScreenName(), null);
                 PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollOptionTypeList);
             }
         });
@@ -2040,7 +2040,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mIsPollOptionClicked = true;
         mImageList.clear();
         mTitleToolbar.setText(R.string.title_create_poll);
-        etView.getEditText().setCursorVisible(false);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);

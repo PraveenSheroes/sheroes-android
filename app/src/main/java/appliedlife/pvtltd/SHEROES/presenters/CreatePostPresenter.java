@@ -306,7 +306,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                     public void onNext(CreatePollResponse communityPostCreateResponse) {
                         if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                            AnalyticsManager.trackPostAction(Event.POST_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
+                            AnalyticsManager.trackPostAction(Event.POLL_CREATED, communityPostCreateResponse.getFeedDetail(), CommunityPostActivity.SCREEN_LABEL);
                         } else {
                             getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
                             getMvpView().stopProgressBar();
