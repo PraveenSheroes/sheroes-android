@@ -109,9 +109,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
@@ -144,7 +144,6 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
-
 
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
@@ -841,89 +840,31 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public void sendPost() {
-        if (mIsPollOptionClicked) {
-            List<PollOptionRequestModel> pollOptionModelList = new ArrayList<>();
-            PollType pollType = TEXT;
-            if (mPollOptionType != null) {
-                switch (mPollOptionType) {
-                    case TEXT:
-                        for (int i = 0; i < mEtTextPollList.size(); i++) {
-                            PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
-                            imagePollOptionModel.setActive(true);
-                            if (StringUtil.isNotNullOrEmptyString(mEtTextPollList.get(i).getText().toString())) {
-                                imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
-                            } else {
-                                Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
-                                return;
-                            }
-                            pollOptionModelList.add(imagePollOptionModel);
-                        }
-                        pollType = TEXT;
-                        break;
-                    case IMAGE:
-                        PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
-                        imagePollOptionModelLeft.setActive(true);
-                        imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
-                        if (StringUtil.isNotNullOrEmptyString(mEtImagePollLeft.getText().toString())) {
-                            imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
-                        } else {
-                            Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
-                            return;
-                        }
-
-
-                        PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
-                        imagePollOptionModelRight.setActive(true);
-                        imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
-                        if (StringUtil.isNotNullOrEmptyString(mEtImagePollRight.getText().toString())) {
-                            imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
-                        } else {
-                            Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
-                            return;
-                        }
-
-                        pollOptionModelList.add(imagePollOptionModelLeft);
-                        pollOptionModelList.add(imagePollOptionModelRight);
-                        pollType = IMAGE;
-                        break;
-                    case EMOJI:
-                        pollType = EMOJI;
-                        break;
-                    case BOOLEAN:
-                        pollType = BOOLEAN;
-                        break;
-                }
+        if (mHasPermission) {
+            if (mCommunityPost != null) {
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Integer.toString(mCommunityPost.remote_id))
+                                .title(mCommunityPost.title)
+                                .build();
+                AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
             }
-            String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(), AppConstants.DATE_FORMAT);
-            String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
-            mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), pollType, etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
+        }
+
+        mMentionSpanList = etView.getMentionSpans();
+        addMentionSpanDetail();
+        if (mIsChallengePost) {
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+        } else if (!mIsEditPost) {
+            String accessToken = "";
+            if (AccessToken.getCurrentAccessToken() != null) {
+                accessToken = AccessToken.getCurrentAccessToken().getToken();
+            }
+            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
+
         } else {
-            if (mHasPermission) {
-                if (mCommunityPost != null) {
-                    final HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Integer.toString(mCommunityPost.remote_id))
-                                    .title(mCommunityPost.title)
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
-                }
-            }
-
-            mMentionSpanList = etView.getMentionSpans();
-            addMentionSpanDetail();
-            if (mIsChallengePost) {
-                mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
-            } else if (!mIsEditPost) {
-                String accessToken = "";
-                if (AccessToken.getCurrentAccessToken() != null) {
-                    accessToken = AccessToken.getCurrentAccessToken().getToken();
-                }
-                mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
-
-            } else {
-                if (mCommunityPost != null) {
-                    mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), mNewEncodedImages, (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
-                }
+            if (mCommunityPost != null) {
+                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), mNewEncodedImages, (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
@@ -1939,13 +1880,73 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mIsProgressBarVisible) {
             return;
         }
-
-        if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
-            selectPostNowOrLater();
+        if (mIsPollOptionClicked) {
+            createPoll();
         } else {
-            sendPost();
+            if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
+                selectPostNowOrLater();
+            } else {
+                sendPost();
+            }
         }
+    }
 
+    private void createPoll() {
+        List<PollOptionRequestModel> pollOptionModelList = new ArrayList<>();
+        PollType pollType = TEXT;
+        if (mPollOptionType != null) {
+            switch (mPollOptionType) {
+                case TEXT:
+                    for (int i = 0; i < mEtTextPollList.size(); i++) {
+                        PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
+                        imagePollOptionModel.setActive(true);
+                        if (StringUtil.isNotNullOrEmptyString(mEtTextPollList.get(i).getText().toString())) {
+                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
+                        } else {
+                            Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                            return;
+                        }
+                        pollOptionModelList.add(imagePollOptionModel);
+                    }
+                    pollType = TEXT;
+                    break;
+                case IMAGE:
+                    PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
+                    imagePollOptionModelLeft.setActive(true);
+                    imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
+                    if (StringUtil.isNotNullOrEmptyString(mEtImagePollLeft.getText().toString())) {
+                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
+                    } else {
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+
+
+                    PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
+                    imagePollOptionModelRight.setActive(true);
+                    imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
+                    if (StringUtil.isNotNullOrEmptyString(mEtImagePollRight.getText().toString())) {
+                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+                    } else {
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    pollOptionModelList.add(imagePollOptionModelLeft);
+                    pollOptionModelList.add(imagePollOptionModelRight);
+                    pollType = IMAGE;
+                    break;
+                case EMOJI:
+                    pollType = EMOJI;
+                    break;
+                case BOOLEAN:
+                    pollType = BOOLEAN;
+                    break;
+            }
+        }
+        String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(), AppConstants.DATE_FORMAT);
+        String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
+        mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), pollType, etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
     }
 
     private boolean keyboardShown(View rootView) {
@@ -2106,13 +2107,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 public void onClick(View view) {
                     mLiPollContainer.removeView(pollLayout);
                     mEtTextPollList.clear();
-                    for(int i=0;i<mLiPollContainer.getChildCount();i++)
-                    {
-                       // mEtTextPollList.get(i).setHint(mEtTextPollList.get(i).getHint());
-                        View pollLayout= mLiPollContainer.getChildAt(i);
-                        EditText editText=pollLayout.findViewById(R.id.et_text_poll);
-                        int count=i+1;
-                        editText.setHint(getString(R.string.poll_option)+count);
+                    for (int i = 0; i < mLiPollContainer.getChildCount(); i++) {
+                        // mEtTextPollList.get(i).setHint(mEtTextPollList.get(i).getHint());
+                        View pollLayout = mLiPollContainer.getChildAt(i);
+                        EditText editText = pollLayout.findViewById(R.id.et_text_poll);
+                        int count = i + 1;
+                        editText.setHint(getString(R.string.poll_option) + count);
                         mEtTextPollList.add(mEtTextPoll);
                     }
                     mPollOptionCount--;

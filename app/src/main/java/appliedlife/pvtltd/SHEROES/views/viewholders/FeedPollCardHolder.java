@@ -426,7 +426,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             mTvFeedPollTotalVotes.setVisibility(View.GONE);
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getEndsAt())) {
-            long endDateTime = mDateUtil.getTimeInMillis(mPollSolarObj.getEndsAt(), AppConstants.DATE_FORMAT);
+            long endDateTime = mDateUtil.getTimeInMillisWithUTC(mPollSolarObj.getEndsAt(), AppConstants.DATE_FORMAT);
             String endsIn = mDateUtil.getDifferenceInTime(endDateTime, System.currentTimeMillis());
             if (StringUtil.isNotNullOrEmptyString(endsIn)) {
                 endsIn = mContext.getString(R.string.ends_in) + " " + endsIn;
@@ -483,7 +483,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mPollSolarObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            String time = mDateUtil.getDifferenceInTime(createdDate,System.currentTimeMillis());
+            String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(),createdDate);
             if (StringUtil.isNotNullOrEmptyString(time)) {
                 mTvFeedCommunityPostTime.setText(time);
                 mTvFeedCommunityPostTime.setVisibility(View.VISIBLE);

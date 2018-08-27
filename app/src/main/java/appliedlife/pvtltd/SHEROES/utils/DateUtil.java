@@ -55,7 +55,6 @@ public class DateUtil {
             return "";
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(CONTEST_TIME, LOCALE);
-        dateFormat.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
         return dateFormat.format(date);
     }
 
@@ -79,6 +78,17 @@ public class DateUtil {
         long time = 0;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+            time = sdf.parse(dateString).getTime();
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
+        }
+
+        return time;
+    }
+    public long getTimeInMillisWithUTC(String dateString, String format) {
+        long time = 0;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
             sdf.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
             time = sdf.parse(dateString).getTime();
         } catch (Exception e) {
@@ -87,7 +97,6 @@ public class DateUtil {
 
         return time;
     }
-
     public static CharSequence getRelativeTimeSpanString(Date date) {
         return DateUtils.getRelativeTimeSpanString(date.getTime(), new Date().getTime(), DateUtils.SECOND_IN_MILLIS);
     }
@@ -213,8 +222,6 @@ public class DateUtil {
 
         Date date = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateformat, LOCALE);
-        dateFormat.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
-
         return dateFormat.parse(dateStr);
     }
 
@@ -223,7 +230,6 @@ public class DateUtil {
             return "";
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_ONLY_FORMAT, LOCALE);
-        dateFormat.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
         return dateFormat.format(date);
     }
 
@@ -242,7 +248,6 @@ public class DateUtil {
     public static boolean isSameDay(Date date1, Date date2) {
         if (date1 != null && date2 != null) {
             SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd", LOCALE);
-            fmt.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
             return fmt.format(date1).equals(fmt.format(date2));
         } else return date1 == null && date2 == null;
     }
