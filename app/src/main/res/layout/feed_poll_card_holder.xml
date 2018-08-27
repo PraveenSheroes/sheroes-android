@@ -3,7 +3,7 @@
     android:id="@+id/card_view_poll"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_size_10">
+    android:layout_marginBottom="@dimen/feed_poll_main_layout_margin">
 
     <LinearLayout
         android:id="@+id/li_poll_main_layout"
@@ -22,7 +22,7 @@
             android:layout_marginLeft="@dimen/poll_user_name_header_margin_left"
             android:layout_marginTop="@dimen/poll_user_name_header_margin_right"
             android:gravity="top"
-            android:weightSum="1">
+            android:weightSum="@integer/li_poll_user_name_header_weight">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
                     android:background="@drawable/ic_verified"
                     android:visibility="gone" />
             </FrameLayout>
-
+   <!--Getting warning for 0dp while adding in dimension for better performance-->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -131,9 +131,9 @@
             android:id="@+id/rl_feed_poll_no_reaction_comments"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginLeft="@dimen/rl_feed_poll_reaction_comments_margin"
+            android:layout_marginRight="@dimen/rl_feed_poll_reaction_comments_margin"
+            android:layout_marginTop="@dimen/rl_feed_poll_reaction_comments_margin_top"
             android:visibility="gone">
 
             <TextView
@@ -153,7 +153,7 @@
                 android:layout_toRightOf="@id/tv_feed_poll_total_reactions"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_14" />
+                android:textSize="@dimen/feed_poll_total_replies_text_size" />
 
             <TextView
                 android:id="@+id/tv_feed_poll_total_replies"
@@ -164,13 +164,13 @@
                 android:layout_alignParentTop="true"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_14" />
+                android:textSize="@dimen/feed_poll_total_replies_text_size" />
         </RelativeLayout>
 
         <View
             android:id="@+id/line_separate"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_0.5"
+            android:layout_height="@dimen/feed_line_view_height"
             android:layout_marginLeft="@dimen/feed_line_margin"
             android:layout_marginRight="@dimen/feed_line_margin"
             android:layout_marginTop="@dimen/feed_line_margin_top"

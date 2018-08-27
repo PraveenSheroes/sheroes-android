@@ -15,7 +15,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -133,10 +132,10 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     int mPollMarginLeftRight;
 
 
-    @BindDimen(R.dimen.dp_size_30)
+    @BindDimen(R.dimen.author_pic_size)
     int authorPicSize;
 
-    @BindDimen(R.dimen.dp_size_40)
+    @BindDimen(R.dimen.author_pic_size_for_image)
     int authorPicSizeFourty;
     //endregion
 
@@ -144,18 +143,12 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     private PostDetailCallBack mPostDetailCallBack;
     private PollSolarObj mPollSolarObj;
     private Context mContext;
-    private int mItemPosition;
-    private long mUserId;
-    private String loggedInUser;
-    private int mAdminId;
-    private String mPhotoUrl;
     private boolean isWhatappShareOption = false;
     private LinearLayout liImagePollRow;
     private ConstraintLayout clImagePollLeftContainer, clImagePollRightContainer;
     private ProgressBar pbPollPercentLeft, pbPollPercentRight;
     private TextView tvPollPercentNumberLeft, tvPollPercentNumberRight, tvImagePollNameLeft, tvImagePollNameRight;
     private RoundedImageView ivFeedImagePollLeft, ivFeedImagePollRight;
-    private RadioGroup mRgTextPollInput;
 
     public FeedPollCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -173,20 +166,6 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
     private void initPollCardHolder() {
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            mUserId = mUserPreference.get().getUserSummary().getUserId();
-            if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                mAdminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-            }
-            if (StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                mPhotoUrl = mUserPreference.get().getUserSummary().getPhotoUrl();
-            }
-            String first = mUserPreference.get().getUserSummary().getFirstName();
-            String last = mUserPreference.get().getUserSummary().getLastName();
-            if (StringUtil.isNotNullOrEmptyString(first) || StringUtil.isNotNullOrEmptyString(last)) {
-                loggedInUser = first + AppConstants.SPACE + last;
-            }
-        }
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareOption = "";
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
@@ -241,14 +220,13 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         if (StringUtil.isNotEmptyCollection(pollOptionModelList) && pollOptionModelList.size() > 1) {
             int width = CommonUtil.getWindowWidth(mContext);
             int imageHeight = CommonUtil.getWindowHeight(mContext);
-            if(StringUtil.isNotNullOrEmptyString(pollOptionModelList.get(0).getImageUrl())) {
+            if (StringUtil.isNotNullOrEmptyString(pollOptionModelList.get(0).getImageUrl())) {
                 String firstImageUrl = CommonUtil.getThumborUriWithFit(pollOptionModelList.get(0).getImageUrl(), width, imageHeight);
                 Glide.with(mContext)
                         .load(firstImageUrl)
                         .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                         .into(ivFeedImagePollLeft);
-            }else
-            {
+            } else {
                 ivFeedImagePollLeft.setBackgroundResource(R.color.photo_placeholder);
             }
             tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
@@ -266,14 +244,13 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
 
             // Image poll right option
-            if(StringUtil.isNotNullOrEmptyString(pollOptionModelList.get(1).getImageUrl())) {
+            if (StringUtil.isNotNullOrEmptyString(pollOptionModelList.get(1).getImageUrl())) {
                 String secondImageUrl = CommonUtil.getThumborUriWithFit(pollOptionModelList.get(1).getImageUrl(), width, imageHeight);
                 Glide.with(mContext)
                         .load(secondImageUrl)
                         .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                         .into(ivFeedImagePollRight);
-            }else
-            {
+            } else {
                 ivFeedImagePollRight.setBackgroundResource(R.color.photo_placeholder);
             }
             tvImagePollNameRight.setText(pollOptionModelList.get(1).getDescription());
@@ -316,7 +293,6 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     //region private methods
 
     private void addTextPollInputViews() {
-        mRgTextPollInput = new RadioGroup(mContext);
         for (int i = 0; i < mPollSolarObj.getPollOptions().size(); i++) {
             final TextView textPollInputLayout = (TextView) LayoutInflater.from(mContext).inflate(R.layout.feed_poll_card_textpoll_input_layout, null);
             final PollOptionModel pollOptionModel = mPollSolarObj.getPollOptions().get(i);
@@ -371,8 +347,6 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 liImageRatingRow.setLayoutParams(params);
                 mLiTypeOfPollView.addView(liImageRatingRow);
             }
-        } else {
-            addTextPollInputViews();
         }
     }
 
@@ -453,9 +427,14 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getEndsAt())) {
             long endDateTime = mDateUtil.getTimeInMillis(mPollSolarObj.getEndsAt(), AppConstants.DATE_FORMAT);
-            String endsIn = mContext.getString(R.string.ends_in) + " " + mDateUtil.getRoundedDifferenceInHours(endDateTime, System.currentTimeMillis());
-            mTvFeedPollEndsIn.setText(endsIn);
-            mTvFeedPollEndsIn.setVisibility(View.VISIBLE);
+            String endsIn = mDateUtil.getDifferenceInTime(endDateTime, System.currentTimeMillis());
+            if (StringUtil.isNotNullOrEmptyString(endsIn)) {
+                endsIn = mContext.getString(R.string.ends_in) + " " + endsIn;
+                mTvFeedPollEndsIn.setVisibility(View.VISIBLE);
+                mTvFeedPollEndsIn.setText(endsIn);
+            } else {
+                mTvFeedPollEndsIn.setVisibility(View.GONE);
+            }
         } else {
             mTvFeedPollEndsIn.setVisibility(View.GONE);
         }
@@ -504,9 +483,16 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mPollSolarObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            mTvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            String time = mDateUtil.getDifferenceInTime(System.currentTimeMillis(), createdDate);
+            if (StringUtil.isNotNullOrEmptyString(time)) {
+                mTvFeedCommunityPostTime.setText(time);
+                mTvFeedCommunityPostTime.setVisibility(View.VISIBLE);
+            } else {
+                mTvFeedCommunityPostTime.setVisibility(View.GONE);
+            }
+            mTvFeedCommunityPostTime.setVisibility(View.VISIBLE);
         } else {
-            mTvFeedCommunityPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
+            mTvFeedCommunityPostTime.setVisibility(View.GONE);
         }
     }
 

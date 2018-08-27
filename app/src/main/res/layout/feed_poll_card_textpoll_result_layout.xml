@@ -5,9 +5,9 @@
     android:layout_height="wrap_content">
 
     <FrameLayout
-        android:layout_width="0dp"
+        android:layout_width="@dimen/text_poll_result_frame_width"
         android:layout_height="wrap_content"
-        android:layout_weight="@integer/int_value_for_line_1">
+        android:layout_weight="@integer/feed_text_poll_row_value">
         <ProgressBar
             android:id="@+id/pb_poll_percent"
             style="@style/PollProgressBar"

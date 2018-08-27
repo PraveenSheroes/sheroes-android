@@ -6,20 +6,20 @@
     android:gravity="center"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/dp_size_10"
-    android:paddingRight="@dimen/dp_size_10">
+    android:paddingLeft="@dimen/poll_type_holder_margin_left_right"
+    android:paddingRight="@dimen/poll_type_holder_margin_left_right">
 
     <ImageView
         android:id="@+id/poll_type_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_4" />
+        android:layout_margin="@dimen/poll_type_holder_image_margin" />
 
     <TextView
         android:id="@+id/poll_type_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/dp_size_5"
+        android:layout_margin="@dimen/poll_type_holder_name_margin"
         android:ellipsize="end"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"

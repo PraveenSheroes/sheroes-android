@@ -130,7 +130,41 @@ public class DateUtil {
         }
         return sb.toString();
     }
+    public String getDifferenceInTime(long timeOne, long timeTwo) {
+        //long Millis24Hrs = 24 * 60 * 60 * 1000;
+        long differenceInMinutes = Math.round((timeOne - timeTwo) / (60 * 1000));
+        //long  seconds =(long)difference % 60;
+        //difference=(long)difference/60;
+        int day = (int) (differenceInMinutes / (24 * 60));
+        differenceInMinutes = differenceInMinutes - (day * 24 * 60);
+        int hour = (int) (differenceInMinutes / 60);
+        differenceInMinutes = differenceInMinutes - (hour * 60);
+        StringBuilder sb = new StringBuilder();
 
+        if (day > 0) {
+            sb.append(day);
+            if (day == 1) {
+                sb.append(AppConstants.DAY);
+            } else {
+                sb.append(AppConstants.DAY + AppConstants.S);
+            }
+        } else if (hour > 0) {
+            sb.append(hour);
+            if (hour == 1) {
+                sb.append(AppConstants.HOUR);
+            } else {
+                sb.append(AppConstants.HOUR + AppConstants.S);
+            }
+        } else if (differenceInMinutes > 0) {
+            sb.append(differenceInMinutes);
+            if (differenceInMinutes == 1) {
+                sb.append(AppConstants.MINUT);
+            } else {
+                sb.append(AppConstants.MINUT + AppConstants.S);
+            }
+        }
+        return sb.toString();
+    }
     public static String getDateWithFormat(String dateString, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         try {

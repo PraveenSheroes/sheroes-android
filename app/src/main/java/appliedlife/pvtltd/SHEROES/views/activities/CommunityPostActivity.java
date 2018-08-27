@@ -111,7 +111,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PostPollCreatorType;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
@@ -1254,11 +1254,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     //region private helper methods
     private String getCreatorType() {
         if (mPostAsCommunitySelected) {
-            return PostPollCreatorType.COMMUNITY_OWNER.toString();
+            return CreatorType.COMMUNITY_OWNER.toString();
         } else if (mIsAnonymous) {
-            return PostPollCreatorType.ANONYMOUS.toString();
+            return CreatorType.ANONYMOUS.toString();
         } else {
-            return PostPollCreatorType.USER.toString();
+            return CreatorType.USER.toString();
         }
     }
 
