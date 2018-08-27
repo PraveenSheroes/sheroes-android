@@ -249,7 +249,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                         .into(ivFeedImagePollLeft);
             }else
             {
-                ivFeedImagePollLeft.setBackgroundResource(R.drawable.ic_image_holder);
+                ivFeedImagePollLeft.setBackgroundResource(R.color.photo_placeholder);
             }
             tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
             tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
@@ -274,7 +274,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                         .into(ivFeedImagePollRight);
             }else
             {
-                ivFeedImagePollRight.setBackgroundResource(R.drawable.ic_image_holder);
+                ivFeedImagePollRight.setBackgroundResource(R.color.photo_placeholder);
             }
             tvImagePollNameRight.setText(pollOptionModelList.get(1).getDescription());
             tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);

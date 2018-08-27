@@ -19,8 +19,7 @@
             app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_bottom_left="0dp"
-            app:riv_corner_radius_bottom_right="0dp"
-            android:src="@drawable/vector_image_poll_holder" />
+            app:riv_corner_radius_bottom_right="0dp" />
 
         <ProgressBar
             android:id="@+id/pb_imagepoll_percent_left"
@@ -73,8 +72,7 @@
             app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
             app:riv_corner_radius_bottom_left="0dp"
-            app:riv_corner_radius_bottom_right="0dp"
-            android:src="@drawable/vector_image_poll_holder" />
+            app:riv_corner_radius_bottom_right="0dp" />
 
         <ProgressBar
             android:id="@+id/pb_imagepoll_percent_right"
