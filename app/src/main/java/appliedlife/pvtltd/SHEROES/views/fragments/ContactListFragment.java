@@ -393,7 +393,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             btnSyncContact.setVisibility(View.GONE);
             mInviteFriendAdapter.setData(userContactDetailList);
             mInviteFriendAdapter.notifyDataSetChanged();
-            if (null != getActivity() && getActivity() instanceof AllContactActivity) {
+            if (null != getActivity() && !getActivity().isFinishing() && getActivity() instanceof AllContactActivity && ((AllContactActivity) getActivity()).etInviteSearchBox!=null) {
                 ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
             }
             isContactFirstTime = true;
