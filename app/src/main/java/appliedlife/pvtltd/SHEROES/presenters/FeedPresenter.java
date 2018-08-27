@@ -94,7 +94,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
 
-
     MasterDataModel mMasterDataModel;
     private String mEndpointUrl;
     private boolean mIsHomeFeed;
