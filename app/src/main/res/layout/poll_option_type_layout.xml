@@ -9,7 +9,7 @@
         android:id="@+id/et_text_poll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="@integer/int_value_for_line_1"
+        android:layout_weight="@integer/et_text_poll_weight"
         android:background="@drawable/rectangle_border"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:padding="@dimen/option_poll_padding"
