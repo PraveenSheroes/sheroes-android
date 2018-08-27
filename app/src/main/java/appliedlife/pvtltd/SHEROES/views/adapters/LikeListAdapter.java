@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,7 +118,7 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
 
     //Show or hide the badge icon from user pic
     private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !isAnonymous) {
+        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
             userPic.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(badgeUrl)

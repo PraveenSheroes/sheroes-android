@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -707,7 +708,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
     //Show or hide the badge icon from user pic
     private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !isAnonymous) {
+        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
             userPic.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(badgeUrl)

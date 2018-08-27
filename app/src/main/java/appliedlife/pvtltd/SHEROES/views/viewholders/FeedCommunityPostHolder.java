@@ -13,6 +13,7 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -881,7 +882,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     //Show or hide the badge icon from user pic
     private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !isAnonymous) {
+        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
             userPic.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(badgeUrl)

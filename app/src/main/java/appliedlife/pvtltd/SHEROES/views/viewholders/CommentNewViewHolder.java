@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -166,7 +167,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
 
     //Show or hide the badge icon from user pic
     private void showHideUserBadge() {
-        if(mComment.isBadgeShown() && !mComment.isAnonymous()) {
+        if(mComment.isBadgeShown() && !mComment.isAnonymous() && !TextUtils.isEmpty(mComment.getBadgeUrl())) {
             badgeIcon.setVisibility(View.VISIBLE);
             Glide.with(mContext)
                     .load(mComment.getBadgeUrl())

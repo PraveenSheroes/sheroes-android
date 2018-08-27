@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -75,6 +76,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.author_verified_icon)
     ImageView mAuthorVerifiedIcon;
+
+    @Bind(R.id.last_comment_badge_icon)
+    ImageView mBadgeIcon;
+
+    @Bind(R.id.last_comment_badge_icon)
+    ImageView mLastCommentBadgeIcon;
 
     @Bind(R.id.post_title)
     TextView mTitle;
@@ -358,6 +365,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     mAuthorVerifiedIcon.setVisibility(View.GONE);
                 }
+
+                showHideUserBadge(mUserPostObj.isAnonymous(), mBadgeIcon, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -651,6 +660,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             int mItemPosition = lastCommentList.size() - 1;
             lastComment = lastCommentList.get(mItemPosition);
             mCommentAuthorImage.setCircularImage(true);
+
+            showHideUserBadge(lastComment.isAnonymous(), mLastCommentBadgeIcon, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
@@ -703,6 +714,17 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     }
 
+    //Show or hide the badge icon from user pic
+    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if(!isAnonymous && isBadgeShown && !TextUtils.isEmpty(badgeUrl)) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
+        }
+    }
 
     private void invalidateCommentLike(Comment lastComment) {
         mCommentLike.setVisibility(View.VISIBLE);
