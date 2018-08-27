@@ -483,7 +483,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mPollSolarObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            String time = mDateUtil.getDifferenceInTime(System.currentTimeMillis(), createdDate);
+            String time = mDateUtil.getDifferenceInTime(createdDate,System.currentTimeMillis());
             if (StringUtil.isNotNullOrEmptyString(time)) {
                 mTvFeedCommunityPostTime.setText(time);
                 mTvFeedCommunityPostTime.setVisibility(View.VISIBLE);
