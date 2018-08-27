@@ -500,6 +500,11 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         if (mPollSolarObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && mPollSolarObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
             mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             rlFeedPollNoReactionComment.setVisibility(View.GONE);
+            mLineSeparate.setVisibility(View.GONE);
+        }else
+        {
+            mLineSeparate.setVisibility(View.VISIBLE);
+            rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
         }
         switch (mPollSolarObj.getNoOfLikes()) {
             case AppConstants.NO_REACTION_CONSTANT:
@@ -522,13 +527,11 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             case AppConstants.NO_REACTION_CONSTANT:
                 if (mPollSolarObj.getNoOfLikes() > AppConstants.NO_REACTION_CONSTANT) {
                     rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
-                    mLineSeparate.setVisibility(View.VISIBLE);
                     mTvFeedPollTotalReactionCount.setVisibility(View.VISIBLE);
                     mTvFeedPollTotalReaction.setVisibility(View.VISIBLE);
                     mTvFeedPollTotalReplies.setVisibility(View.INVISIBLE);
                 } else {
                     rlFeedPollNoReactionComment.setVisibility(View.GONE);
-                    mLineSeparate.setVisibility(View.GONE);
                 }
                 break;
             case AppConstants.ONE_CONSTANT:

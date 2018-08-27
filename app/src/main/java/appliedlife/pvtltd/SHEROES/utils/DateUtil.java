@@ -47,7 +47,7 @@ public class DateUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.DAY_OF_YEAR, noOfDays);
-        return getDateFromMillisecondsWithFormat(calendar.getTimeInMillis(),  AppConstants.DATE_FORMAT);
+        return getDateFromMillisecondsWithFormat(calendar.getTimeInMillis(), AppConstants.DATE_FORMAT);
     }
 
     public static String contestDate(Date date) {
@@ -55,6 +55,7 @@ public class DateUtil {
             return "";
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(CONTEST_TIME, LOCALE);
+        dateFormat.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
         return dateFormat.format(date);
     }
 
@@ -78,6 +79,7 @@ public class DateUtil {
         long time = 0;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
+            sdf.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
             time = sdf.parse(dateString).getTime();
         } catch (Exception e) {
             LogUtils.error(TAG, e);
@@ -130,6 +132,7 @@ public class DateUtil {
         }
         return sb.toString();
     }
+
     public String getDifferenceInTime(long timeOne, long timeTwo) {
         //long Millis24Hrs = 24 * 60 * 60 * 1000;
         long differenceInMinutes = Math.round((timeOne - timeTwo) / (60 * 1000));
@@ -149,11 +152,17 @@ public class DateUtil {
                 sb.append(AppConstants.DAY + AppConstants.S);
             }
         } else if (hour > 0) {
-            sb.append(hour);
             if (hour == 1) {
+                sb.append(hour);
                 sb.append(AppConstants.HOUR);
             } else {
-                sb.append(AppConstants.HOUR + AppConstants.S);
+                if (differenceInMinutes > 0) {
+                    sb.append(hour + 1);
+                    sb.append(AppConstants.HOUR + AppConstants.S);
+                } else {
+                    sb.append(hour);
+                    sb.append(AppConstants.HOUR + AppConstants.S);
+                }
             }
         } else if (differenceInMinutes > 0) {
             sb.append(differenceInMinutes);
@@ -165,6 +174,7 @@ public class DateUtil {
         }
         return sb.toString();
     }
+
     public static String getDateWithFormat(String dateString, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
         try {
@@ -203,6 +213,7 @@ public class DateUtil {
 
         Date date = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat(dateformat, LOCALE);
+        dateFormat.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
 
         return dateFormat.parse(dateStr);
     }
@@ -212,6 +223,7 @@ public class DateUtil {
             return "";
         }
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_ONLY_FORMAT, LOCALE);
+        dateFormat.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
         return dateFormat.format(date);
     }
 
@@ -230,6 +242,7 @@ public class DateUtil {
     public static boolean isSameDay(Date date1, Date date2) {
         if (date1 != null && date2 != null) {
             SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd", LOCALE);
+            fmt.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
             return fmt.format(date1).equals(fmt.format(date2));
         } else return date1 == null && date2 == null;
     }
