@@ -239,11 +239,18 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     private void imagePollViewResultView() {
         List<PollOptionModel> pollOptionModelList = mPollSolarObj.getPollOptions();
         if (StringUtil.isNotEmptyCollection(pollOptionModelList) && pollOptionModelList.size() > 1) {
-            Glide.with(mContext)
-                    .load(pollOptionModelList.get(0).getImageUrl())
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .into(ivFeedImagePollLeft);
-
+            int width = CommonUtil.getWindowWidth(mContext);
+            int imageHeight = CommonUtil.getWindowHeight(mContext);
+            if(StringUtil.isNotNullOrEmptyString(pollOptionModelList.get(0).getImageUrl())) {
+                String firstImageUrl = CommonUtil.getThumborUriWithFit(pollOptionModelList.get(0).getImageUrl(), width, imageHeight);
+                Glide.with(mContext)
+                        .load(firstImageUrl)
+                        .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                        .into(ivFeedImagePollLeft);
+            }else
+            {
+                ivFeedImagePollLeft.setBackgroundResource(R.drawable.ic_image_holder);
+            }
             tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
             tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvImagePollNameLeft.setText(pollOptionModelList.get(0).getDescription());
@@ -259,10 +266,16 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
 
             // Image poll right option
-            Glide.with(mContext)
-                    .load(pollOptionModelList.get(1).getImageUrl())
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .into(ivFeedImagePollRight);
+            if(StringUtil.isNotNullOrEmptyString(pollOptionModelList.get(1).getImageUrl())) {
+                String secondImageUrl = CommonUtil.getThumborUriWithFit(pollOptionModelList.get(1).getImageUrl(), width, imageHeight);
+                Glide.with(mContext)
+                        .load(secondImageUrl)
+                        .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                        .into(ivFeedImagePollRight);
+            }else
+            {
+                ivFeedImagePollRight.setBackgroundResource(R.drawable.ic_image_holder);
+            }
             tvImagePollNameRight.setText(pollOptionModelList.get(1).getDescription());
             tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
             tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));

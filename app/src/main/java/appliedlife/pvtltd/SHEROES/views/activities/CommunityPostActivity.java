@@ -145,6 +145,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTouch;
 
+
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
@@ -932,11 +933,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             int width = CommonUtil.getWindowWidth(this);
-           // int imageHeight = width / 2;
-           // String finalImageUrl = CommonUtil.getThumborUri(imageUrl, width, imageHeight);
+            int imageHeight = CommonUtil.getWindowHeight(this);
+            String finalImageUrl = CommonUtil.getThumborUriWithFit(imageUrl, width, imageHeight);
             Glide.with(this)
                     .asBitmap()
-                    .load(imageUrl)
+                    .load(finalImageUrl)
                     .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
                     .into(new SimpleTarget<Bitmap>() {
                         @Override
@@ -1838,7 +1839,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearPollSurvey.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                CommonUtil.hideKeyboard(CommunityPostActivity.this);
                 mSuggestionList.setVisibility(View.GONE);
                 List<PollOptionType> pollOptionTypeList = new ArrayList<>();
 
