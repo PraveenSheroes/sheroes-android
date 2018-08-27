@@ -39,7 +39,7 @@ public class DateUtil {
      */
     public static String getDateFromMillisecondsWithFormat(Long time, String format) {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        sdf.setTimeZone(TimeZone.getTimeZone(LOCALE_UTC));
         return sdf.format(time);
     }
 
