@@ -216,6 +216,8 @@
     <dimen name="leaderboard_user_icon">39dp</dimen>
     <dimen name="leaderboard_badge_icon">40dp</dimen>
     <dimen name="leaderboard_about_header_height">45dp</dimen>
+    <dimen name="leaderboard_position_user_pic_margin_start">10dp</dimen>
+    <dimen name="leaderboard_badge_user_pic_margin_left">13dp</dimen>
     <dimen name="badge_share_card_width">300dp</dimen>
     <dimen name="badge_share_playstore_icon_width">100dp</dimen>
     <dimen name="badge_share_playstore_icon_height">35dp</dimen>
@@ -315,6 +317,7 @@
     <dimen name="comment_body_padding_vertical">12dp</dimen>
     <dimen name="comment_body_padding_left">15dp</dimen>
     <dimen name="post_comment_badge_icon">14dp</dimen>
+
 
 </resources>
 

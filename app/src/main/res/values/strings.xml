@@ -687,6 +687,7 @@
     <string name="your_response_copied">Your response copied</string>
     <string name="list_comment_submit">Submit</string>
     <string name="list_comment_cancel">Cancel</string>
+    <string name="leaderboard_rank_unavailable">--</string>
 
 
 </resources>
