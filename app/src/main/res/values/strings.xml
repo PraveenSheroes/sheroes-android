@@ -688,6 +688,7 @@
     <string name="list_comment_submit">Submit</string>
     <string name="list_comment_cancel">Cancel</string>
     <string name="leaderboard_rank_unavailable">--</string>
+    <string name="edit">Edit</string>
 
 
 </resources>

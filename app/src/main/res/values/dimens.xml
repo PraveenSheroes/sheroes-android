@@ -317,6 +317,24 @@
     <dimen name="comment_body_padding_vertical">12dp</dimen>
     <dimen name="comment_body_padding_left">15dp</dimen>
     <dimen name="post_comment_badge_icon">14dp</dimen>
+    <dimen name="list_comment_edit_margin_top">5dp</dimen>
+    <dimen name="list_comment_edit_padding_left">12dp</dimen>
+    <dimen name="comment_edit_padding_vertical">3dp</dimen>
+    <dimen name="list_comment_submit_margin_left">15dp</dimen>
+    <dimen name="list_comment_submit_margin_top">8dp</dimen>
+    <dimen name="list_comment_margin_top">13dp</dimen>
+    <dimen name="list_comment_padding_left">12dp</dimen>
+    <dimen name="list_comment_padding_right">16dp</dimen>
+    <dimen name="list_comment_padding_top">8dp</dimen>
+    <dimen name="list_comment_cancel_padding_left">8dp</dimen>
+    <dimen name="list_comment_cancel_text">14sp</dimen>
+    <dimen name="spam_comment_conatiner_height">100dp</dimen>
+    <dimen name="list_comment_spam_menu_padding">16dp</dimen>
+    <dimen name="list_comment_review_desc">11dp</dimen>
+    <dimen name="review_desc_text">14sp</dimen>
+    <dimen name="review_article_comment_padding">8dp</dimen>
+    <dimen name="review_desc_line_space">3dp</dimen>
+    <dimen name="list_comment_cancel_drawable_padding">4dp</dimen>
 
 
 </resources>

@@ -137,20 +137,26 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             itemContainer.setOnClickListener(this);
 
             if (leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails() != null && CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl())) {
+                badgeIcon.setVisibility(View.VISIBLE);
                 String badgeIconUrl = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getImageUrl(), mBadgeIconSize, mBadgeIconSize);
                 Glide.with(badgeIcon.getContext())
                         .load(badgeIconUrl)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(badgeIcon.getContext())))
                         .into(badgeIcon);
+            } else {
+                badgeIcon.setVisibility(View.GONE);
             }
             mName.setText(leaderBoardUserSolrObj.getUserSolrObj().getNameOrTitle());
 
             if (leaderBoardUserSolrObj.getUserSolrObj().getThumbnailImageUrl() != null && CommonUtil.isNotEmpty(leaderBoardUserSolrObj.getUserSolrObj().getThumbnailImageUrl())) {
+                mProfilePic.setVisibility(View.VISIBLE);
                 String userImage = CommonUtil.getThumborUri(leaderBoardUserSolrObj.getUserSolrObj().getThumbnailImageUrl(), mUserPicSize, mUserPicSize);
                 Glide.with(mProfilePic.getContext())
                         .load(userImage)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(context)))
                         .into(mProfilePic);
+            } else {
+                mProfilePic.setVisibility(View.GONE);
             }
 
             String pluralLikes = context.getResources().getQuantityString(R.plurals.numberOfLikes, leaderBoardUserSolrObj.getSolrIgnoreNoOfLikesOnUserPost());
@@ -210,6 +216,8 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     PaintDrawable selectedRowDrawable = new PaintDrawable(Color.parseColor(mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().getPrimaryColor()));
                     selectedRowDrawable.setCornerRadius(mSelectedRowRadius);
                     itemContainer.setBackground(selectedRowDrawable);
+                } else {
+                    itemContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.white_color));
                 }
 
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
@@ -225,13 +233,12 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             }
             itemContainer.setLayoutParams(layoutParams);
 
-            if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails() != null) {
-                if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isActive()) {
-                    badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
-                } else {
-                    badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
-                }
+            if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails() != null && mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isActive()) {
+                badgeIcon.setBackgroundResource(R.drawable.circular_background_yellow);
+            } else {
+                badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
             }
+
             mProfilePic.setBackgroundResource(R.drawable.circular_leaderbaord_user_icon_background_grey);
         }
     }
