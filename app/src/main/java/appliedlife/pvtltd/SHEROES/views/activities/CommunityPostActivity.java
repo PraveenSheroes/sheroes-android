@@ -477,8 +477,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             externalImageWithTextShare();
             setupToolBarItem();
 
-        }
 
+        }
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -2030,7 +2030,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     setImageCount();
                 }
             }
-
+            mAction.setAlpha(1f);
+            etView.getEditText().setCursorVisible(true);
+        }else
+        {
+            mAction.setAlpha(.9f);
         }
 
     }
@@ -2041,6 +2045,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPollOptionType = pollType;
         mIsPollOptionClicked = true;
         mImageList.clear();
+        etView.getEditText().setCursorVisible(false);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
@@ -2113,7 +2118,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         EditText editText = pollLayout.findViewById(R.id.et_text_poll);
                         int count = i + 1;
                         editText.setHint(getString(R.string.poll_option) + count);
-                        mEtTextPollList.add(mEtTextPoll);
+                        mEtTextPollList.add(editText);
                     }
                     mPollOptionCount--;
                     addOptionButtonView();

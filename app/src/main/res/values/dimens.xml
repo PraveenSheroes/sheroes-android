@@ -196,7 +196,7 @@
     <dimen name="poll_type_height">230dp</dimen>
     <dimen name="poll_title_size">16sp</dimen>
     <dimen name="phot_poll_lable_text_size">14sp</dimen>
-    <dimen name="option_poll_text_size">14sp</dimen>
+    <dimen name="option_poll_text_size">13sp</dimen>
     <dimen name="text_option_poll_text_size">18sp</dimen>
     <dimen name="option_poll_margin_left_right">16dp</dimen>
     <dimen name="option_poll_ends_padding">2dp</dimen>
@@ -204,6 +204,7 @@
     <dimen name="add_icon_top_bottom">4dp</dimen>
     <dimen name="option_poll_margintop">6dp</dimen>
     <dimen name="option_poll_padding">9dp</dimen>
+    <dimen name="image_poll_option_height">40dp</dimen>
     <dimen name="add_option_poll_label_text">14sp</dimen>
     <dimen name="add_option_poll_label_text_margin">8dp</dimen>
     <dimen name="add_option_poll_day_selection_margin">20dp</dimen>
@@ -281,6 +282,9 @@
     <dimen name="author_pic_size">30dp</dimen>
     <dimen name="author_pic_size_for_image">40dp</dimen>
     <dimen name="li_main_poll_view_margin">50dp</dimen>
+    <dimen name="post_action_btn_padding">16dp</dimen>
+    <dimen name="post_action_btn_text_size">14sp</dimen>
+    <dimen name="post_action_btn_padding_top_bottom">10dp</dimen>
 
 
 
