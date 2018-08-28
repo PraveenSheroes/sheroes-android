@@ -699,6 +699,7 @@
     <string name="percent_vote">% vote</string>
     <string name="ends_in">Ends in:</string>
     <string name="option_empty">Option can\'t be empty</string>
+    <string name="option_image_empty">Image can\'t be empty</string>
 
 
 

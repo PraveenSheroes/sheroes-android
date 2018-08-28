@@ -1913,22 +1913,31 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case IMAGE:
                     PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                     imagePollOptionModelLeft.setActive(true);
-                    imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
                     if (StringUtil.isNotNullOrEmptyString(mEtImagePollLeft.getText().toString())) {
                         imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                         return;
                     }
-
+                    if (StringUtil.isNotNullOrEmptyString(mImagePollLeftUrl)) {
+                        imagePollOptionModelLeft.setImageUrl(mImagePollLeftUrl);
+                    } else {
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_image_empty), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
                     imagePollOptionModelRight.setActive(true);
-                    imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
                     if (StringUtil.isNotNullOrEmptyString(mEtImagePollRight.getText().toString())) {
                         imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(mImagePollRightUrl)) {
+                        imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
+                    } else {
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_image_empty), Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
