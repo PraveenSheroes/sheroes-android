@@ -368,6 +368,9 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/stream?setOrderKey=UserStoryStream")
     Observable<FeedResponsePojo> getUserStory(@Query("id") String article_id, @Body FeedRequestPojo feedRequestPojo);
 
+    @POST("participant/feed/stream?setOrderKey=PollStream")
+    Observable<FeedResponsePojo> getPollDetail(@Query("poll_id") String poll_id, @Body FeedRequestPojo feedRequestPojo);
+
     @POST("participation/global/image/add")
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 }

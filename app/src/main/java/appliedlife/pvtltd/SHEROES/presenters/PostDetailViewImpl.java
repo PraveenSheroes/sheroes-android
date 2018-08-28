@@ -54,6 +54,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.RxSearchObservable;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
@@ -81,6 +82,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
 public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     SheroesAppServiceApi mSheroesAppServiceApi;
     private FeedDetail mFeedDetail;
+    private String mCommunityPostDetailDeepLink;
     private String mFeedDetailObjId;
     private List<BaseResponse> mBaseResponseList;
     private SheroesApplication mSheroesApplication;
@@ -106,14 +108,21 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         this.mIsScrollAllowed = isScrollAllowed;
     }
 
-    public void setUserPost(FeedDetail feedDetail, String userPostId) {
+    public void setUserPost(FeedDetail feedDetail, String userPostId, String communityPostDetailDeepLink) {
         this.mFeedDetail = feedDetail;
         this.mFeedDetailObjId = userPostId;
+        mCommunityPostDetailDeepLink = communityPostDetailDeepLink;
     }
 
     public void fetchUserPost() {
         if (mFeedDetail == null) {
-            fetchUserPostFromServer();
+            if (StringUtil.isNotNullOrEmptyString(mCommunityPostDetailDeepLink)) {
+                if (AppConstants.POLL_URL_COM.equalsIgnoreCase(mCommunityPostDetailDeepLink) || AppConstants.POLL_URL.equalsIgnoreCase(mCommunityPostDetailDeepLink)) {
+                    fetchPollFromServer();
+                } else {
+                    fetchUserPostFromServer();
+                }
+            }
         } else {
             mBaseResponseList.add(mFeedDetail);
             getMvpView().addData(0, mFeedDetail);
@@ -127,6 +136,47 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, 1, Long.valueOf(mFeedDetailObjId));
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         getFeedFromPresenter(feedRequestPojo);
+    }
+
+    private void fetchPollFromServer() {
+        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_POLL, 1, Long.valueOf(mFeedDetailObjId));
+        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.getPollDetail(mFeedDetailObjId,feedRequestPojo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                    }
+
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
+                            mFeedDetail = feedResponsePojo.getFeedDetails().get(0);
+                            if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                                mFeedDetail.setStreamType(getMvpView().getStreamType());
+                            }
+                            mBaseResponseList.add(mFeedDetail);
+                            getMvpView().addData(0, mFeedDetail);
+                            headerCount++;
+                            getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
+                        }
+                    }
+                });
     }
 
     public void fetchMoreComments() {

@@ -152,7 +152,7 @@ public class AppConstants {
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
     public static final String FOLLOWED_CHAMPION_LABEL = "Followed Champions Screen";
     public static final String FOLLOWERS = "FOLLOWERS";
-    public static final String FOLLOWING= "FOLLOWING";
+    public static final String FOLLOWING = "FOLLOWING";
     public static final String FOLLOWING_COUNT_CLICK = "Following Count Click";
     public static final String FOLLOWERS_COUNT_CLICK = "Followers Count Click";
     public static final String SHARE_PROFILE = "Share profile";
@@ -245,7 +245,7 @@ public class AppConstants {
 
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
     public static final String BAD_RQUEST = "HTTP 400 Bad Request";
-/**/
+    /**/
 
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
     public static final String DAY = " day";
@@ -279,6 +279,8 @@ public class AppConstants {
     public static final String STORIES_URL_COM = "https://sheroes.com/stories";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
+    public static final String POLL_URL = "https://sheroes.in/communities/poll";
+    public static final String POLL_URL_COM = "https://sheroes.com/communities/poll";
     public static final String EVENT_URL = "https://sheroes.in/event";
     public static final String EVENT_URL_COM = "https://sheroes.com/event";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/";
@@ -451,4 +453,7 @@ public class AppConstants {
     public static final String PUSH_PROVIDER_SHEROES = "Sheroes";
     public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
+
+    public static final int BACK_SLASH_OCCURRENCE_IN_POLL_LINK = 5; // https://sheroes.com/communities/poll/carrer-community/MTI3NQ==/MTIx
+    public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
 }

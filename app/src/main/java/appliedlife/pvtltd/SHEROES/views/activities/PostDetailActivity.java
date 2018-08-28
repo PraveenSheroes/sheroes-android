@@ -188,7 +188,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region presenter region
     private PostDetailAdapter mPostDetailListAdapter;
     private FeedDetail mFeedDetail;
-    private String mFeedDetailObjId;
+    private String mFeedDetailObjId,mCommunityPostDetailDeepLink;
     private boolean mIsAnonymous;
     private String mPrimaryColor = "#ffffff";
     private String mTitleTextColor = "#3c3c3c";
@@ -227,7 +227,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         initAdapter();
 
-        mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId);
+        mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId,mCommunityPostDetailDeepLink);
         mPostDetailPresenter.fetchUserPost();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
@@ -288,6 +288,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             } else {
                 mFeedDetailObjId = getIntent().getStringExtra(FeedDetail.FEED_OBJ_ID);
+                mCommunityPostDetailDeepLink = getIntent().getStringExtra(BaseActivity.POST_DETAIL_DEEPLINK);
                 if (!CommonUtil.isNotEmpty(mFeedDetailObjId)) {
                     return;
                 }
