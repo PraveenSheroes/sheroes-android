@@ -250,7 +250,7 @@ public class AppConstants {
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
     public static final String DAY = " day";
     public static final String HOUR = " hr";
-    public static final String MINUT = " min";
+    public static final String MINUTE = " min";
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community

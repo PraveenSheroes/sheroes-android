@@ -257,10 +257,6 @@ public class CommonUtil {
         return 0;
     }
     public static void hideKeyboard(Activity activity) {
-//		activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        // Check if no view has focus:
-        //   http://stackoverflow.com/a/7696791/559680
         View view = activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -268,10 +264,6 @@ public class CommonUtil {
         }
     }
     public static void showKeyboard(Activity activity) {
-//		activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-
-        // Check if no view has focus:
-        //   http://stackoverflow.com/a/7696791/559680
         View view = activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);

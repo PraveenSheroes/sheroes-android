@@ -4,7 +4,7 @@
     <item android:id="@android:id/background">
         <shape>
             <stroke
-                android:width="@dimen/dp_size_1"
+                android:width="1dp"
                 android:color="@color/fully_transparent"/>
             <gradient
                 android:angle="270"
@@ -17,7 +17,7 @@
         <clip>
             <shape>
                 <stroke
-                    android:width="@dimen/dp_size_1"
+                    android:width="1dp"
                     android:color="@color/footer_icon_text"/>
                 <gradient
                     android:angle="90"

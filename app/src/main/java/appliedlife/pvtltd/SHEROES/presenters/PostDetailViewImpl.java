@@ -174,6 +174,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             getMvpView().addData(0, mFeedDetail);
                             headerCount++;
                             getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
+                        }else
+                        {
+                            getMvpView().stopProgressBar();
                         }
                     }
                 });

@@ -132,9 +132,9 @@ public class DateUtil {
         } else if (differenceInMinutes > 0) {
             sb.append(differenceInMinutes);
             if (differenceInMinutes == 1) {
-                sb.append(AppConstants.MINUT);
+                sb.append(AppConstants.MINUTE);
             } else {
-                sb.append(AppConstants.MINUT + AppConstants.S);
+                sb.append(AppConstants.MINUTE + AppConstants.S);
             }
         } else {
             sb.append(SheroesApplication.mContext.getString(R.string.ID_JUST_NOW));
@@ -176,9 +176,9 @@ public class DateUtil {
         } else if (differenceInMinutes > 0) {
             sb.append(differenceInMinutes);
             if (differenceInMinutes == 1) {
-                sb.append(AppConstants.MINUT);
+                sb.append(AppConstants.MINUTE);
             } else {
-                sb.append(AppConstants.MINUT + AppConstants.S);
+                sb.append(AppConstants.MINUTE + AppConstants.S);
             }
         }
         return sb.toString();
