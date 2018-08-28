@@ -358,7 +358,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private PollType mPollOptionType;
     private List<EditText> mEtTextPollList = new ArrayList<>();
     private EditText mEtTextPoll;
-    private int mMaxLength = 5;
+    private int mMaxLength = 500;
 
 
     //endregion
