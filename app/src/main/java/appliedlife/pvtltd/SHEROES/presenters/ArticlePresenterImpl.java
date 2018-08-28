@@ -36,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleView;
@@ -82,28 +83,28 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), null);
-
                     }
 
                     @Override
                     public void onNext(FeedResponsePojo feedResponsePojo) {
-                        FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
-                        ArticleSolrObj articleObj = new ArticleSolrObj();
-                        if (feedDetail instanceof ArticleSolrObj) {
-                            articleObj = (ArticleSolrObj) feedDetail;
-                            articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
-                            articleObj.likesCount = articleObj.getNoOfLikes();
-                            if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-                                articleObj.setStreamType(getMvpView().getStreamType());
-                                feedDetail.setStreamType(getMvpView().getStreamType());
+                        if(StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
+                            FeedDetail feedDetail = feedResponsePojo.getFeedDetails().get(0);
+                            ArticleSolrObj articleObj = new ArticleSolrObj();
+                            if (feedDetail instanceof ArticleSolrObj) {
+                                articleObj = (ArticleSolrObj) feedDetail;
+                                articleObj.isLiked = articleObj.getReactionValue() == AppConstants.HEART_REACTION_CONSTANT;
+                                articleObj.likesCount = articleObj.getNoOfLikes();
+                                if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                                    articleObj.setStreamType(getMvpView().getStreamType());
+                                    feedDetail.setStreamType(getMvpView().getStreamType());
+                                }
+                                getMvpView().setFeedDetail(feedDetail);
+                                getMvpView().showArticle(articleObj, isImageLoaded);
+                                getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
                             }
-                            getMvpView().setFeedDetail(feedDetail);
-                            getMvpView().showArticle(articleObj, isImageLoaded);
-                            getMvpView().showComments(feedDetail.getLastComments(), articleObj.getNoOfComments());
                         }
                     }
                 });
-
     }
 
 
@@ -239,7 +240,6 @@ public class ArticlePresenterImpl extends BasePresenter<IArticleView> {
                         }
                     }
                 });
-
     }
 
 
