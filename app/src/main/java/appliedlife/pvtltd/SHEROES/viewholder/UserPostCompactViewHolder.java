@@ -77,7 +77,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.author_verified_icon)
     ImageView mAuthorVerifiedIcon;
 
-    @Bind(R.id.last_comment_badge_icon)
+    @Bind(R.id.bade_icon)
     ImageView mBadgeIcon;
 
     @Bind(R.id.last_comment_badge_icon)
