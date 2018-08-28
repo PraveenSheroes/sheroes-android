@@ -358,6 +358,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private PollType mPollOptionType;
     private List<EditText> mEtTextPollList = new ArrayList<>();
     private EditText mEtTextPoll;
+    private int mMaxLength = 5;
 
 
     //endregion
@@ -1892,6 +1893,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void createPoll() {
+        if (etView.getText().toString().length() >mMaxLength) {
+            Snackbar.make(mRlMainLayout, getString(R.string.poll_text_limit), Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         List<PollOptionRequestModel> pollOptionModelList = new ArrayList<>();
         PollType pollType = TEXT;
         if (mPollOptionType != null) {
@@ -2041,8 +2046,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
             mAction.setAlpha(1f);
             etView.getEditText().setCursorVisible(true);
-        }else
-        {
+        } else {
             mAction.setAlpha(.9f);
         }
 
@@ -2055,6 +2059,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mIsPollOptionClicked = true;
         mImageList.clear();
         etView.getEditText().setCursorVisible(false);
+        etView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);

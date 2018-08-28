@@ -265,7 +265,6 @@
     <dimen name="text_poll_verified_margin">16dp</dimen>
     <dimen name="text_poll_progress_height">42dp</dimen>
     <dimen name="poll_type_recyler_list_margin">50dp</dimen>
-    <dimen name="option_delete_width_height">32dp</dimen>
     <dimen name="text_pol_percent_number_text_size">14sp</dimen>
     <dimen name="image_poll_corner_radius">2dp</dimen>
     <dimen name="image_poll_corner_width">1dp</dimen>

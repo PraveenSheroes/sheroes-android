@@ -13,6 +13,7 @@
         android:focusable="true"
         android:paddingLeft="@dimen/dp_size_8"
         android:paddingRight="@dimen/dp_size_8"
+        android:textCursorDrawable="@drawable/cursor_line"
         android:focusableInTouchMode="true"
         android:scrollHorizontally="false"
         android:minHeight="48dp"
