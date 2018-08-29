@@ -639,7 +639,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail) {
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail,final long pollOptionId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
@@ -680,7 +680,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                         if (pollSolarObj != null) {
                             getMvpView().invalidateItem(pollSolarObj);
-                            getMvpView().pollVoteResponse(pollSolarObj);
+                            getMvpView().pollVoteResponse(pollSolarObj,pollOptionId);
                         }
                     }
                 });

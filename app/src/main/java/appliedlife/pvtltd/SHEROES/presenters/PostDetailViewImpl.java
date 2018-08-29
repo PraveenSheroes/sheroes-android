@@ -39,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRe
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -678,7 +679,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail) {
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail, final PollOptionModel pollOptionModel) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
@@ -715,7 +716,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         PollSolarObj pollSolarObj = null;
                         if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
-                            AnalyticsManager.trackPostAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL,pollOptionModel.getPollOptionId());
                         } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);

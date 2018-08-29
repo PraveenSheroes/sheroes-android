@@ -187,6 +187,12 @@ public class AnalyticsManager {
         }
         MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName);
     }
+    public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName,long pollOptionId) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackPollActionEvent(event, feedDetail, screenName,pollOptionId);
+    }
     public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName) {
         if (!canSend()) {
             return;

@@ -352,9 +352,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void pollVoteResponse(FeedDetail feedDetail) {
+    public void pollVoteResponse(FeedDetail feedDetail,long polOptionId) {
         if (feedDetail instanceof PollSolarObj) {
-            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName());
+            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName(),polOptionId);
         }
     }
 
@@ -1099,7 +1099,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
-        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj);
+        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj,pollOptionModel.getPollOptionId());
     }
 
     @Override
