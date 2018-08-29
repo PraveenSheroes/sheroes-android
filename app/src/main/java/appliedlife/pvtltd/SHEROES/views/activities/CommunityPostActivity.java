@@ -38,9 +38,11 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -480,6 +482,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
 
         }
+        etView.getEditText().setFocusable(true);
+        etView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                Log.i("Tag","###################### hasFocu "+hasFocus);
+            }
+        });
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -886,8 +895,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
 
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
-                                // mLiMainPollView.setVisibility(View.VISIBLE);
-                                // mRlImageList.setVisibility(View.GONE);
                                 if ((Boolean) mIvImagePollLeft.getTag()) {
                                     mImagePollLeftUrl = imageUrl;
                                     mIvImagePollLeft.setImageBitmap(bitmap);
@@ -895,9 +902,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                     mIvImagePollRight.setImageBitmap(bitmap);
                                     mImagePollRightUrl = imageUrl;
                                 }
+                                mIvImagePollRight.setEnabled(true);
+                                mIvImagePollLeft.setEnabled(true);
                             }
                         }
                     });
+        }else {
+            mIvImagePollRight.setEnabled(true);
+            mIvImagePollLeft.setEnabled(true);
         }
     }
 
@@ -1054,6 +1066,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
                                 Bitmap bitmap = decodeFile(photo.file);
                                 startProgressBar();
+                                mIvImagePollRight.setEnabled(false);
+                                mIvImagePollLeft.setEnabled(false);
                                 mCreatePostPresenter.uploadFile(CompressImageUtil.setImageOnHolder(bitmap));
                             } else {
                                 postPicsAndCountView(photo);

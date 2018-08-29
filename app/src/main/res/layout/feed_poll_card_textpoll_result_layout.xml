@@ -12,16 +12,17 @@
             android:id="@+id/pb_poll_percent"
             style="@style/PollProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/text_poll_progress_height"
-            android:theme="@style/PollProgressBar" />
+            android:layout_height="match_parent" />
         <TextView
             android:id="@+id/tv_text_poll_desc"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:textColor="@color/comment_text"
             android:layout_gravity="center|left"
             android:layout_marginStart="@dimen/text_poll_result_desc_margin"
             android:layout_marginLeft="@dimen/text_poll_result_desc_margin"
+            android:paddingTop="@dimen/text_poll_result_desc_padding"
+            android:paddingBottom="@dimen/text_poll_result_desc_padding"
             android:layout_marginEnd="@dimen/text_poll_result_desc_margin"
             android:layout_marginRight="@dimen/text_poll_result_desc_margin"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
