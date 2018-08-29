@@ -4,7 +4,7 @@
     android:id="@+id/community_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/like_list_item_padding_top">
+    android:layout_marginTop="@dimen/like_list_item_padding_top">
 
     <FrameLayout
         android:id="@+id/user_pic_container"
