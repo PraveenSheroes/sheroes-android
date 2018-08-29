@@ -480,6 +480,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
 
         }
+
+        etView.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                etView.getEditText().setCursorVisible(true);
+            }
+        });
+
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -1508,6 +1516,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             navigateToParentActivity();
         }
+        CommonUtil.hideSoftKeyboard(this);
     }
 
 
@@ -2045,7 +2054,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }
             }
             mAction.setAlpha(1f);
-            etView.getEditText().setCursorVisible(true);
         } else {
             mAction.setAlpha(.9f);
         }
@@ -2068,6 +2076,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         liUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
         int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
                 for (int i = 0; i <= 1; i++) {
@@ -2173,6 +2182,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mIvImagePollLeft.setTag(true);
                 mIvImagePollRight.setTag(false);
                 CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
+                CommonUtil.hideSoftKeyboard(CommunityPostActivity.this);
             }
         });
         mIvImagePollRight = pollLayout.findViewById(R.id.iv_image_poll_right);
@@ -2183,6 +2193,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mIvImagePollRight.setTag(true);
                 mIvImagePollLeft.setTag(false);
                 CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
+                CommonUtil.hideSoftKeyboard(CommunityPostActivity.this);
             }
         });
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
