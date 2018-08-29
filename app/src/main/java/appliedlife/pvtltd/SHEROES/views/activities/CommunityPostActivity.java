@@ -485,13 +485,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         }
 
-        etView.getEditText().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etView.getEditText().setCursorVisible(true);
-            }
-        });
-
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -511,6 +504,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void bottomSheetCollapsed() {
+        etView.getEditText().setCursorVisible(true);
         mImageUploadView.setOrientation(LinearLayout.HORIZONTAL);
         tvPhotoLable.setVisibility(View.GONE);
         tvCameraLable.setVisibility(View.GONE);
@@ -540,6 +534,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void bottomSheetExpanded() {
+        etView.getEditText().setCursorVisible(false);
         mImageUploadView.setOrientation(LinearLayout.VERTICAL);
         tvPhotoLable.setVisibility(View.VISIBLE);
         tvCameraLable.setVisibility(View.VISIBLE);
@@ -2076,7 +2071,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPollOptionType = pollType;
         mIsPollOptionClicked = true;
         mImageList.clear();
-        etView.getEditText().setCursorVisible(false);
         etView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
