@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -126,8 +125,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserName;
     @Bind(R.id.iv_feed_article_user_verified)
     ImageView ivFeedArticleUserVerified;
-    @Bind(R.id.user_badge)
-    ImageView mLastCommentUserBadgePic;
     @Bind(R.id.tv_feed_article_comment_post_time)
     TextView tvFeedArticleCommentPostTime;
     @Bind(R.id.iv_feed_article_login_user_pic)
@@ -437,6 +434,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             ivFeedArticleUserPic.setCircularImage(true);
 
             //tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
+
             if (lastComment.isSpamComment()) {
                 spamCommentMenu.setVisibility(View.GONE);
                 spamContainer.setVisibility(View.VISIBLE);
@@ -471,8 +469,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
-
-            showHideUserBadge(lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -704,18 +700,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             if ((Boolean) tvFeedArticleUserReaction.getTag()) {
                 userReactionWithOutLongPress();
             }
-        }
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
-            userPic.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(badgeUrl)
-                    .into(userPic);
-        } else {
-            userPic.setVisibility(View.GONE);
         }
     }
 
