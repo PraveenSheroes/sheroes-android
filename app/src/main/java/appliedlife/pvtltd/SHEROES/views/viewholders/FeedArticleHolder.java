@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -72,7 +73,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.li_feed_article_images)
     LinearLayout liFeedArticleImages;
     @Bind(R.id.li_feed_article_user_comments)
-    LinearLayout liFeedArticleUserComments;
+    FrameLayout liFeedArticleUserComments;
     @Bind(R.id.spam_comment_container)
     FrameLayout spamContainer;
     @Bind(R.id.last_comment_container)
@@ -125,6 +126,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserName;
     @Bind(R.id.iv_feed_article_user_verified)
     ImageView ivFeedArticleUserVerified;
+    @Bind(R.id.user_badge)
+    ImageView mLastCommentUserBadgePic;
     @Bind(R.id.tv_feed_article_comment_post_time)
     TextView tvFeedArticleCommentPostTime;
     @Bind(R.id.iv_feed_article_login_user_pic)
@@ -215,11 +218,42 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         tvFeedArticleUserReaction.setTag(true);
         articleObj.setItemPosition(position);
         articleObj.setLastReactionValue(articleObj.getReactionValue());
-        allTextViewStringOperations(context);
         onBookMarkClick();
         if (!articleObj.isTrending()) {
             imageOperations(context);
         }
+
+        UpdateUserStoryVisibility();
+        allTextViewStringOperations(context);
+
+        if (StringUtil.isNotEmptyCollection(articleObj.getTags())) {
+            tvFeedArticleTag.setVisibility(View.VISIBLE);
+            List<String> tags = articleObj.getTags();
+            StringBuilder mergeTags = new StringBuilder(AppConstants.EMPTY_STRING);
+            for (String tag : tags) {
+                mergeTags.append(tag).append(AppConstants.COMMA).append(AppConstants.SPACE);
+            }
+            mergeTags = new StringBuilder(mergeTags.substring(0, mergeTags.length() - 2));
+            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + AppConstants.COLON + RIGHT_HTML_TAG;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+            } else {
+                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags));// or for older api
+            }
+        } else {
+            tvFeedArticleTag.setVisibility(View.GONE);
+        }
+        // TODO : ujjwal
+        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
+            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
+        } else {
+            tvFeedArticleUserMenu.setVisibility(View.GONE);
+        }*/
+
+
+    }
+
+    private void UpdateUserStoryVisibility() {
         if (StringUtil.isNotNullOrEmptyString(articleObj.getUserStoryStatus())) {
             if (articleObj.getUserStoryStatus().equalsIgnoreCase(ArticleStatusEnum.DRAFT.toString())) {
                 tvFeedArticleUserBookmark.setVisibility(View.GONE);
@@ -244,31 +278,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             lineForNoImage.setVisibility(View.VISIBLE);
             rlFeedArticleJoinConversation.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotEmptyCollection(articleObj.getTags())) {
-            tvFeedArticleTag.setVisibility(View.VISIBLE);
-            List<String> tags = articleObj.getTags();
-            StringBuilder mergeTags = new StringBuilder(AppConstants.EMPTY_STRING);
-            for (String tag : tags) {
-                mergeTags.append(tag).append(AppConstants.COMMA).append(AppConstants.SPACE);
-            }
-            mergeTags = new StringBuilder(mergeTags.substring(0, mergeTags.length() - 2));
-            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + AppConstants.COLON + RIGHT_HTML_TAG;
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
-            } else {
-                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags));// or for older api
-            }
-        } else {
-            tvFeedArticleTag.setVisibility(View.GONE);
-        }
-        // TODO : ujjwal
-       /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
-            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
-        } else {
-            tvFeedArticleUserMenu.setVisibility(View.GONE);
-        }*/
-
-
     }
 
     private void onBookMarkClick() {
@@ -428,11 +437,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             ivFeedArticleUserPic.setCircularImage(true);
 
             //tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
-
             if (lastComment.isSpamComment()) {
+                spamCommentMenu.setVisibility(View.GONE);
                 spamContainer.setVisibility(View.VISIBLE);
                 lastCommentContainer.setVisibility(View.GONE);
             } else {
+                spamCommentMenu.setVisibility(View.VISIBLE);
                 spamContainer.setVisibility(View.GONE);
                 lastCommentContainer.setVisibility(View.VISIBLE);
             }
@@ -461,6 +471,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
+
+            showHideUserBadge(lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -489,12 +501,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
             }*/
-
-            if (lastComment.isSpamComment()) {
-                spamCommentMenu.setVisibility(View.GONE);
-            } else {
-                spamCommentMenu.setVisibility(View.VISIBLE);
-            }
 
         } else {
             liFeedArticleUserComments.setVisibility(View.GONE);
@@ -698,6 +704,18 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             if ((Boolean) tvFeedArticleUserReaction.getTag()) {
                 userReactionWithOutLongPress();
             }
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(mContext)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
         }
     }
 
