@@ -38,11 +38,9 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
@@ -482,13 +480,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
 
         }
-        etView.getEditText().setFocusable(true);
-        etView.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+
+        etView.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                Log.i("Tag","###################### hasFocu "+hasFocus);
+            public void onClick(View view) {
+                etView.getEditText().setCursorVisible(true);
             }
         });
+
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -1522,6 +1521,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             navigateToParentActivity();
         }
+        CommonUtil.hideSoftKeyboard(this);
     }
 
 
@@ -2059,7 +2059,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 }
             }
             mAction.setAlpha(1f);
-            etView.getEditText().setCursorVisible(true);
         } else {
             mAction.setAlpha(.9f);
         }
@@ -2082,6 +2081,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         liUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
         int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
                 for (int i = 0; i <= 1; i++) {
@@ -2187,6 +2187,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mIvImagePollLeft.setTag(true);
                 mIvImagePollRight.setTag(false);
                 CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
+                CommonUtil.hideSoftKeyboard(CommunityPostActivity.this);
             }
         });
         mIvImagePollRight = pollLayout.findViewById(R.id.iv_image_poll_right);
@@ -2197,6 +2198,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mIvImagePollRight.setTag(true);
                 mIvImagePollLeft.setTag(false);
                 CameraBottomSheetFragment.showDialog(CommunityPostActivity.this, SCREEN_LABEL);
+                CommonUtil.hideSoftKeyboard(CommunityPostActivity.this);
             }
         });
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
