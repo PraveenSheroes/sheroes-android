@@ -311,6 +311,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @BindDimen(R.dimen.add_icon_left_right)
     int mPhotoCameraPollImageLeftRight;
+
+    @BindDimen(R.dimen.add_icon_collapse_left_right)
+    int mPhotoCameraPollCollapseImageLeftRight;
+
     @BindDimen(R.dimen.add_icon_top_bottom)
     int mPhotoCameraPollImageTopBottom;
 
@@ -514,20 +518,20 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         tvAddPhotoLable.setVisibility(View.VISIBLE);
 
         LinearLayout.LayoutParams photo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
-        photo.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        photo.setMargins(mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearAddImage.setLayoutParams(photo);
         mRippleViewLinearAddImage.setGravity(Gravity.CENTER);
 
 
         LinearLayout.LayoutParams camera = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
-        camera.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
+        camera.setMargins(mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearCamera.setLayoutParams(camera);
 
         mRippleViewLinearCamera.setGravity(Gravity.CENTER);
 
 
         LinearLayout.LayoutParams pollSurvey = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
-        pollSurvey.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, 0, mPhotoCameraPollImageTopBottom);
+        pollSurvey.setMargins(mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom, 0, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearPollSurvey.setLayoutParams(pollSurvey);
 
         mRippleViewLinearPollSurvey.setGravity(Gravity.CENTER);
@@ -1975,6 +1979,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         String startDate = DateUtil.getDateFromMillisecondsWithFormat(System.currentTimeMillis(), AppConstants.DATE_FORMAT);
         String endDate = DateUtil.getDateForAddedDays((int) tvDaySelector.getTag());
         mCreatePostPresenter.createPoll(mAppUtils.createPollRequestBuilder(mCommunityPost.community.id, getCreatorType(), pollType, etView.getEditText().getText().toString(), pollOptionModelList, startDate, endDate));
+        CommonUtil.hideSoftKeyboard(this);
     }
 
     private boolean keyboardShown(View rootView) {

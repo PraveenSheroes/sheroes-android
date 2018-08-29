@@ -212,26 +212,43 @@ public class MixpanelHelper {
             return;
         }
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getSubType())) {
-            UserPostSolrObj userPostSolrObj = null;
+
             if (feedDetail instanceof UserPostSolrObj) {
-                userPostSolrObj = (UserPostSolrObj) feedDetail;
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(feedDetail.getEntityOrParticipantId()))
+                                .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                                .communityName(userPostSolrObj.getPostCommunityName())
+                                .title(feedDetail.getNameOrTitle())
+                                .communityId(Long.toString(userPostSolrObj.getCommunityId()))
+                                .type(getTypeFromSubtype(feedDetail.getSubType()))
+                                .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
+                                .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
+                                .positionInList(feedDetail.getItemPosition())
+                                .build();
+                properties.put(EventProperty.SOURCE.getString(), screenName);
+                AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
+            } else if (feedDetail instanceof PollSolarObj) {
+                PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Long.toString(feedDetail.getEntityOrParticipantId()))
+                                .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                                .communityName(pollSolarObj.getPollCommunityName())
+                                .title(feedDetail.getNameOrTitle())
+                                .communityId(Long.toString(pollSolarObj.getCommunityId()))
+                                .type(getTypeFromSubtype(feedDetail.getSubType()))
+                                .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
+                                .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
+                                .positionInList(feedDetail.getItemPosition())
+                                .build();
+                properties.put(EventProperty.SOURCE.getString(), screenName);
+                AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
             }
-            final HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(feedDetail.getEntityOrParticipantId()))
-                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
-                            .communityName(userPostSolrObj != null ? userPostSolrObj.getPostCommunityName() : "")
-                            .title(feedDetail.getNameOrTitle())
-                            .communityId(userPostSolrObj != null ? Long.toString(userPostSolrObj.getCommunityId()) : "not defined")
-                            .type(getTypeFromSubtype(feedDetail.getSubType()))
-                            .isSharedFromExternalApp(String.valueOf(feedDetail.isSharedFromExternalApp()))
-                            .streamType(CommonUtil.isNotEmpty(feedDetail.getStreamType()) ? feedDetail.getStreamType() : "")
-                            .positionInList(feedDetail.getItemPosition())
-                            .build();
-            properties.put(EventProperty.SOURCE.getString(), screenName);
-            AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
         }
     }
+
     public static void trackPollActionEvent(Event event, FeedDetail feedDetail, String screenName) {
         if (feedDetail == null) {
             return;
@@ -332,6 +349,7 @@ public class MixpanelHelper {
             return null;
         }
     }
+
     public static HashMap<String, Object> getPollProperties(FeedDetail feedDetail, String screenName) {
         if (feedDetail == null) {
             return null;
@@ -358,6 +376,7 @@ public class MixpanelHelper {
             return null;
         }
     }
+
     public static HashMap<String, Object> getArticleOrStoryProperties(ArticleSolrObj articleSolrObj, String screenName) {
         if (articleSolrObj == null) {
             return null;
