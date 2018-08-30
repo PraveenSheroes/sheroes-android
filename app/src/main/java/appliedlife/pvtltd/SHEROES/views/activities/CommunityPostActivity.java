@@ -362,7 +362,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private PollType mPollOptionType;
     private List<EditText> mEtTextPollList = new ArrayList<>();
     private EditText mEtTextPoll;
-    private int mMaxLength = 500;
+    private int mMaxLength = 25;
 
 
     //endregion
@@ -905,7 +905,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             }
                         }
                     });
-        }else {
+        } else {
             mIvImagePollRight.setEnabled(true);
             mIvImagePollLeft.setEnabled(true);
         }
@@ -1906,7 +1906,18 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void createPoll() {
-        if (etView.getText().toString().length() >mMaxLength) {
+        String inputText = etView.getText().toString();
+        List<String> listOfEmoji = CommonUtil.getEmojiListFromText(inputText);
+        // here multi
+        int lengthOfText;
+        if(StringUtil.isNotEmptyCollection(listOfEmoji)) {
+            //Here multiply by 2 because 1 Emoji length is 2.
+            lengthOfText = inputText.length() - (2 * listOfEmoji.size());
+        }else
+        {
+            lengthOfText=inputText.length();
+        }
+        if (lengthOfText > mMaxLength) {
             Snackbar.make(mRlMainLayout, getString(R.string.poll_text_limit), Snackbar.LENGTH_SHORT).show();
             return;
         }
