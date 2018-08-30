@@ -419,7 +419,7 @@
     <string name="action.post">Post</string>
     <string name="action.next">Next</string>
     <string name="action.mentor_post">Ask</string>
-    <string name="title.create_post">Write a Post</string>
+    <string name="title.create_post">Create a Post</string>
     <string name="title.ask_question">Ask a Question</string>
     <string name="title.article_submit">Write a Story</string>
     <string name="anonymous">Anonymous</string>

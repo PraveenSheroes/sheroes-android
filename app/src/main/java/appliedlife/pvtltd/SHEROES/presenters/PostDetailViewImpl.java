@@ -769,7 +769,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 if (feedDetail instanceof UserPostSolrObj) {
                     AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 } else if (feedDetail instanceof PollSolarObj) {
-                    AnalyticsManager.trackPostAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                    AnalyticsManager.trackPollAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 }
                 getMvpView().setData(0, feedDetail);
             }
@@ -816,7 +816,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 if (feedDetail instanceof UserPostSolrObj) {
                     AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 } else if (feedDetail instanceof PollSolarObj) {
-                    AnalyticsManager.trackPostAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                    AnalyticsManager.trackPollAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 }
 
                 getMvpView().setData(0, feedDetail);
