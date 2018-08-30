@@ -23,8 +23,8 @@
             android:layout_marginLeft="@dimen/text_poll_result_desc_margin"
             android:paddingTop="@dimen/text_poll_result_desc_padding"
             android:paddingBottom="@dimen/text_poll_result_desc_padding"
-            android:layout_marginEnd="@dimen/text_poll_result_desc_margin"
-            android:layout_marginRight="@dimen/text_poll_result_desc_margin"
+            android:layout_marginEnd="@dimen/text_poll_result_desc_margin_right"
+            android:layout_marginRight="@dimen/text_poll_result_desc_margin_right"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textSize="@dimen/text_pol_percent_number_text_size"/>
         <ImageView
@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|right"
             android:layout_marginRight="@dimen/text_poll_verified_margin"
-            android:layout_marginLeft="@dimen/text_poll_verified_margin"
             android:src="@drawable/vector_poll_percent_verified"/>
     </FrameLayout>
 
