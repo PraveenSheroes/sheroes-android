@@ -674,6 +674,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         PollSolarObj pollSolarObj = null;
                         if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
+                            pollSolarObj.setStreamType(feedDetail.getStreamType());
                         } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
