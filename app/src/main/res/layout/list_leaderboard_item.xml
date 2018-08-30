@@ -66,6 +66,8 @@
                 android:id="@+id/user_pic_icon"
                 android:layout_width="@dimen/leaderboard_user_icon"
                 android:layout_height="@dimen/leaderboard_user_icon"
+                android:layout_marginLeft="@dimen/leaderboard_user_icon_margin_start"
+                android:layout_marginStart="@dimen/leaderboard_user_icon_margin_start"
                 android:layout_toEndOf="@+id/user_position"
                 android:layout_toRightOf="@+id/user_position" />
 
