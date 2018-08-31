@@ -362,7 +362,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private PollType mPollOptionType;
     private List<EditText> mEtTextPollList = new ArrayList<>();
     private EditText mEtTextPoll;
-    private int mMaxLength = 25;
+    private int mMaxLength = 150;
 
 
     //endregion
@@ -1905,21 +1905,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    private int checkPollDescLength() {
-        String inputText = etView.getText().toString();
-        List<String> listOfEmoji = CommonUtil.getEmojiListFromText(inputText);
-        int lengthOfText;
-        if (StringUtil.isNotEmptyCollection(listOfEmoji)) {
-            //Here multiply by 2 because edit text get 1 Emoji length is equal 2.
-            lengthOfText = inputText.length() - (2 * listOfEmoji.size());
-        } else {
-            lengthOfText = inputText.length();
-        }
-        return lengthOfText;
-    }
-
     private void createPoll() {
-        if (checkPollDescLength() > mMaxLength) {
+        if (etView.getText().toString().length() > mMaxLength) {
             Snackbar.make(mRlMainLayout, getString(R.string.poll_text_limit), Snackbar.LENGTH_SHORT).show();
             return;
         }
