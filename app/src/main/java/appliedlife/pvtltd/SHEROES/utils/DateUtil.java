@@ -85,6 +85,7 @@ public class DateUtil {
 
         return time;
     }
+
     public long getTimeInMillisWithUTC(String dateString, String format) {
         long time = 0;
         try {
@@ -97,6 +98,7 @@ public class DateUtil {
 
         return time;
     }
+
     public static CharSequence getRelativeTimeSpanString(Date date) {
         return DateUtils.getRelativeTimeSpanString(date.getTime(), new Date().getTime(), DateUtils.SECOND_IN_MILLIS);
     }
@@ -154,11 +156,12 @@ public class DateUtil {
         StringBuilder sb = new StringBuilder();
 
         if (day > 0) {
-            sb.append(day);
-            if (day == 1) {
-                sb.append(AppConstants.DAY);
-            } else {
+            if (differenceInMinutes > 0 || hour > 0) {
+                sb.append(day + 1);
                 sb.append(AppConstants.DAY + AppConstants.S);
+            } else {
+                sb.append(day);
+                sb.append(AppConstants.DAY);
             }
         } else if (hour > 0) {
             if (hour == 1) {
