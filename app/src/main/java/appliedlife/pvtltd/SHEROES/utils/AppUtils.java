@@ -2198,7 +2198,7 @@ public class AppUtils {
         return m.find();
     }
 
-    public ArticleSubmissionRequest articleDraftAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedTagList, ArticleSolrObj articleSolrObj, String coverImageUrl, boolean isPublish) {
+    public ArticleSubmissionRequest articleDraftAddEditRequest(Long articleId, String articleTitle, String articleBody, List<Long> tagList, List<Long> deletedArticleTagList, ArticleSolrObj articleSolrObj, String coverImageUrl, boolean isPublish) {
         AppUtils appUtils = AppUtils.getInstance();
         ArticleSubmissionRequest articleSubmissionRequest = new ArticleSubmissionRequest();
         articleSubmissionRequest.setAppVersion(appUtils.getAppVersionName());
@@ -2207,10 +2207,10 @@ public class AppUtils {
         if (null != articleId) {
             articleSubmissionRequest.articleId = articleId;
             if (StringUtil.isNotEmptyCollection(articleSolrObj.getTag_ids())) {
-                for (long oldTag : articleSolrObj.getTag_ids()) {
+                for (long oldArticleTag : articleSolrObj.getTag_ids()) {
                     boolean isMatch = false;
-                    for (long deletedTag : deletedTagList) {
-                        if (oldTag == deletedTag) {
+                    for (long deletedArticleTag : deletedArticleTagList) {
+                        if (oldArticleTag == deletedArticleTag) {
                             isMatch = true;
                             break;
                         } else {
@@ -2218,10 +2218,10 @@ public class AppUtils {
                         }
                     }
                     if (isMatch) {
-                        deletedTagList.add(oldTag);
+                        deletedArticleTagList.add(oldArticleTag);
                     }
                 }
-                articleSubmissionRequest.deletedTagIds = deletedTagList;
+                articleSubmissionRequest.deletedTagIds = deletedArticleTagList;
             }
         }
         articleSubmissionRequest.isPublish = isPublish;
