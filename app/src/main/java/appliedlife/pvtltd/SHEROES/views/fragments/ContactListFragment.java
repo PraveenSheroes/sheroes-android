@@ -311,7 +311,8 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     if (!isWhatsAppNumber.contains("91")) {
                         isWhatsAppNumber = "91" + isWhatsAppNumber;
                     }
-                    isWhatsAppNumber = isWhatsAppNumber.replace("+", "").replace(" ", "");
+
+                    isWhatsAppNumber = isWhatsAppNumber.replaceAll("[\\D]", "");
                     boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
                     if (isWhatsappInstalled) {
                         Intent sendIntent = new Intent("android.intent.action.MAIN");
@@ -392,7 +393,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
             btnSyncContact.setVisibility(View.GONE);
             mInviteFriendAdapter.setData(userContactDetailList);
             mInviteFriendAdapter.notifyDataSetChanged();
-            if (null != getActivity() && getActivity() instanceof AllContactActivity) {
+            if (null != getActivity() && !getActivity().isFinishing() && getActivity() instanceof AllContactActivity && ((AllContactActivity) getActivity()).etInviteSearchBox!=null) {
                 ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
             }
             isContactFirstTime = true;

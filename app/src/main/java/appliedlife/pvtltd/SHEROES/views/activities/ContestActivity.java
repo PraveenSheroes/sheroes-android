@@ -432,14 +432,16 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 onBackPressed();
                 break;
             case R.id.share:
-                String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + mContest.shortUrl;
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .challengeId(Integer.toString(mContest.remote_id))
-                                .title(mContest.title)
-                                .build();
-                trackEvent(Event.CHALLENGE_SHARED_CLICKED, properties);
-                ShareBottomSheetFragment.showDialog(this, shareText, mContest.thumbImage, mContest.shortUrl, getScreenName(), true, mContest.shortUrl, true, Event.CHALLENGE_SHARED, properties);
+                if (mContest != null && mContest.shortUrl != null) {
+                    String shareText = Config.COMMUNITY_POST_CHALLENGE_SHARE + System.getProperty("line.separator") + mContest.shortUrl;
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .challengeId(Integer.toString(mContest.remote_id))
+                                    .title(mContest.title)
+                                    .build();
+                    trackEvent(Event.CHALLENGE_SHARED_CLICKED, properties);
+                    ShareBottomSheetFragment.showDialog(this, shareText, mContest.thumbImage, mContest.shortUrl, getScreenName(), true, mContest.shortUrl, true, Event.CHALLENGE_SHARED, properties);
+                }
                 break;
         }
         return true;
