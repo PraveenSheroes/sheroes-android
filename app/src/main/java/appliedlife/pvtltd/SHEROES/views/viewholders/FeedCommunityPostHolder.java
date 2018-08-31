@@ -544,7 +544,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
                 }
-                showHideUserBadge(mUserPostObj.isAnonymous(), badgeOnPic, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
+                CommonUtil.showHideUserBadge(mContext, mUserPostObj.isAnonymous(), badgeOnPic, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     rlOrgCompanyFeedCard.setVisibility(View.VISIBLE);
@@ -841,7 +841,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
                 }
             }
-            showHideUserBadge(lastComment.isAnonymous(), lastCommentUserBadge, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), lastCommentUserBadge, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
+
             linkifyURLs(tvFeedCommunityPostUserCommentPost);
             if (tvFeedCommunityPostUserCommentPost.getLineCount() > 3) {
                 tvFeedCommunityPostUserCommentPostViewMore.setVisibility(View.VISIBLE);
@@ -878,18 +879,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
         }
 
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
-            userPic.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(badgeUrl)
-                    .into(userPic);
-        } else {
-            userPic.setVisibility(View.GONE);
-        }
     }
 
     private void invalidateCommentLike(Comment lastComment) {

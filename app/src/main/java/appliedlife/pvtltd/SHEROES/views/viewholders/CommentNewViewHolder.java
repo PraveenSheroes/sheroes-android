@@ -157,23 +157,11 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     } else {
                         mProfileVerfied.setVisibility(View.GONE);
                     }
-                    showHideUserBadge();
+                    CommonUtil.showHideUserBadge(mContext, comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
                 } else {
                     showCommentMention();
                 }
             }
-        }
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge() {
-        if(mComment.isBadgeShown() && !mComment.isAnonymous() && !TextUtils.isEmpty(mComment.getBadgeUrl())) {
-            badgeIcon.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(mComment.getBadgeUrl())
-                    .into(badgeIcon);
-        } else {
-            badgeIcon.setVisibility(View.GONE);
         }
     }
 

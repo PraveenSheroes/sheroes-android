@@ -366,7 +366,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                     mAuthorVerifiedIcon.setVisibility(View.GONE);
                 }
 
-                showHideUserBadge(mUserPostObj.isAnonymous(), mBadgeIcon, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
+                CommonUtil.showHideUserBadge(context, mUserPostObj.isAnonymous(), mBadgeIcon, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -661,7 +661,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             lastComment = lastCommentList.get(mItemPosition);
             mCommentAuthorImage.setCircularImage(true);
 
-            showHideUserBadge(lastComment.isAnonymous(), mLastCommentBadgeIcon, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), mLastCommentBadgeIcon, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
@@ -712,18 +712,6 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             }
         }
 
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(!isAnonymous && isBadgeShown && !TextUtils.isEmpty(badgeUrl)) {
-            userPic.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(badgeUrl)
-                    .into(userPic);
-        } else {
-            userPic.setVisibility(View.GONE);
-        }
     }
 
     private void invalidateCommentLike(Comment lastComment) {

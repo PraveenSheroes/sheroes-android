@@ -120,20 +120,7 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
             mLocation.setVisibility(View.GONE);
         }
 
-        showHideUserBadge(mBadgeIcon, mUserSolrObj.isSheBadgeActive(), mUserSolrObj.getProfileBadgeUrl());
-
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge(ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !TextUtils.isEmpty(badgeUrl) && !TextUtils.isEmpty(badgeUrl)) {
-            userPic.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(badgeUrl)
-                    .into(userPic);
-        } else {
-            userPic.setVisibility(View.GONE);
-        }
+        CommonUtil.showHideUserBadge(mContext, false, mBadgeIcon, mUserSolrObj.isSheBadgeActive(), mUserSolrObj.getProfileBadgeUrl());
     }
 
     @OnClick(R.id.follow_button)

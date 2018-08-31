@@ -464,8 +464,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
-
-            showHideUserBadge(lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -703,18 +702,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             if ((Boolean) tvFeedArticleUserReaction.getTag()) {
                 userReactionWithOutLongPress();
             }
-        }
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(isBadgeShown && !isAnonymous && !TextUtils.isEmpty(badgeUrl)) {
-            userPic.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(badgeUrl)
-                    .into(userPic);
-        } else {
-            userPic.setVisibility(View.GONE);
         }
     }
 

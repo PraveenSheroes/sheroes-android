@@ -215,7 +215,8 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     author.setText("User");
                     //authorPic.setImageDrawable(ContextCompat.getDrawable(mContext, User.getAnonymousPlaceholder()));
                 }
-                showHideUserBadge(comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
+                CommonUtil.showHideUserBadge(mContext, comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
+
                 hideEditorView(comment);
                 author.setOnClickListener(mOnViewClickListener);
                 authorPicContainer.setOnClickListener(mOnViewClickListener);
@@ -295,18 +296,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             }
         }
 
-    }
-
-    //Show or hide the badge icon from user pic
-    private void showHideUserBadge(boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
-        if(!isAnonymous && isBadgeShown && !TextUtils.isEmpty(badgeUrl)) {
-            userPic.setVisibility(View.VISIBLE);
-            Glide.with(mContext)
-                    .load(badgeUrl)
-                    .into(userPic);
-        } else {
-            userPic.setVisibility(View.GONE);
-        }
     }
     //endregion
 }
