@@ -597,7 +597,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             @Override
             public void onClick(final View view) {
                 View recyclerViewItem = (View) view.getParent();
-                final int position = mCommentList.getChildLayoutPosition(recyclerViewItem);
+                final int position = mCommentList.getChildAdapterPosition(recyclerViewItem);
                 if (position == RecyclerView.NO_POSITION) {
                     return;
                 }

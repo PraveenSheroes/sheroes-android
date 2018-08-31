@@ -1488,7 +1488,7 @@ public class CommonUtil {
             return false;
         }
     }
-    
+
     //Show or hide the badge icon from user pic
     public static void showHideUserBadge(Context context, boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
         if (context == null) return;
