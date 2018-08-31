@@ -1905,19 +1905,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    private void createPoll() {
+    private int checkPollDescLength() {
         String inputText = etView.getText().toString();
         List<String> listOfEmoji = CommonUtil.getEmojiListFromText(inputText);
-        // here multi
         int lengthOfText;
-        if(StringUtil.isNotEmptyCollection(listOfEmoji)) {
-            //Here multiply by 2 because 1 Emoji length is 2.
+        if (StringUtil.isNotEmptyCollection(listOfEmoji)) {
+            //Here multiply by 2 because edit text get 1 Emoji length is equal 2.
             lengthOfText = inputText.length() - (2 * listOfEmoji.size());
-        }else
-        {
-            lengthOfText=inputText.length();
+        } else {
+            lengthOfText = inputText.length();
         }
-        if (lengthOfText > mMaxLength) {
+        return lengthOfText;
+    }
+
+    private void createPoll() {
+        if (checkPollDescLength() > mMaxLength) {
             Snackbar.make(mRlMainLayout, getString(R.string.poll_text_limit), Snackbar.LENGTH_SHORT).show();
             return;
         }
