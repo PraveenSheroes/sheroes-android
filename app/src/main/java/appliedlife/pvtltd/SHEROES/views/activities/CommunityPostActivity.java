@@ -567,20 +567,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setupToolBarItem() {
-        if (mCommunityPost != null) {
-            switch (mCommunityPost.createPostRequestFrom) {
-                case AppConstants.CREATE_POST:
-                    mAction.setText(getResources().getString(R.string.action_post));
-                    break;
-                case AppConstants.MENTOR_CREATE_QUESTION:
-                    mAction.setText(getResources().getString(R.string.action_mentor_post));
-                    break;
-                default:
-                    mAction.setText(getResources().getString(R.string.action_post));
-                    break;
-            }
+        switch (mCommunityPost.createPostRequestFrom) {
+            case AppConstants.CREATE_POST:
+                mAction.setText(getResources().getString(R.string.action_post));
+                break;
+            case AppConstants.MENTOR_CREATE_QUESTION:
+                mAction.setText(getResources().getString(R.string.action_mentor_post));
+                break;
+            default:
+                mAction.setText(getResources().getString(R.string.action_post));
+                break;
         }
-
         if (mStatusBarColorEmpty) {
             mAction.setTextColor(Color.parseColor(actionDefault));
         } else {
