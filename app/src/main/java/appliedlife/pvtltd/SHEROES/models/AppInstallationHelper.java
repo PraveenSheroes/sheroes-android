@@ -1,33 +1,28 @@
 package appliedlife.pvtltd.SHEROES.models;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.StrictMode;
 import android.provider.Settings;
 
+import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.gson.Gson;
 import com.moengage.push.PushManager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -96,6 +91,11 @@ public class AppInstallationHelper {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 PushManager.getInstance().refreshToken(mContext, registrationId);
+                //Refresh GCM token
+                CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                if(cleverTapAPI!=null) {
+                    cleverTapAPI.data.pushGcmRegistrationId(registrationId, true);
+                }
                 fillAndSaveInstallation(registrationId, hasLoggedIn);
             }
 
