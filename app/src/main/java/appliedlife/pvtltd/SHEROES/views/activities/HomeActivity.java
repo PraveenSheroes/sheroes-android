@@ -53,6 +53,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
+import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
@@ -1967,6 +1968,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mGcmId = registrationId;
                 PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
+                //Refresh GCM token
+                CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                if(cleverTapAPI!=null) {
+                    cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
+                }
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
                     if (mAppInstallation != null && mAppInstallation.isSet()) {
                         AppInstallation appInstallation = mAppInstallation.get();

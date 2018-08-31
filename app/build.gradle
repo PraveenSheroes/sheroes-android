@@ -172,7 +172,7 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:customtabs:27.0.2'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
-    compile 'io.branch.sdk.android:library:2.8.0'
+    compile 'io.branch.sdk.android:library:2.16.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.2'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'

@@ -689,7 +689,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             }
             return false;
         }
-        if (!isDraft && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+        if (!isDraft && completionView!=null && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
             if (showError) {
                 showMessage(R.string.error_tag_min);
                 tvTagLable.setVisibility(View.VISIBLE);

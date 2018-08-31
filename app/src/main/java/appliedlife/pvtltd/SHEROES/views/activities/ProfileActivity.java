@@ -1648,7 +1648,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                             if (isPostDeleted) {
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                                } else {
+                                } else if(mFragment instanceof MentorQADetailFragment){
                                     ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
                                 }
@@ -1656,8 +1656,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
                                 } else {
-                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
-                                    isMentorQARefresh = true;
+                                    if (mFragment instanceof MentorQADetailFragment) {
+                                        ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
+                                        isMentorQARefresh = true;
+                                    }
                                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
                                 }
                             }
