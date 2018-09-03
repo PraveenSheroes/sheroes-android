@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_40"
         android:layout_marginStart="@dimen/dp_size_40"
-        android:src="@drawable/ic_level_complete" />
+        android:src="@drawable/vector_level_complete" />
 
     <TextView
         android:id="@+id/seprator"
@@ -34,7 +34,7 @@
         android:layout_marginStart="@dimen/dp_size_15"
         android:layout_toEndOf="@id/seprator"
         android:layout_toRightOf="@id/seprator"
-        android:src="@drawable/ic_level_incomplete" />
+        android:src="@drawable/vector_level_incomplete" />
 
     <ImageView
         android:id="@+id/all_star"
@@ -43,6 +43,6 @@
         android:layout_centerVertical="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:src="@drawable/ic_all_level_complete" />
+        android:src="@drawable/vector_all_level_complete" />
 
 </RelativeLayout>

@@ -85,5 +85,5 @@
         android:layout_gravity="bottom|end"
         android:tint="@color/white"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_pencil" />
+        app:srcCompat="@drawable/vector_pencil" />
 </android.support.design.widget.CoordinatorLayout>

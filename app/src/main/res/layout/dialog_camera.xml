@@ -45,7 +45,7 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="15dp"
-                    android:src="@drawable/ic_camera_2" />
+                    android:src="@drawable/vector_camera_2" />
             </LinearLayout>
 
             <LinearLayout
@@ -88,7 +88,7 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="2dp"
                     android:layout_marginTop="15dp"
-                    android:src="@drawable/ic_gallery" />
+                    android:src="@drawable/vector_gallery" />
             </LinearLayout>
 
             <LinearLayout
