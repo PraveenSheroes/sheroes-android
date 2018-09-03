@@ -2170,9 +2170,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_image_view_layout, null);
         final LinearLayout liImagePollRow = pollLayout.findViewById(R.id.li_image_poll_view);
         mEtImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
-        mEtImagePollLeft.setHint(getString(R.string.poll_option,1));
+        mEtImagePollLeft.setHint(getString(R.string.poll_option)+1);
         mEtImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
-        mEtImagePollRight.setHint(getString(R.string.poll_option,2));
+        mEtImagePollRight.setHint(getString(R.string.poll_option)+2);
         mIvImagePollLeft = pollLayout.findViewById(R.id.iv_image_poll_left);
         mIvImagePollLeft.setTag(false);
         mIvImagePollLeft.setOnClickListener(new View.OnClickListener() {
