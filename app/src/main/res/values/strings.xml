@@ -589,6 +589,7 @@
     <!--spam region start-->
     <string name="spam_confirmation_dialog_title">Thank you for your feedback!</string>
     <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and it is in review. Thank You!</string>
+    <string name="reported_spam_marked_dialog_message">The %1$s has been marked as SPAM and it is in review. Thank You!</string>
 
     <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
     <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
@@ -720,10 +721,10 @@
     <string name="copied">Copied</string>
     <string name="message">message</string>
     <string name="your_response_copied">Your response copied</string>
-
-
-
-
+    <string name="list_comment_submit">Submit</string>
+    <string name="list_comment_cancel">Cancel</string>
+    <string name="leaderboard_rank_unavailable">--</string>
+    <string name="edit">Edit</string>
 
 
 </resources>

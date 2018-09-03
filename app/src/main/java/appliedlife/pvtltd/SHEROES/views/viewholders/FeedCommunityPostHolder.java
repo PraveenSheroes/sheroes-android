@@ -13,6 +13,7 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -202,6 +203,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_post_link_sub_title)
     TextView tvLinkSubTitle;
 
+    @Bind(R.id.last_comment_user_badge)
+    ImageView lastCommentUserBadge;
+
+    @Bind(R.id.user_badge)
+    ImageView badgeOnPic;
 
     //Organisation type post in communityPost
     @Bind(R.id.rl_comm_post_org_details)
@@ -538,6 +544,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
                 }
+                CommonUtil.showHideUserBadge(mContext, mUserPostObj.isAnonymous(), badgeOnPic, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     rlOrgCompanyFeedCard.setVisibility(View.VISIBLE);
@@ -834,6 +841,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
                 }
             }
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), lastCommentUserBadge, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
+
             linkifyURLs(tvFeedCommunityPostUserCommentPost);
             if (tvFeedCommunityPostUserCommentPost.getLineCount() > 3) {
                 tvFeedCommunityPostUserCommentPostViewMore.setVisibility(View.VISIBLE);

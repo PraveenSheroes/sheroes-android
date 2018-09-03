@@ -1407,7 +1407,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if (leaderBoardUserSolrObj != null) {
+        if (leaderBoardUserSolrObj != null && getActivity()!=null && !getActivity().isFinishing()) {
             SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
         }
     }
@@ -1881,7 +1881,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             if (getActivity() == null || getActivity().isFinishing()) return;
 
-            if (!spamResponse.isSpamAlreadyReported()) {
+            if(spamResponse.isSpammed()) {
+                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
+            } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
                 CommonUtil.createDialog(getActivity(), getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));

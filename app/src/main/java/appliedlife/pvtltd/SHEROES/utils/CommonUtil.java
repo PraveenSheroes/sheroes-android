@@ -42,6 +42,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -1516,6 +1517,19 @@ public class CommonUtil {
             return dir.delete();
         } else {
             return false;
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    public static void showHideUserBadge(Context context, boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if (context == null) return;
+        if (!isAnonymous && isBadgeShown && !TextUtils.isEmpty(badgeUrl)) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(context)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
         }
     }
 }

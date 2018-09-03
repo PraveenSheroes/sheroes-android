@@ -1,6 +1,6 @@
 def versionMajor = 6
 def versionMinor = 9
-def versionPatch = 1
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -74,15 +74,23 @@ android {
     }
     buildTypes {
         debug {
-            buildConfigField "String", "BASE_URL", "\"https://testservices.sheroes.in\""
-           //  buildConfigField "String", "BASE_URL","\"https://testservicesglow.sheroes.in/\""
-            // buildConfigField "String", "BASE_URL","\"https://testserviceswork.sheroes.in/\""
-            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL","\"https://testservicesconf.sheroes.in/\""
+            /**
+             *  Test servers
+             *  Integration(testservices), Glow(testservicesglow), Play(testservicesplay) , Work(testserviceswork), Conf(testservicesconf) server
+             */
+            // buildConfigField "String", "BASE_URL", "\"https://testservices.sheroes.in/\""
+            //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
+            // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
+            // buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
+            buildConfigField "String", "BASE_URL", "\"http://testservicesconf.sheroes.in/\""
 
-            if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
-                buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""
+            /**
+             * Release server
+             */
+            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+
+            if (System.getProperty("BASE_URL")) { //Used in Jenkins parameterised build
+                buildConfigField "String", "BASE_URL", "\"" + System.getProperty("BASE_URL") + "\""
             }
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'

@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -125,6 +126,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserName;
     @Bind(R.id.iv_feed_article_user_verified)
     ImageView ivFeedArticleUserVerified;
+    @Bind(R.id.user_badge)
+    ImageView mLastCommentUserBadgePic;
     @Bind(R.id.tv_feed_article_comment_post_time)
     TextView tvFeedArticleCommentPostTime;
     @Bind(R.id.iv_feed_article_login_user_pic)
@@ -469,6 +472,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
