@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/about_leaderboard"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_45"
+            android:layout_height="@dimen/leaderboard_about_header_height"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
             android:drawableLeft="@drawable/vector_idea"
@@ -64,15 +64,15 @@
 
             <ImageView
                 android:id="@+id/user_pic_icon"
-                android:layout_width="@dimen/dp_size_39"
-                android:layout_height="@dimen/dp_size_39"
+                android:layout_width="@dimen/leaderboard_user_icon"
+                android:layout_height="@dimen/leaderboard_user_icon"
                 android:layout_marginLeft="@dimen/dp_size_28"
                 android:layout_marginStart="@dimen/dp_size_28" />
 
             <ImageView
                 android:id="@+id/badge_icon"
-                android:layout_width="@dimen/dp_size_40"
-                android:layout_height="@dimen/dp_size_40" />
+                android:layout_width="@dimen/leaderboard_badge_icon"
+                android:layout_height="@dimen/leaderboard_badge_icon" />
 
         </FrameLayout>
 
@@ -90,7 +90,7 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="2sp"
                 android:textColor="@color/leaderboard_user"
                 android:textSize="@dimen/sp_size_16"

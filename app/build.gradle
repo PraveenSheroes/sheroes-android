@@ -1,6 +1,6 @@
 def versionMajor = 6
-def versionMinor = 8
-def versionPatch = 3
+def versionMinor = 9
+def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -81,7 +81,7 @@ android {
             // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
            // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
            // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
-           
+
             if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
                 buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""
             }
@@ -90,7 +90,7 @@ android {
             signingConfig signingConfigs.debug
             ext.crashlyticsApiSecret = "c8e9927007c169ba7b17261a41984f3d63d39fe5cda3e9c42234990e04cec4ae"
             ext.crashlyticsApiKey = "6f53a2cf9e2249594beb5d245e04eb8094f6a56e"
-            manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61"]
+            manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
         }
@@ -100,7 +100,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
-            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60"]
+            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:754013124314"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
 
@@ -173,7 +173,7 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:customtabs:27.0.2'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
-    compile 'io.branch.sdk.android:library:2.8.0'
+    compile 'io.branch.sdk.android:library:2.16.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.2'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'

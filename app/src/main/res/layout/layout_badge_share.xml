@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <RelativeLayout
-        android:layout_width="@dimen/dp_size_300"
+        android:layout_width="@dimen/badge_share_card_width"
         android:layout_height="wrap_content"
         android:background="@color/white">
 
@@ -20,20 +20,20 @@
                 android:layout_width="@dimen/badge_share_icon_size"
                 android:layout_height="@dimen/badge_share_icon_size"
                 android:layout_gravity="center_vertical"
-                android:layout_margin="@dimen/dp_size_16" />
+                android:layout_margin="@dimen/card_badge_icon_margin" />
 
             <ImageView
                 android:id="@+id/user_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|end"
-                android:layout_marginEnd="@dimen/dp_size_35"
-                android:layout_marginRight="@dimen/dp_size_35"
-                android:layout_marginTop="@dimen/dp_size_8"
-                android:paddingEnd="@dimen/dp_size_1"
-                android:paddingLeft="@dimen/dp_size_8"
-                android:paddingRight="@dimen/dp_size_1"
-                android:paddingStart="@dimen/dp_size_8"
+                android:layout_marginEnd="@dimen/badge_user_icon_margin_right"
+                android:layout_marginRight="@dimen/badge_user_icon_margin_right"
+                android:layout_marginTop="@dimen/badge_user_icon_margin_top"
+                android:paddingEnd="@dimen/badge_user_image_padding_right"
+                android:paddingLeft="@dimen/badge_user_image_padding_left"
+                android:paddingRight="@dimen/badge_user_image_padding_right"
+                android:paddingStart="@dimen/badge_user_image_padding_left"
                 android:src="@drawable/vector_badge_dialog_girl" />
 
         </FrameLayout>
@@ -44,11 +44,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/header_container"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/badge_title_margin_top"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:lineSpacingExtra="@dimen/sp_size_8"
+            android:lineSpacingExtra="@dimen/badge_text_line_space"
             android:textColor="@color/leader_board_dialog_badge_title"
-            android:textSize="@dimen/sp_size_20"
+            android:textSize="@dimen/badge_desc_title_text"
             tools:text="Magic Pen Badge" />
 
         <TextView
@@ -57,42 +57,48 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_title"
             android:layout_centerHorizontal="true"
-            android:layout_marginEnd="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginStart="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginEnd="@dimen/badge_desc_margin"
+            android:layout_marginLeft="@dimen/badge_desc_margin"
+            android:layout_marginRight="@dimen/badge_desc_margin"
+            android:layout_marginStart="@dimen/badge_desc_margin"
+            android:layout_marginTop="@dimen/badge_desc_margin_top"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:lineSpacingExtra="@dimen/badge_desc_line_space"
+            android:gravity="center_horizontal"
             android:text="@string/yay"
-            android:textColor="@color/leader_board_badge_sub_text"
-            android:textSize="@dimen/sp_size_22" />
+            android:textColor="@color/badge_text"
+            android:textSize="@dimen/badge_desc_text" />
 
         <TextView
             android:id="@+id/badge_desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_des_prefix"
-            android:layout_marginEnd="@dimen/dp_size_16"
             android:layout_centerHorizontal="true"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_marginEnd="@dimen/badge_desc_margin"
+            android:layout_marginLeft="@dimen/badge_desc_margin"
+            android:layout_marginRight="@dimen/badge_desc_margin"
+            android:layout_marginStart="@dimen/badge_desc_margin"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="2sp"
-            android:textColor="@color/leader_board_badge_sub_text"
-            android:textSize="@dimen/sp_size_16" />
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="@dimen/badge_desc_line_space"
+            android:textColor="@color/badge_text"
+            android:textSize="@dimen/badge_desc_text" />
 
         <ImageView
             android:id="@+id/playstore_icon"
-            android:layout_width="@dimen/dp_size_100"
-            android:layout_height="@dimen/dp_size_35"
+            android:layout_width="@dimen/badge_share_playstore_icon_width"
+            android:layout_height="@dimen/badge_share_playstore_icon_height"
+            android:layout_marginTop="@dimen/badge_share_playstore_margin_top"
             android:layout_below="@id/badge_desc"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_playstore" />
 
         <ImageView
-            android:layout_width="@dimen/dp_size_100"
-            android:layout_height="@dimen/dp_size_40"
+            android:layout_width="@dimen/badge_share_sheroes_icon_width"
+            android:layout_height="@dimen/badge_share_sheroes_icon_height"
             android:layout_below="@id/playstore_icon"
+            android:layout_marginTop="@dimen/badge_share_sheroes_margin_top"
             android:layout_centerHorizontal="true"
             android:src="@drawable/vector_sheroes_header" />
 

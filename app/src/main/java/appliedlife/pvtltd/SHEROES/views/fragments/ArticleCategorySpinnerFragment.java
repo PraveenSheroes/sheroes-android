@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,13 +24,12 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -48,7 +46,9 @@ import butterknife.OnClick;
 
 public class ArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
     private static final String SCREEN_LABEL = "Article Category Spinner Screen";
-    private final String TAG = LogUtils.makeLogTag(ArticleCategorySpinnerFragment.class);
+    public static final int CATEGORY_SELECTED_DONE = 1;
+    public static final int CATEGORY_SELECTED_CANCEL = 0;
+
     @Inject
     HomePresenter mHomePresenter;
     @Bind(R.id.rv_spinner_list)
@@ -60,7 +60,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
     TextView mTvCancel;
     @Bind(R.id.tv_done)
     TextView mTvDone;
-    List<HomeSpinnerItem> mHomeSpinnerItemList;
+    List<ArticleCategory> mArticleCategoryList;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
 
@@ -72,20 +72,19 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         mHomePresenter.attachView(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            mHomeSpinnerItemList = Parcels.unwrap(bundle.getParcelable(AppConstants.HOME_SPINNER_FRAGMENT));
+            mArticleCategoryList = Parcels.unwrap(bundle.getParcelable(AppConstants.ARTICLE_CATEGORY_SPINNER_FRAGMENT));
         }
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(manager);
         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setAdapter(mAdapter);
-        if (StringUtil.isNotEmptyCollection(mHomeSpinnerItemList)) {
-            mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
+        if (StringUtil.isNotEmptyCollection(mArticleCategoryList)) {
+            mAdapter.setSheroesGenericListData(mArticleCategoryList);
             mAdapter.notifyDataSetChanged();
         } else {
             mHomePresenter.getMasterDataToPresenter();
         }
-
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE_SELECT_CATEGORY));
         return view;
     }
@@ -106,6 +105,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         super.onDestroyView();
         mHomePresenter.detachView();
     }
+
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
         setArticleCategoryFilterValues();
@@ -113,16 +113,16 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
 
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
-        if(getActivity()!=null && !getActivity().isFinishing()) {
-            ((HomeActivity) getActivity()).onCancelDone(AppConstants.NO_REACTION_CONSTANT);
+        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_CANCEL);
         }
 
     }
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
-        if(getActivity()!=null && !getActivity().isFinishing()) {
-            ((HomeActivity) getActivity()).onCancelDone(AppConstants.ONE_CONSTANT);
+        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_DONE);
             ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
         }
     }
@@ -132,32 +132,28 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         return SCREEN_LABEL;
     }
 
-    public interface HomeSpinnerFragmentListner {
-        void onCancelDone(int pressedEvent);
-    }
-
     private void setArticleCategoryFilterValues() {
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get().getData()) {
             HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
             if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
                 {
                     HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
                     List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
                     if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
-                        List<HomeSpinnerItem> homeSpinnerItemList = new ArrayList<>();
-                        HomeSpinnerItem homeSpinnerFirst=new HomeSpinnerItem();
+                        List<ArticleCategory> articleCategoryList = new ArrayList<>();
+                        ArticleCategory homeSpinnerFirst = new ArticleCategory();
                         homeSpinnerFirst.setName(AppConstants.FOR_ALL);
-                        homeSpinnerItemList.add(homeSpinnerFirst);
+                        articleCategoryList.add(homeSpinnerFirst);
                         for (LabelValue lookingFor : labelValueArrayList) {
 
-                            HomeSpinnerItem homeSpinnerItem = new HomeSpinnerItem();
-                            homeSpinnerItem.setId(lookingFor.getValue());
-                            homeSpinnerItem.setName(lookingFor.getLabel());
-                            homeSpinnerItemList.add(homeSpinnerItem);
+                            ArticleCategory articleCategory = new ArticleCategory();
+                            articleCategory.setId(lookingFor.getValue());
+                            articleCategory.setName(lookingFor.getLabel());
+                            articleCategoryList.add(articleCategory);
                         }
-                        mHomeSpinnerItemList = homeSpinnerItemList;
+                        mArticleCategoryList = articleCategoryList;
                     }
-                    mAdapter.setSheroesGenericListData(mHomeSpinnerItemList);
+                    mAdapter.setSheroesGenericListData(mArticleCategoryList);
                     mAdapter.notifyDataSetChanged();
                 }
             }

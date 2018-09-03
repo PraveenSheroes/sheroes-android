@@ -824,7 +824,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
                     //Refresh GCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(getApplicationContext());
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if(cleverTapAPI!=null) {
                         cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
                     }
@@ -1063,7 +1063,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     public void showGenderInputDialog(String userName, String personEmail) {
-        GenderInputFormDialogFragment fragment = (GenderInputFormDialogFragment) getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
+        GenderInputFormDialogFragment fragment = (GenderInputFormDialogFragment) getFragmentManager().findFragmentByTag(AppConstants.GENDER_INPUT_DIALOG);
         if (fragment == null) {
             fragment = new GenderInputFormDialogFragment();
             Bundle b = new Bundle();
@@ -1072,7 +1072,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             fragment.setArguments(b);
         }
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), AppConstants.NETWORK_TIMEOUT);
+            fragment.show(getFragmentManager(), AppConstants.GENDER_INPUT_DIALOG);
         }
     }
 

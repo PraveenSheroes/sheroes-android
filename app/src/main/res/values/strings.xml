@@ -1,7 +1,6 @@
 <resources>
     <string name="ID_APP_NAME">SHEROES</string>
     <string name="ID_PROJECT_ID">409228886131</string>
-    <string name="ID_CLEVER_TAP_PROJECT_ID">id:409228886131</string>
     <string name="ID_APPS_FLYER_DEV_ID">CDkJAsj9hBUkp2V6ERGWd9</string>
     <string name="ID_ROBOTO_REGULAR">sans-serif</string>
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
@@ -136,6 +135,7 @@
     <string name="ID_FOLLOWER">Follower</string>
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
+    <string name="BadgeCounter">+%1$d</string>
     <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\nHelp us personalize SHEROES for you by joining some communities of your interests.</string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
@@ -400,6 +400,11 @@
         <item quantity="other">Views</item>
     </plurals>
 
+    <plurals name="badgeWonTime">
+        <item quantity="one">Time</item>
+        <item quantity="other">Times</item>
+    </plurals>
+
     <string name="action_like">like</string>
     <string name="action_bookmark">bookmark</string>
     <string name="delete">Delete</string>
@@ -418,6 +423,7 @@
     <string name="anonymous">Anonymous</string>
     <string name="choose_community_option">Choose your community</string>
     <string name="image_count">%1$d/%2$d</string>
+    <string name="badge_won_times_label">Won %1$d %2$s</string>
     <string name="error_blank">Please add something to post</string>
     <string name="error_choose_community">Please choose the community to post in</string>
     <string name="menu.post_as_community">Post as Community</string>
@@ -635,8 +641,12 @@
     <string name="how_do_i_become_a_supersheroes">How do I become a SuperSheroes?</string>
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
-    <string name="badge_period_date_text">Won Latest on : %1$s - %2$s</string>
-    <string name="badge_desc">%1$s is a Super SHEROES in %2$s.</string>
+    <string name="badge_active_period_date_text">Won this week : %1$s - %2$s</string>
+    <string name="badge_inactive_period_date_text">Won latest on : %1$s - %2$s</string>
+    <string name="badge_closet_won_date_text">Won latest on : %1$s</string>
+    <string name="badge_closet_won_this_week_text">Won this week</string>
+    <string name="badge_desc">%1$sis a Super SHEROES in %2$s</string>
+    <string name="inactive_badge_desc">%1$swas a Super SHEROES in %2$s</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>
     <string name="view_profile">VIEW PROFILE</string>
 
@@ -669,6 +679,13 @@
     <string name="no_tag_found">No</string>
     <string name="write_a_story">Write a story</string>
     <string name="no_story">No stories yet</string>
+    <string name="paste_on_playstore">Paste as Review on Playstore</string>
+    <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
+    <string name="congratulation">Congratulations</string>
+    <string name="copied">Copied</string>
+    <string name="message">message</string>
+    <string name="your_response_copied">Your response copied</string>
+
 
 
 

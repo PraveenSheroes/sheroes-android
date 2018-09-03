@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minWidth="@dimen/badge_dialog_width">
 
     <FrameLayout
         android:id="@+id/header_container"
@@ -11,12 +12,12 @@
 
         <ImageView
             android:id="@+id/cross"
-            android:layout_width="@dimen/dp_size_20"
-            android:layout_height="@dimen/dp_size_20"
+            android:layout_width="@dimen/badge_dialog_cross"
+            android:layout_height="@dimen/badge_dialog_cross"
             android:layout_gravity="right|end"
-            android:layout_marginEnd="@dimen/dp_size_12"
-            android:layout_marginRight="@dimen/dp_size_12"
-            android:layout_marginTop="@dimen/dp_size_12"
+            android:layout_marginEnd="@dimen/dialog_badge_details_cross_icon_margin"
+            android:layout_marginRight="@dimen/dialog_badge_details_cross_icon_margin"
+            android:layout_marginTop="@dimen/dialog_badge_details_cross_icon_margin"
             android:src="@drawable/ic_dialog_close_dark" />
 
         <ImageView
@@ -24,20 +25,20 @@
             android:layout_width="@dimen/badge_icon_size"
             android:layout_height="@dimen/badge_icon_size"
             android:layout_gravity="center_vertical"
-            android:layout_margin="@dimen/dp_size_16" />
+            android:layout_margin="@dimen/dialog_badge_details_icon_margin" />
 
         <ImageView
             android:id="@+id/user_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right|end"
-            android:layout_marginEnd="@dimen/dp_size_35"
-            android:layout_marginRight="@dimen/dp_size_35"
-            android:layout_marginTop="@dimen/dp_size_8"
-            android:paddingEnd="@dimen/dp_size_1"
-            android:paddingLeft="@dimen/dp_size_8"
-            android:paddingRight="@dimen/dp_size_1"
-            android:paddingStart="@dimen/dp_size_8"
+            android:layout_marginEnd="@dimen/dialog_badge_user_image_margin_right"
+            android:layout_marginRight="@dimen/dialog_badge_user_image_margin_right"
+            android:layout_marginTop="@dimen/dialog_badge_user_image_margin_top"
+            android:paddingEnd="@dimen/dialog_badge_user_image_padding_right"
+            android:paddingLeft="@dimen/dialog_badge_user_image_padding_left"
+            android:paddingRight="@dimen/dialog_badge_user_image_padding_right"
+            android:paddingStart="@dimen/dialog_badge_user_image_padding_left"
             android:src="@drawable/vector_badge_dialog_girl" />
 
     </FrameLayout>
@@ -47,47 +48,63 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header_container"
-        android:layout_marginEnd="@dimen/dp_size_24"
-        android:layout_marginLeft="@dimen/dp_size_24"
-        android:layout_marginRight="@dimen/dp_size_24"
-        android:layout_marginStart="@dimen/dp_size_24"
-        android:layout_marginTop="@dimen/dp_size_21"
+        android:layout_marginEnd="@dimen/dialog_badge_margin"
+        android:layout_marginLeft="@dimen/dialog_badge_margin"
+        android:layout_marginRight="@dimen/dialog_badge_margin"
+        android:layout_marginStart="@dimen/dialog_badge_margin"
+        android:layout_marginTop="@dimen/dialog_badge_title_margin_top"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:lineSpacingExtra="@dimen/sp_size_8"
+        android:lineSpacingExtra="@dimen/dialog_badge_line_space"
         android:textColor="@color/leader_board_dialog_badge_title"
-        android:textSize="@dimen/sp_size_20"
+        android:textSize="@dimen/dialog_badge_title_text"
         tools:text="Wealth Creators Badge" />
+
+    <TextView
+        android:id="@+id/bade_won_count_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/badge_title"
+        android:layout_marginEnd="@dimen/dialog_badge_margin"
+        android:layout_marginLeft="@dimen/dialog_badge_margin"
+        android:layout_marginRight="@dimen/dialog_badge_margin"
+        android:layout_marginStart="@dimen/dialog_badge_margin"
+        android:layout_marginTop="@dimen/dialog_badge_margin_top"
+        android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:lineSpacingExtra="@dimen/dialog_badge_line_space"
+        android:textColor="@color/gray_light"
+        android:textSize="@dimen/dialog_badge_counter_text"
+        android:textStyle="bold"
+        tools:text="Won 5 times" />
 
     <TextView
         android:id="@+id/bade_won_date_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/badge_title"
-        android:layout_marginEnd="@dimen/dp_size_24"
-        android:layout_marginLeft="@dimen/dp_size_24"
-        android:layout_marginRight="@dimen/dp_size_24"
-        android:layout_marginStart="@dimen/dp_size_24"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_below="@id/bade_won_count_label"
+        android:layout_marginLeft="@dimen/dialog_badge_won_date_margin_left"
+        android:layout_marginStart="@dimen/dialog_badge_won_date_margin_left"
+        android:layout_marginTop="@dimen/dialog_badge_won_date_margin_top"
         android:fontFamily="@string/ID_ROBOTO_BOLD"
-        android:lineSpacingExtra="@dimen/sp_size_8"
-        android:textColor="@color/light_grey"
-        android:textSize="@dimen/sp_size_16"
+        android:lineSpacingExtra="@dimen/dialog_badge_line_space"
+        android:textColor="@color/gray_light"
+        android:textSize="@dimen/dialog_badge_won_date_text"
+        android:textStyle="bold"
         tools:text="Won Latest on : 21-29 Feb’18" />
 
     <TextView
         android:id="@+id/badge_desc"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/bade_won_date_label"
-        android:layout_marginEnd="@dimen/dp_size_24"
-        android:layout_marginLeft="@dimen/dp_size_24"
-        android:layout_marginRight="@dimen/dp_size_24"
-        android:layout_marginStart="@dimen/dp_size_24"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginEnd="@dimen/dialog_badge_desc_margin_right"
+        android:layout_marginLeft="@dimen/dialog_badge_margin"
+        android:layout_marginRight="@dimen/dialog_badge_desc_margin_right"
+        android:layout_marginStart="@dimen/dialog_badge_margin"
+        android:layout_marginTop="@dimen/dialog_badge_desc_margin_top"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:lineSpacingExtra="@dimen/sp_size_8"
+        android:lineSpacingExtra="@dimen/dialog_badge_desc_line_space"
         android:textColor="@color/leader_board_badge_sub_text"
-        android:textSize="@dimen/sp_size_16"
+        android:textSize="@dimen/dialog_badge_desc_text"
         tools:text="Anupriya was a Super SHEROES in Money Matters" />
 
     <FrameLayout
@@ -105,13 +122,12 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_horizontal"
             android:letterSpacing="0.04"
-            android:padding="@dimen/dp_size_16"
+            android:padding="@dimen/dialog_badge_button_padding"
             android:text="@string/ID_SHARE"
             android:textAllCaps="true"
             android:textColor="@color/leader_board_dialog_button"
-            android:textSize="@dimen/sp_size_14"
+            android:textSize="@dimen/dialog_badge_button_text"
             android:visibility="gone" />
-
 
         <TextView
             android:id="@+id/ok"
@@ -120,11 +136,11 @@
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_horizontal"
             android:letterSpacing="0.04"
-            android:padding="@dimen/dp_size_16"
+            android:padding="@dimen/dialog_badge_button_padding"
             android:text="@string/ID_OK"
             android:textAllCaps="true"
             android:textColor="@color/leader_board_dialog_button"
-            android:textSize="@dimen/sp_size_14"
+            android:textSize="@dimen/dialog_badge_button_text"
             android:visibility="gone" />
 
     </FrameLayout>
@@ -139,14 +155,14 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center_horizontal"
         android:letterSpacing="0.04"
-        android:paddingBottom="@dimen/dp_size_16"
-        android:paddingEnd="@dimen/dp_size_8"
-        android:paddingRight="@dimen/dp_size_8"
-        android:paddingStart="@dimen/dp_size_8"
-        android:paddingTop="@dimen/dp_size_16"
+        android:paddingBottom="@dimen/dialog_badge_button_padding"
+        android:paddingEnd="@dimen/dialog_badge_button_padding_left"
+        android:paddingRight="@dimen/dialog_badge_button_padding_left"
+        android:paddingStart="@dimen/dialog_badge_button_padding_left"
+        android:paddingTop="@dimen/dialog_badge_button_padding"
         android:text="@string/show_leaderboard"
         android:textColor="@color/leader_board_dialog_button"
-        android:textSize="@dimen/sp_size_14"
+        android:textSize="@dimen/dialog_badge_button_text"
         android:visibility="gone" />
 
     <TextView
@@ -159,14 +175,14 @@
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center_horizontal"
         android:letterSpacing="0.04"
-        android:paddingBottom="@dimen/dp_size_16"
-        android:paddingEnd="@dimen/dp_size_8"
-        android:paddingRight="@dimen/dp_size_8"
-        android:paddingTop="@dimen/dp_size_16"
+        android:paddingBottom="@dimen/dialog_badge_button_padding"
+        android:paddingEnd="@dimen/dialog_badge_button_padding_left"
+        android:paddingRight="@dimen/dialog_badge_button_padding_left"
+        android:paddingTop="@dimen/dialog_badge_button_padding"
         android:text="@string/view_profile"
         android:textAllCaps="true"
         android:textColor="@color/leader_board_dialog_button"
-        android:textSize="@dimen/sp_size_14"
+        android:textSize="@dimen/dialog_badge_button_text"
         android:visibility="gone" />
 
 </RelativeLayout>

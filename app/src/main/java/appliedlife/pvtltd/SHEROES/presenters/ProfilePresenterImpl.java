@@ -8,7 +8,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -269,5 +268,4 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
                     }
                 });
     }
-
 }

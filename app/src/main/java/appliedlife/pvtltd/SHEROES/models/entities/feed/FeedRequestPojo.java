@@ -39,7 +39,7 @@ public class FeedRequestPojo extends BaseRequest{
 
     @SerializedName("author_id")
     @Expose
-    private Integer autherId;
+    private Long autherId;
     @SerializedName("sub_type")
     @Expose
     private String subType;
@@ -83,18 +83,18 @@ public class FeedRequestPojo extends BaseRequest{
 
     @SerializedName("source_entity_id")
     @Expose
-    private Integer sourceEntityId;
+    private Long sourceEntityId;
 
     @SerializedName("is_anonymous_post_hide")
     @Expose
     private boolean isAnonymousPostHide;
 
 
-    public Integer getSourceEntityId() {
+    public Long getSourceEntityId() {
         return sourceEntityId;
     }
 
-    public void setSourceEntityId(Integer sourceEntityId) {
+    public void setSourceEntityId(Long sourceEntityId) {
         this.sourceEntityId = sourceEntityId;
     }
 
@@ -213,11 +213,11 @@ public class FeedRequestPojo extends BaseRequest{
     public FeedRequestPojo() {
     }
 
-    public Integer getAutherId() {
+    public Long getAutherId() {
         return autherId;
     }
 
-    public void setAutherId(Integer autherId) {
+    public void setAutherId(Long autherId) {
         this.autherId = autherId;
     }
 

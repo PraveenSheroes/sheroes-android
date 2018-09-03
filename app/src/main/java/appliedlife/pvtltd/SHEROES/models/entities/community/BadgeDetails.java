@@ -59,6 +59,15 @@ public class BadgeDetails {
     @SerializedName("lastModifiedBy")
     @Expose
     private int lastModifiedBy;
+    @SerializedName("count")
+    @Expose
+    private int badgeCount;
+    @SerializedName("latestStartDate")
+    @Expose
+    private String solrIgnoreStartDate;
+    @SerializedName("latestEndDate")
+    @Expose
+    private String solrIgnoreEndDate;
 
     public int getId() {
         return id;
@@ -100,7 +109,7 @@ public class BadgeDetails {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isIsActive() {
+    public boolean isActive() {
         return isActive;
     }
 
@@ -164,19 +173,31 @@ public class BadgeDetails {
         this.lastModifiedOn = lastModifiedOn;
     }
 
-    public int getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(int lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
     public String getCommunityName() {
         return communityName;
     }
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public int getBadgeCount() {
+        return badgeCount;
+    }
+
+    public String getSolrIgnoreStartDate() {
+        return solrIgnoreStartDate;
+    }
+
+    public void setSolrIgnoreStartDate(String solrIgnoreStartDate) {
+        this.solrIgnoreStartDate = solrIgnoreStartDate;
+    }
+
+    public String getSolrIgnoreEndDate() {
+        return solrIgnoreEndDate;
+    }
+
+    public void setSolrIgnoreEndDate(String solrIgnoreEndDate) {
+        this.solrIgnoreEndDate = solrIgnoreEndDate;
     }
 }

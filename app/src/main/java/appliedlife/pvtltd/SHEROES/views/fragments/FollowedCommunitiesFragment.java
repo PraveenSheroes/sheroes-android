@@ -114,6 +114,8 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
     }
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
+
+        if(getContext() ==null) return;
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         RecyclerRowDivider decoration = new RecyclerRowDivider(getContext(), ContextCompat.getColor(getContext(), R.color.on_board_work), 1);
@@ -135,6 +137,7 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
             public void dismissReactions() {
             }
         });
+
         if (isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(mFragmentListRefreshData.getPageNo(), userMentorId));
         } else {
@@ -148,7 +151,6 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
                 refreshFeedMethod();
             }
         });
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     private void refreshFeedMethod() {

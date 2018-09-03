@@ -11,6 +11,8 @@ package appliedlife.pvtltd.SHEROES.utils;
 public class AppConstants {
     public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk";
 
+    public static final String PLAY_STORE_ID_URL = "market://details?id=";
+    public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
@@ -50,7 +52,7 @@ public class AppConstants {
     public static final String AT_THE_RATE_OF = "@";
 
     public static final String SHARED_PREFS = "SHARED_PREFS";
-    public static final String HOME_SPINNER_FRAGMENT = "spinner_fragment";
+    public static final String ARTICLE_CATEGORY_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
     public static final String COLON = ":";
     public static final String HOURS = " Hrs ";
@@ -159,6 +161,7 @@ public class AppConstants {
     public static final String EDIT_PROFILE = "Edit profile";
     public static final String HIDE_SPLASH_THEME = "hide_splash_theme";
     public static final String NETWORK_TIMEOUT = "network_timout";
+    public static final String GENDER_INPUT_DIALOG = "GenderInputDialog";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
     public static final String LEADER_BOARD_SCREEN = "Leaderboard Screen";
@@ -218,6 +221,7 @@ public class AppConstants {
     public static final String MALE_ERROR_SHARE_PREF = "MALE_USER_ERROR";
     public static final String GUIDELINE_SHARE_PREF = "GUIDELINE";
     public static final String NEW_TAG_FOR_RIGHT_SWIP = "NEW_TAG";
+    public static final String APP_REVIEW_PLAY_STORE = "REVIEW_PLAY_STORE";
     public static final String FOLLOWER_SHARE_PREF = "FOLLOW_USER";
     public static final String PICTURE_SHARE_PREF = "PICTURE_SHARE_PREF";
     public static final String PICTURE_SHARE_SESSION_PREF = "PICTURE_SHARE_SESSION_PREF";
@@ -272,6 +276,8 @@ public class AppConstants {
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
     public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
+    public static final String ARTICLE_CATEGORY_URL_COM = "https://sheroes.com/articles/category";
+    public static final String ARTICLE_CATEGORY_URL_IN = "https://sheroes.in/articles/category";
     public static final String STORIES_URL = "https://sheroes.in/stories";
     public static final String STORIES_URL_COM = "https://sheroes.com/stories";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
@@ -317,6 +323,7 @@ public class AppConstants {
     public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
+    public static final String ARTICLE_CATEGORY_ID = "article_category_id";
     public static final String CHAMPION_ID = "champion_id";
     public static final String IS_MENTOR_ID = "is_mentor";
     public static final String COMMUNITY_ID = "community_id";
