@@ -73,11 +73,11 @@ android {
     }
     buildTypes {
         debug {
-            //buildConfigField "String", "BASE_URL", "\"https://testservices.sheroes.in\""
+            buildConfigField "String", "BASE_URL", "\"https://testservices.sheroes.in\""
            //  buildConfigField "String", "BASE_URL","\"https://testservicesglow.sheroes.in/\""
             // buildConfigField "String", "BASE_URL","\"https://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-            buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
            // buildConfigField "String", "BASE_URL","\"https://testservicesconf.sheroes.in/\""
 
             if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
@@ -98,12 +98,11 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            ext.crashlyticsApiSecret = "9edaf311149aaaac17a2399c76e31db5fd18706615646d41ac84e561504e4e57"
+            ext.crashlyticsApiKey = "07aa242372597565df80681a25002e6e25e6ef0e"
             manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:754013124314"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
-
-            ext.crashlyticsApiSecret = "9edaf311149aaaac17a2399c76e31db5fd18706615646d41ac84e561504e4e57"
-            ext.crashlyticsApiKey = "07aa242372597565df80681a25002e6e25e6ef0e"
         }
     }
     lintOptions {
@@ -171,7 +170,7 @@ dependencies {
     compile 'com.android.support:support-v4:27.0.2'
     compile 'com.android.support:customtabs:27.0.2'
     compile 'com.yahoo.mobile.client.android.util.rangeseekbar:rangeseekbar-library:0.1.0'
-    compile 'io.branch.sdk.android:library:2.8.0'
+    compile 'io.branch.sdk.android:library:2.16.0'
     compile 'com.android.support.constraint:constraint-layout:1.1.2'
     testCompile 'junit:junit:4.12'
     apt 'com.google.dagger:dagger-compiler:2.2'

@@ -12,6 +12,7 @@ public enum AnalyticsEventType {
     POST("Post"),
     POLL("Poll"),
     GENDER_SELECTED("Gender Selected"),
+    APP_REVIEW_CLICKED("App Review Clicked"),
     PROFILE("Profile"),
     BADGE("Badge"),
     REPLY("Reply"),

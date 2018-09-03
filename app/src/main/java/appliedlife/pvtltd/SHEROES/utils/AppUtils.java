@@ -108,6 +108,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserBadgeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
@@ -1580,10 +1581,10 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public FeedRequestPojo usersFeedDetailRequestBuilder(String typeOfFeed, int pageNo, long idForDetail, boolean hideAnnonymousPost) {
-        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
-        feedRequestPojo.setAutherId((int) idForDetail);
-        feedRequestPojo.setAnonymousPostHide(hideAnnonymousPost);
+    public FeedRequestPojo winnerPostRequestBuilder(String typeOfFeed, Long userId, Long challengeId) {
+        FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, 1);
+        feedRequestPojo.setAutherId(userId);
+        feedRequestPojo.setSourceEntityId(challengeId);
         return feedRequestPojo;
     }
 
@@ -1634,7 +1635,7 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-    public static FeedRequestPojo makeChallengeResponseRequest(String typeOfFeed, int challengeId, int pageNo) {
+    public static FeedRequestPojo makeChallengeResponseRequest(String typeOfFeed, Long challengeId, int pageNo) {
         AppUtils appUtils = AppUtils.getInstance();
         FeedRequestPojo feedRequestPojo = new FeedRequestPojo();
         feedRequestPojo.setAppVersion(appUtils.getAppVersionName());
@@ -2137,6 +2138,11 @@ public class AppUtils {
         return helplinePostQuestionRequest;
     }
 
+    public static UserBadgeRequest badgeRequestBuilder(long userId) {
+        UserBadgeRequest userBadgeRequest = new UserBadgeRequest();
+        userBadgeRequest.setUserId(String.valueOf(userId));
+        return userBadgeRequest;
+    }
     public static HelplineGetChatThreadRequest helplineGetChatThreadRequestBuilder(int pageNo) {
         HelplineGetChatThreadRequest helplineGetChatThreadRequest = new HelplineGetChatThreadRequest();
         helplineGetChatThreadRequest.setPageNo(pageNo);

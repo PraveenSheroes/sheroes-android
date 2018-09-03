@@ -66,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
+import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
@@ -1397,7 +1398,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (getActivity() != null && getActivity().isFinishing()) return;
 
         if (leaderBoardUserSolrObj != null) {
-            BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj, screenName, true);
+            BadgeDetails badgeDetails = leaderBoardUserSolrObj.getSolrIgnoreBadgeDetails();
+            badgeDetails.setSolrIgnoreStartDate(leaderBoardUserSolrObj.getSolrIgnoreStartDate());
+            badgeDetails.setSolrIgnoreEndDate(leaderBoardUserSolrObj.getSolrIgnoreEndDate());
+            BadgeDetailsDialogFragment.showDialog(getActivity(), leaderBoardUserSolrObj.getUserSolrObj(), badgeDetails, screenName, true);
         }
     }
 

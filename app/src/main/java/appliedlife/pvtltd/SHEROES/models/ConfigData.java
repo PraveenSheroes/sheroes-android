@@ -80,4 +80,10 @@ public class ConfigData {
 
     @SerializedName("maleUserShareText")
     public String mMaleErrorText = "Hi, I found this women only app for you. Its name is SHEROES (Women Heroes). You can talk about and ask anything (even anonymously) without hesitation and help other women by giving them good advice. https://shrs.me/xtap573vXM";
+
+    @SerializedName("showInviteFriendTab")
+    public boolean showInviteFriendTab;
+
+    @SerializedName("challengeWinnerDailogMessage")
+    public String challengeWinnerDialogMassage="You have won the Invitation to SHEROES Summit 2018. We loved your response to our Challenge.";
 }

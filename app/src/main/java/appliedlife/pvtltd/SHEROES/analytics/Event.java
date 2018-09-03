@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
  * Note:
  * 1. Always Capitalize Words
  * 2. Use Past Tense
+ *
  */
 public enum Event {
 
@@ -245,6 +246,7 @@ public enum Event {
     STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
     STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created"),
     GENDER_SELECTED(AnalyticsEventType.GENDER_SELECTED, ""),
+    APP_REVIEW_CLICKED(AnalyticsEventType.APP_REVIEW_CLICKED, ""),
 
     //Poll events
     POLL_LIKED(AnalyticsEventType.POLL, "Liked"),

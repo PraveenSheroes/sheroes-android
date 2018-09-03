@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AddressActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.BadgeClosetActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -68,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
@@ -332,6 +334,8 @@ public interface SheroesAppComponent {
 
     void inject(CleverTapHelper cleverTapHelper);
 
+    void inject(BadgeClosetActivity badgeClosetActivity);
+
     void inject(BadgeDetailsDialogFragment badgeDetailsDialogFragment);
 
     void inject(SuperSheroesCriteriaFragment superSheroesCriteriaFragment);
@@ -339,6 +343,8 @@ public interface SheroesAppComponent {
     void inject(LeaderBoardViewHolder leaderBoardViewHolder);
 
     void inject(NoStoriesHolder noStoriesHolder);
+
+    void inject(ChallengeWinnerPopUpDialog challengeWinnerPopUpDialog);
 
     void inject(PollTypesViewHolder pollTypesViewHolder);
 

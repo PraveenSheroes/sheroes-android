@@ -17,7 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventDetailPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSpeakerData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.EventSponsorData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
+import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMember;
@@ -316,7 +316,7 @@ public enum HolderMapping {
                     }
                 } else if (item instanceof NavMenuItem) {
                     returnView = DRAWER_ITEMS.ordinal();
-                } else if (item instanceof HomeSpinnerItem) {
+                } else if (item instanceof ArticleCategory) {
                     returnView = HOME_SPINNER_ITEMS.ordinal();
                 } else if (item instanceof GetAllDataDocument) {
                     returnView = GET_ALL_DATA_BOARDING_SEARCH.ordinal();

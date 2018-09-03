@@ -23,7 +23,6 @@ public class FragmentListRefreshData {
     private int challengePosition=-1;
     private FeedRequestPojo feedRequestPojo;
     private String subType;
-    private int sourceEntity;
     private boolean isSelfProfile;
     private long mentorUserId;
     private boolean isChallenge;
@@ -174,14 +173,6 @@ public class FragmentListRefreshData {
 
     public void setSubType(String subType) {
         this.subType = subType;
-    }
-
-    public int getSourceEntity() {
-        return sourceEntity;
-    }
-
-    public void setSourceEntity(int sourceEntity) {
-        this.sourceEntity = sourceEntity;
     }
 
     public boolean isSelfProfile() {

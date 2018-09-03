@@ -62,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_16"
-            android:autoLink="all"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:text="@string/setting"
