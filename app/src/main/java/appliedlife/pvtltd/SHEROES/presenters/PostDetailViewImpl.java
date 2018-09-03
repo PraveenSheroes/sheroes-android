@@ -28,13 +28,20 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequest
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -48,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.RxSearchObservable;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
@@ -73,9 +81,10 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilde
  */
 
 public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
-    SheroesAppServiceApi sheroesAppServiceApi;
-    private UserPostSolrObj mUserPostObj;
-    private String mUserPostId;
+    SheroesAppServiceApi mSheroesAppServiceApi;
+    private FeedDetail mFeedDetail;
+    private String mCommunityPostDetailDeepLink;
+    private String mFeedDetailObjId;
     private List<BaseResponse> mBaseResponseList;
     private SheroesApplication mSheroesApplication;
     private int headerCount = 0;
@@ -88,8 +97,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     AppUtils mAppUtils;
 
     @Inject
-    public PostDetailViewImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
-        this.sheroesAppServiceApi = sheroesAppServiceApi;
+    public PostDetailViewImpl(SheroesAppServiceApi mSheroesAppServiceApi, SheroesApplication sheroesApplication) {
+        this.mSheroesAppServiceApi = mSheroesAppServiceApi;
         this.mBaseResponseList = new ArrayList<>();
         this.mSheroesApplication = sheroesApplication;
     }
@@ -100,32 +109,83 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         this.mIsScrollAllowed = isScrollAllowed;
     }
 
-    public void setUserPost(UserPostSolrObj userPostSolrObj, String userPostId) {
-        this.mUserPostObj = userPostSolrObj;
-        this.mUserPostId = userPostId;
+    public void setUserPost(FeedDetail feedDetail, String userPostId, String communityPostDetailDeepLink) {
+        this.mFeedDetail = feedDetail;
+        this.mFeedDetailObjId = userPostId;
+        mCommunityPostDetailDeepLink = communityPostDetailDeepLink;
     }
 
     public void fetchUserPost() {
-        if (mUserPostObj == null) {
-            fetchUserPostFromServer();
+        if (mFeedDetail == null) {
+            if (StringUtil.isNotNullOrEmptyString(mCommunityPostDetailDeepLink)) {
+                if (AppConstants.POLL_URL_COM.equalsIgnoreCase(mCommunityPostDetailDeepLink) || AppConstants.POLL_URL.equalsIgnoreCase(mCommunityPostDetailDeepLink)) {
+                    fetchPollFromServer();
+                } else {
+                    fetchUserPostFromServer();
+                }
+            }
         } else {
-            mBaseResponseList.add(mUserPostObj);
-            getMvpView().addData(0, mUserPostObj);
+            mBaseResponseList.add(mFeedDetail);
+            getMvpView().addData(0, mFeedDetail);
             headerCount++;
             getMvpView().startProgressBar();
-            getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
+            getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
         }
     }
 
     private void fetchUserPostFromServer() {
-        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, 1, Long.valueOf(mUserPostId));
+        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, 1, Long.valueOf(mFeedDetailObjId));
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         getFeedFromPresenter(feedRequestPojo);
     }
 
+    private void fetchPollFromServer() {
+        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_POLL, 1, Long.valueOf(mFeedDetailObjId));
+        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.getPollDetail(mFeedDetailObjId,feedRequestPojo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                    }
+
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
+                            mFeedDetail = feedResponsePojo.getFeedDetails().get(0);
+                            if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
+                                mFeedDetail.setStreamType(getMvpView().getStreamType());
+                            }
+                            mBaseResponseList.add(mFeedDetail);
+                            getMvpView().addData(0, mFeedDetail);
+                            headerCount++;
+                            getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
+                        }else
+                        {
+                            getMvpView().stopProgressBar();
+                        }
+                    }
+                });
+    }
+
     public void fetchMoreComments() {
         getMvpView().commentStartedLoading();
-        getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
+        getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
     }
 
     private void getAllCommentFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo) {
@@ -169,15 +229,30 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
                     mIsScrollAllowed = false;
                 } else {
-                    if (mUserPostObj.getIsEditOrDelete() == 1) {
-                        mUserPostObj.setIsEditOrDelete(0);
-                        mBaseResponseList.set(0, mUserPostObj);
-                        getMvpView().editLastComment();
-                    }
-                    if (mUserPostObj.getIsEditOrDelete() == 2) {
-                        mUserPostObj.setIsEditOrDelete(0);
-                        mBaseResponseList.set(0, mUserPostObj);
-                        getMvpView().deleteLastComment();
+                    if (mFeedDetail instanceof UserPostSolrObj) {
+                        UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetail;
+                        if (userPostSolrObj.getIsEditOrDelete() == AppConstants.COMMENT_EDIT) {
+                            userPostSolrObj.setIsEditOrDelete(0);
+                            mBaseResponseList.set(0, userPostSolrObj);
+                            getMvpView().editLastComment();
+                        }
+                        if (userPostSolrObj.getIsEditOrDelete() == AppConstants.COMMENT_DELETE) {
+                            userPostSolrObj.setIsEditOrDelete(0);
+                            mBaseResponseList.set(0, userPostSolrObj);
+                            getMvpView().deleteLastComment();
+                        }
+                    } else if (mFeedDetail instanceof PollSolarObj) {
+                        PollSolarObj pollSolarObj = (PollSolarObj) mFeedDetail;
+                        if (pollSolarObj.getIsEditOrDelete() == AppConstants.COMMENT_EDIT) {
+                            pollSolarObj.setIsEditOrDelete(0);
+                            mBaseResponseList.set(0, pollSolarObj);
+                            getMvpView().editLastComment();
+                        }
+                        if (pollSolarObj.getIsEditOrDelete() == AppConstants.COMMENT_DELETE) {
+                            pollSolarObj.setIsEditOrDelete(0);
+                            mBaseResponseList.set(0, pollSolarObj);
+                            getMvpView().deleteLastComment();
+                        }
                     }
                 }
                 if (mIsScrollAllowed) {
@@ -199,30 +274,30 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
-                getMvpView().stopProgressBar();
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
 
-            @Override
-            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                getMvpView().stopProgressBar();
-                getMvpView().setData(0, communityPostCreateResponse.getFeedDetail());
-            }
+                    @Override
+                    public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                        getMvpView().stopProgressBar();
+                        getMvpView().setData(0, communityPostCreateResponse.getFeedDetail());
+                    }
 
-        });
+                });
 
     }
 
     private Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
-        return sheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
+        return mSheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
                     public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
@@ -257,14 +332,14 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
                 if (null != feedResponsePojo && !CommonUtil.isEmpty(feedResponsePojo.getFeedDetails())) {
-                    mUserPostObj = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
+                    mFeedDetail = (UserPostSolrObj) feedResponsePojo.getFeedDetails().get(0);
                     if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-                        mUserPostObj.setStreamType(getMvpView().getStreamType());
+                        mFeedDetail.setStreamType(getMvpView().getStreamType());
                     }
-                    mBaseResponseList.add(mUserPostObj);
-                    getMvpView().addData(0, mUserPostObj);
+                    mBaseResponseList.add(mFeedDetail);
+                    getMvpView().addData(0, mFeedDetail);
                     headerCount++;
-                    getAllCommentFromPresenter(getCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), pageNumber));
+                    getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
                 }
             }
         });
@@ -273,7 +348,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
 
     public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+        return mSheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
                 .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
                     @Override
                     public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
@@ -286,7 +361,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
 
     private Observable<CommentReactionResponsePojo> getAllCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
-        return sheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
+        return mSheroesAppServiceApi.getCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentReactionResponsePojo, CommentReactionResponsePojo>() {
                     @Override
                     public CommentReactionResponsePojo apply(CommentReactionResponsePojo commentReactionResponsePojo) {
@@ -303,11 +378,11 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
         }
-        if (mUserPostObj == null) {
+        if (mFeedDetail == null) {
             return;
         }
         getMvpView().startProgressBar();
-        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mUserPostObj.getEntityOrParticipantId(), commentText, isAnonymous, hasMention, mentionSpanList);
+        CommentReactionRequestPojo commentReactionRequestPojo = postCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), commentText, isAnonymous, hasMention, mentionSpanList);
         addCommentListFromModel(commentReactionRequestPojo).subscribe(new DisposableObserver<CommentAddDelete>() {
             @Override
             public void onComplete() {
@@ -325,19 +400,19 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 if (null != commentResponsePojo) {
                     Comment comment = commentResponsePojo.getCommentReactionModel();
                     mBaseResponseList.add(comment);
-                    mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() + 1);
-                    mBaseResponseList.set(0, mUserPostObj);
-                    getMvpView().setData(0, mUserPostObj);
+                    mFeedDetail.setNoOfComments(mFeedDetail.getNoOfComments() + 1);
+                    mBaseResponseList.set(0, mFeedDetail);
+                    getMvpView().setData(0, mFeedDetail);
                     getMvpView().addData(comment);
                     getMvpView().smoothScrollToBottom();
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .id(Long.toString(commentResponsePojo.getCommentReactionModel().getId()))
-                                    .postId(Long.toString(mUserPostObj.getIdOfEntityOrParticipant()))
+                                    .postId(Long.toString(mFeedDetail.getIdOfEntityOrParticipant()))
                                     .postCommentId(Long.toString(commentResponsePojo.getCommentReactionModel().getEntityId()))
                                     .postType(AnalyticsEventType.COMMUNITY.toString())
                                     .body(commentResponsePojo.getCommentReactionModel().getComment())
-                                    .streamType(CommonUtil.isNotEmpty(mUserPostObj.getStreamType()) ? mUserPostObj.getStreamType() : "")
+                                    .streamType(CommonUtil.isNotEmpty(mFeedDetail.getStreamType()) ? mFeedDetail.getStreamType() : "")
                                     .communityId(commentResponsePojo.getCommentReactionModel().getCommunityId())
                                     .build();
                     AnalyticsManager.trackEvent(Event.REPLY_CREATED, PostDetailActivity.SCREEN_LABEL, properties);
@@ -348,7 +423,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<CommentAddDelete> addCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
-        return sheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
+        return mSheroesAppServiceApi.addCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
                     public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
@@ -388,9 +463,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             mBaseResponseList.remove(pos);
                             getMvpView().removeData(pos);
 
-                            mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
-                            mBaseResponseList.set(0, mUserPostObj);
-                            getMvpView().setData(0, mUserPostObj);
+                            mFeedDetail.setNoOfComments(mFeedDetail.getNoOfComments() - 1);
+                            mBaseResponseList.set(0, mFeedDetail);
+                            getMvpView().setData(0, mFeedDetail);
                         }
                     } else {
                         getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
@@ -401,7 +476,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<CommentAddDelete> editCommentListFromModel(CommentReactionRequestPojo commentReactionRequestPojo) {
-        return sheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
+        return mSheroesAppServiceApi.editCommentFromApi(commentReactionRequestPojo)
                 .map(new Function<CommentAddDelete, CommentAddDelete>() {
                     @Override
                     public CommentAddDelete apply(CommentAddDelete commentReactionResponsePojo) {
@@ -470,7 +545,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
-                                .streamType((mUserPostObj != null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType() : "")
+                                .streamType((mFeedDetail != null && CommonUtil.isNotEmpty(mFeedDetail.getStreamType())) ? mFeedDetail.getStreamType() : "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -519,7 +594,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                                 .postType(AnalyticsEventType.COMMUNITY.toString())
                                 .body(comment.getComment())
                                 .communityId(comment.getCommunityId())
-                                .streamType((mUserPostObj != null && CommonUtil.isNotEmpty(mUserPostObj.getStreamType())) ? mUserPostObj.getStreamType() : "")
+                                .streamType((mFeedDetail != null && CommonUtil.isNotEmpty(mFeedDetail.getStreamType())) ? mFeedDetail.getStreamType() : "")
                                 .build();
                 AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
             }
@@ -556,8 +631,44 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
+    public void deletePollFromPresenter(DeletePollRequest deletePollRequest, final PollSolarObj pollSolarObj) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.deletePoll(deletePollRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CreatePollResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreatePollResponse>() {
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(CreatePollResponse communityPostCreateResponse) {
+                        if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onPostDeleted();
+                        }
+                        getMvpView().stopProgressBar();
+                    }
+
+                });
+    }
+
+
     private Observable<DeleteCommunityPostResponse> deleteCommunityPostFromModel(DeleteCommunityPostRequest deleteCommunityPostRequest) {
-        return sheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
+        return mSheroesAppServiceApi.getCommunityPostDeleteResponse(deleteCommunityPostRequest)
                 .map(new Function<DeleteCommunityPostResponse, DeleteCommunityPostResponse>() {
                     @Override
                     public DeleteCommunityPostResponse apply(DeleteCommunityPostResponse deleteCommunityPostResponse) {
@@ -568,14 +679,63 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
-    public void getPostLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail, final PollOptionModel pollOptionModel) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-            userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-            mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().setData(0, userPostSolrObj);
+            PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+            pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+            mBaseResponseList.set(0, pollSolarObj);
+            getMvpView().setData(0, pollSolarObj);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.getPollVoteFromApi(pollVote)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<PollVoteResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<PollVoteResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+                        PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+                        pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+                        mBaseResponseList.set(0, pollSolarObj);
+                        getMvpView().setData(0, pollSolarObj);
+                    }
+
+                    @Override
+                    public void onNext(PollVoteResponse voteResponse) {
+                        getMvpView().stopProgressBar();
+                        PollSolarObj pollSolarObj = null;
+                        if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
+                            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL,pollOptionModel.getPollOptionId());
+                        } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+                            pollSolarObj = (PollSolarObj) feedDetail;
+                            pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
+                        }
+                        mBaseResponseList.set(0, pollSolarObj);
+                        getMvpView().setData(0, pollSolarObj);
+                    }
+                });
+
+    }
+
+
+    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
+            feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+            feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+            mBaseResponseList.set(0, feedDetail);
+            getMvpView().setData(0, feedDetail);
             return;
         }
         getMvpView().startProgressBar();
@@ -590,10 +750,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                mBaseResponseList.set(0, userPostSolrObj);
-                getMvpView().setData(0, userPostSolrObj);
+                feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                mBaseResponseList.set(0, feedDetail);
+                getMvpView().setData(0, feedDetail);
 
             }
 
@@ -601,25 +761,29 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                    userPostSolrObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                    userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                    mBaseResponseList.set(0, userPostSolrObj);
-                    getMvpView().setData(0, userPostSolrObj);
+                    feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
+                    feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
+                    mBaseResponseList.set(0, feedDetail);
+                    getMvpView().setData(0, feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_LIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
-                getMvpView().setData(0, userPostSolrObj);
+                if (feedDetail instanceof UserPostSolrObj) {
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                } else if (feedDetail instanceof PollSolarObj) {
+                    AnalyticsManager.trackPollAction(Event.POLL_LIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                }
+                getMvpView().setData(0, feedDetail);
             }
         });
 
     }
 
-    public void getPostUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
+    public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-            userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-            mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().setData(0, userPostSolrObj);
+            feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+            feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+            mBaseResponseList.set(0, feedDetail);
+            getMvpView().setData(0, feedDetail);
             return;
         }
         getMvpView().startProgressBar();
@@ -634,10 +798,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                mBaseResponseList.set(0, userPostSolrObj);
-                getMvpView().setData(0, userPostSolrObj);
+                feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                mBaseResponseList.set(0, feedDetail);
+                getMvpView().setData(0, feedDetail);
 
             }
 
@@ -645,19 +809,25 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             public void onNext(LikeResponse likeResponse) {
                 getMvpView().stopProgressBar();
                 if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                    userPostSolrObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                    userPostSolrObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                    mBaseResponseList.set(0, userPostSolrObj);
+                    feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
+                    feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
+                    mBaseResponseList.set(0, feedDetail);
                 }
-                AnalyticsManager.trackPostAction(Event.POST_UNLIKED, userPostSolrObj, PostDetailActivity.SCREEN_LABEL);
-                getMvpView().setData(0, userPostSolrObj);
+                if (feedDetail instanceof UserPostSolrObj) {
+                    AnalyticsManager.trackPostAction(Event.POST_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                } else if (feedDetail instanceof PollSolarObj) {
+                    AnalyticsManager.trackPollAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
+                }
+
+                getMvpView().setData(0, feedDetail);
             }
         });
 
     }
 
+
     private Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return sheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+        return mSheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
                     public LikeResponse apply(LikeResponse likeResponse) {
@@ -669,7 +839,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return sheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+        return mSheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
                 .map(new Function<LikeResponse, LikeResponse>() {
                     @Override
                     public LikeResponse apply(LikeResponse likeResponse) {
@@ -713,7 +883,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<ApproveSpamPostResponse> getSpamPostApproveFromModel(ApproveSpamPostRequest approveSpamPostRequest) {
-        return sheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
+        return mSheroesAppServiceApi.spamPostApprove(approveSpamPostRequest)
                 .map(new Function<ApproveSpamPostResponse, ApproveSpamPostResponse>() {
                     @Override
                     public ApproveSpamPostResponse apply(ApproveSpamPostResponse approveSpamPostResponse) {
@@ -724,25 +894,28 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public UserPostSolrObj getUserPostObj() {
-        if (mUserPostObj == null) {
+    public FeedDetail getUserPostObj() {
+        if (mFeedDetail == null) {
             return null;
         }
-        UserPostSolrObj userPostSolrObj = mUserPostObj;
         List<Comment> comments = new ArrayList<>();
         if (!mBaseResponseList.isEmpty()) {
             if (mBaseResponseList.get(mBaseResponseList.size() - 1) instanceof Comment) {
                 comments.add((Comment) mBaseResponseList.get(mBaseResponseList.size() - 1));
             }
+            if (mFeedDetail instanceof PollSolarObj) {
+                mFeedDetail = (PollSolarObj) mBaseResponseList.get(0);
+            } else {
+                mFeedDetail.setLastComments(comments);
+            }
         }
-        userPostSolrObj.setLastComments(comments);
-        return userPostSolrObj;
+        return mFeedDetail;
     }
 
     public void updateUserPost(UserPostSolrObj userPostSolrObj) {
-        mUserPostObj = userPostSolrObj;
+        mFeedDetail = userPostSolrObj;
         if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
-            mUserPostObj.setStreamType(getMvpView().getStreamType());
+            mFeedDetail.setStreamType(getMvpView().getStreamType());
         }
         mBaseResponseList.set(0, userPostSolrObj);
         getMvpView().setData(0, userPostSolrObj);
@@ -762,7 +935,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     //Debounce for usermention function
 
-    public void getUserMentionSuggestion(final RichEditorView richEditorView, final UserPostSolrObj userPostSolrObj) {
+    public void getUserMentionSuggestion(final RichEditorView richEditorView, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
@@ -775,23 +948,35 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     public ObservableSource<SearchUserDataResponse> apply(String query) throws Exception {
                         SearchUserDataRequest searchUserDataRequest = null;
                         Long communityId = null, postEntityId = null, postAuthorUserId = null;
-                        if (null != userPostSolrObj) {
-                            if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
-                                communityId = null;
-                            } else {
-                                communityId = userPostSolrObj.getCommunityId();
-                            }
-                            postEntityId = userPostSolrObj.getEntityOrParticipantId();
-                            postAuthorUserId = userPostSolrObj.getAuthorId();
-                        } else {
-                            if (null != mUserPostObj) {
-                                if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                        if (null != feedDetail) {
+                            if (feedDetail instanceof UserPostSolrObj) {
+                                if (((UserPostSolrObj) feedDetail).getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
                                     communityId = null;
                                 } else {
-                                    communityId = mUserPostObj.getCommunityId();
+                                    communityId = ((UserPostSolrObj) feedDetail).getCommunityId();
                                 }
-                                postEntityId = mUserPostObj.getEntityOrParticipantId();
-                                postAuthorUserId = mUserPostObj.getAuthorId();
+                            } else if (feedDetail instanceof PollSolarObj) {
+                                communityId = ((PollSolarObj) feedDetail).getCommunityId();
+                            }
+                            postEntityId = feedDetail.getEntityOrParticipantId();
+                            postAuthorUserId = feedDetail.getAuthorId();
+                        } else {
+                            if (null != mFeedDetail) {
+                                if (mFeedDetail instanceof UserPostSolrObj) {
+                                    UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetail;
+                                    if (userPostSolrObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                                        communityId = null;
+                                    } else {
+                                        communityId = userPostSolrObj.getCommunityId();
+                                    }
+                                    postEntityId = userPostSolrObj.getEntityOrParticipantId();
+                                    postAuthorUserId = userPostSolrObj.getAuthorId();
+                                } else if (mFeedDetail instanceof PollSolarObj) {
+                                    PollSolarObj pollSolarObj = (PollSolarObj) mFeedDetail;
+                                    communityId = pollSolarObj.getCommunityId();
+                                    postEntityId = pollSolarObj.getEntityOrParticipantId();
+                                    postAuthorUserId = pollSolarObj.getAuthorId();
+                                }
                             }
                         }
                         if (query.length() == 1) {
@@ -837,7 +1022,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
     private Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
-        return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
+        return mSheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)
                 .map(new Function<SearchUserDataResponse, SearchUserDataResponse>() {
                     @Override
                     public SearchUserDataResponse apply(SearchUserDataResponse searchUserDataResponse) {
@@ -859,7 +1044,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         getMvpView().startProgressBar();
 
-        sheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
+        mSheroesAppServiceApi.reportSpamPostOrComment(spamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -888,51 +1073,51 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     //Spam Comment for admin
     public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final Comment comment) {
         getMvpView().startProgressBar();
-        sheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
+        mSheroesAppServiceApi.approveSpamComment(approveSpamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<BaseResponse>() {
 
-            @Override
-            public void onComplete() {
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-            }
-
-            @Override
-            public void onNext(BaseResponse approveSpamPostResponse) {
-                getMvpView().stopProgressBar();
-                if (null != approveSpamPostResponse) {
-                    int pos = findCommentPositionById(mBaseResponseList, comment.getId());
-                    if (pos != RecyclerView.NO_POSITION) {
-                        mBaseResponseList.remove(pos);
-                        getMvpView().removeData(pos);
-
-                        mUserPostObj.setNoOfComments(mUserPostObj.getNoOfComments() - 1);
-                        mBaseResponseList.set(0, mUserPostObj);
-                        getMvpView().setData(0, mUserPostObj);
-
-                        //Event for the post comment deleted by admin
-                        HashMap<String, Object> properties =
-                                new EventProperty.Builder()
-                                        .id(Long.toString(comment.getId()))
-                                        .postId(Long.toString(comment.getEntityId()))
-                                        .postType(AnalyticsEventType.ARTICLE.toString())
-                                        .body(comment.getComment())
-                                        .streamType(getMvpView().getStreamType())
-                                        .build();
-                        AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
-
+                    @Override
+                    public void onComplete() {
                     }
-                }
-            }
-        });
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse approveSpamPostResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != approveSpamPostResponse) {
+                            int pos = findCommentPositionById(mBaseResponseList, comment.getId());
+                            if (pos != RecyclerView.NO_POSITION) {
+                                mBaseResponseList.remove(pos);
+                                getMvpView().removeData(pos);
+
+                                mFeedDetail.setNoOfComments(mFeedDetail.getNoOfComments() - 1);
+                                mBaseResponseList.set(0, mFeedDetail);
+                                getMvpView().setData(0, mFeedDetail);
+
+                                //Event for the post comment deleted by admin
+                                HashMap<String, Object> properties =
+                                        new EventProperty.Builder()
+                                                .id(Long.toString(comment.getId()))
+                                                .postId(Long.toString(comment.getEntityId()))
+                                                .postType(AnalyticsEventType.ARTICLE.toString())
+                                                .body(comment.getComment())
+                                                .streamType(getMvpView().getStreamType())
+                                                .build();
+                                AnalyticsManager.trackEvent(Event.REPLY_DELETED, ArticleActivity.SOURCE_SCREEN, properties);
+
+                            }
+                        }
+                    }
+                });
 
     }
 }

@@ -33,16 +33,17 @@
             android:id="@+id/action"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:paddingRight="@dimen/dp_size_16"
-            android:paddingLeft="@dimen/dp_size_16"
-            android:paddingTop="@dimen/dp_size_10"
-            android:paddingBottom="@dimen/dp_size_10"
+            android:textSize="@dimen/post_action_btn_text_size"
+            android:paddingRight="@dimen/post_action_btn_padding"
+            android:paddingLeft="@dimen/post_action_btn_padding"
+            android:paddingTop="@dimen/post_action_btn_padding_top_bottom"
+            android:paddingBottom="@dimen/post_action_btn_padding_top_bottom"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:alpha=".9"
             android:textAllCaps="true"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:textColor="#92878787"
+            android:textColor="@color/post_action"
             android:lineSpacingExtra="6sp" />
     </RelativeLayout>
 </android.support.v7.widget.Toolbar>

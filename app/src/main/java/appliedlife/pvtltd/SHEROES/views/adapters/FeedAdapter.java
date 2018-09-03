@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -39,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityFlatViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
@@ -85,6 +87,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new FeedArticleHolder(mInflater.inflate(R.layout.feed_article_card_normal, parent, false), mBaseHolderInterface);
             case TYPE_USER_POST:
                 return new FeedCommunityPostHolder(mInflater.inflate(R.layout.feed_comunity_user_post_normal, parent, false), mBaseHolderInterface);
+            case TYPE_POLL:
+                return new FeedPollCardHolder(mInflater.inflate(R.layout.feed_poll_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_LOADER:
                 return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
             case TYPE_CHALLENGE:
@@ -126,6 +130,12 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 FeedCommunityPostHolder feedCommunityPostHolder = (FeedCommunityPostHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetailList.get(position);
                 feedCommunityPostHolder.bindData(userPostSolrObj, mContext, position);
+
+                break;
+            case TYPE_POLL:
+                FeedPollCardHolder feedPollHolder = (FeedPollCardHolder) holder;
+                PollSolarObj pollSolarObj = (PollSolarObj) mFeedDetailList.get(position);
+                feedPollHolder.bindData(pollSolarObj, mContext, position);
                 break;
             case TYPE_LOADER:
                 LoaderViewHolder loaderViewHolder = ((LoaderViewHolder) holder);
@@ -205,6 +215,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_HOME_FEED_HEADER = 13;
     private static final int TYPE_IMAGE = 14;
     private static final int TYPE_NO_STORIES = 15;
+    private static final int TYPE_POLL = 3;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -229,6 +240,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 } else {
                     return TYPE_USER_POST;
                 }
+            }
+            if (feedDetail instanceof PollSolarObj) {
+                return TYPE_POLL;
             }
             if (feedDetail instanceof ChallengeSolrObj) {
                 return TYPE_CHALLENGE;

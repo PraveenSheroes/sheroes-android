@@ -92,6 +92,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
@@ -109,6 +110,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.PollTypesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserMentionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
@@ -343,6 +345,10 @@ public interface SheroesAppComponent {
     void inject(NoStoriesHolder noStoriesHolder);
 
     void inject(ChallengeWinnerPopUpDialog challengeWinnerPopUpDialog);
+
+    void inject(PollTypesViewHolder pollTypesViewHolder);
+
+    void inject(FeedPollCardHolder feedPollCardHolder);
 }
 
 

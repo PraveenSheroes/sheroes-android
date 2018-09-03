@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
@@ -149,7 +150,8 @@ public class SheroesAppModule {
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
                 .registerSubtype(LeaderBoardUserSolrObj.class, AppConstants.LEADER_SUB_TYPE)
-                .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE);
+                .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE)
+                .registerSubtype(PollSolarObj.class, AppConstants.FEED_POLL);
 
         return new GsonBuilder()
                 .setDateFormat(DATE_FORMATS[0])

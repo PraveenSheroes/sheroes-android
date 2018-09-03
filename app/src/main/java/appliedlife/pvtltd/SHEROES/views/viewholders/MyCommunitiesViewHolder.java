@@ -75,7 +75,7 @@ public class MyCommunitiesViewHolder extends BaseViewHolder<FeedDetail> {
                         .into(mCommunityIcon);
             }
         } else {
-            mCommunityIcon.setImageResource(R.drawable.challenge_placeholder);
+            mCommunityIcon.setImageResource(R.drawable.ic_image_holder);
         }
 
         mCommunityName.setText(mFeedDetail.getNameOrTitle());
