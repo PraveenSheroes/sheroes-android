@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|top"
-                android:src="@drawable/ic_login_icon" />
+                android:src="@drawable/vector_login_icon" />
         </FrameLayout>
 
         <LinearLayout
@@ -127,7 +127,7 @@
                 android:paddingLeft="@dimen/dp_size_16"
                 android:paddingRight="@dimen/dp_size_16"
                 android:paddingTop="@dimen/dp_size_8"
-                android:src="@drawable/ic_password_eye" />
+                android:src="@drawable/vector_password_eye" />
         </LinearLayout>
         <!-- Login progress -->
 

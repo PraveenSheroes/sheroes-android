@@ -46,7 +46,7 @@
                     android:id="@+id/id_spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_spinner_icon"
+                    android:src="@drawable/vector_spinner_icon"
                     android:tint="@color/faq_spinner_color"
                     android:layout_marginTop="@dimen/dp_size_30"
                     android:layout_marginLeft="@dimen/dp_size_28"/>

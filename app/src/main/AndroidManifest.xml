@@ -95,7 +95,7 @@
         <!-- MANDATORY FIELD: THE NOTIFICATION SMALL ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data
             android:name="NOTIFICATION_ICON"
-            android:value="@drawable/ic_push_notification_icon" />
+            android:value="@drawable/vector_push_notification_icon" />
 
         <!-- MANDATORY FIELD: THE NOTIFICATION LARGE ICON WHICH WILL BE USED TO SET TO NOTIFICATIONS POSTED -->
         <meta-data

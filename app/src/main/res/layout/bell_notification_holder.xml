@@ -32,7 +32,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -88,7 +88,7 @@
                     android:layout_height="@dimen/bell_notification_reaction_icon_size"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/dp_size_2"
-                    android:src="@drawable/ic_heart_active"
+                    android:src="@drawable/vector_heart_active"
                     android:visibility="visible" />
 
                 <TextView

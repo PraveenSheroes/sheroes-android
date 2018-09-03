@@ -178,21 +178,21 @@
             android:visibility="gone">
 
             <ImageView
+                android:visibility="gone"
                 android:id="@+id/spam_comment_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:padding="@dimen/list_comment_spam_menu_padding"
-                android:src="@drawable/ic_menu_dashboard"
-                android:visibility="gone" />
+                android:src="@drawable/vector_menu_dashboard"
+                android:padding="@dimen/list_comment_spam_menu_padding" />
 
 
             <ImageView
                 android:id="@+id/spam_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_spam_post_message" />
+                android:src="@drawable/vector_spam_post_message" />
 
             <TextView
                 android:id="@+id/tv_review_description"
@@ -215,8 +215,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:drawableEnd="@drawable/ic_menu_dashboard"
-            android:drawableRight="@drawable/ic_menu_dashboard"
+            android:drawableRight="@drawable/vector_menu_dashboard"
+            android:drawableEnd="@drawable/vector_menu_dashboard"
             android:padding="@dimen/review_article_comment_padding" />
     </LinearLayout>
 

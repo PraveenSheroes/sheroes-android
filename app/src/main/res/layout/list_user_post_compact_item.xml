@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
 
             <ImageView
@@ -167,7 +167,7 @@
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_video_play_icon" />
+                        android:src="@drawable/vector_video_play_icon" />
                 </FrameLayout>
 
                 <RelativeLayout
@@ -274,7 +274,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
-                    android:drawableLeft="@drawable/ic_heart_in_active"
+                    android:drawableLeft="@drawable/vector_heart_in_active"
                     android:drawablePadding="8dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="Like"
@@ -288,7 +288,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30.5dp"
                     android:layout_toRightOf="@+id/post_like_button"
-                    android:drawableLeft="@drawable/ic_comment_icon"
+                    android:drawableLeft="@drawable/vector_comment_icon"
                     android:drawablePadding="8dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="Comment"
@@ -302,7 +302,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30.5dp"
                     android:layout_toRightOf="@+id/post_comment_button"
-                    android:drawableLeft="@drawable/ic_share_card"
+                    android:drawableLeft="@drawable/vector_share_card"
                     android:drawablePadding="8dp"
                     android:fontFamily="sans-serif-medium"
                     android:text="Share"
@@ -330,7 +330,7 @@
                     android:layout_marginLeft="@dimen/dp_size_5"
                     android:layout_marginStart="@dimen/dp_size_5"
                     android:layout_marginTop="@dimen/dp_size_5"
-                    android:src="@drawable/ic_spam_post_message" />
+                    android:src="@drawable/vector_spam_post_message" />
 
                 <TextView
                     android:id="@+id/tv_review_description"
@@ -369,7 +369,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"
-                        android:background="@drawable/ic_verified"
+                        android:background="@drawable/vector_verified"
                         android:visibility="gone" />
 
                     <ImageView
@@ -457,7 +457,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"
-                        android:background="@drawable/ic_verified"
+                        android:background="@drawable/vector_verified"
                         android:visibility="gone" />
 
                 </FrameLayout>
@@ -508,7 +508,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_size_8"
-                android:src="@drawable/ic_spam_post_message" />
+                android:src="@drawable/vector_spam_post_message" />
 
             <TextView
                 android:layout_width="wrap_content"
