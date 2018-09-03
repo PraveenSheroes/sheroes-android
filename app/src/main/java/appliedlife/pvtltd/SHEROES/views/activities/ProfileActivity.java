@@ -1318,7 +1318,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
             if (ProfileActivity.this.isFinishing()) return;
 
-            if (!spamResponse.isSpamAlreadyReported()) {
+            if(spamResponse.isSpammed()) {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
+            } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
