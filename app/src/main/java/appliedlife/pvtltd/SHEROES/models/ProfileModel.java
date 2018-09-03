@@ -186,5 +186,4 @@ public class ProfileModel {
         return sheroesAppServiceApi.deactivateUser(deactivateUserRequest).
                 subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
     }
-
 }

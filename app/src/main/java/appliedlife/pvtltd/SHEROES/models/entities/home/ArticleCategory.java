@@ -9,8 +9,8 @@ import org.parceler.Parcel;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-@Parcel(analyze = {HomeSpinnerItem.class,BaseResponse.class})
-public class HomeSpinnerItem extends BaseResponse{
+@Parcel(analyze = {ArticleCategory.class,BaseResponse.class})
+public class ArticleCategory extends BaseResponse{
 
     private long id;
     @SerializedName("name")

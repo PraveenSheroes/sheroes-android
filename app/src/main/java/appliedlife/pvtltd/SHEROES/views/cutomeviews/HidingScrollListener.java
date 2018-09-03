@@ -207,19 +207,6 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                             mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, pageNo));
                         }
                         break;
-                    case AppConstants.HOME_FRAGMENT:
-                        if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
-                            if (mFragmentListRefreshData.isChallenge()) {
-                                FeedRequestPojo feedRequestPojo = AppUtils.makeChallengeResponseRequest(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getSourceEntity(), pageNo);
-                                feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
-                                mHomePresenter.getChallengeResponse(feedRequestPojo, mFragmentListRefreshData);
-                            } else {
-                                FeedRequestPojo feedRequestPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_SUB_TYPE, pageNo);
-                                feedRequestPojo.setPostingDate(mFragmentListRefreshData.getPostedDate());
-                                mHomePresenter.getFeedFromPresenter(feedRequestPojo);
-                            }
-                        }
-                        break;
                     case AppConstants.COMMUNITY_DETAIL:
                         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo, mFragmentListRefreshData.getIdFeedDetail()));
                         break;
@@ -234,8 +221,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         if (StringUtil.isNotNullOrEmptyString(mFragmentListRefreshData.getCallForNameUser()) && mFragmentListRefreshData.getCallForNameUser().equalsIgnoreCase(AppConstants.GROWTH_PUBLIC_PROFILE)) {
                             FeedRequestPojo feedRequestCommunnityDetailPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY_POST, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCommunityId());
                             feedRequestCommunnityDetailPojo.setIdForFeedDetail(null);
-                            Integer autherId = (int) mFragmentListRefreshData.getCommunityId();
-                            feedRequestCommunnityDetailPojo.setAutherId(autherId);
+                            feedRequestCommunnityDetailPojo.setAutherId(mFragmentListRefreshData.getCommunityId());
                             feedRequestCommunnityDetailPojo.setAnonymousPostHide(mFragmentListRefreshData.isAnonymous());
                             mHomePresenter.getFeedFromPresenter(feedRequestCommunnityDetailPojo);
                         } else {

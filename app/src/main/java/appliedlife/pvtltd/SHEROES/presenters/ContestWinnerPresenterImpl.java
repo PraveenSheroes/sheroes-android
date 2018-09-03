@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
@@ -23,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestWinnerView;
 import io.reactivex.Observable;
 
@@ -33,19 +35,22 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
+
 /**
  * Created by ujjwal on 04/05/17.
  */
 
 public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView> {
     SheroesAppServiceApi sheroesAppServiceApi;
-
+    SheroesApplication mSheroesApplication;
     @Inject
     AppUtils mAppUtils;
     //region Constructor
     @Inject
-    public ContestWinnerPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi) {
+    public ContestWinnerPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
+        this.mSheroesApplication=sheroesApplication;
     }
     //endregion
 
@@ -87,7 +92,7 @@ public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView
 
     }
 
-    public Observable<WinnerResponse> getWinnersFromModel(WinnerRequest winnerRequest) {
+    private Observable<WinnerResponse> getWinnersFromModel(WinnerRequest winnerRequest) {
         return sheroesAppServiceApi.getWinners(winnerRequest)
                 .map(new Function<WinnerResponse, WinnerResponse>() {
                     @Override
@@ -97,6 +102,42 @@ public class ContestWinnerPresenterImpl extends BasePresenter<IContestWinnerView
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
+    }
+
+
+    public void getChallengeWinnerPostResponse(final FeedRequestPojo feedRequestPojo) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        getMvpView().stopProgressBar();
+                        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+                        if(StringUtil.isNotEmptyCollection(feedDetailList)) {
+                            FeedDetail feedDetail = feedDetailList.get(0);
+                            getMvpView().showChallengeWinnerPostResponse(feedDetail);
+                        }
+                    }
+                });
+
     }
     //endregion
 }

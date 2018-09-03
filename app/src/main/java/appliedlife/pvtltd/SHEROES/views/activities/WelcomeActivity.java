@@ -818,7 +818,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
                     //Refresh GCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(getApplicationContext());
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if(cleverTapAPI!=null) {
                         cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
                     }

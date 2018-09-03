@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
@@ -31,6 +32,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -53,14 +55,12 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 /**
@@ -163,7 +163,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
 
-                        AnalyticsManager.initializeCleverTap(getContext(), currentTime < createdDate);
+                        AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         ((LoginActivity) getActivity()).onLoginAuthToken();
@@ -191,7 +191,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     }
                     AnalyticsManager.initializeMixpanel(getContext());
-                    AnalyticsManager.initializeCleverTap(getApplicationContext(), currentTime < createdDate);
+                    AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     if(getActivity()!=null && !getActivity().isFinishing()) {
@@ -335,7 +335,12 @@ public class LoginFragment extends BaseFragment implements LoginView {
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mGcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    PushManager.getInstance().refreshToken(getApplicationContext(), mGcmId);
+                    PushManager.getInstance().refreshToken(SheroesApplication.mContext, mGcmId);
+                    //Refresh GCM token
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                    if(cleverTapAPI!=null) {
+                        cleverTapAPI.data.pushGcmRegistrationId(registrationId, true);
+                    }
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                     loginRequest.setUsername(email);
                     loginRequest.setPassword(password);

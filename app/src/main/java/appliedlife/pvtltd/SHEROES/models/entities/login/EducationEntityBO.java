@@ -5,9 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.HomeSpinnerItem;
-
 @Parcel(analyze = {EducationEntityBO.class})
 public class EducationEntityBO {
 
