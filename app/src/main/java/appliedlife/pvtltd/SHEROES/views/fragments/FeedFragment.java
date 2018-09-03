@@ -234,7 +234,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         tvGoToSetting.setText(content);
 
         //fetch latest all communities and save it in sharePref
-        mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+        if (isHomeFeed) {
+            mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
+        }
         return view;
     }
 

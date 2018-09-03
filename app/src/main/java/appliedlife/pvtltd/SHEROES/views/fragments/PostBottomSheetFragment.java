@@ -191,6 +191,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mHomePresenter.detachView();
     }
 
     @Override

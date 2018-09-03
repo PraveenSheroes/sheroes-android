@@ -58,6 +58,7 @@ public class CommunityListAdapter extends RecyclerView.Adapter<CommunityListAdap
                 String userImage = CommonUtil.getThumborUri(community.thumbImageUrl, holder.authorPicSize, holder.authorPicSize);
                 Glide.with(holder.communityPic.getContext())
                         .load(userImage)
+                        .thumbnail(.1f)
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mContext)))
                         .into(holder.communityPic);
             }
@@ -106,7 +107,7 @@ public class CommunityListAdapter extends RecyclerView.Adapter<CommunityListAdap
 
         // endregion
 
-        public CommunityListItemViewHolder(View itemView) {
+        private CommunityListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
