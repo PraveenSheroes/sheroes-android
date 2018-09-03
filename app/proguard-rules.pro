@@ -256,3 +256,7 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior {
     public <init>(android.content.Context, android.util.AttributeSet);
 }
+-ignorewarnings
+-keep class * {
+    public private *;
+}
