@@ -484,7 +484,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
 
         }
-
         etView.onReceiveSuggestionsListView(mSuggestionList);
 
         etView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -1761,13 +1760,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                selectImageFrmGallery();
+                selectImageFromGallery();
             }
         });
 
     }
 
-    public void selectImageFrmGallery() {
+    public void selectImageFromGallery() {
         CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200).setFixAspectRatio(true)
                 .start(CommunityPostActivity.this);
     }
@@ -1777,13 +1776,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                selectImageFrmCamera();
+                selectImageFromCamera();
             }
         });
 
     }
 
-    public void selectImageFrmCamera() {
+    public void selectImageFromCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)

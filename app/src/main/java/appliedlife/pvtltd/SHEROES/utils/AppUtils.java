@@ -59,6 +59,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -95,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
+import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
@@ -2249,5 +2251,11 @@ public class AppUtils {
         articleSubmissionRequest.storyContent = articleSolrObj.getDescription();
 
         return articleSubmissionRequest;
+    }
+    public UploadImageRequest uploadImageRequestBuilder(String  encodedImage) {
+        UploadImageRequest uploadImageRequest = new UploadImageRequest();
+        uploadImageRequest.images = new ArrayList<>();
+        uploadImageRequest.images.add(encodedImage);
+        return uploadImageRequest;
     }
 }

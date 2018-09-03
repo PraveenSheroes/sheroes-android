@@ -914,11 +914,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
                     mFeedDetail.setTrending(true);
-                    if(mFeedDetail instanceof UserPostSolrObj)
-                    {
+                    if(mFeedDetail instanceof UserPostSolrObj){
                         ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
-                    }else if(mFeedDetail instanceof PollSolarObj)
-                    {
+                    }else if(mFeedDetail instanceof PollSolarObj){
                         ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
                     }
                     openCommentReactionFragment(mFeedDetail);
@@ -946,11 +944,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
                     mFeedDetail.setTrending(true);
-                    if(mFeedDetail instanceof UserPostSolrObj)
-                    {
+                    if(mFeedDetail instanceof UserPostSolrObj){
                         ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
-                    }else if(mFeedDetail instanceof PollSolarObj)
-                    {
+                    }else if(mFeedDetail instanceof PollSolarObj){
                         ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
                     }
                     openCommentReactionFragment(mFeedDetail);

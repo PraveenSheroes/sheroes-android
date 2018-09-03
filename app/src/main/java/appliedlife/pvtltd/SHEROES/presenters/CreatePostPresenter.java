@@ -317,11 +317,8 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
     }
 
     public void uploadFile(String encodedImage) {
-        UploadImageRequest uploadImageRequest = new UploadImageRequest();
-        uploadImageRequest.images = new ArrayList<>();
-        uploadImageRequest.images.add(encodedImage);
         getMvpView().startProgressBar();
-        mSheroesAppServiceApi.uploadImageForAnyModule(uploadImageRequest)
+        mSheroesAppServiceApi.uploadImageForAnyModule(mAppUtils.uploadImageRequestBuilder(encodedImage))
                 .compose(this.<UpLoadImageResponse>bindToLifecycle())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
