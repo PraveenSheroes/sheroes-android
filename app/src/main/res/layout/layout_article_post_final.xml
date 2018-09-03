@@ -31,7 +31,7 @@
             android:layout_marginRight="@dimen/dp_size_8"
             android:layout_marginTop="16dp"
             android:visibility="gone"
-            android:src="@drawable/ic_cross_16dp" />
+            android:src="@drawable/vector_cancel_grey" />
 
         <RelativeLayout
             android:id="@+id/add_photo_container"
@@ -59,7 +59,7 @@
                 android:layout_marginBottom="48dp"
                 android:layout_marginTop="48dp"
                 android:layout_toRightOf="@id/add_photo_image_view"
-                android:drawableLeft="@drawable/ic_add_circle"
+                android:drawableLeft="@drawable/vector_add_circle"
                 android:drawablePadding="@dimen/dp_size_8"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="Add cover photo"
@@ -132,7 +132,7 @@
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:defaultValue="true"
-                android:drawableLeft="@drawable/ic_facebook_small"
+                android:drawableLeft="@drawable/vector_facebook_small"
                 android:drawablePadding="12dp"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:text="Share on Facebook"

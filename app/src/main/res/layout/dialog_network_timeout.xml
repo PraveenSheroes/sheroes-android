@@ -21,7 +21,7 @@
             android:paddingLeft="@dimen/dp_size_12"
             android:paddingRight="@dimen/dp_size_16"
             android:paddingTop="@dimen/dp_size_16"
-            android:src="@drawable/ic_cross" />
+            android:src="@drawable/vector_cross" />
 
         <ImageView
             android:id="@+id/iv_user_deactivate"

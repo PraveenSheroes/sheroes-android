@@ -197,9 +197,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             mCommentLike.setText("");
         }
         if (item.isLiked) {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_likes_heart, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_likes_heart, 0, 0, 0);
         } else {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_likes_heart_in_active, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_likes_heart_in_active, 0, 0, 0);
         }
     }
 
@@ -228,13 +228,6 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     public void onCommentMenuClick() {
         mComment.setItemPosition(getAdapterPosition());
         mCommentCallback.onCommentMenuClicked(mComment, mUserCommentListMenu);
-    }
-
-    @OnClick(R.id.tv_list_user_comment)
-    public void onCommentWithNameClick() {
-       /* if (mComment.isVerifiedMentor()) {
-            viewInterface.navigateToProfileView(mComment, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }*/
     }
 
     @OnClick(R.id.like)
@@ -305,6 +298,5 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
         mUserComment.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
 
-        // tvMention.setSelected(true);
     }
 }

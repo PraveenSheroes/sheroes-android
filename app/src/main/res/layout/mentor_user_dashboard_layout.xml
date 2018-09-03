@@ -73,8 +73,8 @@
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        android:drawableEnd="@drawable/ic_menu_dashboard"
-                        android:drawableRight="@drawable/ic_menu_dashboard"
+                        android:drawableEnd="@drawable/vector_menu_dashboard"
+                        android:drawableRight="@drawable/vector_menu_dashboard"
                         android:padding="@dimen/dp_size_20"
                         android:visibility="visible" />
 
@@ -128,7 +128,7 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/dp_size_45"
         android:layout_marginRight="@dimen/dp_size_16"
-        android:src="@drawable/ic_pencil"
+        android:src="@drawable/vector_pencil"
         android:visibility="gone"
         app:backgroundTint="@color/email" />
 

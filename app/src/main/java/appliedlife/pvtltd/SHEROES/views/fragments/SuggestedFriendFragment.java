@@ -224,7 +224,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                     msg=getString(R.string.suggested_list_blank);
                 }
             }
-            mFeedRecyclerView.setEmptyViewWithImage(emptyView, msg, R.drawable.ic_suggested_blank, "");
+            mFeedRecyclerView.setEmptyViewWithImage(emptyView, msg, R.drawable.vector_suggested_blank, "");
         } else {
             emptyView.setVisibility(View.GONE);
         }
@@ -297,7 +297,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             }
             isUserList=true;
         } else {
-            mFeedRecyclerView.setEmptyViewWithImage(emptyView,msg , R.drawable.ic_suggested_blank, "");
+            mFeedRecyclerView.setEmptyViewWithImage(emptyView,msg , R.drawable.vector_suggested_blank, "");
             emptyView.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);

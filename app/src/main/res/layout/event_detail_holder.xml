@@ -138,7 +138,7 @@
                     android:layout_marginRight="@dimen/dp_size_8"
                     android:drawablePadding="@dimen/dp_size_5"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:drawableLeft="@drawable/ic_going_check"
+                    android:drawableLeft="@drawable/vector_going_check"
                     android:gravity="center"
                     android:textColor="@color/event_text"
                     android:textSize="@dimen/sp_size_12" />
@@ -150,7 +150,7 @@
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
                     android:drawablePadding="@dimen/dp_size_5"
-                    android:drawableLeft="@drawable/ic_interested_check"
+                    android:drawableLeft="@drawable/vector_interested_check"
                     android:textColor="@color/event_text"
                     android:textSize="@dimen/sp_size_12" />
 
@@ -184,7 +184,7 @@
                     android:id="@+id/tv_start_end_time"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:drawableLeft="@drawable/ic_job_date_time"
+                    android:drawableLeft="@drawable/vector_job_date_time"
                     android:drawablePadding="@dimen/dp_size_35"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/detail_page_text"
@@ -200,7 +200,7 @@
                         android:id="@+id/tv_event_address_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_job_location"
+                        android:drawableLeft="@drawable/vector_job_location"
                         android:drawablePadding="@dimen/dp_size_35"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:textColor="@color/detail_page_text"

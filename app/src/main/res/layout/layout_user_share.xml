@@ -32,7 +32,7 @@
                 android:layout_alignRight="@id/profile_pic"
                 android:layout_marginBottom="@dimen/dp_size_5"
                 android:layout_marginRight="5dp"
-                android:background="@drawable/ic_verified" />
+                android:background="@drawable/vector_verified" />
 
         </RelativeLayout>
 
@@ -209,7 +209,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:drawableLeft="@drawable/ic_loc"
+            android:drawableLeft="@drawable/vector_loc"
             android:drawablePadding="@dimen/dp_size_7"
             android:ellipsize="end"
             android:gravity="center"
@@ -264,7 +264,7 @@
             android:layout_height="50dp"
             android:layout_gravity="right"
             android:layout_marginRight="4dp"
-            android:src="@drawable/ic_sheroes_name" />
+            android:src="@drawable/vector_sheroes_name" />
     </LinearLayout>
 
 </LinearLayout>

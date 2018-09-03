@@ -57,13 +57,13 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="end|bottom"
-                    android:src="@drawable/ic_edit_pic" />
+                    android:src="@drawable/vector_edit_pic" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center"
-                    android:background="@drawable/ic_edit_profile"
+                    android:background="@drawable/vector_edit_profile"
                     android:visibility="gone">
 
                     <TextView
@@ -82,7 +82,7 @@
                         android:layout_marginLeft="@dimen/dp_size_5"
                         android:layout_marginStart="@dimen/dp_size_5"
                         android:layout_marginTop="@dimen/dp_size_5"
-                        android:background="@drawable/ic_photo_camera" />
+                        android:background="@drawable/vector_photo_camera" />
 
                 </LinearLayout>
 

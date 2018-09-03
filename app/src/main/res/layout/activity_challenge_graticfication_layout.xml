@@ -101,7 +101,7 @@
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_size_16"
                         android:layout_marginRight="@dimen/dp_size_16"
-                        android:src="@drawable/ic_gratification_share" />
+                        android:src="@drawable/vector_gratification_share" />
 
                     <View
                         android:layout_width="@dimen/dp_size_0.5"

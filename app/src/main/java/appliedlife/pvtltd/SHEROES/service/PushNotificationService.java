@@ -211,7 +211,7 @@ public class PushNotificationService extends GcmListenerService {
 
     private int getNotificationIcon() {
         boolean useWhiteIcon = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
-        return useWhiteIcon ? R.drawable.ic_push_notification_icon : R.drawable.ic_push_notification_icon;
+        return useWhiteIcon ? R.drawable.vector_push_notification_icon : R.drawable.vector_push_notification_icon;
     }
 
     private class NotificationImageLoader extends AsyncTask<String, Void, Bitmap> {

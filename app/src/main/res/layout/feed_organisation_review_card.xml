@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -139,7 +139,7 @@
             android:layout_alignTop="@id/tv_review_company_title"
             android:layout_toLeftOf="@id/tv_review_company_rating"
             android:layout_toStartOf="@id/tv_review_company_rating"
-            android:drawableLeft="@drawable/ic_star_rating"
+            android:drawableLeft="@drawable/vector_star_rating"
             android:gravity="top" />
     </RelativeLayout>
 
@@ -167,7 +167,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_14"
-                android:drawableLeft="@drawable/ic_upvote_active"
+                android:drawableLeft="@drawable/vector_upvote_active"
                 android:padding="@dimen/dp_size_10" />
 
             <TextView
@@ -185,7 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_15"
-                android:drawableRight="@drawable/ic_share_card"
+                android:drawableRight="@drawable/vector_share_card"
                 android:gravity="center"
                 android:padding="@dimen/dp_size_10" />
 
