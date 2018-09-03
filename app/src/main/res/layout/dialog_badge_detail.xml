@@ -39,7 +39,7 @@
             android:paddingLeft="@dimen/dialog_badge_user_image_padding_left"
             android:paddingRight="@dimen/dialog_badge_user_image_padding_right"
             android:paddingStart="@dimen/dialog_badge_user_image_padding_left"
-            android:src="@drawable/ic_badge_dialog_girl" />
+            android:src="@drawable/vector_badge_dialog_girl" />
 
     </FrameLayout>
 

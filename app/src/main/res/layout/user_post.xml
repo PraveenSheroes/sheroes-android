@@ -25,7 +25,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
                 android:background="@color/white"
-                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:drawableRight="@drawable/vector_menu_dashboard"
                 android:padding="@dimen/dp_size_16" />
 
             <TextView
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_42"
                 android:layout_marginRight="@dimen/dp_size_42"
-                android:drawableTop="@drawable/ic_spam_post_message"
+                android:drawableTop="@drawable/vector_spam_post_message"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:text="@string/ID_NEED_TO_BE_REVIEWED"
@@ -108,7 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
-                    android:background="@drawable/ic_verified"
+                    android:background="@drawable/vector_verified"
                     android:visibility="gone" />
             </FrameLayout>
 
@@ -141,7 +141,7 @@
                 android:id="@+id/post_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:drawableRight="@drawable/vector_menu_dashboard"
                 android:padding="@dimen/dp_size_10"
                 android:visibility="gone" />
 
@@ -194,7 +194,7 @@
                     android:layout_width="@dimen/dp_size_50"
                     android:layout_height="@dimen/dp_size_50"
                     android:layout_gravity="center"
-                    android:src="@drawable/ic_video_play_icon"
+                    android:src="@drawable/vector_video_play_icon"
                     android:visibility="gone" />
 
                 <ProgressBar
@@ -273,7 +273,7 @@
                 android:id="@+id/like_heart_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/ic_likes_heart" />
+                android:drawableLeft="@drawable/vector_likes_heart" />
 
             <TextView
                 android:id="@+id/likes_count"
@@ -327,7 +327,7 @@
                     android:id="@+id/like_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableLeft="@drawable/ic_heart_in_active"
+                    android:drawableLeft="@drawable/vector_heart_in_active"
                     android:drawablePadding="@dimen/dp_size_8"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
@@ -344,7 +344,7 @@
                     android:layout_alignBottom="@+id/comment_button"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:drawableLeft="@drawable/ic_share_card"
+                    android:drawableLeft="@drawable/vector_share_card"
                     android:drawablePadding="@dimen/dp_size_8"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
@@ -362,7 +362,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:drawableLeft="@drawable/ic_comment_icon"
+                    android:drawableLeft="@drawable/vector_comment_icon"
                     android:drawablePadding="@dimen/dp_size_8"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:paddingBottom="@dimen/dp_size_10"

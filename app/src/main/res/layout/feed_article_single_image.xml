@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_size_12"
             android:layout_marginLeft="@dimen/dp_size_16"
-            android:drawableLeft="@drawable/ic_timer_icon"
+            android:drawableLeft="@drawable/vector_timer_icon"
             android:drawablePadding="@dimen/dp_size_6"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/white"

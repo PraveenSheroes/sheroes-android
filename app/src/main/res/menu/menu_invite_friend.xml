@@ -8,7 +8,7 @@
         app:showAsAction="always" />
     <item
         android:id="@+id/search_contact"
-        android:icon="@drawable/ic_search"
+        android:icon="@drawable/vector_search"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:title="@string/ID_SEARCH"/>

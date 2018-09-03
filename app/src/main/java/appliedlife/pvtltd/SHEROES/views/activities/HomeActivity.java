@@ -590,8 +590,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void changeFragmentWithCommunities() {
         mFragmentOpen.setFeedFragment(false);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
 
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
         mTvHome.setText(getString(R.string.home_label));
@@ -646,17 +646,17 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFragmentOpen.setFeedFragment(true);
 
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_selected_icon), null, null);
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_selected_icon), null, null);
         mTvHome.setText(getString(R.string.home_label));
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_unselected_icon), null, null);
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
 
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.VISIBLE);
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
-        mFloatActionBtn.setImageResource(R.drawable.ic_pencil);
+        mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
 
         mInvite.setVisibility(View.VISIBLE);
@@ -684,10 +684,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void communityButton() {
 
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_community_selected_icon), null, null);
+        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_selected_icon), null, null);
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.ic_home_unselected_icon), null, null);
+        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -1502,8 +1502,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             String profile = mUserPreference.get().getUserSummary().getPhotoUrl();
             if (null != profile) {
                 ivDrawerProfileCircleIcon.setCircularImage(true);
-                ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.default_img);
-                ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.default_img);
+                ivDrawerProfileCircleIcon.setPlaceHolderId(R.drawable.vector_default_img);
+                ivDrawerProfileCircleIcon.setErrorPlaceHolderId(R.drawable.vector_default_img);
                 String authorThumborUrl = CommonUtil.getThumborUri(profile, navProfileSize, navProfileSize);
                 ivDrawerProfileCircleIcon.bindImage(authorThumborUrl);
             }

@@ -73,7 +73,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -483,7 +482,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             } else if (mCurrentState == State.EXPANDED) {
                 menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
+                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_white);
                 getSupportActionBar().setHomeAsUpIndicator(upArrow);
             }
 
@@ -614,8 +613,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                     case R.id.delete:
                         final PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
 
-                        popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-                        popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+                        popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+                        popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
                         final Comment selectedComment = mCommentsAdapter.getComment(position);
                         if (selectedComment == null) return;

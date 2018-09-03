@@ -34,7 +34,7 @@
                 android:paddingLeft="@dimen/badge_user_image_padding_left"
                 android:paddingRight="@dimen/badge_user_image_padding_right"
                 android:paddingStart="@dimen/badge_user_image_padding_left"
-                android:src="@drawable/ic_badge_dialog_girl" />
+                android:src="@drawable/vector_badge_dialog_girl" />
 
         </FrameLayout>
 
@@ -100,7 +100,7 @@
             android:layout_below="@id/playstore_icon"
             android:layout_marginTop="@dimen/badge_share_sheroes_margin_top"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_sheroes_header" />
+            android:src="@drawable/vector_sheroes_header" />
 
     </RelativeLayout>
 </FrameLayout>

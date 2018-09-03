@@ -54,7 +54,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@color/white"
-                        android:drawableTop="@drawable/ic_add_community"
+                        android:drawableTop="@drawable/vector_add_community"
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:textSize="16sp" />
@@ -186,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@color/white"
-                    android:drawableTop="@drawable/mentor_empty_icon"
+                    android:drawableTop="@drawable/vector_mentor_empty_icon"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="center"
                     android:textSize="16sp"

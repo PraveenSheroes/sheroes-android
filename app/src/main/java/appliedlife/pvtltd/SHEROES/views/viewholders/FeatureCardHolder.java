@@ -91,7 +91,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textViewOperation(Context context) {
         if (CommunityFeedObj.isClosedCommunity()) {
-            tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_lock, 0);
+            tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_lock, 0);
         } else {
             tvFeaturedCommunityTime.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         }
@@ -165,7 +165,7 @@ public class FeatureCardHolder extends BaseViewHolder<FeedDetail> {
                     });
             liFeaturedCoverImage.addView(backgroundImage);
         } else {
-            liFeaturedCoverImage.setBackgroundResource(R.drawable.ic_image_holder);
+            liFeaturedCoverImage.setBackgroundResource(R.drawable.vector_image_holder);
         }
 
     }

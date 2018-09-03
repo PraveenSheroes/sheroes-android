@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/rectangle_feed_community_joined_active"
     android:drawablePadding="10dp"
-    android:drawableRight="@drawable/ic_cross_white"
+    android:drawableRight="@drawable/vector_cross_white"
     android:ellipsize="end"
     android:gravity="center"
     android:maxLines="1"
