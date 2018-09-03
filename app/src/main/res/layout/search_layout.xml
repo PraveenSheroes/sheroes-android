@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left|center"
         android:padding="@dimen/dp_size_10"
-        android:background="@drawable/ic_search_icon"
+        android:background="@drawable/vector_search_icon"
         android:importantForAccessibility="no" />
     <EditText
         android:id="@+id/et_search_edit_text"

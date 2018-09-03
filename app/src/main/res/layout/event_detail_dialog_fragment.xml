@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_size_90"
                     android:layout_marginTop="@dimen/dp_size_12"
-                    android:background="@drawable/ic_sheroes_header" />
+                    android:background="@drawable/vector_sheroes_header" />
             </android.support.v7.widget.Toolbar>
 
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>

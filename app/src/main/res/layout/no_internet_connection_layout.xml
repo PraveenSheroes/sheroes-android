@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_16"
-            android:background="@drawable/ic_no_internet" />
+            android:background="@drawable/vector_no_internet" />
 
         <TextView
             android:layout_width="wrap_content"

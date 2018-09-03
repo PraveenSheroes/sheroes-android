@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -67,7 +67,7 @@
             android:id="@+id/tv_feed_article_user_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableEnd="@drawable/ic_bookmark_in_active"
+            android:drawableEnd="@drawable/vector_bookmark_in_active"
             android:drawableRight="@drawable/ic_bookmark_in_active"
             android:paddingBottom="@dimen/feed_article_bookmark_padding_bottom"
             android:paddingEnd="@dimen/feed_article_bookmark_padding_right"
@@ -92,8 +92,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="-2dp"
-            android:drawableEnd="@drawable/ic_menu_dashboard"
-            android:drawableRight="@drawable/ic_menu_dashboard"
+            android:drawableEnd="@drawable/vector_menu_dashboard"
+            android:drawableRight="@drawable/vector_menu_dashboard"
             android:paddingBottom="@dimen/feed_article_user_menu_padding_bottom"
             android:paddingEnd="@dimen/feed_article_user_menu_padding_right"
             android:paddingLeft="@dimen/feed_article_user_menu_padding_left"
@@ -107,7 +107,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/feed_article_image_height"
         android:layout_marginTop="@dimen/feed_article_image_margin_top"
-        android:background="@drawable/ic_image_holder"
+        android:background="@drawable/vector_image_holder"
         android:orientation="vertical" />
 
     <TextView
@@ -185,8 +185,8 @@
             android:id="@+id/tv_feed_article_reaction1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_likes_heart"
-            android:drawableStart="@drawable/ic_likes_heart" />
+            android:drawableLeft="@drawable/vector_likes_heart"
+            android:drawableStart="@drawable/vector_likes_heart" />
 
         <TextView
             android:id="@+id/tv_feed_article_total_reactions"
@@ -240,9 +240,9 @@
             android:id="@+id/tv_feed_article_user_reaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_heart_in_active"
+            android:drawableLeft="@drawable/vector_heart_in_active"
             android:drawablePadding="@dimen/eed_article_user_reaction_drawable_padding"
-            android:drawableStart="@drawable/ic_heart_in_active"
+            android:drawableStart="@drawable/vector_heart_in_active"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:padding="@dimen/eed_article_user_reaction_padding"
@@ -258,9 +258,9 @@
             android:layout_alignBottom="@+id/tv_feed_article_user_comment"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_share_card"
+            android:drawableLeft="@drawable/vector_share_card"
             android:drawablePadding="@dimen/article_user_share_drawable_padding"
-            android:drawableStart="@drawable/ic_share_card"
+            android:drawableStart="@drawable/vector_share_card"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:paddingBottom="@dimen/feed_article_user_padding"
@@ -277,9 +277,9 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tv_feed_article_user_reaction"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/ic_comment_icon"
+            android:drawableLeft="@drawable/vector_comment_icon"
             android:drawablePadding="@dimen/feed_article_comment_drawable_padding"
-            android:drawableStart="@drawable/ic_comment_icon"
+            android:drawableStart="@drawable/vector_comment_icon"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:padding="@dimen/feed_article_user_comment_padding"
             android:text="@string/comment"
@@ -322,7 +322,7 @@
                     android:layout_marginLeft="@dimen/feed_article_author_verified_icon_margin"
                     android:layout_marginStart="@dimen/feed_article_author_verified_icon_margin"
                     android:layout_marginTop="@dimen/feed_article_author_verified_icon_margin"
-                    android:background="@drawable/ic_verified"
+                    android:background="@drawable/vector_verified"
                     android:visibility="gone" />
             </FrameLayout>
 
@@ -394,8 +394,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="end"
-                android:drawableEnd="@drawable/ic_menu_dashboard"
-                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:drawableEnd="@drawable/vector_menu_dashboard"
+                android:drawableRight="@drawable/vector_menu_dashboard"
                 android:paddingBottom="@dimen/feed_article_user_comment_post_menu_padding_bottom"
                 android:paddingEnd="@dimen/feed_article_user_comment_post_menu_padding_right"
                 android:paddingLeft="@dimen/feed_article_user_comment_post_menu_padding_left"
@@ -417,8 +417,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:drawableEnd="@drawable/ic_menu_dashboard"
-                android:drawableRight="@drawable/ic_menu_dashboard"
+                android:drawableEnd="@drawable/vector_menu_dashboard"
+                android:drawableRight="@drawable/vector_menu_dashboard"
                 android:gravity="end"
                 android:padding="@dimen/feed_article_spam_comment_menu_padding"
                 android:visibility="gone" />
@@ -442,7 +442,7 @@
                         android:layout_marginLeft="@dimen/feed_article_spam_info_margin"
                         android:layout_marginStart="@dimen/feed_article_spam_info_margin"
                         android:layout_marginTop="@dimen/feed_article_spam_info_margin"
-                        android:src="@drawable/ic_spam_post_message" />
+                        android:src="@drawable/vector_spam_post_message" />
 
                     <TextView
                         android:id="@+id/tv_review_description"
@@ -493,7 +493,7 @@
                 android:layout_marginLeft="@dimen/feed_article_login_user_icon_verified_margin"
                 android:layout_marginStart="@dimen/feed_article_login_user_icon_verified_margin"
                 android:layout_marginTop="@dimen/feed_article_login_user_icon_verified_margin"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 

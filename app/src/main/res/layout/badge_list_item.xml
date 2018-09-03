@@ -30,7 +30,7 @@
         android:layout_marginRight="@dimen/badge_closet_count_margin_right"
         android:textColor="@color/earned_badge_count"
         android:layout_marginTop="@dimen/badge_closet_count_margin_top"
-        tools:background="@drawable/ic_active_badge_blank" />
+        tools:background="@drawable/vector_active_badge_blank" />
 
     <LinearLayout
         android:layout_width="match_parent"

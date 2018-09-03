@@ -62,7 +62,7 @@
                     android:id="@+id/community_icon"
                     android:layout_width="@dimen/dp_community_icon_width"
                     android:layout_height="@dimen/dp_community_icon_height"
-                    tools:src="@drawable/ic_champion_avatar" />
+                    tools:src="@drawable/vector_champion_avatar" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -82,21 +82,19 @@
                         android:maxLines="@integer/int_value_for_line_1"
                         android:ellipsize="end"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_15"
-                        tools:text="Health Tips" />
+                        android:textSize="@dimen/sp_size_15"/>
 
                     <TextView
                         android:id="@+id/community_member_count"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawableLeft="@drawable/ic_member_icon"
-                        android:drawableStart="@drawable/ic_member_icon"
+                        android:drawableLeft="@drawable/vector_member_icon"
+                        android:drawableStart="@drawable/vector_member_icon"
                         android:drawablePadding="@dimen/dp_size_5"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:maxLines="@integer/int_value_for_line_1"
                         android:textColor="@color/recent_post_comment"
-                        android:textSize="@dimen/sp_size_14"
-                        tools:text="47889 Members" />
+                        android:textSize="@dimen/sp_size_14" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

@@ -16,7 +16,6 @@ import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -712,18 +711,18 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mCommentLike.setText(Integer.toString(lastComment.likeCount));
         }
         if (lastComment.isLiked) {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active_16dp, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active_16dp, 0, 0, 0);
         } else {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_inactive_16dp, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_inactive_16dp, 0, 0, 0);
         }
     }
 
 
     private void invalidatePostLike(UserPostSolrObj userPostSolrObj) {
         if (mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT) {
-            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
         } else {
-            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
         }
 
     }
@@ -758,12 +757,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
                 mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onUserPostUnLiked(mUserPostObj);
             } else {
                 mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onUserPostLiked(mUserPostObj);
             }
             String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, mUserPostObj.getNoOfLikes());

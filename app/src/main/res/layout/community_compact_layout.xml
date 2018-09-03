@@ -63,7 +63,7 @@
                     android:layout_height="@dimen/dp_community_icon_height"
                     android:layout_marginLeft="@dimen/dp_size_2"
                     android:layout_marginStart="@dimen/dp_size_2"
-                    tools:src="@drawable/ic_champion_avatar" />
+                    tools:src="@drawable/vector_champion_avatar" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
                             android:id="@+id/icon"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:src="@drawable/ic_member_icon" />
+                            android:src="@drawable/vector_member_icon" />
 
                         <TextView
                             android:id="@+id/community_member_count"

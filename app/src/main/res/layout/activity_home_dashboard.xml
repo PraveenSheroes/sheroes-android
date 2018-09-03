@@ -70,7 +70,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/dp_size_20"
-                android:src="@drawable/ic_spinner_icon" />
+                android:src="@drawable/vector_spinner_icon" />
         </RelativeLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -90,7 +90,7 @@
         android:layout_marginBottom="@dimen/dp_size_65"
         android:layout_marginRight="@dimen/dp_size_20"
         android:visibility="gone"
-        android:src="@drawable/ic_pencil"
+        android:src="@drawable/vector_pencil"
         app:backgroundTint="@color/email" />
 
     <include

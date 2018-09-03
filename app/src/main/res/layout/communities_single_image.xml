@@ -24,7 +24,7 @@
             android:id="@+id/tv_community_time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_timer_icon"
+            android:drawableLeft="@drawable/vector_timer_icon"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_size_12"
