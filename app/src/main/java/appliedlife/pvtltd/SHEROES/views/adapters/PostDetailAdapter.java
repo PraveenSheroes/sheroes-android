@@ -15,10 +15,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.CommentLoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 
 /**
@@ -33,6 +35,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     private static final int TYPE_LOADER = 1;
     private static final int TYPE_USER_POST = 2;
     private static final int TYPE_COMMENT = 3;
+    private static final int TYPE_POLL = 4;
     private boolean showLoader = false;
     private boolean hasMoreItem = false;
     private int loaderPostion;
@@ -54,6 +57,9 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TYPE_USER_POST:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_post, parent, false);
                 return new UserPostHolder(view, mPostDetailCallback);
+            case TYPE_POLL:
+                View viewPoll = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_poll_card_detail_holder, parent, false);
+                return new FeedPollCardHolder(viewPoll, mPostDetailCallback);
             case TYPE_COMMENT:
                 View viewAlbum = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_new_layout, parent, false);
                 return new CommentNewViewHolder(viewAlbum, mCommentCallback);
@@ -73,6 +79,11 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 UserPostHolder userPostHolder = (UserPostHolder) holder;
                 FeedDetail feedDetail = (FeedDetail) mFeedDetail.get(position);
                 userPostHolder.bindData(feedDetail, mContext, position);
+                break;
+            case TYPE_POLL:
+                FeedPollCardHolder feedPollCardHolder = (FeedPollCardHolder) holder;
+                PollSolarObj pollSolarObj = (PollSolarObj) mFeedDetail.get(position);
+                feedPollCardHolder.bindData(pollSolarObj, mContext, position);
                 break;
             case TYPE_COMMENT:
                 CommentNewViewHolder commentNewViewHolder = (CommentNewViewHolder) holder;
@@ -109,6 +120,9 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         BaseResponse feedDetail = mFeedDetail.get(position);
         if (feedDetail instanceof UserPostSolrObj) {
             return TYPE_USER_POST;
+        }
+        if (feedDetail instanceof PollSolarObj) {
+            return TYPE_POLL;
         }
         if (feedDetail instanceof Comment) {
             return TYPE_COMMENT;

@@ -13,6 +13,7 @@ import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.isNotNullOrEmptyString;
 
@@ -24,13 +25,24 @@ public class AnalyticsManager {
     //region private variable & constants
     private static final String TAG = "AnalyticsManager";
     private static Context sAppContext = null;
+    private static AnalyticsManager sInstance;
     //endregion
 
     //region private method
     private static boolean canSend() {
         return sAppContext != null;
     }
+
+    private AnalyticsManager() {
+    }
     //endregion
+
+    public static synchronized AnalyticsManager getInstance() {
+        if (sInstance == null) {
+            sInstance = new AnalyticsManager();
+        }
+        return sInstance;
+    }
 
     // region Individual Analytics Initializers
 
@@ -174,6 +186,18 @@ public class AnalyticsManager {
             return;
         }
         MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName);
+    }
+    public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName,long pollOptionId) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackPollActionEvent(event, feedDetail, screenName,pollOptionId);
+    }
+    public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName) {
+        if (!canSend()) {
+            return;
+        }
+        MixpanelHelper.trackPollActionEvent(event, feedDetail, screenName);
     }
     public static void trackPostAction(Event event, FeedDetail feedDetail, String screenName,HashMap<String, Object> properties) {
         if (!canSend()) {

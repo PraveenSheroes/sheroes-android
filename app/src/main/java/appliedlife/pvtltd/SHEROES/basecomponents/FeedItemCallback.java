@@ -10,8 +10,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 
 /**
@@ -27,13 +29,15 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPostShared(FeedDetail feedDetail);
 
-    void onUserPostClicked(UserPostSolrObj mUserPostObj);
+    void onUserPostClicked(FeedDetail feedDetail);
 
     void onUserPostCommentClicked(UserPostSolrObj userPostObj);
 
     void onUserPostImageClicked(UserPostSolrObj userPostObj);
 
     void onPostMenuClicked(UserPostSolrObj userPostObj, View tvFeedCommunityPostUserMenu);
+
+    void onPollMenuClicked(PollSolarObj pollSolarObj, View tvFeedCommunityPollMenu);
 
     void onCommentMenuClicked(UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu);
 
@@ -43,11 +47,17 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onUserPostLiked(UserPostSolrObj userPostObj);
 
+    void onPollLiked(PollSolarObj pollSolarObj);
+
+    void onPollVote(PollSolarObj pollSolarObj,PollOptionModel pollOptionModel);
+
     void onUserPostUnLiked(UserPostSolrObj userPostObj);
 
-    void onChampionProfileClicked(UserPostSolrObj userPostObj, int requestCodeForMentorProfileDetail);
+    void onPollUnLiked(PollSolarObj pollSolarObj);
 
-    void onCommunityTitleClicked(UserPostSolrObj userPostObj);
+    void onChampionProfileClicked(FeedDetail feedDetail, int requestCodeForMentorProfileDetail);
+
+    void onCommunityTitleClicked(FeedDetail feedDetail);
 
     void userCommentLikeRequest(UserPostSolrObj comment, boolean isLikedAction, int adapterPosition);
 
@@ -114,4 +124,5 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName);
 
     void onLeaderBoardUserClick(long userId, String screenName);
+
 }

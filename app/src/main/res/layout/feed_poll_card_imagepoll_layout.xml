@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/li_feed_imagepoll_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_imagepoll_left_container"
+        android:layout_width="@dimen/feed_imagepoll_width"
+        android:layout_height="wrap_content">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
+            android:id="@+id/iv_feed_image_poll_left"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_imagepoll_height"
+            app:riv_border_width="@dimen/image_poll_corner_width"
+            app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_bottom_left="0dp"
+            app:riv_corner_radius_bottom_right="0dp" />
+
+        <ProgressBar
+            android:id="@+id/pb_imagepoll_percent_left"
+            style="@style/ImagePollProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_imagepoll_progress_height"
+            android:alpha=".7"
+            android:theme="@style/ImagePollProgressBar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_left" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_percent_count_left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/feed_imagepoll_progress_text_margin"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:paddingStart="@dimen/feed_imagepoll_progress_text_margin"
+            android:paddingLeft="@dimen/feed_imagepoll_progress_text_margin"
+            android:textColor="@color/white"
+            android:textSize="@dimen/feed_imagepoll_progress_count_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_left" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_name_left"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_poll_text_height"
+            android:background="@drawable/rectangle_image_poll_bottom_border"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:paddingRight="@dimen/feed_imagepoll_name_left_padding_right"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/feed_imagepoll_name_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_left" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_imagepoll_right_container"
+        android:layout_width="@dimen/feed_imagepoll_width"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_imagepoll_margin_left"
+        android:layout_marginStart="@dimen/feed_imagepoll_margin_left">
+
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.RoundedImageView
+            android:id="@+id/iv_feed_image_poll_right"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_imagepoll_height"
+            app:riv_border_width="@dimen/image_poll_corner_width"
+            app:riv_corner_radius_top_left="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_top_right="@dimen/image_poll_corner_radius"
+            app:riv_corner_radius_bottom_left="0dp"
+            app:riv_corner_radius_bottom_right="0dp" />
+
+        <ProgressBar
+            android:id="@+id/pb_imagepoll_percent_right"
+            style="@style/ImagePollProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_imagepoll_progress_height"
+            android:alpha=".7"
+            android:theme="@style/ImagePollProgressBar"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_right" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_percent_count_right"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/feed_imagepoll_progress_text_margin"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:paddingStart="@dimen/feed_imagepoll_progress_text_margin"
+            android:paddingLeft="@dimen/feed_imagepoll_progress_text_margin"
+            android:textColor="@color/white"
+            android:textSize="@dimen/feed_imagepoll_progress_count_text_size"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_feed_image_poll_right" />
+
+        <TextView
+            android:id="@+id/tv_imagepoll_name_right"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/image_poll_text_height"
+            android:background="@drawable/rectangle_image_poll_bottom_border"
+            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:gravity="center"
+            android:paddingRight="@dimen/feed_imagepoll_name_left_padding_right"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/feed_imagepoll_name_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_right" />
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

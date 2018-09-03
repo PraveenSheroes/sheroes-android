@@ -1640,7 +1640,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     boolean isPostDeleted = false;
                     FeedDetail feedDetailObj = null;
                     if (AppUtils.isFragmentUIActive(mFragment)) {
-                        Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        Parcelable parcelable = intent.getParcelableExtra(FeedDetail.FEED_COMMENTS);
                         if (parcelable != null) {
                             UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
                             isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
