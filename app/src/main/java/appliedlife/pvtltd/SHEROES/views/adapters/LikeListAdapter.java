@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,6 +82,9 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
 
         @Bind(R.id.user_name)
         public TextView userName;
+
+        @Bind(R.id.user_badge)
+        public ImageView userBadge;
         // endregion
 
         public LikeListItemViewHolder(View itemView) {
@@ -104,6 +108,10 @@ public class LikeListAdapter extends RecyclerView.Adapter<LikeListAdapter.LikeLi
                             .into(userPic);
                 }
                 userName.setText(comment.getParticipantName());
+
+                CommonUtil.showHideUserBadge(mContext, comment.isAnonymous(), userBadge, comment.isBadgeShown(), comment.getBadgeUrl());
+            } else {
+                userBadge.setVisibility(View.GONE);
             }
         }
     }

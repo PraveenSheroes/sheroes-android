@@ -57,6 +57,15 @@ public class ConfigData {
     @SerializedName("intermediate_tick_index")
     public  int intermediateStartIndex = 5;
 
+    @SerializedName("leaderboard_top_user_count")
+    public  int leaderBoardTopUserCount = 10;
+
+    @SerializedName("leaderboard_user_rank_threshold")
+    public  int leaderBoardUserRankThreshold = 999;
+
+    @SerializedName("leaderboard_exceed_user_rank_")
+    public String userRankExceedLimitText =  "1K+";
+
     @SerializedName("promoCardUrl")
     public String mPromoCardUrl = "Quiz";
 

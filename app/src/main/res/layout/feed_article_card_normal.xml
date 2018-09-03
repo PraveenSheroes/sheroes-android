@@ -324,6 +324,14 @@
                     android:layout_marginTop="@dimen/feed_article_author_verified_icon_margin"
                     android:background="@drawable/vector_verified"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/user_badge"
+                    android:layout_width="@dimen/article_last_comment_author_pic_size"
+                    android:layout_height="@dimen/article_last_comment_author_pic_size"
+                    android:layout_gravity="end|bottom"
+                    android:visibility="gone" />
+
             </FrameLayout>
 
             <LinearLayout

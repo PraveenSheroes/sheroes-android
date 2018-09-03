@@ -69,6 +69,15 @@
                     android:layout_gravity="end|bottom"
                     android:background="@drawable/vector_verified"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/user_badge"
+                    android:layout_width="@dimen/post_user_badge_icon"
+                    android:layout_height="@dimen/post_user_badge_icon"
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_badge_golden"
+                    android:visibility="gone" />
+
             </FrameLayout>
 
             <LinearLayout
@@ -475,6 +484,13 @@
                     android:layout_marginLeft="@dimen/dp_size_15"
                     android:layout_marginTop="@dimen/dp_size_15"
                     android:background="@drawable/vector_verified"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/last_comment_user_badge"
+                    android:layout_width="@dimen/last_comment_user_badge_icon"
+                    android:layout_height="@dimen/last_comment_user_badge_icon"
+                    android:layout_gravity="end|bottom"
                     android:visibility="gone" />
             </FrameLayout>
 
