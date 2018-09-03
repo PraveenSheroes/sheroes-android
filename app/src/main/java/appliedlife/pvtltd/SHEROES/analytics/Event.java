@@ -9,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
  * Note:
  * 1. Always Capitalize Words
  * 2. Use Past Tense
- *
  */
 public enum Event {
 
@@ -27,33 +26,25 @@ public enum Event {
     STORY_SHARED(AnalyticsEventType.STORY, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     POST_SHARED(AnalyticsEventType.POST, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     ARTICLE_SHARED(AnalyticsEventType.ARTICLE, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     POST_SHARED_CLICKED(AnalyticsEventType.POST, "Shared Clicked") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
@@ -67,12 +58,9 @@ public enum Event {
     POST_CREATED(AnalyticsEventType.POST, "Created") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
-
     POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
 
     //endregion
@@ -81,9 +69,7 @@ public enum Event {
     REPLY_CREATED(AnalyticsEventType.REPLY, "Created") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     REPLY_EDITED(AnalyticsEventType.REPLY, "Edited"),
@@ -92,9 +78,7 @@ public enum Event {
     REPLY_LIKED(AnalyticsEventType.REPLY, "Liked") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     REPLY_UNLIKED(AnalyticsEventType.REPLY, "Unliked"),
@@ -115,9 +99,7 @@ public enum Event {
     HELPLINE_MESSAGE_CREATED(AnalyticsEventType.HELPLINE_MESSAGE, "Created") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     //endregion
@@ -127,9 +109,7 @@ public enum Event {
     CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     CHALLENGE_SHARED_CLICKED(AnalyticsEventType.CHALLENGE, "Shared Clicked"),
@@ -187,9 +167,7 @@ public enum Event {
     PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     PROFILE_PIC_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Picture Edit Clicked"),
@@ -257,17 +235,13 @@ public enum Event {
     POLL_SHARED(AnalyticsEventType.POLL, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
     POLL_CREATED(AnalyticsEventType.POLL, "Created") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                    analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                    analyticsProvider == AnalyticsProvider.APPSFLYER;
+            return getAnalyticsProviderStatus(analyticsProvider);
         }
     },;
     //endregion
@@ -292,4 +266,10 @@ public enum Event {
         type.addProperties(properties);
     }
     // endregion
+
+    boolean getAnalyticsProviderStatus(AnalyticsProvider analyticsProvider) {
+        return analyticsProvider == AnalyticsProvider.FACEBOOK ||
+                analyticsProvider == AnalyticsProvider.MIXPANEL ||
+                analyticsProvider == AnalyticsProvider.APPSFLYER;
+    }
 }
