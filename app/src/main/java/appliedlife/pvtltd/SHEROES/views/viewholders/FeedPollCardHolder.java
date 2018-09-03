@@ -450,7 +450,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             String authorThumborUrl = CommonUtil.getThumborUri(authorImageUrl, authorPicSizeFourty, authorPicSizeFourty);
             mIvFeedPollCircleIcon.bindImage(authorThumborUrl);
         } else {
-            mIvFeedPollCircleIcon.setBackgroundResource(R.drawable.default_img);
+            mIvFeedPollCircleIcon.setBackgroundResource(R.drawable.vector_default_img);
         }
 
         if (mPollSolarObj.isAuthorMentor()) {
