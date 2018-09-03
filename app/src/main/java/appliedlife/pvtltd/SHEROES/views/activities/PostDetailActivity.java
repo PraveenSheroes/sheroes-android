@@ -420,16 +420,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (feedDetail instanceof UserPostSolrObj) {
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                 if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(userPostSolrObj.getPostCommunityName() + " post");
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title,userPostSolrObj.getPostCommunityName()));
                 } else {
-                    mTitleToolbar.setText(userPostSolrObj.getAuthorName() + "'s" + " post");
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple,userPostSolrObj.getAuthorName()));
                 }
             } else if (feedDetail instanceof PollSolarObj) {
                 PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
                 if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(pollSolarObj.getPollCommunityName() + " post");
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title,pollSolarObj.getPollCommunityName()));
                 } else {
-                    mTitleToolbar.setText(pollSolarObj.getAuthorName() + "'s" + " post");
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple,pollSolarObj.getAuthorName()));
                 }
             }
         }

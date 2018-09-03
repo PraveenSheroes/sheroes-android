@@ -13,7 +13,7 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/suggestions_list"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/suggestion_list_height"
         android:background="@drawable/user_tagg_border"
         android:visibility="gone" />
 
@@ -31,18 +31,18 @@
             android:layout_marginStart="@dimen/post_anonymous_check_margin"
             android:defaultValue="true"
             android:text="@string/post_anonymous"
-            android:textColor="#878787"
-            android:textSize="14sp" />
+            android:textColor="@color/gray_light"
+            android:textSize="@dimen/anonymous_select_text_size" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="1dp"
+            android:layout_height="@dimen/bottom_sheet_line_height"
             android:layout_below="@+id/anonymous_select"
             android:layout_marginEnd="@dimen/post_anonymous_margin"
             android:layout_marginLeft="@dimen/post_anonymous_margin"
             android:layout_marginRight="@dimen/post_anonymous_margin"
             android:layout_marginStart="@dimen/post_anonymous_margin"
-            android:layout_marginTop="@dimen/dp_size_12"
+            android:layout_marginTop="@dimen/post_anonymous_margin_top"
             android:background="@color/on_board_work" />
     </RelativeLayout>
 
@@ -65,7 +65,7 @@
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/add_photo"
             android:textColor="@color/comment_text"
-            android:textSize="14sp"
+            android:textSize="@dimen/tv_add_photo_lable_text_size"
             android:visibility="gone" />
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
@@ -75,8 +75,8 @@
             android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:paddingBottom="@dimen/add_image_padding"
+            android:paddingTop="@dimen/add_image_padding">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -94,7 +94,7 @@
                 android:text="@string/photo_video"
                 android:textAllCaps="true"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/phot_poll_lable_text_size" />
+                android:textSize="@dimen/photo_poll_lable_text_size" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
 
 
@@ -105,8 +105,8 @@
             android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:paddingBottom="@dimen/camera_padding_bottom"
+            android:paddingTop="@dimen/camera_padding_top">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                 android:gravity="center"
                 android:text="@string/camera"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/phot_poll_lable_text_size" />
+                android:textSize="@dimen/photo_poll_lable_text_size" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
@@ -133,8 +133,8 @@
             android:layout_marginLeft="@dimen/photo_poll_icon_container_margin"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
             android:orientation="horizontal"
-            android:paddingBottom="10dp"
-            android:paddingTop="10dp">
+            android:paddingBottom="@dimen/poll_survey_padding"
+            android:paddingTop="@dimen/poll_survey_padding">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -152,7 +152,7 @@
                 android:text="@string/poll"
                 android:textAllCaps="true"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/phot_poll_lable_text_size" />
+                android:textSize="@dimen/photo_poll_lable_text_size" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
     </LinearLayout>
 

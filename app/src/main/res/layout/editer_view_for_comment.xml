@@ -11,13 +11,13 @@
         android:inputType="textMultiLine|textShortMessage|textCapSentences"
         android:scrollbars="vertical"
         android:focusable="true"
-        android:paddingLeft="@dimen/dp_size_8"
-        android:paddingRight="@dimen/dp_size_8"
+        android:paddingLeft="@dimen/text_editor_comment_padding"
+        android:paddingRight="@dimen/text_editor_comment_padding"
         android:textCursorDrawable="@drawable/cursor_line"
         android:focusableInTouchMode="true"
         android:scrollHorizontally="false"
-        android:minHeight="48dp"
+        android:minHeight="@dimen/text_editor_comment_min_height"
         android:textColor="@color/black"
-        android:textColorHint="#90949c"
-        android:textSize="14sp" />
+        android:textColorHint="@color/posted_in"
+        android:textSize="@dimen/text_editor_comment_text_Size" />
 </merge>

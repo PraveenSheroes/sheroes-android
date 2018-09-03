@@ -52,8 +52,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagCol
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
-    private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
-    private static final String RIGHT_HTML_TAG = "</font>";
+    private static final int POLL_ADMIN_ID =18;
     //region Inject variables
     @Inject
     DateUtil mDateUtil;
@@ -311,7 +310,6 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 }
             });
 
-
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
             params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
             textPollInputLayout.setLayoutParams(params);
@@ -332,7 +330,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 TextView tvTextPollDesc = pollLayout.findViewById(R.id.tv_text_poll_desc);
                 ImageView ivPercentVerified = pollLayout.findViewById(R.id.iv_percent_verified);
                 pbPollPercent.setProgress(pollOptionModel.getTotalNoOfVotesPercent());
-                tvPollPercentNumber.setText(pollOptionModel.getTotalNoOfVotesPercent() + "%");
+                tvPollPercentNumber.setText(pollOptionModel.getTotalNoOfVotesPercent()+mContext.getString(R.string.poll_result_percent));
                 tvTextPollDesc.setText(pollOptionModel.getDescription());
                 if (pollOptionModel.isVoted()) {
                     ivPercentVerified.setVisibility(View.VISIBLE);
@@ -464,7 +462,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             String feedTitle;
             String feedCommunityName;
             String createdIn;
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == POLL_ADMIN_ID) {
                 feedTitle = mPollSolarObj.getPollCommunityName();
                 feedCommunityName = "";
                 createdIn = mContext.getString(R.string.created_poll);

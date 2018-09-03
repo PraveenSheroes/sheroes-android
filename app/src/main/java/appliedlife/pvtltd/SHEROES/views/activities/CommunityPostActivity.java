@@ -167,6 +167,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final String TYPE_TEXT = "text/plain";
     public static final String TYPE_FILE = "file";
     public static final int MAX_IMAGE = 5;
+    public static final int POLL_OPTION_DEFAULT_COUNT=2;
+    public static final int POLL_OPTION_MAX_COUNT=8;
     private boolean mIsPostScheduled = false;
     private boolean mStatusBarColorEmpty = false;
     private Dialog mScheduledConfirmationDialog;
@@ -515,21 +517,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearAddImage.setLayoutParams(photo);
         mRippleViewLinearAddImage.setGravity(Gravity.CENTER);
 
-
         LinearLayout.LayoutParams camera = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         camera.setMargins(mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearCamera.setLayoutParams(camera);
-
         mRippleViewLinearCamera.setGravity(Gravity.CENTER);
-
 
         LinearLayout.LayoutParams pollSurvey = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         pollSurvey.setMargins(mPhotoCameraPollCollapseImageLeftRight, mPhotoCameraPollImageTopBottom, 0, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearPollSurvey.setLayoutParams(pollSurvey);
-
         mRippleViewLinearPollSurvey.setGravity(Gravity.CENTER);
-
-
     }
 
     private void bottomSheetExpanded() {
@@ -545,18 +541,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRippleViewLinearAddImage.setLayoutParams(photo);
         mRippleViewLinearAddImage.setGravity(Gravity.START);
 
-
         LinearLayout.LayoutParams camera = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         camera.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearCamera.setLayoutParams(camera);
-
         mRippleViewLinearCamera.setGravity(Gravity.START);
-
 
         LinearLayout.LayoutParams pollSurvey = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
         pollSurvey.setMargins(mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom, mPhotoCameraPollImageLeftRight, mPhotoCameraPollImageTopBottom);
         mRippleViewLinearPollSurvey.setLayoutParams(pollSurvey);
-
         mRippleViewLinearPollSurvey.setGravity(Gravity.START);
     }
 
@@ -1847,7 +1839,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @OnClick({R.id.iv_add_poll_img, R.id.tv_add_poll_text})
     public void onAddMoreOptionClicked() {
-        if (mPollOptionCount < 8) {
+        if (mPollOptionCount < POLL_OPTION_MAX_COUNT) {
             mPollOptionCount++;
             addTextPollOptionView();
         }
@@ -2074,6 +2066,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mImageList.clear();
         etView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
+        etView.getEditText().getText().clear();
         etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
@@ -2084,7 +2077,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
-                for (int i = 0; i <= 1; i++) {
+                for (int i = 0; i <POLL_OPTION_DEFAULT_COUNT; i++) {
                     mPollOptionCount++;
                     addTextPollOptionView();
                 }
@@ -2132,7 +2125,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final LinearLayout liTextPollRow = pollLayout.findViewById(R.id.li_text_poll_row);
         mEtTextPoll = pollLayout.findViewById(R.id.et_text_poll);
         mEtTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount);
-        if (mPollOptionCount > 2) {
+        //When user select more then two option the cross icon will appear
+        if (mPollOptionCount > POLL_OPTION_DEFAULT_COUNT) {
             final ImageView ivDeleteTextPoll = pollLayout.findViewById(R.id.iv_delete_text_poll);
             ivDeleteTextPoll.setVisibility(View.VISIBLE);
             ivDeleteTextPoll.setOnClickListener(new View.OnClickListener() {
@@ -2161,7 +2155,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void addOptionButtonView() {
-        if (mPollOptionCount <= 7) {
+        if (mPollOptionCount < POLL_OPTION_MAX_COUNT) {
             mAddPollImg.setVisibility(View.VISIBLE);
             mAddPollText.setVisibility(View.VISIBLE);
         } else {
@@ -2176,9 +2170,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_image_view_layout, null);
         final LinearLayout liImagePollRow = pollLayout.findViewById(R.id.li_image_poll_view);
         mEtImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
-        mEtImagePollLeft.setHint(getString(R.string.poll_option) + 1);
+        mEtImagePollLeft.setHint(getString(R.string.poll_option,1));
         mEtImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
-        mEtImagePollRight.setHint(getString(R.string.poll_option) + 2);
+        mEtImagePollRight.setHint(getString(R.string.poll_option,2));
         mIvImagePollLeft = pollLayout.findViewById(R.id.iv_image_poll_left);
         mIvImagePollLeft.setTag(false);
         mIvImagePollLeft.setOnClickListener(new View.OnClickListener() {

@@ -325,8 +325,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 .subscribe(new DisposableObserver<UpLoadImageResponse>() {
                     @Override
                     public void onComplete() {
-
-
                     }
 
                     @Override

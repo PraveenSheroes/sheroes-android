@@ -259,7 +259,9 @@ public enum Event {
     }
 
     public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-        return analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS || analyticsProvider == AnalyticsProvider.MIXPANEL || analyticsProvider == AnalyticsProvider.APPSFLYER;
+        return analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS
+                || analyticsProvider == AnalyticsProvider.MIXPANEL
+                || analyticsProvider == AnalyticsProvider.APPSFLYER;
     }
 
     public void addProperties(Map<String, Object> properties) {

@@ -647,6 +647,9 @@
     <string name="home_label">Home</string>
     <string name="youtube">Youtube.com</string>
     <string name="how_do_i_become_a_supersheroes">How do I become a SuperSheroes?</string>
+    <string name="poll_option">Option %1$d</string>
+    <string name="post_detail_toolbar_title">%1$s post</string>
+    <string name="post_detail_toolbar_title_multiple">%1$s\'s post</string>
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
     <string name="badge_active_period_date_text">Won this week : %1$s - %2$s</string>
@@ -691,7 +694,6 @@
     <string name="photo_video">Photo/Video</string>
     <string name="choose_poll">Choose your type of poll</string>
     <string name="title.create_poll">Create a Poll</string>
-    <string name="poll_option">Option</string>
     <string name="poll_option_text">Add more options</string>
     <string name="poll_option_end_text">Poll ends:</string>
     <string-array name="poll_time">
@@ -706,7 +708,7 @@
         <item>7</item>
         <item>30</item>
     </integer-array>
-    <string name="created_poll">created a poll</string>
+    <string name="created_poll">created a poll </string>
     <string name="percent_vote">% vote</string>
     <string name="ends_in">Ends in:</string>
     <string name="ended">Poll ended</string>
@@ -725,6 +727,6 @@
     <string name="list_comment_cancel">Cancel</string>
     <string name="leaderboard_rank_unavailable">--</string>
     <string name="edit">Edit</string>
-
+    <string name="poll_result_percent">%</string>
 
 </resources>
