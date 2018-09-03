@@ -169,7 +169,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_LEADER:
                 LeaderBoardViewHolder leaderBoardViewHolder = (LeaderBoardViewHolder) holder;
                 LeaderBoardUserSolrObj leaderBoardUserSolrObj = (LeaderBoardUserSolrObj) mFeedDetailList.get(position);
-                leaderBoardViewHolder.totalNumberOfUsersInLeaderBoard(mFeedDetailList.size());
                 leaderBoardViewHolder.bindData(leaderBoardUserSolrObj, mContext, position);
                 break;
 

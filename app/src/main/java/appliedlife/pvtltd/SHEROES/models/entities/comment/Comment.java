@@ -104,6 +104,14 @@ public class Comment extends BaseResponse{
     @Expose
     private List<MentionSpan> commentUserMentionList;
 
+    @SerializedName("solr_ignore_show_author_profile_badge")
+    @Expose
+    private boolean isBadgeShown;
+
+    @SerializedName("solr_ignore_author_profile_badge_url")
+    @Expose
+    private String badgeUrl;
+
     public boolean isEdit() {
         return isEdit;
     }
@@ -321,5 +329,21 @@ public class Comment extends BaseResponse{
 
     public void setHasCommentMention(boolean hasCommentMention) {
         this.hasCommentMention = hasCommentMention;
+    }
+
+    public boolean isBadgeShown() {
+        return isBadgeShown;
+    }
+
+    public void setBadgeShown(boolean badgeShown) {
+        isBadgeShown = badgeShown;
+    }
+
+    public String getBadgeUrl() {
+        return badgeUrl;
+    }
+
+    public void setBadgeUrl(String badgeUrl) {
+        this.badgeUrl = badgeUrl;
     }
 }

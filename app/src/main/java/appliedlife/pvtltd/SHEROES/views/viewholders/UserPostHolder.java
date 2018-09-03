@@ -80,6 +80,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.author_pic_icon)
     CircleImageView mAuthorIcon;
 
+    @Bind(R.id.bade_icon)
+    ImageView mBadgeIcon;
+
     @Bind(R.id.author_verified_icon)
     ImageView mAuthorVerifiedIcon;
 
@@ -365,6 +368,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     mAuthorVerifiedIcon.setVisibility(View.GONE);
                 }
+                CommonUtil.showHideUserBadge(mContext, mUserPostObj.isAnonymous(), mBadgeIcon, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {

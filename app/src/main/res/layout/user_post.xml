@@ -110,6 +110,13 @@
                     android:layout_gravity="end|bottom"
                     android:background="@drawable/vector_verified"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/bade_icon"
+                    android:layout_width="@dimen/user_post_badge_icon"
+                    android:layout_height="@dimen/user_post_badge_icon"
+                    android:layout_gravity="end|bottom"
+                    android:visibility="gone" />
             </FrameLayout>
 
             <LinearLayout

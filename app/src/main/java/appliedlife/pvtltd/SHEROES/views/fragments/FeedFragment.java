@@ -1316,7 +1316,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if (leaderBoardUserSolrObj != null) {
+        if (leaderBoardUserSolrObj != null && getActivity()!=null && !getActivity().isFinishing()) {
             SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
         }
     }

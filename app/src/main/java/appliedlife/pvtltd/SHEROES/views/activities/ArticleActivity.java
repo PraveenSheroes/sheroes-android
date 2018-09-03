@@ -594,14 +594,14 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentList.setFocusable(false);
         mCommentsAdapter = new CommentListAdapter(this, mArticlePresenter, new View.OnClickListener() {
             @Override
-            public void onClick(final View deleteItem) {
-                View recyclerViewItem = (View) deleteItem.getParent();
+            public void onClick(final View view) {
+                View recyclerViewItem = (View) view.getParent();
                 final int position = mCommentList.getChildAdapterPosition(recyclerViewItem);
                 if (position == RecyclerView.NO_POSITION) {
                     return;
                 }
-                switch (deleteItem.getId()) {
-                    case R.id.author_pic:
+                switch (view.getId()) {
+                    case R.id.author_pic_container:
                     case R.id.author:
 
                         Comment comment = mCommentsAdapter.getComment(position);
@@ -611,7 +611,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         break;
 
                     case R.id.delete:
-                        final PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
+                        final PopupMenu popup = new PopupMenu(ArticleActivity.this, view);
 
                         popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
                         popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
