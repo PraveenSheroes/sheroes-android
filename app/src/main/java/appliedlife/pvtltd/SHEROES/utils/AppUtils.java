@@ -2200,7 +2200,7 @@ public class AppUtils {
     }
 
     public static boolean matchesWebsiteURLPattern(String sentence) {
-        final Pattern pattern = Pattern.compile("\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+        final Pattern pattern = Pattern.compile(AppConstants.WEB_LINK_PATTERN_REGEX,
                 Pattern.MULTILINE | Pattern.DOTALL);
         Matcher m = pattern.matcher(sentence);
         return m.find();

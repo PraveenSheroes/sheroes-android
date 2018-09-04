@@ -49,11 +49,12 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
     public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position) {
         this.dataItem = helplineChatDoc;
         if(StringUtil.isNotNullOrEmptyString(dataItem.getSearchText())){
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+           /* if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 answer.setText(Html.fromHtml(dataItem.getSearchText(), 0).toString());
             } else {
                 answer.setText(Html.fromHtml(dataItem.getSearchText()).toString());
-            }
+            }*/
+            answer.setText(dataItem.getSearchText());
             linkifyURLs(answer);
         }
         if(StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
