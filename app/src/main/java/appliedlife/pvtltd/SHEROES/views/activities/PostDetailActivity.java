@@ -288,7 +288,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             } else {
                 mFeedDetailObjId = getIntent().getStringExtra(FeedDetail.FEED_OBJ_ID);
-                mCommunityPostDetailDeepLink = getIntent().getStringExtra(BaseActivity.POST_DETAIL_DEEPLINK);
+                mCommunityPostDetailDeepLink = getIntent().getStringExtra(BaseActivity.KEY_FOR_DEEPLINK_DETAIL);
                 if (!CommonUtil.isNotEmpty(mFeedDetailObjId)) {
                     return;
                 }

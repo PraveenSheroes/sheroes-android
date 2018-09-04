@@ -39,8 +39,9 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INV
 public class SheroesDeepLinkingActivity extends BaseActivity {
     private static final String SCREEN_LABEL = "DeepLink Screen";
     public static final String OPEN_FRAGMENT = "Open Fragment";
+    public static final int COMMUNITY_DEEP_LINK_URL_BACK_SLASH = 4;
     private Uri mData;
-    private int indexOfFourthBackSlace;
+    private int mIndexOfBackSlaceInPostDeeplink;
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
     private PayloadBuilder payloadBuilder;
@@ -230,10 +231,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                             Crashlytics.getInstance().core.logException(e);
                             homeActivityCall("");
                         }
-                    } else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/") ) {
+                    } else if (urlOfSharedCard.equals(AppConstants.ARTICLE_URL) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM) || urlOfSharedCard.equals(AppConstants.ARTICLE_URL + "/") || urlOfSharedCard.equals(AppConstants.ARTICLE_URL_COM + "/")) {
                         homeActivityCall(ArticlesFragment.SCREEN_LABEL);
-                    } else if(urlOfSharedCard.startsWith(AppConstants.ARTICLE_CATEGORY_URL_COM) || urlOfSharedCard.startsWith(AppConstants.ARTICLE_CATEGORY_URL_IN)) {
-                       homeActivityCallForArticleCategory(urlOfSharedCard);
+                    } else if (urlOfSharedCard.startsWith(AppConstants.ARTICLE_CATEGORY_URL_COM) || urlOfSharedCard.startsWith(AppConstants.ARTICLE_CATEGORY_URL_IN)) {
+                        homeActivityCallForArticleCategory(urlOfSharedCard);
 
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
@@ -246,17 +247,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         homeActivityCall(AppConstants.COMMUNITY_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
-                    } else if (urlOfSharedCard.contains(AppConstants.POLL_URL) || urlOfSharedCard.contains(AppConstants.POLL_URL_COM)) {
-                        indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, AppConstants.BACK_SLASH_OCCURRENCE_IN_POLL_LINK);
-                        if (indexOfFourthBackSlace > 0) {
-                            baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
-                        } else {
-                            baseUrl = urlOfSharedCard;
-                        }
                     } else {
-                        indexOfFourthBackSlace = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, AppConstants.BACK_SLASH_OCCURRENCE_IN_POST_LINK);
-                        if (indexOfFourthBackSlace > 0) {
-                            baseUrl = urlOfSharedCard.substring(0, indexOfFourthBackSlace);
+                        mIndexOfBackSlaceInPostDeeplink = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, AppConstants.BACK_SLASH_OCCURRENCE_IN_POST_LINK);
+                        if (mIndexOfBackSlaceInPostDeeplink > 0) {
+                            baseUrl = urlOfSharedCard.substring(0, mIndexOfBackSlaceInPostDeeplink);
                             //When Fourth back slace not available
                             if (baseUrl.equalsIgnoreCase(AppConstants.EMPTY_STRING)) {
                                 baseUrl = urlOfSharedCard;
@@ -279,7 +273,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             fullLength = urlOfSharedCard.length();
 
             if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
-                callActivities(urlOfSharedCard, baseUrl, fullLength, sourceIntent);
+                openEndPointActivities(urlOfSharedCard, baseUrl, fullLength, sourceIntent);
             }
 
         } else {
@@ -299,7 +293,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    private void callActivities(String urlSharedViaSocial, String baseUrl, int fullLength, Intent sourceIntent) {
+    private void openEndPointActivities(String urlSharedViaSocial, String baseUrl, int fullLength, Intent sourceIntent) {
         String dataIdString = AppConstants.EMPTY_STRING;
         //In case of Article
         if (AppConstants.ARTICLE_URL.equalsIgnoreCase(baseUrl) || AppConstants.ARTICLE_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.ARTICLE_URL.length() < fullLength) {
@@ -354,8 +348,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
-            openCommunityPostPollDeepLink(urlSharedViaSocial, baseUrl, sourceIntent);
-        } else if (AppConstants.POLL_URL.equalsIgnoreCase(baseUrl) || AppConstants.POLL_URL_COM.equalsIgnoreCase(baseUrl)) {
             openCommunityPostPollDeepLink(urlSharedViaSocial, baseUrl, sourceIntent);
         } else if (AppConstants.EVENT_URL.equalsIgnoreCase(baseUrl) || AppConstants.EVENT_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.EVENT_URL.length() < fullLength) {
             try {
@@ -422,7 +414,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         //In case of profile
         else if (baseUrl.contains(AppConstants.USER_PROFILE_URL) || baseUrl.contains(AppConstants.USER_PROFILE_URL_COM) && AppConstants.USER_PROFILE_URL.length() < fullLength) {
             try {
-                indexOfFourthBackSlace = AppUtils.findNthIndexOf(baseUrl, AppConstants.BACK_SLASH, 5);
+                mIndexOfBackSlaceInPostDeeplink = AppUtils.findNthIndexOf(baseUrl, AppConstants.BACK_SLASH, 5);
                 int userId = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
                 String id = urlSharedViaSocial.substring(userId + 1, fullLength);
                 byte[] id1 = Base64.decode(id, Base64.DEFAULT);
@@ -573,32 +565,51 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
     private void openCommunityPostPollDeepLink(String urlSharedViaSocial, String baseUrl, Intent sourceIntent) {
         try {
-            String dataIdString;
-            String communityDetail = urlSharedViaSocial.substring(indexOfFourthBackSlace, urlSharedViaSocial.length());
+            String communityDetail = urlSharedViaSocial.substring(mIndexOfBackSlaceInPostDeeplink, urlSharedViaSocial.length());
             int countBackSlash = countBackSlash(communityDetail);
             if (countBackSlash > 2) {
+                String communityId = "", postId = "", typeOfFeed = AppConstants.COMMUNITY_POST_URL_COM;
                 String splitCommPostUrl[] = communityDetail.split(AppConstants.BACK_SLASH);
-                if (splitCommPostUrl.length > 0) {
-                    if (StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 1]) && StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 2])) {
-                        String postid = splitCommPostUrl[splitCommPostUrl.length - 1];
-                        postid = postid.replace("=", AppConstants.EMPTY_STRING);
-                        String communityId = splitCommPostUrl[splitCommPostUrl.length - 2];
-                        communityId = communityId.replace("=", AppConstants.EMPTY_STRING);
-                        byte[] communityPostBytes = Base64.decode(postid, Base64.DEFAULT);
-                        dataIdString = new String(communityPostBytes, AppConstants.UTF_8);
-                        byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
-                        String newCommunityId = new String(communityBytes, AppConstants.UTF_8);
-                        Intent postIntent = new Intent(SheroesDeepLinkingActivity.this, PostDetailActivity.class);
-                        postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(newCommunityId));
-                        postIntent.putExtra(FeedDetail.FEED_OBJ_ID, dataIdString);
-                        postIntent.putExtra(BaseActivity.POST_DETAIL_DEEPLINK, baseUrl);
-                        postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
-                        postIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
-                        postIntent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                        postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                        addShareLink(sourceIntent, postIntent);
-                        startActivity(postIntent);
-                    }
+                if (splitCommPostUrl.length <= COMMUNITY_DEEP_LINK_URL_BACK_SLASH && StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 1]) && StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 2])) {
+                    //https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
+                    /* If deepLink consists only post id after community name/id(eg: mcarrer-community/MTI3NQ==/MTIx)
+                     * Url's syntax were defined when we first time launched app.
+                     * We can change Url's structure after discussion but for now we have to follow this structure.*/
+                    postId = splitCommPostUrl[splitCommPostUrl.length - 1];
+                    postId = postId.replace("=", AppConstants.EMPTY_STRING);
+                    communityId = splitCommPostUrl[splitCommPostUrl.length - 2];
+                    communityId = communityId.replace("=", AppConstants.EMPTY_STRING);
+                    byte[] communityPostBytes = Base64.decode(postId, Base64.DEFAULT);
+                    postId = new String(communityPostBytes, AppConstants.UTF_8);
+                    byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
+                    communityId = new String(communityBytes, AppConstants.UTF_8);
+                    typeOfFeed = AppConstants.COMMUNITY_POST_URL_COM;
+                } else if (splitCommPostUrl.length > COMMUNITY_DEEP_LINK_URL_BACK_SLASH && StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 1]) && StringUtil.isNotNullOrEmptyString(splitCommPostUrl[splitCommPostUrl.length - 3])) {
+                    //https://sheroes.com/communities/my-ferst-community/Mjgw/polls/Mjc=
+                    /* If deepLink consists poll or any other type in url after community name/id(eg: my-ferst-community/Mjgw/polls) */
+                    postId = splitCommPostUrl[splitCommPostUrl.length - 1];
+                    postId = postId.replace("=", AppConstants.EMPTY_STRING);
+                    communityId = splitCommPostUrl[splitCommPostUrl.length - 3];
+                    communityId = communityId.replace("=", AppConstants.EMPTY_STRING);
+                    byte[] communityPostBytes = Base64.decode(postId, Base64.DEFAULT);
+                    postId = new String(communityPostBytes, AppConstants.UTF_8);
+                    byte[] communityBytes = Base64.decode(communityId, Base64.DEFAULT);
+                    communityId = new String(communityBytes, AppConstants.UTF_8);
+                    typeOfFeed = AppConstants.POLL_URL_COM;
+                }
+                if (StringUtil.isNotNullOrEmptyString(communityId) && StringUtil.isNotNullOrEmptyString(postId)) {
+                    Intent postIntent = new Intent(SheroesDeepLinkingActivity.this, PostDetailActivity.class);
+                    postIntent.putExtra(AppConstants.COMMUNITY_ID, Long.parseLong(communityId));
+                    postIntent.putExtra(FeedDetail.FEED_OBJ_ID, postId);
+                    postIntent.putExtra(BaseActivity.KEY_FOR_DEEPLINK_DETAIL, typeOfFeed);
+                    postIntent.putExtra(AppConstants.FROM_DEEPLINK, true);
+                    postIntent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
+                    postIntent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
+                    postIntent.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+                    addShareLink(sourceIntent, postIntent);
+                    startActivity(postIntent);
+                } else {
+                    homeActivityCall("");
                 }
             } else {
                 Intent into = new Intent(SheroesDeepLinkingActivity.this, CommunityDetailActivity.class);
@@ -632,7 +643,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
             homeActivityCall("");
-
         }
     }
 

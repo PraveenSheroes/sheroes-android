@@ -284,7 +284,6 @@ public class AppConstants {
     public static final String STORIES_URL_COM = "https://sheroes.com/stories";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
-    public static final String POLL_URL = "https://sheroes.in/communities/poll";
     public static final String POLL_URL_COM = "https://sheroes.com/communities/poll";
     public static final String EVENT_URL = "https://sheroes.in/event";
     public static final String EVENT_URL_COM = "https://sheroes.com/event";
@@ -460,6 +459,5 @@ public class AppConstants {
     public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
 
-    public static final int BACK_SLASH_OCCURRENCE_IN_POLL_LINK = 5; // https://sheroes.com/communities/poll/carrer-community/MTI3NQ==/MTIx
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
 }

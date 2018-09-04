@@ -118,7 +118,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     public void fetchUserPost() {
         if (mFeedDetail == null) {
             if (StringUtil.isNotNullOrEmptyString(mCommunityPostDetailDeepLink)) {
-                if (AppConstants.POLL_URL_COM.equalsIgnoreCase(mCommunityPostDetailDeepLink) || AppConstants.POLL_URL.equalsIgnoreCase(mCommunityPostDetailDeepLink)) {
+                if (AppConstants.POLL_URL_COM.equalsIgnoreCase(mCommunityPostDetailDeepLink)) {
                     fetchPollFromServer();
                 } else {
                     fetchUserPostFromServer();
