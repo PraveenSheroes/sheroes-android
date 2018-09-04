@@ -154,7 +154,7 @@ dependencies {
         all*.exclude group: 'com.android.support', module: 'support-v13'
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.facebook.android:facebook-android-sdk:4.28.0'
+    implementation 'com.facebook.android:facebook-android-sdk:4.36.0'
     implementation 'com.google.android.gms:play-services-analytics:11.8.0'
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation 'com.google.android.gms:play-services-gcm:11.8.0'
