@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/li_text_poll_row"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollEditText
+        android:id="@+id/et_text_poll"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="@integer/et_text_poll_weight"
+        android:background="@drawable/rectangle_border"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:padding="@dimen/option_poll_padding"
+        android:inputType="textMultiLine"
+        android:maxLength="@integer/text_poll_input_option_char_limit"
+        android:scrollbars="vertical"
+        android:maxLines="@integer/image_poll_option_line"
+        android:textCursorDrawable="@drawable/cursor_line"
+        android:textColor="@color/comment_text"
+        android:textColorHint="@color/on_board_work"
+        android:textSize="@dimen/text_option_poll_text_size" />
+
+    <ImageView
+        android:id="@+id/iv_delete_text_poll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/option_poll_delete_padding"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_cross" />
+</LinearLayout>
+

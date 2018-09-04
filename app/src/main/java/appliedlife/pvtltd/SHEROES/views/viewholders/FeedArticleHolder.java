@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -72,7 +73,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.li_feed_article_images)
     LinearLayout liFeedArticleImages;
     @Bind(R.id.li_feed_article_user_comments)
-    LinearLayout liFeedArticleUserComments;
+    FrameLayout liFeedArticleUserComments;
     @Bind(R.id.spam_comment_container)
     FrameLayout spamContainer;
     @Bind(R.id.last_comment_container)
@@ -125,6 +126,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedArticleUserName;
     @Bind(R.id.iv_feed_article_user_verified)
     ImageView ivFeedArticleUserVerified;
+    @Bind(R.id.user_badge)
+    ImageView mLastCommentUserBadgePic;
     @Bind(R.id.tv_feed_article_comment_post_time)
     TextView tvFeedArticleCommentPostTime;
     @Bind(R.id.iv_feed_article_login_user_pic)
@@ -215,11 +218,42 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         tvFeedArticleUserReaction.setTag(true);
         articleObj.setItemPosition(position);
         articleObj.setLastReactionValue(articleObj.getReactionValue());
-        allTextViewStringOperations(context);
         onBookMarkClick();
         if (!articleObj.isTrending()) {
             imageOperations(context);
         }
+
+        UpdateUserStoryVisibility();
+        allTextViewStringOperations(context);
+
+        if (StringUtil.isNotEmptyCollection(articleObj.getTags())) {
+            tvFeedArticleTag.setVisibility(View.VISIBLE);
+            List<String> tags = articleObj.getTags();
+            StringBuilder mergeTags = new StringBuilder(AppConstants.EMPTY_STRING);
+            for (String tag : tags) {
+                mergeTags.append(tag).append(AppConstants.COMMA).append(AppConstants.SPACE);
+            }
+            mergeTags = new StringBuilder(mergeTags.substring(0, mergeTags.length() - 2));
+            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + AppConstants.COLON + RIGHT_HTML_TAG;
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
+            } else {
+                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags));// or for older api
+            }
+        } else {
+            tvFeedArticleTag.setVisibility(View.GONE);
+        }
+        // TODO : ujjwal
+        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
+            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
+        } else {
+            tvFeedArticleUserMenu.setVisibility(View.GONE);
+        }*/
+
+
+    }
+
+    private void UpdateUserStoryVisibility() {
         if (StringUtil.isNotNullOrEmptyString(articleObj.getUserStoryStatus())) {
             if (articleObj.getUserStoryStatus().equalsIgnoreCase(ArticleStatusEnum.DRAFT.toString())) {
                 tvFeedArticleUserBookmark.setVisibility(View.GONE);
@@ -244,38 +278,13 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             lineForNoImage.setVisibility(View.VISIBLE);
             rlFeedArticleJoinConversation.setVisibility(View.VISIBLE);
         }
-        if (StringUtil.isNotEmptyCollection(articleObj.getTags())) {
-            tvFeedArticleTag.setVisibility(View.VISIBLE);
-            List<String> tags = articleObj.getTags();
-            StringBuilder mergeTags = new StringBuilder(AppConstants.EMPTY_STRING);
-            for (String tag : tags) {
-                mergeTags.append(tag).append(AppConstants.COMMA).append(AppConstants.SPACE);
-            }
-            mergeTags = new StringBuilder(mergeTags.substring(0, mergeTags.length() - 2));
-            String tagHeader = LEFT_HTML_TAG + mContext.getString(R.string.ID_TAGS) + AppConstants.COLON + RIGHT_HTML_TAG;
-            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags, 0)); // for 24 api and more
-            } else {
-                tvFeedArticleTag.setText(Html.fromHtml(tagHeader + AppConstants.SPACE + mergeTags));// or for older api
-            }
-        } else {
-            tvFeedArticleTag.setVisibility(View.GONE);
-        }
-        // TODO : ujjwal
-       /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
-            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
-        } else {
-            tvFeedArticleUserMenu.setVisibility(View.GONE);
-        }*/
-
-
     }
 
     private void onBookMarkClick() {
         if (articleObj.isBookmarked()) {
-            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_active, 0);
         } else {
-            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+            tvFeedArticleUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_in_active, 0);
         }
     }
 
@@ -287,12 +296,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             ivFeedArticleCardCircleIconVerified.setVisibility(View.GONE);
         }
         if (isWhatappShareOption) {
-            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
+            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.vector_share_card), null, null, null);
             tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
 
         } else {
-            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
+            tvFeedArticleUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.vector_share_white_out), null, null, null);
             tvFeedArticleUserShare.setText(mContext.getString(R.string.ID_SHARE));
             tvFeedArticleUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
@@ -327,7 +336,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleHeader.setText(articleObj.getNameOrTitle());
         }
         if (articleObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && articleObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
-            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
             rlFeedArticleNoReactionComment.setVisibility(View.GONE);
             lineForNoImage.setVisibility(View.GONE);
         }
@@ -394,11 +403,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
 
         switch (articleObj.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
-                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
 
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
-                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
 
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
@@ -430,16 +439,18 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             //tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);
 
             if (lastComment.isSpamComment()) {
+                spamCommentMenu.setVisibility(View.GONE);
                 spamContainer.setVisibility(View.VISIBLE);
                 lastCommentContainer.setVisibility(View.GONE);
             } else {
+                spamCommentMenu.setVisibility(View.VISIBLE);
                 spamContainer.setVisibility(View.GONE);
                 lastCommentContainer.setVisibility(View.VISIBLE);
             }
 
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
-                    ivFeedArticleUserPic.setImageResource(R.drawable.ic_anonomous);
+                    ivFeedArticleUserPic.setImageResource(R.drawable.vector_anonymous);
                     tvFeedArticleUserName.setText(lastComment.getParticipantName());
                     tvFeedArticleUserCommentPost.setText(lastComment.getComment());
                     ivFeedArticleUserVerified.setVisibility(View.GONE);
@@ -461,6 +472,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     }
                 }
             }
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), mLastCommentUserBadgePic, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
@@ -489,12 +501,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.GONE);
             }*/
-
-            if (lastComment.isSpamComment()) {
-                spamCommentMenu.setVisibility(View.GONE);
-            } else {
-                spamCommentMenu.setVisibility(View.VISIBLE);
-            }
 
         } else {
             liFeedArticleUserComments.setVisibility(View.GONE);
@@ -685,12 +691,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             if (articleObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
                 articleObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 articleObj.setNoOfLikes(articleObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onArticlePostUnLiked(articleObj);
             } else {
                 articleObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 articleObj.setNoOfLikes(articleObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onArticlePostLiked(articleObj);
             }
             allTextViewStringOperations(mContext);
@@ -715,11 +721,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (articleObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             articleObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
             articleObj.setNoOfLikes(articleObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
         } else {
             articleObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
             articleObj.setNoOfLikes(articleObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
         }
         allTextViewStringOperations(mContext);
 

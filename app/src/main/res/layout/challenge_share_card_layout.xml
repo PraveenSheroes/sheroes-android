@@ -76,5 +76,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_size_12"
-        android:background="@drawable/ic_sheroes_name"/>
+        android:background="@drawable/vector_sheroes_name"/>
 </LinearLayout>

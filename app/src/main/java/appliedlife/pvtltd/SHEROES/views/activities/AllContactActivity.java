@@ -40,8 +40,10 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.ContactCallBackListener;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -59,7 +61,7 @@ import butterknife.ButterKnife;
  * Created by Praveen on 13/02/18.
  */
 
-public class AllContactActivity extends BaseActivity implements ViewPager.OnPageChangeListener {
+public class AllContactActivity extends BaseActivity implements ViewPager.OnPageChangeListener, ContactCallBackListener {
     private static final String SCREEN_LABEL = "All Contact Activity";
     //region View variables
     @Bind(R.id.title_toolbar)
@@ -82,6 +84,9 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
 
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    Preference<Configuration> mConfiguration;
     //endregion
 
     //region Member variables
@@ -174,7 +179,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
             searchIcon.setImageDrawable(null);
             
             ImageView searchClose = etInviteSearchBox.findViewById(R.id.search_close_btn);
-            searchClose.setImageResource(R.drawable.ic_clear_black_24dp);
+            searchClose.setImageResource(R.drawable.vector_clear_black_24dp);
             View v = etInviteSearchBox.findViewById(R.id.search_plate);
             v.setBackgroundColor(ContextCompat.getColor(getApplication(), R.color.fully_transparent));
             searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
@@ -193,7 +198,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
                 }
             });
         }
-        if (etInviteSearchBox != null) {
+        if (etInviteSearchBox != null && searchManager != null) {
             etInviteSearchBox.setSearchableInfo(searchManager.getSearchableInfo(AllContactActivity.this.getComponentName()));
             editTextWatcher();
         }
@@ -381,5 +386,21 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
+    }
+
+    @Override
+    public void onUserDetailsCallBack() {
+        if (!this.isFinishing()) {
+            if(etInviteSearchBox!=null) {
+                etInviteSearchBox.setQuery("", true);
+            }
+            boolean showInviteFriendTab=false;
+            if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                showInviteFriendTab = mConfiguration.get().configData.showInviteFriendTab;
+            }
+            if(!showInviteFriendTab) {
+                mViewPager.setCurrentItem(0);
+            }
+        }
     }
 }

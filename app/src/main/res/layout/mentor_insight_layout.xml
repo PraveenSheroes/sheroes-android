@@ -279,7 +279,7 @@
                         android:layout_marginTop="@dimen/dp_size_6"
                         android:layout_toLeftOf="@id/tv_insight_like"
                         android:layout_toStartOf="@id/tv_insight_like"
-                        android:src="@drawable/ic_heart_in_active" />
+                        android:src="@drawable/vector_heart_in_active" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -319,7 +319,7 @@
                         android:layout_marginTop="@dimen/dp_size_6"
                         android:layout_toLeftOf="@id/tv_insight_comment"
                         android:layout_toStartOf="@id/tv_insight_comment"
-                        android:src="@drawable/ic_comment_icon" />
+                        android:src="@drawable/vector_comment_icon" />
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -336,7 +336,7 @@
                         android:layout_marginBottom="@dimen/dp_size_8"
                         android:layout_marginLeft="@dimen/dp_size_8"
                         android:layout_marginTop="@dimen/dp_size_8"
-                        android:src="@drawable/ic_share_card" />
+                        android:src="@drawable/vector_share_card" />
 
                     <TextView
                         android:id="@+id/tv_insight_share_count"

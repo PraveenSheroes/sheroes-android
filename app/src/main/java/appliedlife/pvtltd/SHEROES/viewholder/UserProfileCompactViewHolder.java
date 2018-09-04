@@ -4,8 +4,13 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -31,6 +36,9 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.user_image)
     CircleImageView mImage;
+
+    @Bind(R.id.bade_icon)
+    ImageView mBadgeIcon;
 
     @Bind(R.id.post_count_title)
     TextView mPostCountTitle;
@@ -112,6 +120,7 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
             mLocation.setVisibility(View.GONE);
         }
 
+        CommonUtil.showHideUserBadge(mContext, false, mBadgeIcon, mUserSolrObj.isSheBadgeActive(), mUserSolrObj.getProfileBadgeUrl());
     }
 
     @OnClick(R.id.follow_button)

@@ -578,7 +578,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public void selectImageFrmCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setFixAspectRatio(true)
                 .setAllowRotation(true)
                 .start(this);
     }
@@ -594,10 +594,10 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if (isChecked) {
-                    mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small_active), null, null, null);
+                    mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.vector_facebook_small_active), null, null, null);
                     mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.fb_Color));
                 } else {
-                    mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.ic_facebook_small), null, null, null);
+                    mShareToFacebook.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(getApplication(), R.drawable.vector_facebook_small), null, null, null);
                     mShareToFacebook.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
                 }
             }
@@ -689,7 +689,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             }
             return false;
         }
-        if (!isDraft && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+        if (!isDraft && completionView!=null && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
             if (showError) {
                 showMessage(R.string.error_tag_min);
                 tvTagLable.setVisibility(View.VISIBLE);

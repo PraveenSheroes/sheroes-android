@@ -1,16 +1,20 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -38,14 +42,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
+import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityListAdapter;
+import appliedlife.pvtltd.SHEROES.views.adapters.PollSurveyTypeAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
@@ -56,41 +63,50 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
 
 public class PostBottomSheetFragment extends BottomSheetDialogFragment implements HomeView {
     private static final String SCREEN_LABEL = "PostBottomSheetFragment";
-
-    private CommunityListAdapter mCommunityListAdapter;
-    public List<Community> mCommunityList = new ArrayList<>();
-    private MyCommunities mMyCommunities;
-    CommunityPostActivity mCommunityPostActivity;
-    CreateStoryActivity mCreateStoryActivity;
+    // region Inject variables
     @Inject
     HomePresenter mHomePresenter;
 
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
+    // endregion'
 
     // region View variables
     @Bind(R.id.community_list)
     RecyclerView mRecyclerView;
+
+    @Bind(R.id.tv_choose_community)
+    TextView mTvChooseCommunity;
+
+    @BindDimen(R.dimen.poll_type_recyler_list_margin)
+    int mPollTypeRecyclerListMargin;
+
+    // endregion
+
+    // region Member variables
+    private CommunityListAdapter mCommunityListAdapter;
+    public List<Community> mCommunityList = new ArrayList<>();
+    private MyCommunities mMyCommunities;
+    private CommunityPostActivity mCommunityPostActivity;
+    private CreateStoryActivity mCreateStoryActivity;
+    private PollSurveyTypeAdapter mPollSurveyTypeAdapter;
     // endregion
 
     //region Fragment LifeCycle Methods
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if (getArguments() != null) {
-
-        }
         return super.onCreateDialog(savedInstanceState);
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        if (activity instanceof CommunityPostActivity) {
-            mCommunityPostActivity = (CommunityPostActivity) activity;
+    public void onAttach(Context context) {
+        if (context instanceof CommunityPostActivity) {
+            mCommunityPostActivity = (CommunityPostActivity) context;
         } else {
-            mCreateStoryActivity = (CreateStoryActivity) activity;
+            mCreateStoryActivity = (CreateStoryActivity) context;
         }
-        super.onAttach(activity);
+        super.onAttach(context);
     }
 
     @Override
@@ -113,15 +129,32 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         mRecyclerView.setFocusable(false);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         Parcelable parcelable;
-        mMyCommunities = new MyCommunities();
-        if (getArguments().getParcelable(MyCommunities.MY_COMMUNITY_OBJ) != null) {
-            parcelable = getArguments().getParcelable(MyCommunities.MY_COMMUNITY_OBJ);
-            mMyCommunities = Parcels.unwrap(parcelable);
-            mCommunityList = mMyCommunities.myCommunities;
+
+        if (getArguments() != null) {
+            if (getArguments().getParcelable(MyCommunities.MY_COMMUNITY_OBJ) != null) {
+                mMyCommunities = new MyCommunities();
+                parcelable = getArguments().getParcelable(MyCommunities.MY_COMMUNITY_OBJ);
+                mMyCommunities = Parcels.unwrap(parcelable);
+                mCommunityList = mMyCommunities.myCommunities;
+                showCommunity();
+            } else if (getArguments().getParcelable(PollOptionType.POLL_TYPE) != null) {
+                mTvChooseCommunity.setText(getString(R.string.choose_poll));
+                parcelable = getArguments().getParcelable(PollOptionType.POLL_TYPE);
+                List<PollOptionType> pollOptionTypeList = Parcels.unwrap(parcelable);
+                setPollTypeList(pollOptionTypeList);
+                LinearLayout.LayoutParams photo = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT); //Layout params for Button
+                photo.setMargins(mPollTypeRecyclerListMargin, 0, 0, 0);
+                mRecyclerView.setLayoutParams(photo);
+            } else {
+                mMyCommunities = new MyCommunities();
+                setMyCommunityList();
+                showCommunity();
+            }
         } else {
+            mMyCommunities = new MyCommunities();
             setMyCommunityList();
+            showCommunity();
         }
-        showCommunity();
     }
 
     private void setMyCommunityList() {
@@ -146,9 +179,19 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         }
     }
 
+    private void setPollTypeList(List<PollOptionType> pollOptionTypeList) {
+        mPollSurveyTypeAdapter = new PollSurveyTypeAdapter(getActivity(), ((CommunityPostActivity) getActivity()), this);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this.getContext(), 2);
+        mRecyclerView.setLayoutManager(gridLayoutManager);
+        mRecyclerView.setAdapter(mPollSurveyTypeAdapter);
+        mPollSurveyTypeAdapter.setData(pollOptionTypeList);
+        mPollSurveyTypeAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        mHomePresenter.detachView();
     }
 
     @Override
@@ -227,6 +270,7 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     //region private methods
     private void showCommunity() {
+        mTvChooseCommunity.setText(getString(R.string.choose_community));
         mRecyclerView.setAdapter(mCommunityListAdapter = new CommunityListAdapter(getActivity(), mCommunityList, new View.OnClickListener() {
             @Override
             public void onClick(View item) {
@@ -266,6 +310,16 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         PostBottomSheetFragment postBottomSheetFragment = new PostBottomSheetFragment();
         Bundle args = new Bundle();
         args.putParcelable(MyCommunities.MY_COMMUNITY_OBJ, Parcels.wrap(myCommunities));
+        postBottomSheetFragment.setArguments(args);
+        args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
+        return postBottomSheetFragment;
+    }
+
+    public static PostBottomSheetFragment showDialog(AppCompatActivity activity, String sourceScreen, List<PollOptionType> pollOptionTypeList) {
+        PostBottomSheetFragment postBottomSheetFragment = new PostBottomSheetFragment();
+        Bundle args = new Bundle();
+        args.putParcelable(PollOptionType.POLL_TYPE, Parcels.wrap(pollOptionTypeList));
         postBottomSheetFragment.setArguments(args);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);

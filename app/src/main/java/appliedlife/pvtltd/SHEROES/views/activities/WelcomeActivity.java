@@ -169,9 +169,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private int gcmForGoogleAndFacebook;
     public static final int GOOGLE_CALL = 101;
     public static final int FACEBOOK_CALL = 201;
-    public static final int NORMAL_CALL = 301;
-    private static final int REQUEST_PERMISSION_EMAIL = 1100;
-    private GooglePlusHelper mGooglePlusHelper;
     private GoogleSignInOptions gso;
     private ProgressDialog mProgressDialog, mLoggingProgressDialog;
     //google api client
@@ -480,9 +477,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mViewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList, this, screenText);
         mViewPager.setAdapter(mViewPagerAdapter);
         mViewPager.addOnPageChangeListener(WelcomeActivity.this);
-        ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
-        ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-        ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+        ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
+        ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
+        ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
         mHandler = new Handler();
         mRunnable = new Runnable() {
             public void run() {
@@ -499,9 +496,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     protected void onDestroy() {
-        if (mGooglePlusHelper != null) {
-            mGooglePlusHelper.signOut();
-        }
         if (null != mGoogleApiClient) {
             mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
             mGoogleApiClient.disconnect();
@@ -564,19 +558,19 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public void onPageSelected(int position) {
         switch (position) {
             case AppConstants.NO_REACTION_CONSTANT:
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
+                ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
                 break;
             case AppConstants.ONE_CONSTANT:
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeSecond.setImageResource(R.drawable.vector_circle_red);
+                ivWelcomeFirst.setImageResource(R.drawable.vector_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
                 break;
             case AppConstants.TWO_CONSTANT:
-                ivWelcomeThird.setImageResource(R.drawable.ic_circle_red);
-                ivWelcomeFirst.setImageResource(R.drawable.ic_circle_w);
-                ivWelcomeSecond.setImageResource(R.drawable.ic_circle_w);
+                ivWelcomeThird.setImageResource(R.drawable.vector_circle_red);
+                ivWelcomeFirst.setImageResource(R.drawable.vector_circle_w);
+                ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
                 break;
         }
     }
@@ -824,7 +818,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mFcmId);
                     //Refresh FCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(getApplicationContext());
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if(cleverTapAPI!=null) {
                         cleverTapAPI.data.pushFcmRegistrationId(mFcmId, true);
                     }
@@ -1118,9 +1112,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void userLoggedIn(SocialPerson person) {
         if (person == null) {
-            if (mGooglePlusHelper != null) {
-                mGooglePlusHelper.dismissDialog();
-            }
             WelcomeActivity.this.runOnUiThread(new Runnable() {
                 public void run() {
                     Toast.makeText(AppUtils.getInstance().getApplicationContext(), getString(R.string.ID_GENERIC_ERROR), Toast.LENGTH_SHORT).show();
@@ -1129,11 +1120,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             return;
         }
         if (StringUtil.isNotNullOrEmptyString(person.getEmail())) {
-            if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
-                if (mGooglePlusHelper != null) {
-                    mGooglePlusHelper.signOut();
-                }
-            }
             if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
                 this.runOnUiThread(new Runnable() {
                     public void run() {

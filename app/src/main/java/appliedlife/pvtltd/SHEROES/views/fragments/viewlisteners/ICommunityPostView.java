@@ -35,4 +35,6 @@ public interface ICommunityPostView extends BaseMvpView {
     Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);
+
+    void showImage(String finalImageUrl);
 }

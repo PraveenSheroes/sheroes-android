@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.ContactCallBackListener;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -64,8 +65,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     InviteFriendViewPresenterImp mInviteFriendViewPresenterImp;
     @Inject
     AppUtils mAppUtils;
-    @Inject
-    Preference<Configuration> mConfiguration;
     //endregion
 
     //region View variables
@@ -85,6 +84,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     private boolean hasFeedEnded;
     private String msg;
     private boolean isUserList;
+    private ContactCallBackListener mContactCallBackListener;
     //endregion
 
     //region Static methods
@@ -106,6 +106,14 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         Bundle bundle = getArguments();
         initViews();
         return view;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //getActivity() is fully created in onActivityCreated and instanceOf differentiate it between different Activities
+        if (getActivity() instanceof ContactCallBackListener)
+            mContactCallBackListener = (ContactCallBackListener) getActivity();
     }
 
     //region Private methods
@@ -216,7 +224,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                     msg=getString(R.string.suggested_list_blank);
                 }
             }
-            mFeedRecyclerView.setEmptyViewWithImage(emptyView, msg, R.drawable.ic_suggested_blank, "");
+            mFeedRecyclerView.setEmptyViewWithImage(emptyView, msg, R.drawable.vector_suggested_blank, "");
         } else {
             emptyView.setVisibility(View.GONE);
         }
@@ -283,20 +291,13 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
             emptyView.setVisibility(View.GONE);
             mInviteFriendSuggestedAdapter.setData(userSolrObjList);
             mInviteFriendSuggestedAdapter.notifyDataSetChanged();
-            if (null != getActivity() && getActivity() instanceof AllContactActivity) {
-                ((AllContactActivity) getActivity()).etInviteSearchBox.setQuery("", true);
-                boolean showInviteFriendTab=false;
-                if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                    showInviteFriendTab = mConfiguration.get().configData.showInviteFriendTab;
-                }
-                if(!showInviteFriendTab)
-                {
-                    ((AllContactActivity) getActivity()).mViewPager.setCurrentItem(0);
-                }
+
+            if (mContactCallBackListener != null) {
+                mContactCallBackListener.onUserDetailsCallBack();
             }
             isUserList=true;
         } else {
-            mFeedRecyclerView.setEmptyViewWithImage(emptyView,msg , R.drawable.ic_suggested_blank, "");
+            mFeedRecyclerView.setEmptyViewWithImage(emptyView,msg , R.drawable.vector_suggested_blank, "");
             emptyView.setVisibility(View.VISIBLE);
         }
         progressBar.setVisibility(View.GONE);

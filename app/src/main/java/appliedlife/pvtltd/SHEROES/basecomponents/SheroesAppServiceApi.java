@@ -73,6 +73,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDr
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVoteResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.WinnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
@@ -156,6 +161,9 @@ public interface SheroesAppServiceApi {
     @POST("participation/reaction/like")
     Observable<LikeResponse> getLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
 
+    @POST("participation/reaction/poll/vote")
+    Observable<PollVoteResponse> getPollVoteFromApi(@Body PollVote pollVote);
+
     @POST("participation/reaction/unlike")
     Observable<LikeResponse> getUnLikesFromApi(@Body LikeRequestPojo likeRequestPojo);
 
@@ -216,6 +224,12 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
+    @POST("participation/poll/add")
+    Observable<CreatePollResponse> createPoll(@Body CreatePollRequest createPollRequest);
+
+    @POST("participation/poll/delete")
+    Observable<CreatePollResponse> deletePoll(@Body DeletePollRequest deletePollRequest);
 
     @POST("participation/post/edit")
     Observable<CreateCommunityResponse> editCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
@@ -353,4 +367,10 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/feed/stream?setOrderKey=UserStoryStream")
     Observable<FeedResponsePojo> getUserStory(@Query("id") String article_id, @Body FeedRequestPojo feedRequestPojo);
+
+    @POST("participant/feed/stream?setOrderKey=PollStream")
+    Observable<FeedResponsePojo> getPollDetail(@Query("poll_id") String poll_id, @Body FeedRequestPojo feedRequestPojo);
+
+    @POST("participation/global/image/add")
+    Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 }

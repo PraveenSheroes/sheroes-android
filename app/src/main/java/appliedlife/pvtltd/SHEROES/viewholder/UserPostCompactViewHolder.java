@@ -9,6 +9,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -16,7 +17,6 @@ import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -75,6 +75,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     @Bind(R.id.author_verified_icon)
     ImageView mAuthorVerifiedIcon;
+
+    @Bind(R.id.bade_icon)
+    ImageView mBadgeIcon;
+
+    @Bind(R.id.last_comment_badge_icon)
+    ImageView mLastCommentBadgeIcon;
 
     @Bind(R.id.post_title)
     TextView mTitle;
@@ -358,6 +364,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     mAuthorVerifiedIcon.setVisibility(View.GONE);
                 }
+
+                CommonUtil.showHideUserBadge(context, mUserPostObj.isAnonymous(), mBadgeIcon, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
@@ -651,6 +659,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             int mItemPosition = lastCommentList.size() - 1;
             lastComment = lastCommentList.get(mItemPosition);
             mCommentAuthorImage.setCircularImage(true);
+
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), mLastCommentBadgeIcon, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
             invalidateCommentLike(lastComment);
             if (lastComment.isAnonymous()) {
                 if (StringUtil.isNotNullOrEmptyString(lastComment.getParticipantName())) {
@@ -703,7 +713,6 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-
     private void invalidateCommentLike(Comment lastComment) {
         mCommentLike.setVisibility(View.VISIBLE);
         if (lastComment.likeCount == 0) {
@@ -712,18 +721,18 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             mCommentLike.setText(Integer.toString(lastComment.likeCount));
         }
         if (lastComment.isLiked) {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active_16dp, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active_16dp, 0, 0, 0);
         } else {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_inactive_16dp, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_inactive_16dp, 0, 0, 0);
         }
     }
 
 
     private void invalidatePostLike(UserPostSolrObj userPostSolrObj) {
         if (mUserPostObj.getReactedValue() == AppConstants.NO_REACTION_CONSTANT) {
-            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
         } else {
-            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
         }
 
     }
@@ -758,12 +767,12 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
                 mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onUserPostUnLiked(mUserPostObj);
             } else {
                 mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                mPostLikeButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onUserPostLiked(mUserPostObj);
             }
             String pluralLikes = mContext.getResources().getQuantityString(R.plurals.numberOfLikes, mUserPostObj.getNoOfLikes());

@@ -44,7 +44,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="8dp"
-                android:src="@drawable/ic_anonomous" />
+                android:src="@drawable/vector_anonymous" />
 
             <appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView
                 android:id="@+id/input_edit_text"

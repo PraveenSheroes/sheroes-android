@@ -80,8 +80,7 @@ public class AppConstants {
     public static final String UTF_8 = "UTF-8";
 
     public static final String USER = "USER";
-    public static final String COMMUNITY_OWNER = "COMMUNITY_OWNER";
-    public static final String ANONYMOUS = "ANONYMOUS";
+
     public static final String ASKING_QUESTION = "asking_question";
     public static final int ASKING_QUESTION_CALL = 101;
 
@@ -90,6 +89,7 @@ public class AppConstants {
     public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
     public static final String FEATURED_COMMUNITY = "T";
+    public static final String FEED_POLL = "PL";
     public static final String BOOKMARKS = "bookmarks";
     public static final String COMMENT_REACTION_FRAGMENT = "comment_reaction_fragment";
     public static final String HOME_FRAGMENT = "home";
@@ -154,7 +154,7 @@ public class AppConstants {
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
     public static final String FOLLOWED_CHAMPION_LABEL = "Followed Champions Screen";
     public static final String FOLLOWERS = "FOLLOWERS";
-    public static final String FOLLOWING= "FOLLOWING";
+    public static final String FOLLOWING = "FOLLOWING";
     public static final String FOLLOWING_COUNT_CLICK = "Following Count Click";
     public static final String FOLLOWERS_COUNT_CLICK = "Followers Count Click";
     public static final String SHARE_PROFILE = "Share profile";
@@ -189,6 +189,8 @@ public class AppConstants {
     public static final String FAILED = "FAILED";
     public static final String INVALID = "INVALID";
     public static final long SAVED_DAYS_TIME = 2246400000l;
+    public static final int COMMENT_EDIT = 1;
+    public static final int COMMENT_DELETE = 2;
     public static final int ONE_CONSTANT = 1;
     public static final int TWO_CONSTANT = 2;
     public static final int THREE_CONSTANT = 3;
@@ -246,12 +248,12 @@ public class AppConstants {
 
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
     public static final String BAD_RQUEST = "HTTP 400 Bad Request";
-/**/
+    /**/
 
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
     public static final String DAY = " day";
     public static final String HOUR = " hr";
-    public static final String MINUT = " min";
+    public static final String MINUTE = " min";
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
@@ -282,6 +284,7 @@ public class AppConstants {
     public static final String STORIES_URL_COM = "https://sheroes.com/stories";
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
+    public static final String POLL_URL_COM = "https://sheroes.com/communities/poll";
     public static final String EVENT_URL = "https://sheroes.in/event";
     public static final String EVENT_URL_COM = "https://sheroes.com/event";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/";
@@ -455,4 +458,6 @@ public class AppConstants {
     public static final String PUSH_PROVIDER_SHEROES = "Sheroes";
     public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
+
+    public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
 }

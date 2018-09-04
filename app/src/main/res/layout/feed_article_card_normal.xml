@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_size_10"
+    android:layout_marginBottom="@dimen/feed_article_margin_bottom"
     android:background="@color/white"
     android:orientation="vertical">
 
@@ -10,8 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/dp_size_12"
-        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginLeft="@dimen/feed_article_user_container_margin_left"
+        android:layout_marginStart="@dimen/feed_article_user_container_margin_left"
+        android:layout_marginTop="@dimen/feed_article_user_container_margin_top"
         android:gravity="top"
         android:orientation="horizontal"
         android:weightSum="1">
@@ -30,15 +31,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_8"
-            android:layout_marginRight="@dimen/dp_size_10"
+            android:layout_marginEnd="@dimen/feed_article_title_container_margin_right"
+            android:layout_marginLeft="@dimen/feed_article_title_container_margin_left"
+            android:layout_marginRight="@dimen/feed_article_title_container_margin_right"
+            android:layout_marginStart="@dimen/feed_article_title_container_margin_left"
             android:layout_weight="1"
             android:orientation="vertical">
 
@@ -46,29 +49,32 @@
                 android:id="@+id/tv_feed_article_card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/sp_size_14"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"/>
+                android:textSize="@dimen/feed_article_card_title_textsize" />
 
             <TextView
                 android:id="@+id/tv_feed_article_title_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_size_3"
+                android:layout_marginTop="@dimen/tv_feed_article_card_title_label"
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/feed_card_time"
-                android:textSize="@dimen/sp_size_12" />
+                android:textSize="@dimen/tv_feed_article_card_title_label_size" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_feed_article_user_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawableEnd="@drawable/vector_bookmark_in_active"
             android:drawableRight="@drawable/ic_bookmark_in_active"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingLeft="@dimen/dp_size_14"
-            android:paddingRight="@dimen/dp_size_20"
-            android:paddingTop="@dimen/dp_size_5" />
+            android:paddingBottom="@dimen/feed_article_bookmark_padding_bottom"
+            android:paddingEnd="@dimen/feed_article_bookmark_padding_right"
+            android:paddingLeft="@dimen/feed_article_bookmark_padding_left"
+            android:paddingRight="@dimen/feed_article_bookmark_padding_right"
+            android:paddingStart="@dimen/feed_article_bookmark_padding_left"
+            android:paddingTop="@dimen/feed_article_bookmark_padding_top" />
 
         <TextView
             android:id="@+id/tv_feed_article_draft"
@@ -78,7 +84,7 @@
             android:text="@string/action_draft"
             android:textAllCaps="true"
             android:textColor="@color/recent_post_comment"
-            android:textSize="14sp"
+            android:textSize="@dimen/feed_article_draft_text_size"
             android:visibility="gone" />
 
         <TextView
@@ -86,63 +92,67 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="-2dp"
-            android:drawableRight="@drawable/ic_menu_dashboard"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingLeft="@dimen/dp_size_14"
-            android:paddingRight="@dimen/sp_size_24"
-            android:paddingTop="@dimen/dp_size_5" />
+            android:drawableEnd="@drawable/vector_menu_dashboard"
+            android:drawableRight="@drawable/vector_menu_dashboard"
+            android:paddingBottom="@dimen/feed_article_user_menu_padding_bottom"
+            android:paddingEnd="@dimen/feed_article_user_menu_padding_right"
+            android:paddingLeft="@dimen/feed_article_user_menu_padding_left"
+            android:paddingRight="@dimen/feed_article_user_menu_padding_right"
+            android:paddingStart="@dimen/feed_article_user_menu_padding_left"
+            android:paddingTop="@dimen/feed_article_user_menu_padding_top" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/li_feed_article_images"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_180"
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:background="@drawable/ic_image_holder"
+        android:layout_height="@dimen/feed_article_image_height"
+        android:layout_marginTop="@dimen/feed_article_image_margin_top"
+        android:background="@drawable/vector_image_holder"
         android:orientation="vertical" />
 
     <TextView
         android:id="@+id/tv_feed_article_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/feed_article_header_margin_horizontal"
+        android:layout_marginRight="@dimen/feed_article_header_margin_horizontal"
+        android:layout_marginTop="@dimen/feed_article_header_margin_vertical"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:lineSpacingExtra="@dimen/dp_size_3"
-        android:lines="4"
-        android:maxLines="4"
-        android:minLines="1"
+        android:lineSpacingExtra="@dimen/feed_article_header_line_space"
+        android:lines="@integer/feed_article_header_max_line"
+        android:maxLines="@integer/feed_article_header_max_line"
+        android:minLines="@integer/feed_article_header_min_line"
         android:textColor="@color/feed_article_label"
-        android:textSize="@dimen/sp_size_18" />
+        android:textSize="@dimen/feed_article_header_text_size" />
 
     <TextView
         android:id="@+id/tv_feed_article_header_lebel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_8"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginBottom="@dimen/feed_article_header_label_margin_vertical"
+        android:layout_marginLeft="@dimen/feed_article_header_label_margin_horizontal"
+        android:layout_marginRight="@dimen/feed_article_header_label_margin_horizontal"
+        android:layout_marginTop="@dimen/feed_article_header_label_margin_vertical"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:lineSpacingExtra="@dimen/dp_size_3"
-        android:maxLines="@integer/int_value_for_line_4"
+        android:lineSpacingExtra="@dimen/feed_article_header_label_line_space"
+        android:maxLines="@integer/feed_article_header_label_max_line"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_14" />
+        android:textSize="@dimen/feed_article_header_label_text_size" />
 
     <TextView
         android:id="@+id/tv_feed_article_view_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:layout_marginRight="@dimen/dp_size_25"
+        android:layout_gravity="end"
+        android:layout_marginEnd="@dimen/feed_artcle_view_more_margin_right"
+        android:layout_marginRight="@dimen/feed_artcle_view_more_margin_right"
         android:layout_marginTop="-10dp"
         android:background="@color/white"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:gravity="right"
+        android:gravity="end"
         android:text="@string/ID_VIEW_MORE"
         android:textColor="@color/view_more"
-        android:textSize="@dimen/sp_size_14"
+        android:textSize="@dimen/feed_article_view_more_text_size"
         android:visibility="gone" />
 
 
@@ -150,15 +160,15 @@
         android:id="@+id/tv_feed_article_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_8"
-        android:layout_marginEnd="@dimen/dp_size_16"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginStart="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_8"
+        android:layout_marginBottom="@dimen/feed_article_tag_margin_vertical"
+        android:layout_marginEnd="@dimen/feed_article_tag_margin_horizontal"
+        android:layout_marginLeft="@dimen/feed_article_tag_margin_horizontal"
+        android:layout_marginRight="@dimen/feed_article_tag_margin_horizontal"
+        android:layout_marginStart="@dimen/feed_article_tag_margin_horizontal"
+        android:layout_marginTop="@dimen/feed_article_tag_margin_vertical"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_14"
+        android:textSize="@dimen/feed_article_tag_text_size"
         android:visibility="gone" />
 
 
@@ -166,29 +176,30 @@
         android:id="@+id/rl_feed_article_no_reaction_comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
-        android:layout_marginTop="@dimen/dp_size_16"
+        android:layout_marginLeft="@dimen/article_no_reaction_margin"
+        android:layout_marginRight="@dimen/article_no_reaction_margin"
+        android:layout_marginTop="@dimen/article_no_reaction_margin"
         android:visibility="gone">
 
         <TextView
             android:id="@+id/tv_feed_article_reaction1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_likes_heart" />
+            android:drawableLeft="@drawable/vector_likes_heart"
+            android:drawableStart="@drawable/vector_likes_heart" />
 
         <TextView
             android:id="@+id/tv_feed_article_total_reactions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/dp_size_8"
-            android:layout_marginStart="@dimen/dp_size_8"
+            android:layout_marginLeft="@dimen/feed_article_total_reaction_margin_left"
+            android:layout_marginStart="@dimen/feed_article_total_reaction_margin_left"
             android:layout_toEndOf="@id/tv_feed_article_reaction1"
             android:layout_toRightOf="@id/tv_feed_article_reaction1"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="@color/feed_card_time"
-            android:textSize="@dimen/sp_size_12" />
+            android:textSize="@dimen/feed_article_total_reaction_text_size" />
 
         <TextView
             android:id="@+id/tv_feed_article_total_replies"
@@ -199,16 +210,16 @@
             android:layout_alignParentTop="true"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="@color/feed_card_time"
-            android:textSize="@dimen/sp_size_12" />
+            android:textSize="@dimen/feed_article_total_replies_text_size" />
     </RelativeLayout>
 
 
     <View
         android:id="@+id/line_for_no_image"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_size_0.5"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="@dimen/dp_size_16"
+        android:layout_height="@dimen/feed_article_line_for_no_image"
+        android:layout_marginLeft="@dimen/feed_article_margin_left"
+        android:layout_marginRight="@dimen/feed_article_margin_left"
         android:background="@color/feed_card_time" />
 
 
@@ -216,9 +227,11 @@
         android:id="@+id/rl_comment_reaction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_size_8"
-        android:layout_marginRight="@dimen/dp_size_6"
-        android:layout_marginTop="@dimen/dp_size_6"
+        android:layout_marginEnd="@dimen/feed_article_comment_reaction_margin_right"
+        android:layout_marginLeft="@dimen/feed_article_comment_reaction_margin_left"
+        android:layout_marginRight="@dimen/feed_article_comment_reaction_margin_right"
+        android:layout_marginStart="@dimen/feed_article_comment_reaction_margin_left"
+        android:layout_marginTop="@dimen/feed_article_comment_reaction_margin_top"
         android:clickable="false"
         android:orientation="horizontal"
         android:saveEnabled="false">
@@ -227,14 +240,15 @@
             android:id="@+id/tv_feed_article_user_reaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_heart_in_active"
-            android:drawablePadding="@dimen/dp_size_8"
+            android:drawableLeft="@drawable/vector_heart_in_active"
+            android:drawablePadding="@dimen/eed_article_user_reaction_drawable_padding"
+            android:drawableStart="@drawable/vector_heart_in_active"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
-            android:padding="@dimen/dp_size_10"
+            android:padding="@dimen/eed_article_user_reaction_padding"
             android:text="@string/ID_LIKE"
             android:textColor="@color/recent_post_comment"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/eed_article_user_reaction_text_size" />
 
         <TextView
             android:id="@+id/tv_feed_article_user_share"
@@ -244,17 +258,18 @@
             android:layout_alignBottom="@+id/tv_feed_article_user_comment"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:drawableLeft="@drawable/ic_share_card"
-            android:drawablePadding="@dimen/dp_size_8"
+            android:drawableLeft="@drawable/vector_share_card"
+            android:drawablePadding="@dimen/article_user_share_drawable_padding"
+            android:drawableStart="@drawable/vector_share_card"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingLeft="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_10"
-            android:paddingTop="@dimen/dp_size_7"
+            android:paddingBottom="@dimen/feed_article_user_padding"
+            android:paddingLeft="@dimen/feed_article_user_padding"
+            android:paddingRight="@dimen/feed_article_user_padding"
+            android:paddingTop="@dimen/feed_article_user_padding_top"
             android:text="@string/ID_SHARE_ON_WHATS_APP"
             android:textColor="@color/share_color"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/feed_article_user_text_size" />
 
         <TextView
             android:id="@+id/tv_feed_article_user_comment"
@@ -262,94 +277,32 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tv_feed_article_user_reaction"
             android:layout_centerHorizontal="true"
-            android:drawableLeft="@drawable/ic_comment_icon"
-            android:drawablePadding="@dimen/dp_size_8"
+            android:drawableLeft="@drawable/vector_comment_icon"
+            android:drawablePadding="@dimen/feed_article_comment_drawable_padding"
+            android:drawableStart="@drawable/vector_comment_icon"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:paddingBottom="@dimen/dp_size_10"
-            android:paddingLeft="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_10"
-            android:paddingTop="@dimen/dp_size_10"
+            android:padding="@dimen/feed_article_user_comment_padding"
             android:text="@string/comment"
             android:textColor="@color/recent_post_comment"
-            android:textSize="@dimen/sp_size_14" />
+            android:textSize="@dimen/feed_article_user_reaction_text_size" />
 
     </RelativeLayout>
 
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/li_feed_article_user_comments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_18"
+        android:layout_marginTop="@dimen/feed_article_user_comment_margin_top"
         android:orientation="vertical">
-
-        <FrameLayout
-            android:id="@+id/spam_comment_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="@integer/int_value_for_line_1"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/spam_article_comment_menu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right|end"
-                android:drawableRight="@drawable/ic_menu_dashboard"
-                android:gravity="right|end"
-                android:padding="@dimen/dp_size_8"
-                android:paddingBottom="@dimen/dp_size_10"
-                android:visibility="gone" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:weightSum="@integer/int_value_for_line_1">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:weightSum="@integer/int_value_for_line_1">
-
-                    <ImageView
-                        android:id="@+id/spam_info_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_8"
-                        android:layout_marginStart="@dimen/dp_size_8"
-                        android:layout_marginTop="@dimen/dp_size_8"
-                        android:src="@drawable/ic_spam_post_message" />
-
-                    <TextView
-                        android:id="@+id/tv_review_description"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_11"
-                        android:layout_marginRight="@dimen/dp_size_11"
-                        android:layout_toEndOf="@id/spam_info_icon"
-                        android:layout_toRightOf="@id/spam_info_icon"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:lineSpacingExtra="@dimen/dp_size_3"
-                        android:padding="@dimen/dp_size_8"
-                        android:text="@string/COMMENT_REVIEW_MESSAGE"
-                        android:textColor="@color/pure_black"
-                        android:textSize="@dimen/sp_size_14" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-        </FrameLayout>
-
+        <!--user last comment -->
         <RelativeLayout
             android:id="@+id/last_comment_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginRight="@dimen/dp_size_6"
-            android:layout_weight="@integer/int_value_for_line_1">
+            android:layout_marginEnd="@dimen/feed_article_last_comment_margin_right"
+            android:layout_marginLeft="@dimen/feed_article_last_comment_margin_left"
+            android:layout_marginRight="@dimen/feed_article_last_comment_margin_right"
+            android:layout_marginStart="@dimen/feed_article_last_comment_margin_left">
 
             <FrameLayout
                 android:id="@+id/img_container"
@@ -366,10 +319,19 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|bottom"
-                    android:layout_marginLeft="@dimen/dp_size_15"
-                    android:layout_marginTop="@dimen/dp_size_15"
-                    android:background="@drawable/ic_verified"
+                    android:layout_marginLeft="@dimen/feed_article_author_verified_icon_margin"
+                    android:layout_marginStart="@dimen/feed_article_author_verified_icon_margin"
+                    android:layout_marginTop="@dimen/feed_article_author_verified_icon_margin"
+                    android:background="@drawable/vector_verified"
                     android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/user_badge"
+                    android:layout_width="@dimen/article_last_comment_author_pic_size"
+                    android:layout_height="@dimen/article_last_comment_author_pic_size"
+                    android:layout_gravity="end|bottom"
+                    android:visibility="gone" />
+
             </FrameLayout>
 
             <LinearLayout
@@ -383,36 +345,39 @@
                     android:id="@+id/tv_feed_article_user_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginLeft="@dimen/feed_article_user_name_margin"
+                    android:layout_marginStart="@dimen/feed_article_user_name_margin"
                     android:ellipsize="end"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:lineSpacingExtra="@dimen/dp_size_3"
-                    android:maxLines="@integer/int_value_for_line_2"
+                    android:lineSpacingExtra="@dimen/feed_article_user_name_line_space"
+                    android:maxLines="@integer/feed_article_user_name_margin_max_line"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/feed_article_user_name_text_size" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_10"
-                    android:layout_marginRight="@dimen/dp_size_5">
+                    android:layout_marginEnd="@dimen/feed_article_comment_container_margin_right"
+                    android:layout_marginLeft="@dimen/feed_article_comment_container_margin_left"
+                    android:layout_marginRight="@dimen/feed_article_comment_container_margin_right"
+                    android:layout_marginStart="@dimen/feed_article_comment_container_margin_left">
 
                     <TextView
                         android:id="@+id/tv_feed_article_user_comment_post"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                        android:lineSpacingExtra="@dimen/dp_size_3"
-                        android:maxLines="@integer/int_value_for_line_3"
+                        android:lineSpacingExtra="@dimen/feed_article_user_comment_post_line_space"
+                        android:maxLines="@integer/feed_article_user_comment_post_line"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_12" />
+                        android:textSize="@dimen/feed_article_user_comment_post_text_size" />
 
                     <TextView
                         android:id="@+id/tv_feed_article_user_comment_post_view_more"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom|right"
-                        android:layout_marginBottom="@dimen/dp_size_2"
+                        android:layout_marginBottom="@dimen/feed_article_user_comment_post_view_more_margin"
                         android:background="@color/white"
                         android:text="@string/ID_VIEW_MORE"
                         android:textColor="@color/view_more"
@@ -423,10 +388,11 @@
                     android:id="@+id/tv_feed_article_comment_post_time"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_size_10"
+                    android:layout_marginLeft="@dimen/feed_article_comment_post_time_margin"
+                    android:layout_marginStart="@dimen/feed_article_comment_post_time_margin"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/recent_post_comment"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/feed_article_comment_text_size" />
             </LinearLayout>
 
             <TextView
@@ -435,56 +401,118 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_gravity="right"
-                android:drawableRight="@drawable/ic_menu_dashboard"
-                android:paddingBottom="@dimen/dp_size_20"
-                android:paddingLeft="@dimen/dp_size_10"
-                android:paddingRight="@dimen/dp_size_14"
-                android:paddingTop="@dimen/dp_size_5"
+                android:layout_gravity="end"
+                android:drawableEnd="@drawable/vector_menu_dashboard"
+                android:drawableRight="@drawable/vector_menu_dashboard"
+                android:paddingBottom="@dimen/feed_article_user_comment_post_menu_padding_bottom"
+                android:paddingEnd="@dimen/feed_article_user_comment_post_menu_padding_right"
+                android:paddingLeft="@dimen/feed_article_user_comment_post_menu_padding_left"
+                android:paddingRight="@dimen/feed_article_user_comment_post_menu_padding_right"
+                android:paddingStart="@dimen/feed_article_user_comment_post_menu_padding_left"
+                android:paddingTop="@dimen/feed_article_user_comment_post_menu_padding_top"
                 android:visibility="gone" />
 
         </RelativeLayout>
-    </LinearLayout>
+
+        <!--spam comment -->
+        <FrameLayout
+            android:id="@+id/spam_comment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/spam_article_comment_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:drawableEnd="@drawable/vector_menu_dashboard"
+                android:drawableRight="@drawable/vector_menu_dashboard"
+                android:gravity="end"
+                android:padding="@dimen/feed_article_spam_comment_menu_padding"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/spam_info_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/feed_article_spam_info_margin"
+                        android:layout_marginStart="@dimen/feed_article_spam_info_margin"
+                        android:layout_marginTop="@dimen/feed_article_spam_info_margin"
+                        android:src="@drawable/vector_spam_post_message" />
+
+                    <TextView
+                        android:id="@+id/tv_review_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/feed_article_spam_review_margin"
+                        android:layout_marginRight="@dimen/feed_article_spam_review_margin"
+                        android:layout_toEndOf="@id/spam_info_icon"
+                        android:layout_toRightOf="@id/spam_info_icon"
+                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                        android:lineSpacingExtra="@dimen/feed_article_spam_review_line_space"
+                        android:padding="@dimen/feed_article_spam_review_padding"
+                        android:text="@string/COMMENT_REVIEW_MESSAGE"
+                        android:textColor="@color/pure_black"
+                        android:textSize="@dimen/feed_article_spam_review_text_size" />
+                </RelativeLayout>
+            </LinearLayout>
+        </FrameLayout>
+
+    </FrameLayout>
 
     <RelativeLayout
         android:id="@+id/rl_feed_article_join_conversation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_size_10"
+        android:layout_marginTop="@dimen/feed_article_join_conversation_margin_top"
         android:background="@color/join_conversation"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:id="@+id/fl_login_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_size_16">
+            android:layout_marginTop="@dimen/feed_article_login_user_container_margin_top">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_feed_article_login_user_pic"
                 android:layout_width="@dimen/comment_icon"
                 android:layout_height="@dimen/comment_icon"
-                android:layout_marginLeft="14dp"
-                android:layout_marginStart="14dp" />
+                android:layout_marginLeft="@dimen/feed_article_login_user_icon_margin"
+                android:layout_marginStart="@dimen/feed_article_login_user_icon_margin" />
 
             <ImageView
                 android:id="@+id/iv_feed_article_login_user_icon_verified"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:layout_marginLeft="@dimen/dp_size_15"
-                android:layout_marginTop="@dimen/dp_size_15"
-                android:background="@drawable/ic_verified"
+                android:layout_marginLeft="@dimen/feed_article_login_user_icon_verified_margin"
+                android:layout_marginStart="@dimen/feed_article_login_user_icon_verified_margin"
+                android:layout_marginTop="@dimen/feed_article_login_user_icon_verified_margin"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_size_16"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginBottom="@dimen/feed_article_user_container_margin_vertical"
+            android:layout_marginLeft="@dimen/feed_article_user_container_margin_horizontal"
+            android:layout_marginStart="@dimen/feed_article_user_container_margin_horizontal"
+            android:layout_marginTop="@dimen/feed_article_user_container_margin_vertical"
+            android:layout_toEndOf="@id/fl_login_user"
             android:layout_toRightOf="@id/fl_login_user"
             android:orientation="vertical">
 
@@ -497,31 +525,32 @@
                     android:id="@+id/tv_feed_article_login_user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/dp_size_16"
+                    android:layout_marginEnd="@dimen/feed_article_user_name_margin_right"
+                    android:layout_marginRight="@dimen/feed_article_user_name_margin_right"
                     android:ellipsize="end"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                    android:maxLines="@integer/int_value_for_line_2"
+                    android:maxLines="@integer/feed_article_user_name_max_lines"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/sp_size_12" />
+                    android:textSize="@dimen/feed_article_login_user_name_text_size" />
 
                 <TextView
                     android:id="@+id/tv_article_join_conversation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_feed_article_login_user_name"
-                    android:layout_marginRight="@dimen/dp_size_16"
-                    android:layout_marginTop="@dimen/dp_size_4"
+                    android:layout_marginEnd="@dimen/article_join_conversation_margin_right"
+                    android:layout_marginRight="@dimen/article_join_conversation_margin_right"
+                    android:layout_marginTop="@dimen/article_join_conversation_margin_top"
                     android:background="@drawable/rectangle_comment_background"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:lineSpacingExtra="@dimen/dp_size_3"
-                    android:maxLines="@integer/int_value_for_line_3"
-                    android:padding="@dimen/dp_size_11"
+                    android:lineSpacingExtra="@dimen/feed_article_join_conversation_text_line_space"
+                    android:maxLines="@integer/article_join_conversation_max_lines"
+                    android:padding="@dimen/feed_article_join_conversation_text_padding"
                     android:textColor="@color/feed_card_time"
-                    android:textSize="@dimen/sp_size_14" />
+                    android:textSize="@dimen/feed_article_join_conversation_text" />
             </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView>
         </LinearLayout>
 
 
     </RelativeLayout>
 </LinearLayout>
-

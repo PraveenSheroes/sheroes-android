@@ -763,34 +763,34 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             profileLevel.setText(R.string.progress_status_beginner);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= ProfileProgressDialog.BEGINNER_END_LIMIT) {
-                beginnerTick.setImageResource(R.drawable.ic_level_complete);
+                beginnerTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                beginnerTick.setImageResource(R.drawable.ic_level_incomplete);
+                beginnerTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
-            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+            intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
+            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
 
         } else if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
             profileLevel.setText(R.string.progress_status_all_star);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
-                allStarTick.setImageResource(R.drawable.ic_all_level_complete);
+                allStarTick.setImageResource(R.drawable.vector_all_level_complete);
             } else {
-                allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
+                allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
             }
-            beginnerTick.setImageResource(R.drawable.ic_level_complete);
-            intermediateTick.setImageResource(R.drawable.ic_level_complete);
+            beginnerTick.setImageResource(R.drawable.vector_level_complete);
+            intermediateTick.setImageResource(R.drawable.vector_level_complete);
 
         } else {
             profileLevel.setText(R.string.progress_level_status_intermediate);
 
             if (mUserSolarObject.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setImageResource(R.drawable.ic_level_complete);
+                intermediateTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                intermediateTick.setImageResource(R.drawable.ic_level_incomplete);
+                intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            allStarTick.setImageResource(R.drawable.ic_all_level_incomplete);
-            beginnerTick.setImageResource(R.drawable.ic_level_complete);
+            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+            beginnerTick.setImageResource(R.drawable.vector_level_complete);
 
         }
     }
@@ -947,10 +947,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
         //admin and community moderator have feature to share profile and deactivate user
         if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (mLoggedInUserIdTypeId == ADMIN_TYPE_ID || mLoggedInUserIdTypeId == COMMUNITY_MODERATOR_TYPE_ID)) {
-            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_share_black), getResources().getString(R.string.SHARE_PROFILE)));
-            popup.getMenu().add(0, R.id.deactivate_user, 2, menuIconWithText(getResources().getDrawable(R.drawable.deactivate_user), getResources().getString(R.string.deactivate_user)));
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.SHARE_PROFILE)));
+            popup.getMenu().add(0, R.id.deactivate_user, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_deactivate_user), getResources().getString(R.string.deactivate_user)));
         } else if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
-            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
         }
 
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -1318,7 +1318,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
             if (ProfileActivity.this.isFinishing()) return;
 
-            if (!spamResponse.isSpamAlreadyReported()) {
+            if(spamResponse.isSpammed()) {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
+            } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
@@ -1638,7 +1640,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     boolean isPostDeleted = false;
                     FeedDetail feedDetailObj = null;
                     if (AppUtils.isFragmentUIActive(mFragment)) {
-                        Parcelable parcelable = intent.getParcelableExtra(UserPostSolrObj.USER_POST_OBJ);
+                        Parcelable parcelable = intent.getParcelableExtra(FeedDetail.FEED_COMMENTS);
                         if (parcelable != null) {
                             UserPostSolrObj userPostSolrObj = Parcels.unwrap(parcelable);
                             isPostDeleted = intent.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
@@ -1648,7 +1650,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                             if (isPostDeleted) {
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                                } else {
+                                } else if(mFragment instanceof MentorQADetailFragment){
                                     ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
                                 }
@@ -1656,8 +1658,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
                                 } else {
-                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
-                                    isMentorQARefresh = true;
+                                    if (mFragment instanceof MentorQADetailFragment) {
+                                        ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
+                                        isMentorQARefresh = true;
+                                    }
                                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
                                 }
                             }
@@ -2085,7 +2089,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 tvMentorDashBoardFollow.setText("");
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.ic_profile_edit_icon);
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.vector_profile_edit_icon);
                 tvMentorDashBoardFollow.setLayoutParams(params1);
             } else {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -2103,7 +2107,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
                 shareProfile.setText("");
-                shareProfile.setBackgroundResource(R.drawable.ic_share_profile);
+                shareProfile.setBackgroundResource(R.drawable.vector_share_profile);
                 shareProfile.setLayoutParams(params1);
             }
         } else {

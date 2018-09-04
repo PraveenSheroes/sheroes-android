@@ -195,17 +195,18 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
             //For profile if badge is inactive show message "Won last on" & for other "Won Latest on"
             if (!isLeaderBoard) {
+                String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : "This User";
                 if (mBadgeDetails.isActive()) {
                     showLeaderBoard.setVisibility(View.VISIBLE);
                     badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));
 
-                    String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
+                    String badgeDescription = getResources().getString(R.string.badge_desc, CommonUtil.camelCaseString(userName.trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
                     badgeDesc.setText(badgeDescription);
                 } else {
                     showLeaderBoard.setVisibility(View.GONE);
                     badgeWonPeriod.setText(getResources().getString(R.string.badge_inactive_period_date_text, day, endDateText));
 
-                    String badgeDescription = getResources().getString(R.string.inactive_badge_desc, CommonUtil.camelCaseString(mUserSolrObj.getNameOrTitle().trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
+                    String badgeDescription = getResources().getString(R.string.inactive_badge_desc, CommonUtil.camelCaseString(userName.trim().toLowerCase()), CommonUtil.camelCaseString(mBadgeDetails.getCommunityName().toLowerCase()));
                     badgeDesc.setText(badgeDescription);
                 }
 

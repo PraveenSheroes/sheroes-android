@@ -27,7 +27,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end|top"
-            android:src="@drawable/ic_edit_pic"
+            android:src="@drawable/vector_edit_pic"
             android:visibility="gone" />
 
         <ImageView
@@ -35,7 +35,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end|bottom"
-            android:src="@drawable/ic_badge_golden"
+            android:src="@drawable/vector_badge_golden"
             android:visibility="gone" />
 
         <ImageView
@@ -43,7 +43,7 @@
             android:layout_width="@dimen/dp_size_30"
             android:layout_height="@dimen/dp_size_30"
             android:layout_gravity="end|bottom"
-            android:background="@drawable/ic_verified"
+            android:background="@drawable/vector_verified"
             android:visibility="gone" />
 
     </FrameLayout>
@@ -263,9 +263,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
-            android:drawableLeft="@drawable/ic_loc"
+            android:drawableLeft="@drawable/vector_loc"
             android:drawablePadding="@dimen/dp_size_6"
-            android:drawableStart="@drawable/ic_loc"
+            android:drawableStart="@drawable/vector_loc"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:maxLines="@integer/int_value_for_line_1"
             android:textColor="@color/gray_light"
@@ -283,7 +283,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:src="@drawable/ic_mentor_profession" />
+                android:src="@drawable/vector_mentor_profession" />
 
             <TextView
                 android:id="@+id/tv_profession"
@@ -358,9 +358,9 @@
             android:layout_marginStart="@dimen/dp_size_10"
             android:layout_marginTop="@dimen/dp_size_8"
             android:background="@drawable/border_new_feature"
-            android:drawableLeft="@drawable/ic_offer"
+            android:drawableLeft="@drawable/vector_offer"
             android:drawablePadding="@dimen/dp_size_3"
-            android:drawableStart="@drawable/ic_offer"
+            android:drawableStart="@drawable/vector_offer"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_vertical"
             android:padding="@dimen/dp_size_3"

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_Add_option_poll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_add_poll_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/option_poll_margin_left_right"
+        android:layout_marginStart="@dimen/option_poll_margin_left_right"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/vector_add_red" />
+
+    <TextView
+        android:id="@+id/tv_add_poll_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/add_option_poll_label_text_margin"
+        android:layout_marginStart="@dimen/add_option_poll_label_text_margin"
+        android:layout_toRightOf="@+id/iv_add_poll_img"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/poll_option_text"
+        android:textAllCaps="true"
+        android:textColor="@color/footer_icon_text"
+        android:textSize="@dimen/add_option_poll_label_text"
+        app:layout_constraintLeft_toRightOf="@id/iv_add_poll_img" />
+
+    <TextView
+        android:id="@+id/tv_add_poll_ends_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_add_poll_img"
+        android:layout_marginLeft="@dimen/option_poll_margin_left_right"
+        android:layout_marginStart="@dimen/option_poll_margin_left_right"
+        android:layout_marginTop="@dimen/add_option_poll_day_selection_margin"
+        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:paddingTop="@dimen/option_poll_ends_padding"
+        android:text="@string/poll_option_end_text"
+        android:textColor="@color/recent_post_comment"
+        android:textSize="@dimen/add_option_poll_label_text" />
+
+    <TextView
+        android:id="@+id/tv_day_selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_add_poll_ends_label"
+        android:layout_marginTop="0dp"
+        android:layout_toRightOf="@+id/tv_add_poll_ends_label"
+        android:drawablePadding="@dimen/add_option_poll_day_selection_margin_left"
+        android:drawableRight="@drawable/vector_spinner_red"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:paddingEnd="@dimen/poll_spinner_day_padding"
+        android:paddingLeft="@dimen/poll_spinner_day_padding"
+        android:paddingRight="@dimen/poll_spinner_day_padding"
+        android:paddingStart="@dimen/poll_spinner_day_padding"
+        android:textColor="@color/footer_icon_text"
+        android:textSize="@dimen/poll_spinner_day_text" />
+</RelativeLayout>

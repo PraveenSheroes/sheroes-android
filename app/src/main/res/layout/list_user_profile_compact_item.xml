@@ -35,8 +35,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
                 android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/bade_icon"
+                android:layout_width="@dimen/user_post_badge_icon"
+                android:layout_height="@dimen/user_post_badge_icon"
+                android:layout_gravity="end|bottom" />
+
         </FrameLayout>
         
         <RelativeLayout
@@ -63,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:textSize="14sp"
-            android:drawableLeft="@drawable/ic_loc"
+            android:drawableLeft="@drawable/vector_loc"
             android:drawablePadding="6dp"
             android:layout_below="@+id/name"
             android:fontFamily="sans-serif"

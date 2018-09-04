@@ -6,6 +6,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.List;
@@ -32,6 +35,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -58,6 +62,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     // region View variables
     @Bind(R.id.profile_verified)
     ImageView mProfileVerfied;
+
+    @Bind(R.id.bade_icon)
+    ImageView badgeIcon;
 
     @Bind(R.id.user_profile_pic)
     CircleImageView mUserProfilePic;
@@ -88,6 +95,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
 
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
+
+    @BindDimen(R.dimen.user_comment_badge_icon_size)
+    int badgeIconSize;
     //endregion
 
     // region member variables
@@ -152,6 +162,7 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                 }
             }
         }
+        CommonUtil.showHideUserBadge(mContext, comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
     }
 
     /*show comments with mentions and links   */
@@ -197,9 +208,9 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
             mCommentLike.setText("");
         }
         if (item.isLiked) {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_likes_heart, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_likes_heart, 0, 0, 0);
         } else {
-            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_likes_heart_in_active, 0, 0, 0);
+            mCommentLike.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_likes_heart_in_active, 0, 0, 0);
         }
     }
 
@@ -228,13 +239,6 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
     public void onCommentMenuClick() {
         mComment.setItemPosition(getAdapterPosition());
         mCommentCallback.onCommentMenuClicked(mComment, mUserCommentListMenu);
-    }
-
-    @OnClick(R.id.tv_list_user_comment)
-    public void onCommentWithNameClick() {
-       /* if (mComment.isVerifiedMentor()) {
-            viewInterface.navigateToProfileView(mComment, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }*/
     }
 
     @OnClick(R.id.like)
@@ -305,6 +309,5 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         mUserComment.setMovementMethod(LinkMovementMethod.getInstance());
         mUserComment.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
 
-        // tvMention.setSelected(true);
     }
 }

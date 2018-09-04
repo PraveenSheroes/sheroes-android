@@ -37,6 +37,10 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
     @Expose
     private String solrIgnoreEndDate;
 
+    @SerializedName("solr_ignore_user_rank_model")
+    @Expose
+    private LeaderBoardUserRankObj leaderBoardUserRankObj;
+
     public BadgeDetails getSolrIgnoreBadgeDetails() {
         return solrIgnoreBadgeDetails;
     }
@@ -63,5 +67,13 @@ public class LeaderBoardUserSolrObj extends UserSolrObj {
 
     public String getSolrIgnoreEndDate() {
         return solrIgnoreEndDate;
+    }
+
+    public LeaderBoardUserRankObj getLeaderBoardUserRankObj() {
+        return leaderBoardUserRankObj;
+    }
+
+    public void setLeaderBoardUserRankObj(LeaderBoardUserRankObj leaderBoardUserRankObj) {
+        this.leaderBoardUserRankObj = leaderBoardUserRankObj;
     }
 }

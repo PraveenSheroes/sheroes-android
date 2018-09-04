@@ -14,8 +14,6 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
  */
 @Parcel(analyze = {UserPostSolrObj.class, FeedDetail.class})
 public class UserPostSolrObj extends FeedDetail {
-    public static final String USER_POST_OBJ = "USER_POST_OBJ";
-    public static final String USER_POST_ID = "USER_POST_ID";
 
     public boolean isRecentCommentClicked = false;
 
@@ -98,6 +96,12 @@ public class UserPostSolrObj extends FeedDetail {
     @SerializedName("user_mentions")
     @Expose
     private List<MentionSpan> userMentionList;
+
+    @SerializedName("solr_ignore_show_profile_badge")
+    private boolean isBadgeShownOnPic;
+
+    @SerializedName("solr_ignore_profile_badge_url")
+    private String profilePicBadgeUrl;
 
     //this field are added by own
     private int noOfOpenings;
@@ -341,5 +345,21 @@ public class UserPostSolrObj extends FeedDetail {
 
     public void setUserMentionList(List<MentionSpan> userMentionList) {
         this.userMentionList = userMentionList;
+    }
+
+    public String getProfilePicBadgeUrl() {
+        return profilePicBadgeUrl;
+    }
+
+    public void setProfilePicBadgeUrl(String profilePicBadgeUrl) {
+        this.profilePicBadgeUrl = profilePicBadgeUrl;
+    }
+
+    public boolean isBadgeShownOnPic() {
+        return isBadgeShownOnPic;
+    }
+
+    public void setBadgeShownOnPic(boolean badgeShownOnPic) {
+        isBadgeShownOnPic = badgeShownOnPic;
     }
 }

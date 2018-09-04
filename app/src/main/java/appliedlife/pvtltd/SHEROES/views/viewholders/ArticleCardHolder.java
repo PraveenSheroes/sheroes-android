@@ -105,7 +105,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareOption = "";
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareOption)) {
@@ -132,18 +132,18 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     private void onBookMarkClick() {
         if (dataItem.isBookmarked()) {
-            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_active, 0);
         } else {
-            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+            tvArticleBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_in_active, 0);
         }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void textRelatedOperation() {
         if (isWhatappShareOption) {
-            tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null);
+            tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_share_card), null);
         } else {
-            tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.ic_share_black), null);
+            tvArticleShare.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(mContext, R.drawable.vector_share_black), null);
         }
 
         mViewMoreDescription = dataItem.getShortDescription();

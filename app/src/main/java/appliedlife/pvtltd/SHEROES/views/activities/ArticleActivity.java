@@ -73,7 +73,6 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -483,7 +482,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             } else if (mCurrentState == State.EXPANDED) {
                 menu.findItem(R.id.like).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
                 menu.findItem(R.id.bookmark).getIcon().setColorFilter(getResources().getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.ic_back_white);
+                final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_white);
                 getSupportActionBar().setHomeAsUpIndicator(upArrow);
             }
 
@@ -595,14 +594,14 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mCommentList.setFocusable(false);
         mCommentsAdapter = new CommentListAdapter(this, mArticlePresenter, new View.OnClickListener() {
             @Override
-            public void onClick(final View deleteItem) {
-                View recyclerViewItem = (View) deleteItem.getParent();
+            public void onClick(final View view) {
+                View recyclerViewItem = (View) view.getParent();
                 final int position = mCommentList.getChildAdapterPosition(recyclerViewItem);
                 if (position == RecyclerView.NO_POSITION) {
                     return;
                 }
-                switch (deleteItem.getId()) {
-                    case R.id.author_pic:
+                switch (view.getId()) {
+                    case R.id.author_pic_container:
                     case R.id.author:
 
                         Comment comment = mCommentsAdapter.getComment(position);
@@ -612,10 +611,10 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         break;
 
                     case R.id.delete:
-                        final PopupMenu popup = new PopupMenu(ArticleActivity.this, deleteItem);
+                        final PopupMenu popup = new PopupMenu(ArticleActivity.this, view);
 
-                        popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.ic_delete), getResources().getString(R.string.ID_DELETE)));
-                        popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.ic_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+                        popup.getMenu().add(0, R.id.delete, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+                        popup.getMenu().add(0, R.id.report_spam, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
                         final Comment selectedComment = mCommentsAdapter.getComment(position);
                         if (selectedComment == null) return;
@@ -1255,7 +1254,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             if (ArticleActivity.this.isFinishing()) return;
 
-            if (!spamResponse.isSpamAlreadyReported()) {
+            if(spamResponse.isSpammed()) {
+                CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, SpamContentType.COMMENT.name()));
+            } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
             } else {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, SpamContentType.COMMENT.name()));

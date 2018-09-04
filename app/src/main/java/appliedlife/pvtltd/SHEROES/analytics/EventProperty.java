@@ -27,12 +27,14 @@ public enum EventProperty {
     POSITION_IN_LIST("Position in List"),
     POST_TYPE("Post Type"),
     POST_ID("Post Id"),
+    POLL_ID("Poll Id"),
     BODY("Body"),
     COMPANY_ID("Company Id"),
     LOCATION("Location"),
     COMMUNITY_ID("Community Id"),
     CHALLENGE_ID("Challenge Id"),
     COMMUNITY_NAME("Community Name"),
+    OPTION_ID("Option Id"),
     KEYWORD("Keyword"),
     SHARED_TO("Share To"),
     ENTITY_ID("Entity Id"),
@@ -152,6 +154,10 @@ public enum EventProperty {
             put(POST_ID, value);
             return this;
         }
+        public Builder pollId(String value){
+            put(POLL_ID, value);
+            return this;
+        }
 
         public Builder body(String value){
             put(BODY, value);
@@ -218,7 +224,10 @@ public enum EventProperty {
             put(COMMUNITY_NAME, value);
             return this;
         }
-
+        public Builder optionId(String value) {
+            put(OPTION_ID, value);
+            return this;
+        }
         public Builder communityCategory(String value) {
             put(COMMUNITY_CATEGORY, value);
             return this;

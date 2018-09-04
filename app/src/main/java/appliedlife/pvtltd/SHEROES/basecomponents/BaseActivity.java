@@ -55,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -111,6 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String BOTTOM_SHEET = "Bottom Sheet";
     public static final String STORIES_TAB = "write a story";
     public static final String USER_STORY = "USER_STORY";
+    public static final String KEY_FOR_DEEPLINK_DETAIL = "post_detail_deep_link";
 
     public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
@@ -608,7 +610,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
             case R.id.tv_join_conversation:
                 if (mFeedDetail instanceof UserPostSolrObj) {
-                    PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj) mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
+                    PostDetailActivity.navigateTo(this, getScreenName(), mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
                 } else if (mFeedDetail instanceof ArticleSolrObj) {
                     ArticleSolrObj articleSolrObj=(ArticleSolrObj)mFeedDetail;
                     ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
@@ -911,9 +913,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
-                    // mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.ONE_CONSTANT);
+                    if(mFeedDetail instanceof UserPostSolrObj){
+                        ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
+                    }else if(mFeedDetail instanceof PollSolarObj){
+                        ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
+                    }
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -938,10 +943,12 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
-                    //  mFragmentOpen.setCommentList(true);
-                    // mFragmentOpen.setCommentList(true);
                     mFeedDetail.setTrending(true);
-                    ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.TWO_CONSTANT);
+                    if(mFeedDetail instanceof UserPostSolrObj){
+                        ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
+                    }else if(mFeedDetail instanceof PollSolarObj){
+                        ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
+                    }
                     openCommentReactionFragment(mFeedDetail);
                 }
                 break;
@@ -973,7 +980,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
         if (feedDetail instanceof UserPostSolrObj) {
-            PostDetailActivity.navigateTo(this, getScreenName(), (UserPostSolrObj) feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+            PostDetailActivity.navigateTo(this, getScreenName(),feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
         } else if (feedDetail instanceof ArticleSolrObj) {
             ArticleSolrObj articleSolrObj=(ArticleSolrObj)feedDetail;
             ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());

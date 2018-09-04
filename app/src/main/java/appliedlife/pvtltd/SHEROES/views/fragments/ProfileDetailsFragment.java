@@ -365,7 +365,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             }
             String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
-            emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_public_business_woman,0,0);
+            emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.vector_public_business_woman,0,0);
 
             followedMentorsListContainer.setVisibility(View.GONE);
 
@@ -451,7 +451,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             }
             String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_community, name);
-            emptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.ic_community_member_public,0,0);
+            emptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.vector_community_member_public,0,0);
             emptyViewCommunities.setText(message);
 
             if(isSelfProfile) {

@@ -16,6 +16,9 @@ public class SpamResponse extends BaseResponse {
     @SerializedName("modelType")
     private String modelType;
 
+    @SerializedName("isMarkedSpam")
+    private boolean isSpammed;
+
     public boolean isSpamAlreadyReported() {
         return isSpamAlreadyReported;
     }
@@ -30,5 +33,13 @@ public class SpamResponse extends BaseResponse {
 
     public void setModelType(String modelType) {
         this.modelType = modelType;
+    }
+
+    public boolean isSpammed() {
+        return isSpammed;
+    }
+
+    public void setSpammed(boolean spammed) {
+        isSpammed = spammed;
     }
 }

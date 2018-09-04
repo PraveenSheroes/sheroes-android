@@ -13,6 +13,7 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -202,6 +203,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_post_link_sub_title)
     TextView tvLinkSubTitle;
 
+    @Bind(R.id.last_comment_user_badge)
+    ImageView lastCommentUserBadge;
+
+    @Bind(R.id.user_badge)
+    ImageView badgeOnPic;
 
     //Organisation type post in communityPost
     @Bind(R.id.rl_comm_post_org_details)
@@ -510,9 +516,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void onBookMarkClick() {
         if (mUserPostObj.isBookmarked()) {
-            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_active, 0);
+            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_active, 0);
         } else {
-            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_bookmark_in_active, 0);
+            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_in_active, 0);
         }
     }
 
@@ -538,6 +544,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 } else {
                     ivFeedCommunityPostCircleIconVerified.setVisibility(View.GONE);
                 }
+                CommonUtil.showHideUserBadge(mContext, mUserPostObj.isAnonymous(), badgeOnPic, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
                     rlOrgCompanyFeedCard.setVisibility(View.VISIBLE);
@@ -604,7 +611,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void likeCommentOps() {
         if (mUserPostObj.getNoOfLikes() < AppConstants.ONE_CONSTANT && mUserPostObj.getNoOfComments() < AppConstants.ONE_CONSTANT) {
-            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
             rlFeedCommunityPostNoReactionComment.setVisibility(View.GONE);
             lineForNoImage.setVisibility(View.GONE);
         }
@@ -674,12 +681,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     private void populatePostText() {
         if (isWhatappShareOption) {
-            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_card), null, null, null);
+            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.vector_share_card), null, null, null);
             tvFeedCommunityPostUserShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
             tvFeedCommunityPostUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
 
         } else {
-            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.ic_share_white_out), null, null, null);
+            tvFeedCommunityPostUserShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.vector_share_white_out), null, null, null);
             tvFeedCommunityPostUserShare.setText(mContext.getString(R.string.ID_SHARE));
             tvFeedCommunityPostUserShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
 
@@ -757,10 +764,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
         switch (mUserPostObj.getReactionValue()) {
             case AppConstants.NO_REACTION_CONSTANT:
-                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
-                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
                 break;
             case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
                 break;
@@ -834,6 +841,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
                 }
             }
+            CommonUtil.showHideUserBadge(mContext, lastComment.isAnonymous(), lastCommentUserBadge, lastComment.isBadgeShown(), lastComment.getBadgeUrl());
+
             linkifyURLs(tvFeedCommunityPostUserCommentPost);
             if (tvFeedCommunityPostUserCommentPost.getLineCount() > 3) {
                 tvFeedCommunityPostUserCommentPostViewMore.setVisibility(View.VISIBLE);
@@ -1210,12 +1219,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
                 mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                 mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onUserPostUnLiked(mUserPostObj);
             } else {
                 mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                 mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+                tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
                 ((FeedItemCallback) viewInterface).onUserPostLiked(mUserPostObj);
             }
             likeCommentOps();
@@ -1249,11 +1258,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
             mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
         } else {
             mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
             mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_active, 0, 0, 0);
+            tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
 
 
         }

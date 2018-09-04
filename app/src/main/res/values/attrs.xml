@@ -56,11 +56,7 @@
       <enum name="mirror" value="2" />
     </attr>
   </declare-styleable>
-  <declare-styleable name="RangeSeekBar">
-    <attr name="absoluteMinValue" format="integer|float"/>
-    <attr name="absoluteMaxValue" format="integer|float"/>
-    <attr name="singleThumb" format="boolean"/>
-  </declare-styleable>
+
   <declare-styleable name="SubtitleCollapsingToolbar">
     <attr name="subtitle" />
     <attr name="collapsedSubtitleAppearance" format="reference"/>

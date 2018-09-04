@@ -168,7 +168,7 @@
     <!--String related setting_preferences_deactiveaccount page -->
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">Ask a Question</string>
+    <string name="ID_ASK_QUESTION">Ask a Question?</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">Follow</string>
     <string name="following_user">Following</string>
@@ -347,6 +347,13 @@
         <item quantity="one">Comment</item>
         <item quantity="other">Comments</item>
     </plurals>
+
+    <plurals name="numberOfVotes">
+        <item quantity="zero">Votes</item>
+        <item quantity="one">Vote</item>
+        <item quantity="other">Votes</item>
+    </plurals>
+
     <plurals name="numberOfQuestions">
         <item quantity="zero">Question</item>
         <item quantity="one">Question</item>
@@ -412,12 +419,12 @@
     <string name="comment_deleted">Your comment has been deleted</string>
     <string name="choose_community">Choose your community to post in</string>
     <string name="other_community">Other Communities</string>
-    <string name="add_photo">Add Photo</string>
+    <string name="add_photo">Add to your Post</string>
     <string name="post_anonymous">Post as Anonymous</string>
     <string name="action.post">Post</string>
     <string name="action.next">Next</string>
     <string name="action.mentor_post">Ask</string>
-    <string name="title.create_post">Write a Post</string>
+    <string name="title.create_post">Create a Post</string>
     <string name="title.ask_question">Ask a Question</string>
     <string name="title.article_submit">Write a Story</string>
     <string name="anonymous">Anonymous</string>
@@ -582,6 +589,7 @@
     <!--spam region start-->
     <string name="spam_confirmation_dialog_title">Thank you for your feedback!</string>
     <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and it is in review. Thank You!</string>
+    <string name="reported_spam_marked_dialog_message">The %1$s has been marked as SPAM and it is in review. Thank You!</string>
 
     <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
     <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
@@ -639,6 +647,9 @@
     <string name="home_label">Home</string>
     <string name="youtube">Youtube.com</string>
     <string name="how_do_i_become_a_supersheroes">How do I become a SuperSheroes?</string>
+    <string name="poll_option">Option</string>
+    <string name="post_detail_toolbar_title">%1$s post</string>
+    <string name="post_detail_toolbar_title_multiple">%1$s\'s post</string>
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
     <string name="badge_active_period_date_text">Won this week : %1$s - %2$s</string>
@@ -679,16 +690,43 @@
     <string name="no_tag_found">No</string>
     <string name="write_a_story">Write a story</string>
     <string name="no_story">No stories yet</string>
+    <string name="poll">Poll</string>
+    <string name="photo_video">Photo/Video</string>
+    <string name="choose_poll">Choose your type of poll</string>
+    <string name="title.create_poll">Create a Poll</string>
+    <string name="poll_option_text">Add more options</string>
+    <string name="poll_option_end_text">Poll ends:</string>
+    <string-array name="poll_time">
+        <item>1 Day</item>
+        <item>2 Days</item>
+        <item>1 Week</item>
+        <item>1 Month</item>
+    </string-array>
+    <integer-array name="poll_days_count">
+        <item>1</item>
+        <item>2</item>
+        <item>7</item>
+        <item>30</item>
+    </integer-array>
+    <string name="created_poll">created a poll </string>
+    <string name="percent_vote">% vote</string>
+    <string name="ends_in">Ends in:</string>
+    <string name="ended">Poll ended</string>
+    <string name="option_empty">Option can\'t be empty</string>
+    <string name="option_image_empty">Image can\'t be empty</string>
+    <string name="poll_text_limit">Description can\'t exceed 500 char</string>
+
+
     <string name="paste_on_playstore">Paste as Review on Playstore</string>
     <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
     <string name="congratulation">Congratulations</string>
     <string name="copied">Copied</string>
     <string name="message">message</string>
     <string name="your_response_copied">Your response copied</string>
-
-
-
-
-
+    <string name="list_comment_submit">Submit</string>
+    <string name="list_comment_cancel">Cancel</string>
+    <string name="leaderboard_rank_unavailable">--</string>
+    <string name="edit">Edit</string>
+    <string name="poll_result_percent">%</string>
 
 </resources>

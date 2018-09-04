@@ -23,14 +23,21 @@
                 android:id="@+id/user_profile_pic"
                 android:layout_width="@dimen/user_comment_icon"
                 android:layout_height="@dimen/user_comment_icon"
-                android:src="@drawable/ic_createc_ommunity_icon" />
+                android:src="@drawable/vector_create_community_icon" />
 
             <ImageView
                 android:id="@+id/profile_verified"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:background="@drawable/ic_verified"
+                android:background="@drawable/vector_verified"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/bade_icon"
+                android:layout_width="@dimen/post_comment_badge_icon"
+                android:layout_height="@dimen/post_comment_badge_icon"
+                android:layout_gravity="end|bottom"
                 android:visibility="gone" />
         </FrameLayout>
 
@@ -56,8 +63,7 @@
             android:lineSpacingExtra="4sp"
             android:textColor="#3c3c3c"
             android:textSize="14sp"
-            android:textStyle="bold"
-            tools:text="Anupriya Udai" />
+            android:textStyle="bold"/>
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
             android:id="@+id/tv_list_user_comment"
@@ -72,8 +78,7 @@
             android:lineSpacingExtra="4sp"
             android:textColor="#3c3c3c"
             android:textColorLink="@color/view_more"
-            android:textSize="@dimen/sp_size_14"
-            tools:text="Anyone on the other end who is interviewing you or trying to recruit you\nlooks for honesty and zeal to learn and adapt. Be honest ..." />
+            android:textSize="@dimen/sp_size_14" />
 
         <TextView
             android:id="@+id/like"
@@ -123,7 +128,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_menu_dashboard"
+            android:src="@drawable/vector_menu_dashboard"
             android:padding="@dimen/dp_size_16" />
 
         <ImageView
@@ -132,7 +137,7 @@
             android:layout_marginLeft="@dimen/dp_size_8"
             android:layout_marginStart="@dimen/dp_size_8"
             android:layout_width="wrap_content"
-            android:src="@drawable/ic_spam_post_message"
+            android:src="@drawable/vector_spam_post_message"
             android:layout_height="wrap_content" />
 
         <TextView

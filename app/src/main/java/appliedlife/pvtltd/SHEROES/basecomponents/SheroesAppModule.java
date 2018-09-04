@@ -47,6 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
@@ -149,7 +150,8 @@ public class SheroesAppModule {
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
                 .registerSubtype(LeaderBoardUserSolrObj.class, AppConstants.LEADER_SUB_TYPE)
-                .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE);
+                .registerSubtype(ImageSolrObj.class, AppConstants.IMAGE_SUBTYPE)
+                .registerSubtype(PollSolarObj.class, AppConstants.FEED_POLL);
 
         return new GsonBuilder()
                 .setDateFormat(DATE_FORMATS[0])
@@ -172,7 +174,6 @@ public class SheroesAppModule {
                     simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
                     return simpleDateFormat.parse(jsonElement.getAsString());
                 } catch (ParseException ignored) {
-                    // Bamboo.e(TAG, ignored.toString() + " Format - " + format);
                 }
             }
             Crashlytics.getInstance().core.logException(new JsonParseException("Unparseable date: \"" + jsonElement.getAsString()
@@ -219,38 +220,38 @@ public class SheroesAppModule {
     @Singleton
     @Provides
     public Preference<LoginResponse> provideTokenPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new LoginResponse(), new GsonConverter<LoginResponse>(gson, LoginResponse.class));
+        return rxSharedPreferences.getObject(AppConstants.SHEROES_AUTH_TOKEN, new LoginResponse(), new GsonConverter<>(gson, LoginResponse.class));
     }
 
     @Singleton
     @Provides
     public Preference<AllCommunitiesResponse> provideAllCommunities(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.ALL_COMMUNITY_LIST, new AllCommunitiesResponse(), new GsonConverter<AllCommunitiesResponse>(gson, AllCommunitiesResponse.class));
+        return rxSharedPreferences.getObject(AppConstants.ALL_COMMUNITY_LIST, new AllCommunitiesResponse(), new GsonConverter<>(gson, AllCommunitiesResponse.class));
     }
 
     @Singleton
     @Provides
     public Preference<Configuration> provideConfiguration(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.CONFIG_KEY, new Configuration(), new GsonConverter<Configuration>(gson, Configuration.class));
+        return rxSharedPreferences.getObject(AppConstants.CONFIG_KEY, new Configuration(), new GsonConverter<>(gson, Configuration.class));
     }
 
     @Singleton
     @Provides
     public Preference<AppInstallation> provideAppInstallation(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.APP_INSTALLATION, new AppInstallation(), new GsonConverter<AppInstallation>(gson, AppInstallation.class));
+        return rxSharedPreferences.getObject(AppConstants.APP_INSTALLATION, new AppInstallation(), new GsonConverter<>(gson, AppInstallation.class));
     }
 
 
     @Singleton
     @Provides
     public Preference<MasterDataResponse> provideMasterDataUserPref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new MasterDataResponse(), new GsonConverter<MasterDataResponse>(gson, MasterDataResponse.class));
+        return rxSharedPreferences.getObject(AppConstants.MASTER_DATA, new MasterDataResponse(), new GsonConverter<>(gson, MasterDataResponse.class));
     }
 
     @Singleton
     @Provides
     public Preference<InstallUpdateForMoEngage> provideInstallUpdatePref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new InstallUpdateForMoEngage(), new GsonConverter<InstallUpdateForMoEngage>(gson, InstallUpdateForMoEngage.class));
+        return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new InstallUpdateForMoEngage(), new GsonConverter<>(gson, InstallUpdateForMoEngage.class));
     }
 
     @Provides

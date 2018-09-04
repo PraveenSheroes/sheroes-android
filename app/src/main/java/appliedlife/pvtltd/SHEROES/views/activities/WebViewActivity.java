@@ -15,15 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -73,11 +74,6 @@ public class WebViewActivity extends BaseActivity {
         setPagerAndLayouts();
         setupToolbar();
         invalidateOptionsMenu();
-        HashMap<String, Object> properties = new EventProperty.Builder()
-                .title(menuItem)
-                .build();
-        properties.put(EventProperty.SOURCE.getString(), mSourceScreen);
-        AnalyticsManager.trackScreenView(getScreenName(), mSourceScreen, properties);
     }
 
     private void setupToolbar() {
@@ -152,6 +148,17 @@ public class WebViewActivity extends BaseActivity {
     }
 
     //endregion
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        if (StringUtil.isNotNullOrEmptyString(menuItem)) {
+            return new EventProperty.Builder()
+                    .title(menuItem)
+                    .build();
+        }
+        return null;
+    }
+
     @Override
     protected SheroesPresenter getPresenter() {
         return null;

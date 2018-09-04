@@ -43,35 +43,8 @@ public class CommunityModel {
         this.gson = gson;
     }
 
-    public Observable<SelectedCommunityResponse> getSelectedFromModel(SelectCommunityRequest selectCommunityRequest) {
-        LogUtils.info(TAG, "***************suggested community****" + new Gson().toJson(selectCommunityRequest));
-        return sheroesAppServiceApi.suggestedCommunity(selectCommunityRequest)
-                .map(new Function<SelectedCommunityResponse, SelectedCommunityResponse>() {
-                    @Override
-                    public SelectedCommunityResponse apply(SelectedCommunityResponse selectedCommunityResponse) {
-                        return selectedCommunityResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Observable<CreateCommunityResponse> postEditCommunity(EditCommunityRequest editCommunityRequest) {
-        LogUtils.info(TAG, "***************edit community****" + new Gson().toJson(editCommunityRequest));
-
-        return sheroesAppServiceApi.postEditCommunity(editCommunityRequest)
-                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
-                        return communityTagsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
     public Observable<LinkRenderResponse> linkRenderFromModel(LinkRequest linkRequest) {
-        LogUtils.info(TAG, "***************Link Render****" + new Gson().toJson(linkRequest));
         return sheroesAppServiceApi.linkRenderApi(linkRequest)
                 .map(new Function<LinkRenderResponse, LinkRenderResponse>() {
                     @Override
@@ -84,7 +57,6 @@ public class CommunityModel {
     }
 
     public Observable<CreateCommunityResponse> addPostCommunity(CommunityPostCreateRequest communityPostCreateRequest) {
-        LogUtils.info(TAG, "***************Post****" + new Gson().toJson(communityPostCreateRequest));
         return sheroesAppServiceApi.createCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
@@ -97,7 +69,6 @@ public class CommunityModel {
     }
 
     public Observable<CreateCommunityResponse> createChallengePost(ChallengePostCreateRequest challengePostCreateRequest) {
-        LogUtils.info(TAG, "***************Post****" + new Gson().toJson(challengePostCreateRequest));
         return sheroesAppServiceApi.createChallengePost(challengePostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
@@ -110,7 +81,6 @@ public class CommunityModel {
     }
 
     public Observable<CreateCommunityResponse> editPostCommunity(CommunityPostCreateRequest communityPostCreateRequest) {
-        LogUtils.info(TAG, "***************edit community Post****" + new Gson().toJson(communityPostCreateRequest));
         return sheroesAppServiceApi.editCommunityPost(communityPostCreateRequest)
                 .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
                     @Override
@@ -122,31 +92,7 @@ public class CommunityModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(CreateCommunityOwnerRequest createCommunityOwnerRequest) {
-        LogUtils.info(TAG, "***************Post Owner****" + new Gson().toJson(createCommunityOwnerRequest));
-        return sheroesAppServiceApi.postCreateCommunityOwner(createCommunityOwnerRequest)
-                .map(new Function<CreateCommunityOwnerResponse, CreateCommunityOwnerResponse>() {
-                    @Override
-                    public CreateCommunityOwnerResponse apply(CreateCommunityOwnerResponse createCommunityOwnerResponse) {
-                        return createCommunityOwnerResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
-    public Observable<ShareMailResponse> shareViaEmailModel(ShareViaMail shareViaMail) {
-        LogUtils.info(TAG, "***************share community post****" + new Gson().toJson(shareViaMail));
-        return sheroesAppServiceApi.shareCommunityViaMail(shareViaMail)
-                .map(new Function<ShareMailResponse, ShareMailResponse>() {
-                    @Override
-                    public ShareMailResponse apply(ShareMailResponse shareMailResponse) {
-                        return shareMailResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
     //region Private Helper methods
     public Observable<SearchUserDataResponse> getUserMentionSuggestionSearchResult(SearchUserDataRequest searchUserDataRequest) {
          return sheroesAppServiceApi.userMentionSuggestion(searchUserDataRequest)

@@ -19,7 +19,6 @@ import com.moe.pushlibrary.MoEHelper;
 import java.io.File;
 
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -35,7 +34,7 @@ import io.fabric.sdk.android.Fabric;
  * Title: Application level context and all app componets register here.
  * dagger used for components injection in app.
  */
-public class SheroesApplication extends MultiDexApplication  {
+public class SheroesApplication extends MultiDexApplication {
     private final String TAG = LogUtils.makeLogTag(SheroesApplication.class);
     SheroesAppComponent mSheroesAppComponent;
     public static volatile SheroesApplication mContext;
@@ -64,7 +63,7 @@ public class SheroesApplication extends MultiDexApplication  {
         AnalyticsTrackers.initialize(this);
         AnalyticsTrackers.getInstance().get(AnalyticsTrackers.Target.APP);
         File cacheFile = new File(getCacheDir(), "responses");
-        mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile,this)).build();
+        mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile, this)).build();
         setAppComponent(mSheroesAppComponent);
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
@@ -92,8 +91,8 @@ public class SheroesApplication extends MultiDexApplication  {
         }
     }
 
-    public static SharedPreferences getAppSharedPrefs(){
-        if(mContext == null){
+    public static SharedPreferences getAppSharedPrefs() {
+        if (mContext == null) {
             return null;
         }
         return mContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
@@ -104,15 +103,17 @@ public class SheroesApplication extends MultiDexApplication  {
         return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
 
     }
+
     public void trackUserId(String userId) {
         Tracker t = getGoogleAnalyticsTracker();
         t.set("&uid", userId);
-       t.send(new HitBuilders.EventBuilder()
+        t.send(new HitBuilders.EventBuilder()
                 .setCategory("UX")
                 .setAction("User Sign In")
                 .build());
 
     }
+
     /***
      * Tracking screen view
      *

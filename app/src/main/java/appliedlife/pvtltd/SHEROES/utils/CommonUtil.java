@@ -42,6 +42,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.crashlytics.android.Crashlytics;
@@ -139,11 +140,11 @@ public class CommonUtil {
     }
 
     public static boolean deepLinkingRedirection(JSONObject referringParams) {
-        if(referringParams.has("+is_first_session")) {
+        if (referringParams.has("+is_first_session")) {
             try {
                 boolean isFirstSession = referringParams.getBoolean("+is_first_session");
 
-                 if(isFirstSession) {
+                if (isFirstSession) {
                     return true;
                 }
             } catch (JSONException e) {
@@ -256,16 +257,46 @@ public class CommonUtil {
         }
         return 0;
     }
-    public static void hideKeyboard(Activity activity) {
-//		activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        // Check if no view has focus:
-        //   http://stackoverflow.com/a/7696791/559680
+    //Hide SoftKeyBoard From The View
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+    public static void hideKeyboard(Activity activity) {
         View view = activity.getCurrentFocus();
         if (view != null) {
             InputMethodManager inputManager = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         }
+    }
+
+    public static void showKeyboard(Activity activity) {
+        View view = activity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+    }
+
+    public static List<String> getEmojiListFromText(String string) {
+        String regexPattern = "[\uD83C-\uDBFF\uDC00-\uDFFF]+";
+        List<String> matchList = new ArrayList<>();
+        byte[] utf8;
+        try {
+            utf8 = string.getBytes("UTF-8");
+            String string1 = new String(utf8, "UTF-8");
+            Pattern pattern = Pattern.compile(regexPattern);
+            Matcher matcher = pattern.matcher(string1);
+            while (matcher.find()) {
+                matchList.add(matcher.group());
+            }
+            return matchList;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return matchList;
     }
 
     /**
@@ -399,7 +430,7 @@ public class CommonUtil {
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile")|| url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge")|| url.getPath().startsWith("/write_story")|| url.getPath().startsWith("/my_story")|| url.getPath().startsWith("/stories")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories")) {
                 return true;
             }
         }
@@ -442,7 +473,7 @@ public class CommonUtil {
         return uri;
     }
 
-    public static String getThumborUriWithoutSmart(String image, int width, int height){
+    public static String getThumborUriWithoutSmart(String image, int width, int height) {
         String uri = image;
         try {
             uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
@@ -455,7 +486,7 @@ public class CommonUtil {
         return uri;
     }
 
-    public static String getThumborUriWithFit(String image, int width, int height){
+    public static String getThumborUriWithFit(String image, int width, int height) {
         String uri = image;
         try {
             uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
@@ -546,26 +577,26 @@ public class CommonUtil {
 
     public static int[] getWindowSize(Context context) {
         int screenWidth, screenHeight;
-            Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                Point point = new Point();
-                display.getSize(point);
-                screenWidth = point.x;
-                screenHeight = point.y;
-            } else {
-                screenWidth = display.getWidth();
-                screenHeight = display.getHeight();
-            }
-            return new int[]{screenWidth, screenHeight};
+        Display display = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            Point point = new Point();
+            display.getSize(point);
+            screenWidth = point.x;
+            screenHeight = point.y;
+        } else {
+            screenWidth = display.getWidth();
+            screenHeight = display.getHeight();
+        }
+        return new int[]{screenWidth, screenHeight};
     }
 
     public static int getWindowWidth(Context context) {
         try {
             int[] size = getWindowSize(context);
             return size[0];
-            } catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             Crashlytics.getInstance().core.logException(e);
-             }
+        }
         return 400;
     }
 
@@ -624,9 +655,9 @@ public class CommonUtil {
 
     }
 
-    public static Bitmap drawableToBitmap (Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable)drawable).getBitmap();
+            return ((BitmapDrawable) drawable).getBitmap();
         }
 
         int width = drawable.getIntrinsicWidth();
@@ -646,8 +677,8 @@ public class CommonUtil {
         Bitmap cs = null;
 
         int width, height = 0;
-            width = c.getWidth();
-            height = c.getHeight() + s.getHeight();
+        width = c.getWidth();
+        height = c.getHeight() + s.getHeight();
 
         cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
 
@@ -1208,7 +1239,7 @@ public class CommonUtil {
             if (prefs != null) {
                 prefs.edit().putBoolean(key, true).apply();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             LogUtils.error(TAG, e.toString());
         }
     }
@@ -1468,7 +1499,8 @@ public class CommonUtil {
         try {
             File dir = context.getCacheDir();
             deleteDir(dir);
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
     }
 
     public static boolean deleteDir(File dir) {
@@ -1481,10 +1513,23 @@ public class CommonUtil {
                 }
             }
             return dir.delete();
-        } else if(dir!= null && dir.isFile()) {
+        } else if (dir != null && dir.isFile()) {
             return dir.delete();
         } else {
             return false;
+        }
+    }
+
+    //Show or hide the badge icon from user pic
+    public static void showHideUserBadge(Context context, boolean isAnonymous, ImageView userPic, boolean isBadgeShown, String badgeUrl) {
+        if (context == null) return;
+        if (!isAnonymous && isBadgeShown && !TextUtils.isEmpty(badgeUrl)) {
+            userPic.setVisibility(View.VISIBLE);
+            Glide.with(context)
+                    .load(badgeUrl)
+                    .into(userPic);
+        } else {
+            userPic.setVisibility(View.GONE);
         }
     }
 }

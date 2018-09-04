@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_size_10"
             android:layout_marginLeft="@dimen/dp_size_20"
-            android:src="@drawable/ic_camera_profile" />
+            android:src="@drawable/vector_camera_profile" />
 
         <ImageView
             android:id="@+id/iv_profile_image_from_gall"
