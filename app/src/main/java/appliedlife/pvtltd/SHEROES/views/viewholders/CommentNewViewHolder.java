@@ -157,12 +157,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
                     } else {
                         mProfileVerfied.setVisibility(View.GONE);
                     }
-                    CommonUtil.showHideUserBadge(mContext, comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
                 } else {
                     showCommentMention();
                 }
             }
         }
+        CommonUtil.showHideUserBadge(mContext, comment.isAnonymous(), badgeIcon, comment.isBadgeShown(), comment.getBadgeUrl());
     }
 
     /*show comments with mentions and links   */
