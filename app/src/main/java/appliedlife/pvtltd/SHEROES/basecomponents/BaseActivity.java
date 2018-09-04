@@ -112,7 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String BOTTOM_SHEET = "Bottom Sheet";
     public static final String STORIES_TAB = "write a story";
     public static final String USER_STORY = "USER_STORY";
-    public static final String POST_DETAIL_DEEPLINK = "post_detail_deep_link";
+    public static final String KEY_FOR_DEEPLINK_DETAIL = "post_detail_deep_link";
 
     public static final int BRANCH_REQUEST_CODE = 1290;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
