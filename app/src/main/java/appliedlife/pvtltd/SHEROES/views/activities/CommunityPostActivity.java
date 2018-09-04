@@ -2067,7 +2067,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         etView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().getText().clear();
-        etView.getEditText().setHint(getString(R.string.poll_ask_question,150));
+        etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
         mRlImageList.setVisibility(View.GONE);
@@ -2124,7 +2124,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_option_type_layout, null);
         final LinearLayout liTextPollRow = pollLayout.findViewById(R.id.li_text_poll_row);
         mEtTextPoll = pollLayout.findViewById(R.id.et_text_poll);
-        mEtTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount +" "+getString(R.string.poll_text_option,25));
+        mEtTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount);
         //When user select more then two option the cross icon will appear
         if (mPollOptionCount > POLL_OPTION_DEFAULT_COUNT) {
             final ImageView ivDeleteTextPoll = pollLayout.findViewById(R.id.iv_delete_text_poll);
@@ -2170,9 +2170,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_image_view_layout, null);
         final LinearLayout liImagePollRow = pollLayout.findViewById(R.id.li_image_poll_view);
         mEtImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
-        mEtImagePollLeft.setHint(getString(R.string.poll_option)+1+" "+getString(R.string.poll_text_option,22));
+        mEtImagePollLeft.setHint(getString(R.string.poll_option)+1);
         mEtImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
-        mEtImagePollRight.setHint(getString(R.string.poll_option)+2+" "+getString(R.string.poll_text_option,22));
+        mEtImagePollRight.setHint(getString(R.string.poll_option)+2);
         mIvImagePollLeft = pollLayout.findViewById(R.id.iv_image_poll_left);
         mIvImagePollLeft.setTag(false);
         mIvImagePollLeft.setOnClickListener(new View.OnClickListener() {

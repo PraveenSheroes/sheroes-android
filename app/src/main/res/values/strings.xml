@@ -650,8 +650,6 @@
     <string name="poll_option">Option</string>
     <string name="post_detail_toolbar_title">%1$s post</string>
     <string name="post_detail_toolbar_title_multiple">%1$s\'s post</string>
-    <string name="poll_detail_toolbar_title">%1$s poll</string>
-    <string name="poll_detail_toolbar_title_multiple">%1$s\'s poll</string>
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
     <string name="badge_active_period_date_text">Won this week : %1$s - %2$s</string>
@@ -730,7 +728,5 @@
     <string name="leaderboard_rank_unavailable">--</string>
     <string name="edit">Edit</string>
     <string name="poll_result_percent">%</string>
-    <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
-    <string name="poll_text_option">(%1$d char)</string>
 
 </resources>
