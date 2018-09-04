@@ -11,8 +11,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 
@@ -27,7 +27,7 @@ public class GCMClientManager {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     // Member variables
-    private GoogleCloudMessaging gcm;
+    private FirebaseMessaging fcm;
     private String regid;
     private String projectNumber;
     private Context mContext;
@@ -35,7 +35,7 @@ public class GCMClientManager {
     public GCMClientManager(Context context, String projectNumber) {
         this.mContext = context;
         this.projectNumber = projectNumber;
-        this.gcm = GoogleCloudMessaging.getInstance(context);
+        this.fcm = FirebaseMessaging.getInstance();
     }
 
     /**
@@ -70,7 +70,7 @@ public class GCMClientManager {
     }
 
     /**
-     * Registers the application with GCM servers asynchronously.
+     * Registers the application with FCM servers asynchronously.
      * <p>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
@@ -80,15 +80,14 @@ public class GCMClientManager {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getContext());
+                    if (fcm == null) {
+                        fcm = FirebaseMessaging.getInstance();
                     }
-                    InstanceID instanceID = InstanceID.getInstance(getContext());
-                    regid = instanceID.getToken(projectNumber, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    regid = FirebaseInstanceId.getInstance().getToken();
                     Log.i(TAG, regid);
                     // Persist the regID - no need to register again.
                     storeRegistrationId(getContext(), regid);
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     // If there is an error, don't just keep trying to register.
                     // Require the user to click a button again, or perform
                     // exponential back-off.
@@ -107,7 +106,7 @@ public class GCMClientManager {
     }
 
     /**
-     * Gets the current registration ID for application on GCM service.
+     * Gets the current registration ID for application on FCM service.
      * <p>
      * If result is empty, the app needs to register.
      *

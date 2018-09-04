@@ -75,14 +75,14 @@ android {
         debug {
             buildConfigField "String", "BASE_URL", "\"http://34.193.138.177/\""
             //buildConfigField "String", "BASE_URL", "\"http://34.234.43.47/\""
-          //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
+            //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
+            // buildConfigField "String", "BASE_URL", "\"http://testservicesplay.sheroes.in/\""
+            // buildConfigField "String", "BASE_URL","\"http://testservicesconf.sheroes.in/\""
 
-            if(System.getProperty("BASE_URL")){ //Used in Jenkins parameterised build
-                buildConfigField "String", "BASE_URL", "\""+ System.getProperty("BASE_URL") +"\""
+            if (System.getProperty("BASE_URL")) { //Used in Jenkins parameterised build
+                buildConfigField "String", "BASE_URL", "\"" + System.getProperty("BASE_URL") + "\""
             }
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -133,7 +133,7 @@ repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
     maven { url "https://jitpack.io" }
-    maven { url 'https://maven.google.com'}
+    maven { url 'https://maven.google.com' }
     flatDir {
         dirs 'libs'
     }
@@ -141,11 +141,12 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.facebook.android:facebook-android-sdk:4.28.0'
-    compile 'com.google.android.gms:play-services-analytics:11.8.0'
-    compile 'com.google.android.gms:play-services-auth:11.8.0'
-    compile 'com.google.android.gms:play-services-gcm:11.8.0'
+    compile 'com.google.android.gms:play-services-analytics:15.0.0'
+    compile 'com.google.android.gms:play-services-auth:15.0.0'
+    compile 'com.google.firebase:firebase-messaging:17.1.0'
     compile 'com.clevertap.android:clevertap-android-sdk:3.1.10'
-    compile 'com.google.android.gms:play-services-location:11.8.0'
+    compile 'com.google.android.gms:play-services-location:15.0.0'
+    compile 'com.google.android.gms:play-services-ads:15.0.0'
     compile 'com.android.support:mediarouter-v7:27.0.2'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:27.0.2'

@@ -179,7 +179,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String mToken = null;
     private String loginViaSocial = MoEngageConstants.GOOGLE;
     private long currentTime;
-    private String mGcmId;
+    private String mFcmId;
     private boolean doubleBackToExitPressedOnce = false;
     private boolean isHandleAuthTokenRefresh = false;
 
@@ -367,7 +367,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                             AppUtils appUtils = AppUtils.getInstance();
                                             loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
                                             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-                                            loginRequest.setGcmorapnsid(mGcmId);
+                                            loginRequest.setGcmorapnsid(mFcmId);
                                             loginRequest.setUserGender(GENDER);
                                             loginViaSocial = MoEngageConstants.FACEBOOK;
                                             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
@@ -411,7 +411,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                     return;
                 } else {
-                    getGcmId();
+                    getFcmId();
                 }
             }
         });
@@ -801,7 +801,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         } else {
-            getGcmId();
+            getFcmId();
         }
     }
 
@@ -813,20 +813,20 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    private void getGcmId() {
+    private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         GCMClientManager pushClientManager = new GCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
         pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mGcmId = registrationId;
-                if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
-                    //Refresh GCM token
+                mFcmId = registrationId;
+                if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
+                    PushManager.getInstance().refreshToken(WelcomeActivity.this, mFcmId);
+                    //Refresh FCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(getApplicationContext());
                     if(cleverTapAPI!=null) {
-                        cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
+                        cleverTapAPI.data.pushFcmRegistrationId(mFcmId, true);
                     }
                     fbLogin.setEnabled(true);
                     checkSignUpCall(gcmForGoogleAndFacebook);
@@ -836,14 +836,14 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                         return;
                     } else {
-                        getGcmId();
+                        getFcmId();
                     }
                 }
             }
 
             @Override
             public void onFailure(String ex) {
-                mGcmId = ex;
+                mFcmId = ex;
             }
         });
     }
@@ -934,7 +934,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private void loginAuthTokenResponse(LoginResponse loginResponse) {
         loginResponse.setTokenTime(System.currentTimeMillis());
         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-        loginResponse.setGcmId(mGcmId);
+        loginResponse.setGcmId(mFcmId);
         mUserPreference.set(loginResponse);
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
 
@@ -979,7 +979,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             AppUtils appUtils = AppUtils.getInstance();
             loginRequest.setCloudMessagingId(appUtils.getCloudMessaging());
             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
-            loginRequest.setGcmorapnsid(mGcmId);
+            loginRequest.setGcmorapnsid(mFcmId);
             loginRequest.setCallForSignUp(AppConstants.GOOGLE_PLUS);
             loginRequest.setUserGender(GENDER);
             loginViaSocial = MoEngageConstants.GOOGLE;
