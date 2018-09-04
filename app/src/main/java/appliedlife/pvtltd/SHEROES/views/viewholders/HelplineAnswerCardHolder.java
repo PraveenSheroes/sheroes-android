@@ -18,6 +18,8 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
+
 /**
  * Created by SHEROES-TECH on 23-05-2017.
  */
@@ -52,6 +54,7 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
             } else {
                 answer.setText(Html.fromHtml(dataItem.getSearchText()).toString());
             }
+            linkifyURLs(answer);
         }
         if(StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
             answerTime.setText(dataItem.getFormatedDate());

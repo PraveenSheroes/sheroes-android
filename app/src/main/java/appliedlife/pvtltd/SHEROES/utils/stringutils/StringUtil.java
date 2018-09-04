@@ -78,7 +78,7 @@ public class StringUtil {
 
     public static void linkifyURLs(TextView textView) {
         // Source - http://stackoverflow.com/a/163398/559485
-        final Pattern pattern = Pattern.compile("\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
+        final Pattern pattern = Pattern.compile("\\b((https?|Https?|ftp)?)(:?)(//?|)(?=www.)[-a-zA-Z0-9+&@#%?=~_|!:,.;]*[-a-zA-Z0-9+&@#%=~_|]",
                 Pattern.MULTILINE | Pattern.DOTALL);
 
         Linkify.addLinks(textView, pattern, "", null, null);
