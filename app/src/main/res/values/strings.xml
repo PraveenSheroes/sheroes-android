@@ -732,5 +732,6 @@
     <string name="poll_result_percent">%</string>
     <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
     <string name="poll_text_option">(%1$d char)</string>
+    <string name="challenge">Challenge</string>
 
 </resources>
