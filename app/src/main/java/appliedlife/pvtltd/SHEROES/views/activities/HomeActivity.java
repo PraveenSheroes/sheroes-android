@@ -1971,7 +1971,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 //Refresh GCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if(cleverTapAPI!=null) {
-                    cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
+                    cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                 }
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
                     if (mAppInstallation != null && mAppInstallation.isSet()) {

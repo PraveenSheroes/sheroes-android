@@ -820,7 +820,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     //Refresh FCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if(cleverTapAPI!=null) {
-                        cleverTapAPI.data.pushFcmRegistrationId(mFcmId, true);
+                        cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }
                     fbLogin.setEnabled(true);
                     checkSignUpCall(gcmForGoogleAndFacebook);

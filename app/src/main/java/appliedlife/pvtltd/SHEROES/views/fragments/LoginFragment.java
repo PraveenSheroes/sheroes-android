@@ -338,8 +338,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     PushManager.getInstance().refreshToken(SheroesApplication.mContext, mGcmId);
                     //Refresh GCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
-                    if(cleverTapAPI!=null) {
-                        cleverTapAPI.data.pushGcmRegistrationId(registrationId, true);
+                    if (cleverTapAPI != null) {
+                        cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                     loginRequest.setUsername(email);
