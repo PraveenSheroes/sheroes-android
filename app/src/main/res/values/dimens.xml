@@ -537,6 +537,12 @@
     <dimen name="anonymous_select_text_size">14sp</dimen>
     <dimen name="suggestion_list_height">150dp</dimen>
     <dimen name="bottom_sheet_line_height">1dp</dimen>
+    <dimen name="helpline_outer_layout_padding">5dp</dimen>
+    <dimen name="helpline_card_corner_radius">2dp</dimen>
+    <dimen name="helpline_margin">16dp</dimen>
+    <dimen name="help_card_min_height">10dp</dimen>
+    <dimen name="helpline_time_text_size">12sp</dimen>
+    <dimen name="helpline_time_margin">5dp</dimen>
 
 
 </resources>

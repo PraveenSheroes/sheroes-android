@@ -603,10 +603,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 switch (view.getId()) {
                     case R.id.author_pic_container:
                     case R.id.author:
-
-                        Comment comment = mCommentsAdapter.getComment(position);
-                        if (!comment.isAnonymous() && !comment.isSpamComment()) {
-                            openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
+                        if(mArticleSolrObj.isUserStory()) {
+                            Comment comment = mCommentsAdapter.getComment(position);
+                            if (!comment.isAnonymous() && !comment.isSpamComment()) {
+                                openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
+                            }
                         }
                         break;
 
@@ -810,16 +811,17 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @OnClick({R.id.author_pic, R.id.author, R.id.author_description__pic, R.id.author_description_name})
     public void onUserDetailClick() {
-        boolean isMentor = false;
-        if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
-            isMentor = true;
+        if(mArticleSolrObj.isUserStory()) {
+            boolean isMentor = false;
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+                isMentor = true;
+            }
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(mArticleSolrObj.getCreatedBy());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            mFeedDetail = communityFeedSolrObj;
+            ProfileActivity.navigateTo(this, communityFeedSolrObj, mArticleSolrObj.getCreatedBy(), isMentor, mArticleSolrObj.getItemPosition(), getScreenName(), null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
-        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-        communityFeedSolrObj.setIdOfEntityOrParticipant(mArticleSolrObj.getCreatedBy());
-        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        mFeedDetail = communityFeedSolrObj;
-        ProfileActivity.navigateTo(this, communityFeedSolrObj, mArticleSolrObj.getCreatedBy(), isMentor, mArticleSolrObj.getItemPosition(), getScreenName(), null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-
     }
 
     @OnClick(R.id.submit)
