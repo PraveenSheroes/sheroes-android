@@ -471,19 +471,13 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (StringUtil.isNotNullOrEmptyString(urlString)) {
                     try {
                         URI uri = new URI(urlString);
-
                         String domain = uri.getHost();
-                        if (StringUtil.isNotNullOrEmptyString(domain)) {
-                            if (domain.contains(AppConstants.YOUTUBE_VIDEO_CODE) || domain.contains(AppConstants.MOBILE_YOUTUBE_VIDEO_CODE) || domain.contains("youtube")) {
-                                Intent youTube = new Intent(this, VideoPlayActivity.class);
-                                Bundle bundle = new Bundle();
-                                bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, urlString);
-                                youTube.putExtras(bundle);
-                                startActivity(youTube);
-                            } else {
-                                Uri url = Uri.parse(urlString);
-                                AppUtils.openChromeTab(this, url);
-                            }
+                        if (StringUtil.isNotNullOrEmptyString(domain) && (domain.contains(AppConstants.YOUTUBE_VIDEO_CODE) || domain.contains(AppConstants.MOBILE_YOUTUBE_VIDEO_CODE) || domain.contains("youtube"))) {
+                            Intent youTube = new Intent(this, VideoPlayActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, urlString);
+                            youTube.putExtras(bundle);
+                            startActivity(youTube);
                         } else {
                             Uri url = Uri.parse(urlString);
                             AppUtils.openChromeTab(this, url);
