@@ -1,38 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v7.widget.CardView
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="#ffffff"
-    card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="0dp">
+    card_view:cardBackgroundColor="@color/white"
+    card_view:cardCornerRadius="@dimen/helpline_card_corner_radius">
     <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="@dimen/helpline_outer_layout_padding">
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/LinearLayout2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="0dp"
                 android:orientation="vertical"
-                android:layout_marginLeft="16dp"
+                android:layout_marginLeft="@dimen/helpline_margin"
                 android:background="@drawable/outgoing_shap"
                 android:shadowColor="@color/green"
-                android:shadowDx="-1"
-                android:shadowDy="-1"
-                android:shadowRadius="1"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true">
@@ -44,31 +37,32 @@
                     android:textAllCaps="false"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="left|center_horizontal"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginRight="@dimen/helpline_margin"
                     android:layout_gravity="center|right"
                     android:textIsSelectable="true"
                     android:linksClickable="true"
                     android:enabled="true"
+                    android:textColorLink="@color/white"
                     android:focusable="true"
                     android:longClickable="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
-                    android:minHeight="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:textColor="#ffffff" />
+                    android:layout_marginBottom="@dimen/helpline_margin"
+                    android:layout_marginTop="@dimen/helpline_margin"
+                    android:minHeight="@dimen/help_card_min_height"
+                    android:layout_marginLeft="@dimen/helpline_margin"
+                    android:textColor="@color/white" />
 
             </LinearLayout>
             <TextView
                 android:id="@+id/time_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginTop="@dimen/helpline_time_margin"
+                android:layout_marginBottom="@dimen/helpline_time_margin"
                 android:textAllCaps="false"
-                android:textColor="#c1c5d0"
+                android:textColor="@color/helpline_text_time_color"
                 android:layout_below="@+id/LinearLayout2"
-                android:textSize="10dp"
-                android:layout_marginRight="5dp"
+                android:textSize="@dimen/helpline_time_text_size"
+                android:layout_marginRight="@dimen/helpline_time_margin"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentLeft="false" />
 
