@@ -693,7 +693,7 @@
     <string name="write_a_story">Write a story</string>
     <string name="no_story">No stories yet</string>
     <string name="poll">Poll</string>
-    <string name="photo_video">Photo/Video</string>
+    <string name="photo_video">Photo</string>
     <string name="choose_poll">Choose your type of poll</string>
     <string name="title.create_poll">Create a Poll</string>
     <string name="poll_option_text">Add more options</string>
