@@ -96,7 +96,7 @@
         android:layout_alignEnd="@+id/tv_home_notification_icon"
         android:layout_alignRight="@+id/tv_home_notification_icon"
         android:layout_alignTop="@+id/tv_home_notification_icon"
-        android:background="@drawable/ic_red_circle"
+        android:background="@drawable/vector_red_circle"
         android:backgroundTint="@color/footer_icon_text"
         android:visibility="gone">
 
