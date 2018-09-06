@@ -23,11 +23,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 
-    <permission
-        android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE"
-        android:protectionLevel="signature" />
-    <uses-permission android:name="appliedlife.pvtltd.SHEROES.permission.C2D_MESSAGE" />
-
     <!-- Required to show current location -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
