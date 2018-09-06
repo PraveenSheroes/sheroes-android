@@ -72,7 +72,6 @@ public class SheroesApplication extends MultiDexApplication {
         //cleverTap
         AnalyticsManager.initializeCleverTap(this, false);
         Stetho.initializeWithDefaults(this);
-        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     public String getCurrentActivityName() {
