@@ -168,7 +168,7 @@
     <!--String related setting_preferences_deactiveaccount page -->
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">Ask a Question?</string>
+    <string name="ID_ASK_QUESTION">Ask a Question</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">Follow</string>
     <string name="following_user">Following</string>
