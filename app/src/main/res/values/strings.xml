@@ -204,7 +204,7 @@
     <!--string related welcome page-->
 
     <string name="ID_FACEBOOK_LONGING">LOGGING IN...</string>
-    <string name="ID_INFORMATION_WARNING">We never share your info with anyone</string>
+    <string name="ID_INFORMATION_WARNING">We\'ll never post without your permission!</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(Only for existing users)</string>
     <string name="ID_WELCOME_FIRST">Ask questions and discuss about health, career, relationships and more...</string>
     <string name="ID_WELCOME_SECOND">Join Communities you like and talk to other women even anonymously</string>
@@ -733,5 +733,6 @@
     <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
     <string name="poll_text_option">(%1$d char)</string>
     <string name="challenge">Challenge</string>
+    <string name="care_msg">Need help? care@sheroes.in</string>
 
 </resources>

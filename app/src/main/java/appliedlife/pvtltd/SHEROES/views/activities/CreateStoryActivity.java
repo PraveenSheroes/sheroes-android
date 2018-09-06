@@ -67,6 +67,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagName;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -165,7 +166,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     private ArticleSolrObj mArticleSolrObj = null;
     private Long mIdOfEntityOrParticipantArticle;
     private List<ArticleTagName> mArticleTagNameList = new ArrayList<>();
-    private String mSourceScreen;
+    private String mSourceScreen, mStoryTagText;
     //endregion
 
     //region activity methods
@@ -191,7 +192,14 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         invalidateToolBar();
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         this.localImageSaveForChallenge = localImageSaveForChallenge;
-        String articleGuideline = (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null && CommonUtil.isNotEmpty(mConfiguration.get().configData.articleGuideline)) ? mConfiguration.get().configData.articleGuideline : AppConstants.ARTICLE_GUIDELINE;
+        String articleGuideline;
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            articleGuideline = mConfiguration.get().configData.articleGuideline;
+            mStoryTagText = mConfiguration.get().configData.mWriteStoryTag;
+        } else {
+            articleGuideline = new ConfigData().articleGuideline;
+            mStoryTagText = new ConfigData().mWriteStoryTag;
+        }
         mBody.setText(Html.fromHtml(articleGuideline));
         if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
@@ -228,6 +236,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public void getArticleTagList(List<ArticleTagName> articleTagNameList, boolean isEdit) {
         mArticleTagNameList = articleTagNameList;
         completionView = findViewById(R.id.tag_search_view);
+        completionView.setHint(mStoryTagText);
         if (StringUtil.isNotEmptyCollection(articleTagNameList)) {
             if (isEdit) {
                 for (ArticleTagName articleTagName : articleTagNameList) {
@@ -344,7 +353,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         if (mIsCoverPhoto) {
             if (StringUtil.isNotNullOrEmptyString(finalImageUrl)) {
                 mCoverImageUrl = finalImageUrl;
-                int width=CommonUtil.getWindowWidth(this);
+                int width = CommonUtil.getWindowWidth(this);
                 int imageHeight = width / 2;
                 finalImageUrl = CommonUtil.getThumborUri(finalImageUrl, width, imageHeight);
                 Glide.with(this)
@@ -422,7 +431,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @OnClick(R.id.iv_close_img)
     public void onImageCloseClick() {
-        mCoverImageUrl="";
+        mCoverImageUrl = "";
         ivAddPhoto.setVisibility(View.GONE);
         tvAddCover.setVisibility(View.VISIBLE);
         ivCloseImg.setVisibility(View.GONE);
@@ -616,17 +625,18 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             Crashlytics.getInstance().core.logException(e);
         }
         List<Long> tagList = new ArrayList<>();
-        if(null!=completionView) {
+        if (null != completionView) {
             for (ArticleTagName articleTagName : completionView.getObjects()) {
                 tagList.add(articleTagName.getId());
             }
         }
         if (null != mIdOfEntityOrParticipantArticle) {
-            mArticleSubmissionPresenter.editArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), isPublish);
+            mArticleSubmissionPresenter.editArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl, isPublish), isPublish);
         } else {
-            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl,isPublish), isPublish);
+            mArticleSubmissionPresenter.submitAndDraftArticle(mAppUtils.articleDraftAddEditRequest(mIdOfEntityOrParticipantArticle, articleTitle, articleBody, tagList, mDeletedTagsList, mArticleSolrObj, mCoverImageUrl, isPublish), isPublish);
         }
     }
+
     private void onBackPress() {
         if (isNextPage) {
             hideNextPage();
@@ -689,7 +699,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             }
             return false;
         }
-        if (!isDraft && completionView!=null && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+        if (!isDraft && completionView != null && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
             if (showError) {
                 showMessage(R.string.error_tag_min);
                 tvTagLable.setVisibility(View.VISIBLE);

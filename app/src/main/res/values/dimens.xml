@@ -543,6 +543,9 @@
     <dimen name="help_card_min_height">10dp</dimen>
     <dimen name="helpline_time_text_size">12sp</dimen>
     <dimen name="helpline_time_margin">5dp</dimen>
+    <dimen name="care_id_margin">10dp</dimen>
+    <dimen name="user_name_margin">12dp</dimen>
+    <dimen name="error_desc_margin">24dp</dimen>
 
 
 </resources>

@@ -593,7 +593,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             fbShareContainer.setVisibility(View.GONE);
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
-            mCommunityName.setText("Challenge");
+            mCommunityName.setText(getString(R.string.challenge));
             if (mCommunityPost.hasMention) {
                 mHasMentions = true;
                 mMentionSpanList = mCommunityPost.userMentionList;
@@ -1360,6 +1360,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mCommunityName.setVisibility(View.VISIBLE);
                 mCommunityName.setText(getString(R.string.challenge));
                 mCommunityName.setEnabled(false);
+                hidePollIcon();
             } else {
                 if (mCommunityPost != null && mCommunityPost.community != null)
                     mCommunityName.setText(mCommunityPost.community.name);
@@ -1399,6 +1400,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+            communityPost.createPostRequestFrom = userPostObj.askQuestionFromMentor;
             if (userPostObj.isHasMention()) {
                 communityPost.hasMention = userPostObj.isHasMention();
                 communityPost.userMentionList = userPostObj.getUserMentionList();
@@ -1918,7 +1920,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
                         imagePollOptionModel.setActive(true);
                         if (StringUtil.isNotNullOrEmptyString(mEtTextPollList.get(i).getText().toString())) {
-                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
+                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString().trim().replace("\n", ""));
                         } else {
                             Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                             return;
@@ -1931,7 +1933,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                     imagePollOptionModelLeft.setActive(true);
                     if (StringUtil.isNotNullOrEmptyString(mEtImagePollLeft.getText().toString())) {
-                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
+                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString().trim().replace("\n", ""));
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                         return;
@@ -1946,7 +1948,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
                     imagePollOptionModelRight.setActive(true);
                     if (StringUtil.isNotNullOrEmptyString(mEtImagePollRight.getText().toString())) {
-                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString().trim().replace("\n", ""));
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                         return;
@@ -2074,6 +2076,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().getText().clear();
         etView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
+        mIsAnonymous = false;
+        mPostAsCommunitySelected = false;
+        setupUserView();
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
         mRlImageList.setVisibility(View.GONE);

@@ -1,10 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -58,17 +61,21 @@ public class MaleErrorDialog extends BaseDialogFragment {
 
     @Bind(R.id.tv_description_male_error)
     TextView tvDescriptionMaleError;
+
+    @Bind(R.id.tv_care_id)
+    TextView tvCareId;
     //endregion
 
     //region member variables
     private int callFor = 0;
 
-    private String message, mUserName;
+    private String mUserName;
 
-    private String mSharedText;
+    private String mSharedText, mErrorText;
     //endregion
 
     //region overridden variables
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -76,35 +83,30 @@ public class MaleErrorDialog extends BaseDialogFragment {
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
             callFor = getArguments().getInt(AppConstants.FACEBOOK_VERIFICATION);
-            message = getArguments().getString(AppConstants.SHEROES_AUTH_TOKEN);
             mUserName = getArguments().getString(BaseDialogFragment.USER_NAME);
         }
-        if (StringUtil.isNotNullOrEmptyString(message)) {
-            try {
-                if (StringUtil.isNotNullOrEmptyString(mUserName)) {
-                    tvUserNameMaleError.setVisibility(View.VISIBLE);
-                    tvUserNameMaleError.setText(mUserName);
-
-                }
-                if (message.length() > 69) {
-                    SpannableString spannableString = new SpannableString(message);
-                    spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 33, 47, 0);
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 69, message.length(), 0);
-                    tvDescriptionMaleError.setMovementMethod(LinkMovementMethod.getInstance());
-                    tvDescriptionMaleError.setText(spannableString, TextView.BufferType.SPANNABLE);
-                    tvDescriptionMaleError.setSelected(true);
-                }
-            } catch (Exception e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-
-        }
         if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            mSharedText = mConfiguration.get().configData.mMaleErrorText;
+            mSharedText = mConfiguration.get().configData.mMaleShareText;
+            mErrorText = mConfiguration.get().configData.mMaleErrorText;
         } else {
-            mSharedText = new ConfigData().mMaleErrorText;
+            mSharedText = new ConfigData().mMaleShareText;
+            mErrorText = new ConfigData().mMaleErrorText;
         }
+        try {
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvDescriptionMaleError.setText(Html.fromHtml(mErrorText, 0)); // for 24 api and more
+            } else {
+                tvDescriptionMaleError.setText(Html.fromHtml(mErrorText));// or for older api
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        String msg=getString(R.string.care_msg);
+        SpannableString spannableString = new SpannableString(msg);
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.footer_icon_text)), 11, msg.length(), 0);
+        tvCareId.setMovementMethod(LinkMovementMethod.getInstance());
+        tvCareId.setText(spannableString, TextView.BufferType.SPANNABLE);
+        tvCareId.setSelected(true);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
         CommonUtil.setPrefValue(AppConstants.MALE_ERROR_SHARE_PREF);
