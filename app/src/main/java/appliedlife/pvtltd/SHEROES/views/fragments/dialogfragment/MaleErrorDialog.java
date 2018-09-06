@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -11,7 +11,6 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,6 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -101,9 +99,9 @@ public class MaleErrorDialog extends BaseDialogFragment {
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        String msg=getString(R.string.care_msg);
+        String msg = getString(R.string.care_msg);
         SpannableString spannableString = new SpannableString(msg);
-        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.footer_icon_text)), 11, msg.length(), 0);
+        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.view_more)), 11, msg.length(), 0);
         tvCareId.setMovementMethod(LinkMovementMethod.getInstance());
         tvCareId.setText(spannableString, TextView.BufferType.SPANNABLE);
         tvCareId.setSelected(true);
@@ -162,6 +160,12 @@ public class MaleErrorDialog extends BaseDialogFragment {
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
             AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
         }
+    }
+
+    @OnClick(R.id.tv_care_id)
+    public void onCareSupportClick() {
+        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", getString(R.string.care_sheroes), null));
+        startActivity(Intent.createChooser(emailIntent, null));
     }
     //endregion
 

@@ -2077,7 +2077,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         etView.getEditText().getText().clear();
         etView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
         mIsAnonymous = false;
-        mPostAsCommunitySelected = false;
         setupUserView();
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
