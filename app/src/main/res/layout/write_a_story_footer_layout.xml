@@ -4,9 +4,7 @@
     android:id="@+id/cl_story_footer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="@dimen/dp_size_40"
-    android:visibility="visible"
-    app:cardElevation="@dimen/dp_size_40">
+    android:visibility="visible">
 
     <LinearLayout
         android:layout_width="match_parent"

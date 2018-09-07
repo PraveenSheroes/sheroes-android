@@ -513,7 +513,7 @@
     <dimen name="poll_type_holder_image_margin">4dp</dimen>
     <dimen name="poll_type_holder_margin_left_right">10dp</dimen>
     <dimen name="text_poll_input_text_padding">16dp</dimen>
-    <dimen name="text_poll_input_text_background_padding">12dp</dimen>
+    <dimen name="text_poll_input_text_background_padding">8dp</dimen>
     <dimen name="text_poll_result_frame_width">0dp</dimen>
     <dimen name="feed_poll_total_replies_text_size">14sp</dimen>
     <dimen name="rl_feed_poll_reaction_comments_margin">16dp</dimen>
@@ -537,6 +537,15 @@
     <dimen name="anonymous_select_text_size">14sp</dimen>
     <dimen name="suggestion_list_height">150dp</dimen>
     <dimen name="bottom_sheet_line_height">1dp</dimen>
+    <dimen name="helpline_outer_layout_padding">5dp</dimen>
+    <dimen name="helpline_card_corner_radius">2dp</dimen>
+    <dimen name="helpline_margin">16dp</dimen>
+    <dimen name="help_card_min_height">10dp</dimen>
+    <dimen name="helpline_time_text_size">12sp</dimen>
+    <dimen name="helpline_time_margin">5dp</dimen>
+    <dimen name="care_id_margin">10dp</dimen>
+    <dimen name="user_name_margin">12dp</dimen>
+    <dimen name="error_desc_margin">24dp</dimen>
 
 
 </resources>

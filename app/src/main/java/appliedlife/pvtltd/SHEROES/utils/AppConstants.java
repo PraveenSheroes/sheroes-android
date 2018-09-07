@@ -13,6 +13,8 @@ public class AppConstants {
 
     public static final String PLAY_STORE_ID_URL = "market://details?id=";
     public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
+    //\b((https?|Https?|ftp)?)(:?)(\/\/?|)(www)[-a-zA-Z0-9+&@#%?=~_|!:,.;/]*[-a-zA-Z0-9+&@#%=~_|]
+    public static final String WEB_LINK_PATTERN_REGEX ="\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";

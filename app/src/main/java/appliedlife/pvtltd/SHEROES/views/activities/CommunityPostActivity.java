@@ -167,8 +167,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final String TYPE_TEXT = "text/plain";
     public static final String TYPE_FILE = "file";
     public static final int MAX_IMAGE = 5;
-    public static final int POLL_OPTION_DEFAULT_COUNT=2;
-    public static final int POLL_OPTION_MAX_COUNT=8;
+    public static final int POLL_OPTION_DEFAULT_COUNT = 2;
+    public static final int POLL_OPTION_MAX_COUNT = 8;
     private boolean mIsPostScheduled = false;
     private boolean mStatusBarColorEmpty = false;
     private Dialog mScheduledConfirmationDialog;
@@ -414,7 +414,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 fbShareContainer.setVisibility(View.GONE);
                 mAnonymousSelect.setVisibility(View.GONE);
                 mAnonymousView.setVisibility(View.GONE);
-                mCommunityName.setText("Challenge");
+                mCommunityName.setText(getString(R.string.challenge));
                 if (mCommunityPost.hasMention) {
                     mMentionSpanList = mCommunityPost.userMentionList;
                     editUserMentionWithFullDescriptionText(mMentionSpanList, " " + "#" + mCommunityPost.challengeHashTag);
@@ -423,6 +423,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         etView.setEditText(" " + "#" + mCommunityPost.challengeHashTag, 0);
                     }
                 }
+                hidePollIcon();
             }
             if (mIsEditPost) {
                 fbShareContainer.setVisibility(View.GONE);
@@ -502,6 +503,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         });
 
         mCreatePostPresenter.getUserMentionSuggestion(etView, mCommunityPost);
+    }
+
+    private void hidePollIcon() {
+        mRippleViewLinearPollSurvey.setVisibility(View.GONE);
     }
 
     private void bottomSheetCollapsed() {
@@ -588,7 +593,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             fbShareContainer.setVisibility(View.GONE);
             mAnonymousSelect.setVisibility(View.GONE);
             mAnonymousView.setVisibility(View.GONE);
-            mCommunityName.setText("Challenge");
+            mCommunityName.setText(getString(R.string.challenge));
             if (mCommunityPost.hasMention) {
                 mHasMentions = true;
                 mMentionSpanList = mCommunityPost.userMentionList;
@@ -1349,11 +1354,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mCommunityName.setSelected(true);
             etView.getEditText().setHint(getString(R.string.ID_WHAT_IS_QUESTION));
             etView.getEditText().requestFocus();
+            hidePollIcon();
         } else {
             if (mIsChallengePost) {
                 mCommunityName.setVisibility(View.VISIBLE);
-                mCommunityName.setText("Challenge");
+                mCommunityName.setText(getString(R.string.challenge));
                 mCommunityName.setEnabled(false);
+                hidePollIcon();
             } else {
                 if (mCommunityPost != null && mCommunityPost.community != null)
                     mCommunityName.setText(mCommunityPost.community.name);
@@ -1393,6 +1400,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+            communityPost.createPostRequestFrom = userPostObj.askQuestionFromMentor;
             if (userPostObj.isHasMention()) {
                 communityPost.hasMention = userPostObj.isHasMention();
                 communityPost.userMentionList = userPostObj.getUserMentionList();
@@ -1912,7 +1920,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         PollOptionRequestModel imagePollOptionModel = new PollOptionRequestModel();
                         imagePollOptionModel.setActive(true);
                         if (StringUtil.isNotNullOrEmptyString(mEtTextPollList.get(i).getText().toString())) {
-                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString());
+                            imagePollOptionModel.setDescription(mEtTextPollList.get(i).getText().toString().trim().replace("\n", ""));
                         } else {
                             Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                             return;
@@ -1925,7 +1933,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                     imagePollOptionModelLeft.setActive(true);
                     if (StringUtil.isNotNullOrEmptyString(mEtImagePollLeft.getText().toString())) {
-                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString());
+                        imagePollOptionModelLeft.setDescription(mEtImagePollLeft.getText().toString().trim().replace("\n", ""));
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                         return;
@@ -1940,7 +1948,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     PollOptionRequestModel imagePollOptionModelRight = new PollOptionRequestModel();
                     imagePollOptionModelRight.setActive(true);
                     if (StringUtil.isNotNullOrEmptyString(mEtImagePollRight.getText().toString())) {
-                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString());
+                        imagePollOptionModelRight.setDescription(mEtImagePollRight.getText().toString().trim().replace("\n", ""));
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_empty), Snackbar.LENGTH_SHORT).show();
                         return;
@@ -2067,7 +2075,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         etView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
         etView.getEditText().getText().clear();
-        etView.getEditText().setHint(getString(R.string.ID_ASK_QUESTION));
+        etView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
+        mIsAnonymous = false;
+        setupUserView();
         mLiMainPollView.setVisibility(View.VISIBLE);
         fbShareContainer.setVisibility(View.GONE);
         mRlImageList.setVisibility(View.GONE);
@@ -2077,7 +2087,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
-                for (int i = 0; i <POLL_OPTION_DEFAULT_COUNT; i++) {
+                for (int i = 0; i < POLL_OPTION_DEFAULT_COUNT; i++) {
                     mPollOptionCount++;
                     addTextPollOptionView();
                 }
@@ -2124,7 +2134,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_option_type_layout, null);
         final LinearLayout liTextPollRow = pollLayout.findViewById(R.id.li_text_poll_row);
         mEtTextPoll = pollLayout.findViewById(R.id.et_text_poll);
-        mEtTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount);
+        mEtTextPoll.setHint(getString(R.string.poll_option) + mPollOptionCount + " " + getString(R.string.poll_text_option, 25));
         //When user select more then two option the cross icon will appear
         if (mPollOptionCount > POLL_OPTION_DEFAULT_COUNT) {
             final ImageView ivDeleteTextPoll = pollLayout.findViewById(R.id.iv_delete_text_poll);
@@ -2170,9 +2180,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         final View pollLayout = LayoutInflater.from(this).inflate(R.layout.poll_image_view_layout, null);
         final LinearLayout liImagePollRow = pollLayout.findViewById(R.id.li_image_poll_view);
         mEtImagePollLeft = pollLayout.findViewById(R.id.et_image_poll_left);
-        mEtImagePollLeft.setHint(getString(R.string.poll_option)+1);
+        mEtImagePollLeft.setHint(getString(R.string.poll_option) + 1 + " " + getString(R.string.poll_text_option, 22));
         mEtImagePollRight = pollLayout.findViewById(R.id.et_image_poll_right);
-        mEtImagePollRight.setHint(getString(R.string.poll_option)+2);
+        mEtImagePollRight.setHint(getString(R.string.poll_option) + 2 + " " + getString(R.string.poll_text_option, 22));
         mIvImagePollLeft = pollLayout.findViewById(R.id.iv_image_poll_left);
         mIvImagePollLeft.setTag(false);
         mIvImagePollLeft.setOnClickListener(new View.OnClickListener() {
