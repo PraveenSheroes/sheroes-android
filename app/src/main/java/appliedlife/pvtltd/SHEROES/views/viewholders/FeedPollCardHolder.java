@@ -52,7 +52,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagCol
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
-    private static final int POLL_ADMIN_ID =18;
+    private static final int POLL_ADMIN_ID = 18;
     //region Inject variables
     @Inject
     DateUtil mDateUtil;
@@ -299,6 +299,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             textPollInputLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    disableTextPollInputView();
                     textPollInputLayout.setBackgroundResource(R.drawable.rectangle_text_poll_active);
                     textPollInputLayout.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                     mPollSolarObj.setTotalNumberOfResponsesOnPoll(mPollSolarObj.getTotalNumberOfResponsesOnPoll() + AppConstants.ONE_CONSTANT);
@@ -319,6 +320,14 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
 
     }
 
+    private void disableTextPollInputView() {
+        for (int i = 0; i < mLiTypeOfPollView.getChildCount(); i++) {
+            View pollLayout = mLiTypeOfPollView.getChildAt(i);
+            TextView textPollInputLayout = pollLayout.findViewById(R.id.tv_text_poll_input);
+            textPollInputLayout.setEnabled(false);
+        }
+    }
+
     private void addTextPollResultViews() {
         List<PollOptionModel> pollOptionModelList = mPollSolarObj.getPollOptions();
         if (StringUtil.isNotEmptyCollection(pollOptionModelList)) {
@@ -330,7 +339,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 TextView tvTextPollDesc = pollLayout.findViewById(R.id.tv_text_poll_desc);
                 ImageView ivPercentVerified = pollLayout.findViewById(R.id.iv_percent_verified);
                 pbPollPercent.setProgress(pollOptionModel.getTotalNoOfVotesPercent());
-                tvPollPercentNumber.setText(pollOptionModel.getTotalNoOfVotesPercent()+mContext.getString(R.string.poll_result_percent));
+                tvPollPercentNumber.setText(pollOptionModel.getTotalNoOfVotesPercent() + mContext.getString(R.string.poll_result_percent));
                 tvTextPollDesc.setText(pollOptionModel.getDescription());
                 if (pollOptionModel.isVoted()) {
                     ivPercentVerified.setVisibility(View.VISIBLE);
@@ -356,6 +365,8 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         clImagePollLeftContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                clImagePollLeftContainer.setEnabled(false);
+                clImagePollRightContainer.setEnabled(false);
                 tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border_active);
                 tvImagePollNameLeft.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
@@ -372,6 +383,8 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         clImagePollRightContainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                clImagePollLeftContainer.setEnabled(false);
+                clImagePollRightContainer.setEnabled(false);
                 tvImagePollNameRight.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border_active);
                 tvImagePollNameRight.setTextColor(ContextCompat.getColor(mContext, R.color.white));
                 tvImagePollNameLeft.setBackgroundResource(R.drawable.rectangle_image_poll_bottom_border);
@@ -431,7 +444,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 endsIn = mContext.getString(R.string.ends_in) + " " + endsIn;
                 mTvFeedPollEndsIn.setText(endsIn);
             } else {
-                mTvFeedPollEndsIn.setText( mContext.getString(R.string.ended));
+                mTvFeedPollEndsIn.setText(mContext.getString(R.string.ended));
             }
         } else {
             mTvFeedPollEndsIn.setVisibility(View.GONE);
@@ -481,7 +494,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mPollSolarObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(),createdDate);
+            String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
             if (StringUtil.isNotNullOrEmptyString(time)) {
                 mTvFeedCommunityPostTime.setText(time);
                 mTvFeedCommunityPostTime.setVisibility(View.VISIBLE);
@@ -499,8 +512,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             mTvFeedPollUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_heart_in_active, 0, 0, 0);
             rlFeedPollNoReactionComment.setVisibility(View.GONE);
             mLineSeparate.setVisibility(View.GONE);
-        }else
-        {
+        } else {
             mLineSeparate.setVisibility(View.VISIBLE);
             rlFeedPollNoReactionComment.setVisibility(View.VISIBLE);
         }
