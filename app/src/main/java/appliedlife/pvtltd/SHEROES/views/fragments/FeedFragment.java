@@ -1985,6 +1985,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
                     FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
                     if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
+                        if (updatedFeedDetail instanceof UserSolrObj && innerFeedDetail instanceof UserSolrObj) { //Since community name not available in user solr object
+                            UserSolrObj updatedUserSolrObj = (UserSolrObj) updatedFeedDetail;
+                            if (!StringUtil.isNotNullOrEmptyString(updatedUserSolrObj.getmSolarIgnoreCommunityName())) {
+                                UserSolrObj userSolrObj = (UserSolrObj) innerFeedDetail;
+                                updatedUserSolrObj.setmSolarIgnoreCommunityName(userSolrObj.getmSolarIgnoreCommunityName());
+                                updatedFeedDetail = updatedUserSolrObj;
+                            }
+                        }
                         ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
                         mAdapter.setData(i, feedDetail);
                     }
