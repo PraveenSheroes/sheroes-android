@@ -187,9 +187,6 @@ public class UserSolrObj extends FeedDetail {
     @SerializedName("solr_ignore_profile_badge_url")
     private String profileBadgeUrl;
 
-    @SerializedName("solr_ignore_leaderboard_community_name")
-    private String mSolarIgnoreCommunityName;
-
     @SerializedName("solr_ignore_user_badges_list")
     @Expose
     private List<BadgeDetails> userBadgesList = null;
@@ -674,13 +671,5 @@ public class UserSolrObj extends FeedDetail {
 
     public void setProfileBadgeUrl(String profileBadgeUrl) {
         this.profileBadgeUrl = profileBadgeUrl;
-    }
-
-    public String getmSolarIgnoreCommunityName() {
-        return mSolarIgnoreCommunityName;
-    }
-
-    public void setmSolarIgnoreCommunityName(String mSolarIgnoreCommunityName) {
-        this.mSolarIgnoreCommunityName = mSolarIgnoreCommunityName;
     }
 }

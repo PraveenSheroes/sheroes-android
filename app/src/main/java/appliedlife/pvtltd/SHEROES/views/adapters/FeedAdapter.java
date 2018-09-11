@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.LoaderViewHolder;
-import appliedlife.pvtltd.SHEROES.viewholder.UserProfileCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
@@ -45,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.Bind;
@@ -99,11 +99,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new OrgReviewCardHolder(mInflater.inflate(R.layout.review_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
-            case TYPE_CAROUSEL:
+            case TYPE_MENTOR_SUGGESTION_CAROSEL:
                 return new CarouselViewHolder(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
-            case TYPE_USER_COMPACT:
-                return new UserProfileCompactViewHolder(mInflater.inflate(R.layout.list_user_flat_item, parent, false), mContext, mBaseHolderInterface);
-            case TYPE_LEADERBOARD:
+            case TYPE_MENTOR_COMPACT:
+                return new MentorCard(mInflater.inflate(R.layout.feed_mentor_card, parent, false), mBaseHolderInterface);
+            case TYPE_LEADER:
                 return new LeaderBoardViewHolder(mInflater.inflate(R.layout.list_leaderboard_item, parent, false), mBaseHolderInterface);
             case TYPE_COMMUNITY:
                 return new CommunityFlatViewHolder(mInflater.inflate(R.layout.community_flat_layout, parent, false), mBaseHolderInterface);
@@ -161,27 +161,22 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 FeedDetail feedDetail = mFeedDetailList.get(position);
                 appIntroCardHolder.bindData(feedDetail, mContext, position);
                 break;
-            case TYPE_CAROUSEL:
+            case TYPE_MENTOR_SUGGESTION_CAROSEL:
                 CarouselViewHolder carouselViewHolder = (CarouselViewHolder) holder;
                 CarouselDataObj carouselDataObj = (CarouselDataObj) mFeedDetailList.get(position);
                 carouselViewHolder.bindData(carouselDataObj, mContext, position);
                 break;
-            case TYPE_USER_COMPACT:
-                UserProfileCompactViewHolder userProfileCompactViewHolder = (UserProfileCompactViewHolder) holder;
-                UserSolrObj userProfileSolrObj = (UserSolrObj) mFeedDetailList.get(position);
-                userProfileSolrObj.setCompactView(true);
-                userProfileCompactViewHolder.bindData(userProfileSolrObj, mContext);
-
-               /* MentorCard mentorCard = (MentorCard) holder;
+            case TYPE_MENTOR_COMPACT:
+                MentorCard mentorCard = (MentorCard) holder;
                 UserSolrObj userSolrObj = (UserSolrObj) mFeedDetailList.get(position);
-                mentorCard.bindData(userSolrObj, mContext, position);*/
+                mentorCard.bindData(userSolrObj, mContext, position);
                 break;
             case TYPE_COMMUNITY:
                 CommunityFlatViewHolder communityFlatViewHolder = (CommunityFlatViewHolder) holder;
                 CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetailList.get(position);
                 communityFlatViewHolder.bindData(communityFeedSolrObj, mContext, position);
                 break;
-            case TYPE_LEADERBOARD:
+            case TYPE_LEADER:
                 LeaderBoardViewHolder leaderBoardViewHolder = (LeaderBoardViewHolder) holder;
                 LeaderBoardUserSolrObj leaderBoardUserSolrObj = (LeaderBoardUserSolrObj) mFeedDetailList.get(position);
                 leaderBoardViewHolder.bindData(leaderBoardUserSolrObj, mContext, position);
@@ -213,9 +208,9 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_EVENT = 6;
     private static final int TYPE_ORGANIZATION = 7;
     private static final int TYPE_INRO = 8;
-    private static final int TYPE_CAROUSEL = 9;
-    private static final int TYPE_USER_COMPACT = 10;
-    private static final int TYPE_LEADERBOARD = 11;
+    private static final int TYPE_MENTOR_SUGGESTION_CAROSEL = 9;
+    private static final int TYPE_MENTOR_COMPACT = 10;
+    private static final int TYPE_LEADER = 11;
     private static final int TYPE_COMMUNITY = 12;
     private static final int TYPE_HOME_FEED_HEADER = 13;
     private static final int TYPE_IMAGE = 14;
@@ -232,7 +227,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             }
 
             if (feedDetail instanceof LeaderBoardUserSolrObj) {
-                return TYPE_LEADERBOARD;
+                return TYPE_LEADER;
             }
 
             if (feedDetail instanceof UserPostSolrObj) {
@@ -262,11 +257,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return TYPE_INRO;
             }
             if (feedDetail instanceof CarouselDataObj) {
-                return TYPE_CAROUSEL;
+                return TYPE_MENTOR_SUGGESTION_CAROSEL;
             }
 
             if (feedDetail instanceof UserSolrObj) {
-                return TYPE_USER_COMPACT;
+                return TYPE_MENTOR_COMPACT;
             }
 
             if (feedDetail instanceof CommunityFeedSolrObj) {

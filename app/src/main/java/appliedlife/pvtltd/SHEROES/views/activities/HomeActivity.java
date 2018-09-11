@@ -1149,22 +1149,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
         if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
-        } else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
-            Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
-            if (parcelable != null) {
-                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
-                invalidateItem1(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
-
-            }
-        }else if(resultCode == AppConstants.REQUEST_CODE_FOR_USER_LISTING)  {
-            Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
-            if (parcelable != null) {
-                List<FeedDetail> userSolrObj = Parcels.unwrap(parcelable);
-                for(int i =0; i<userSolrObj.size(); i++) {
-                    FeedDetail userSolrObj1 = userSolrObj.get(i);
-                    invalidateItem1(userSolrObj1, userSolrObj1.getIdOfEntityOrParticipant());
-                }
-            }
         } else if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
             Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
             if (fragment instanceof CommunitiesListFragment) {
@@ -1862,20 +1846,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
         if (fragment != null) {
             ((HomeFragment) fragment).invalidateItem(feedDetail);
-
-            Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                    .show();
-        }
-    }
-
-
-    private void invalidateItem1(FeedDetail feedDetail, long id) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
-        if (fragment != null) {
-            ((HomeFragment) fragment).refreshAtPosition(feedDetail, id);
-
-       //     Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-       //             .show();
         }
     }
 

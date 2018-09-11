@@ -125,6 +125,4 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onLeaderBoardUserClick(long userId, String screenName);
 
-    void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj);
-
 }

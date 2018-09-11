@@ -106,7 +106,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
@@ -1191,11 +1190,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
 
-            if(carouselDataObj.getStreamType()!=null && carouselDataObj.getStreamType().equalsIgnoreCase("LeaderboardCarouselStream")) {
-                UsersCollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-            } else {
-                CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-            }
+            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
         }
     }
 
@@ -1422,32 +1417,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onLeaderBoardUserClick(long userId, String sourceScreenName) {
         ProfileActivity.navigateTo(getActivity(), userId, false, PROFILE_NOTIFICATION_ID, sourceScreenName, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }
-
-    @Override
-    public void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj) {
-        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getIdOfEntityOrParticipant());
-        if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-
-            mFeedPresenter.getPostAuthorUnfollowed(publicProfileListRequest, userPostSolrObj);
-        } else {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getPostAuthorFollowed(publicProfileListRequest, userPostSolrObj);
-        }
     }
 
     @Override
@@ -1981,17 +1950,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             FeedDetail feedDetail = feedDetails.get(i);
             if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
                 mAdapter.setData(i, updatedFeedDetail);
-            } else if (feedDetail instanceof CarouselDataObj) {
+            }
+            if (feedDetail instanceof CarouselDataObj) {
                 for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
                     FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
                     if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
                         ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
                         mAdapter.setData(i, feedDetail);
                     }
-                }
-            } else if(feedDetail!=null && feedDetail instanceof LeaderBoardUserSolrObj ) {
-                if(((LeaderBoardUserSolrObj)feedDetail).getUserSolrObj() !=null) {
-                    mAdapter.setData(i, feedDetail);
                 }
             }
         }

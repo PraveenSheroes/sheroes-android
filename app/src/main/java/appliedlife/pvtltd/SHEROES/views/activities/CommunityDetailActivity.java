@@ -477,8 +477,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
-        } else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
-            refreshCurrentFragment();
         }
     }
 
@@ -871,8 +869,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     ((FeedFragment) fragment).updateItem(feedDetail);
                 }
             }
-            Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                    .show();
         }
     }
 

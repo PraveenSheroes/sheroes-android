@@ -86,7 +86,7 @@ android {
             //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
-            //buildConfigField "String", "BASE_URL", "\"https://testservicesconf.sheroes.in/\""
+           // buildConfigField "String", "BASE_URL", "\"http://testservicesconf.sheroes.in/\""
 
             /**
              * Release server

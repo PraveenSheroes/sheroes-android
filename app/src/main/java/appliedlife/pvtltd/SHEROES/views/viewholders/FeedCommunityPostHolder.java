@@ -13,6 +13,7 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -156,9 +157,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     CircleImageView ivFeedCommunityPostUserPic;
     @Bind(R.id.tv_feed_community_post_user_bookmark)
     TextView tvFeedCommunityPostUserBookmark;
-
-    @Bind(R.id.follow_button)
-    TextView mFollowButton;
     @Bind(R.id.tv_feed_community_post_card_title)
     TextView tvFeedCommunityPostCardTitle;
     @Bind(R.id.tv_feed_community_post_time)
@@ -257,7 +255,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (null != userPreference.get().getUserSummary().getUserBO()) {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
-
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
             }
@@ -411,20 +408,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
         postDataContentRendering(mContext);
         likeCommentOps();
-        displayFollowUnFollowButton();
-    }
-
-    private void displayFollowUnFollowButton() {
-        if (mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
-            mFollowButton.setVisibility(View.GONE);
-        } else {
-            mFollowButton.setVisibility(View.VISIBLE);
-            if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
-                mFollowButton.setText("Follow");
-            } else {
-                mFollowButton.setVisibility(View.GONE);
-            }
-        }
     }
 
     @OnClick(R.id.li_post_link_render)
@@ -1174,20 +1157,13 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
                 break;
             }
+
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
         }
     }
 
-    @OnClick(R.id.follow_button)
-    public void onFollowedButtonClick() {
-        if (viewInterface instanceof FeedItemCallback) {
-            ((FeedItemCallback) viewInterface).onPostAuthorFollowed(mUserPostObj);
-        } else {
-            viewInterface.dataOperationOnClick(mUserPostObj);
-        }
-    }
 
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
     public void isBookMarkClick() {
