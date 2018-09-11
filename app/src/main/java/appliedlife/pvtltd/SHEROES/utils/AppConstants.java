@@ -119,8 +119,10 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
     public static final int RESULT_CODE_FOR_DEACTIVATION = 10007;
+    public static final int RESULT_CODE_FOR_PROFILE_FOLLOWED = 10009;
     public static final int REQUEST_CODE_FOR_EDIT_PROFILE = 1002;
     public static final int REQUEST_CODE_FOR_COMMUNITY_LISTING = 1003;
+    public static final int REQUEST_CODE_FOR_USER_LISTING = 1009;
     public static final int REQUEST_CODE_FOR_IMAGE_CROPPING = 1201;
     public static final int REQUEST_CODE_FOR_GOOGLE_PLUS = 1301;
     public static final int REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL = 1501;
@@ -167,6 +169,7 @@ public class AppConstants {
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
     public static final String LEADER_BOARD_SCREEN = "Leaderboard Screen";
+    public static final String USER_FOLLOWED_DETAIL = "USER_FOLLOWED_DETAIL";
 
     public static final String EMAIL = "email";
 
