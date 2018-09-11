@@ -49,6 +49,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -302,6 +303,12 @@ public class ContestActivity extends BaseActivity implements IContestView {
         } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             if (mFeedFragment != null) {
                 mFeedFragment.refreshList();
+            }
+        }else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+            Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+            if (parcelable != null && mFeedFragment!=null) {
+                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                mFeedFragment.findPositionAndUpdateItem(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
             }
         }
     }

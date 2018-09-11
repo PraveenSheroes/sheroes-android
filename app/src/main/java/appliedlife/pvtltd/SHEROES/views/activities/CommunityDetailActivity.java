@@ -75,6 +75,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -477,8 +478,24 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
-        } else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
-            refreshCurrentFragment();
+        } else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+            Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+            if (parcelable != null) {
+                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                refreshAtPosition(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
+            }
+        }
+    }
+
+    //refresh post at a specific position
+    public void refreshAtPosition(FeedDetail feedDetail, long id) {
+        for (int i = 0; i < mAdapter.getCount(); i++) {
+            Fragment fragment = mAdapter.getItem(i);
+            if (fragment instanceof FeedFragment) {
+                if (fragment.isVisible()) {
+                    ((FeedFragment) fragment).findPositionAndUpdateItem(feedDetail, id);
+                }
+            }
         }
     }
 

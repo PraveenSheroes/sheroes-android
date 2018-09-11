@@ -2008,6 +2008,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if(((LeaderBoardUserSolrObj)feedDetail).getUserSolrObj() !=null) {
                     mAdapter.setData(i, feedDetail);
                 }
+            } else if(feedDetail!=null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
+                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.MENTOR_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
+                mAdapter.setData(i, userPostSolrObj);
             }
         }
         return;
