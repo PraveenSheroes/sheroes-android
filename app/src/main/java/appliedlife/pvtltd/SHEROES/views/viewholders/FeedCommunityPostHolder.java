@@ -415,12 +415,12 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void displayFollowUnFollowButton() {
-        if (mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+        if (!(viewInterface instanceof FeedItemCallback) || mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
             mFollowButton.setVisibility(View.GONE);
         } else {
             mFollowButton.setVisibility(View.VISIBLE);
             if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
-                mFollowButton.setText("Follow");
+                mFollowButton.setText(R.string.follow_text);
             } else {
                 mFollowButton.setVisibility(View.GONE);
             }
