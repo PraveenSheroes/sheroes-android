@@ -318,6 +318,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
+    //Unfollowed
     public void getPostAuthorUnfollowed(PublicProfileListRequest publicProfileListRequest, final UserPostSolrObj userPostSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
@@ -347,7 +348,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             if (userPostSolrObj.getEntityOrParticipantTypeId() == 7) {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             } else {
-                                userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
                         } else {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(false);

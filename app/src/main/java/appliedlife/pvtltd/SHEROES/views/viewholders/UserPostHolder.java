@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -88,6 +89,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.title)
     TextView mTitle;
+
+    @Bind(R.id.follow_button)
+    TextView mFollowButton;
 
     @Bind(R.id.post_time)
     TextView mPostTime;
@@ -210,6 +214,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
+        displayFollowUnFollowButton();
 
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
@@ -225,6 +230,19 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void viewRecycled() {
 
+    }
+
+    private void displayFollowUnFollowButton() {
+        if (mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+            mFollowButton.setVisibility(View.GONE);
+        } else {
+            if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
+                mFollowButton.setVisibility(View.VISIBLE);
+                mFollowButton.setText(R.string.follow_text);
+            } else {
+                mFollowButton.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void normalCommunityPostUi(long userId, int adminId) {
@@ -246,6 +264,11 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         allTextViewStringOperations(mContext);
         likeCommentOps();
         mPostMenu.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.follow_button)
+    public void onFollowedButtonClick() {
+        mPostDetailCallback.onPostDetailsAuthorFollow(mUserPostObj);
     }
 
     @OnClick(R.id.li_post_link_render)

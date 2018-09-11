@@ -1862,9 +1862,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
         if (fragment != null) {
             ((HomeFragment) fragment).invalidateItem(feedDetail);
-
-            Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                    .show();
         }
     }
 

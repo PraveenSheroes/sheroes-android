@@ -856,6 +856,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
             //****   Hide/show options according to user
+            if(userPostObj.isBookmarked()) {
+                popup.getMenu().add(0, R.id.bookmark, 6, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmarked), getResources().getString(R.string.BOOKMARKED))).setVisible(true);
+            } else {
+                popup.getMenu().add(0, R.id.bookmark, 6, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmark_in_active), getResources().getString(R.string.BOOKMARK))).setVisible(true);
+            }
 
             if (userPostObj.getAuthorId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
@@ -924,6 +929,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.POST, userPostObj);
+                            return true;
+                        case R.id.bookmark:
+                            onPostBookMarkedClicked(userPostObj);
                             return true;
                         default:
                             return false;
@@ -1047,7 +1055,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
             popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
-            popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+            popup.getMenu().add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             Comment comment = userPostObj.getLastComments().get(0);
 
@@ -1065,6 +1073,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
 
+
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -1077,9 +1086,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.COMMENT, userPostObj);
-                            //SpamPostRequest request = SpamUtil.spamRequestBuilder(userPostObj, tvFeedCommunityPostUserCommentPostMenu, mLoggedInUser);
-                            //reportSpamDialog(request, userPostObj);
-
+                            return true;
                         default:
                             return false;
                     }
