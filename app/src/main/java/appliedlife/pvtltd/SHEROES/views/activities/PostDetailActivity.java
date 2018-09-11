@@ -81,6 +81,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -559,6 +560,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     mPostDetailPresenter.updateUserPost(userPostSolrObj);
                 }
             }
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+            Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+            if (parcelable != null) {
+                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                mPostDetailPresenter.updateFollowedAuthor(mFeedDetail, userSolrObj.isSolrIgnoreIsMentorFollowed());
+            }
         }
     }
 
@@ -891,7 +898,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onPostDetailsAuthorFollow(UserPostSolrObj userPostSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getIdOfEntityOrParticipant());
+        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
         if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()

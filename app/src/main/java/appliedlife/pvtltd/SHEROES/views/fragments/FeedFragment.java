@@ -1434,7 +1434,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getIdOfEntityOrParticipant());
+        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
         if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
