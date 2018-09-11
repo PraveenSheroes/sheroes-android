@@ -13,7 +13,7 @@ import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserListCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import butterknife.Bind;
@@ -25,7 +25,7 @@ import butterknife.OnClick;
  * Created by Ravi on 05/09/18.
  */
 
-public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
+public class UserProfileFlatViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
 
     // region ButterKnife Bindings
@@ -54,7 +54,7 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     private UserSolrObj mUserSolrObj;
     // endregion
 
-    public UserProfileCompactViewHolder(View itemView, Context context, BaseHolderInterface baseHolderInterface) {
+    public UserProfileFlatViewHolder(View itemView, Context context, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.mContext = context;
@@ -77,9 +77,9 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
 
         if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(0.3f);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
             mFollowButton.setText(context.getString(R.string.following_user));
-            mFollowButton.setAlpha(0.3f);
             mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
         } else {
             mFollowButton.setEnabled(true);
@@ -100,12 +100,12 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     //region onClick methods
     @OnClick(R.id.follow_button)
     public void onFollowClicked() {
-        ((FeedItemCallback) viewInterface).onUserFollowedUnFollowed(mUserSolrObj);
+        ((UserListCallback)viewInterface).onUserFollowedUnFollowed(mUserSolrObj);
     }
 
     @OnClick(R.id.user_compact_card)
     public void onUserCardClicked() {
-        ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserSolrObj);
+        ((UserListCallback)viewInterface).onUserProfileClicked(mUserSolrObj);
     }
     //endregion
 }
