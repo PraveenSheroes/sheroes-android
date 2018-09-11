@@ -202,4 +202,9 @@
         <item name="android:progressDrawable">@drawable/poll_image_progress_layer</item>
         <item name="android:minWidth">200dp</item>
     </style>
+    <style name="TextViewForStandardSizeColor" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/comment_text</item>
+        <item name="android:fontFamily">@string/ID_ROBOTO_REGULAR</item>
+    </style>
 </resources>

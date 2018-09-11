@@ -2201,3 +2201,4 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mLiPollContainer.addView(liImagePollRow);
     }
 }
+

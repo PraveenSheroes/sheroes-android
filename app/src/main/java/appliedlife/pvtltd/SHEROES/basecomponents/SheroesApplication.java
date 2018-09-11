@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.support.multidex.MultiDexApplication;
 
 import com.clevertap.android.sdk.ActivityLifecycleCallback;
@@ -166,4 +167,7 @@ public class SheroesApplication extends MultiDexApplication {
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
     }
+
+
+
 }

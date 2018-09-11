@@ -5,33 +5,25 @@ import android.graphics.Typeface;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
-/**
- * Created by Praveen on 07/11/17.
- */
-
-public class NoScrollTextView extends AppCompatTextView {
-    public NoScrollTextView(Context context) {
+public class CustomTextView extends AppCompatTextView {
+    public CustomTextView(Context context) {
         super(context);
         setFont();
     }
 
-    public NoScrollTextView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+    public CustomTextView(Context context, AttributeSet set) {
+        super(context, set);
         setFont();
     }
 
-    public NoScrollTextView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
+    public CustomTextView(Context context, AttributeSet set, int defaultStyle) {
+        super(context, set, defaultStyle);
         setFont();
-    }
-
-    @Override
-    public void scrollTo(int x, int y) {
-        //do nothing
     }
 
     private void setFont() {
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/Hind-Regular.ttf");
         setTypeface(typeface); //function used to set font
     }
+
 }
