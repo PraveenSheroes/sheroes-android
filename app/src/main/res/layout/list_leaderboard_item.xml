@@ -56,28 +56,10 @@
         android:layout_height="wrap_content"
         android:padding="@dimen/dp_size_16">
 
-        <TextView
-            android:id="@+id/follow_button"
-            android:layout_width="@dimen/leaderboard_follow_button_width"
-            android:layout_height="@dimen/leaderboard_follow_button_height"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="@dimen/leaderbaord_follow_button_margin"
-            android:gravity="center"
-            android:background="@drawable/border_new_feature"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:foreground="?attr/selectableItemBackground"
-            android:textColor="@color/leaderbaord_follow_button_text"
-            android:textSize="@dimen/leaderbaord_follow_text"
-            tools:text="Following" />
-
         <RelativeLayout
             android:id="@+id/icon_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_centerVertical="true">
 
             <ImageView
@@ -108,8 +90,7 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:id="@+id/desc_container"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_size_10"

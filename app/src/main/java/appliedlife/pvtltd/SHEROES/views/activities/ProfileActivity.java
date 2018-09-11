@@ -405,8 +405,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     DashProgressBar dashProgressBar;
     private boolean isUserDeactivated;
 
-    private UserSolrObj followedUserSolrObj;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -1161,27 +1159,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     isUserDeactivated = false;
                     setResult(AppConstants.RESULT_CODE_FOR_DEACTIVATION);
                     finish();
-                } else if (followedUserSolrObj != null) {
-                    onFollowedActivtyResultOfParentRefresh(followedUserSolrObj);
-                 //   followedUserSolrObj = null;
                 } else if (!isProfileClicked) {
                     onActivtyResultOfParentRefresh();
                 }
             }
         }
         super.onBackPressed();
-    }
-
-    private void onFollowedActivtyResultOfParentRefresh(UserSolrObj userSolrObj) {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        if (mUserSolarObject != null) {
-            mUserSolarObject.currentItemPosition = itemPosition;
-            Parcelable parcelable = Parcels.wrap(userSolrObj);
-            bundle.putParcelable(AppConstants.USER_FOLLOWED_DETAIL, parcelable);
-            intent.putExtras(bundle);
-            setResult(AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED, intent);
-        }
     }
 
     private void onActivtyResultOfParentRefresh() {
@@ -1446,8 +1429,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
                 UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-
-                followedUserSolrObj = userSolrObj;
                 tvMentorDashBoardFollow.setEnabled(true);
                 userFollowerCount.setText(String.valueOf(numericToThousand(userSolrObj.getSolrIgnoreNoOfMentorFollowers())));
                 followUnFollowMentor();

@@ -281,82 +281,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    //Post Follow /Following
-    public void getPostAuthorFollowed(PublicProfileListRequest publicProfileListRequest, final UserPostSolrObj userPostSolrObj) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
-                        userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
-                    }
-
-                    @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
-                        } else {
-                            userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
-                        }
-                          getMvpView().invalidateItem(userPostSolrObj);
-                    }
-                });
-
-    }
-
-    public void getPostAuthorUnfollowed(PublicProfileListRequest publicProfileListRequest, final UserPostSolrObj userPostSolrObj) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getUnFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
-                        userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
-                    }
-
-                    @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userPostSolrObj.getEntityOrParticipantTypeId() == 7) {
-                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
-                            } else {
-                                userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
-                            }
-                        } else {
-                            userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
-                        }
-                        getMvpView().invalidateItem(userPostSolrObj);
-                    }
-                });
-    }
-
 
     public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -394,7 +318,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             getMvpView().invalidateItem(userSolrObj);
                         } else {
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                            getMvpView().invalidateItem(userSolrObj);
                         }
                     }
                 });

@@ -660,7 +660,6 @@
     <string name="badge_closet_won_this_week_text">Won this week</string>
     <string name="badge_desc">%1$sis a Super SHEROES in %2$s</string>
     <string name="inactive_badge_desc">%1$swas a Super SHEROES in %2$s</string>
-    <string name="user_card_desc">Super SHEROES in %1$s</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>
     <string name="view_profile">VIEW PROFILE</string>
 
