@@ -226,6 +226,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     itemContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.white_color));
                 }
                 isFollowed = false;
+                mFollowButton.setVisibility(View.GONE);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 layoutParams.setMargins(CommonUtil.convertDpToPixel(selectedRowSideMargin, context), 0, CommonUtil.convertDpToPixel(selectedRowSideMargin, context), CommonUtil.convertDpToPixel(selectedRowBottomMargin, context));
@@ -236,7 +237,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 mName.setTextColor(ContextCompat.getColor(context, R.color.leaderboard_user));
                 layoutParams.setMargins(0, 0, 0, 0);
                 mUserPosition.setVisibility(View.GONE);
-
+                mFollowButton.setVisibility(View.VISIBLE);
                 isFollowed = mLeaderBoardUserSolrObj.getUserSolrObj() != null && mLeaderBoardUserSolrObj.getUserSolrObj().isSolrIgnoreIsUserFollowed();
             }
 
@@ -258,11 +259,13 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
 
         if (isFollowed) {
             mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(0.3f);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
             mFollowButton.setText(context.getString(R.string.following_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
         } else {
             mFollowButton.setEnabled(true);
+            mFollowButton.setAlpha(1.0f);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
             mFollowButton.setText(context.getString(R.string.follow_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

@@ -156,6 +156,7 @@
     <color name="user_flat_desc">#878787</color>
     <color name="leaderbaord_follow_button_text">#ffffff</color>
     <color name="user_follow_post_text">#ffffff</color>
+    <color name="about_leaderbaord_text">#3c3c3c</color>
 
 
 </resources>
