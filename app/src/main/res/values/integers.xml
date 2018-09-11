@@ -33,5 +33,9 @@
   <integer name="feed_article_header_label_max_line">4</integer>
   <integer name="feed_article_user_name_margin_max_line">2</integer>
   <integer name="feed_article_user_comment_post_line">3</integer>
+  <integer name="user_compact_card_name_max_line">1</integer>
+  <integer name="user_flat_card_name_max_line">1</integer>
+  <integer name="user_compact_card_desc_max_line">2</integer>
+  <integer name="user_flat_card_desc_max_line">2</integer>
 
 </resources>

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/user_compact_card"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/user_flat_card_height"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginLeft="@dimen/user_flat_card_margin"
+    android:layout_marginRight="@dimen/user_flat_card_margin"
+    android:layout_marginTop="@dimen/user_flat_card_margin"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    card_view:cardCornerRadius="@dimen/user_flat_card_radius"
+    card_view:cardElevation="@dimen/user_flat_card_shadow">
+
+    <RelativeLayout
+        android:layout_width="@dimen/user_flat_container_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/user_flat_container_margin_bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/image_container"
+                android:layout_width="@dimen/user_flat_card_image_container"
+                android:layout_height="@dimen/user_flat_card_image_container"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/user_flat_card_image_conatiner_margin">
+
+                <ImageView
+                    android:id="@+id/user_image"
+                    android:layout_width="@dimen/user_flat_icon_size"
+                    android:layout_height="@dimen/user_flat_icon_size" />
+
+                <ImageView
+                    android:id="@+id/profile_verified"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:background="@drawable/vector_verified"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/bade_icon"
+                    android:layout_width="@dimen/user_flat_badge_icon_size"
+                    android:layout_height="@dimen/user_flat_badge_icon_size"
+                    android:layout_gravity="end|bottom"
+                    android:visibility="gone" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/user_flat_card_name_margin_horizontal"
+                android:layout_marginRight="@dimen/user_flat_card_name_margin_horizontal"
+                android:layout_marginTop="@dimen/user_flat_card_name_margin_vertical"
+                android:fontFamily="@string/ID_ROBOTO_BOLD"
+                android:gravity="center_horizontal"
+                android:maxLines="@integer/user_flat_card_name_max_line"
+                android:textColor="@color/user_flat_name_text_color"
+                android:textSize="@dimen/user_card_flat_text"
+                android:textStyle="bold"
+                tools:text="Anupriya" />
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/dp_size_8"
+                android:layout_marginLeft="@dimen/user_flat_desc_margin_horizontal"
+                android:layout_marginRight="@dimen/user_flat_desc_margin_horizontal"
+                android:layout_marginStart="@dimen/user_flat_desc_margin_horizontal"
+                android:layout_marginTop="@dimen/user_flat_desc_margin_vertical"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:gravity="center_horizontal"
+                android:maxLines="@integer/user_flat_card_desc_max_line"
+                android:textColor="@color/user_flat_desc"
+                android:textSize="@dimen/user_flat_desc_text" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/follow_button"
+            android:layout_width="@dimen/user_card_flat_follow_width"
+            android:layout_height="@dimen/user_card_flat_follow_height"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/rectangle_feed_commnity_join"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:gravity="center"
+            android:paddingBottom="@dimen/user_flat_card_padding"
+            android:paddingTop="@dimen/user_flat_card_padding"
+            android:textAllCaps="true"
+            android:textColor="@color/footer_icon_text"
+            android:textSize="@dimen/user_flat_card_follow_button_text"
+            tools:text="FOLLOW" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
