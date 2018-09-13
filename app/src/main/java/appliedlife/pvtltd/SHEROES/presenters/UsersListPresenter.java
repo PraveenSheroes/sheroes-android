@@ -244,7 +244,11 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                                 userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             }
                         } else {
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            }
                         }
                         getMvpView().invalidateItem(userSolrObj);
                     }

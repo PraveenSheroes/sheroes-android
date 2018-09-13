@@ -1174,7 +1174,11 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            } else {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            }
                         }
                         getMvpView().setData(0, userPostSolrObj);
                     }

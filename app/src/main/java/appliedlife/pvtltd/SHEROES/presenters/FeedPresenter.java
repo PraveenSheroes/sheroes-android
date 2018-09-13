@@ -318,7 +318,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            if (mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            } else {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            }
                         }
                           getMvpView().invalidateItem(userPostSolrObj);
                     }
@@ -409,7 +413,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             }
                             getMvpView().invalidateItem(userSolrObj);
                         } else {
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            }
                             getMvpView().invalidateItem(userSolrObj);
                         }
                     }
