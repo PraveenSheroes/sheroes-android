@@ -860,16 +860,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                     if (mFeedDetail.getAuthorId() == userId || ((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
-                        if (((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
-                            if (mFeedDetail.getAuthorId() == userId) {
-                                tvEdit.setVisibility(View.VISIBLE);
-                            } else {
-                                tvEdit.setVisibility(View.GONE);
-                            }
+                        if (mFeedDetail.getAuthorId() == userId && mFeedDetail instanceof UserPostSolrObj && ((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
+                            tvEdit.setVisibility(View.GONE);
                         } else {
                             tvEdit.setVisibility(View.VISIBLE);
                         }
-
                     } else {
                         if (mFeedDetail.isFromHome()) {
                             tvReport.setText(getString(R.string.ID_REPORTED_AS_SPAM));

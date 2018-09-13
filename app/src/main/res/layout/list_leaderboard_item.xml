@@ -17,106 +17,140 @@
             android:id="@+id/about_leaderboard"
             android:layout_width="match_parent"
             android:layout_height="@dimen/leaderboard_about_header_height"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/about_laederboard_spacing"
+            android:layout_marginStart="@dimen/about_laederboard_spacing"
             android:drawableLeft="@drawable/vector_idea"
-            android:drawablePadding="@dimen/dp_size_16"
+            android:drawablePadding="@dimen/about_laederboard_spacing"
             android:drawableStart="@drawable/vector_idea"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_vertical"
             android:text="@string/how_do_i_become_a_supersheroes"
-            android:textColor="#3c3c3c"
-            android:textSize="13sp"
+            android:textColor="@color/about_leaderbaord_text"
+            android:textSize="@dimen/about_leaderboard_text"
             android:textStyle="normal" />
 
         <TextView
             android:id="@+id/divider"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_size_1"
+            android:layout_height="@dimen/about_leaderboard_divider_height"
             android:background="@color/lighter_gray" />
 
         <TextView
             android:id="@+id/top_user_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_marginLeft="@dimen/leaderboard_top_user_title_margin"
+            android:layout_marginStart="@dimen/leaderboard_top_user_title_margin"
             android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:paddingBottom="@dimen/dp_size_8"
-            android:paddingTop="@dimen/dp_size_14"
+            android:paddingBottom="@dimen/leaderboard_top_user_padding_bottom"
+            android:paddingTop="@dimen/leaderboard_top_user_padding_top"
             android:text="@string/leaderbaord_top_10_user"
             android:textAllCaps="true"
             android:textColor="@color/leader_board_badge_sub_text"
-            android:textSize="14sp"/>
+            android:textSize="@dimen/leaderboard_top_user_title_text" />
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/leader_board_users_container"
         android:layout_width="match_parent"
+        android:orientation="horizontal"
         android:layout_height="wrap_content"
-        android:padding="@dimen/dp_size_16">
+        android:padding="@dimen/leaderboard_user_container_padding">
+
+        <TextView
+            android:id="@+id/follow_button"
+            android:layout_width="@dimen/leaderboard_follow_button_width"
+            android:layout_height="@dimen/leaderboard_follow_button_height"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/leaderboard_follow_button_margin"
+            android:layout_marginEnd="@dimen/leaderboard_follow_button_margin_right"
+            android:layout_marginLeft="@dimen/leaderboard_follow_button_margin"
+            android:layout_marginRight="@dimen/leaderboard_follow_button_margin_right"
+            android:layout_marginStart="@dimen/leaderboard_follow_button_margin"
+            android:layout_marginTop="@dimen/leader_board_follow_button_margin_top"
+            android:background="@drawable/border_new_feature"
+            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:foreground="?attr/selectableItemBackground"
+            android:textColor="@color/leaderbaord_follow_button_text"
+            android:textSize="@dimen/leaderbaord_follow_text"
+            tools:text="Following" />
 
         <RelativeLayout
-            android:id="@+id/icon_container"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
-
-            <ImageView
-                android:id="@+id/user_pic_icon"
-                android:layout_width="@dimen/leaderboard_user_icon"
-                android:layout_height="@dimen/leaderboard_user_icon"
-                android:layout_marginLeft="@dimen/leaderboard_user_icon_margin_start"
-                android:layout_marginStart="@dimen/leaderboard_user_icon_margin_start"
-                android:layout_toEndOf="@+id/user_position"
-                android:layout_toRightOf="@+id/user_position" />
-
-            <ImageView
-                android:id="@+id/badge_icon"
-                android:layout_width="@dimen/leaderboard_badge_icon"
-                android:layout_height="@dimen/leaderboard_badge_icon"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/user_position"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/logged_in_user_position_icon"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                android:gravity="center_vertical"
-                android:maxLines="@integer/leader_board_selected_user_position_max_line"
-                android:textColor="@color/white"
-                android:textSize="@dimen/logged_in_user_position_text_size" />
-
-        </RelativeLayout>
-
-        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_toLeftOf="@id/follow_button"
+            android:layout_toStartOf="@id/follow_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_size_10"
-            android:layout_marginStart="@dimen/dp_size_10"
-            android:layout_toEndOf="@id/icon_container"
-            android:layout_toRightOf="@id/icon_container"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/name"
+            <RelativeLayout
+                android:id="@+id/icon_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:lineSpacingExtra="2sp"
-                android:textColor="@color/leaderboard_user"
-                android:textSize="@dimen/sp_size_16"
-                tools:text="Champa Roy" />
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true">
 
-            <TextView
-                android:id="@+id/description"
+                <ImageView
+                    android:id="@+id/user_pic_icon"
+                    android:layout_width="@dimen/leaderboard_user_icon"
+                    android:layout_height="@dimen/leaderboard_user_icon"
+                    android:layout_marginLeft="@dimen/leaderboard_user_icon_margin_start"
+                    android:layout_marginStart="@dimen/leaderboard_user_icon_margin_start"
+                    android:layout_toEndOf="@+id/user_position"
+                    android:layout_toRightOf="@+id/user_position" />
+
+                <ImageView
+                    android:id="@+id/badge_icon"
+                    android:layout_width="@dimen/leaderboard_badge_icon"
+                    android:layout_height="@dimen/leaderboard_badge_icon"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/user_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/logged_in_user_position_icon"
+                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                    android:gravity="center_vertical"
+                    android:maxLines="@integer/leader_board_selected_user_position_max_line"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/logged_in_user_position_text_size" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/desc_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:textColor="@color/leader_board_badge_sub_text"
-                android:textSize="@dimen/sp_size_14"
-                tools:text="168 Likes · 140 Comments" />
-        </LinearLayout>
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/laederboard_desc_coantainer_margin"
+                android:layout_marginStart="@dimen/laederboard_desc_coantainer_margin"
+                android:layout_toEndOf="@id/icon_container"
+                android:layout_toRightOf="@id/icon_container"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:lineSpacingExtra="@dimen/laederboard_user_name_linespace"
+                    android:maxLines="@integer/leaderboard_user_name_max_line"
+                    android:ellipsize="end"
+                    android:textColor="@color/leaderboard_user"
+                    android:textSize="@dimen/leaderboard_user_name_text"
+                    tools:text="Champa Roy" />
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:textColor="@color/leader_board_badge_sub_text"
+                    android:textSize="@dimen/leaderbaord_desc_text"
+                    tools:text="168 Likes · 140 Comments" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 </LinearLayout>

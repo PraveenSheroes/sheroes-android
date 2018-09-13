@@ -217,7 +217,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isStoryPost) {
         boolean isMentor = false;
-        if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+        if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
             isMentor = true;
         }
         ProfileActivity.navigateTo(this, articleSolrObj.getCreatedBy(), isMentor, -1, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, true);

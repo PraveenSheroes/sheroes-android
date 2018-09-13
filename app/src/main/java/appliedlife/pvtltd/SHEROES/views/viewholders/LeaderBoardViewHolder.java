@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -32,6 +33,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.BindInt;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen on 18/09/17.
@@ -60,6 +62,9 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
 
     @Bind(R.id.badge_icon)
     ImageView badgeIcon;
+
+    @Bind(R.id.follow_button)
+    TextView mFollowButton;
 
     @Bind(R.id.name)
     TextView mName;
@@ -130,7 +135,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             }
 
             mLeaderBoardUserSolrObj = leaderBoardUserSolrObj;
-
+            boolean isFollowed = false;
             mProfilePic.setOnClickListener(this);
             mName.setOnClickListener(this);
             topHeaderView.setOnClickListener(this);
@@ -168,6 +173,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             if (mLoggedInUserId != -1 && mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant() == mLoggedInUserId) {
+
                 //If user is not in leaderBoard top users list , show its position in the end
                 RelativeLayout.LayoutParams marginParams = new RelativeLayout.LayoutParams(
                         mUserPicSize, mUserPicSize);
@@ -219,7 +225,8 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 } else {
                     itemContainer.setBackgroundColor(ContextCompat.getColor(context, R.color.white_color));
                 }
-
+                isFollowed = false;
+                mFollowButton.setVisibility(View.GONE);
                 mDescription.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 mName.setTextColor(ContextCompat.getColor(context, R.color.white_color));
                 layoutParams.setMargins(CommonUtil.convertDpToPixel(selectedRowSideMargin, context), 0, CommonUtil.convertDpToPixel(selectedRowSideMargin, context), CommonUtil.convertDpToPixel(selectedRowBottomMargin, context));
@@ -230,7 +237,11 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                 mName.setTextColor(ContextCompat.getColor(context, R.color.leaderboard_user));
                 layoutParams.setMargins(0, 0, 0, 0);
                 mUserPosition.setVisibility(View.GONE);
+                mFollowButton.setVisibility(View.VISIBLE);
+                isFollowed = mLeaderBoardUserSolrObj.getUserSolrObj() != null && mLeaderBoardUserSolrObj.getUserSolrObj().isSolrIgnoreIsUserFollowed();
             }
+
+            followButtonVisibility(context, isFollowed);
             itemContainer.setLayoutParams(layoutParams);
 
             if (mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails() != null && mLeaderBoardUserSolrObj.getSolrIgnoreBadgeDetails().isActive()) {
@@ -240,6 +251,24 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             }
 
             mProfilePic.setBackgroundResource(R.drawable.circular_leaderbaord_user_icon_background_grey);
+        }
+    }
+
+    //Follow/Following button in leaderboard
+    private void followButtonVisibility(Context context, boolean isFollowed) {
+
+        if (isFollowed) {
+            mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(0.3f);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+            mFollowButton.setText(context.getString(R.string.following_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
+        } else {
+            mFollowButton.setEnabled(true);
+            mFollowButton.setAlpha(1.0f);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
+            mFollowButton.setText(context.getString(R.string.follow_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
 
@@ -263,5 +292,11 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
                     break;
             }
         }
+    }
+
+    //region onClick methods
+    @OnClick(R.id.follow_button)
+    public void onFollowClicked() {
+        ((FeedItemCallback) viewInterface).onMentorFollowClicked(mLeaderBoardUserSolrObj.getUserSolrObj());
     }
 }
