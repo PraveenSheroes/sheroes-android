@@ -696,8 +696,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
             }
 
+            //Hide edit for challenge
             if (userPostObj.communityId == 0) {
-                popup.getMenu().findItem(R.id.delete).setVisible(false);
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
+                if (adminId == AppConstants.TWO_CONSTANT) {
+                    popup.getMenu().findItem(R.id.delete).setVisible(true);
+                } else {
+                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+                }
             }
             if (userPostObj.isSpamPost()) {
                 popup.getMenu().findItem(R.id.share).setVisible(false);

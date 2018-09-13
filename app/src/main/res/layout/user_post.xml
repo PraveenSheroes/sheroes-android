@@ -161,6 +161,7 @@
                 android:layout_width="@dimen/user_post_follow_width"
                 android:layout_height="@dimen/user_post_follow_height"
                 android:gravity="center"
+                android:layout_marginTop="-5dp"
                 android:visibility="gone"
                 android:background="@drawable/border_new_feature"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
@@ -173,6 +174,7 @@
                 android:id="@+id/post_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
                 android:drawableRight="@drawable/vector_menu_dashboard"
                 android:padding="@dimen/dp_size_10"
                 android:visibility="gone" />

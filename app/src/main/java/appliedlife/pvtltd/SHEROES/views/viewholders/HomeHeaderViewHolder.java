@@ -61,9 +61,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     TextView userName;
     @Bind(R.id.ripple)
     RippleView rippleView;
-    @Bind(R.id.new_offer)
-    FrameLayout newOffer;
-
     @BindDimen(R.dimen.dp_size_40)
     int authorProfileSize;
     //endregion
@@ -124,13 +121,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         if (isToolTip) {
             toolTipForHeaderFeed(context);
         }
-
-        //Show/hide the new offer icon
-        if(CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF) || CommonUtil.getPrefValue(AppConstants.HOME_OFFER_PREF)) {
-            newOffer.setVisibility(View.GONE);
-        } else {
-            newOffer.setVisibility(View.VISIBLE);
-        }
     }
     //endregion
 
@@ -158,13 +148,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         openProfileActivity();
     }
 
-    @OnClick(R.id.new_offer)
-    void offerClickForProfile() {
-        newOffer.setVisibility(View.GONE);
-        CommonUtil.setPrefValue(AppConstants.HOME_OFFER_PREF);
-        navigateToProfileActivity();
-    }
-
     @OnClick(R.id.header_msg)
      void textClickForCreatePost() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
@@ -177,7 +160,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
         });
-
     }
     //endregion
 

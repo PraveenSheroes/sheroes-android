@@ -171,10 +171,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 UserSolrObj userProfileSolrObj = (UserSolrObj) mFeedDetailList.get(position);
                 userProfileSolrObj.setCompactView(true);
                 userProfileCompactViewHolder.bindData(userProfileSolrObj, mContext);
-
-               /* MentorCard mentorCard = (MentorCard) holder;
-                UserSolrObj userSolrObj = (UserSolrObj) mFeedDetailList.get(position);
-                mentorCard.bindData(userSolrObj, mContext, position);*/
                 break;
             case TYPE_COMMUNITY:
                 CommunityFlatViewHolder communityFlatViewHolder = (CommunityFlatViewHolder) holder;

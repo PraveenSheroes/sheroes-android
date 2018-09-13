@@ -900,6 +900,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             //Enable delete response for admin in challenge response
             if (userPostObj.communityId == 0) {
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
                 if (adminId == AppConstants.TWO_CONSTANT) {
                     popup.getMenu().findItem(R.id.delete).setVisible(true);
                 } else {

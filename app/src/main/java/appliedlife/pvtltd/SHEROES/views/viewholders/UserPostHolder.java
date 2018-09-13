@@ -238,10 +238,29 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
                 mFollowButton.setVisibility(View.VISIBLE);
-                mFollowButton.setText(R.string.follow_text);
+                mFollowButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                mFollowButton.setText(R.string.follow_user);
+                mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
             } else {
                 mFollowButton.setVisibility(View.GONE);
             }
+        }
+    }
+
+    //Follow/Following button in leaderboard
+    private void followButtonVisibility(Context context, boolean isFollowed) {
+        if (isFollowed) {
+            mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(0.3f);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+            mFollowButton.setText(context.getString(R.string.following_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
+        } else {
+            mFollowButton.setEnabled(true);
+            mFollowButton.setAlpha(1.0f);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
+            mFollowButton.setText(context.getString(R.string.follow_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
 
@@ -268,6 +287,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.follow_button)
     public void onFollowedButtonClick() {
+        followButtonVisibility(mContext, !mUserPostObj.isSolrIgnoreIsUserFollowed());
         mPostDetailCallback.onPostDetailsAuthorFollow(mUserPostObj);
     }
 

@@ -418,12 +418,33 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (!(viewInterface instanceof FeedItemCallback) || mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
             mFollowButton.setVisibility(View.GONE);
         } else {
-            mFollowButton.setVisibility(View.VISIBLE);
             if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
-                mFollowButton.setText(R.string.follow_text);
+                mFollowButton.setVisibility(View.VISIBLE);
+                mFollowButton.setEnabled(true);
+                mFollowButton.setAlpha(1.0f);
+                mFollowButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                mFollowButton.setText(R.string.follow_user);
+                mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
             } else {
                 mFollowButton.setVisibility(View.GONE);
             }
+        }
+    }
+
+    //Follow/Following button in leaderboard
+    private void followButtonVisibility(Context context, boolean isFollowed) {
+        if (isFollowed) {
+            mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(0.3f);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+            mFollowButton.setText(context.getString(R.string.following_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
+        } else {
+            mFollowButton.setEnabled(true);
+            mFollowButton.setAlpha(1.0f);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
+            mFollowButton.setText(context.getString(R.string.follow_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
 
@@ -1183,6 +1204,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.follow_button)
     public void onFollowedButtonClick() {
         if (viewInterface instanceof FeedItemCallback) {
+            followButtonVisibility(mContext, !mUserPostObj.isSolrIgnoreIsUserFollowed());
             ((FeedItemCallback) viewInterface).onPostAuthorFollowed(mUserPostObj);
         } else {
             viewInterface.dataOperationOnClick(mUserPostObj);
