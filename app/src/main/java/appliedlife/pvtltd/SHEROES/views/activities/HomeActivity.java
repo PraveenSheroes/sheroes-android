@@ -358,7 +358,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             isSheUser = mUserPreference.get().isSheUser();
             mUserId = mUserPreference.get().getUserSummary().getUserId();
             mUserName = mUserPreference.get().getUserSummary().getFirstName();
-            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isMentor = true;
             }
         }
@@ -1066,7 +1066,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
         if (mValue == REQUEST_CODE_FOR_USER_PROFILE_DETAIL) {
             ArticleSolrObj articleSolrObj = (ArticleSolrObj) baseResponse;
-            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isMentor = true;
             }
             championDetailActivity(articleSolrObj.getCreatedBy(), 1, isMentor, ArticlesFragment.SCREEN_LABEL); //self profile

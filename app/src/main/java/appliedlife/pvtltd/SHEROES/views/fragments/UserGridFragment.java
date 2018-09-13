@@ -37,11 +37,10 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserListCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserCardCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -58,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -77,8 +75,8 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
  * User fragment for carousel Item
  */
 
-public class UserFragment extends BaseFragment implements IFeedView, UserListCallback {
-    public static String SCREEN_LABEL = "User Feed Fragment";
+public class UserGridFragment extends BaseFragment implements IFeedView, UserCardCallback {
+    public static String SCREEN_LABEL = "User Grid Fragment";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
     public static final String IS_HOME_FEED = "Is Home Feed";
@@ -140,7 +138,7 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
     private GridLayoutManager mLinearLayoutManager;
     private boolean isActiveTabFragment;
 
-    private Set<FeedDetail> dirtyItems;
+    private Set<FeedDetail> mUpdatedUsers;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -162,7 +160,7 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
         setupRecyclerScrollListener();
         showGifLoader();
 
-        mUserListPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+        mUserListPresenter.fetchUserFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
 
         return view;
     }
@@ -263,13 +261,12 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof UsersCollectionActivity) {
             updateItem(feedDetail);
 
-            if(dirtyItems == null) {
-                dirtyItems = new HashSet<>();
+            if (mUpdatedUsers == null) {
+                mUpdatedUsers = new HashSet<>();
             }
-            dirtyItems.add(feedDetail);
-            if(getActivity()!=null && !getActivity().isFinishing()) {
-                ((UsersCollectionActivity) getActivity()).updateTopCarouselUsers(dirtyItems);
-            }
+            mUpdatedUsers.add(feedDetail);
+            ((UsersCollectionActivity) getActivity()).updateTopCarouselUsers(mUpdatedUsers);
+
         }
     }
 
@@ -366,7 +363,7 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
                     mUserListPresenter.setEndpointUrl(dataUrl);
                 }
                 isHomeFeed = getArguments().getBoolean(IS_HOME_FEED, false);
-                mStreamName = getArguments().getString(UserFragment.STREAM_NAME, "");
+                mStreamName = getArguments().getString(UserGridFragment.STREAM_NAME, "");
                 mUserListPresenter.setIsHomeFeed(isHomeFeed);
                 mScreenProperties = new EventProperty.Builder()
                         .sourceCollectionName(screenName)
@@ -426,7 +423,7 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
                         mAdapter.feedStartedLoading();
                     }
                 });
-                mUserListPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
+                mUserListPresenter.fetchUserFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
@@ -437,7 +434,7 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mUserListPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+                mUserListPresenter.fetchUserFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
@@ -532,9 +529,9 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
 
     @Override
     public void onUserProfileClicked(UserSolrObj userSolrObj) {
-        if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+        if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
             ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        } else if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
+        } else {
             ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, -1, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
@@ -586,18 +583,10 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
 
     @Override
     public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
-        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (getActivity() != null && getActivity() instanceof CollectionActivity) {
-            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList());
-        }
     }
 
     @Override
     public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
-        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (getActivity() != null && getActivity() instanceof CollectionActivity) {
-            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList());
-        }
     }
 
     @Override
@@ -650,19 +639,17 @@ public class UserFragment extends BaseFragment implements IFeedView, UserListCal
         for (int i = 0; i < feedDetails.size(); ++i) {
             FeedDetail feedDetail = feedDetails.get(i);
             if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
-                mAdapter.setData(i, updatedFeedDetail);
-            }
-            if (feedDetail instanceof CarouselDataObj) {
-                for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
-                    FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
-                    if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
-                        ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
-                        mAdapter.setData(i, feedDetail);
+                if(feedDetail instanceof UserSolrObj && updatedFeedDetail instanceof UserSolrObj) {
+                    UserSolrObj userSolrObj1 = (UserSolrObj) feedDetail;
+                    if (StringUtil.isNotNullOrEmptyString(userSolrObj1.getmSolarIgnoreCommunityName())) {
+                        UserSolrObj updatedUserSolrObj1 = (UserSolrObj) updatedFeedDetail;
+                        updatedUserSolrObj1.setmSolarIgnoreCommunityName(userSolrObj1.getmSolarIgnoreCommunityName());
+                        updatedFeedDetail = updatedUserSolrObj1;
                     }
                 }
+                mAdapter.setData(i, updatedFeedDetail);
             }
         }
-        return;
     }
 
     @Override

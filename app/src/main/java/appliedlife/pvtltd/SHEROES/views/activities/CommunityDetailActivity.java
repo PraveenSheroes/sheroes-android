@@ -888,8 +888,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     ((FeedFragment) fragment).updateItem(feedDetail);
                 }
             }
-            Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                    .show();
         }
     }
 

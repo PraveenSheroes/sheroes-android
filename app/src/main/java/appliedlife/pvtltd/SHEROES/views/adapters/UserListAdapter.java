@@ -55,7 +55,7 @@ public class UserListAdapter extends HeaderRecyclerViewAdapter {
         switch (viewType) {
             case TYPE_LOADER:
                 return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
-           case TYPE_MENTOR_COMPACT:
+           case TYPE_USER_FLAT:
                 return new UserProfileFlatViewHolder(mInflater.inflate(R.layout.list_user_flat_item, parent, false), mContext, mBaseHolderInterface);
         }
         return null;
@@ -68,16 +68,15 @@ public class UserListAdapter extends HeaderRecyclerViewAdapter {
                 LoaderViewHolder loaderViewHolder = ((LoaderViewHolder) holder);
                 loaderViewHolder.bindData(holder.getAdapterPosition(), showLoader);
                 break;
-            case TYPE_MENTOR_COMPACT:
+            case TYPE_USER_FLAT:
                 UserProfileFlatViewHolder userProfileCompactViewHolder = (UserProfileFlatViewHolder) holder;
                 UserSolrObj userProfileSolrObj = (UserSolrObj) mFeedDetailList.get(position);
-                userProfileSolrObj.setCompactView(true);
                 userProfileCompactViewHolder.bindData(userProfileSolrObj, mContext);
                 break;
         }
     }
 
-    private static final int TYPE_MENTOR_COMPACT = 10;;
+    private static final int TYPE_USER_FLAT = 10;;
     private static final int TYPE_LOADER = -1;
 
     @Override
@@ -85,7 +84,7 @@ public class UserListAdapter extends HeaderRecyclerViewAdapter {
         if (position < getDataItemCount() && getDataItemCount() > 0) {
             FeedDetail feedDetail = mFeedDetailList.get(position);
             if (feedDetail instanceof UserSolrObj) {
-                return TYPE_MENTOR_COMPACT;
+                return TYPE_USER_FLAT;
             }
         }
         return TYPE_LOADER;

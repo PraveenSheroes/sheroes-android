@@ -1086,30 +1086,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
     }
 
-    public Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
-        return mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
-                    @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    public Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
-        return mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
-                    @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
     //Spam Comment for admin
     public void getSpamCommentApproveFromPresenter(final ApproveSpamPostRequest approveSpamPostRequest, final Comment comment) {
         getMvpView().startProgressBar();
@@ -1168,7 +1144,15 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        getFollowFromModel(publicProfileListRequest)
+        mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
                     @Override
@@ -1205,7 +1189,15 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        getUnFollowFromModel(publicProfileListRequest)
+        mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
                     @Override

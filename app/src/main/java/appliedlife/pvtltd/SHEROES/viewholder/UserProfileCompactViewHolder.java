@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -73,7 +74,11 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
             mUserImage.setVisibility(View.GONE);
         }
 
-        mName.setText(userSolrObj.getNameOrTitle());
+        if(StringUtil.isNotNullOrEmptyString(userSolrObj.getNameOrTitle())) {
+            mName.setText(userSolrObj.getNameOrTitle());
+        } else {
+            mName.setText(R.string.not_available);
+        }
 
         if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             mFollowButton.setEnabled(false);

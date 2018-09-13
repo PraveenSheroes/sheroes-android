@@ -372,6 +372,7 @@
     <dimen name="feed_article_user_comment_post_menu_padding_left">10dp</dimen>
     <dimen name="feed_article_user_comment_post_menu_padding_top">5dp</dimen>
     <dimen name="article_last_comment_author_pic_size">14dp</dimen>
+    <dimen name="followed_user_badge_size">20dp</dimen>
 
     <dimen name="logged_in_user_position_icon">40dp</dimen>
     <dimen name="logged_in_user_position_text_size">14sp</dimen>

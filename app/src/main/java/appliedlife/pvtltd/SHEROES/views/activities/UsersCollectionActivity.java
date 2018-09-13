@@ -32,7 +32,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserGridFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -80,7 +80,7 @@ public class UsersCollectionActivity extends BaseActivity {
 
         setupToolbar(mTitle);
 
-        UserFragment feedFragment = new UserFragment();
+        UserGridFragment feedFragment = new UserGridFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, mEndPointUrl);
         bundle.putSerializable(FeedFragment.SCREEN_PROPERTIES, properties);
@@ -90,7 +90,7 @@ public class UsersCollectionActivity extends BaseActivity {
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
         feedFragment.setArguments(bundle);
-        fragmentTransaction.replace(R.id.container, feedFragment, UserFragment.class.getName());
+        fragmentTransaction.replace(R.id.container, feedFragment, UserGridFragment.class.getName());
         fragmentTransaction.commit();
     }
 
@@ -130,9 +130,9 @@ public class UsersCollectionActivity extends BaseActivity {
     }
 
     private void invalidateItem(UserSolrObj userSolrObj) {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(UserFragment.class.getName());
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(UserGridFragment.class.getName());
         if (fragment != null) {
-            ((UserFragment) fragment).invalidateItem(userSolrObj);
+            ((UserGridFragment) fragment).invalidateItem(userSolrObj);
         }
     }
 

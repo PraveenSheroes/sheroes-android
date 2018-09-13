@@ -129,8 +129,8 @@
     <string name="ID_LESS_MENTOR">...View Less</string>
     <string name="ID_TAGS">Tags</string>
     <string name="ID_BOOKMARKS">Bookmarks</string>
-    <string name="BOOKMARK">Bookmark</string>
-    <string name="BOOKMARKED">Bookmarked</string>
+    <string name="Bookmark">Bookmark</string>
+    <string name="Bookmarked">Bookmarked</string>
 
     <!--text related setting_dashboard page-->
 
@@ -738,5 +738,6 @@
     <string name="challenge">Challenge</string>
     <string name="care_msg">Need help? care@sheroes.in</string>
     <string name="follow_text">Follow</string>
+    <string name="not_available">NA</string>
 
 </resources>

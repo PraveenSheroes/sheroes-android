@@ -20,7 +20,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
  * Created by Ravi on 11/08/18.
  */
 
-public interface UserListCallback extends BaseHolderInterface {
+public interface UserCardCallback extends BaseHolderInterface {
 
     void onUserFollowedUnFollowed(UserSolrObj userSolrObj);
 

@@ -67,7 +67,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.UserGridFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
@@ -354,7 +354,7 @@ public interface SheroesAppComponent {
 
     void inject(UsersCollectionActivity usersCollectionActivity);
 
-    void inject(UserFragment userFragment);
+    void inject(UserGridFragment userGridFragment);
 }
 
 

@@ -288,7 +288,15 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getFollowFromModel(publicProfileListRequest)
+        mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
                     @Override
@@ -325,7 +333,15 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        mHomeModel.getUnFollowFromModel(publicProfileListRequest)
+        mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
                     @Override
@@ -429,10 +445,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                                if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
+                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                                }
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             } else {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
+                                if (userSolrObj.getUserFollowersCount() > 0) {
+                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
+                                }
                                 userSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
                             getMvpView().invalidateItem(userSolrObj);

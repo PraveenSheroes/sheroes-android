@@ -13,9 +13,10 @@ import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.basecomponents.UserListCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.UserCardCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -89,7 +90,11 @@ public class UserProfileFlatViewHolder extends RecyclerView.ViewHolder {
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
 
-        mName.setText(userSolrObj.getNameOrTitle());
+        if(StringUtil.isNotNullOrEmptyString(userSolrObj.getNameOrTitle())) {
+            mName.setText(userSolrObj.getNameOrTitle());
+        } else {
+            mName.setText(R.string.not_available);
+        }
 
         String description = mContext.getResources().getString(R.string.user_card_desc, CommonUtil.camelCaseString(userSolrObj.getmSolarIgnoreCommunityName().toLowerCase()));
         mDesc.setText(description);
@@ -100,12 +105,12 @@ public class UserProfileFlatViewHolder extends RecyclerView.ViewHolder {
     //region onClick methods
     @OnClick(R.id.follow_button)
     public void onFollowClicked() {
-        ((UserListCallback)viewInterface).onUserFollowedUnFollowed(mUserSolrObj);
+        ((UserCardCallback)viewInterface).onUserFollowedUnFollowed(mUserSolrObj);
     }
 
     @OnClick(R.id.user_compact_card)
     public void onUserCardClicked() {
-        ((UserListCallback)viewInterface).onUserProfileClicked(mUserSolrObj);
+        ((UserCardCallback)viewInterface).onUserProfileClicked(mUserSolrObj);
     }
     //endregion
 }

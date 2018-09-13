@@ -137,6 +137,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
 
+    //Menu Item Id
+    private static final int SHARE_MENU_ID = 1;
+    private static final int EDIT_MENU_ID = 2;
+    private static final int DELETE_MENU_ID = 3;
+    private static final int REPORT_MENU_ID = 4;
+    private static final int FEATURED_POST_MENU_ID = 5;
+    private static final int BOOKMARK_MENU_ID = 6;
+
     @Inject
     AppUtils mAppUtils;
 
@@ -610,7 +618,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
 
-            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isLoggedInUserMentor = true;
             }
         }
@@ -843,23 +851,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
 
-            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.ID_SHARE)));
-            popup.getMenu().add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
-            popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
-            popup.getMenu().add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+            popup.getMenu().add(0, R.id.share, SHARE_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.ID_SHARE)));
+            popup.getMenu().add(0, R.id.edit, EDIT_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
+            popup.getMenu().add(0, R.id.delete, DELETE_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+            popup.getMenu().add(0, R.id.report_spam, REPORT_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
                 if (userPostObj.isTopPost()) {
-                    popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.UNFEATURE_POST)));
+                    popup.getMenu().add(0, R.id.top_post, FEATURED_POST_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.UNFEATURE_POST)));
                 } else {
-                    popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.FEATURE_POST)));
+                    popup.getMenu().add(0, R.id.top_post, FEATURED_POST_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.FEATURE_POST)));
                 }
             }
             //****   Hide/show options according to user
             if(userPostObj.isBookmarked()) {
-                popup.getMenu().add(0, R.id.bookmark, 6, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmarked), getResources().getString(R.string.BOOKMARKED))).setVisible(true);
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
             } else {
-                popup.getMenu().add(0, R.id.bookmark, 6, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmark_in_active), getResources().getString(R.string.BOOKMARK))).setVisible(true);
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmark_in_active), getResources().getString(R.string.Bookmark))).setVisible(true);
             }
 
             if (userPostObj.getAuthorId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
@@ -1435,23 +1443,17 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
-        if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userPostSolrObj.getNameOrTitle())
+                        .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                        .build();
+        if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
+            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getPostAuthorUnfollowed(publicProfileListRequest, userPostSolrObj);
         } else {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
-                            .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getPostAuthorFollowed(publicProfileListRequest, userPostSolrObj);
         }
@@ -2011,7 +2013,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else if(feedDetail!=null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                 UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
-                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.MENTOR_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
+                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
                 mAdapter.setData(i, userPostSolrObj);
             }
         }

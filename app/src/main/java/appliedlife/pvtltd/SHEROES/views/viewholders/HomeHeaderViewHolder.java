@@ -105,7 +105,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             }
             userId = userPreference.get().getUserSummary().getUserId();
             int userType = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
-            if (userType == AppConstants.MENTOR_TYPE_ID) {
+            if (userType == AppConstants.CHAMPION_TYPE_ID) {
                 dataItem.setAuthorMentor(true);
             }
         }

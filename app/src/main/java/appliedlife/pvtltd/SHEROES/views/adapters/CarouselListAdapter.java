@@ -16,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserProfileCompactViewHolder;
@@ -131,7 +132,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (feedDetail instanceof CommunityFeedSolrObj) {
                 return TYPE_COMMUNITY;
             } else if (feedDetail instanceof UserSolrObj) {
-                if (feedDetail.getEntityOrParticipantTypeId() == 7) {
+                if (feedDetail.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                     return TYPE_MENTOR;
                 } else {
                     return TYPE_USER;
