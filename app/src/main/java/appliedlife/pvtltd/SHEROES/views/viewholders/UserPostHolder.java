@@ -67,6 +67,9 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
 public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(UserPostHolder.class);
     private static final int COMMUNITY_TYPE_ID = 15;
+    private static final float FOLLOW_BUTTON_ORIGINAL = 1.0f;
+    private static final float FOLLOW_BUTTON_SEMI_TRANSPARENT = 0.3f;
+
     @Inject
     DateUtil mDateUtil;
     @Inject
@@ -251,13 +254,13 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private void followButtonVisibility(Context context, boolean isFollowed) {
         if (isFollowed) {
             mFollowButton.setEnabled(false);
-            mFollowButton.setAlpha(0.3f);
+            mFollowButton.setAlpha(FOLLOW_BUTTON_SEMI_TRANSPARENT);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
             mFollowButton.setText(context.getString(R.string.following_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
         } else {
             mFollowButton.setEnabled(true);
-            mFollowButton.setAlpha(1.0f);
+            mFollowButton.setAlpha(FOLLOW_BUTTON_ORIGINAL);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
             mFollowButton.setText(context.getString(R.string.follow_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

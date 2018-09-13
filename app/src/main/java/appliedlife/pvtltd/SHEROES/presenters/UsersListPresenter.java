@@ -186,7 +186,7 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
 
                         } else {
 
-                            if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
+                            if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
                                 getMvpView().setFeedEnded(true);
@@ -236,7 +236,7 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                            if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                                 userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {
@@ -285,7 +285,7 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == 7 && userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
+                            if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID && userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
                                 userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {

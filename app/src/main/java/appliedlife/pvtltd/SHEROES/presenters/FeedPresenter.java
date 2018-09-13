@@ -361,7 +361,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userPostSolrObj.getEntityOrParticipantTypeId() == 7) {
+                            if (userPostSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             } else {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
@@ -373,7 +373,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
                 });
     }
-
 
     public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
