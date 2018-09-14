@@ -75,11 +75,13 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -110,6 +112,8 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 
 
 /**
@@ -427,9 +431,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             } else if (feedDetail instanceof PollSolarObj) {
                 PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
                 if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title,pollSolarObj.getPollCommunityName()));
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title,pollSolarObj.getPollCommunityName()));
                 } else {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple,pollSolarObj.getAuthorName()));
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple,pollSolarObj.getAuthorName()));
                 }
             }
         }
@@ -555,6 +559,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
                     mPostDetailPresenter.updateUserPost(userPostSolrObj);
                 }
+            }
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+            Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+            if (parcelable != null) {
+                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                mPostDetailPresenter.updateFollowedAuthor(mFeedDetail, userSolrObj.isSolrIgnoreIsMentorFollowed());
             }
         }
     }
@@ -686,8 +696,14 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 popup.getMenu().findItem(R.id.edit).setEnabled(true);
             }
 
+            //Hide edit for challenge
             if (userPostObj.communityId == 0) {
-                popup.getMenu().findItem(R.id.delete).setVisible(false);
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
+                if (adminId == AppConstants.TWO_CONSTANT) {
+                    popup.getMenu().findItem(R.id.delete).setVisible(true);
+                } else {
+                    popup.getMenu().findItem(R.id.delete).setVisible(false);
+                }
             }
             if (userPostObj.isSpamPost()) {
                 popup.getMenu().findItem(R.id.share).setVisible(false);
@@ -883,6 +899,32 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onPollLikeClicked(PollSolarObj pollSolarObj) {
         mPostDetailPresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(pollSolarObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), pollSolarObj);
+    }
+
+    @Override
+    public void onPostDetailsAuthorFollow(UserPostSolrObj userPostSolrObj) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
+        if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                            .name(userPostSolrObj.getNameOrTitle())
+                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                            .build();
+            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
+
+            mPostDetailPresenter.getPostAuthorUnfollowed(publicProfileListRequest, userPostSolrObj);
+        } else {
+            HashMap<String, Object> properties =
+                    new EventProperty.Builder()
+                            .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                            .name(userPostSolrObj.getNameOrTitle())
+                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                            .build();
+            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
+            mPostDetailPresenter.getPostAuthorFollowed(publicProfileListRequest, userPostSolrObj);
+        }
     }
 
     @Override

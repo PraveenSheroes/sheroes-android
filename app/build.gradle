@@ -1,6 +1,6 @@
 def versionMajor = 6
 def versionMinor = 9
-def versionPatch = 1
+def versionPatch = 3
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -59,7 +59,7 @@ android {
                 includeCompileClasspath true
             }
         }
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = false
     }
 
     signingConfigs {
@@ -86,7 +86,7 @@ android {
             //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             // buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
-           // buildConfigField "String", "BASE_URL", "\"http://testservicesconf.sheroes.in/\""
+            //buildConfigField "String", "BASE_URL", "\"https://testservicesconf.sheroes.in/\""
 
             /**
              * Release server
@@ -154,7 +154,7 @@ dependencies {
         all*.exclude group: 'com.android.support', module: 'support-v13'
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.facebook.android:facebook-android-sdk:4.28.0'
+    implementation 'com.facebook.android:facebook-android-sdk:4.36.0'
     implementation 'com.google.android.gms:play-services-analytics:11.8.0'
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation 'com.google.android.gms:play-services-gcm:11.8.0'

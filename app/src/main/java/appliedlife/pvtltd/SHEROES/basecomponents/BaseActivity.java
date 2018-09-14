@@ -113,8 +113,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String STORIES_TAB = "write a story";
     public static final String USER_STORY = "USER_STORY";
     public static final String KEY_FOR_DEEPLINK_DETAIL = "post_detail_deep_link";
-
     public static final int BRANCH_REQUEST_CODE = 1290;
+    public static final int ASK_QUESTION_POST = 3;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public boolean mIsDestroyed;
     protected SheroesApplication mSheroesApplication;
@@ -472,7 +472,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     try {
                         URI uri = new URI(urlString);
                         String domain = uri.getHost();
-                        if (domain.contains(AppConstants.YOUTUBE_VIDEO_CODE) || domain.contains(AppConstants.MOBILE_YOUTUBE_VIDEO_CODE) || domain.contains("youtube")) {
+                        if (StringUtil.isNotNullOrEmptyString(domain) && (domain.contains(AppConstants.YOUTUBE_VIDEO_CODE) || domain.contains(AppConstants.MOBILE_YOUTUBE_VIDEO_CODE) || domain.contains("youtube"))) {
                             Intent youTube = new Intent(this, VideoPlayActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString(AppConstants.YOUTUBE_VIDEO_CODE, urlString);
@@ -612,8 +612,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     PostDetailActivity.navigateTo(this, getScreenName(), mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
                 } else if (mFeedDetail instanceof ArticleSolrObj) {
-                    ArticleSolrObj articleSolrObj=(ArticleSolrObj)mFeedDetail;
-                    ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
+                    ArticleSolrObj articleSolrObj = (ArticleSolrObj) mFeedDetail;
+                    ArticleActivity.navigateTo(this, mFeedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
                 }
                 break;
 
@@ -632,14 +632,14 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
 
             case R.id.li_feed_article_images:
-                ArticleSolrObj articleSolrObj=(ArticleSolrObj)mFeedDetail;
-                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
+                ArticleSolrObj articleSolrObj = (ArticleSolrObj) mFeedDetail;
+                ArticleActivity.navigateTo(this, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
                 break;
 
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
-                ArticleSolrObj articleObj=(ArticleSolrObj)mFeedDetail;
-                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleObj.isUserStory());
+                ArticleSolrObj articleObj = (ArticleSolrObj) mFeedDetail;
+                ArticleActivity.navigateTo(this, mFeedDetail, screenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleObj.isUserStory());
 
                 break;
             case R.id.li_featured_community_images:
@@ -860,16 +860,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                     }
                     if (mFeedDetail.getAuthorId() == userId || ((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
                         tvDelete.setVisibility(View.VISIBLE);
-                        if (((UserPostSolrObj) mFeedDetail).isCommunityOwner() || adminId == AppConstants.TWO_CONSTANT) {
-                            if (mFeedDetail.getAuthorId() == userId) {
-                                tvEdit.setVisibility(View.VISIBLE);
-                            } else {
-                                tvEdit.setVisibility(View.GONE);
-                            }
+                        if (mFeedDetail.getAuthorId() == userId && mFeedDetail instanceof UserPostSolrObj && ((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
+                            tvEdit.setVisibility(View.GONE);
                         } else {
                             tvEdit.setVisibility(View.VISIBLE);
                         }
-
                     } else {
                         if (mFeedDetail.isFromHome()) {
                             tvReport.setText(getString(R.string.ID_REPORTED_AS_SPAM));
@@ -914,9 +909,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
                     mFeedDetail.setTrending(true);
-                    if(mFeedDetail instanceof UserPostSolrObj){
+                    if (mFeedDetail instanceof UserPostSolrObj) {
                         ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
-                    }else if(mFeedDetail instanceof PollSolarObj){
+                    } else if (mFeedDetail instanceof PollSolarObj) {
                         ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
                     }
                     openCommentReactionFragment(mFeedDetail);
@@ -924,10 +919,17 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
+                    if (mFeedDetail instanceof UserPostSolrObj) {
+                        UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetail;
+                        if (userPostSolrObj.getCommTypeId() == ASK_QUESTION_POST) {
+                            userPostSolrObj.askQuestionFromMentor = AppConstants.MENTOR_CREATE_QUESTION;
+                            CommunityPostActivity.navigateTo(this, userPostSolrObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
+                        } else {
+                            CommunityPostActivity.navigateTo(this, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
+                        }
+                    }
                 }
                 break;
-
         }
     }
 
@@ -944,9 +946,9 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             case USER_REACTION_COMMENT_MENU:
                 if (null != mFeedDetail) {
                     mFeedDetail.setTrending(true);
-                    if(mFeedDetail instanceof UserPostSolrObj){
+                    if (mFeedDetail instanceof UserPostSolrObj) {
                         ((UserPostSolrObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
-                    }else if(mFeedDetail instanceof PollSolarObj){
+                    } else if (mFeedDetail instanceof PollSolarObj) {
                         ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
                     }
                     openCommentReactionFragment(mFeedDetail);
@@ -980,10 +982,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
         if (feedDetail instanceof UserPostSolrObj) {
-            PostDetailActivity.navigateTo(this, getScreenName(),feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+            PostDetailActivity.navigateTo(this, getScreenName(), feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
         } else if (feedDetail instanceof ArticleSolrObj) {
-            ArticleSolrObj articleSolrObj=(ArticleSolrObj)feedDetail;
-            ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL,articleSolrObj.isUserStory());
+            ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+            ArticleActivity.navigateTo(this, feedDetail, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
         }
     }
 

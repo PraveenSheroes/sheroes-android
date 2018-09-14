@@ -105,7 +105,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet()  && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
             String shareOption = "";
             shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareOption)) {
@@ -171,7 +171,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             ClickableSpan authorTitle = new ClickableSpan() {
                 @Override
                 public void onClick(View textView) {
-                    viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
+                    articleAuthorNameClick();
                 }
 
                 @Override
@@ -298,9 +298,9 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick({R.id.tv_article_card_title, R.id.iv_article_circle_icon})
     public void articleAuthorNameClick() {
-        viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
-        //viewInterface.handleOnClick(dataItem, tvArticleCardTitle);
-        //   ((SheroesApplication)((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
+        if (dataItem.isUserStory()) {
+            viewInterface.navigateToProfileView(dataItem, AppConstants.REQUEST_CODE_FOR_USER_PROFILE_DETAIL);
+        }
     }
 
     @OnClick(R.id.tv_article_share)

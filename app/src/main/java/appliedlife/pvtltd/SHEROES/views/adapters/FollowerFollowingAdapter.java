@@ -24,7 +24,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.MENTOR_TYPE_ID;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.CHAMPION_TYPE_ID;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
 
 /**
@@ -128,7 +128,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 });
 
-                if(mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID ) {
+                if(mentor.getEntityOrParticipantTypeId() ==  AppConstants.CHAMPION_TYPE_ID) {
                     verifiedChampionsIcon.setVisibility(View.VISIBLE);
                 } else{
                     verifiedChampionsIcon.setVisibility(View.GONE);
@@ -144,7 +144,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     mentorName.setText(mentor.getNameOrTitle());
                 }
 
-                if(mentor.getEntityOrParticipantTypeId() ==  MENTOR_TYPE_ID ) {
+                if(mentor.getEntityOrParticipantTypeId() ==  AppConstants.CHAMPION_TYPE_ID ) {
                     List<String> canHelpInArea = mentor.getCanHelpIns();
                     if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
                         StringBuilder expertFields = new StringBuilder();
