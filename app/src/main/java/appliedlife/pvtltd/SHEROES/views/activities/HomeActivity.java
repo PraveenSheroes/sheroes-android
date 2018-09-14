@@ -242,9 +242,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
 
-    @Bind(R.id.invite)
-    ImageView mInvite;
-
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
 
@@ -417,7 +414,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mSnowFlakView.setVisibility(View.GONE);
         }
         pbNavDrawer.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
@@ -495,11 +491,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void writeAStory() {
         CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
-    }
-
-    @OnClick(R.id.invite)
-    public void onInviteClicked() {
-        AllContactActivity.navigateTo(this, getScreenName(), null);
     }
 
     public void logOut() {
@@ -659,9 +650,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
         mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-
-        mInvite.setVisibility(View.VISIBLE);
-
     }
 
 
@@ -692,7 +680,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mInvite.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText(getString(R.string.ID_COMMUNITIES));
         mICSheroes.setVisibility(View.GONE);
@@ -710,8 +697,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-
     }
 
     public void inviteMyCommunityDialog() {
@@ -730,8 +715,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-
     }
 
     @Override
