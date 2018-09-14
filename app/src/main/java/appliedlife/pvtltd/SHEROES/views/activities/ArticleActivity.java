@@ -603,11 +603,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 switch (view.getId()) {
                     case R.id.author_pic_container:
                     case R.id.author:
-                        if(mArticleSolrObj.isUserStory()) {
-                            Comment comment = mCommentsAdapter.getComment(position);
-                            if (!comment.isAnonymous() && !comment.isSpamComment()) {
-                                openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
-                            }
+                        Comment comment = mCommentsAdapter.getComment(position);
+                        if (!comment.isAnonymous() && !comment.isSpamComment()) {
+                            openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
                         break;
 
