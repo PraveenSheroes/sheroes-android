@@ -216,7 +216,9 @@ public class AppConstants {
     public static final int NOT_TIME = 50000;
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
+    //User id's eg: Admin,Champion etc
     public static final int CHAMPION_TYPE_ID = 7;
+    public static final int ADMIN_TYPE_ID = 2;
 
     public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";

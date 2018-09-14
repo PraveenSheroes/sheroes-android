@@ -1347,6 +1347,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
                 popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
                 popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+            }else if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                if(mUserPreference.get().getUserSummary().getUserBO().getUserTypeId()==AppConstants.ADMIN_TYPE_ID){
+                    popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+                }
             }
         }
         if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
