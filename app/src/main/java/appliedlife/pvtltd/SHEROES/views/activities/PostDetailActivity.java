@@ -127,6 +127,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private boolean mStatusBarColorEmpty = true;
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
+    private static final int BOOKMARK_MENU_ID = 6;
     public int mPositionInFeed = -1;
     private long mLoggedInUser = -1;
     private String mStreamType;
@@ -664,6 +665,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             menu.add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
             menu.add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
+            //****   Hide/show options according to user
+            if(userPostObj.isBookmarked()) {
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
+            } else {
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmark), getResources().getString(R.string.Bookmark))).setVisible(true);
+            }
+
             if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
                 if (userPostObj.isTopPost()) {
                     popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.UNFEATURE_POST)));
@@ -741,8 +749,9 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.POST, userPostObj, null);
                             return true;
-
-
+                        case R.id.bookmark:
+                            onPostBookMarkedClicked(userPostObj);
+                            return true;
                         default:
                             return false;
                     }
@@ -829,6 +838,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
 
+
+    @Override
+    public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
+        mPostDetailPresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(userPostObj.getEntityOrParticipantId()), userPostObj.isBookmarked(), userPostObj);
+    }
+
     @Override
     public void onSpamMenuClicked(UserPostSolrObj userPostObj, TextView spamPostView) {
 
@@ -899,6 +914,17 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onPollLikeClicked(PollSolarObj pollSolarObj) {
         mPostDetailPresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(pollSolarObj.getEntityOrParticipantId(), AppConstants.HEART_REACTION_CONSTANT), pollSolarObj);
+    }
+
+    @Override
+    public void onBookmarkedResponse(UserPostSolrObj userPostObj) {
+        if (userPostObj == null) return;
+        setData(0, userPostObj);
+        if (userPostObj.isBookmarked()) {
+            AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, userPostObj, getScreenName());
+        } else {
+            AnalyticsManager.trackPostAction(Event.POST_UNBOOKMARKED, userPostObj, getScreenName());
+        }
     }
 
     @Override

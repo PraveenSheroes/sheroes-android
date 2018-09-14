@@ -122,6 +122,7 @@
                 android:layout_width="@dimen/user_post_follow_width"
                 android:layout_height="@dimen/user_post_follow_height"
                 android:gravity="center"
+                android:textAllCaps="true"
                 android:background="@drawable/border_new_feature"
                 android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:foreground="?attr/selectableItemBackground"

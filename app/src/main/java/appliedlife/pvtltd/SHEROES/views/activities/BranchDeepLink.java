@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
@@ -124,7 +125,15 @@ public class BranchDeepLink extends BaseActivity {
             if(url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL) || url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL_COM)){
                 String endPointUrl = sessionParams.has(AppConstants.END_POINT_URL) ? sessionParams.getString(AppConstants.END_POINT_URL) : "";
                 String screenName = sessionParams.has(AppConstants.SCREEN_NAME) ? sessionParams.getString(AppConstants.SCREEN_NAME) : "";
-                CollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                String viewType = sessionParams.has(AppConstants.COLLECTION_VIEW_TYPE) ? sessionParams.getString(AppConstants.COLLECTION_VIEW_TYPE) : "";
+
+                if (StringUtil.isNotNullOrEmptyString(viewType)) {
+                    if (viewType.equalsIgnoreCase(AppConstants.GRID_VIEW_TYPE)) { //Redirect to User Collection i.e in Grid
+                        UsersCollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                    }
+                } else {
+                    CollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                }
                 finish();
                 return;
             }

@@ -161,6 +161,7 @@
                 android:layout_width="@dimen/user_post_follow_width"
                 android:layout_height="@dimen/user_post_follow_height"
                 android:gravity="center"
+                android:textAllCaps="true"
                 android:layout_marginTop="-5dp"
                 android:visibility="gone"
                 android:background="@drawable/border_new_feature"

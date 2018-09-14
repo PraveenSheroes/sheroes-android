@@ -63,10 +63,13 @@ public interface IPostDetailView extends BaseMvpView {
 
     void userMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken);
 
+    void onPostBookMarkedClicked(UserPostSolrObj userPostObj);
 
     List<String> onQueryReceived(final @NonNull QueryToken queryToken);
 
     Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);
+
+    void onBookmarkedResponse(UserPostSolrObj userPostObj);
 }

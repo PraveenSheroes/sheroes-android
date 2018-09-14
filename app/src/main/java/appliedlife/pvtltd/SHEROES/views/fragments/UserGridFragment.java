@@ -76,7 +76,7 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
  */
 
 public class UserGridFragment extends BaseFragment implements IFeedView, UserCardCallback {
-    public static String SCREEN_LABEL = "User Grid Fragment";
+    public static String SCREEN_LABEL = "User Grid Screen";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
     public static final String IS_HOME_FEED = "Is Home Feed";
