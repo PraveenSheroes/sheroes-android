@@ -682,6 +682,19 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     }
 
+    //Refresh the feed after clicking the Sheroes logo
+    @OnClick(R.id.ic_sheroes)
+    public void onClickLogo(){
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+        flFeedFullView.setVisibility(View.VISIBLE);
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        homeButtonUi();
+        initHomeViewPagerAndTabs();
+        mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
+    }
+
     public void communityButton() {
 
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_selected_icon), null, null);
