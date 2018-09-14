@@ -610,7 +610,7 @@
     <dimen name="leaderboard_user_name_text">16sp</dimen>
     <dimen name="leaderbaord_desc_text">14sp</dimen>
     <dimen name="leaderboard_follow_button_margin_right">4dp</dimen>
-    <dimen name="notification_icon_right_padding">21dp</dimen>
+    <dimen name="notification_icon_right_padding">10dp</dimen>
     <dimen name="sheroes_logo_paddingleft">8dp</dimen>
     <dimen name="sheroes_logo_paddingright">14dp</dimen>
     <dimen name="sheroes_logo_paddingtop">8dp</dimen>
