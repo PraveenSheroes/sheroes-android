@@ -625,7 +625,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    //Refresh the feed after clicking the Sheroes logoa and home button
+    //Refresh the feed after clicking the Sheroes logo and home button
     @OnClick({R.id.tv_home,R.id.ic_sheroes})
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
