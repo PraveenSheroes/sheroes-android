@@ -685,14 +685,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     //Refresh the feed after clicking the Sheroes logo
     @OnClick(R.id.ic_sheroes)
     public void onClickSheroesLogo() {
-        DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
-        flFeedFullView.setVisibility(View.VISIBLE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        homeButtonUi();
-        initHomeViewPagerAndTabs();
-        mTitleText.setText("");
-        mICSheroes.setVisibility(View.VISIBLE);
+        homeOnClick();
     }
 
     public void communityButton() {
