@@ -4,7 +4,6 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.support.v7.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,6 +24,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -56,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.RxSearchObservable;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -70,6 +70,7 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
@@ -1230,6 +1231,51 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                         }
                         getMvpView().setData(0, userPostSolrObj);
+                    }
+                });
+    }
+
+    private Observable<BookmarkResponsePojo> getBookmarkObservable(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
+        if (!isBookmarked) {
+            return mSheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        } else {
+            return mSheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+    }
+
+    public void addBookMarkFromPresenter(final BookmarkRequestPojo bookmarkRequestPojo, final boolean isBookmarked, final UserPostSolrObj userSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
+            return;
+        }
+        getMvpView().startProgressBar();
+        getBookmarkObservable(bookmarkRequestPojo, isBookmarked)
+                .compose(this.<BookmarkResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+                    }
+
+                    @Override
+                    public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                        getMvpView().stopProgressBar();
+
+                        if (bookmarkResponsePojo.getStatus() != null && bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setBookmarked(!isBookmarked);
+                        }
+                        getMvpView().onBookmarkedResponse(userSolrObj);
                     }
                 });
     }
