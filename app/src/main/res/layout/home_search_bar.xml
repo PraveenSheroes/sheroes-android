@@ -35,9 +35,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:layout_marginLeft="@dimen/dp_size_60"
-        android:layout_marginTop="@dimen/dp_size_16"
-        android:background="@drawable/vector_sheroes_header" />
+        android:paddingLeft="@dimen/sheroes_logo_paddingleft"
+        android:paddingStart="@dimen/sheroes_logo_paddingleft"
+        android:paddingEnd="@dimen/sheroes_logo_paddingright"
+        android:paddingRight="@dimen/sheroes_logo_paddingright"
+        android:layout_marginLeft="@dimen/sheroes_logo_marginleft"
+        android:paddingTop="@dimen/sheroes_logo_paddingtop"
+        android:layout_marginTop="@dimen/sheroes_logo_margintop"
+        android:paddingBottom="@dimen/sheroes_logo_paddingbottom"
+        android:src="@drawable/vector_sheroes_header" />
 
 
     <ImageView
