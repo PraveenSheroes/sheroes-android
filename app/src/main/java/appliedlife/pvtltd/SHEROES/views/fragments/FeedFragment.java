@@ -2025,6 +2025,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+    public void scrollToTopInList() {
+        mFeedRecyclerView.smoothScrollToPosition(0);
+    }
+
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
