@@ -52,17 +52,6 @@
         android:paddingTop="@dimen/dp_size_10"
         android:src="@drawable/vector_communities_nav_icon" />
 
-
-    <ImageView
-        android:id="@+id/invite"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/tv_home_notification_icon"
-        android:layout_toStartOf="@+id/tv_home_notification_icon"
-        android:padding="@dimen/dp_size_10"
-        android:src="@drawable/vector_invite_24dp" />
-
     <ImageView
         android:id="@+id/iv_new_tag"
         android:layout_width="wrap_content"
@@ -86,7 +75,7 @@
         android:drawableLeft="@drawable/vector_notification"
         android:paddingBottom="@dimen/dp_size_10"
         android:paddingLeft="@dimen/dp_size_10"
-        android:paddingRight="@dimen/dp_size_10"
+        android:paddingRight="@dimen/dp_size_21"
         android:paddingTop="@dimen/dp_size_14" />
 
     <FrameLayout
