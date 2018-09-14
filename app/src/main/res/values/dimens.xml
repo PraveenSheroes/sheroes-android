@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Dimensions Core values. -->
     <dimen name="dp_size_300">300dp</dimen>
     <dimen name="dp_size_320">320dp</dimen>
@@ -610,6 +610,9 @@
     <dimen name="leaderboard_user_name_text">16sp</dimen>
     <dimen name="leaderbaord_desc_text">14sp</dimen>
     <dimen name="leaderboard_follow_button_margin_right">4dp</dimen>
+
+    //Notifictaion icon in toolbar
+    <dimen name="notification_icon_right_padding">21dp</dimen>
 
 
 </resources>
