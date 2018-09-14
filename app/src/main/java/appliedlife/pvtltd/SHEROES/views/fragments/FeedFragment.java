@@ -2021,6 +2021,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return;
     }
 
+    public void scrollToTopInList() {
+        mFeedRecyclerView.smoothScrollToPosition(0);
+        //mFeedRecyclerView.scrollBy(0,0);
+        //mFeedRecyclerView.scrollTo(0,0);
+        //mFeedRecyclerView.scrollToPosition(0);
+        //mFeedRecyclerView.scrollTo(5,0);
+    }
+
     public void refreshList() {
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         if (getActivity() != null && getActivity() instanceof HomeActivity) {

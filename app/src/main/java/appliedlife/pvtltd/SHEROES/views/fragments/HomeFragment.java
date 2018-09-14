@@ -257,6 +257,10 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+                if (AppUtils.isFragmentUIActive(activeFragment)) {
+                    ((FeedFragment) activeFragment).scrollToTopInList();
+                }
 
             }
         });
