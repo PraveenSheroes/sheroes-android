@@ -625,7 +625,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    @OnClick(R.id.tv_home)
+    //Refresh the feed after clicking the Sheroes logoa and home button
+    @OnClick({R.id.tv_home,R.id.ic_sheroes})
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
@@ -680,12 +681,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mDrawer.closeDrawer(GravityCompat.END);
         }
 
-    }
-
-    //Refresh the feed after clicking the Sheroes logo
-    @OnClick(R.id.ic_sheroes)
-    public void onClickSheroesLogo() {
-        homeOnClick();
     }
 
     public void communityButton() {
