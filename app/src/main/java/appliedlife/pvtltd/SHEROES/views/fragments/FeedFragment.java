@@ -1247,28 +1247,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onUserFollowedUnFollowed(UserSolrObj userSolrObj) {
-        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
-
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                        .name(userSolrObj.getNameOrTitle())
-                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                        .build();
-        properties.putAll(getExtraProperties());
-
-        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
-        } else {
-            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
-        }
-    }
-
-    @Override
     public void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor) {
         ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant(), authorMentor, 0, mScreenLabel, mScreenProperties, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -1451,6 +1429,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .name(userPostSolrObj.getNameOrTitle())
                         .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                         .build();
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+            properties.putAll(getExtraProperties());
+        }
+
         if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getPostAuthorUnfollowed(publicProfileListRequest, userPostSolrObj);
@@ -1695,7 +1677,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onMentorFollowClicked(UserSolrObj userSolrObj) {
+    public void onFollowClicked(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
 
@@ -1705,7 +1687,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .name(userSolrObj.getNameOrTitle())
                         .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                         .build();
-        properties.putAll(getExtraProperties());
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+            properties.putAll(getExtraProperties());
+        }
 
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
