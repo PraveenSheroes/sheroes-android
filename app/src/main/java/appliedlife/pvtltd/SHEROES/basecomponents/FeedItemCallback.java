@@ -75,7 +75,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onOrgTitleClicked(UserPostSolrObj userPostObj);
 
-    void onMentorFollowClicked(UserSolrObj userSolrObj);
+    void onFollowClicked(UserSolrObj userSolrObj);
 
     void onMentorAskQuestionClicked(UserSolrObj userSolrObj);
 
@@ -106,8 +106,6 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onSeeMoreClicked(CarouselDataObj carouselDataObj);
 
     void onImagePostClicked(ImageSolrObj imageSolrObj);
-
-    void onUserFollowedUnFollowed(UserSolrObj userSolrObj);
 
     void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor);
 

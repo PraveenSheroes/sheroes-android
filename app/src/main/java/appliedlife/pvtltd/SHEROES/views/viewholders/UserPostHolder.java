@@ -241,9 +241,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
                 mFollowButton.setVisibility(View.VISIBLE);
-                mFollowButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-                mFollowButton.setText(R.string.follow_user);
-                mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                followButtonVisibility(mContext, false);
             } else {
                 mFollowButton.setVisibility(View.GONE);
             }

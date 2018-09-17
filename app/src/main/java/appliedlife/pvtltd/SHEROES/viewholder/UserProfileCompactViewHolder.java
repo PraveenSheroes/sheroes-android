@@ -105,7 +105,7 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     //region onClick methods
     @OnClick(R.id.follow_button)
     public void onFollowClicked() {
-        ((FeedItemCallback) viewInterface).onUserFollowedUnFollowed(mUserSolrObj);
+        ((FeedItemCallback) viewInterface).onFollowClicked(mUserSolrObj);
     }
 
     @OnClick(R.id.user_compact_card)
