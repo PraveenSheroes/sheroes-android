@@ -22,6 +22,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentAddDelete;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.CommentReactionRequestPojo;
@@ -66,12 +70,14 @@ import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMUNITY_OWNER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREATE_COMMUNITY;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.postCommentRequestBuilder;
 
@@ -921,6 +927,17 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         getMvpView().setData(0, userPostSolrObj);
     }
 
+
+    public  void updateFollowedAuthor(FeedDetail userPostSolrObj, boolean isFollowed) {
+        if(mFeedDetail!=null && mFeedDetail instanceof UserPostSolrObj) {
+            UserPostSolrObj userPostDetail = (UserPostSolrObj) mFeedDetail;
+            userPostDetail.setSolrIgnoreIsUserFollowed(isFollowed);
+            mFeedDetail = userPostSolrObj;
+            mBaseResponseList.set(0, userPostSolrObj);
+            getMvpView().setData(0, userPostSolrObj);
+        }
+    }
+
     public Comment getLastComment() {
         if (!CommonUtil.isEmpty(mBaseResponseList)) {
             BaseResponse baseResponse = mBaseResponseList.get(mBaseResponseList.size() - 1);
@@ -1119,5 +1136,147 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
                 });
 
+    }
+
+    //Post Follow /Following
+    public void getPostAuthorFollowed(PublicProfileListRequest publicProfileListRequest, final UserPostSolrObj userPostSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                    }
+
+                    @Override
+                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        getMvpView().stopProgressBar();
+                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
+                        } else {
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            } else {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            }
+                        }
+                        getMvpView().setData(0, userPostSolrObj);
+                    }
+                });
+
+    }
+
+    //Unfollowed
+    public void getPostAuthorUnfollowed(PublicProfileListRequest publicProfileListRequest, final UserPostSolrObj userPostSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
+            return;
+        }
+        getMvpView().startProgressBar();
+        mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
+                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                    @Override
+                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        return mentorFollowUnfollowResponse;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                    }
+
+                    @Override
+                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                        getMvpView().stopProgressBar();
+                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            if (userPostSolrObj.getEntityOrParticipantTypeId() == 7) {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            } else {
+                                userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            }
+                        } else {
+                            userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
+                        }
+                        getMvpView().setData(0, userPostSolrObj);
+                    }
+                });
+    }
+
+    private Observable<BookmarkResponsePojo> getBookmarkObservable(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
+        if (!isBookmarked) {
+            return mSheroesAppServiceApi.addBookMarkToApi(bookmarkRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        } else {
+            return mSheroesAppServiceApi.UnBookMarkToApi(bookmarkRequestPojo)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+    }
+
+    public void addBookMarkFromPresenter(final BookmarkRequestPojo bookmarkRequestPojo, final boolean isBookmarked, final UserPostSolrObj userSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);
+            return;
+        }
+        getMvpView().startProgressBar();
+        getBookmarkObservable(bookmarkRequestPojo, isBookmarked)
+                .compose(this.<BookmarkResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<BookmarkResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
+                    }
+
+                    @Override
+                    public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
+                        getMvpView().stopProgressBar();
+
+                        if (bookmarkResponsePojo.getStatus() != null && bookmarkResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setBookmarked(!isBookmarked);
+                        }
+                        getMvpView().onBookmarkedResponse(userSolrObj);
+                    }
+                });
     }
 }

@@ -15,6 +15,8 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 @Parcel(analyze = {UserPostSolrObj.class, FeedDetail.class})
 public class UserPostSolrObj extends FeedDetail {
 
+    public int askQuestionFromMentor;
+
     public boolean isRecentCommentClicked = false;
 
     public Boolean isTextExpanded = false;
@@ -102,6 +104,9 @@ public class UserPostSolrObj extends FeedDetail {
 
     @SerializedName("solr_ignore_profile_badge_url")
     private String profilePicBadgeUrl;
+
+    @SerializedName("solr_ignore_is_user_followed")
+    private boolean solrIgnoreIsUserFollowed;
 
     //this field are added by own
     private int noOfOpenings;
@@ -361,5 +366,13 @@ public class UserPostSolrObj extends FeedDetail {
 
     public void setBadgeShownOnPic(boolean badgeShownOnPic) {
         isBadgeShownOnPic = badgeShownOnPic;
+    }
+
+    public boolean isSolrIgnoreIsUserFollowed() {
+        return solrIgnoreIsUserFollowed;
+    }
+
+    public void setSolrIgnoreIsUserFollowed(boolean solrIgnoreIsUserFollowed) {
+        this.solrIgnoreIsUserFollowed = solrIgnoreIsUserFollowed;
     }
 }

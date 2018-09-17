@@ -80,7 +80,6 @@
             android:layout_marginTop="20dp"
             android:focusableInTouchMode="true"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:hint="Add upto 5 Tags"
             android:imeOptions="actionDone"
             android:inputType="text|textNoSuggestions|textMultiLine"
             android:lineSpacingExtra="1dp"

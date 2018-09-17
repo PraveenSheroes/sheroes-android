@@ -31,6 +31,13 @@
                 android:layout_height="@dimen/dp_size_20"
                 android:layout_gravity="end|bottom"
                 android:background="@drawable/vector_verified" />
+
+            <ImageView
+                android:id="@+id/user_badge"
+                android:layout_width="@dimen/followed_user_badge_size"
+                android:layout_height="@dimen/followed_user_badge_size"
+                android:layout_gravity="end|bottom"
+                android:visibility="gone" />
         </FrameLayout>
 
         <LinearLayout

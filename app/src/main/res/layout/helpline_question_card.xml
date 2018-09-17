@@ -5,7 +5,7 @@
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="@color/white"
+    card_view:cardBackgroundColor="@color/feed_back_color"
     card_view:cardCornerRadius="@dimen/helpline_card_corner_radius">
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -42,14 +42,14 @@
                     android:textIsSelectable="true"
                     android:linksClickable="true"
                     android:enabled="true"
-                    android:textColorLink="@color/white"
+                    android:textColorLink="@color/view_more"
                     android:focusable="true"
                     android:longClickable="true"
                     android:layout_marginBottom="@dimen/helpline_margin"
                     android:layout_marginTop="@dimen/helpline_margin"
                     android:minHeight="@dimen/help_card_min_height"
                     android:layout_marginLeft="@dimen/helpline_margin"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/comment_text" />
 
             </LinearLayout>
             <TextView
