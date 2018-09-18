@@ -30,7 +30,7 @@ import static org.mockito.Mockito.when;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class ExampleUnitTest {
+public class ArticleUnitTest {
     @Mock
     Context mMockContext;
     @Mock
