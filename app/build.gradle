@@ -59,7 +59,7 @@ android {
                 includeCompileClasspath true
             }
         }
-        vectorDrawables.useSupportLibrary = true
+        vectorDrawables.useSupportLibrary = false
     }
 
     signingConfigs {
