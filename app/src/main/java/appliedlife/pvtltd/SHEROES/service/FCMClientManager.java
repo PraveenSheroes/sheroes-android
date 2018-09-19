@@ -19,9 +19,9 @@ import java.io.IOException;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 
-public class GCMClientManager {
+public class FCMClientManager {
     // Constants
-    public static final String TAG = "GCMClientManager";
+    public static final String TAG = "FCMClientManager";
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
@@ -32,7 +32,7 @@ public class GCMClientManager {
     private String projectNumber;
     private Context mContext;
 
-    public GCMClientManager(Context context, String projectNumber) {
+    public FCMClientManager(Context context, String projectNumber) {
         this.mContext = context;
         this.projectNumber = projectNumber;
         this.fcm = FirebaseMessaging.getInstance();
@@ -114,7 +114,7 @@ public class GCMClientManager {
      * registration ID.
      */
     private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        final SharedPreferences prefs = getFCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -140,7 +140,7 @@ public class GCMClientManager {
      * @param regId   registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        final SharedPreferences prefs = getFCMPreferences(context);
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
@@ -149,7 +149,7 @@ public class GCMClientManager {
         editor.apply();
     }
 
-    private SharedPreferences getGCMPreferences(Context context) {
+    private SharedPreferences getFCMPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
         return getContext().getSharedPreferences(context.getPackageName(),

@@ -47,7 +47,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInRespo
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
-import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -97,7 +97,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     TextView tvEmailDescription;
     private ProgressDialog mProgressDialog;
     private MoEHelper mMoEHelper;
-    private String mGcmId;
+    private String mFcmId;
     private String email;
     private String password;
     private PayloadBuilder payloadBuilder;
@@ -151,7 +151,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
                         loginResponse.setTokenTime(System.currentTimeMillis());
                         loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                        loginResponse.setGcmId(mGcmId);
+                        loginResponse.setFcmId(mFcmId);
                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
                         appInstallationHelper.setupAndSaveInstallation(true);
                         moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
@@ -182,7 +182,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     appInstallationHelper.setupAndSaveInstallation(true);
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-                    loginResponse.setGcmId(mGcmId);
+                    loginResponse.setFcmId(mFcmId);
                     moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
                     moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
@@ -285,11 +285,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
         } else {
             mEmailSign.setEnabled(false);
             showDialog(LOGGING_IN_DIALOG);
-            if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
+            if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                 LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                 loginRequest.setUsername(email);
                 loginRequest.setPassword(password);
-                loginRequest.setGcmorapnsid(mGcmId);
+                loginRequest.setFcmorapnsid(mFcmId);
                 currentTime = System.currentTimeMillis();
                 mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
             } else {
@@ -297,7 +297,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
                     return;
                 } else {
-                    getGcmId();
+                    getFcmId();
                 }
             }
         }
@@ -323,20 +323,20 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
 
-    private void getGcmId() {
+    private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         if(getActivity() ==null || !isAdded()){
             return;
         }
-        GCMClientManager pushClientManager = new GCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+        FCMClientManager pushClientManager = new FCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mGcmId = registrationId;
-                if (StringUtil.isNotNullOrEmptyString(mGcmId)) {
-                    PushManager.getInstance().refreshToken(SheroesApplication.mContext, mGcmId);
-                    //Refresh GCM token
+                mFcmId = registrationId;
+                if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
+                    PushManager.getInstance().refreshToken(SheroesApplication.mContext, mFcmId);
+                    //Refresh FCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if (cleverTapAPI != null) {
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
@@ -344,16 +344,16 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
                     loginRequest.setUsername(email);
                     loginRequest.setPassword(password);
-                    loginRequest.setGcmorapnsid(mGcmId);
+                    loginRequest.setFcmorapnsid(mFcmId);
                     mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
                 } else {
-                    getGcmId();
+                    getFcmId();
                 }
             }
 
             @Override
             public void onFailure(String ex) {
-                mGcmId = ex;
+                mFcmId = ex;
             }
         });
     }

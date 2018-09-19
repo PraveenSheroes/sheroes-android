@@ -66,7 +66,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.GCM_ID;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FCM_ID;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -124,7 +124,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         return super.isViewAttached();
     }
 
-    public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
+    public void getNewFCMidFromPresenter(LoginRequest loginRequest) {
         mHomeModel.getNewGCMidFromModel(loginRequest)
                 .compose(this.<GcmIdResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<GcmIdResponse>() {
@@ -140,9 +140,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     }
 
                     @Override
-                    public void onNext(GcmIdResponse gcmIdResponse) {
-                        if (null != gcmIdResponse) {
-                            getMvpView().getNotificationReadCountSuccess(gcmIdResponse, GCM_ID);
+                    public void onNext(GcmIdResponse fcmIdResponse) {
+                        if (null != fcmIdResponse) {
+                            getMvpView().getNotificationReadCountSuccess(fcmIdResponse, FCM_ID);
                         }
                     }
                 });

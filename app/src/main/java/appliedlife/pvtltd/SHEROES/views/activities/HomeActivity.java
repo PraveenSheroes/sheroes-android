@@ -126,7 +126,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
-import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -334,7 +334,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
-    private String mGcmId;
+    private String mFcmId;
     private ShowcaseManager showcaseManager;
     private String mUserName;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -378,7 +378,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         try {
-            getGcmId();
+            getFcmId();
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -967,8 +967,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             case NOTIFICATION_COUNT:
                 unReadNotificationCount(baseResponse);
                 break;
-            case GCM_ID:
-                gcmIdResponse(baseResponse);
+            case FCM_ID:
+                fcmIdResponse(baseResponse);
                 break;
             case USER_CONTACTS_ACCESS_SUCCESS:
                 getAppContactsListSuccess(baseResponse);
@@ -1932,12 +1932,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void gcmIdResponse(BaseResponse baseResponse) {
+    private void fcmIdResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof GcmIdResponse) {
                     LoginResponse loginResponse = mUserPreference.get();
-                    loginResponse.setGcmId(mGcmId);
+                    loginResponse.setFcmId(mFcmId);
                     mUserPreference.set(loginResponse);
                     InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                     installUpdateForMoEngage.setFirstOpen(false);
@@ -1959,16 +1959,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void getGcmId() {
+    private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(this, getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+        FCMClientManager pushClientManager = new FCMClientManager(this, getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mGcmId = registrationId;
-                PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
-                //Refresh GCM token
+                mFcmId = registrationId;
+                PushManager.getInstance().refreshToken(getBaseContext(), mFcmId);
+                //Refresh FCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if(cleverTapAPI!=null) {
                     cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
@@ -1976,27 +1976,27 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
                     if (mAppInstallation != null && mAppInstallation.isSet()) {
                         AppInstallation appInstallation = mAppInstallation.get();
-                        appInstallation.gcmId = registrationId;
+                        appInstallation.fcmId = registrationId;
                         mAppInstallation.set(appInstallation);
                     }
                     if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();
-                            loginRequest.setGcmorapnsid(registrationId);
+                            loginRequest.setFcmorapnsid(registrationId);
                             if (mInstallUpdatePreference.get().isWelcome()) {
                                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                                 installUpdateForMoEngage.setWelcome(false);
                                 mInstallUpdatePreference.set(installUpdateForMoEngage);
                             }
-                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                            mHomePresenter.getNewFCMidFromPresenter(loginRequest);
                         } else {
-                            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
-                                String mOldGcmId = mUserPreference.get().getGcmId();
-                                if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
-                                    if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getFcmId())) {
+                                String mOldFcmId = mUserPreference.get().getFcmId();
+                                if (StringUtil.isNotNullOrEmptyString(mOldFcmId)) {
+                                    if (!mOldFcmId.equalsIgnoreCase(registrationId)) {
                                         LoginRequest loginRequest = loginRequestBuilder();
-                                        loginRequest.setGcmorapnsid(registrationId);
-                                        mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                                        loginRequest.setFcmorapnsid(registrationId);
+                                        mHomePresenter.getNewFCMidFromPresenter(loginRequest);
                                     }
                                 }
                             }
@@ -2008,7 +2008,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         }
                     }
                 } else {
-                    getGcmId();
+                    getFcmId();
                 }
             }
 

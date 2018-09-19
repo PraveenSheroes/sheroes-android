@@ -95,7 +95,7 @@
             android:name="NOTIFICATION_LARGE_ICON"
             android:value="@drawable/appicon" />
         <meta-data
-            android:name="SKIP_GCM_REGISTRATION"
+            android:name="SKIP_FCM_REGISTRATION"
             android:value="true" />
         <meta-data
             android:name="invitereferrals_bid"
