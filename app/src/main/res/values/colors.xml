@@ -90,7 +90,7 @@
     <color name="comment_text">#3c3c3c</color>
     <color name="feed_title">#3c3c3c</color>
     <color name="toolbar_title">#3c3c3c</color>
-    <color name="helpline_text_time_color">#c1c5d0</color>
+    <color name="helpline_text_time_color">#878787</color>
     <color name="profile_progress_dialog_section">#3c3c3c</color>
 
     <!--colors set through priyanka-->
@@ -150,6 +150,13 @@
     <color name="leader_board_dialog_badge_title">#de3c3c3c</color>
     <color name="leader_board_dialog_button">#dc4541</color>
     <color name="badge_inactive_circle">#dcdcdc</color>
+    <color name="user_card_compact_name">#3c3c3c</color>
+    <color name="user_compact_card_desc">#878787</color>
+    <color name="user_flat_name_text_color">#3c3c3c</color>
+    <color name="user_flat_desc">#878787</color>
+    <color name="leaderbaord_follow_button_text">#ffffff</color>
+    <color name="user_follow_post_text">#ffffff</color>
+    <color name="about_leaderbaord_text">#3c3c3c</color>
 
 
 </resources>

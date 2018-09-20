@@ -316,8 +316,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
-                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            }
                         }
                         getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
                     }
@@ -350,7 +355,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                            if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                            }
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         } else {

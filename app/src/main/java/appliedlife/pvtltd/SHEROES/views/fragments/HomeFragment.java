@@ -115,6 +115,15 @@ public class HomeFragment extends BaseFragment {
         }
     }
 
+
+    public void refreshAtPosition(FeedDetail feedDetail, long id) {
+        Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+        if (AppUtils.isFragmentUIActive(activeFragment)) {
+            ((FeedFragment) activeFragment).findPositionAndUpdateItem(feedDetail, id);
+        }
+
+    }
+
     public String getInactiveTabFragmentName() {
         return mUnSelectedFragment;
     }
@@ -248,7 +257,10 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+                if (AppUtils.isFragmentUIActive(activeFragment)) {
+                    ((FeedFragment) activeFragment).scrollToTopInList();
+                }
             }
         });
     }

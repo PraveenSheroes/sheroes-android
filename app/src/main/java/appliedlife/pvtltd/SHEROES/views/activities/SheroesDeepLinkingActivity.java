@@ -490,7 +490,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             long userId = mUserPreference.get().getUserSummary().getUserId();
             int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             boolean isMentor = false;
-            if (userType == AppConstants.MENTOR_TYPE_ID) {
+            if (userType == AppConstants.CHAMPION_TYPE_ID) {
                 isMentor = true;
             }
             Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);

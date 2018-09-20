@@ -13,7 +13,6 @@ import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
@@ -86,6 +85,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     Preference<Configuration> mConfiguration;
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
+    private static final float FOLLOW_BUTTON_ORIGINAL = 1.0f;
+    private static final float FOLLOW_BUTTON_SEMI_TRANSPARENT = 0.3f;
     //spam handling
 
     @Bind(R.id.card_view_post)
@@ -157,6 +158,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     CircleImageView ivFeedCommunityPostUserPic;
     @Bind(R.id.tv_feed_community_post_user_bookmark)
     TextView tvFeedCommunityPostUserBookmark;
+
+    @Bind(R.id.follow_button)
+    TextView mFollowButton;
     @Bind(R.id.tv_feed_community_post_card_title)
     TextView tvFeedCommunityPostCardTitle;
     @Bind(R.id.tv_feed_community_post_time)
@@ -255,6 +259,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (null != userPreference.get().getUserSummary().getUserBO()) {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
+
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
             }
@@ -408,6 +413,41 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
         postDataContentRendering(mContext);
         likeCommentOps();
+        displayFollowedButton();
+    }
+
+    private void displayFollowedButton() {
+        if (!(viewInterface instanceof FeedItemCallback) || mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+            mFollowButton.setVisibility(View.GONE);
+        } else {
+            if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
+                mFollowButton.setVisibility(View.VISIBLE);
+                mFollowButton.setEnabled(true);
+                mFollowButton.setAlpha(FOLLOW_BUTTON_ORIGINAL);
+                mFollowButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+                mFollowButton.setText(R.string.follow_user);
+                mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+            } else {
+                mFollowButton.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    //Follow/Following button in leaderboard
+    private void followButtonVisibility(Context context, boolean isFollowed) {
+        if (isFollowed) {
+            mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(FOLLOW_BUTTON_SEMI_TRANSPARENT);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+            mFollowButton.setText(context.getString(R.string.following_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
+        } else {
+            mFollowButton.setEnabled(true);
+            mFollowButton.setAlpha(FOLLOW_BUTTON_ORIGINAL);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
+            mFollowButton.setText(context.getString(R.string.follow_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+        }
     }
 
     @OnClick(R.id.li_post_link_render)
@@ -1157,13 +1197,21 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 }
                 break;
             }
-
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + " " + TAG + " " + id);
 
         }
     }
 
+    @OnClick(R.id.follow_button)
+    public void onFollowedButtonClick() {
+        if (viewInterface instanceof FeedItemCallback) {
+            followButtonVisibility(mContext, !mUserPostObj.isSolrIgnoreIsUserFollowed());
+            ((FeedItemCallback) viewInterface).onPostAuthorFollowed(mUserPostObj);
+        } else {
+            viewInterface.dataOperationOnClick(mUserPostObj);
+        }
+    }
 
     @OnClick(R.id.tv_feed_community_post_user_bookmark)
     public void isBookMarkClick() {

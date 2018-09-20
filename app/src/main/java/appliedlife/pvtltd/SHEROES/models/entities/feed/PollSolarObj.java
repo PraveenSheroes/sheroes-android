@@ -66,7 +66,7 @@ public class PollSolarObj extends FeedDetail {
     @SerializedName(value = "solr_ignore_poll_community_name")
     private String pollCommunityName;
 
-    @SerializedName("is_commumity_poll")
+    @SerializedName("is_community_poll")
     private boolean isCommunityPoll;
 
     @SerializedName(value = "community_participant_id_l")

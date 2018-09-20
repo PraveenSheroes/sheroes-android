@@ -200,7 +200,7 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         } else {
             tvMentorFollow.setEnabled(false);
             if(viewInterface instanceof FeedItemCallback){
-                ((FeedItemCallback)viewInterface).onMentorFollowClicked(dataItem);
+                ((FeedItemCallback)viewInterface).onFollowClicked(dataItem);
             }else {
                 viewInterface.handleOnClick(dataItem, tvMentorFollow);
             }
