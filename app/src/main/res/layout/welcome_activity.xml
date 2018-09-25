@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_welcome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -59,8 +60,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.TextViewFontRobotoRegular
-                style="@style/TextView14spColorBlack"
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                style="@style/TextView14spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -69,6 +70,8 @@
                 android:layout_marginTop="@dimen/dp_size_10"
                 android:fontFamily="@font/noto_sans_regular"
                 android:gravity="center"
+                android:textColor="@color/recent_post_comment"
+                vernacular:customTextFontFamily="regular"
                 android:text="@string/ID_INFORMATION_WARNING" />
 
             <LinearLayout
@@ -79,52 +82,56 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <Button
+                <appliedlife.pvtltd.SHEROES.vernacular.CustomButtonFont
                     android:id="@+id/click_to_join_fb_signup"
+                    style="@style/Button14spRegular"
                     android:layout_width="124dp"
                     android:layout_height="36dp"
                     android:background="@drawable/vector_facebook"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:paddingLeft="@dimen/dp_size_48"
                     android:text="@string/ID_LOGIN_TEXT"
-                    android:textAllCaps="true"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_14"
-                    android:textStyle="normal" />
+                    vernacular:customButtonFontFamily="regular"
+                    android:textAllCaps="true" />
 
-                <Button
+                <appliedlife.pvtltd.SHEROES.vernacular.CustomButtonFont
                     android:id="@+id/btn_login_google"
                     android:layout_width="124dp"
                     android:layout_height="36dp"
+                    style="@style/Button14spRegular"
                     android:layout_marginLeft="@dimen/dp_size_16"
                     android:background="@drawable/vector_google_plus"
                     android:clickable="true"
+                    android:textColor="@color/white"
                     android:paddingLeft="@dimen/dp_size_48"
                     android:text="@string/ID_LOGIN_TEXT"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_14" />
+                    vernacular:customButtonFontFamily="regular"
+                    android:textAllCaps="true" />
 
             </LinearLayout>
 
-            <appliedlife.pvtltd.SHEROES.vernacular.TextViewFontRobotoMediumBold
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                 android:id="@+id/tv_other_login_option"
-                style="@style/TextView14spColorRed"
+                style="@style/TextView14spBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_16"
                 android:gravity="center"
                 android:padding="@dimen/dp_size_10"
+                android:textColor="@color/email"
+                vernacular:customTextFontFamily="medium"
                 android:text="@string/login_with_email" />
 
-            <TextView
-                style="@style/TextView14spColorBlack"
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                style="@style/TextView14spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_size_16"
                 android:layout_marginLeft="@dimen/dp_size_10"
                 android:layout_marginRight="@dimen/dp_size_10"
                 android:gravity="center"
+                android:textColor="@color/recent_post_comment"
+                vernacular:customTextFontFamily="regular"
                 android:text="@string/ID_ONLY_FOR_EXISTING_USER" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

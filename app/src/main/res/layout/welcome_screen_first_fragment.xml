@@ -2,18 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:gravity="center">
 
-    <appliedlife.pvtltd.SHEROES.vernacular.TextViewFontRobotoRegular
+    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
         android:id="@+id/tv_welcome_text"
-        style="@style/TextView16spColorBlack"
+        style="@style/TextView16spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_size_20"
         android:layout_marginRight="@dimen/dp_size_20"
         android:maxLines="@integer/int_value_for_line_2"
+        android:textColor="@color/feed_article_label"
+        vernacular:customTextFontFamily="regular"
         android:textAlignment="center" />
 
     <ImageView
