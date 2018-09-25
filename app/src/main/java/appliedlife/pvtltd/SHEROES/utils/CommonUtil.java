@@ -1243,7 +1243,27 @@ public class CommonUtil {
             LogUtils.error(TAG, e.toString());
         }
     }
-
+    public static synchronized void setPrefStringValue(String key,String value) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null) {
+                prefs.edit().putString(key, value).apply();
+            }
+        } catch (Exception e) {
+            LogUtils.error(TAG, e.toString());
+        }
+    }
+    public static synchronized String getPrefStringValue(String key) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null && prefs.contains(key)) {
+                return prefs.getString(key,"");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return "";
+    }
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (null == prefs) {

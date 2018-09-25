@@ -25,8 +25,6 @@ import android.widget.Toast;
 
 import com.appsflyer.AppsFlyerLib;
 import com.clevertap.android.sdk.CleverTapAPI;
-import com.clevertap.android.sdk.exceptions.CleverTapMetaDataNotFoundException;
-import com.clevertap.android.sdk.exceptions.CleverTapPermissionsNotSatisfied;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.AccessToken;
@@ -92,7 +90,6 @@ import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
-import appliedlife.pvtltd.SHEROES.social.GooglePlusHelper;
 import appliedlife.pvtltd.SHEROES.social.SocialListener;
 import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -104,6 +101,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.SheroesWelcomeViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -190,7 +188,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.SplashTheme);
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         mLoginPresenter.attachView(this);
@@ -198,13 +195,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
-            showMaleError(getString(R.string.sheroes_gender_error), "");
+        if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
+            showSelectLanguageOption();
         } else {
-            checkAuthTokenExpireOrNot();
+            if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
+                showMaleError(getString(R.string.sheroes_gender_error), "");
+            } else {
+                checkAuthTokenExpireOrNot();
+            }
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
+            appInstallationHelper.setupAndSaveInstallation(false);
         }
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
-        appInstallationHelper.setupAndSaveInstallation(false);
     }
 
     private void checkAuthTokenExpireOrNot() {
@@ -266,7 +267,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             } else {
                 final Branch branch = Branch.getInstance();
                 branch.resetUserSession();
-                if(CleverTapHelper.getCleverTapInstance(getApplicationContext())!=null) {
+                if (CleverTapHelper.getCleverTapInstance(getApplicationContext()) != null) {
                     branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
                             CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
                 }
@@ -319,21 +320,17 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    private void setUpView() {
+    public void setUpView() {
         setContentView(R.layout.welcome_activity);
         ButterKnife.bind(WelcomeActivity.this);
         isFirstTimeUser = true;
-
         initHomeViewPagerAndTabs();
-
         loginSetUp();
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
             return;
         }
-
         ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
-
         if (isFirstTimeUser) {
             AnalyticsManager.trackScreenView(getScreenName());
         }
@@ -590,6 +587,18 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
+    public void showSelectLanguageOption() {
+        SelectLanguageDialog fragment = (SelectLanguageDialog) getFragmentManager().findFragmentByTag(SelectLanguageDialog.class.getName());
+        if (fragment == null) {
+            fragment = new SelectLanguageDialog();
+            Bundle b = new Bundle();
+            fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), SelectLanguageDialog.class.getName());
+        }
+    }
+
     public void showMaleError(String message, String userName) {
         MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
         if (fragment == null) {
@@ -819,7 +828,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     PushManager.getInstance().refreshToken(WelcomeActivity.this, mGcmId);
                     //Refresh GCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
-                    if(cleverTapAPI!=null) {
+                    if (cleverTapAPI != null) {
                         cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
                     }
                     fbLogin.setEnabled(true);

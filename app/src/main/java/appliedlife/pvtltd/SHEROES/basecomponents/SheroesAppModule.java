@@ -57,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.preferences.GsonConverter;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import dagger.Module;
@@ -118,6 +119,7 @@ public class SheroesAppModule {
                 } else {
                     builder.header("Content-Type", "application/json");
                 }
+                builder.header("language", CommonUtil.getPrefStringValue(AppConstants.LANGUAGE_KEY));
                 builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
                 builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
                 if (NetworkUtil.isConnected(mApplication)) {

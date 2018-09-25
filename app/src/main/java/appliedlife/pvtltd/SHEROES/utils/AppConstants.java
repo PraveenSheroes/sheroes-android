@@ -14,7 +14,7 @@ public class AppConstants {
     public static final String PLAY_STORE_ID_URL = "market://details?id=";
     public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
     //\b((https?|Https?|ftp)?)(:?)(\/\/?|)(www)[-a-zA-Z0-9+&@#%?=~_|!:,.;/]*[-a-zA-Z0-9+&@#%=~_|]
-    public static final String WEB_LINK_PATTERN_REGEX ="\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    public static final String WEB_LINK_PATTERN_REGEX = "\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
@@ -465,4 +465,10 @@ public class AppConstants {
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
 
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
+
+    //Vernacular
+    public static final String SELECT_LANGUAGE_SHARE_PREF = "SELECT_LANGUAGE";
+    public static final String LANGUAGE_KEY = "language_key";
+    public static final String LANGUAGE_ENGLISH = "en";
+    public static final String LANGUAGE_HINDI = "hi";
 }

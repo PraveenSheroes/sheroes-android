@@ -1,40 +1,32 @@
 package appliedlife.pvtltd.SHEROES.vernacular;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
-import android.preference.PreferenceManager;
 
 import java.util.Locale;
 
-public class LocaleManager {
-    public static final  String LANGUAGE_ENGLISH   = "en";
-    public static final  String LANGUAGE_UKRAINIAN = "uk";
-    private static final String LANGUAGE_KEY       = "language_key";
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
+
+public class LocaleManager {
     public static Context setLocale(Context c) {
         return updateResources(c, getLanguage(c));
     }
 
-    public static Context setNewLocale(Context c, String language) {
+    public static void setNewLocale(Context c, String language) {
         persistLanguage(c, language);
-        return updateResources(c, language);
+        updateResources(c, language);
     }
 
-    public static String getLanguage(Context c) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        return prefs.getString(LANGUAGE_KEY, LANGUAGE_ENGLISH);
+    private static String getLanguage(Context c) {
+        return CommonUtil.getPrefStringValue(LANGUAGE_KEY);
     }
 
-    @SuppressLint("ApplySharedPref")
     private static void persistLanguage(Context c, String language) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(c);
-        // use commit() instead of apply(), because sometimes we kill the application process immediately
-        // which will prevent apply() to finish
-        prefs.edit().putString(LANGUAGE_KEY, language).commit();
+        CommonUtil.setPrefStringValue(LANGUAGE_KEY, language);
     }
 
     private static Context updateResources(Context context, String language) {

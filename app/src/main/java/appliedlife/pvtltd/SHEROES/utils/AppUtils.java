@@ -293,7 +293,7 @@ public class AppUtils {
 
 
     public String getApplicationDisplayName() {
-        return SheroesApplication.mContext.getResources().getString(R.string.ID_APP_NAME);
+        return SheroesApplication.mContext.getResources().getString(R.string.app_name);
     }
 
     /**

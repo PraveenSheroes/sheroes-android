@@ -106,7 +106,11 @@
                 android:layout_below="@id/user_container"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16" />
-
+            <View
+                android:id="@+id/view_keyboard"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_size_200"
+                android:layout_below="@id/et_view"/>
             <android.support.v7.widget.CardView
                 android:id="@+id/card_link_render"
                 android:layout_width="match_parent"

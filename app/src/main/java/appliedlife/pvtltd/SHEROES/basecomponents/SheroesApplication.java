@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 
 import com.clevertap.android.sdk.ActivityLifecycleCallback;
 import com.crashlytics.android.Crashlytics;
@@ -20,10 +21,13 @@ import com.moe.pushlibrary.MoEHelper;
 
 import java.io.File;
 
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
 
@@ -49,7 +53,16 @@ public class SheroesApplication extends MultiDexApplication {
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
         this.mSheroesAppComponent = sheroesAppComponent;
     }
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleManager.setLocale(this);
+    }
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate() {

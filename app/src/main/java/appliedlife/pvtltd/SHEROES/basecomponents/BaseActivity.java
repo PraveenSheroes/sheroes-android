@@ -1,10 +1,12 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.app.DialogFragment;
+import android.app.LoaderManager;
 import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +20,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,6 +73,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
@@ -136,7 +140,15 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
     private boolean isWhatsAppShare;
-
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleManager.setLocale(this);
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -207,4 +207,19 @@
         <item name="android:textColor">@color/comment_text</item>
         <item name="android:fontFamily">@string/ID_ROBOTO_REGULAR</item>
     </style>
+    <style name="TextView16spColorBlack" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/feed_article_label</item>
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+    </style>
+    <style name="TextView14spColorBlack" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/recent_post_comment</item>
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+    </style>
+    <style name="TextView14spColorRed" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/email</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
 </resources>
