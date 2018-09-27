@@ -168,6 +168,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.tv_approve_spam_post)
     TextView tvApproveSpamPost;
 
+    @Bind(R.id.tv_source_name)
+    TextView tvSourceName;
+
     @BindDimen(R.dimen.dp_size_40)
     int authorPicIconSize;
 
@@ -331,8 +334,10 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                             pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
                                 ivPlay.setVisibility(View.VISIBLE);
+                                tvSourceName.setVisibility(View.VISIBLE);
                             } else {
                                 ivPlay.setVisibility(View.GONE);
+                                tvSourceName.setVisibility(View.GONE);
                             }
                         }
                     });

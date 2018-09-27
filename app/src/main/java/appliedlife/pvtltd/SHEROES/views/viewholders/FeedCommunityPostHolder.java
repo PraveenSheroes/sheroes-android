@@ -196,6 +196,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.iv_play)
     ImageView ivPlay;
+    @Bind(R.id.tv_source_name)
+    TextView tvSourceName;
     @Bind(R.id.fm_image_thumb)
     FrameLayout fmImageThumb;
     @Bind(R.id.iv_post_link_thumbnail)
@@ -489,8 +491,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
                                 ivPlay.setVisibility(View.VISIBLE);
+                                tvSourceName.setVisibility(View.VISIBLE);
                             } else {
                                 ivPlay.setVisibility(View.GONE);
+                                tvSourceName.setVisibility(View.GONE);
                             }
                         }
                     });
