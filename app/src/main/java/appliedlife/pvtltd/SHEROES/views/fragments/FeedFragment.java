@@ -3,10 +3,12 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -21,6 +23,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -94,6 +98,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
+import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
@@ -115,6 +120,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.functions.Consumer;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -136,6 +142,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
+    private static final int THRESHOLD_MS = 250;
+    private static final int minimumVisibleHeightThreshold = 50;
 
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
@@ -144,6 +152,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private static final int REPORT_MENU_ID = 4;
     private static final int FEATURED_POST_MENU_ID = 5;
     private static final int BOOKMARK_MENU_ID = 6;
+
+    private int startViewId = -1;
+    private  int endViewId = -1;
+
+    // ArrayList of view ids that are being considered for tracking.
+    private ArrayList<TrackingData> currentQueueViewed = new ArrayList<>();
+    private ArrayList<TrackingData> previousViewed = new ArrayList<>();
+    private ArrayList<TrackingData> finalViewData = new ArrayList<>();
+    OneMinuteCountDownTimer countDownTimer;
+
 
     @Inject
     AppUtils mAppUtils;
@@ -371,6 +389,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
+    public void onImpressionResponse(boolean isSuccessFul) {
+        Log.i("Impression hit Response", "Called");
+    }
+
+    @Override
     public void likeUnlikeResponse(FeedDetail feedDetail, boolean isLike) {
         if (isLike) {
             if (feedDetail instanceof ArticleSolrObj) {
@@ -573,6 +596,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+                //finalViewData.clear();
+
+// if(!isSameView(linearLayoutManager.findFirstVisibleItemPosition(),  linearLayoutManager.findLastVisibleItemPosition())) {
+                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+
+                if(!isSameView(startPos, endPos)) {
+                    analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
+
+                    // if(viewPos == -1) return;
+    /*if(mRemoveItem == null)  return;
+    ArrayList<TrackingData> clonedList = new ArrayList<>(mRemoveItem);*/
+                    final VisibleState visibleStateFinal = new VisibleState(finalViewData);
+                    SheroesBus.getInstance().post(visibleStateFinal);
+                }
+//  }
+
+//removed the item which have end times TODO
+
+
+//  viewsViewed.clear();
+
+
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                     if (firstVisibleItem == 0) {
@@ -1008,6 +1055,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onResume() {
         super.onResume();
+
+        if(isActiveTabFragment) {
+            if(countDownTimer!=null) {
+                countDownTimer.cancel();
+            }
+            countDownTimer = new OneMinuteCountDownTimer(50000, 45000);
+            countDownTimer.start();
+        }
+
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
         }
@@ -1025,6 +1081,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onStop() {
         super.onStop();
         isActiveTabFragment = false;
+        SheroesBus.getInstance().unregister(this);
     }
 
     @Override
@@ -2060,4 +2117,275 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return string;
         }
     }
+
+    public static class VisibleState {
+        //final int firstCompletelyVisible;
+        // final int lastCompletelyVisible;
+        private List<TrackingData> viewIds= null;
+
+        public VisibleState(List<TrackingData> views) {
+            viewIds = views;
+            // this.firstCompletelyVisible = firstCompletelyVisible;
+            //this.lastCompletelyVisible = lastCompletelyVisible;
+        }
+
+        public List<TrackingData> getViewIds() {
+            return viewIds;
+        }
+
+        /*@Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            VisibleState that = (VisibleState) o;
+
+            if (firstCompletelyVisible != that.firstCompletelyVisible) return false;
+            return lastCompletelyVisible == that.lastCompletelyVisible;
+
+        }
+
+        @Override
+        public int hashCode() {
+            int result = firstCompletelyVisible;
+            result = 31 * result + lastCompletelyVisible;
+            return result;
+        }*/
+
+        @Override
+        public String toString() {
+            return "VisibleState{" +
+                    //  "first=" + firstCompletelyVisible +
+                    //", last=" + lastCompletelyVisible +
+                    '}';
+        }
+    }
+
+    private void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
+
+        startViewId = firstVisibleItemPosition;
+        endViewId = lastVisibleItemPosition;
+
+        // Analyze all the views
+        for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
+            TrackingData trackingData = new TrackingData();
+            //  Log.i("View being considered", String.valueOf(viewPosition));
+            // Get the view from its position.
+            View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
+
+            if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
+                //check if exist
+                //Log.i("Adding ", " shown view"+viewPosition);
+
+                // endViewId  = lastVisibleItemPosition;
+                trackingData.setStartTime(System.currentTimeMillis());
+                trackingData.setViewId(viewPosition);
+                currentQueueViewed.add(trackingData);
+
+                int indexInFinalList = checkIfItemInFinal(viewPosition);
+                if (indexInFinalList == -1) {
+                    //finalViewData.add(indexInFinalList, trackingData);
+                    finalViewData.add(trackingData);
+                } else {
+                    //todo - watch below aDDING WHEN RETURN TRUE THT ITEM EXIST UPDATE ITS TIME
+                    //finalViewData.get(viewPosition).setmEndTime(System.currentTimeMillis());
+                    //trackingData.setmEndTime(System.currentTimeMillis());
+                    //finalViewData.add(indexInFinalList, trackingData);
+                    Log.i("Ravi", "There in final list*******");
+                }
+                // return viewPosition;
+            }
+
+            if (previousViewed.size() > 0) {
+                for (int i = 0; i < previousViewed.size(); i++) {
+                    TrackingData trackingData1 = previousViewed.get(i);
+                    if (!checkIfItemInCurrent(trackingData1.getViewId())) { //TODO - chk case of scroll up nd down
+                        updateEndTimeIfItemNotExist(trackingData1.getViewId());
+                    }
+                }
+                previousViewed.clear();
+            }
+
+       /* if(currentQueueViewed.size()>0) {
+            for (int i = 0; i < currentQueueViewed.size(); i++) {
+                TrackingData trackingData1 = currentQueueViewed.get(i);
+                if(checkIfItemInFinal(trackingData1.getViewId())) {
+
+                    //add it in list
+                  //  if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
+                        //check if exist
+                        Log.i("Adding ", " shown view"+viewPosition);
+                        endViewId  = lastVisibleItemPosition;
+                        trackingData.setStartTime(System.currentTimeMillis());
+                        trackingData.setViewId(viewPosition);
+                        currentQueueViewed.add(trackingData);
+
+                        finalViewData.add(trackingData);
+                        // return viewPosition;
+                 //   }
+
+
+                }
+            }
+           // previousViewed.clear();
+        } */
+
+
+        /*else {
+            if(currentQueueViewed.size()>0 ) {// && !isSameView(firstVisibleItemPosition, lastVisibleItemPosition)
+
+                ListIterator<TrackingData> iter = currentQueueViewed.listIterator();
+                while(iter.hasNext()){
+                    TrackingData trackingData1 = iter.next();
+                    if (trackingData1.getViewId().equalsIgnoreCase(String.valueOf(viewPosition))) {
+                        trackingData1.setmEndTime(System.currentTimeMillis());
+                        Log.i("Adding in remove item", trackingData1.getViewId()+"End time+++++++++++++++++++++");
+                        mRemoveItem.add(trackingData1);
+                        Log.i("Removing from viewed", trackingData1.getViewId()+"End time+++++++++++++++++++++");
+                        //viewsViewed.remove(trackingData1);
+                        iter.remove();
+                    }
+                }
+            }
+        }*/
+        }
+
+        previousViewed.addAll(currentQueueViewed);
+        currentQueueViewed.clear();
+
+    }
+
+
+
+    public class OneMinuteCountDownTimer extends CountDownTimer {
+
+        public OneMinuteCountDownTimer (long startTime, long interval) {
+            super(startTime, interval);
+        }
+
+        @Override
+        public void onFinish() {
+            Log.i("Time Expired", "50 sec");
+
+            // hitNetworkCall();
+
+            start();
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+        }
+    }
+
+    private void hitNetworkCall() {
+
+        UserEvent userEvent = new UserEvent();
+        for(int i=0; i<finalViewData.size() ; i++) {
+            TrackingData trackingData = finalViewData.get(i);
+
+            userEvent.setTimestamp(""+trackingData.getViewDuration());
+            userEvent.setEvent("Vi");
+            userEvent.setClientId(""+mLoggedInUser);
+            userEvent.setPosition(""+trackingData.getViewId());
+            userEvent.setAppVersion(mAppUtils.getAppVersionName());
+            userEvent.setGtid(mAppUtils.getDeviceId());
+
+            // mFeedPresenter.sendImpressionData(userEvent);
+        }
+
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //doSomeWork();
+
+        SheroesBus.getInstance().register(this).add(SheroesBus.getInstance().toObserveable().
+                distinctUntilChanged()
+                .throttleWithTimeout(THRESHOLD_MS, TimeUnit.MILLISECONDS).subscribe(new Consumer<Object>() {
+                    @Override
+                    public void accept(Object event) {
+                        if(event instanceof VisibleState){
+                            //  mRemoveItem.clear();
+
+                            VisibleState visibleState = (VisibleState) event;
+                            List<TrackingData> views = visibleState.getViewIds();
+                            if (views == null) return;
+
+                            Log.i("######", "#############################");
+                            for (int i = 0; i < views.size(); i++) {
+                                float timeSpent = views.get(i).getmEndTime() - views.get(i).getStartTime();
+                                Log.d("######", "Id> " + views.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
+                            }
+                            Log.i("######", "#############################");
+                        }
+                    }
+                }));
+    }
+
+    private int checkIfItemInFinal(int id) { //todo - it return true if already item ther , fix it
+        int index = -1;
+        for (int i = 0; i < finalViewData.size(); i++) {
+            TrackingData trackingData = finalViewData.get(i);
+            if (trackingData.getViewId() == id) {
+                // return true;
+                index = i;
+                break; //todo - rechk it
+            }
+        }
+        return index;
+    }
+
+
+    private boolean checkIfItemInCurrent(int id) {
+        for (int i = 0; i < currentQueueViewed.size(); i++) {
+            TrackingData trackingData = currentQueueViewed.get(i);
+            if (trackingData.getViewId() == id) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void updateEndTimeIfItemNotExist(int id) {
+        //boolean newItem = true;
+        for (int i = 0; i < finalViewData.size(); i++) {
+            TrackingData trackingData1 = finalViewData.get(i);
+            if (trackingData1.getmEndTime() == -1 && trackingData1.getViewId() == id) {
+                //  newItem = false;
+                Log.i("Updating", "End time" + id);
+                trackingData1.setmEndTime(System.currentTimeMillis());
+                finalViewData.add(i, trackingData1);
+            }
+        }
+        //  return newItem;
+    }
+
+    private boolean isSameView(int start , int endId) {
+        return  (start == startViewId && endId == endViewId);
+    }
+    // (i.e. within the screen) wrt the view height.
+// @param view
+// @return Percentage of the height visible.
+    private double getVisibleHeightPercentage(View view) {
+
+        Rect itemRect = new Rect();
+        view.getLocalVisibleRect(itemRect);
+
+        // Find the height of the item.
+        double visibleHeight = itemRect.height();
+        double height = view.getMeasuredHeight();
+
+        //Log.i("Visible Height", String.valueOf(visibleHeight));
+        //Log.i("Measured Height", String.valueOf(height));
+
+        return ((visibleHeight / height) * 100);
+
+        //Log.i("Percentage visible", String.valueOf(viewVisibleHeightPercentage));
+        //Log.i("___", "___");
+
+        //return viewVisibleHeightPercentage;
+    }
+
 }

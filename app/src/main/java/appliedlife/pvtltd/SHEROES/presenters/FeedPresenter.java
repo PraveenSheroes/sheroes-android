@@ -1195,4 +1195,42 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
                 });
     }
+
+
+
+    /*public void sendImpressionData(final UserEvent userEvent) {
+
+    Log.i("Impression hit", "Called");
+    if (!NetworkUtil.isConnected(mSheroesApplication)) {
+        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+        return;
+    }
+    getMvpView().startProgressBar();
+    mSheroesAppServiceApi.updateImpressionData(userEvent)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .compose(this.<BaseResponse>bindToLifecycle())
+            .subscribe(new DisposableObserver<BaseResponse>() {
+                @Override
+                public void onComplete() {
+                    getMvpView().stopProgressBar();
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    Crashlytics.getInstance().core.logException(e);
+                    getMvpView().showError(e.getMessage(), ERROR_TAG);
+                    getMvpView().stopProgressBar();
+                }
+
+                @Override
+                public void onNext(BaseResponse baseResponse) {
+                    getMvpView().stopProgressBar();
+                    if (null != baseResponse) {
+                       getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
+                    }
+                }
+            });
+}*/
+
 }
