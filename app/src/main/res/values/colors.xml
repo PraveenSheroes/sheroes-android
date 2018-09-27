@@ -157,6 +157,7 @@
     <color name="leaderbaord_follow_button_text">#ffffff</color>
     <color name="user_follow_post_text">#ffffff</color>
     <color name="about_leaderbaord_text">#3c3c3c</color>
+    <color name="background_color_link_card">#f5f5f5</color>
 
 
 </resources>
