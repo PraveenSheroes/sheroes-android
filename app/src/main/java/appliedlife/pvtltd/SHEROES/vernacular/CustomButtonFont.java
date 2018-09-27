@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.vernacular;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
 
@@ -30,18 +31,18 @@ public class CustomButtonFont extends AppCompatButton {
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.CustomButtonFont);
         CharSequence fontFamily = styledAttributes.getString(R.styleable.CustomButtonFont_customButtonFontFamily);
         if (fontFamily != null) {
-            if (Locale.getDefault().getLanguage().equalsIgnoreCase(AppConstants.LANGUAGE_ENGLISH)) {
+            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(AppConstants.LANGUAGE_ENGLISH)) {
                 Typeface typeface;
                 if (fontFamily.toString().equalsIgnoreCase("regular")) {
-                    typeface = Typeface.create("sans-serif-regular", Typeface.NORMAL);
+                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
                 } else if (fontFamily.toString().equalsIgnoreCase("light")) {
-                    typeface = Typeface.create("sans-serif-light", Typeface.NORMAL);
+                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
                 } else if (fontFamily.toString().equalsIgnoreCase("medium")) {
-                    typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_bold);
                 } else if (fontFamily.toString().equalsIgnoreCase("bold")) {
-                    typeface = Typeface.create("sans-serif-bold", Typeface.BOLD);
+                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_bold);
                 } else {
-                    typeface = Typeface.create("sans-serif-regular", Typeface.NORMAL);
+                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
                 }
                 setTypeface(typeface);
             }

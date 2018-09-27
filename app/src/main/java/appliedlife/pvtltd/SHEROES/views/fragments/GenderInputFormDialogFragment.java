@@ -1,9 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -23,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import butterknife.Bind;
@@ -65,6 +69,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
     //endregion
 
     //region overridden methods
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.gender_input_form_fragment_layout, container, false);
@@ -75,16 +80,13 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             mPersonnelEmailId = getArguments().getString(EMAIL_ID);
         }
         if (StringUtil.isNotNullOrEmptyString(mUserName)) {
-            tvUserName.setText("Hi " + mUserName);
+            tvUserName.setText(getString(R.string.hi)+" " + mUserName);
         }
-        String description = getString(R.string.sheroes_msg);
-        SpannableString spannableString = new SpannableString(description);
-        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, 7, 0);
-        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.feed_article_label)), 37, description.length(), 0);
-        spannableString.setSpan(new StyleSpan(Typeface.NORMAL), 37, description.length(), 0);
-        tvMsg.setMovementMethod(LinkMovementMethod.getInstance());
-        tvMsg.setText(spannableString, TextView.BufferType.SPANNABLE);
-        tvMsg.setSelected(true);
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            tvMsg.setText(Html.fromHtml(getString(R.string.sheroes_msg), 0)); // for 24 api and more
+        } else {
+            tvMsg.setText(Html.fromHtml(getString(R.string.sheroes_msg)));// or for older api
+        }
         ivFemale.setImageResource(R.drawable.vector_female);
         ivMale.setImageResource(R.drawable.vector_male);
         tvGenderSelectFinish.setEnabled(false);

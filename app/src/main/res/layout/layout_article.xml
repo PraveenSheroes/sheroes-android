@@ -100,7 +100,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:layout_marginTop="12dp"
-            android:background="@color/white"
+            android:background="@color/red"
             android:lineSpacingMultiplier="1.4"
             android:textColor="@color/light_grey"
             android:textIsSelectable="true"

@@ -1,12 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
@@ -107,21 +110,16 @@ public class OnBoardingActivity extends BaseActivity {
             startActivity(homeIntent);
             finish();
         }
+        onBoardingFragment();
     }
-
+    @TargetApi(AppConstants.ANDROID_SDK_24)
     public void onBoardingFragment() {
-        tvNameUser.setText("Welcome " + userPreference.get().getUserSummary().getFirstName() + "!");
-        String description = getString(R.string.ID_BOARDING_COMMUNITIES);
+        tvNameUser.setText(getString(R.string.welcome)+" "+ userPreference.get().getUserSummary().getFirstName() + "!");
         isJoinCount = 0;
-        SpannableString spannableString = new SpannableString(description);
-        if (StringUtil.isNotNullOrEmptyString(description)) {
-            //spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), 34, 42, 0);
-            // spannableString.setSpan(new StyleSpan(Typeface.BOLD), 34, 42, 0);
-            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.feed_article_label)), description.length() - 30, description.length() - 18, 0);
-            spannableString.setSpan(new StyleSpan(Typeface.BOLD), description.length() - 30, description.length() - 18, 0);
-            tvDescription.setMovementMethod(LinkMovementMethod.getInstance());
-            tvDescription.setText(spannableString, TextView.BufferType.SPANNABLE);
-            tvDescription.setSelected(true);
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES), 0)); // for 24 api and more
+        } else {
+            tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
         }
         OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
         Bundle bundleArticle = new Bundle();

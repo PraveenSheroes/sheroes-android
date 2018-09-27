@@ -16,10 +16,10 @@
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
     <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
     <!-- Strings related to login -->
-    <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
+    <string name="ID_PROMPT_EMAIL">SHEROES पर आपका ईमेल आईडी पंजीकृत है</string>
     <string name="ID_TODAY">Today</string>
-    <string name="ID_PROMPT_PASSWORD">Password</string>
-    <string name="ID_ACTION_LOG_IN_SHORT">Login</string>
+    <string name="ID_PROMPT_PASSWORD">पासवर्ड</string>
+    <string name="ID_ACTION_LOG_IN_SHORT">लॉगिन</string>
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_EMAIL">Enter email address</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
@@ -137,7 +137,16 @@
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="BadgeCounter">+%1$d</string>
-    <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\nHelp us personalize SHEROES for you by joining some communities of your interests.</string>
+    <string name="ID_BOARDING_COMMUNITIES"><![CDATA[ <html><head>
+                                                    <meta charset="UTF-8">
+                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+                                                    </head>
+                                                    <body>
+                                                    <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
+                                                    हम बहुत खुश हैं कि आप SHEROES में शामिल हो गए। हमें आपकी रुचियों के कुछ <span style="font-weight: bold"><b>समुदायों</b></span> में शामिल होने के लिए SHEROES को निजीकृत करने में सहायता करें।
+                                                    </div>
+                                                    </body>
+                                                    </html> ]]></string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>
@@ -205,7 +214,7 @@
     <!--string related welcome page-->
     <string name="login_with_email">ईमेल के साथ लॉगिन करें</string>
     <string name="ID_FACEBOOK_LONGING">LOGGING IN&#8230;</string>
-    <string name="ID_INFORMATION_WARNING">हम आपकी जानकारी किसी के साथ शेयर नहीं करते हैं</string>
+    <string name="ID_INFORMATION_WARNING">हम आपकी जानकारी किसी के साथ शेयर नहीं करते हैं।</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(केवल मौजूदा उपयोगकर्ताओं के लिए)</string>
     <string name="ID_WELCOME_FIRST"> <![CDATA[ <html><head>
                                                     <meta charset="UTF-8">
@@ -315,7 +324,7 @@
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">Please enter the email ID associated with your SHEROES account</string>
 
     <string name="ID_RESET_PASSWORD_SUCCESS_LINK_TEXT">Click here to login</string>
-    <string name="ID_FORGOT_PASSWORD_TEXT">Forgot Password ?</string>
+    <string name="ID_FORGOT_PASSWORD_TEXT">पासवर्ड भूल गए ?</string>
     <string name="ID_ERROR_NO_EMAIL">Please enter any email ID.</string>
 
 
@@ -325,7 +334,7 @@
     <string name="communities_listing">Communities Screen</string>
     <string name="ID_COMMUNITIES_CATEGORY">Communities Category Screen</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
-    <string name="ID_LOGIN_TEXT">लॉगिन </string>
+    <string name="ID_LOGIN_TEXT">लॉगिन</string>
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
     <string name="ID_COMMUNITY_LISTING_ALL_COMMUNITIES">community listing- all communties</string>
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
@@ -530,7 +539,7 @@
     <string name="private_information">Private Information (Only Visible to You)</string>
 
     <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
-    <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
+    <string name="ID_LOGIN_MSG">ईमेल लॉगिन केवल मौजूदा उपयोगकर्ताओं के लिए है। नए उपयोगकर्ताओं को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।</string>
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
     <string name="ID_SECOND_WELCOME">Join Communities</string>
     <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
@@ -545,7 +554,7 @@
     <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
     <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
     <string name="ID_NEXT">Next</string>
-    <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
+    <string name="ID_LETS_GET_STARTED">आएँ शुरू करें!</string>
 
     <string name="view_more">View More</string>
     <string name="followed_mentors">Followed Champions</string>
@@ -639,7 +648,17 @@
     <string name="male">I’m a Man</string>
     <string name="female">Yes, I’m a Woman</string>
     <string name="share_sheroes_app">Share sheroes app</string>
-    <string name="sheroes_msg">SHEROES is a platform only for women. Please declare that you are a woman before continuing.</string>
+    <string name="sheroes_msg"><![CDATA[ <html><head>
+                                                    <meta charset="UTF-8">
+                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+                                                    </head>
+                                                    <body>
+                                                    <div style="text-align: center;margin: 0px 0px 5px 0px;">
+                                                    <span style="color:#dc4541;"><b>SHEROES</b> केवल महिलाओं के लिए एक मंच है।</span>
+                                                    <span style="color:#3c3c3c;"> कृपया घोषणा करें कि आप जारी रखने से पहले एक महिला हैं।</span>
+                                                    </div>
+                                                    </body>
+                                                    </html> ]]></string>
     <string name="sheroes_gender_error">SHEROES is a women only platform. How about you share the SHEROES app with the women in your life?</string>
 
 
@@ -766,4 +785,12 @@
     <string name="follow_text">Follow</string>
     <string name="not_available">NA</string>
 
+    <!--Roboto fonts name for widgets-->
+    <string name="regular_font">regular</string>
+    <string name="medium_font">medium</string>
+    <string name="bold_font">bold</string>
+    <string name="light_font">light</string>
+
+    <string name="welcome">स्वागत हे</string>
+    <string name="hi">नमस्ते</string>
 </resources>

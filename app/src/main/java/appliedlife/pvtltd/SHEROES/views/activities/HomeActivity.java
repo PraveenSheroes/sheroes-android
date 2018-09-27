@@ -606,7 +606,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.li_article_spinner_icon)
     public void openSpinnerOnClick() {
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if mSelectLanguageDialog exist
         if (!AppUtils.isFragmentUIActive(fragment)) {
             mFlHomeFooterList.setVisibility(View.GONE);
             if (!StringUtil.isNotEmptyCollection(mArticleCategoryItemList) && !StringUtil.isNotEmptyCollection(mFragmentOpen.getArticleCategoryList())) {
@@ -1007,7 +1007,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 mArticleCategoryItemList.addAll(localList);
             }
 
-            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if fragment exist
+            Fragment fragment = getSupportFragmentManager().findFragmentByTag(ArticleCategorySpinnerFragment.class.getName()); //check if mSelectLanguageDialog exist
             if (AppUtils.isFragmentUIActive(fragment)) {
                 getSupportFragmentManager().popBackStackImmediate();
             }

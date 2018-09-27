@@ -2,22 +2,20 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-
-import javax.inject.Inject;
+import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
+import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -31,7 +29,8 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //endregion
 
     //region member variables
-
+    @Bind(R.id.tv_continue)
+    TextView tvContinue;
 
     //endregion
 
@@ -48,9 +47,7 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     }
 
     private void setNewLocale(String language) {
-        LocaleManager.setNewLocale(getActivity(), language);
-        CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
-        dismiss();
+        LocaleManager.setNewLocale(getActivity().getBaseContext(), language);
     }
 
     @Override
@@ -67,16 +64,22 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //region onclick methods
     @OnClick(R.id.tv_hindi)
     public void onHindiLanguageClick() {
+        tvContinue.setBackgroundResource(R.drawable.rectangle_boarding_active);
         setNewLocale(AppConstants.LANGUAGE_HINDI);
-        Intent i = new Intent(getActivity(), WelcomeActivity.class);
-        startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     @OnClick(R.id.tv_english)
     public void onEnglishLanguageClick() {
+        tvContinue.setBackgroundResource(R.drawable.rectangle_boarding_active);
         setNewLocale(AppConstants.LANGUAGE_ENGLISH);
-        Intent i = new Intent(getActivity(), WelcomeActivity.class);
-        startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+    }
+
+    @OnClick(R.id.tv_continue)
+    public void onContinueClick() {
+        if (getActivity() instanceof WelcomeActivity) {
+            ((WelcomeActivity) getActivity()).updateLangTextOnUi();
+        }
+        dismiss();
     }
 
     //endregion

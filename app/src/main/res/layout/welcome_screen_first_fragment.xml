@@ -16,7 +16,7 @@
         android:layout_marginRight="@dimen/dp_size_20"
         android:maxLines="@integer/int_value_for_line_2"
         android:textColor="@color/feed_article_label"
-        vernacular:customTextFontFamily="regular"
+        vernacular:customTextFontFamily="@string/regular_font"
         android:textAlignment="center" />
 
     <ImageView

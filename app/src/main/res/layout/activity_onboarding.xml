@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/tools"
     android:id="@+id/cl_boarding"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -33,36 +34,40 @@
                 android:background="@color/white"
                 android:fitsSystemWindows="true"
                 android:orientation="horizontal">
+
                 <ImageView
                     android:id="@+id/iv_boarding_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/on_boarding_girl_height"
                     android:layout_gravity="center|top"
                     android:src="@drawable/on_boarding_girl" />
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_size_18"
                     android:layout_marginRight="@dimen/dp_size_8"
+                    android:layout_marginTop="@dimen/dp_size_18"
                     android:orientation="vertical">
-                    <TextView
+
+                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                         android:id="@+id/tv_name_user"
+                        style="@style/TextView18spBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-                        android:textStyle="bold"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_18" />
-                    <TextView
+                        android:textStyle="bold"
+                        vernacular:customTextFontFamily="@string/medium_font" />
+
+                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                         android:id="@+id/tv_on_boarding_description"
+                        style="@style/TextView14spRegular"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp_size_8"
                         android:lineSpacingExtra="@dimen/dp_size_5"
                         android:text="@string/ID_BOARDING_COMMUNITIES"
-                        android:layout_marginTop="@dimen/dp_size_8"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_14" />
+                        vernacular:customTextFontFamily="@string/regular_font" />
                 </LinearLayout>
             </LinearLayout>
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.CustomCollapsingToolbarLayout>
@@ -86,21 +91,21 @@
         android:visibility="visible"
         app:cardElevation="@dimen/dp_size_40">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
             android:id="@+id/tv_on_boarding_finish"
+            style="@style/TextView14spBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@drawable/rectangle_boarding_active"
             android:drawablePadding="@dimen/dp_size_4"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="bottom|center_horizontal"
             android:paddingBottom="@dimen/dp_size_12"
             android:paddingTop="@dimen/dp_size_12"
             android:text="@string/ID_LETS_GET_STARTED"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </android.support.v7.widget.CardView>
 
 </android.support.design.widget.CoordinatorLayout>

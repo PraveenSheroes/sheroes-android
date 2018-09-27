@@ -142,4 +142,8 @@
     <declare-styleable name="CustomButtonFont">
         <attr name="customButtonFontFamily" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="CustomEditTextFont">
+        <attr name="customEditTextFontFamily" format="string" />
+    </declare-styleable>
 </resources>

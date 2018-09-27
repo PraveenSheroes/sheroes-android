@@ -535,7 +535,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    //Article fragment category id
+    //Article mSelectLanguageDialog category id
     private void homeActivityCallForArticleCategory(String articleCategoryUrl) {
         try {
             int articleCategoryId = articleCategoryUrl.lastIndexOf(AppConstants.BACK_SLASH);

@@ -21,7 +21,7 @@ public class LocaleManager {
         updateResources(c, language);
     }
 
-    private static String getLanguage(Context c) {
+    public static String getLanguage(Context c) {
         return CommonUtil.getPrefStringValue(LANGUAGE_KEY);
     }
 
@@ -32,16 +32,17 @@ public class LocaleManager {
     private static Context updateResources(Context context, String language) {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
-
         Resources res = context.getResources();
-        Configuration config = new Configuration(res.getConfiguration());
+        Configuration config = new Configuration();
+        /*Configuration config = new Configuration(res.getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            config.setLocale(locale);
-            context = context.createConfigurationContext(config);
+        config.setLocale(locale);
+        context = context.createConfigurationContext(config);
         } else {
-            config.locale = locale;
-            res.updateConfiguration(config, res.getDisplayMetrics());
-        }
+        config.locale = locale;
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        }*/
+        res.updateConfiguration(config, res.getDisplayMetrics());
         return context;
     }
 

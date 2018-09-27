@@ -137,7 +137,16 @@
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="BadgeCounter">+%1$d</string>
-    <string name="ID_BOARDING_COMMUNITIES">We are super happy that you joined SHEROES.\nHelp us personalize SHEROES for you by joining some communities of your interests.</string>
+    <string name="ID_BOARDING_COMMUNITIES"><![CDATA[ <html><head>
+                                                    <meta charset="UTF-8">
+                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+                                                    </head>
+                                                    <body>
+                                                    <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
+                                                    We are super happy that you joined SHEROES.Help us personalize SHEROES for you by joining some <span style="font-weight: bold"><b>communities</b></span> of your interests.
+                                                    </div>
+                                                    </body>
+                                                    </html> ]]></string>
     <string name="ID_OPEN">Open</string>
     <string name="ID_CLOSE_PRIVACY"> Close </string>
     <string name="ID_OPEN_MO">open</string>
@@ -638,7 +647,17 @@
     <string name="male">I’m a Man</string>
     <string name="female">Yes, I’m a Woman</string>
     <string name="share_sheroes_app">Share sheroes app</string>
-    <string name="sheroes_msg">SHEROES is a platform only for women. Please declare that you are a woman before continuing.</string>
+    <string name="sheroes_msg"><![CDATA[ <html><head>
+                                                    <meta charset="UTF-8">
+                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+                                                    </head>
+                                                    <body>
+                                                    <div style="text-align: center;margin: 0px 0px 5px 0px;">
+                                                    <span style="color:#dc4541;"><b>SHEROES</b> is a platform only for women.</span>
+                                                    <span style="color:#3c3c3c;"> Please declare that you are a woman before continuing.</span>
+                                                    </div>
+                                                    </body>
+                                                    </html>  ]]></string>
     <string name="sheroes_gender_error">SHEROES is a women only platform. How about you share the SHEROES app with the women in your life?</string>
 
 
@@ -764,5 +783,14 @@
     <string name="care_msg">Need help? care@sheroes.in</string>
     <string name="follow_text">Follow</string>
     <string name="not_available">NA</string>
+
+    <!--Roboto fonts name for widgets-->
+    <string name="regular_font">regular</string>
+    <string name="medium_font">medium</string>
+    <string name="bold_font">bold</string>
+    <string name="light_font">light</string>
+
+    <string name="welcome">Welcome</string>
+    <string name="hi">Hi</string>
 
 </resources>

@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
@@ -355,6 +356,8 @@ public interface SheroesAppComponent {
     void inject(UsersCollectionActivity usersCollectionActivity);
 
     void inject(UserGridFragment userGridFragment);
+
+    void inject(LanguageSelectionActivity languageSelectionActivity);
 }
 
 
