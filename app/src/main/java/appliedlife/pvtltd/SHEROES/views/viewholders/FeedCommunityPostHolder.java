@@ -203,7 +203,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.iv_post_link_thumbnail)
     ImageView ivLinkThumbnail;
     @Bind(R.id.li_post_link_render)
-    LinearLayout liViewLinkRender;
+    CardView liViewLinkRender;
     @Bind(R.id.tv_post_link_title)
     TextView tvLinkTitle;
     @Bind(R.id.tv_post_link_sub_title)
@@ -492,6 +492,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             if (mUserPostObj.isOgVideoLinkB()) {
                                 ivPlay.setVisibility(View.VISIBLE);
                                 tvSourceName.setVisibility(View.VISIBLE);
+
                             } else {
                                 ivPlay.setVisibility(View.GONE);
                                 tvSourceName.setVisibility(View.GONE);
