@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.accounts.Account;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.NotificationManager;
@@ -10,12 +9,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -60,7 +61,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Timer;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -78,7 +78,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
@@ -186,6 +185,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private boolean isBranchFirstSession = false;
     private String deepLinkUrl = null;
     private String defaultTab = null;
+    private ArrayList<Integer> mScreenNameList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -196,6 +196,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
+        if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
+            showSelectLanguageOption();
+        }
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError(getString(R.string.sheroes_gender_error), "");
         } else {
@@ -318,12 +321,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     private void setUpView() {
-        if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
-            showSelectLanguageOption();
-        }
         setContentView(R.layout.welcome_activity);
         ButterKnife.bind(WelcomeActivity.this);
         isFirstTimeUser = true;
+        initHomeViewPagerAndTabs();
         loginSetUp();
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
@@ -335,22 +336,39 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
         mLoginPresenter.getMasterDataToPresenter();
         mLoginPresenter.queryConfig();
-        mHandler = new Handler();
-        mRunnable = new Runnable() {
-            public void run() {
-                clWelcome.setVisibility(View.VISIBLE);
-            }
-        };
-        mHandler.postDelayed(mRunnable, 1000);
+        clWelcome.setVisibility(View.VISIBLE);
     }
 
     public void updateLangTextOnUi() {
-        initHomeViewPagerAndTabs();
         tvPermission.setText(R.string.ID_INFORMATION_WARNING);
         fbLogin.setText(R.string.ID_LOGIN_TEXT);
         btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
         tvOtherLoginOption.setText(R.string.login_with_email);
         tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
+        updateViewPagerUi(0);
+    }
+
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    private void updateViewPagerUi(int position) {
+        if (mViewPager == null) {
+            mViewPager = this.findViewById(R.id.welcome_view_pager);
+        }
+        View view = mViewPager.getChildAt(position);
+        ImageView imageView = view.findViewById(R.id.iv_welcome_screen);
+        TextView textView = view.findViewById(R.id.tv_welcome_text);
+
+        ArrayList<String> screenText = new ArrayList<>();
+        screenText.add(getString(R.string.ID_WELCOME_FIRST));
+        screenText.add(getString(R.string.ID_WELCOME_SECOND));
+        screenText.add(getString(R.string.ID_WELCOME_THIRD));
+        int screen = mScreenNameList.get(position);
+        String text = screenText.get(position);
+        imageView.setImageResource(screen);
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            textView.setText(Html.fromHtml(text, 0)); // for 24 api and more
+        } else {
+            textView.setText(Html.fromHtml(text));// or for older api
+        }
     }
 
     private void loginSetUp() {
@@ -467,16 +485,15 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void initHomeViewPagerAndTabs() {
-        ArrayList<Integer> screenNameList = new ArrayList<>();
-        screenNameList.add(R.drawable.welcome_first);
-        screenNameList.add(R.drawable.welcome_second);
-        screenNameList.add(R.drawable.welcome_third);
+        mScreenNameList.add(R.drawable.welcome_first);
+        mScreenNameList.add(R.drawable.welcome_second);
+        mScreenNameList.add(R.drawable.welcome_third);
         ArrayList<String> screenText = new ArrayList<>();
         screenText.add(getString(R.string.ID_WELCOME_FIRST));
         screenText.add(getString(R.string.ID_WELCOME_SECOND));
         screenText.add(getString(R.string.ID_WELCOME_THIRD));
 
-        SheroesWelcomeViewPagerAdapter viewPagerAdapter = new SheroesWelcomeViewPagerAdapter(screenNameList, this, screenText);
+        SheroesWelcomeViewPagerAdapter viewPagerAdapter = new SheroesWelcomeViewPagerAdapter(mScreenNameList, this);
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.addOnPageChangeListener(WelcomeActivity.this);
         ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
@@ -546,7 +563,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
     }
 
     /**
@@ -557,6 +573,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      */
     @Override
     public void onPageSelected(int position) {
+        updateViewPagerUi(position);
         switch (position) {
             case AppConstants.NO_REACTION_CONSTANT:
                 ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
