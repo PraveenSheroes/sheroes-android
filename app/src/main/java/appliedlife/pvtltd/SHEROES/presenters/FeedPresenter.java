@@ -1,6 +1,8 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
+import android.util.Log;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
@@ -18,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
@@ -40,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -48,7 +52,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
@@ -1196,9 +1199,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-
-
-    /*public void sendImpressionData(final UserEvent userEvent) {
+    public void sendImpressionData(final UserEventsContainer userEventsContainer) {
 
     Log.i("Impression hit", "Called");
     if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -1206,7 +1207,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         return;
     }
     getMvpView().startProgressBar();
-    mSheroesAppServiceApi.updateImpressionData(userEvent)
+    mSheroesAppServiceApi.updateImpressionData(userEventsContainer)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .compose(this.<BaseResponse>bindToLifecycle())
@@ -1227,10 +1228,11 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 public void onNext(BaseResponse baseResponse) {
                     getMvpView().stopProgressBar();
                     if (null != baseResponse) {
-                       getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
+                        Log.i("Impression" , "responseee");
+                      // getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
                     }
                 }
             });
-}*/
+}
 
 }

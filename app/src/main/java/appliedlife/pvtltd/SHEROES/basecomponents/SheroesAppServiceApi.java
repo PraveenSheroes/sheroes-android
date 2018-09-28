@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
@@ -375,5 +376,5 @@ public interface SheroesAppServiceApi {
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 
     @POST("http://testevents.sheroes.in/user/event/producer")
-    Observable<BaseResponse> updateImpressionData(@Body UserEvent userEvent);
+    Observable<BaseResponse> updateImpressionData(@Body UserEventsContainer userEventsContainer);
 }

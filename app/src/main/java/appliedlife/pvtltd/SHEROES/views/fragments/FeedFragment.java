@@ -81,12 +81,15 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.TrackingData;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEvent;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -157,11 +160,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private  int endViewId = -1;
 
     // ArrayList of view ids that are being considered for tracking.
-    private ArrayList<TrackingData> currentQueueViewed = new ArrayList<>();
-    private ArrayList<TrackingData> previousViewed = new ArrayList<>();
-    private ArrayList<TrackingData> finalViewData = new ArrayList<>();
+    private ArrayList<Integer> currentViewed = new ArrayList<>();
+    private ArrayList<Integer> previousViewed = new ArrayList<>();
+    private static ArrayList<TrackingData> finalViewData = new ArrayList<>();
     OneMinuteCountDownTimer countDownTimer;
-
 
     @Inject
     AppUtils mAppUtils;
@@ -390,7 +392,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onImpressionResponse(boolean isSuccessFul) {
-        Log.i("Impression hit Response", "Called");
+        Log.i("Impression", "tracking response");
     }
 
     @Override
@@ -597,28 +599,20 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                //finalViewData.clear();
-
-// if(!isSameView(linearLayoutManager.findFirstVisibleItemPosition(),  linearLayoutManager.findLastVisibleItemPosition())) {
+                //Scroll view visibility and duration
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
 
                 if(!isSameView(startPos, endPos)) {
+
+                    startViewId = startPos;
+                    endViewId = endPos;
+
                     analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
 
-                    // if(viewPos == -1) return;
-    /*if(mRemoveItem == null)  return;
-    ArrayList<TrackingData> clonedList = new ArrayList<>(mRemoveItem);*/
-                    final VisibleState visibleStateFinal = new VisibleState(finalViewData);
+                    final VisibleState visibleStateFinal = new VisibleState(startViewId, endViewId,finalViewData);
                     SheroesBus.getInstance().post(visibleStateFinal);
                 }
-//  }
-
-//removed the item which have end times TODO
-
-
-//  viewsViewed.clear();
-
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -1056,13 +1050,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onResume() {
         super.onResume();
 
-        if(isActiveTabFragment) {
+        //Uncomment for network hit
+       /* if(isActiveTabFragment) {
             if(countDownTimer!=null) {
                 countDownTimer.cancel();
             }
-            countDownTimer = new OneMinuteCountDownTimer(50000, 45000);
+            countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
             countDownTimer.start();
-        }
+        }*/
 
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
@@ -2118,144 +2113,76 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    public static class VisibleState {
-        //final int firstCompletelyVisible;
-        // final int lastCompletelyVisible;
+    public class VisibleState {
         private List<TrackingData> viewIds= null;
 
-        public VisibleState(List<TrackingData> views) {
+        int firstPosition;
+        int lastPosition;
+
+        private VisibleState(int firstPos, int lastPos, List<TrackingData> views) {
+            firstPosition = firstPos;
+            lastPosition = lastPos;
             viewIds = views;
-            // this.firstCompletelyVisible = firstCompletelyVisible;
-            //this.lastCompletelyVisible = lastCompletelyVisible;
         }
 
-        public List<TrackingData> getViewIds() {
+        private List<TrackingData> getViewIds() {
             return viewIds;
         }
-
-        /*@Override
+        
+        @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
             VisibleState that = (VisibleState) o;
 
-            if (firstCompletelyVisible != that.firstCompletelyVisible) return false;
-            return lastCompletelyVisible == that.lastCompletelyVisible;
+            return this.firstPosition == that.firstPosition
+                    && this.lastPosition == that.lastPosition;
 
         }
 
         @Override
         public int hashCode() {
-            int result = firstCompletelyVisible;
-            result = 31 * result + lastCompletelyVisible;
+            int result = firstPosition;
+            result = 31 * result + lastPosition;
             return result;
-        }*/
-
-        @Override
-        public String toString() {
-            return "VisibleState{" +
-                    //  "first=" + firstCompletelyVisible +
-                    //", last=" + lastCompletelyVisible +
-                    '}';
         }
     }
 
     private void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
-
-        startViewId = firstVisibleItemPosition;
-        endViewId = lastVisibleItemPosition;
-
         // Analyze all the views
         for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
             TrackingData trackingData = new TrackingData();
-            //  Log.i("View being considered", String.valueOf(viewPosition));
-            // Get the view from its position.
             View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
             if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
-                //check if exist
-                //Log.i("Adding ", " shown view"+viewPosition);
-
-                // endViewId  = lastVisibleItemPosition;
                 trackingData.setStartTime(System.currentTimeMillis());
                 trackingData.setViewId(viewPosition);
-                currentQueueViewed.add(trackingData);
+                currentViewed.add(viewPosition); //Add to current list with start time
 
                 int indexInFinalList = checkIfItemInFinal(viewPosition);
-                if (indexInFinalList == -1) {
-                    //finalViewData.add(indexInFinalList, trackingData);
+                if (indexInFinalList == -1) { //new item add it in final list
                     finalViewData.add(trackingData);
-                } else {
-                    //todo - watch below aDDING WHEN RETURN TRUE THT ITEM EXIST UPDATE ITS TIME
-                    //finalViewData.get(viewPosition).setmEndTime(System.currentTimeMillis());
-                    //trackingData.setmEndTime(System.currentTimeMillis());
-                    //finalViewData.add(indexInFinalList, trackingData);
-                    Log.i("Ravi", "There in final list*******");
+                    Log.d("@@@@New Item", "::"+viewPosition);
                 }
-                // return viewPosition;
             }
 
-            if (previousViewed.size() > 0) {
+            if (previousViewed.size() > 0) { //Compare if any item was present , now not in the list
                 for (int i = 0; i < previousViewed.size(); i++) {
-                    TrackingData trackingData1 = previousViewed.get(i);
-                    if (!checkIfItemInCurrent(trackingData1.getViewId())) { //TODO - chk case of scroll up nd down
-                        updateEndTimeIfItemNotExist(trackingData1.getViewId());
+                    if (!checkIfItemInCurrent(previousViewed.get(i))) { //TODO - chk case of scroll up nd down
+                        updateEndTimeIfItemNotExist(previousViewed.get(i));
+                    } else {
+                        Log.i("Still visibile", "In current");
+                        //trackingData1.setmEndTime(System.currentTimeMillis());
+                        //finalViewData.add(i, trackingData1);
                     }
                 }
                 previousViewed.clear();
             }
-
-       /* if(currentQueueViewed.size()>0) {
-            for (int i = 0; i < currentQueueViewed.size(); i++) {
-                TrackingData trackingData1 = currentQueueViewed.get(i);
-                if(checkIfItemInFinal(trackingData1.getViewId())) {
-
-                    //add it in list
-                  //  if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
-                        //check if exist
-                        Log.i("Adding ", " shown view"+viewPosition);
-                        endViewId  = lastVisibleItemPosition;
-                        trackingData.setStartTime(System.currentTimeMillis());
-                        trackingData.setViewId(viewPosition);
-                        currentQueueViewed.add(trackingData);
-
-                        finalViewData.add(trackingData);
-                        // return viewPosition;
-                 //   }
-
-
-                }
-            }
-           // previousViewed.clear();
-        } */
-
-
-        /*else {
-            if(currentQueueViewed.size()>0 ) {// && !isSameView(firstVisibleItemPosition, lastVisibleItemPosition)
-
-                ListIterator<TrackingData> iter = currentQueueViewed.listIterator();
-                while(iter.hasNext()){
-                    TrackingData trackingData1 = iter.next();
-                    if (trackingData1.getViewId().equalsIgnoreCase(String.valueOf(viewPosition))) {
-                        trackingData1.setmEndTime(System.currentTimeMillis());
-                        Log.i("Adding in remove item", trackingData1.getViewId()+"End time+++++++++++++++++++++");
-                        mRemoveItem.add(trackingData1);
-                        Log.i("Removing from viewed", trackingData1.getViewId()+"End time+++++++++++++++++++++");
-                        //viewsViewed.remove(trackingData1);
-                        iter.remove();
-                    }
-                }
-            }
-        }*/
         }
-
-        previousViewed.addAll(currentQueueViewed);
-        currentQueueViewed.clear();
-
+        previousViewed.addAll(currentViewed);
+        currentViewed.clear();
     }
-
-
 
     public class OneMinuteCountDownTimer extends CountDownTimer {
 
@@ -2267,8 +2194,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         public void onFinish() {
             Log.i("Time Expired", "50 sec");
 
-            // hitNetworkCall();
-
+            hitNetworkCall();
             start();
         }
 
@@ -2279,27 +2205,32 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void hitNetworkCall() {
 
-        UserEvent userEvent = new UserEvent();
-        for(int i=0; i<finalViewData.size() ; i++) {
+        UserEventsContainer userEventsContainer = new UserEventsContainer();
+        List<UserEvent> userEventList = new ArrayList<>();
+        for(int i=0; i<1 ; i++) {
             TrackingData trackingData = finalViewData.get(i);
 
-            userEvent.setTimestamp(""+trackingData.getViewDuration());
-            userEvent.setEvent("Vi");
-            userEvent.setClientId(""+mLoggedInUser);
-            userEvent.setPosition(""+trackingData.getViewId());
+            UserEvent userEvent = new UserEvent();
+            userEvent.setUserId("abc");
+            userEvent.setTimestamp(1536100000);
+            userEvent.setEvent("vi");
+            //userEvent.setClientId(""+mLoggedInUser);
+           // userEvent.setPosition(""+trackingData.getViewId());
             userEvent.setAppVersion(mAppUtils.getAppVersionName());
-            userEvent.setGtid(mAppUtils.getDeviceId());
-
-            // mFeedPresenter.sendImpressionData(userEvent);
+            userEvent.setPostId(""+trackingData.getPostId());
+            userEvent.setPostType("article");
+            userEvent.setSourceURL("https://sheroes.com/articles/founder-arranged-gay-marriage/ODgwOQ==");
+            //userEvent.setGtid(mAppUtils.getDeviceId());
+            userEventList.add(userEvent);
         }
+        userEventsContainer.setUserEvent(userEventList);
+        mFeedPresenter.sendImpressionData(userEventsContainer);
 
     }
-
 
     @Override
     public void onStart() {
         super.onStart();
-        //doSomeWork();
 
         SheroesBus.getInstance().register(this).add(SheroesBus.getInstance().toObserveable().
                 distinctUntilChanged()
@@ -2307,7 +2238,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     @Override
                     public void accept(Object event) {
                         if(event instanceof VisibleState){
-                            //  mRemoveItem.clear();
 
                             VisibleState visibleState = (VisibleState) event;
                             List<TrackingData> views = visibleState.getViewIds();
@@ -2319,29 +2249,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                                 Log.d("######", "Id> " + views.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
                             }
                             Log.i("######", "#############################");
+
                         }
                     }
                 }));
     }
 
-    private int checkIfItemInFinal(int id) { //todo - it return true if already item ther , fix it
+    //Check if item is there in final list
+    private int checkIfItemInFinal(int id) {
         int index = -1;
         for (int i = 0; i < finalViewData.size(); i++) {
             TrackingData trackingData = finalViewData.get(i);
-            if (trackingData.getViewId() == id) {
-                // return true;
-                index = i;
-                break; //todo - rechk it
+            if (trackingData.getViewId() == id) { //trackingData.getmEndTime() == -1 &&
+               index = i;
+               break;
             }
         }
         return index;
     }
 
-
-    private boolean checkIfItemInCurrent(int id) {
-        for (int i = 0; i < currentQueueViewed.size(); i++) {
-            TrackingData trackingData = currentQueueViewed.get(i);
-            if (trackingData.getViewId() == id) {
+    //Check if item is there in current visible item list
+    private boolean checkIfItemInCurrent(int itemPosition) {
+        for (int i = 0; i < currentViewed.size(); i++) {
+            int viewPosition = currentViewed.get(i);
+            if (viewPosition == itemPosition) {
                 return true;
             }
         }
@@ -2349,22 +2280,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private void updateEndTimeIfItemNotExist(int id) {
-        //boolean newItem = true;
         for (int i = 0; i < finalViewData.size(); i++) {
             TrackingData trackingData1 = finalViewData.get(i);
             if (trackingData1.getmEndTime() == -1 && trackingData1.getViewId() == id) {
-                //  newItem = false;
                 Log.i("Updating", "End time" + id);
                 trackingData1.setmEndTime(System.currentTimeMillis());
                 finalViewData.add(i, trackingData1);
             }
         }
-        //  return newItem;
     }
 
     private boolean isSameView(int start , int endId) {
         return  (start == startViewId && endId == endViewId);
     }
+
+
     // (i.e. within the screen) wrt the view height.
 // @param view
 // @return Percentage of the height visible.
@@ -2377,15 +2307,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         double visibleHeight = itemRect.height();
         double height = view.getMeasuredHeight();
 
-        //Log.i("Visible Height", String.valueOf(visibleHeight));
-        //Log.i("Measured Height", String.valueOf(height));
-
         return ((visibleHeight / height) * 100);
-
-        //Log.i("Percentage visible", String.valueOf(viewVisibleHeightPercentage));
-        //Log.i("___", "___");
-
-        //return viewVisibleHeightPercentage;
     }
 
 }
