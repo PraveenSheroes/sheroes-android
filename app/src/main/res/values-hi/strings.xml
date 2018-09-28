@@ -137,10 +137,7 @@
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="BadgeCounter">+%1$d</string>
-    <string name="ID_BOARDING_COMMUNITIES"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_BOARDING_COMMUNITIES"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     हम बहुत खुश हैं कि आप SHEROES में शामिल हो गए। हमें आपकी रुचियों के कुछ <span style="font-weight: bold"><b>समुदायों</b></span> में शामिल होने के लिए SHEROES को निजीकृत करने में सहायता करें।
@@ -216,20 +213,14 @@
     <string name="ID_FACEBOOK_LONGING">LOGGING IN&#8230;</string>
     <string name="ID_INFORMATION_WARNING">हम आपकी जानकारी किसी के साथ शेयर नहीं करते हैं।</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(केवल मौजूदा उपयोगकर्ताओं के लिए)</string>
-    <string name="ID_WELCOME_FIRST"> <![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_WELCOME_FIRST"> <![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     <span style="font-weight: bold"><b>स्वास्थ्य, करियर, रिश्तों </b></span> और अधिक के बारे में चर्चा करें और प्रश्न पूछें&#8230;
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
-    <string name="ID_WELCOME_SECOND"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_WELCOME_SECOND"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     अपने <span style="font-weight: bold"><b>पसंदीदा समुदायों</b></span> में शामिल हों और
@@ -237,10 +228,7 @@
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
-    <string name="ID_WELCOME_THIRD"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_WELCOME_THIRD"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     <span style="font-weight: bold"><b>चैंपियन से विशेषज्ञ सलाह</b></span> प्राप्‍त करें - समुदाय के भीतर से प्राप्तकर्ता
@@ -645,14 +633,10 @@
     <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
     <string name="reactivate_your_account">To reactivate your account write to us</string>
     <string name="care_sheroes">care@sheroes.in</string>
-    <string name="male">I’m a Man</string>
-    <string name="female">Yes, I’m a Woman</string>
+    <string name="male">मैं एक आदमी हूँ</string>
+    <string name="female">हाँ, मैं एक महिला हूँ</string>
     <string name="share_sheroes_app">Share sheroes app</string>
-    <string name="sheroes_msg"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
-                                                    <body>
+    <string name="sheroes_msg"><![CDATA[ <html> <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px;">
                                                     <span style="color:#dc4541;"><b>SHEROES</b> केवल महिलाओं के लिए एक मंच है।</span>
                                                     <span style="color:#3c3c3c;"> कृपया घोषणा करें कि आप जारी रखने से पहले एक महिला हैं।</span>
@@ -781,7 +765,13 @@
     <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
     <string name="poll_text_option">(%1$d char)</string>
     <string name="challenge">Challenge</string>
-    <string name="care_msg">Need help? care@sheroes.in</string>
+    <string name="care_msg"><![CDATA[ <html>
+                                            <body>
+                                            <div style="text-align: center;margin: 0px 0px 5px 0px;">
+                                             मदद चाहिए? <span style="color:#2793e7;">care@sheroes.in</span>
+                                            </div>
+                                            </body>
+                                            </html> ]]></string>
     <string name="follow_text">Follow</string>
     <string name="not_available">NA</string>
 

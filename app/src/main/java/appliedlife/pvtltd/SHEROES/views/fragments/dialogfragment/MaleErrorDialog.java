@@ -96,15 +96,15 @@ public class MaleErrorDialog extends BaseDialogFragment {
             } else {
                 tvDescriptionMaleError.setText(Html.fromHtml(mErrorText));// or for older api
             }
+            String msg = getString(R.string.care_msg);
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvCareId.setText(Html.fromHtml(msg, 0)); // for 24 api and more
+            } else {
+                tvCareId.setText(Html.fromHtml(msg));// or for older api
+            }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        String msg = getString(R.string.care_msg);
-        SpannableString spannableString = new SpannableString(msg);
-        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.view_more)), 11, msg.length(), 0);
-        tvCareId.setMovementMethod(LinkMovementMethod.getInstance());
-        tvCareId.setText(spannableString, TextView.BufferType.SPANNABLE);
-        tvCareId.setSelected(true);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
         CommonUtil.setPrefValue(AppConstants.MALE_ERROR_SHARE_PREF);

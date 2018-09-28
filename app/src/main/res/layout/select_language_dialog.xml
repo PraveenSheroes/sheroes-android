@@ -1,76 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_english"
-        android:layout_width="103dp"
-        android:layout_height="103dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/vector_circle_red"
-        android:fontFamily="@font/noto_sans_bold"
-        android:gravity="center_horizontal|center"
-        android:letterSpacing="0.04"
-        android:text="English"
-        android:textColor="@color/white"
-        android:textSize="16sp"
+        android:id="@+id/tv_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/lang_header_top_margin"
+        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:text="@string/select_your_preferred_language"
+        android:textColor="@color/comment_text"
+        android:textSize="@dimen/language_header"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_hindi"
-        android:layout_width="103dp"
-        android:layout_height="103dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/vector_circle_red"
-        android:fontFamily="@font/noto_sans_bold"
-        android:gravity="center_horizontal|center"
-        android:letterSpacing="0.04"
-        android:text="हिन्दी"
-        android:textColor="@color/white"
-        android:textSize="16sp"
+    <FrameLayout
+        android:id="@+id/tv_english"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/lang_selector_left_margin"
+        android:layout_marginLeft="@dimen/lang_selector_left_margin"
+        android:layout_marginRight="@dimen/lang_selector_right_margin"
+        android:layout_marginStart="@dimen/lang_selector_right_margin"
+        android:layout_marginTop="@dimen/lang_eng_top_margin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_english" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_header">
+
+        <TextView
+            android:layout_width="310dp"
+            android:layout_height="62dp"
+            android:layout_marginRight="@dimen/lang_bg_right_margin"
+            android:layout_marginTop="@dimen/lang_bg_top_margin"
+            android:background="@drawable/lang_eng" />
+
+        <ImageView
+            android:id="@+id/iv_lang_eng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_gravity="top|right"
+            android:background="@drawable/vector_tick" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/tv_hindi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/lang_selector_left_margin"
+        android:layout_marginLeft="@dimen/lang_selector_left_margin"
+        android:layout_marginRight="@dimen/lang_selector_right_margin"
+        android:layout_marginStart="@dimen/lang_selector_right_margin"
+        android:layout_marginTop="@dimen/lang_hind_top_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_english">
+
+        <TextView
+            android:layout_width="310dp"
+            android:layout_height="62dp"
+            android:layout_marginRight="@dimen/lang_bg_right_margin"
+            android:layout_marginTop="@dimen/lang_bg_top_margin"
+            android:background="@drawable/lang_hind" />
+
+        <ImageView
+            android:id="@+id/iv_lang_hind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:visibility="gone"
+            android:background="@drawable/vector_tick" />
+    </FrameLayout>
 
     <TextView
         android:id="@+id/tv_continue"
+        style="@style/TextView14spMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/rectangle_gender_form_btn_deactive"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+        android:background="@drawable/rectangle_grey"
         android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingLeft="40dp"
-        android:paddingRight="40dp"
-        android:paddingTop="10dp"
-        android:text="Continue"
+        android:paddingBottom="@dimen/lang_continue_top_bottom_padding"
+        android:paddingLeft="@dimen/lang_continue_left_right_padding"
+        android:paddingRight="@dimen/lang_continue_left_right_padding"
+        android:paddingTop="@dimen/lang_continue_top_bottom_padding"
+        android:text="@string/lang_continue"
         android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="@dimen/sp_size_14"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.728" />
+        app:layout_constraintVertical_bias="0.655" />
 
 </android.support.constraint.ConstraintLayout>

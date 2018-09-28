@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -31,6 +32,11 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //region member variables
     @Bind(R.id.tv_continue)
     TextView tvContinue;
+    @Bind(R.id.iv_lang_hind)
+    ImageView ivLangHind;
+    @Bind(R.id.iv_lang_eng)
+    ImageView ivLangEng;
+
 
     //endregion
 
@@ -64,12 +70,16 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //region onclick methods
     @OnClick(R.id.tv_hindi)
     public void onHindiLanguageClick() {
+        ivLangHind.setVisibility(View.VISIBLE);
+        ivLangEng.setVisibility(View.GONE);
         tvContinue.setBackgroundResource(R.drawable.rectangle_boarding_active);
         setNewLocale(AppConstants.LANGUAGE_HINDI);
     }
 
     @OnClick(R.id.tv_english)
     public void onEnglishLanguageClick() {
+        ivLangEng.setVisibility(View.VISIBLE);
+        ivLangHind.setVisibility(View.GONE);
         tvContinue.setBackgroundResource(R.drawable.rectangle_boarding_active);
         setNewLocale(AppConstants.LANGUAGE_ENGLISH);
     }

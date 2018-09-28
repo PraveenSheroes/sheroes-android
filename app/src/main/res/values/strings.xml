@@ -137,10 +137,7 @@
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="BadgeCounter">+%1$d</string>
-    <string name="ID_BOARDING_COMMUNITIES"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_BOARDING_COMMUNITIES"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     We are super happy that you joined SHEROES.Help us personalize SHEROES for you by joining some <span style="font-weight: bold"><b>communities</b></span> of your interests.
@@ -216,30 +213,21 @@
     <string name="ID_FACEBOOK_LONGING">LOGGING IN&#8230;</string>
     <string name="ID_INFORMATION_WARNING">We\'ll never post without your permission!</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(Only for existing users)</string>
-    <string name="ID_WELCOME_FIRST"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_WELCOME_FIRST"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     Ask questions and discuss about <span style="font-weight: bold"><b>health, career, relationships</b></span> and more&#8230
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
-    <string name="ID_WELCOME_SECOND"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_WELCOME_SECOND"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     Join <span style="font-weight: bold"><b>Communities you like</b></span> and talk to other women even anonymously
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
-    <string name="ID_WELCOME_THIRD"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
+    <string name="ID_WELCOME_THIRD"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
                                                     <span style="font-weight: bold"><b>Get expert advice</b></span> from champions -  achievers from within the community
@@ -647,11 +635,7 @@
     <string name="male">I’m a Man</string>
     <string name="female">Yes, I’m a Woman</string>
     <string name="share_sheroes_app">Share sheroes app</string>
-    <string name="sheroes_msg"><![CDATA[ <html><head>
-                                                    <meta charset="UTF-8">
-                                                    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
-                                                    </head>
-                                                    <body>
+    <string name="sheroes_msg"><![CDATA[ <html><body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px;">
                                                     <span style="color:#dc4541;"><b>SHEROES</b> is a platform only for women.</span>
                                                     <span style="color:#3c3c3c;"> Please declare that you are a woman before continuing.</span>
@@ -780,7 +764,13 @@
     <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
     <string name="poll_text_option">(%1$d char)</string>
     <string name="challenge">Challenge</string>
-    <string name="care_msg">Need help? care@sheroes.in</string>
+    <string name="care_msg"><![CDATA[ <html>
+                                            <body>
+                                            <div style="text-align: center;margin: 0px 0px 5px 0px;">
+                                             Need help? <span style="color:#2793e7;">care@sheroes.in</span>
+                                            </div>
+                                            </body>
+                                            </html> ]]></string>
     <string name="follow_text">Follow</string>
     <string name="not_available">NA</string>
 
@@ -792,5 +782,7 @@
 
     <string name="welcome">Welcome</string>
     <string name="hi">Hi</string>
+    <string name="select_your_preferred_language">Select your Preferred Language</string>
+    <string name="lang_continue">Continue</string>
 
 </resources>

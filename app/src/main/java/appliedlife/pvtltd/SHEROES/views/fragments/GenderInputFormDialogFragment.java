@@ -136,7 +136,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         if (isMaleSelected) {
             gender = "Male";
             String description = getString(R.string.sheroes_gender_error);
-            ((WelcomeActivity) getActivity()).showMaleError(description, mUserName);
+            ((WelcomeActivity) getActivity()).showMaleError(mUserName);
             dismiss();
         } else {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {

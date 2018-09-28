@@ -200,7 +200,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             showSelectLanguageOption();
         }
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
-            showMaleError(getString(R.string.sheroes_gender_error), "");
+            showMaleError("");
         } else {
             checkAuthTokenExpireOrNot();
         }
@@ -340,10 +340,25 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     public void updateLangTextOnUi() {
+        if (tvPermission == null) {
+            tvPermission = this.findViewById(R.id.tv_permission);
+        }
         tvPermission.setText(R.string.ID_INFORMATION_WARNING);
+        if (fbLogin == null) {
+            fbLogin = this.findViewById(R.id.click_to_join_fb_signup);
+        }
         fbLogin.setText(R.string.ID_LOGIN_TEXT);
+        if (btnGoogleLogin == null) {
+            btnGoogleLogin = this.findViewById(R.id.btn_login_google);
+        }
         btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
+        if (tvOtherLoginOption == null) {
+            tvOtherLoginOption = this.findViewById(R.id.tv_other_login_option);
+        }
         tvOtherLoginOption.setText(R.string.login_with_email);
+        if (tvUserMsg == null) {
+            tvUserMsg = this.findViewById(R.id.tv_user_msg);
+        }
         tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
         updateViewPagerUi(0);
     }
@@ -620,12 +635,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    public void showMaleError(String message, String userName) {
+    public void showMaleError(String userName) {
         MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
         if (fragment == null) {
             fragment = new MaleErrorDialog();
             Bundle b = new Bundle();
-            b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
             b.putString(BaseDialogFragment.USER_NAME, userName);
             b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
             fragment.setArguments(b);
@@ -919,7 +933,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             mUserPreference.delete();
                             LoginManager.getInstance().logOut();
                             signOut();
-                            showMaleError(AppConstants.EMPTY_STRING, "");
+                            showMaleError("");
                         }
                         break;
                     case AppConstants.INVALID:
@@ -935,11 +949,11 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                             if (StringUtil.isNotNullOrEmptyString(deactivated) && deactivated.equalsIgnoreCase("true")) {
                                 showErrorDialogOnUserAction(true, false, errorMessage, "true");
                             } else {
-                                showMaleError(errorMessage, "");
+                                showMaleError("");
                             }
                         } else {
                             errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
-                            showMaleError(errorMessage, "");
+                            showMaleError("");
                         }
                         break;
                 }
