@@ -55,8 +55,8 @@
                     android:id="@+id/rv_right_drawer_community_detail"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="@dimen/dp_size_24" />
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginRight="@dimen/dp_size_8" />
             </FrameLayout>
         </RelativeLayout>
 
