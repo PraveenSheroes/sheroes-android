@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -92,6 +93,7 @@ public class FCMClientManager {
                     // Require the user to click a button again, or perform
                     // exponential back-off.
                     handler.onFailure("Error :" + ex.getMessage());
+                    Crashlytics.getInstance().core.logException(ex);
                 }
                 return regid;
             }

@@ -67,26 +67,28 @@ public class PushNotificationService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
-        String from = message.getFrom();
-        Bundle data = new Bundle();
+        if (message != null) {
+            String from = message.getFrom();
+            Bundle data = new Bundle();
 
-        if (message.getData().size() > 0) {
-            for (Map.Entry<String, String> entry : message.getData().entrySet()) {
-                data.putString(entry.getKey(), entry.getValue());
+            if (message.getData().size() > 0) {
+                for (Map.Entry<String, String> entry : message.getData().entrySet()) {
+                    data.putString(entry.getKey(), entry.getValue());
+                }
             }
-        }
 
-        SheroesApplication.getAppComponent(this).inject(this);
-        if (null == data) return;
+            SheroesApplication.getAppComponent(this).inject(this);
+            if (null == data) return;
 
-        String isCleverTapNotification = data.getString(AppConstants.CLEVER_TAP_IS_PRESENT);
-        if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
-            handleCleverTapNotification(data);
-        } else {
-            if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
-                handleMoEngageNotification(data);
+            String isCleverTapNotification = data.getString(AppConstants.CLEVER_TAP_IS_PRESENT);
+            if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
+                handleCleverTapNotification(data);
             } else {
-                handleOtherNotification(from, data);
+                if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
+                    handleMoEngageNotification(data);
+                } else {
+                    handleOtherNotification(from, data);
+                }
             }
         }
     }
