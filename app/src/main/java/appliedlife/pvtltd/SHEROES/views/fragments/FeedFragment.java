@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,6 +65,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
+import appliedlife.pvtltd.SHEROES.datamanger.AppDatabase;
+import appliedlife.pvtltd.SHEROES.datamanger.ImpressionData;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
@@ -81,7 +84,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.TrackingData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEvent;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -147,6 +149,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private static final int HIDE_THRESHOLD = 20;
     private static final int THRESHOLD_MS = 250;
     private static final int minimumVisibleHeightThreshold = 50;
+    private static boolean isDirty = false;
 
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
@@ -158,11 +161,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private int startViewId = -1;
     private  int endViewId = -1;
+    int lastPosition = -1;
+    boolean lastDirectionDown = true;
+    boolean scrollDirectionChange = false;
+    private boolean isbottomScroll, istopScroll;
 
     // ArrayList of view ids that are being considered for tracking.
     private ArrayList<Integer> currentViewed = new ArrayList<>();
     private ArrayList<Integer> previousViewed = new ArrayList<>();
-    private static ArrayList<TrackingData> finalViewData = new ArrayList<>();
+    private ArrayList<ImpressionData> finalViewData = new ArrayList<>();
     OneMinuteCountDownTimer countDownTimer;
 
     @Inject
@@ -595,24 +602,61 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void setupRecyclerScrollListener() {
         mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
+                    // Do something
+                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    //Scroll view visibility and duration
+                    int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+
+                    if(lastPosition == startPos) {
+                        return;
+                    }
+
+
+                  /*  if(startPos > lastPosition) {
+                       // isbottomScroll = true;
+                        istopScroll = false;
+                    }
+                    else {
+                       // isbottomScroll = false;
+                        istopScroll = true;
+                    }*/
+
+                    if(startPos < lastPosition) {
+                        istopScroll = true;
+                    } else {
+                        istopScroll  = false;
+                    }
+
+                    lastPosition = startPos;
+                    scrollDirectionChange = lastDirectionDown != istopScroll;
+                    lastDirectionDown = istopScroll;
+
+
+                    if (!isStartEndSame(startPos, endPos) && !isSameView(startPos, endPos)) {
+                        isDirty = true;
+
+                        startViewId = startPos;
+                        endViewId = endPos;
+
+                        analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
+                    }
+                    // Do something
+                } else {
+                    // Do something
+                }
+            }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
-                //Scroll view visibility and duration
-                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
-                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-
-                if(!isSameView(startPos, endPos)) {
-
-                    startViewId = startPos;
-                    endViewId = endPos;
-
-                    analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
-
-                    final VisibleState visibleStateFinal = new VisibleState(startViewId, endViewId,finalViewData);
-                    SheroesBus.getInstance().post(visibleStateFinal);
-                }
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -653,6 +697,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
+    }
+
+    private void addToDatabase(final List<ImpressionData> impressionData) {
+        final AppDatabase database = AppDatabase.getAppDatabase(getContext());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                database.impressionDataDao().insert(impressionData);
+
+                finalViewData.clear();
+            }
+        }) .start();
+    }
+
+
+    private void getImpressionDatabase() {
+        final AppDatabase database = AppDatabase.getAppDatabase(getContext());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+               List<ImpressionData> impressionData =  database.impressionDataDao().getAll();
+            }
+        }) .start();
+
     }
 
     private void setIsLoggedInUser() {
@@ -1067,6 +1135,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onPause() {
         super.onPause();
+
+        getImpressionDatabase();
+
+
+        Log.i("feed", finalViewData.toString());
+        finalViewData.clear();
+
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
         }
@@ -1991,6 +2066,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+    private FeedDetail getListItem(int index) {
+        if (mAdapter == null) {
+            return null;
+        }
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return null;
+        }
+
+        return feedDetails.get(index);
+    }
+
     public int findPositionById(long id) { //TODO - move to presenter
         if (mAdapter == null) {
             return -1;
@@ -2114,21 +2202,21 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public class VisibleState {
-        private List<TrackingData> viewIds= null;
+        private List<ImpressionData> viewIds= null;
 
         int firstPosition;
         int lastPosition;
 
-        private VisibleState(int firstPos, int lastPos, List<TrackingData> views) {
+        private VisibleState(int firstPos, int lastPos, List<ImpressionData> views) {
             firstPosition = firstPos;
             lastPosition = lastPos;
             viewIds = views;
         }
 
-        private List<TrackingData> getViewIds() {
+        private List<ImpressionData> getViewIds() {
             return viewIds;
         }
-        
+
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
@@ -2138,7 +2226,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             return this.firstPosition == that.firstPosition
                     && this.lastPosition == that.lastPosition;
-
         }
 
         @Override
@@ -2147,32 +2234,63 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             result = 31 * result + lastPosition;
             return result;
         }
+
+        @Override
+        public String toString() {
+            return ""+firstPosition+":"+lastPosition;
+        }
     }
 
-    private void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
+    private  synchronized void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
+        Log.i(">>>>Enter event", "start");
+
         // Analyze all the views
         for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
-            TrackingData trackingData = new TrackingData();
+            ImpressionData trackingData = new ImpressionData();
             View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
             if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
+                FeedDetail feedDetail = getListItem(firstVisibleItemPosition);
                 trackingData.setStartTime(System.currentTimeMillis());
                 trackingData.setViewId(viewPosition);
+                trackingData.setPostType(feedDetail.getSubType());
+                trackingData.setScreenName(getScreenName());
+                trackingData.setUserId(""+feedDetail.getIdOfEntityOrParticipant());
+               // if(!currentViewed.contains(viewPosition)) //todo - uncomment it
                 currentViewed.add(viewPosition); //Add to current list with start time
 
-                int indexInFinalList = checkIfItemInFinal(viewPosition);
-                if (indexInFinalList == -1) { //new item add it in final list
+                 int indexInFinalList = checkIfItemInFinal(viewPosition);
+                 if (indexInFinalList == -1) { //new item add it in final list
                     finalViewData.add(trackingData);
                     Log.d("@@@@New Item", "::"+viewPosition);
-                }
+                } else {
+                     if(istopScroll) {
+                         Log.d("@@@@top scroll", "happen ::"+viewPosition);
+                         addNewEntry(viewPosition, trackingData);
+                     } else if(scrollDirectionChange) {
+                         /*finalViewData.clear();
+                       //  addNewEntry1(viewPosition, trackingData);
+                         Log.d("@@@@bottom scroll", "happen ::"+viewPosition);*/
+                             scrollDirectionChange = false;
+
+                             //  addNewEntry1(viewPosition, trackingData);
+                             Log.d("@@@@bottom scroll", "happen ");
+                             //add to db
+                             List<ImpressionData> datas = new ArrayList<>(finalViewData);
+                             addToDatabase(new ArrayList<>(datas));
+                            // finalViewData.clear();
+                     }
+                     Log.d("@@@@New Item exist", "::"+viewPosition);
+                 }
             }
 
             if (previousViewed.size() > 0) { //Compare if any item was present , now not in the list
                 for (int i = 0; i < previousViewed.size(); i++) {
-                    if (!checkIfItemInCurrent(previousViewed.get(i))) { //TODO - chk case of scroll up nd down
-                        updateEndTimeIfItemNotExist(previousViewed.get(i));
+                    int id = previousViewed.get(i);
+                    if (!checkIfItemInCurrent(id)) { //TODO - chk case of scroll up nd down
+                        updateEndTimeIfItemNotExist(id);
                     } else {
-                        Log.i("Still visibile", "In current");
+                        Log.i("Still visibile", "In current"+ id);
                         //trackingData1.setmEndTime(System.currentTimeMillis());
                         //finalViewData.add(i, trackingData1);
                     }
@@ -2182,6 +2300,52 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         previousViewed.addAll(currentViewed);
         currentViewed.clear();
+
+        // List<TrackingData>  cloneData = new ArrayList<>(finalViewData);
+        // data.addAll(finalViewData);
+
+        synchronized (this) {
+            Log.i("######", "#############################");
+            for (int i = 0; i < finalViewData.size(); i++) {
+                float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
+                Log.d("######", "Id> " + finalViewData.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
+            }
+            Log.i("######", "#############################");
+            Log.i(">>>>>>>>>>>>Enter event", "exit");
+        }
+
+       // final VisibleState visibleStateFinal = new VisibleState(startViewId, endViewId,finalViewData);
+       // SheroesBus.getInstance().post(visibleStateFinal);
+    }
+
+    private void addNewEntry(int viewPosition, ImpressionData impressionData) {
+
+        int viewId = -1;
+        if(finalViewData.size()> 0) {
+            viewId = finalViewData.get(finalViewData.size() -1).getViewId();
+        }
+
+        if (viewId != -1 && viewId > viewPosition) {
+            Log.i("Only add lesser value", "on top scroll");
+            finalViewData.add(impressionData);
+        } else {
+            Log.i("these are greater", "on top scroll" + viewPosition);
+        }
+    }
+
+    private void addNewEntry1(int viewPosition, ImpressionData impressionData) {
+
+        int viewId = -1;
+        if(finalViewData.size()> 0) {
+            viewId = finalViewData.get(finalViewData.size() -1).getViewId();
+        }
+
+        if (viewId != -1 && viewId < viewPosition) {
+            Log.i("Only add lesser value", "on bottom scroll");
+        } else {
+            finalViewData.add(impressionData);
+            Log.i("these are greater", "on bottom scroll" + viewPosition);
+        }
     }
 
     public class OneMinuteCountDownTimer extends CountDownTimer {
@@ -2208,14 +2372,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         UserEventsContainer userEventsContainer = new UserEventsContainer();
         List<UserEvent> userEventList = new ArrayList<>();
         for(int i=0; i<1 ; i++) {
-            TrackingData trackingData = finalViewData.get(i);
+            ImpressionData trackingData = finalViewData.get(i);
 
             UserEvent userEvent = new UserEvent();
             userEvent.setUserId("abc");
             userEvent.setTimestamp(1536100000);
             userEvent.setEvent("vi");
             //userEvent.setClientId(""+mLoggedInUser);
-           // userEvent.setPosition(""+trackingData.getViewId());
+            // userEvent.setPosition(""+trackingData.getViewId());
             userEvent.setAppVersion(mAppUtils.getAppVersionName());
             userEvent.setPostId(""+trackingData.getPostId());
             userEvent.setPostType("article");
@@ -2232,7 +2396,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onStart() {
         super.onStart();
 
-        SheroesBus.getInstance().register(this).add(SheroesBus.getInstance().toObserveable().
+
+        /*SheroesBus.getInstance().register(this).add(SheroesBus.getInstance().toObserveable().
                 distinctUntilChanged()
                 .throttleWithTimeout(THRESHOLD_MS, TimeUnit.MILLISECONDS).subscribe(new Consumer<Object>() {
                     @Override
@@ -2243,29 +2408,39 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             List<TrackingData> views = visibleState.getViewIds();
                             if (views == null) return;
 
-                            Log.i("######", "#############################");
-                            for (int i = 0; i < views.size(); i++) {
-                                float timeSpent = views.get(i).getmEndTime() - views.get(i).getStartTime();
-                                Log.d("######", "Id> " + views.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
+                            synchronized (this) {
+                                Log.i("######", "#############################");
+                                for (int i = 0; i < views.size(); i++) {
+                                    float timeSpent = views.get(i).getmEndTime() - views.get(i).getStartTime();
+                                    Log.d("######", "Id> " + views.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
+                                }
+                                Log.i("######", "#############################");
+                                Log.i(">>>>>>>>>>>>Enter event", "exit");
                             }
-                            Log.i("######", "#############################");
 
+                            isDirty = false;
                         }
                     }
-                }));
+                }));*/
     }
 
     //Check if item is there in final list
     private int checkIfItemInFinal(int id) {
-        int index = -1;
+       // int lastItemId = finalViewData.size()>0 ? finalViewData.get(finalViewData.size()-1).getViewId() : -1;
         for (int i = 0; i < finalViewData.size(); i++) {
-            TrackingData trackingData = finalViewData.get(i);
-            if (trackingData.getViewId() == id) { //trackingData.getmEndTime() == -1 &&
-               index = i;
-               break;
+            ImpressionData trackingData = finalViewData.get(i);
+            if (trackingData.getViewId() == id) { //&& && id!=lastItemId && lastItemId!= -1 && trackingData.getmEndTime() == -1  &&
+                /*if(trackingData.getmEndTime() == -1) {
+                    Log.i("Update End  time", "Yes"+ id);
+                    return i;
+                } else{
+                    Log.i("Add new Entry", "Yes"+ id);
+                    return -1;
+                }*/
+                return  i;
             }
         }
-        return index;
+        return -1;
     }
 
     //Check if item is there in current visible item list
@@ -2281,17 +2456,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void updateEndTimeIfItemNotExist(int id) {
         for (int i = 0; i < finalViewData.size(); i++) {
-            TrackingData trackingData1 = finalViewData.get(i);
-            if (trackingData1.getmEndTime() == -1 && trackingData1.getViewId() == id) {
+            ImpressionData trackingData1 = finalViewData.get(i);
+            if (trackingData1.getEndTime() == -1 && id == trackingData1.getViewId()) { //
                 Log.i("Updating", "End time" + id);
-                trackingData1.setmEndTime(System.currentTimeMillis());
-                finalViewData.add(i, trackingData1);
+                //trackingData1.setmEndTime(System.currentTimeMillis());
+                finalViewData.get(i).setEndTime(System.currentTimeMillis());
+                break;
             }
         }
     }
 
+    private boolean isStartEndSame(int start, int end) {
+        return start == 0 && end == 0;
+    }
+
     private boolean isSameView(int start , int endId) {
-        return  (start == startViewId && endId == endViewId);
+        return (start >= 0 && endId >= 0)
+                && (start == startViewId && endId == endViewId);
     }
 
 

@@ -1,6 +1,6 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
-public class TrackingData {
+public class TrackingData1 {
 
     // Duration for which the view has been viewed.
     private long viewDuration = -1;
