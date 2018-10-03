@@ -615,8 +615,6 @@
     <dimen name="lang_selector_right_margin">24dp</dimen>
     <dimen name="lang_eng_top_margin">24dp</dimen>
     <dimen name="lang_hind_top_margin">24dp</dimen>
-    <dimen name="lang_continue_top_bottom_padding">10dp</dimen>
-    <dimen name="lang_continue_left_right_padding">40dp</dimen>
     <dimen name="lang_header_top_margin">92dp</dimen>
     <dimen name="lang_bg_top_margin">4dp</dimen>
     <dimen name="lang_bg_right_margin">2dp</dimen>

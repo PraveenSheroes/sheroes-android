@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
-        android:id="@+id/tv_english"
+        android:id="@+id/fl_english"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/lang_selector_left_margin"
@@ -33,7 +33,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_header">
 
         <TextView
-            android:layout_width="310dp"
+            android:layout_width="match_parent"
             android:layout_height="62dp"
             android:layout_marginRight="@dimen/lang_bg_right_margin"
             android:layout_marginTop="@dimen/lang_bg_top_margin"
@@ -49,7 +49,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:id="@+id/tv_hindi"
+        android:id="@+id/fl_hindi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/lang_selector_left_margin"
@@ -59,10 +59,10 @@
         android:layout_marginTop="@dimen/lang_hind_top_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_english">
+        app:layout_constraintTop_toBottomOf="@+id/fl_english">
 
         <TextView
-            android:layout_width="310dp"
+            android:layout_width="match_parent"
             android:layout_height="62dp"
             android:layout_marginRight="@dimen/lang_bg_right_margin"
             android:layout_marginTop="@dimen/lang_bg_top_margin"
@@ -80,14 +80,10 @@
     <TextView
         android:id="@+id/tv_continue"
         style="@style/TextView14spMedium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
         android:background="@drawable/rectangle_grey"
         android:gravity="center"
-        android:paddingBottom="@dimen/lang_continue_top_bottom_padding"
-        android:paddingLeft="@dimen/lang_continue_left_right_padding"
-        android:paddingRight="@dimen/lang_continue_left_right_padding"
-        android:paddingTop="@dimen/lang_continue_top_bottom_padding"
         android:text="@string/lang_continue"
         android:textAllCaps="true"
         android:textColor="@color/white"

@@ -469,6 +469,4 @@ public class AppConstants {
     //Vernacular
     public static final String SELECT_LANGUAGE_SHARE_PREF = "SELECT_LANGUAGE";
     public static final String LANGUAGE_KEY = "language_key";
-    public static final String LANGUAGE_ENGLISH = "en";
-    public static final String LANGUAGE_HINDI = "hi";
 }

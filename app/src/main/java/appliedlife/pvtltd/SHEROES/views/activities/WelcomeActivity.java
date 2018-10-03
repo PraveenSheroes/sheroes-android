@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.view.View;
@@ -59,7 +58,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Timer;
 
 import javax.inject.Inject;
@@ -98,7 +96,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.SheroesWelcomeViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
@@ -196,9 +193,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
-            showSelectLanguageOption();
-        }
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError("");
         } else {
@@ -265,6 +259,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             if (bundle != null && bundle.getBoolean(AppConstants.HIDE_SPLASH_THEME)) {
                 setUpView();
             } else {
+                if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
+                    showSelectLanguageOption();
+                }
                 final Branch branch = Branch.getInstance();
                 branch.resetUserSession();
                 if (CleverTapHelper.getCleverTapInstance(getApplicationContext()) != null) {
@@ -340,26 +337,41 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     }
 
     public void updateLangTextOnUi() {
-        if (tvPermission == null) {
+        if (tvPermission != null) {
+            tvPermission.setText(R.string.ID_INFORMATION_WARNING);
+        } else {
             tvPermission = this.findViewById(R.id.tv_permission);
+            tvPermission.setText(R.string.ID_INFORMATION_WARNING);
         }
-        tvPermission.setText(R.string.ID_INFORMATION_WARNING);
-        if (fbLogin == null) {
+
+        if (fbLogin != null) {
+            fbLogin.setText(R.string.ID_LOGIN_TEXT);
+        } else {
             fbLogin = this.findViewById(R.id.click_to_join_fb_signup);
+            fbLogin.setText(R.string.ID_LOGIN_TEXT);
         }
-        fbLogin.setText(R.string.ID_LOGIN_TEXT);
-        if (btnGoogleLogin == null) {
+
+        if (btnGoogleLogin != null) {
+            btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
+        } else {
             btnGoogleLogin = this.findViewById(R.id.btn_login_google);
+            btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
         }
-        btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
-        if (tvOtherLoginOption == null) {
+
+        if (tvOtherLoginOption != null) {
+            tvOtherLoginOption.setText(R.string.login_with_email);
+        } else {
             tvOtherLoginOption = this.findViewById(R.id.tv_other_login_option);
+            tvOtherLoginOption.setText(R.string.login_with_email);
         }
-        tvOtherLoginOption.setText(R.string.login_with_email);
-        if (tvUserMsg == null) {
+
+        if (tvUserMsg != null) {
+            tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
+        } else {
             tvUserMsg = this.findViewById(R.id.tv_user_msg);
+            tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
         }
-        tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
+
         updateViewPagerUi(0);
     }
 
@@ -651,12 +663,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
+       /* if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             if (StringUtil.isNotNullOrEmptyString(Locale.getDefault().getLanguage())) {
                 LocaleManager.setNewLocale(this, Locale.getDefault().getLanguage());
             } else {
-                LocaleManager.setNewLocale(this, AppConstants.LANGUAGE_ENGLISH);
+                LocaleManager.setNewLocale(this, LanguageType.ENGLISH.toString());
             }
             return;
         }
@@ -669,7 +681,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             public void run() {
                 doubleBackToExitPressedOnce = false;
             }
-        }, 2000);
+        }, 2000);*/
+        showSelectLanguageOption();
     }
 
     @Override

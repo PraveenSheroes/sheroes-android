@@ -29,7 +29,7 @@ public class CustomTextViewFont extends AppCompatTextView {
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.CustomTextViewFont);
         CharSequence fontFamily = styledAttributes.getString(R.styleable.CustomTextViewFont_customTextFontFamily);
         if (fontFamily != null) {
-            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(AppConstants.LANGUAGE_ENGLISH)) {
+            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
                 Typeface typeface;
                 if (fontFamily.toString().equalsIgnoreCase("regular")) {
                     typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);

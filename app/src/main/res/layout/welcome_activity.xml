@@ -70,7 +70,6 @@
                 android:layout_marginLeft="@dimen/dp_size_10"
                 android:layout_marginRight="@dimen/dp_size_10"
                 android:layout_marginTop="@dimen/dp_size_10"
-                android:fontFamily="@font/noto_sans_regular"
                 android:gravity="center"
                 android:textColor="@color/recent_post_comment"
                 vernacular:customTextFontFamily="@string/regular_font"

@@ -31,7 +31,7 @@ public class CustomEditTextFont extends AppCompatEditText {
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.CustomEditTextFont);
         CharSequence fontFamily = styledAttributes.getString(R.styleable.CustomEditTextFont_customEditTextFontFamily);
         if (fontFamily != null) {
-            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(AppConstants.LANGUAGE_ENGLISH)) {
+            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
                 Typeface typeface;
                 if (fontFamily.toString().equalsIgnoreCase("regular")) {
                     typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);

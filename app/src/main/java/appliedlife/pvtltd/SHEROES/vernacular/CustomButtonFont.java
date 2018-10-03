@@ -31,7 +31,7 @@ public class CustomButtonFont extends AppCompatButton {
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.CustomButtonFont);
         CharSequence fontFamily = styledAttributes.getString(R.styleable.CustomButtonFont_customButtonFontFamily);
         if (fontFamily != null) {
-            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(AppConstants.LANGUAGE_ENGLISH)) {
+            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
                 Typeface typeface;
                 if (fontFamily.toString().equalsIgnoreCase("regular")) {
                     typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
