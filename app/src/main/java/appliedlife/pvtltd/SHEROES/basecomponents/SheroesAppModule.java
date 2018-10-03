@@ -4,6 +4,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
@@ -57,6 +58,7 @@ import appliedlife.pvtltd.SHEROES.preferences.GsonConverter;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import dagger.Module;
@@ -112,7 +114,11 @@ public class SheroesAppModule {
                 Request original = chain.request();
                 Request.Builder builder = original.newBuilder();
                 Request request;
-                if (null != userPreference && userPreference.isSet()) {
+                if (null != userPreference && userPreference.isSet() && CommonUtil.getPrefValue(AppConstants.IS_FEED_POST)) {
+                    builder.header("Content-Type", "multipart/form-data")
+                            .header("Authorization", userPreference.get().getToken());
+                    CommonUtil.setPrefValue(AppConstants.IS_FEED_POST, false);
+                } else if (null != userPreference && userPreference.isSet()) {
                     builder.header("Content-Type", "application/json")
                             .header("Authorization", userPreference.get().getToken());
                 } else {

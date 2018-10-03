@@ -246,6 +246,7 @@ public class AppConstants {
     public static final int MIN_QUESTION_SEARCH_LENGTH = 3;
     public static final String IS_FROM_ADVERTISEMENT = "IS_FROM_ADVERTISEMENT";
     public static final String ADS_DEEP_LINK_URL = "ADS_DEEP_LINK";
+    public static final String IS_FEED_POST = "FEED_POST";
 
 
     /*Master data keys for pages*/

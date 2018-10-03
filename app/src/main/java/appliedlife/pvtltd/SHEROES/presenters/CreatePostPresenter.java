@@ -6,6 +6,7 @@ import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -67,13 +68,13 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         mSheroesAppServiceApi = sheroesAppServiceApi;
     }
 
-    public void sendPost(CommunityPostCreateRequest communityPostCreateRequest, final boolean isSharedFromExternalApp) {
+    public void sendPost(Map uploadImageFileMap, CommunityPostCreateRequest communityPostCreateRequest, final boolean isSharedFromExternalApp) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.addPostCommunity(communityPostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        communityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
@@ -177,13 +178,13 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
     }
 
-    public void editPost(final CommunityPostCreateRequest communityPostCreateRequest) {
+    public void editPost(Map uploadImageFileMap, final CommunityPostCreateRequest communityPostCreateRequest) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.editPostCommunity(communityPostCreateRequest)
+        communityModel.editPostCommunity(uploadImageFileMap, communityPostCreateRequest)
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 

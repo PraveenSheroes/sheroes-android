@@ -150,6 +150,7 @@ import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.TEXT;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
+import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityImagePostRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.schedulePost;
@@ -363,8 +364,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mIsPollOptionClicked;
     private PollType mPollOptionType;
     private List<EditText> mEtTextPollList = new ArrayList<>();
+    private List<String> mFilePathList = new ArrayList<>();
+    private List<String> mEditFilePathList = new ArrayList<>();
     private EditText mEtTextPoll;
     private int mMaxLength = 150;
+    private int mImageListCount;
 
 
     //endregion
@@ -858,6 +862,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         mMentionSpanList = etView.getMentionSpans();
+        CommonUtil.setPrefValue(AppConstants.IS_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
             mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
@@ -866,11 +871,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
-
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), mNewEncodedImages, (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
@@ -1008,7 +1012,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (AccessToken.getCurrentAccessToken() != null) {
             accessToken = AccessToken.getCurrentAccessToken().getToken();
         }
-        mCreatePostPresenter.sendPost(schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), getImageUrls(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
+        CommonUtil.setPrefValue(AppConstants.IS_FEED_POST, true);
+        mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
     }
 
     private boolean validateFields() {
@@ -1046,8 +1051,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             photo.isNew = true;
                             File file = new File(result.getUri().getPath());
                             photo.file = file;
+                            mFilePathList.add(result.getUri().getPath());
                             if (mIsEditPost) {
-                                Bitmap bitmap = decodeFile(photo.file);
+                              /*  Bitmap bitmap = decodeFile(photo.file);
                                 byte[] buffer = new byte[4096];
                                 if (null != bitmap) {
                                     buffer = getBytesFromBitmap(bitmap);
@@ -1057,7 +1063,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                             mNewEncodedImages.add(encodedImage);
                                         }
                                     }
-                                }
+                                }*/
+                                mEditFilePathList.add(result.getUri().getPath());
                             }
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
                                 Bitmap bitmap = decodeFile(photo.file);
@@ -1379,7 +1386,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public boolean isPostModified() {
-        return !mOldText.equals(etView.getEditText().getText().toString()) || !CommonUtil.isEmpty(mNewEncodedImages) || !CommonUtil.isEmpty(mDeletedImageIdList);
+        return !mOldText.equals(etView.getEditText().getText().toString()) || !CommonUtil.isEmpty(mEditFilePathList) || !CommonUtil.isEmpty(mDeletedImageIdList);
 
         // return !mOldText.equals(mAllText) || !CommonUtil.isEmpty(mNewEncodedImages) || !CommonUtil.isEmpty(mDeletedImageIdList);
     }
@@ -1594,6 +1601,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 Photo photo = mImageList.get(position);
                 if (mIsEditPost && !photo.isNew) {
                     mDeletedImageIdList.add((long) photo.remote_id);
+                } else if (mIsEditPost && photo.isNew) {
+                    mEditFilePathList.remove(position - mImageListCount);
+                } else {
+                    mFilePathList.remove(position);
                 }
                 mImageList.remove(position);
                 setImageCount();
@@ -1607,6 +1618,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 List<Photo> images = new ArrayList<>(mImageList);
                 mPostPhotoAdapter.setData(images);
                 setImageCount();
+                mImageListCount = mImageList.size();
             }
         }
     }
