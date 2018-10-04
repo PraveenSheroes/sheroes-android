@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
@@ -111,6 +112,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public static final int LOGGING_IN_DIALOG = 1;
     public static final String GENDER = "female";
     public static final int TOKEN_LOGGING_PROGRESS_DIALOG = 2;
+    // region inject variables
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -121,7 +123,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Preference<AppInstallation> mAppInstallation;
     @Inject
     AppUtils appUtils;
+    //endregion
 
+    // region view
     @Bind(R.id.welcome_view_pager)
     ViewPager mViewPager;
     @Bind(R.id.iv_welcome_first)
@@ -142,7 +146,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     TextView tvOtherLoginOption;
     @Bind(R.id.tv_user_msg)
     TextView tvUserMsg;
+    //endregion
 
+    // region member variables
     private PayloadBuilder payloadBuilder;
     private int currentPage = 0;
     private Timer timer;
@@ -163,15 +169,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String loginViaSocial = MoEngageConstants.GOOGLE;
     private long currentTime;
     private String mGcmId;
-    private boolean doubleBackToExitPressedOnce = false;
-
-
     //Ads Navigation
     private boolean isBranchFirstSession = false;
     private String deepLinkUrl = null;
     private String defaultTab = null;
     private ArrayList<Integer> mScreenNameList = new ArrayList<>();
-
+    //endregion
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -419,12 +422,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     @Override
     protected SheroesPresenter getPresenter() {
         return mLoginPresenter;
@@ -612,6 +609,12 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             getGcmId();
         }
     }
+
+    @OnClick(R.id.iv_back)
+    public void onBackPress() {
+        super.onBackPressed();
+    }
+
 
     public void launchGooglePlusLogin() {
         if (AppUtils.getInstance().isNetworkAvailable()) {

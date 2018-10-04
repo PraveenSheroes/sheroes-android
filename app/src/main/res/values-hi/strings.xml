@@ -23,8 +23,8 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_EMAIL">Enter email address</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
-    <string name="ID_POSTED_IN">posted in</string>
-    <string name="ID_ASKED">asked</string>
+    <string name="ID_POSTED_IN">में पोस्ट हुआ</string>
+    <string name="ID_ASKED">पूछा गया</string>
     <string name="ID_POSTED_AN">posted an</string>
     <string name="ID_NEW">NEW</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
@@ -67,13 +67,13 @@
     <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
     <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
     <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
-    <string name="ID_TRENDING">Trending</string>
-    <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
+    <string name="ID_TRENDING">ट्रेंडिंग</string>
+    <string name="ID_CHOOSE_CATEGORY">केटेगरी चुने</string>
     <string name="ID_DONE">Done</string>
     <string name="ID_OK">Ok</string>
     <string name="ID_CANCEL">Cancel</string>
-    <string name="ID_VIEW_MORE">View More</string>
-    <string name="ID_VIEW_MORE_MENTOR">&#8230;View More</string>
+    <string name="ID_VIEW_MORE">और देखें</string>
+    <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
     <string name="ID_JOIN">Join</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
@@ -83,11 +83,11 @@
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">min read</string>
-    <string name="ID_COMMUNITY_ANNONYMOUS">ANONYMOUS</string>
+    <string name="ID_COMMUNITY_ANNONYMOUS">गुमनाम</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
-    <string name="ID_LIKE">Like</string>
-    <string name="comment">Comment</string>
+    <string name="ID_LIKE">लाइक</string>
+    <string name="comment">कमेंट</string>
     <string name="ID_COMMENTS">Comments</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
@@ -95,19 +95,19 @@
     <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_POST">Post as:</string>
-    <string name="ID_POSTED">posted</string>
+    <string name="ID_POSTED">पोस्ट हुआ</string>
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_NORMAL_MEMBER">normal member</string>
     <string name="ID_ADMIN">Admin</string>
     <string name="ID_REMOTE">Remote</string>
     <string name="ID_REMOVE">Remove</string>
     <string name="ID_INVITE">Invite</string>
-    <string name="ID_SHARE">Share</string>
+    <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">Edit</string>
     <string name="SHARE_PROFILE">Share Profile</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
-    <string name="ID_DELETE">Delete</string>
-    <string name="ID_APPROVE">Approve</string>
+    <string name="ID_DELETE">हटाना</string>
+    <string name="ID_APPROVE">मंज़ूर</string>
 
     <string name="ID_REPORT">Report as spam</string>
     <string name="REPORT_SPAM">Report Spam</string>
@@ -124,8 +124,8 @@
     <string name="ID_ANONYMOUS">Anonymous</string>
     <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_OWNER_Mo">owner</string>
-    <string name="ID_LESS">View Less</string>
-    <string name="ID_LESS_MENTOR">&#8230;View Less</string>
+    <string name="ID_LESS">कम देखें</string>
+    <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
     <string name="ID_TAGS">Tags</string>
     <string name="ID_BOOKMARKS">Bookmarks</string>
     <string name="Bookmark">Bookmark</string>
@@ -177,8 +177,8 @@
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
     <string name="ID_SUBMIT">SUBMIT</string>
-    <string name="follow_user">Follow</string>
-    <string name="following_user">Following</string>
+    <string name="follow_user">फॉलो</string>
+    <string name="following_user">फॉलोइंग</string>
     <!--String Related personal contact details edit page-->
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
     <string name="ID_LOCATION_HINT">LOCATION</string>
@@ -188,8 +188,8 @@
     <string name="ID_RELACTIONSHIP_HINT"><font size="12">RELATIONSHIP STATUS</font></string>
     <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
     <string name="ID_SAVE">SAVE</string>
-    <string name="ID_NEED_TO_BE_REVIEWED">Your post is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
-    <string name="COMMENT_REVIEW_MESSAGE">This comment is under review due to potential deviation from SHEROES community guidelines. Please check back soon.</string>
+    <string name="ID_NEED_TO_BE_REVIEWED">SHEROES समुदाय निर्देशों से संभावित विचलन के कारण आपकी पोस्ट समीक्षा अधीन है। कृपया कुछ समय बाद दोबारा देखें।</string>
+    <string name="COMMENT_REVIEW_MESSAGE">SHEROES समुदाय निर्देशों से संभावित विचलन के कारण यह कमेंट समीक्षा अधीन है। कृपया कुछ समय बाद दोबारा देखें।</string>
     <!--String Related personal About_me details page-->
     <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
 
@@ -256,7 +256,7 @@
     <string name="ID_COMMUNITY_JOIN_REGION1">I am highly interested in joining this community</string>
     <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
     <string name="ID_USER_NAME">User Name</string>
-    <string name="ID_JUST_NOW">Just Now</string>
+    <string name="ID_JUST_NOW">अभी</string>
 
 
     <string name="app_name">SHEROES</string>
@@ -333,7 +333,7 @@
 
 
     <string name="ID_POSTED_REVIEW">posted a review for</string>
-    <string name="ID_POSTED_ASK_FEEDBACK">is looking for feedback on</string>
+    <string name="ID_POSTED_ASK_FEEDBACK">प्रतिक्रिया की तलाश है</string>
 
     <!-- String related to review post -->
 
@@ -368,9 +368,9 @@
     <string name="following">Following</string>
 
     <plurals name="numberOfComments">
-        <item quantity="zero">Comments</item>
-        <item quantity="one">Comment</item>
-        <item quantity="other">Comments</item>
+        <item quantity="zero">कमैंट्स</item>
+        <item quantity="one">कमेंट</item>
+        <item quantity="other">कमैंट्स</item>
     </plurals>
 
     <plurals name="numberOfVotes">
@@ -421,9 +421,9 @@
 
 
     <plurals name="numberOfLikes">
-        <item quantity="zero">Likes</item>
-        <item quantity="one">Like</item>
-        <item quantity="other">Likes</item>
+        <item quantity="zero">लाइकस</item>
+        <item quantity="one">लाइक</item>
+        <item quantity="other">लाइकस</item>
     </plurals>
 
     <plurals name="numberOfViews">
@@ -437,7 +437,7 @@
         <item quantity="other">Times</item>
     </plurals>
 
-    <string name="action_like">like</string>
+    <string name="action_like">लाइक</string>
     <string name="action_bookmark">bookmark</string>
     <string name="delete">Delete</string>
     <string name="comment_hint">Leave your thoughts here...</string>
@@ -560,10 +560,10 @@
     <string name="champions_followed">Champions Followed</string>
     <string name="join_communities">Join Communities &amp; Connect></string>
 
-    <string name="ID_SHARE_ON_WHATS_APP">Share</string>
+    <string name="ID_SHARE_ON_WHATS_APP">शेयर</string>
 
     <!-- String related to tooltip -->
-    <string name="tool_tip_user_profile">Find out more about this user</string>
+    <string name="tool_tip_user_profile">इस उपभोक्ता के बारे में और जानें</string>
 
 
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
@@ -764,7 +764,7 @@
     <string name="poll_result_percent">%</string>
     <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
     <string name="poll_text_option">(%1$d char)</string>
-    <string name="challenge">Challenge</string>
+    <string name="challenge">चैलेंज</string>
     <string name="care_msg"><![CDATA[ <html>
                                             <body>
                                             <div style="text-align: center;margin: 0px 0px 5px 0px;">
@@ -772,7 +772,7 @@
                                             </div>
                                             </body>
                                             </html> ]]></string>
-    <string name="follow_text">Follow</string>
+
     <string name="not_available">NA</string>
 
     <!--Roboto fonts name for widgets-->
@@ -783,4 +783,10 @@
 
     <string name="welcome">स्वागत हे</string>
     <string name="hi">नमस्ते</string>
+    <string name="top_post">शीर्ष पोस्ट</string>
+    <string name="my_feed">मेरा फीड</string>
+    <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
+    <string name="post_header_community">%1$s ने पोस्ट किया"</string>
+    <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>
+
 </resources>

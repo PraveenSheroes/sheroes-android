@@ -110,7 +110,6 @@ public class OnBoardingActivity extends BaseActivity {
             startActivity(homeIntent);
             finish();
         }
-        onBoardingFragment();
     }
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void onBoardingFragment() {

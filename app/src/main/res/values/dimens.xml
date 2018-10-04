@@ -618,6 +618,7 @@
     <dimen name="lang_header_top_margin">92dp</dimen>
     <dimen name="lang_bg_top_margin">4dp</dimen>
     <dimen name="lang_bg_right_margin">2dp</dimen>
+    <dimen name="welcome_back_padding">10dp</dimen>
 
 
 </resources>

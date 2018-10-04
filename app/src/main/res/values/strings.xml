@@ -771,7 +771,7 @@
                                             </div>
                                             </body>
                                             </html> ]]></string>
-    <string name="follow_text">Follow</string>
+
     <string name="not_available">NA</string>
 
     <!--Roboto fonts name for widgets-->
@@ -784,5 +784,10 @@
     <string name="hi">Hi</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
+    <string name="top_post">Top Post</string>
+    <string name="my_feed">My Feed</string>
+    <string name="post_header_name_community">%1$s posted in  %2$s"</string>
+    <string name="post_header_community">%1$s posted"</string>
+    <string name="post_header_asked_community">%1$s asked %2$s"</string>
 
 </resources>

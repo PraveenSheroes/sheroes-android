@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -14,7 +15,7 @@
         android:paddingTop="@dimen/dp_size_10"
         android:visibility="visible" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
         android:id="@+id/title_text"
         style="@style/TextAppearance.Toolbar"
         android:layout_width="wrap_content"
@@ -26,9 +27,9 @@
         android:layout_toEndOf="@+id/tv_drawer_navigation"
         android:layout_toRightOf="@+id/tv_drawer_navigation"
         android:ellipsize="end"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center_vertical"
-        android:maxLines="@integer/int_value_for_line_1" />
+        android:maxLines="@integer/int_value_for_line_1"
+        vernacular:customTextFontFamily="@string/medium_font" />
 
     <ImageView
         android:id="@+id/ic_sheroes"
@@ -100,14 +101,14 @@
         android:backgroundTint="@color/footer_icon_text"
         android:visibility="gone">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
             android:id="@+id/tv_notification_read_count"
+            style="@style/TextView9spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_9" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </FrameLayout>
 
 

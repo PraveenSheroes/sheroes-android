@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -32,10 +33,11 @@
             android:layout_height="@dimen/dp_size_40"
             android:background="@color/white"
             android:orientation="horizontal"
-            android:visibility="gone">
+            android:visibility="visible">
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                 android:id="@+id/tv_catagory_choose"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -47,20 +49,20 @@
                 android:text="@string/ID_CHOOSE_CATEGORY"
                 android:textAllCaps="true"
                 android:textColor="@color/suggested_text"
-                android:textSize="@dimen/sp_size_13" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                 android:id="@+id/tv_catagory_text"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
                 android:ellipsize="end"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:lines="@integer/int_value_for_line_1"
                 android:textColor="@color/suggested_text"
-                android:textSize="@dimen/sp_size_13" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
             <ImageView
                 android:id="@+id/iv_spinner_icon"
@@ -89,8 +91,8 @@
         android:layout_gravity="bottom|end"
         android:layout_marginBottom="@dimen/dp_size_65"
         android:layout_marginRight="@dimen/dp_size_20"
-        android:visibility="gone"
         android:src="@drawable/vector_pencil"
+        android:visibility="gone"
         app:backgroundTint="@color/email" />
 
     <include
