@@ -113,7 +113,7 @@ android {
             signingConfig signingConfigs.release
             ext.crashlyticsApiSecret = "9edaf311149aaaac17a2399c76e31db5fd18706615646d41ac84e561504e4e57"
             ext.crashlyticsApiKey = "07aa242372597565df80681a25002e6e25e6ef0e"
-            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:754013124314"]
+            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
         }
