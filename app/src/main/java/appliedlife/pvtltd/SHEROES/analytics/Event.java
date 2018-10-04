@@ -29,6 +29,12 @@ public enum Event {
             return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
+    APP_SHARED(AnalyticsEventType.POST, "App Shared") {
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return getAnalyticsProviderStatus(analyticsProvider);
+        }
+    },
     POST_SHARED(AnalyticsEventType.POST, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {

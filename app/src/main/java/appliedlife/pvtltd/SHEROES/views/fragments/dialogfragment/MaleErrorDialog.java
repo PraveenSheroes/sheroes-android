@@ -150,7 +150,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
             startActivity(intent);
             HashMap<String, Object> properties = new EventProperty.Builder().build();
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
-            AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
+            AnalyticsManager.trackEvent(Event.APP_SHARED, SCREEN_LABEL, properties);
         } catch (Exception e) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(AppConstants.SHARE_MENU_TYPE);
@@ -158,7 +158,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
             HashMap<String, Object> properties = new EventProperty.Builder().build();
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
-            AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
+            AnalyticsManager.trackEvent(Event.APP_SHARED, SCREEN_LABEL, properties);
         }
     }
 
