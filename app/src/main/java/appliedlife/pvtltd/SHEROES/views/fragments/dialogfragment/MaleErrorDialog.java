@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -127,18 +124,16 @@ public class MaleErrorDialog extends BaseDialogFragment {
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                tryAgainClick();
+                Intent intent = new Intent(getActivity(), LanguageSelectionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                dismiss();
             }
         };
     }
     //endregion
 
     //region onclick methods
-    @OnClick(R.id.iv_close)
-    public void tryAgainClick() {
-        dismiss();
-        getActivity().finish();
-    }
 
     @OnClick(R.id.tv_share_sheroes_app)
     public void tvShareSheroesAppClick() {

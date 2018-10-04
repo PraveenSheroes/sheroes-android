@@ -149,7 +149,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".views.activities.WelcomeActivity"
+            android:name=".views.activities.LanguageSelectionActivity"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -157,10 +157,15 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".views.activities.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"
+            android:parentActivityName=".views.activities.LanguageSelectionActivity"/>
+
         <activity
             android:name=".views.activities.ProfileActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -199,7 +204,7 @@
             android:exported="true"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
-            tools:ignore="GoogleAppIndexingDeepLinkError"/>
+            tools:ignore="GoogleAppIndexingDeepLinkError" />
         <activity
             android:name=".views.activities.ContestActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -232,7 +237,7 @@
             android:name=".views.activities.CommunityPostActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"

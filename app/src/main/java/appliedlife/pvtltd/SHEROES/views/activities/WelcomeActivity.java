@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -23,7 +22,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.appsflyer.AppsFlyerLib;
 import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
@@ -50,19 +48,16 @@ import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Timer;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
@@ -99,14 +94,10 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.SheroesWelcomeViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
-import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.branch.referral.Branch;
-import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
@@ -117,8 +108,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 
 public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView, SocialListener, GoogleApiClient.OnConnectionFailedListener {
     public static final String SCREEN_LABEL = "Intro Screen";
-    private static final String BRANCH_DEEP_LINK = "deep_link_url";
-    private static final String BRANCH_REFERRER_LINK = "~referring_link";
     public static final int LOGGING_IN_DIALOG = 1;
     public static final String GENDER = "female";
     public static final int TOKEN_LOGGING_PROGRESS_DIALOG = 2;
@@ -160,7 +149,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private int NUM_PAGES = 4;
     private MoEHelper mMoEHelper;
     private MoEngageUtills moEngageUtills;
-    private boolean isFirstTimeUser = false;
     private Handler mHandler;
     private Runnable mRunnable;
     private CallbackManager callbackManager;
@@ -176,7 +164,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private long currentTime;
     private String mGcmId;
     private boolean doubleBackToExitPressedOnce = false;
-    private boolean isHandleAuthTokenRefresh = false;
+
 
     //Ads Navigation
     private boolean isBranchFirstSession = false;
@@ -192,188 +180,21 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
-        if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
-            showMaleError("");
-        } else {
-            checkAuthTokenExpireOrNot();
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            isBranchFirstSession = getIntent().getExtras().getBoolean(BaseActivity.BRANCH_FIRST_SESSION);
+            deepLinkUrl = getIntent().getExtras().getString(BaseActivity.DEEP_LINK_URL);
         }
-        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
-        appInstallationHelper.setupAndSaveInstallation(false);
-    }
-
-    private void checkAuthTokenExpireOrNot() {
-        if (null != mUserPreference && mUserPreference.isSet()) {
-            if (StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-                long daysDifference = System.currentTimeMillis() - mUserPreference.get().getTokenTime();
-                if (daysDifference >= AppConstants.SAVED_DAYS_TIME) {
-                    isHandleAuthTokenRefresh = true;
-                    mLoginPresenter.getAuthTokenRefreshPresenter();
-                } else {
-                    initializeAllDataAfterGCMId();
-                }
-            } else {
-                initializeAllDataAfterGCMId();
-            }
-        } else {
-            initializeAllDataAfterGCMId();
-        }
-    }
-
-    private void initializeAllDataAfterGCMId() {
-        int versionCode = BuildConfig.VERSION_CODE;
-        moEngageUtills.entityMoEngageAppVersion(this, mMoEHelper, payloadBuilder, versionCode);
-        if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
-            if (mInstallUpdatePreference.get().getAppVersion() < versionCode) {
-                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                installUpdateForMoEngage.setFirstOpen(true);
-                installUpdateForMoEngage.setAppVersion(versionCode);
-                installUpdateForMoEngage.setWelcome(true);
-                installUpdateForMoEngage.setAppInstallFirstTime(true);
-                mInstallUpdatePreference.set(installUpdateForMoEngage);
-            }
-            mMoEHelper.setExistingUser(true);
-            if (mInstallUpdatePreference.get().isAppInstallFirstTime()) {
-                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                installUpdateForMoEngage.setWalkThroughShown(true);
-                mInstallUpdatePreference.set(installUpdateForMoEngage);
-            }
-        } else {
-            InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
-            installUpdateForMoEngage.setAppVersion(versionCode);
-            installUpdateForMoEngage.setFirstOpen(true);
-            installUpdateForMoEngage.setAppInstallFirstTime(false);
-            installUpdateForMoEngage.setWalkThroughShown(false);
-            mInstallUpdatePreference.set(installUpdateForMoEngage);
-            mMoEHelper.setExistingUser(false);
-            mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
-        }
-        moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
-
-        if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
-            isFirstTimeUser = false;
-            DrawerViewHolder.selectedOptionName = null;
-            openHomeScreen();
-        } else { //Get Branch Details for First Install
-            Bundle bundle = getIntent().getExtras();
-            if (bundle != null && bundle.getBoolean(AppConstants.HIDE_SPLASH_THEME)) {
-                setUpView();
-            } else {
-                if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
-                    showSelectLanguageOption();
-                }
-                final Branch branch = Branch.getInstance();
-                branch.resetUserSession();
-                if (CleverTapHelper.getCleverTapInstance(getApplicationContext()) != null) {
-                    branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
-                            CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
-                }
-                branch.initSession(new Branch.BranchReferralInitListener() {
-                    @Override
-                    public void onInitFinished(JSONObject sessionParams, BranchError error) {
-                        isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
-                        if (isBranchFirstSession) {
-                            if (sessionParams.has(BRANCH_DEEP_LINK)) {
-                                String deepLink;
-                                String branchLink;
-                                try {
-                                    deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
-                                    branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
-                                    if (StringUtil.isNotNullOrEmptyString(deepLink)) {
-                                        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-                                        SharedPreferences.Editor editor = null;
-                                        if (prefs != null) {
-                                            editor = prefs.edit();
-                                            editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
-                                            editor.apply();
-                                        }
-                                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(WelcomeActivity.this);
-                                        appInstallationHelper.setupAndSaveInstallation(false);
-                                        if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
-                                            deepLinkUrl = deepLink;
-
-                                            if (mInstallUpdatePreference != null) {
-                                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                                installUpdateForMoEngage.setOnBoardingSkipped(true);
-                                                mInstallUpdatePreference.set(installUpdateForMoEngage);
-                                            }
-                                        }
-                                    }
-
-                                    if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
-                                        defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
-                                    }
-                                } catch (JSONException e) {
-                                    deepLinkUrl = null;
-                                    defaultTab = null;
-                                    isBranchFirstSession = false;
-                                }
-                            }
-                        }
-                        setUpView();
-                    }
-                });
-            }
-        }
+        setUpView();
     }
 
     private void setUpView() {
         setContentView(R.layout.welcome_activity);
         ButterKnife.bind(WelcomeActivity.this);
-        isFirstTimeUser = true;
         initHomeViewPagerAndTabs();
         loginSetUp();
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
-            return;
-        }
         ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
-        if (isFirstTimeUser) {
-            AnalyticsManager.trackScreenView(getScreenName());
-        }
-        mLoginPresenter.getMasterDataToPresenter();
-        mLoginPresenter.queryConfig();
-        clWelcome.setVisibility(View.VISIBLE);
     }
 
-    public void updateLangTextOnUi() {
-        if (tvPermission != null) {
-            tvPermission.setText(R.string.ID_INFORMATION_WARNING);
-        } else {
-            tvPermission = this.findViewById(R.id.tv_permission);
-            tvPermission.setText(R.string.ID_INFORMATION_WARNING);
-        }
-
-        if (fbLogin != null) {
-            fbLogin.setText(R.string.ID_LOGIN_TEXT);
-        } else {
-            fbLogin = this.findViewById(R.id.click_to_join_fb_signup);
-            fbLogin.setText(R.string.ID_LOGIN_TEXT);
-        }
-
-        if (btnGoogleLogin != null) {
-            btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
-        } else {
-            btnGoogleLogin = this.findViewById(R.id.btn_login_google);
-            btnGoogleLogin.setText(R.string.ID_LOGIN_TEXT);
-        }
-
-        if (tvOtherLoginOption != null) {
-            tvOtherLoginOption.setText(R.string.login_with_email);
-        } else {
-            tvOtherLoginOption = this.findViewById(R.id.tv_other_login_option);
-            tvOtherLoginOption.setText(R.string.login_with_email);
-        }
-
-        if (tvUserMsg != null) {
-            tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
-        } else {
-            tvUserMsg = this.findViewById(R.id.tv_user_msg);
-            tvUserMsg.setText(R.string.ID_ONLY_FOR_EXISTING_USER);
-        }
-
-        updateViewPagerUi(0);
-    }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void updateViewPagerUi(int position) {
@@ -471,43 +292,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         });
 
 
-    }
-
-    //before
-    private void openHomeScreen() {
-
-        if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
-
-            //Event for on-boarding skipping for new user came through branch link
-            final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(deepLinkUrl).build();
-            AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
-
-            Uri url = Uri.parse(deepLinkUrl);
-            Intent intent = new Intent(WelcomeActivity.this, SheroesDeepLinkingActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString(CommunityDetailActivity.TAB_KEY, "");
-            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
-            bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
-            if (StringUtil.isNotNullOrEmptyString(defaultTab)) {
-                bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
-            }
-            intent.putExtras(bundle);
-            intent.setData(url);
-            startActivity(intent);
-            finish();
-        } else {
-            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getNextScreen()) && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION) && mUserPreference.get().isSheUser()) {
-                openLoginActivity();
-            } else {
-                Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
-                Bundle bundle = new Bundle();
-                boardingIntent.putExtras(bundle);
-                boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(boardingIntent);
-                finish();
-                CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
-            }
-        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -635,54 +419,10 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     }
 
-    public void showSelectLanguageOption() {
-        SelectLanguageDialog selectLanguageDialog = (SelectLanguageDialog) getFragmentManager().findFragmentByTag(SelectLanguageDialog.class.getName());
-        if (selectLanguageDialog == null) {
-            selectLanguageDialog = new SelectLanguageDialog();
-            Bundle b = new Bundle();
-            selectLanguageDialog.setArguments(b);
-        }
-        if (!selectLanguageDialog.isVisible() && !selectLanguageDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
-            selectLanguageDialog.show(getFragmentManager(), SelectLanguageDialog.class.getName());
-        }
-    }
-
-    public void showMaleError(String userName) {
-        MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
-        if (fragment == null) {
-            fragment = new MaleErrorDialog();
-            Bundle b = new Bundle();
-            b.putString(BaseDialogFragment.USER_NAME, userName);
-            b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
-            fragment.setArguments(b);
-        }
-        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), MaleErrorDialog.class.getName());
-        }
-    }
 
     @Override
     public void onBackPressed() {
-       /* if (doubleBackToExitPressedOnce) {
-            super.onBackPressed();
-            if (StringUtil.isNotNullOrEmptyString(Locale.getDefault().getLanguage())) {
-                LocaleManager.setNewLocale(this, Locale.getDefault().getLanguage());
-            } else {
-                LocaleManager.setNewLocale(this, LanguageType.ENGLISH.toString());
-            }
-            return;
-        }
-        doubleBackToExitPressedOnce = true;
-        if (null != clWelcome) {
-            Snackbar.make(clWelcome, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
-        }
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);*/
-        showSelectLanguageOption();
+        super.onBackPressed();
     }
 
     @Override
@@ -726,6 +466,18 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     protected void onResume() {
         super.onResume();
+      /*  initHomeViewPagerAndTabs();
+
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            showNetworkTimeoutDoalog(false, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+            return;
+        }
+        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+        if (isFirstTimeUser) {
+            AnalyticsManager.trackScreenView(getScreenName());
+        }
+        mLoginPresenter.getMasterDataToPresenter();
+        mLoginPresenter.queryConfig();*/
         try {
             if (mProgressDialog != null) {
                 mProgressDialog.dismiss();
@@ -932,56 +684,42 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         dismissProgressDialog(LOGGING_IN_DIALOG);
         dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
         if (loginResponse != null) {
-            if (isHandleAuthTokenRefresh) {
-                if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-                    refreshAuthTokenResponse(loginResponse);
-                }
-            } else {
-                switch (loginResponse.getStatus()) {
-                    case AppConstants.SUCCESS:
-                        if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
-                            loginAuthTokenResponse(loginResponse);
-
-                        } else {
-                            mUserPreference.delete();
-                            LoginManager.getInstance().logOut();
-                            signOut();
-                            showMaleError("");
-                        }
-                        break;
-                    case AppConstants.INVALID:
+            switch (loginResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    if (StringUtil.isNotNullOrEmptyString(loginResponse.getToken())) {
+                        loginAuthTokenResponse(loginResponse);
+                    } else {
                         mUserPreference.delete();
-                        break;
-                    case AppConstants.FAILED:
-                        mUserPreference.delete();
-                        signOut();
                         LoginManager.getInstance().logOut();
-                        String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
-                        String deactivated = loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED);
-                        if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
-                            if (StringUtil.isNotNullOrEmptyString(deactivated) && deactivated.equalsIgnoreCase("true")) {
-                                showErrorDialogOnUserAction(true, false, errorMessage, "true");
-                            } else {
-                                showMaleError("");
-                            }
+                        signOut();
+                        showMaleError("");
+                    }
+                    break;
+                case AppConstants.INVALID:
+                    mUserPreference.delete();
+                    break;
+                case AppConstants.FAILED:
+                    mUserPreference.delete();
+                    signOut();
+                    LoginManager.getInstance().logOut();
+                    String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
+                    String deactivated = loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED);
+                    if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
+                        if (StringUtil.isNotNullOrEmptyString(deactivated) && deactivated.equalsIgnoreCase("true")) {
+                            showErrorDialogOnUserAction(true, false, errorMessage, "true");
                         } else {
-                            errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
                             showMaleError("");
                         }
-                        break;
-                }
+                    } else {
+                        errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.ERROR);
+                        showMaleError("");
+                    }
+                    break;
             }
         } else {
             showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
-    }
-
-    private void refreshAuthTokenResponse(LoginResponse loginResponse) {
-        loginResponse.setTokenTime(System.currentTimeMillis());
-        loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
-        mUserPreference.set(loginResponse);
-        openHomeScreen();
     }
 
     private void loginAuthTokenResponse(LoginResponse loginResponse) {
@@ -1022,6 +760,37 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
         appInstallationHelper.setupAndSaveInstallation(true);
         openHomeScreen();
+    }
+
+    private void openHomeScreen() {
+
+        if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+
+            //Event for on-boarding skipping for new user came through branch link
+            final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(deepLinkUrl).build();
+            AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
+
+            Uri url = Uri.parse(deepLinkUrl);
+            Intent intent = new Intent(WelcomeActivity.this, SheroesDeepLinkingActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString(CommunityDetailActivity.TAB_KEY, "");
+            bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+            bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
+            if (StringUtil.isNotNullOrEmptyString(defaultTab)) {
+                bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
+            }
+            intent.putExtras(bundle);
+            intent.setData(url);
+            startActivity(intent);
+        } else {
+            Intent boardingIntent = new Intent(WelcomeActivity.this, OnBoardingActivity.class);
+            Bundle bundle = new Bundle();
+            boardingIntent.putExtras(bundle);
+            boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(boardingIntent);
+            CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
+        }
+        finishAffinity();
     }
 
     @Override
@@ -1213,15 +982,26 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
                     ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
-                    initializeAllDataAfterGCMId();
                     break;
                 default:
                     onShowErrorDialog(errorMsg, feedParticipationEnum);
-
             }
         }
 
     }
 
+    public void showMaleError(String userName) {
+        MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
+        if (fragment == null) {
+            fragment = new MaleErrorDialog();
+            Bundle b = new Bundle();
+            b.putString(BaseDialogFragment.USER_NAME, userName);
+            b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
+            fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), MaleErrorDialog.class.getName());
+        }
+    }
 }
 

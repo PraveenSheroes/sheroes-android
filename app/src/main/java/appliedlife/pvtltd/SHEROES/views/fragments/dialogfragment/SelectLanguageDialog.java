@@ -86,9 +86,6 @@ public class SelectLanguageDialog extends BaseDialogFragment implements View.OnC
 
     private void onContinueClick() {
         if (isLanguageSelected) {
-            if (getActivity() instanceof WelcomeActivity) {
-                ((WelcomeActivity) getActivity()).updateLangTextOnUi();
-            }
             dismiss();
         }
     }

@@ -117,6 +117,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String STORIES_TAB = "write a story";
     public static final String USER_STORY = "USER_STORY";
     public static final String KEY_FOR_DEEPLINK_DETAIL = "post_detail_deep_link";
+    public static final String BRANCH_FIRST_SESSION = "is_branch_first_session";
+    public static final String DEEP_LINK_URL = "deep_link_url";
     public static final int BRANCH_REQUEST_CODE = 1290;
     public static final int ASK_QUESTION_POST = 3;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);

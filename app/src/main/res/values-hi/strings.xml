@@ -153,7 +153,7 @@
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>
     <string name="ID_INVITE_WOMEN_FRIEND">Invite Friends</string>
-    <string name="ID_PLAY_STORE_DATA">Connecting with SHEROES&#8230;</string>
+    <string name="ID_PLAY_STORE_DATA">SHEROES से कनेक्ट हो रहा है&#8230;</string>
     <string name="ID_LOCATION">Location</string>
 
     <!-- String related to preferences_dashboard page-->
