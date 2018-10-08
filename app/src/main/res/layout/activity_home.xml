@@ -93,8 +93,8 @@
                     android:id="@+id/rv_right_drawer_communities"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_size_8"
-                    android:layout_marginRight="@dimen/dp_size_8" />
+                    android:layout_marginLeft="@dimen/right_drawer_margin"
+                    android:layout_marginRight="@dimen/right_drawer_margin" />
             </FrameLayout>
 
             <LinearLayout
@@ -113,11 +113,11 @@
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
                     android:letterSpacing="0.07"
-                    android:padding="@dimen/dp_size_16"
+                    android:padding="@dimen/community_explore_button_padding"
                     android:text="@string/explore_All"
                     android:textAllCaps="true"
                     android:textColor="@color/footer_icon_text"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/community_explore_button_textsize"
                     android:textStyle="bold" />
             </LinearLayout>
 

@@ -625,6 +625,13 @@
     <dimen name="user_compact_card_desc_margin_bottom">16dp</dimen>
     <dimen name="user_card_flat_desc_margin_bottom">16dp</dimen>
     <dimen name="card_without_radius">0dp</dimen>
+    <dimen name="right_drawer_margin">8dp</dimen>
+    <dimen name="community_explore_button_padding">16dp</dimen>
+    <dimen name="community_explore_button_textsize">14sp</dimen>
+    <dimen name="link_card_marginTop">-2dp</dimen>
+    <dimen name="link_card_title_textsize">16sp</dimen>
+    <dimen name="link_card_source_textsize">9sp</dimen>
+    <dimen name="feed_card_marginbottom">10dp</dimen>
 
 
 </resources>

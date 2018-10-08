@@ -23,8 +23,8 @@
         android:gravity="center_horizontal"
         android:paddingRight="@dimen/dp_size_4"
         android:paddingLeft="@dimen/dp_size_4"
-        android:lines="@integer/int_value_for_line_2"
-        tools:text="name"
+        android:lines="@integer/community_name_lines"
+        tools:text="community_name"
         android:textColor="@color/recent_post_comment"
         android:textSize="@dimen/sp_size_14" />
 
