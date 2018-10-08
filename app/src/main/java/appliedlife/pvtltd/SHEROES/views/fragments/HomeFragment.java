@@ -222,7 +222,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void run() {
                 int tabLayoutWidth = mTabLayout.getWidth();
-                if (tabLayoutWidth < CommonUtil.getWindowWidth(getContext())) {
+                if (getActivity() != null && tabLayoutWidth < CommonUtil.getWindowWidth(getActivity().getApplicationContext())) {
                     mTabLayout.setTabMode(TabLayout.MODE_FIXED);
                     ViewGroup.LayoutParams mParams = mTabLayout.getLayoutParams();
                     mParams.width = ViewGroup.LayoutParams.MATCH_PARENT;

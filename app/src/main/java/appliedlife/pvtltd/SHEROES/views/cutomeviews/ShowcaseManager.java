@@ -63,6 +63,8 @@ public class ShowcaseManager {
     //region showcase First in MainActivity
     public void showFirstMainActivityShowcase() {
         mUserName = "Hello " + mUserName + "! " + activity.getString(R.string.ID_SHOW_CASE_FEED_TITLE);
+        if (showcaseView != null)
+            ((ViewGroup) showcaseView.getParent()).removeView(showcaseView);
         showcaseView = new ShowcaseView.Builder(activity)
                 .withMaterialShowcase()
                 .setTarget(new ViewTarget(tvHome))
@@ -92,6 +94,8 @@ public class ShowcaseManager {
 
     //region showcase Second in MainActivity
     private void showSecondMainActivityShowcase() {
+        if (showcaseView != null)
+            ((ViewGroup) showcaseView.getParent()).removeView(showcaseView);
         showcaseView = new ShowcaseView.Builder(activity)
                 .withMaterialShowcase()
                 .setTarget(new ViewTarget(tvCommunities))
@@ -117,6 +121,8 @@ public class ShowcaseManager {
 
     //region showcase Third in MainActivity
     private void showThirdMainActivityShowCase() {
+        if (showcaseView != null)
+            ((ViewGroup) showcaseView.getParent()).removeView(showcaseView);
         showcaseView = new ShowcaseView.Builder(activity)
                 .withMaterialShowcase()
                 .setTarget(new ViewTarget(floatActionBtn))
