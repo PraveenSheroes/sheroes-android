@@ -108,17 +108,6 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_feed_community_post_user_bookmark"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableRight="@drawable/vector_bookmark_in_active"
-                android:paddingBottom="@dimen/dp_size_10"
-                android:paddingLeft="@dimen/dp_size_14"
-                android:paddingRight="@dimen/dp_size_20"
-                android:paddingTop="@dimen/dp_size_5"
-                android:visibility="gone" />
-
-            <TextView
                 android:id="@+id/follow_button"
                 android:layout_width="@dimen/user_post_follow_width"
                 android:layout_height="@dimen/user_post_follow_height"
@@ -182,7 +171,7 @@
             android:layout_marginTop="@dimen/dp_size_8"
             app:cardCornerRadius="@dimen/card_without_radius"
             app:cardPreventCornerOverlap="false"
-            app:cardElevation="@dimen/dp_size_0.5">
+            app:cardElevation="@dimen/post_link_cardelevation">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -230,34 +219,34 @@
 
                     <TextView
                         android:id="@+id/tv_post_link_title"
-                        android:layout_marginTop="@dimen/dp_size_8"
-                        android:layout_marginLeft="@dimen/dp_size_8"
-                        android:layout_marginRight="@dimen/dp_size_12"
+                        android:layout_marginTop="@dimen/post_link_title_margintop"
+                        android:layout_marginLeft="@dimen/post_link_title_marginleft"
+                        android:layout_marginRight="@dimen/post_link_title_marginright"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_16"
+                        android:textSize="@dimen/post_link_title_textsize"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/tv_post_link_sub_title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_8"
-                        android:layout_marginRight="@dimen/dp_size_12"
-                        android:layout_marginTop="@dimen/dp_size_4"
+                        android:layout_marginLeft="@dimen/post_link_subtitle_marginleft"
+                        android:layout_marginRight="@dimen/post_link_subtitle_marginright"
+                        android:layout_marginTop="@dimen/post_link_subtitle_margintop"
                         android:ellipsize="end"
                         android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:maxLines="@integer/int_value_for_line_2"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_12"
-                        android:layout_marginBottom="@dimen/dp_size_9"/>
+                        android:textSize="@dimen/post_link_subtitle_textsize"
+                        android:layout_marginBottom="@dimen/post_link_subtitle_marginbottom"/>
 
                     <TextView
                         android:id="@+id/tv_source_name"
-                        android:layout_marginLeft="@dimen/dp_size_8"
-                        android:layout_marginRight="@dimen/dp_size_12"
+                        android:layout_marginLeft="@dimen/post_link_source_marginLeft"
+                        android:layout_marginRight="@dimen/post_link_source_marginright"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -266,9 +255,9 @@
                         android:text="@string/youtube"
                         android:textAllCaps="true"
                         android:textColor="@color/posted_in"
-                        android:textSize="@dimen/sp_size_9"
+                        android:textSize="@dimen/post_link_source_textsize"
                         android:visibility="gone"
-                        android:layout_marginBottom="@dimen/dp_size_9"/>
+                        android:layout_marginBottom="@dimen/post_link_source_marginbottom"/>
                 </LinearLayout>
             </LinearLayout>
         </android.support.v7.widget.CardView>

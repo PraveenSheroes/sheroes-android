@@ -80,8 +80,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tv_communities_text"
-                android:layout_marginBottom="52dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginBottom="@dimen/right_drawer_community_margin_bottom"
+                android:layout_marginTop="@dimen/right_drawer_community_margin_top">
 
                 <ProgressBar
                     android:id="@+id/pb_communities_drawer"
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:drawableLeft="@drawable/vector_community_search"
-                    android:drawablePadding="@dimen/dp_size_16"
+                    android:drawablePadding="@dimen/right_drawer_explore_button_padding"
                     android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
                     android:letterSpacing="0.07"

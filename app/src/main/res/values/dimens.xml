@@ -630,7 +630,23 @@
     <dimen name="link_card_title_textsize">16sp</dimen>
     <dimen name="link_card_source_textsize">9sp</dimen>
     <dimen name="feed_card_marginbottom">10dp</dimen>
+    <dimen name="right_drawer_community_margin_bottom">52dp</dimen>
+    <dimen name="right_drawer_community_margin_top">16dp</dimen>
+    <dimen name="right_drawer_explore_button_padding">16dp</dimen>
+    <dimen name="post_link_subtitle_marginleft">8dp</dimen>
+    <dimen name="post_link_subtitle_marginright">12dp</dimen>
+    <dimen name="post_link_subtitle_margintop">4dp</dimen>
+    <dimen name="post_link_title_margintop">8dp</dimen>
+    <dimen name="post_link_title_marginleft">8dp</dimen>
+    <dimen name="post_link_title_marginright">12dp</dimen>
+    <dimen name="post_link_title_textsize">16sp</dimen>
+    <dimen name="post_link_subtitle_textsize">12sp</dimen>
+    <dimen name="post_link_subtitle_marginbottom">9dp</dimen>
+    <dimen name="post_link_source_marginLeft">8dp</dimen>
+    <dimen name="post_link_source_marginright">12dp</dimen>
+    <dimen name="post_link_source_marginbottom">9dp</dimen>
+    <dimen name="post_link_source_textsize">9sp</dimen>
 
-
+    <item name="post_link_cardelevation" type="dimen" format="float">0.5dp</item>
 </resources>
 
