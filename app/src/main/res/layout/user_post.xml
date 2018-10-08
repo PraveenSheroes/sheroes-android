@@ -231,7 +231,7 @@
             </FrameLayout>
 
             <android.support.v7.widget.CardView
-                cardCornerRadius="@dimen/dp_size_0"
+                cardCornerRadius="@dimen/card_without_radius"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/link_card_marginTop"

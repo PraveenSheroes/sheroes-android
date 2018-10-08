@@ -180,7 +180,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
-            app:cardCornerRadius="@dimen/dp_size_0"
+            app:cardCornerRadius="@dimen/card_without_radius"
             app:cardPreventCornerOverlap="false"
             app:cardElevation="@dimen/dp_size_0.5">
 
