@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -66,6 +67,9 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
 public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(UserPostHolder.class);
     private static final int COMMUNITY_TYPE_ID = 15;
+    private static final float FOLLOW_BUTTON_ORIGINAL = 1.0f;
+    private static final float FOLLOW_BUTTON_SEMI_TRANSPARENT = 0.3f;
+
     @Inject
     DateUtil mDateUtil;
     @Inject
@@ -88,6 +92,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.title)
     TextView mTitle;
+
+    @Bind(R.id.follow_button)
+    TextView mFollowButton;
 
     @Bind(R.id.post_time)
     TextView mPostTime;
@@ -210,6 +217,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
+        displayFollowUnFollowButton();
 
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
@@ -225,6 +233,36 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void viewRecycled() {
 
+    }
+
+    private void displayFollowUnFollowButton() {
+        if (mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+            mFollowButton.setVisibility(View.GONE);
+        } else {
+            if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
+                mFollowButton.setVisibility(View.VISIBLE);
+                followButtonVisibility(mContext, false);
+            } else {
+                mFollowButton.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    //Follow/Following button in leaderboard
+    private void followButtonVisibility(Context context, boolean isFollowed) {
+        if (isFollowed) {
+            mFollowButton.setEnabled(false);
+            mFollowButton.setAlpha(FOLLOW_BUTTON_SEMI_TRANSPARENT);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
+            mFollowButton.setText(context.getString(R.string.following_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
+        } else {
+            mFollowButton.setEnabled(true);
+            mFollowButton.setAlpha(FOLLOW_BUTTON_ORIGINAL);
+            mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
+            mFollowButton.setText(context.getString(R.string.follow_user));
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+        }
     }
 
     private void normalCommunityPostUi(long userId, int adminId) {
@@ -246,6 +284,12 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         allTextViewStringOperations(mContext);
         likeCommentOps();
         mPostMenu.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.follow_button)
+    public void onFollowedButtonClick() {
+        followButtonVisibility(mContext, !mUserPostObj.isSolrIgnoreIsUserFollowed());
+        mPostDetailCallback.onPostDetailsAuthorFollow(mUserPostObj);
     }
 
     @OnClick(R.id.li_post_link_render)

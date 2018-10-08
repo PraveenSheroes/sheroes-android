@@ -26,7 +26,7 @@ public class AppInstallation {
     public Integer appVersionCode;
 
     @SerializedName("push_token")
-    public String gcmId;
+    public String fcmId;
 
     @SerializedName("device_name")
     public String deviceName; //done

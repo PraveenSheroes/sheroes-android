@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/card_view_post"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -109,11 +110,25 @@
                 android:id="@+id/tv_feed_community_post_user_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:drawableRight="@drawable/vector_bookmark_in_active"
                 android:paddingBottom="@dimen/dp_size_10"
                 android:paddingLeft="@dimen/dp_size_14"
                 android:paddingRight="@dimen/dp_size_20"
                 android:paddingTop="@dimen/dp_size_5" />
+
+            <TextView
+                android:id="@+id/follow_button"
+                android:layout_width="@dimen/user_post_follow_width"
+                android:layout_height="@dimen/user_post_follow_height"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:background="@drawable/border_new_feature"
+                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+                android:foreground="?attr/selectableItemBackground"
+                android:textColor="@color/user_follow_post_text"
+                android:textSize="@dimen/user_follow_post_text_size"
+                tools:text="Following" />
 
             <TextView
                 android:id="@+id/tv_feed_community_post_user_menu"

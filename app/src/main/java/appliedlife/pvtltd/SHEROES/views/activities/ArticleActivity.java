@@ -603,11 +603,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 switch (view.getId()) {
                     case R.id.author_pic_container:
                     case R.id.author:
-                        if(mArticleSolrObj.isUserStory()) {
-                            Comment comment = mCommentsAdapter.getComment(position);
-                            if (!comment.isAnonymous() && !comment.isSpamComment()) {
-                                openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
-                            }
+                        Comment comment = mCommentsAdapter.getComment(position);
+                        if (!comment.isAnonymous() && !comment.isSpamComment()) {
+                            openProfile(comment.getParticipantUserId(), comment.isVerifiedMentor(), SCREEN_LABEL);
                         }
                         break;
 
@@ -813,7 +811,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public void onUserDetailClick() {
         if(mArticleSolrObj.isUserStory()) {
             boolean isMentor = false;
-            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isMentor = true;
             }
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();

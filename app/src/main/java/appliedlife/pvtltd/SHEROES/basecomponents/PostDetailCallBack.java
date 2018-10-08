@@ -51,4 +51,6 @@ public interface PostDetailCallBack {
     void onPollUnLikeClicked(PollSolarObj pollSolarObj);
 
     void onPollLikeClicked(PollSolarObj pollSolarObj);
+
+    void onPostDetailsAuthorFollow(UserPostSolrObj userPostSolrObj);
 }

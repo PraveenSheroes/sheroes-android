@@ -106,6 +106,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
@@ -135,6 +136,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
+
+    //Menu Item Id
+    private static final int SHARE_MENU_ID = 1;
+    private static final int EDIT_MENU_ID = 2;
+    private static final int DELETE_MENU_ID = 3;
+    private static final int REPORT_MENU_ID = 4;
+    private static final int FEATURED_POST_MENU_ID = 5;
+    private static final int BOOKMARK_MENU_ID = 6;
 
     @Inject
     AppUtils mAppUtils;
@@ -609,7 +618,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
 
-            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.MENTOR_TYPE_ID) {
+            if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isLoggedInUserMentor = true;
             }
         }
@@ -842,19 +851,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
 
-            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.ID_SHARE)));
-            popup.getMenu().add(0, R.id.edit, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
-            popup.getMenu().add(0, R.id.delete, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
-            popup.getMenu().add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+            popup.getMenu().add(0, R.id.share, SHARE_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.ID_SHARE)));
+            popup.getMenu().add(0, R.id.edit, EDIT_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
+            popup.getMenu().add(0, R.id.delete, DELETE_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+            popup.getMenu().add(0, R.id.report_spam, REPORT_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             if (adminId == AppConstants.TWO_CONSTANT || userPostObj.isCommunityOwner()) {
                 if (userPostObj.isTopPost()) {
-                    popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.UNFEATURE_POST)));
+                    popup.getMenu().add(0, R.id.top_post, FEATURED_POST_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.UNFEATURE_POST)));
                 } else {
-                    popup.getMenu().add(0, R.id.top_post, 5, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.FEATURE_POST)));
+                    popup.getMenu().add(0, R.id.top_post, FEATURED_POST_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_feature_post), getResources().getString(R.string.FEATURE_POST)));
                 }
             }
             //****   Hide/show options according to user
+            if(userPostObj.isBookmarked()) {
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
+            } else {
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmark), getResources().getString(R.string.Bookmark))).setVisible(true);
+            }
 
             if (userPostObj.getAuthorId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
                 popup.getMenu().findItem(R.id.report_spam).setVisible(false);
@@ -886,6 +900,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             //Enable delete response for admin in challenge response
             if (userPostObj.communityId == 0) {
+                popup.getMenu().findItem(R.id.edit).setVisible(false);
                 if (adminId == AppConstants.TWO_CONSTANT) {
                     popup.getMenu().findItem(R.id.delete).setVisible(true);
                 } else {
@@ -923,6 +938,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.POST, userPostObj);
+                            return true;
+                        case R.id.bookmark:
+                            onPostBookMarkedClicked(userPostObj);
                             return true;
                         default:
                             return false;
@@ -1046,7 +1064,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
             popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
-            popup.getMenu().add(0, R.id.report_spam, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+            popup.getMenu().add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             Comment comment = userPostObj.getLastComments().get(0);
 
@@ -1064,6 +1082,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 popup.getMenu().findItem(R.id.delete).setVisible(false);
             }
 
+
             popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
@@ -1076,9 +1095,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.COMMENT, userPostObj);
-                            //SpamPostRequest request = SpamUtil.spamRequestBuilder(userPostObj, tvFeedCommunityPostUserCommentPostMenu, mLoggedInUser);
-                            //reportSpamDialog(request, userPostObj);
-
+                            return true;
                         default:
                             return false;
                     }
@@ -1190,7 +1207,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
 
-            CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+            if(carouselDataObj.getStreamType()!=null && carouselDataObj.getStreamType().equalsIgnoreCase("LeaderboardCarouselStream")) {
+                UsersCollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+            } else {
+                CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+            }
         }
     }
 
@@ -1222,32 +1243,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } catch (URISyntaxException e) {
                 Crashlytics.getInstance().core.logException(e);
             }
-        }
-    }
-
-    @Override
-    public void onUserFollowedUnFollowed(UserSolrObj userSolrObj) {
-        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
-        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-
-            mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
-        } else {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
         }
     }
 
@@ -1330,6 +1325,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
                 popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
                 popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+            }else if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                if(mUserPreference.get().getUserSummary().getUserBO().getUserTypeId()==AppConstants.ADMIN_TYPE_ID){
+                    popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+                }
             }
         }
         if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
@@ -1417,6 +1416,30 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onLeaderBoardUserClick(long userId, String sourceScreenName) {
         ProfileActivity.navigateTo(getActivity(), userId, false, PROFILE_NOTIFICATION_ID, sourceScreenName, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    @Override
+    public void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userPostSolrObj.getNameOrTitle())
+                        .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                        .build();
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+            properties.putAll(getExtraProperties());
+        }
+
+        if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
+            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
+            mFeedPresenter.getPostAuthorUnfollowed(publicProfileListRequest, userPostSolrObj);
+        } else {
+            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
+            mFeedPresenter.getPostAuthorFollowed(publicProfileListRequest, userPostSolrObj);
+        }
     }
 
     @Override
@@ -1654,25 +1677,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onMentorFollowClicked(UserSolrObj userSolrObj) {
+    public void onFollowClicked(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userSolrObj.getNameOrTitle())
+                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                        .build();
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+            properties.putAll(getExtraProperties());
+        }
+
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
         } else {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
         }
@@ -1950,15 +1972,31 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             FeedDetail feedDetail = feedDetails.get(i);
             if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
                 mAdapter.setData(i, updatedFeedDetail);
-            }
-            if (feedDetail instanceof CarouselDataObj) {
+            } else if (feedDetail instanceof CarouselDataObj) {
                 for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
                     FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
                     if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
+                        if (updatedFeedDetail instanceof UserSolrObj && innerFeedDetail instanceof UserSolrObj) { //Since community name not available in user solr object
+                            UserSolrObj updatedUserSolrObj = (UserSolrObj) updatedFeedDetail;
+                            if (!StringUtil.isNotNullOrEmptyString(updatedUserSolrObj.getmSolarIgnoreCommunityName())) {
+                                UserSolrObj userSolrObj = (UserSolrObj) innerFeedDetail;
+                                updatedUserSolrObj.setmSolarIgnoreCommunityName(userSolrObj.getmSolarIgnoreCommunityName());
+                                updatedFeedDetail = updatedUserSolrObj;
+                            }
+                        }
                         ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
                         mAdapter.setData(i, feedDetail);
                     }
                 }
+            } else if(feedDetail!=null && feedDetail instanceof LeaderBoardUserSolrObj ) {
+                if(((LeaderBoardUserSolrObj)feedDetail).getUserSolrObj() !=null) {
+                    mAdapter.setData(i, feedDetail);
+                }
+            } else if(feedDetail!=null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
+                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
+                mAdapter.setData(i, userPostSolrObj);
             }
         }
         return;
@@ -1969,6 +2007,22 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (getActivity() != null && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
         }
+    }
+
+    public void scrollToTopInList() {
+        if(mFeedRecyclerView.getLayoutManager() instanceof LinearLayoutManager)
+        {
+            LinearLayoutManager mLayoutManager  =(LinearLayoutManager) mFeedRecyclerView.getLayoutManager();
+            int lastVis = mLayoutManager.findLastVisibleItemPosition();
+            if(lastVis <=AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE)
+                mFeedRecyclerView.smoothScrollToPosition(0);
+            else{
+                mFeedRecyclerView.scrollToPosition(AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE);
+                mFeedRecyclerView.smoothScrollToPosition(0);
+            }
+        }
+
+
     }
 
     @Override

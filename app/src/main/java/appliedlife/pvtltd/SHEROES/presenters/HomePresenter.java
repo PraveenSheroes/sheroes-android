@@ -66,7 +66,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.GCM_ID;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FCM_ID;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -124,7 +124,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         return super.isViewAttached();
     }
 
-    public void getNewGCMidFromPresenter(LoginRequest loginRequest) {
+    public void getNewFCMidFromPresenter(LoginRequest loginRequest) {
         mHomeModel.getNewGCMidFromModel(loginRequest)
                 .compose(this.<GcmIdResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<GcmIdResponse>() {
@@ -140,9 +140,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     }
 
                     @Override
-                    public void onNext(GcmIdResponse gcmIdResponse) {
-                        if (null != gcmIdResponse) {
-                            getMvpView().getNotificationReadCountSuccess(gcmIdResponse, GCM_ID);
+                    public void onNext(GcmIdResponse fcmIdResponse) {
+                        if (null != fcmIdResponse) {
+                            getMvpView().getNotificationReadCountSuccess(fcmIdResponse, FCM_ID);
                         }
                     }
                 });
@@ -316,8 +316,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
-                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            }
                         }
                         getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
                     }
@@ -350,7 +355,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                            if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                            }
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         } else {
