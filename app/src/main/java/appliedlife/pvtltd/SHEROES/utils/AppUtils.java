@@ -63,7 +63,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -1865,7 +1865,7 @@ public class AppUtils {
     }
 
     public static Map createCommunityImagePostRequest(List<String> filePath) {
-        Map<String, RequestBody> map = new HashMap<>();
+        LinkedHashMap<String, RequestBody> map = new LinkedHashMap<>();
         for (int i = 0; i < filePath.size(); i++) {
             File file = new File(filePath.get(i));
             RequestBody fileBody = RequestBody.create(MediaType.parse(FileUtil.getMimeType(filePath.get(i))), file);
