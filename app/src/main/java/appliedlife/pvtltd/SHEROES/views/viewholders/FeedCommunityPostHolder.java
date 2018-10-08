@@ -489,7 +489,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             if (mUserPostObj.isOgVideoLinkB()) {
                                 ivPlay.setVisibility(View.VISIBLE);
                                 tvSourceName.setVisibility(View.VISIBLE);
-
                             } else {
                                 ivPlay.setVisibility(View.GONE);
                                 tvSourceName.setVisibility(View.GONE);
