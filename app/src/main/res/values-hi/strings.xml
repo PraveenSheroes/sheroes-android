@@ -42,7 +42,7 @@
     <string name="ID_NOTIFICATION">Notifications</string>
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
-    <string name="ID_MY_COMMUNITIES">My Communities</string>
+    <string name="ID_MY_COMMUNITIES">मेरी कम्युनिटीज़</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
@@ -548,7 +548,7 @@
     <string name="followed_mentors">Followed Champions</string>
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
-    <string name="new_feature">New</string>
+    <string name="new_feature">नया</string>
     <string name="feed_header">FEED_HEADER</string>
     <string name="add_location">Add Location</string>
     <string name="add_skills">Add Skills</string>
@@ -671,7 +671,7 @@
     <string name="full_name_err_msg">Please enter full name</string>
     <string name="limit">0/140</string>
     <string name="other">Other</string>
-    <string name="explore_All">Explore all</string>
+    <string name="explore_All">और खोज करें</string>
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>

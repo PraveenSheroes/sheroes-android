@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,20 +14,34 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.vernacular.LanguageType;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
-import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class SelectLanguageDialog extends BaseDialogFragment implements View.OnClickListener {
-    private static final String SCREEN_LABEL = "Select Language Screen";
+public class SelectLanguageDialog extends BaseDialogFragment {
+    private static final String SCREEN_LABEL = "Language Setting Screen";
     //region Inject variables
     //endregion
 
     //region View variables
-    private TextView tvContinue;
-    private ImageView ivLangHind;
-    private ImageView ivLangEng;
+    @Bind(R.id.tv_continue)
+    TextView tvContinue;
+    @Bind(R.id.iv_lang_hind)
+    ImageView ivLangHind;
+    @Bind(R.id.iv_lang_eng)
+    ImageView ivLangEng;
+    @Bind(R.id.fl_hindi)
+    FrameLayout flHindi;
+    @Bind(R.id.fl_english)
+    FrameLayout flEnglish;
+    @Bind(R.id.iv_language_cross)
+    ImageView ivLanguageCross;
     //endregion
 
     //region member variables
@@ -39,15 +54,10 @@ public class SelectLanguageDialog extends BaseDialogFragment implements View.OnC
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.select_language_dialog, container, false);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
+        ButterKnife.bind(this, view);
         setCancelable(true);
-        tvContinue = view.findViewById(R.id.tv_continue);
-        ivLangHind = view.findViewById(R.id.iv_lang_hind);
-        ivLangEng = view.findViewById(R.id.iv_lang_eng);
-        FrameLayout flHindi = view.findViewById(R.id.fl_hindi);
-        FrameLayout flEnglish = view.findViewById(R.id.fl_english);
-        flHindi.setOnClickListener(this);
-        flEnglish.setOnClickListener(this);
-        tvContinue.setOnClickListener(this);
+        ivLanguageCross.setVisibility(View.VISIBLE);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
     }
@@ -61,14 +71,16 @@ public class SelectLanguageDialog extends BaseDialogFragment implements View.OnC
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                getActivity().finish();
+                onCrossClick();
             }
         };
     }
     //endregion
 
     //region onclick methods
-    private void onHindiClick() {
+
+    @OnClick(R.id.fl_hindi)
+    public void onHindiClick() {
         tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         ivLangHind.setVisibility(View.VISIBLE);
         ivLangEng.setVisibility(View.GONE);
@@ -76,7 +88,8 @@ public class SelectLanguageDialog extends BaseDialogFragment implements View.OnC
         isLanguageSelected = true;
     }
 
-    private void onEnglishClick() {
+    @OnClick(R.id.fl_english)
+    public void onEnglishClick() {
         tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         ivLangEng.setVisibility(View.VISIBLE);
         ivLangHind.setVisibility(View.GONE);
@@ -84,26 +97,22 @@ public class SelectLanguageDialog extends BaseDialogFragment implements View.OnC
         isLanguageSelected = true;
     }
 
-    private void onContinueClick() {
+    @OnClick(R.id.tv_continue)
+    public void onContinueClick() {
         if (isLanguageSelected) {
+          //  Intent i = new Intent(getActivity(), HomeActivity.class);
+          //  startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
+            if(getActivity() instanceof HomeActivity)
+            {
+                ((HomeActivity)getActivity()).refreshHomeViews();
+            }
             dismiss();
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.fl_hindi:
-                onHindiClick();
-                break;
-            case R.id.fl_english:
-                onEnglishClick();
-                break;
-            case R.id.tv_continue:
-                onContinueClick();
-                break;
-        }
+    @OnClick(R.id.iv_language_cross)
+    public void onCrossClick() {
+        dismiss();
     }
 
     //endregion

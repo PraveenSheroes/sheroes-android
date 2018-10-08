@@ -119,7 +119,7 @@ public class SheroesAppModule {
                 } else {
                     builder.header("Content-Type", "application/json");
                 }
-                builder.header("language", CommonUtil.getPrefStringValue(AppConstants.LANGUAGE_KEY));
+                builder.header("X-Language", CommonUtil.getPrefStringValue(AppConstants.LANGUAGE_KEY));
                 builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
                 builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
                 if (NetworkUtil.isConnected(mApplication)) {

@@ -1,12 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -102,7 +99,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     private String deepLinkUrl = null;
     private String defaultTab = null;
     private boolean isLanguageSelected;
-    private static int flagActivity = 0;
     //endregion
 
     //region overridden variables
@@ -143,7 +139,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
 
     private void setNewLocale(String language) {
         LocaleManager.setNewLocale(this, language);
-        CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
     }
 
     @Override
@@ -203,7 +198,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             mInstallUpdatePreference.set(installUpdateForMoEngage);
             mMoEHelper.setExistingUser(false);
             mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
-            isFirstTimeUser=true;
+            isFirstTimeUser = true;
         }
         moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
 
@@ -272,13 +267,18 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     }
 
     private void setUpView() {
-        setContentView(R.layout.select_language_dialog);
-        ButterKnife.bind(LanguageSelectionActivity.this);
-        if (isFirstTimeUser) {
-            AnalyticsManager.trackScreenView(getScreenName());
+        if (CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
+            openWelcomeScreen();
+            finish();
+        } else {
+            setContentView(R.layout.select_language_dialog);
+            ButterKnife.bind(LanguageSelectionActivity.this);
+            if (isFirstTimeUser) {
+                AnalyticsManager.trackScreenView(getScreenName());
+            }
+            mLoginPresenter.getMasterDataToPresenter();
+            mLoginPresenter.queryConfig();
         }
-        mLoginPresenter.getMasterDataToPresenter();
-        mLoginPresenter.queryConfig();
     }
 
     private void refreshAuthTokenResponse(LoginResponse loginResponse) {
@@ -330,18 +330,9 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
             startActivity(boardingIntent);
             finish();
-            CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
         }
     }
-    public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
-        Intent intent = new Intent(fromActivity, LanguageSelectionActivity.class);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        LanguageSelectionActivity.flagActivity = flagActivity;
-        if (!CommonUtil.isEmpty(screenProperties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, screenProperties);
-        }
-        ActivityCompat.startActivity(fromActivity, intent, null);
-    }
+
     @OnClick(R.id.fl_hindi)
     public void onHindiClick() {
         tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
@@ -363,14 +354,18 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     @OnClick(R.id.tv_continue)
     public void onContinueClick() {
         if (isLanguageSelected) {
-            Intent intent = new Intent(LanguageSelectionActivity.this, WelcomeActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putBoolean(BaseActivity.BRANCH_FIRST_SESSION, isBranchFirstSession);
-            bundle.putString(BaseActivity.DEEP_LINK_URL, deepLinkUrl);
-            intent.putExtras(bundle);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-            startActivity(intent);
+            openWelcomeScreen();
         }
+    }
+
+    private void openWelcomeScreen() {
+        Intent intent = new Intent(LanguageSelectionActivity.this, WelcomeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(BaseActivity.BRANCH_FIRST_SESSION, isBranchFirstSession);
+        bundle.putString(BaseActivity.DEEP_LINK_URL, deepLinkUrl);
+        intent.putExtras(bundle);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
     }
 
     @Override

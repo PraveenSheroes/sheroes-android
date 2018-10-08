@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -19,29 +20,29 @@
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_16" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
             android:id="@+id/tv_user_name"
+            style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_10"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textAllCaps="true"
             android:textColor="@color/nav_menu_header_label"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
             android:id="@+id/tv_user_location"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_size_16"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_6"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/nav_menu_header_label"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <include
             android:id="@+id/progress_bar"

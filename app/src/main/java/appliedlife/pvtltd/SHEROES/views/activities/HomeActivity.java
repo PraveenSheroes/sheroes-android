@@ -151,6 +151,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -454,6 +455,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+    public void refreshHomeViews()
+    {
+        initHomeViewPagerAndTabs();
+        mTvHome.setText(R.string.home_label);
+        mTvCommunities.setText(R.string.ID_COMMUNITIES);
+        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -497,8 +506,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
-    private void selectLanguage() {
-        LanguageSelectionActivity.navigateTo(this, 1, getScreenName(), null);
+    public void showSelectLanguageOption() {
+        SelectLanguageDialog selectLanguageDialog = (SelectLanguageDialog) getFragmentManager().findFragmentByTag(SelectLanguageDialog.class.getName());
+        if (selectLanguageDialog == null) {
+            selectLanguageDialog = new SelectLanguageDialog();
+            Bundle b = new Bundle();
+            selectLanguageDialog.setArguments(b);
+        }
+        if (!selectLanguageDialog.isVisible() && !selectLanguageDialog.isAdded() && !isFinishing() && !mIsDestroyed) {
+            selectLanguageDialog.show(getFragmentManager(), SelectLanguageDialog.class.getName());
+        }
     }
 
     @OnClick(R.id.invite)
@@ -1251,11 +1268,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
                   //  writeAStory();
-                    selectLanguage();
+                    showSelectLanguageOption();
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL)) {
-                    selectLanguage();
+                    showSelectLanguageOption();
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
@@ -1355,6 +1372,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
                         mentorListActivity();
                     }
+                }
+                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL)) {
+                    showSelectLanguageOption();
                 }
             }
         }
