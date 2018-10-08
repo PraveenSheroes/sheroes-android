@@ -5,17 +5,19 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.datamanger.ImpressionData;
+
 public class UserEventsContainer {
 
     @SerializedName("userEvents")
     @Expose
-    private List<UserEvent> userEvent = null;
+    private List<ImpressionData> userEvent = null;
 
-    public List<UserEvent> getUserEvent() {
+    public List<ImpressionData> getUserEvent() {
         return userEvent;
     }
 
-    public void setUserEvent(List<UserEvent> userEvent) {
+    public void setUserEvent(List<ImpressionData> userEvent) {
         this.userEvent = userEvent;
     }
 

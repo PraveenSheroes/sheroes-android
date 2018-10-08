@@ -375,6 +375,6 @@ public interface SheroesAppServiceApi {
     @POST("participation/global/image/add")
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 
-    @POST("http://testevents.sheroes.in/user/event/producer")
+    @POST("http://testevents.sheroes.in:8080/user/event/producer")
     Observable<BaseResponse> updateImpressionData(@Body UserEventsContainer userEventsContainer);
 }

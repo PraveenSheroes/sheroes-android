@@ -19,17 +19,66 @@ public class ImpressionData {
     @ColumnInfo(name = "postId")
     private String postId;
 
-    @ColumnInfo(name = "position")
+    @ColumnInfo(name = "positionInList")
     private int position;
 
     @ColumnInfo(name = "engagementTime")
-    private String engagementTime;
+    private int engagementTime;
 
     @ColumnInfo(name = "timestamp")
-    private String timeStamp;
+    private long timeStamp;
 
     @ColumnInfo(name = "screenName")
     private String screenName;
+
+    @ColumnInfo(name = "event")
+    private String event;
+
+    @ColumnInfo(name = "ipAddress")
+    private String ipAddress;
+
+    @ColumnInfo(name = "deviceId")
+    private String deviceId;
+
+    @ColumnInfo(name = "gtid")
+    private String gtId;
+
+    @ColumnInfo(name = "userAgent")
+    private String userAgent = "Android";
+
+    @ColumnInfo(name = "source")
+    private String source;
+
+    @ColumnInfo(name = "sourceCollection")
+    private String sourceCollection;
+
+    @ColumnInfo(name = "sourceURL")
+    private String sourceURL;
+
+    @ColumnInfo(name = "postType")
+    private String postType;
+
+    @ColumnInfo(name = "appVersion")
+    private String appVersion;
+
+    @ColumnInfo(name = "feedConfigVersion")
+    private int feedConfigVersion;
+
+    public String getAppVersion() {
+        return appVersion;
+    }
+
+    public void setAppVersion(String appVersion) {
+        this.appVersion = appVersion;
+    }
+
+    public String getEvent() {
+        return event;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
 
     public String getUserId() {
         return userId;
@@ -63,19 +112,19 @@ public class ImpressionData {
         this.position = position;
     }
 
-    public String getEngagementTime() {
+    public int getEngagementTime() {
         return engagementTime;
     }
 
-    public void setEngagementTime(String engagementTime) {
+    public void setEngagementTime(int engagementTime) {
         this.engagementTime = engagementTime;
     }
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 
@@ -119,43 +168,25 @@ public class ImpressionData {
         this.postType = postType;
     }
 
-    public String getPositionInList() {
-        return positionInList;
+    public int getFeedConfigVersion() {
+        return feedConfigVersion;
     }
 
-    public void setPositionInList(String positionInList) {
-        this.positionInList = positionInList;
+    public void setFeedConfigVersion(int feedConfigVersion) {
+        this.feedConfigVersion = feedConfigVersion;
     }
-
-    @ColumnInfo(name = "source")
-    private String source;
-
-    @ColumnInfo(name = "sourceCollection")
-    private String sourceCollection;
-
-    @ColumnInfo(name = "sourceURL")
-    private String sourceURL;
-
-    @ColumnInfo(name = "postType")
-    private String postType;
-
-    @ColumnInfo(name = "positionInList")
-    private String positionInList;
 
     // Duration for which the view has been viewed.
-    private long viewDuration = -1;
+    private transient long viewDuration = -1;
 
     // ID for the view that was viewed (we'll use the position of the item here).
-    private int viewId;
-
-    // Percentage of the height visible
-    private double percentageHeightVisible;
+    private transient int viewId;
 
     //start time
-    private long mStartTime = -1;
+    private transient long mStartTime = -1;
 
     //end time
-    private long mEndTime = -1;
+    private transient long mEndTime = -1;
 
     public long getViewDuration() {
         return viewDuration;
@@ -171,14 +202,6 @@ public class ImpressionData {
 
     public void setViewId(int viewId) {
         this.viewId = viewId;
-    }
-
-    public double getPercentageHeightVisible() {
-        return percentageHeightVisible;
-    }
-
-    public void setPercentageHeightVisible(double percentageHeightVisible) {
-        this.percentageHeightVisible = percentageHeightVisible;
     }
 
     public long getStartTime() {
@@ -203,5 +226,37 @@ public class ImpressionData {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getGtId() {
+        return gtId;
+    }
+
+    public void setGtId(String gtId) {
+        this.gtId = gtId;
+    }
+
+    public String getUserAgent() {
+        return userAgent;
+    }
+
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
     }
 }
