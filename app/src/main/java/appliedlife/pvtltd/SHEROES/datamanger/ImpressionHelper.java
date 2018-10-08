@@ -127,12 +127,14 @@ public class ImpressionHelper {
         if (finalViewData.size() > 10) {
             int index = getLastIndexOfUpdatedItem();
             if (index > -1) {
-                List<ImpressionData> forDb = finalViewData.subList(0, index);
+                List<ImpressionData> forDb = finalViewData.subList(0, index+1);
                 Log.i("###", "###Added to db");
                 addToDatabase(mContext, forDb);
 
-                if (finalViewData.size() > index)
-                    finalViewData = finalViewData.subList(index + 1, finalViewData.size());
+                if (finalViewData.size() > index+1) {
+                    finalViewData = finalViewData.subList(index+1 , finalViewData.size());
+                }
+                Log.i("Final list", ":"+finalViewData.size());
             }
         }
 
@@ -161,6 +163,7 @@ public class ImpressionHelper {
                 ImpressionData impressionData = finalViewData.get(i);
                 if(impressionData.getEndTime()!=-1) {
                     index=  i;
+                    break;
                 }
             }
         }
