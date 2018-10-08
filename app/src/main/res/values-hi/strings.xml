@@ -105,7 +105,7 @@
     <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">बदले</string>
     <string name="SHARE_PROFILE">Share Profile</string>
-    <string name="ID_EDIT_PROFILE">Edit Profile</string>
+    <string name="ID_EDIT_PROFILE">प्रोफाइल में बदलाव</string>
     <string name="ID_DELETE">हटाना</string>
     <string name="ID_APPROVE">मंज़ूर</string>
 
@@ -175,7 +175,7 @@
     <!--String related setting_preferences_deactiveaccount page -->
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">Ask a Question</string>
+    <string name="ID_ASK_QUESTION">सवाल पूछे</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">फॉलो</string>
     <string name="following_user">फॉलोइंग</string>
@@ -329,7 +329,7 @@
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
     <string name="carousel_outer_seemore">More Top Icon</string>
-    <string name="ID_CAROUSEL_SEE_MORE">See More</string>
+    <string name="ID_CAROUSEL_SEE_MORE">और देखें</string>
 
 
     <string name="ID_POSTED_REVIEW">posted a review for</string>
@@ -513,10 +513,10 @@
     <string name="ID_MENTOR_Q_A">Q &amp; A</string>
     <string name="ID_ASKING">asking</string>
     <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
-    <string name="ID_ANSWERED_QUESTIONS">answered questions</string>
+    <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
     <string name="ID_GET_EXPERT_ADVICE">चैंपियन से प्रतिष्ठित सलाह प्राप्त करें</string>
     <string name="ID_INSIGHT">Insights</string>
-    <string name="ID_SEE_INSIGHT">See Insights</string>
+    <string name="ID_SEE_INSIGHT">इनसाइट्स देखें</string>
     <string name="ID_PROFILE_VISITOR">Profile Visitors in last 7 days</string>
     <string name="ID_FOLLOWER_VISITOR">Followers in last 7 days</string>
     <string name="ID_POSTS">Posts created in last 7 days</string>
@@ -691,7 +691,7 @@
     <string name="badge_closet_won_this_week_text">Won this week</string>
     <string name="badge_desc">%1$sis a Super SHEROES in %2$s</string>
     <string name="inactive_badge_desc">%1$swas a Super SHEROES in %2$s</string>
-    <string name="user_card_desc">Super SHEROES in %1$s</string>
+    <string name="user_card_desc">%1$s में सुपर SHEROES</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>
     <string name="view_profile">VIEW PROFILE</string>
 
@@ -781,6 +781,8 @@
 
     <string name="welcome">स्वागत हे</string>
     <string name="hi">नमस्ते</string>
+    <string name="select_your_preferred_language">Select your Preferred Language</string>
+    <string name="lang_continue">Continue</string>
     <string name="top_post">शीर्ष पोस्ट</string>
     <string name="my_feed">मेरा फीड</string>
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
@@ -797,4 +799,5 @@
     <string name="type_your_comment">अपना कमेंट यहां टाइप करें&#8230;</string>
     <string name="top_communities_text">SHEROES पर कुछ ट्रेंडिंग पोस्ट यहां दी गई हैं</string>
     <string name="health_tips">स्वास्थ्य सुझाव</string>
+
 </resources>

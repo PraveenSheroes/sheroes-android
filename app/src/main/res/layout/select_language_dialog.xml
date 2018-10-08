@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -17,18 +18,18 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
         android:id="@+id/tv_header"
+        style="@style/TextView20spMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/lang_header_top_margin"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:text="@string/select_your_preferred_language"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/language_header"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        vernacular:customTextFontFamily="@string/medium_font" />
 
     <FrameLayout
         android:id="@+id/fl_english"
@@ -54,9 +55,9 @@
             android:id="@+id/iv_lang_eng"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_gravity="top|right"
-            android:background="@drawable/vector_tick" />
+            android:background="@drawable/vector_tick"
+            android:visibility="gone" />
     </FrameLayout>
 
     <FrameLayout
@@ -84,11 +85,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|right"
-            android:visibility="gone"
-            android:background="@drawable/vector_tick" />
+            android:background="@drawable/vector_tick"
+            android:visibility="gone" />
     </FrameLayout>
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
         android:id="@+id/tv_continue"
         style="@style/TextView14spMedium"
         android:layout_width="150dp"
@@ -102,6 +103,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.655" />
+        app:layout_constraintVertical_bias="0.655"
+        vernacular:customTextFontFamily="@string/medium_font" />
 
 </android.support.constraint.ConstraintLayout>

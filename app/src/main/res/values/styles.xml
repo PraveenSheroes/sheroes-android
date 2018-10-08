@@ -211,6 +211,10 @@
         <item name="android:textSize">9sp</item>
         <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
     </style>
+    <style name="TextView10spBold" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@string/ID_ROBOTO_BOLD</item>
+    </style>
     <style name="TextView12spRegular" parent="TextAppearance.AppCompat">
         <item name="android:textSize">12sp</item>
         <item name="android:fontFamily">@string/ID_ROBOTO_REGULAR</item>
@@ -270,6 +274,10 @@
     </style>
     <style name="Button14spBold" parent="Base.Widget.AppCompat.Button">
         <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
+    </style>
+    <style name="TextView20spMedium" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20sp</item>
         <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
     </style>
     <style name="TextView32spRegular" parent="TextAppearance.AppCompat">

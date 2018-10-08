@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,7 +12,6 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +35,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
-import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -402,7 +399,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
             String feedTitle = mUserPostObj.getAuthorName();
             String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS() == null ? "" : mUserPostObj.getChallengeAcceptPostTextS();
-            String communityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + mContext.getString(R.string.challenge): mUserPostObj.getPostCommunityName();
+            String communityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + mContext.getString(R.string.challenge) : mUserPostObj.getPostCommunityName();
             if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
                 if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                     if (mUserPostObj.isAuthorMentor()) {
@@ -414,24 +411,26 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                     mAuthorVerifiedIcon.setVisibility(View.GONE);
                 }
                 CommonUtil.showHideUserBadge(mContext, mUserPostObj.isAnonymous(), mBadgeIcon, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
-
+                boolean isMentor;
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                    isMentor = true;
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     } else if (feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         feedTitle = mUserPostObj.getPostCommunityName();
                         String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     } else {
                         feedTitle = mContext.getString(R.string.ID_ANONYMOUS);
                         String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     }
                 } else {
+                    isMentor = false;
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         String header = mContext.getString(R.string.post_header_name_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     } else if (feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         feedTitle = mUserPostObj.getPostCommunityName();
                         String header = mContext.getString(R.string.post_header_community, feedTitle);
@@ -439,7 +438,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                     } else {
                         feedTitle = mContext.getString(R.string.ID_ANONYMOUS);
                         String header = mContext.getString(R.string.post_header_name_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     }
                 }
 
@@ -447,23 +446,29 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mUserPostObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            mPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
+            mPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate, mContext));
         } else {
             mPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
     }
-    private void clickOnUserNameAndCommunityName(String userNameAndCommunity, String userName, String communityName) {
+
+    private void clickOnUserNameAndCommunityName(String userNameAndCommunity, String userName, String communityName, final boolean isMentor) {
 
         SpannableString spanString = new SpannableString(userNameAndCommunity);
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
-                        mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
-                    } else if (!mUserPostObj.isAnonymous()) {
+                if (isMentor) {
+                    if (!mUserPostObj.isAnonymous()) {
                         mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }
+                } else {
+                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+                        mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
+                    }
+                }
+
             }
 
             @Override
@@ -510,6 +515,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         }
 
     }
+
     private void clickOnCommunityName(String nameAndCommunity, String communityName) {
 
         SpannableString SpanString = new SpannableString(nameAndCommunity);
@@ -898,7 +904,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         for (int i = 0; i < mentionSpanList.size(); i++) {
             final MentionSpan mentionSpan = mentionSpanList.get(i);
             if (null != mentionSpan && null != mentionSpan.getMention()) {
-                if (mentionSpan.getMention().getStartIndex()>=0&&mentionSpan.getMention().getStartIndex() + i < strWithAddExtra.length()) {
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getStartIndex() + i < strWithAddExtra.length()) {
                     strWithAddExtra.insert(mentionSpan.getMention().getStartIndex() + i, '@');
                 }
             }
@@ -926,7 +932,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                         textPaint.setUnderlineText(false);
                     }
                 };
-                if (mentionSpan.getMention().getStartIndex() >=0&&mentionSpan.getMention().getEndIndex()>0&&mentionSpan.getMention().getEndIndex() + i + 1 <= spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
+                if (mentionSpan.getMention().getStartIndex() >= 0 && mentionSpan.getMention().getEndIndex() > 0 && mentionSpan.getMention().getEndIndex() + i + 1 <= spannableString.length() && mentionSpan.getMention().getStartIndex() + i <= spannableString.length()) {
                     int start = mentionSpan.getMention().getStartIndex() + i;
                     int end = mentionSpan.getMention().getEndIndex() + i;
                     spannableString.setSpan(postedInClick, start, end + 1, 0);

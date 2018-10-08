@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="@dimen/see_more_width"
     android:layout_height="@dimen/see_more_height"
     android:gravity="center">
@@ -10,28 +11,27 @@
         android:id="@+id/more_button"
         android:layout_width="56dp"
         android:layout_height="56dp"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_vertical"
         android:layout_margin="4dp"
         android:scaleType="center"
-        android:layout_centerHorizontal="true"
         android:src="@drawable/vector_arrow_right_24dp"
         app:backgroundTint="@color/white"
         app:elevation="4dp" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
         android:id="@+id/more_text"
-        android:gravity="center_horizontal"
+        style="@style/TextView14spMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
         android:layout_below="@id/more_button"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:textStyle="normal"
         android:layout_marginTop="16dp"
-        android:textColor="#dc4541"
-        android:textAllCaps="true"
+        android:gravity="center_horizontal"
         android:letterSpacing="0.07"
         android:text="@string/ID_CAROUSEL_SEE_MORE"
-        />
+        android:textAllCaps="true"
+        android:textColor="#dc4541"
+        android:textStyle="normal"
+        vernacular:customTextFontFamily="@string/medium_font" />
 
 </RelativeLayout>
