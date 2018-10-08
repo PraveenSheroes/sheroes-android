@@ -326,7 +326,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(articleObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(articleObj.getCreatedDate(), AppConstants.DATE_FORMAT);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             if (articleObj.getCharCount() > 0) {
                 stringBuilder.append(AppConstants.DOT).append(articleObj.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
             }
@@ -494,7 +494,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             }
             if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
-                tvFeedArticleCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+                tvFeedArticleCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             }
            /* if (lastComment.isMyOwnParticipation()) {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);

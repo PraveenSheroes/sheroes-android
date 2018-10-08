@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.views.cutomeviews;
+package appliedlife.pvtltd.SHEROES.vernacular;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;

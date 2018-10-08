@@ -561,7 +561,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void postDataContentRendering(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
-            StringBuilder posted = new StringBuilder();
             String feedTitle = mUserPostObj.getAuthorName();
             String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS() == null ? "" : mUserPostObj.getChallengeAcceptPostTextS();
             String communityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + mContext.getString(R.string.challenge) : mUserPostObj.getPostCommunityName();
@@ -592,8 +591,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     }
                 } else {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                        posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
-                        posted.append(communityName);
                         String header = mContext.getString(R.string.post_header_name_community, feedTitle, communityName);
                         clickOnUserNameAndCommunityName(header, feedTitle, communityName);
                     } else if (feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
@@ -602,8 +599,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         clickOnCommunityName(header, feedTitle);
                     } else {
                         feedTitle = mContext.getString(R.string.ID_ANONYMOUS);
-                        posted.append(feedTitle).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_POSTED_IN)).append(AppConstants.SPACE);
-                        posted.append(communityName);
                         String header = mContext.getString(R.string.post_header_name_community, feedTitle, communityName);
                         clickOnUserNameAndCommunityName(header, feedTitle, communityName);
                     }
@@ -613,7 +608,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mUserPostObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
         } else {
             tvFeedCommunityPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
@@ -980,7 +975,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
             if (StringUtil.isNotNullOrEmptyString(lastComment.getPostedDate())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
-                tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+                tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             } else {
                 tvFeedCommunityPostUserCommentPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
             }

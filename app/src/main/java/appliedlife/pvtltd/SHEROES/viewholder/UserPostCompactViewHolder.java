@@ -413,7 +413,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mUserPostObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            mPostRelativeTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            mPostRelativeTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
         } else {
             mPostRelativeTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
@@ -692,7 +692,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             linkifyURLs(mCommentDescription);
             if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
-                mCommentRelativeTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+                mCommentRelativeTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             } else {
                 mCommentRelativeTime.setText(mContext.getString(R.string.ID_JUST_NOW));
             }

@@ -17,7 +17,7 @@
             android:layout_height="@dimen/feed_imagepoll_height"
             android:src="@drawable/vector_image_poll_holder" />
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollEditText
+        <appliedlife.pvtltd.SHEROES.vernacular.NoScrollEditText
             android:id="@+id/et_image_poll_left"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_poll_option_height"
@@ -47,7 +47,7 @@
             android:layout_height="@dimen/feed_imagepoll_height"
             android:src="@drawable/vector_image_poll_holder" />
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollEditText
+        <appliedlife.pvtltd.SHEROES.vernacular.NoScrollEditText
             android:id="@+id/et_image_poll_right"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_poll_option_height"

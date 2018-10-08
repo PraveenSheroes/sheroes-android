@@ -1,10 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -100,6 +102,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     private String deepLinkUrl = null;
     private String defaultTab = null;
     private boolean isLanguageSelected;
+    private static int flagActivity = 0;
     //endregion
 
     //region overridden variables
@@ -330,7 +333,15 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
         }
     }
-
+    public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
+        Intent intent = new Intent(fromActivity, LanguageSelectionActivity.class);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        LanguageSelectionActivity.flagActivity = flagActivity;
+        if (!CommonUtil.isEmpty(screenProperties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, screenProperties);
+        }
+        ActivityCompat.startActivity(fromActivity, intent, null);
+    }
     @OnClick(R.id.fl_hindi)
     public void onHindiClick() {
         tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);

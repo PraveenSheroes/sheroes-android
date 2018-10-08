@@ -497,6 +497,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
 
+    private void selectLanguage() {
+        LanguageSelectionActivity.navigateTo(this, 1, getScreenName(), null);
+    }
+
     @OnClick(R.id.invite)
     public void onInviteClicked() {
         AllContactActivity.navigateTo(this, getScreenName(), null);
@@ -1246,7 +1250,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
-                    writeAStory();
+                  //  writeAStory();
+                    selectLanguage();
+                }
+
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL)) {
+                    selectLanguage();
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {

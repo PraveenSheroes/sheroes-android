@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollEditText
+    <appliedlife.pvtltd.SHEROES.vernacular.NoScrollEditText
         android:id="@+id/et_text_poll"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

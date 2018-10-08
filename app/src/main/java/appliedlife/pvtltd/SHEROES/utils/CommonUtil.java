@@ -430,7 +430,7 @@ public class CommonUtil {
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories")|| url.getPath().startsWith("/language_selection")) {
                 return true;
             }
         }

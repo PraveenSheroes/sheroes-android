@@ -988,7 +988,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mLikeCount.setText(CommonUtil.getRoundedMetricFormat(articleSolrObj.likesCount) + " " + pluralLikes);
         String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, articleSolrObj.getNoOfViews());
         long createdDate = mDateUtil.getTimeInMillis(articleSolrObj.getPostedDate(), AppConstants.DATE_FORMAT);
-        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,this);
         if (!dateInWord.equalsIgnoreCase(getString(R.string.ID_JUST_NOW))) {
             dateInWord = dateInWord + " ago ";
         }

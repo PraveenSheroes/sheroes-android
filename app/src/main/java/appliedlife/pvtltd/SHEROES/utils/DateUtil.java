@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
+import android.content.Context;
 import android.text.format.DateUtils;
 
 import java.text.ParseException;
@@ -106,7 +107,7 @@ public class DateUtil {
     /**
      * @return absolute rounded off difference in days
      */
-    public String getRoundedDifferenceInHours(long timeOne, long timeTwo) {
+    public String getRoundedDifferenceInHours(long timeOne, long timeTwo,Context context) {
         //long Millis24Hrs = 24 * 60 * 60 * 1000;
         long differenceInMinutes = Math.round((timeOne - timeTwo) / (60 * 1000));
         //long  seconds =(long)difference % 60;
@@ -120,31 +121,31 @@ public class DateUtil {
         if (day > 0) {
             sb.append(day);
             if (day == 1) {
-                sb.append(AppConstants.DAY);
+                sb.append(" ").append(context.getString(R.string.day));
             } else {
-                sb.append(AppConstants.DAY + AppConstants.S);
+                sb.append(" ").append(context.getString(R.string.days));
             }
         } else if (hour > 0) {
             sb.append(hour);
             if (hour == 1) {
-                sb.append(AppConstants.HOUR);
+                sb.append(" ").append(context.getString(R.string.hour));
             } else {
-                sb.append(AppConstants.HOUR + AppConstants.S);
+                sb.append(" ").append(context.getString(R.string.hours));
             }
         } else if (differenceInMinutes > 0) {
             sb.append(differenceInMinutes);
             if (differenceInMinutes == 1) {
-                sb.append(AppConstants.MINUTE);
+                sb.append(" ").append(context.getString(R.string.minute));
             } else {
-                sb.append(AppConstants.MINUTE + AppConstants.S);
+                sb.append(" ").append(context.getString(R.string.minutes));
             }
         } else {
-            sb.append(SheroesApplication.mContext.getString(R.string.ID_JUST_NOW));
+            sb.append(context.getString(R.string.ID_JUST_NOW));
         }
         return sb.toString();
     }
 
-    public String getDifferenceInTime(long timeOne, long timeTwo) {
+    public String getDifferenceInTime(long timeOne, long timeTwo, Context context) {
         //long Millis24Hrs = 24 * 60 * 60 * 1000;
         long differenceInMinutes = Math.round((timeOne - timeTwo) / (60 * 1000));
         //long  seconds =(long)difference % 60;
@@ -158,30 +159,30 @@ public class DateUtil {
         if (day > 0) {
             if (differenceInMinutes > 0 || hour > 0) {
                 sb.append(day + 1);
-                sb.append(AppConstants.DAY + AppConstants.S);
+                sb.append(" ").append(context.getString(R.string.days));
             } else {
                 sb.append(day);
-                sb.append(AppConstants.DAY);
+                sb.append(" ").append(context.getString(R.string.day));
             }
         } else if (hour > 0) {
             if (hour == 1) {
                 sb.append(hour);
-                sb.append(AppConstants.HOUR);
+                sb.append(" ").append(context.getString(R.string.hour));
             } else {
                 if (differenceInMinutes > 0) {
                     sb.append(hour + 1);
-                    sb.append(AppConstants.HOUR + AppConstants.S);
+                    sb.append(" ").append(context.getString(R.string.hours));
                 } else {
                     sb.append(hour);
-                    sb.append(AppConstants.HOUR + AppConstants.S);
+                    sb.append(" ").append(context.getString(R.string.hours));
                 }
             }
         } else if (differenceInMinutes > 0) {
             sb.append(differenceInMinutes);
             if (differenceInMinutes == 1) {
-                sb.append(AppConstants.MINUTE);
+                sb.append(" ").append(context.getString(R.string.minute));
             } else {
-                sb.append(AppConstants.MINUTE + AppConstants.S);
+                sb.append(" ").append(context.getString(R.string.minutes));
             }
         }
         return sb.toString();

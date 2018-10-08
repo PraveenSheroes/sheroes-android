@@ -65,7 +65,7 @@
             android:textSize="14sp"
             android:textStyle="bold"/>
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
+        <appliedlife.pvtltd.SHEROES.vernacular.NoScrollTextView
             android:id="@+id/tv_list_user_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -130,7 +130,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(userPostSolrObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvFeedEventTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            tvFeedEventTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
         }
 
         String authorImageUrl = userPostSolrObj.getAuthorImageUrl();

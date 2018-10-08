@@ -248,7 +248,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
             mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
         } else {
-            etView.getEditText().setHint("Type your comment here...");
+            etView.getEditText().setHint(getString(R.string.type_your_comment));
         }
         setupToolbarItemsColor();
         etView.onReceiveSuggestionsListView(mSuggestionList);

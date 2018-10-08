@@ -610,12 +610,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    @OnClick(R.id.iv_back)
-    public void onBackPress() {
-        super.onBackPressed();
-    }
-
-
     public void launchGooglePlusLogin() {
         if (AppUtils.getInstance().isNetworkAvailable()) {
             signIn();

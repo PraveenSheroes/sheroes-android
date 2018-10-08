@@ -11,7 +11,7 @@
 
     <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">Connectivity Failure</string>
-    <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
+    <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">इंटरनेट कनेक्शन या कनेक्टिविटी नहीं है। कृपया अपने कनेक्शन की जांच करे और फिर से प्रयास करें।</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
     <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
@@ -36,7 +36,7 @@
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
     <!--Fragment classes-->
-    <string name="ID_COMMUNITIES">Communities</string>
+    <string name="ID_COMMUNITIES">कम्युनिटीज़</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notifications</string>
@@ -74,11 +74,11 @@
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
-    <string name="ID_JOIN">Join</string>
+    <string name="ID_JOIN">जुड़े</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">Requested</string>
-    <string name="ID_JOINED">Joined</string>
+    <string name="ID_JOINED">जुड़ गए</string>
     <string name="ID_VIEW">View</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
@@ -94,23 +94,23 @@
     <string name="ID_PROFILE">About</string>
     <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
-    <string name="ID_POST">Post as:</string>
+    <string name="ID_POST">पोस्ट इन रूप में करे:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
     <string name="ID_MEMBERS">Members</string>
     <string name="ID_NORMAL_MEMBER">normal member</string>
-    <string name="ID_ADMIN">Admin</string>
+    <string name="ID_ADMIN">एडमिन</string>
     <string name="ID_REMOTE">Remote</string>
     <string name="ID_REMOVE">Remove</string>
     <string name="ID_INVITE">Invite</string>
     <string name="ID_SHARE">शेयर</string>
-    <string name="ID_EDIT">Edit</string>
+    <string name="ID_EDIT">बदले</string>
     <string name="SHARE_PROFILE">Share Profile</string>
     <string name="ID_EDIT_PROFILE">Edit Profile</string>
     <string name="ID_DELETE">हटाना</string>
     <string name="ID_APPROVE">मंज़ूर</string>
 
     <string name="ID_REPORT">Report as spam</string>
-    <string name="REPORT_SPAM">Report Spam</string>
+    <string name="REPORT_SPAM">स्पैम रिपोर्ट</string>
     <string name="report_user">Report User</string>
     <string name="deactivate_user">Deactivate User</string>
     <string name="banned_user_device">Ban User Device</string>
@@ -121,9 +121,9 @@
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
     <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
-    <string name="ID_ANONYMOUS">Anonymous</string>
-    <string name="ID_OWNER">Owner (S)</string>
-    <string name="ID_OWNER_Mo">owner</string>
+    <string name="ID_ANONYMOUS">गुमनाम</string>
+    <string name="ID_OWNER">मालकिन</string>
+    <string name="ID_OWNER_Mo">मालकिन</string>
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
     <string name="ID_TAGS">Tags</string>
@@ -198,8 +198,8 @@
     <string name="ID_DATE_OF_BIRTH">DATE OF BIRTH</string>
 
     <string name="ID_LEAVE">Leave</string>
-    <string name="FEATURE_POST">Feature This Post</string>
-    <string name="UNFEATURE_POST">UnFeature This Post</string>
+    <string name="FEATURE_POST">पोस्ट को फ़ीचर करें</string>
+    <string name="UNFEATURE_POST">पोस्ट को फ़ीचर से हटाए</string>
 
     <!--String related of professional_add_education page-->
 
@@ -292,7 +292,7 @@
 
     <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
 
-    <string name="ID_EVENT">Event</string>
+    <string name="ID_EVENT">इवेंट</string>
 
     <string name="ID_EMAIL_VERIFICATION_SCREEN_TITLE">VERIFY YOUR EMAIL</string>
     <string name="ID_EMAIL_VERIFICATION_TEXT_PART_1">We have sent a verification link to ***</string>
@@ -364,7 +364,7 @@
     <string name="empty_followed_mentor">%1$s is not following any champion yet"</string>
     <string name="empty_followed_community">%1$s has not joined any community yet"</string>
     <string name="load_more">Load More</string>
-    <string name="more">more</string>
+    <string name="more">और</string>
     <string name="following">Following</string>
 
     <plurals name="numberOfComments">
@@ -374,56 +374,56 @@
     </plurals>
 
     <plurals name="numberOfVotes">
-        <item quantity="zero">Votes</item>
-        <item quantity="one">Vote</item>
-        <item quantity="other">Votes</item>
+        <item quantity="zero">वोटस</item>
+        <item quantity="one">वोट</item>
+        <item quantity="other">वोटस</item>
     </plurals>
 
     <plurals name="numberOfQuestions">
-        <item quantity="zero">Question</item>
-        <item quantity="one">Question</item>
-        <item quantity="other">Questions</item>
+        <item quantity="zero">प्रशन</item>
+        <item quantity="one">प्रशन</item>
+        <item quantity="other">प्रशन</item>
     </plurals>
     <plurals name="numberOfAnswers">
-        <item quantity="zero">Answer</item>
-        <item quantity="one">Answer</item>
-        <item quantity="other">Answers</item>
+        <item quantity="zero">उत्तर</item>
+        <item quantity="one">उत्तर</item>
+        <item quantity="other">उत्तर</item>
     </plurals>
     <plurals name="numberOfPosts">
-        <item quantity="zero">Post</item>
-        <item quantity="one">Post</item>
-        <item quantity="other">Posts</item>
+        <item quantity="zero">पोस्ट</item>
+        <item quantity="one">पोस्ट</item>
+        <item quantity="other">पोस्ट्स</item>
     </plurals>
 
     <plurals name="numberOfMembers">
-        <item quantity="zero">Member</item>
-        <item quantity="one">Member</item>
-        <item quantity="other">Members</item>
+        <item quantity="zero">सदस्य</item>
+        <item quantity="one">सदस्य</item>
+        <item quantity="other">सदस्य</item>
     </plurals>
 
     <plurals name="numberOfFollowers">
-        <item quantity="zero">Follower</item>
-        <item quantity="one">Follower</item>
-        <item quantity="other">Followers</item>
+        <item quantity="zero">फॉलोवर</item>
+        <item quantity="one">फॉलोवर</item>
+        <item quantity="other">फॉलोअर्स</item>
     </plurals>
 
     <plurals name="numberOfImpression">
-        <item quantity="zero">Impression</item>
-        <item quantity="one">Impression</item>
-        <item quantity="other">Impressions</item>
+        <item quantity="zero">इम्प्रेशन</item>
+        <item quantity="one">इम्प्रेशन</item>
+        <item quantity="other">इम्प्रेशनस</item>
     </plurals>
 
     <plurals name="numberOfResponses">
-        <item quantity="zero">Responses</item>
-        <item quantity="one">Response</item>
-        <item quantity="other">Responses</item>
+        <item quantity="zero">प्रतिक्रियाएँ</item>
+        <item quantity="one">प्रतिक्रिया</item>
+        <item quantity="other">प्रतिक्रियाएँ</item>
     </plurals>
 
 
     <plurals name="numberOfLikes">
-        <item quantity="zero">लाइकस</item>
+        <item quantity="zero">लाइक्स</item>
         <item quantity="one">लाइक</item>
-        <item quantity="other">लाइकस</item>
+        <item quantity="other">लाइक्स</item>
     </plurals>
 
     <plurals name="numberOfViews">
@@ -433,8 +433,8 @@
     </plurals>
 
     <plurals name="badgeWonTime">
-        <item quantity="one">Time</item>
-        <item quantity="other">Times</item>
+        <item quantity="one">टाइम</item>
+        <item quantity="other">टाइम्स</item>
     </plurals>
 
     <string name="action_like">लाइक</string>
@@ -445,14 +445,14 @@
     <string name="choose_community">Choose your community to post in</string>
     <string name="other_community">Other Communities</string>
     <string name="add_photo">Add to your Post</string>
-    <string name="post_anonymous">Post as Anonymous</string>
+    <string name="post_anonymous">गुमनाम रहे</string>
     <string name="action.post">Post</string>
     <string name="action.next">Next</string>
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Create a Post</string>
     <string name="title.ask_question">Ask a Question</string>
     <string name="title.article_submit">Write a Story</string>
-    <string name="anonymous">Anonymous</string>
+    <string name="anonymous">गुमनाम</string>
     <string name="choose_community_option">Choose your community</string>
     <string name="image_count">%1$d/%2$d</string>
     <string name="badge_won_times_label">Won %1$d %2$s</string>
@@ -514,7 +514,7 @@
     <string name="ID_ASKING">asking</string>
     <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
     <string name="ID_ANSWERED_QUESTIONS">answered questions</string>
-    <string name="ID_GET_EXPERT_ADVICE">Get expert advice from champions</string>
+    <string name="ID_GET_EXPERT_ADVICE">चैंपियन से प्रतिष्ठित सलाह प्राप्त करें</string>
     <string name="ID_INSIGHT">Insights</string>
     <string name="ID_SEE_INSIGHT">See Insights</string>
     <string name="ID_PROFILE_VISITOR">Profile Visitors in last 7 days</string>
@@ -531,17 +531,17 @@
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
     <string name="ID_SECOND_WELCOME">Join Communities</string>
     <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
-    <string name="ID_GOT"> Got it!</string>
-    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Need help with a problem?</string>
-    <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>
-    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities for you!</string>
-    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Tap here to explore various communities of interest.</string>
+    <string name="ID_GOT">समझ गए !</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">किसी समस्या के अतिरिक्त मदद चाहिए?</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_DESC">एक प्रश्न पूछें और विशेषज्ञों और अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">आपके लिए समुदाय!</string>
+    <string name="ID_SHOW_CASE_COMMUNITIES_DEC">अपनी पसंद अनुसार विभिन्न समुदायों का पता लगाने के लिए यहां टैप करें।</string>
     <string name="ID_SHOW_CASE_MY_COMMUNITIES_TITLE">My Communities</string>
     <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
-    <string name="ID_SHOW_CASE_FEED_TITLE">Welcome to SHEROES</string>
-    <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
+    <string name="ID_SHOW_CASE_FEED_TITLE">हेलो %1$s SHEROES में आपका स्वागत है</string>
+    <string name="ID_SHOW_CASE_FEED_DEC">यह वह जगह है जहां आप शामिल समुदायों की  बातचीत , दिलचस्प कहानियों और उपयोगी लेखों को देख सकते हैं</string>
     <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
-    <string name="ID_NEXT">Next</string>
+    <string name="ID_NEXT">अगला</string>
     <string name="ID_LETS_GET_STARTED">आएँ शुरू करें!</string>
 
     <string name="view_more">View More</string>
@@ -612,12 +612,12 @@
     <string name="please_elaborate">Please elaborate…</string>
 
     <!--spam region start-->
-    <string name="spam_confirmation_dialog_title">Thank you for your feedback!</string>
-    <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and it is in review. Thank You!</string>
-    <string name="reported_spam_marked_dialog_message">The %1$s has been marked as SPAM and it is in review. Thank You!</string>
+    <string name="spam_confirmation_dialog_title">आपकी प्रतिक्रिया के लिए आपका धन्यवाद!</string>
+    <string name="reported_spam_confirmation_dialog_message">आपने पहले ही इस %1$s को स्पैम के रूप में रिपोर्ट कर लिया है, और यह समीक्षा में है। धन्यवाद!</string>
+    <string name="reported_spam_marked_dialog_message">%1$s को स्पैम के रूप में चिह्नित किया गया है और यह समीक्षा में है। धन्यवाद!</string>
 
-    <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
-    <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
+    <string name="reported_spam_confirmation_dialog_title">पहले की सूचना दी थी</string>
+    <string name="spam_confirmation_dialog_message">आपकी प्रतिक्रिया हमें SHEROES के साथ अपने अनुभव को बेहतर बनाने में मदद करेगी।</string>
     <string name="deactivation_dialog_message">Thank you, user has been deactivated.</string>
 
 
@@ -627,14 +627,14 @@
     <string name="update">UPDATE</string>
     <string name="update.title">New Update Available</string>
     <string name="update.description">Update now to have an awesome experience</string>
-    <string name="searching">Searching&#8230;</string>
+    <string name="searching">ढूँढ रहे हैं&#8230;</string>
     <string name="no_result_found">No Result Found</string>
     <string name="user_mention_area_at_post">You can tag community owners &amp; your followers</string>
-    <string name="user_mention_area_at_comment">You can tag community owners, your followers or people who engaged on this post</string>
+    <string name="user_mention_area_at_comment">आप समुदाय के मालिक को, अपने फॉलोवर्स को और इस पोस्ट से जुड़े लोगो को टैग कर सकते हैं</string>
     <string name="reactivate_your_account">To reactivate your account write to us</string>
     <string name="care_sheroes">care@sheroes.in</string>
-    <string name="male">मैं एक आदमी हूँ</string>
-    <string name="female">हाँ, मैं एक महिला हूँ</string>
+    <string name="male">मैं आदमी हूँ</string>
+    <string name="female">हाँ, मैं महिला हूँ</string>
     <string name="share_sheroes_app">Share sheroes app</string>
     <string name="sheroes_msg"><![CDATA[ <html> <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px;">
@@ -675,14 +675,14 @@
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
-    <string name="home_label">Home</string>
+    <string name="home_label">होम</string>
     <string name="youtube">Youtube.com</string>
     <string name="how_do_i_become_a_supersheroes">How do I become a SuperSheroes?</string>
     <string name="poll_option">Option</string>
-    <string name="post_detail_toolbar_title">%1$s post</string>
-    <string name="post_detail_toolbar_title_multiple">%1$s\'s post</string>
-    <string name="poll_detail_toolbar_title">%1$s poll</string>
-    <string name="poll_detail_toolbar_title_multiple">%1$s\'s poll</string>
+    <string name="post_detail_toolbar_title">%1$s पोस्ट</string>
+    <string name="post_detail_toolbar_title_multiple">%1$s\'s पोस्ट</string>
+    <string name="poll_detail_toolbar_title">%1$s पोल</string>
+    <string name="poll_detail_toolbar_title_multiple">%1$s\'s पोल</string>
     <string name="leaderbaord_top_10_user">top %1$d this Week</string>
     <string name="yay">Yay!</string>
     <string name="badge_active_period_date_text">Won this week : %1$s - %2$s</string>
@@ -742,14 +742,12 @@
         <item>7</item>
         <item>30</item>
     </integer-array>
-    <string name="created_poll">created a poll </string>
-    <string name="percent_vote">% vote</string>
-    <string name="ends_in">Ends in:</string>
-    <string name="ended">Poll ended</string>
+    <string name="percent_vote">% वोट</string>
+    <string name="poll_end">%1$s में समाप्त</string>
+    <string name="ended">पोल समाप्त</string>
     <string name="option_empty">Option can\'t be empty</string>
     <string name="option_image_empty">Image can\'t be empty</string>
     <string name="poll_text_limit">Description can\'t exceed 500 char</string>
-
 
     <string name="paste_on_playstore">Paste as Review on Playstore</string>
     <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
@@ -788,5 +786,15 @@
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
     <string name="post_header_community">%1$s ने पोस्ट किया"</string>
     <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>
-
+    <string name="poll_header_name_community">%1$s ने  %2$s में पोल बनाया"</string>
+    <string name="poll_header_name">%1$s ने पोल बनाया"</string>
+    <string name="day">दिन</string>
+    <string name="hour">घंटे</string>
+    <string name="minute">मिनट</string>
+    <string name="days">दिन</string>
+    <string name="hours">घंटे</string>
+    <string name="minutes">मिनट</string>
+    <string name="type_your_comment">अपना कमेंट यहां टाइप करें&#8230;</string>
+    <string name="top_communities_text">SHEROES पर कुछ ट्रेंडिंग पोस्ट यहां दी गई हैं</string>
+    <string name="health_tips">स्वास्थ्य सुझाव</string>
 </resources>

@@ -150,7 +150,7 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8">
 
-            <appliedlife.pvtltd.SHEROES.views.cutomeviews.NoScrollTextView
+            <appliedlife.pvtltd.SHEROES.vernacular.NoScrollTextView
                 android:id="@+id/tv_feed_community_post_text"
                 style="@style/TextViewForStandardSizeColor"
                 android:layout_width="match_parent"

@@ -60,7 +60,7 @@ public class AppConstants {
     public static final String HOURS = " Hrs ";
     public static final String DASH = "-";
     public static final String DOTS = "...";
-    public static final String S = "s";
+
     public static final String DOT = " • ";
     public static final String USER_YOU_TUBE = "youtube.com/user";
     public static final String CHANNEL_YOU_TUBE = "youtube.com/channel";
@@ -256,9 +256,7 @@ public class AppConstants {
     /**/
 
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
-    public static final String DAY = " day";
-    public static final String HOUR = " hr";
-    public static final String MINUTE = " min";
+
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
@@ -308,6 +306,8 @@ public class AppConstants {
     public static final String MY_CHALLENGE_NEW_URL_COM = "https://sheroes.com/my-challenges";
     public static final String COLLECTION_NEW_URL = "https://sheroes.in/app-collections";
     public static final String COLLECTION_NEW_URL_COM = "https://sheroes.com/app-collections";
+    public static final String SELECT_LANGUAGE_URL = "https://sheroes.in/language_selection";
+    public static final String SELECT_LANGUAGE_URL_COM = "https://sheroes.com/language_selection";
 
     /* Create post deeplink */
     public static final String CREATE_POST_URL = "https://sheroes.in/create-post";
