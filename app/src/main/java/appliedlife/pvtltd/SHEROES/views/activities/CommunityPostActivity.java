@@ -773,6 +773,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 photo.isNew = true;
                 photo.file = file;
                 mImageList.add(photo);
+                File compressSharedFile = compressFile(file);
+                mFilePathList.add(compressSharedFile.getAbsolutePath());
                 setImageCount();
                 mPostPhotoAdapter.addPhoto(photo);
             }
