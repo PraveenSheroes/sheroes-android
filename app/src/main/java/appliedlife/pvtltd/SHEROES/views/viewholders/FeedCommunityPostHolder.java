@@ -156,8 +156,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedCommunityPostUserCommentPostViewMore;
     @Bind(R.id.iv_feed_community_post_user_pic)
     CircleImageView ivFeedCommunityPostUserPic;
-    @Bind(R.id.tv_feed_community_post_user_bookmark)
-    TextView tvFeedCommunityPostUserBookmark;
 
     @Bind(R.id.follow_button)
     TextView mFollowButton;
@@ -196,12 +194,14 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @Bind(R.id.iv_play)
     ImageView ivPlay;
+    @Bind(R.id.tv_source_name)
+    TextView tvSourceName;
     @Bind(R.id.fm_image_thumb)
     FrameLayout fmImageThumb;
     @Bind(R.id.iv_post_link_thumbnail)
     ImageView ivLinkThumbnail;
     @Bind(R.id.li_post_link_render)
-    LinearLayout liViewLinkRender;
+    CardView liViewLinkRender;
     @Bind(R.id.tv_post_link_title)
     TextView tvLinkTitle;
     @Bind(R.id.tv_post_link_sub_title)
@@ -410,7 +410,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         showPostImageURLs();
         populatePostText();
-        onBookMarkClick();
         postDataContentRendering(mContext);
         likeCommentOps();
         displayFollowedButton();
@@ -489,8 +488,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             pbLink.setVisibility(View.GONE);
                             if (mUserPostObj.isOgVideoLinkB()) {
                                 ivPlay.setVisibility(View.VISIBLE);
+                                tvSourceName.setVisibility(View.VISIBLE);
                             } else {
                                 ivPlay.setVisibility(View.GONE);
+                                tvSourceName.setVisibility(View.GONE);
                             }
                         }
                     });
@@ -552,14 +553,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             liFeedCommunityUserPostImages.setVisibility(View.GONE);
         }
 
-    }
-
-    private void onBookMarkClick() {
-        if (mUserPostObj.isBookmarked()) {
-            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_active, 0);
-        } else {
-            tvFeedCommunityPostUserBookmark.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.vector_bookmark_in_active, 0);
-        }
     }
 
     /**
@@ -1211,26 +1204,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.dataOperationOnClick(mUserPostObj);
         }
-    }
-
-    @OnClick(R.id.tv_feed_community_post_user_bookmark)
-    public void isBookMarkClick() {
-        if (viewInterface instanceof FeedItemCallback) {
-            ((FeedItemCallback) viewInterface).onPostBookMarkedClicked(mUserPostObj);
-        } else {
-            viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserBookmark);
-        }
-        if (mUserPostObj.isBookmarked()) {
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
-        } else {
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
-        }
-        if (!mUserPostObj.isBookmarked()) {
-            mUserPostObj.setBookmarked(true);
-        } else {
-            mUserPostObj.setBookmarked(false);
-        }
-        onBookMarkClick();
     }
 
     @OnClick(R.id.tv_feed_community_post_user_share)

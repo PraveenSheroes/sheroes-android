@@ -653,7 +653,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
 
-    @OnClick({R.id.tv_communities, R.id.iv_communities_search})
+    @OnClick({R.id.tv_communities, R.id.tv_communities_search})
     public void communityOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();

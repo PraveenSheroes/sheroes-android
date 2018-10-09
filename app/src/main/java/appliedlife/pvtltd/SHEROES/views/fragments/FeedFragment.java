@@ -2010,19 +2010,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void scrollToTopInList() {
-        if(mFeedRecyclerView.getLayoutManager() instanceof LinearLayoutManager)
-        {
-            LinearLayoutManager mLayoutManager  =(LinearLayoutManager) mFeedRecyclerView.getLayoutManager();
+        if (mFeedRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            LinearLayoutManager mLayoutManager = (LinearLayoutManager) mFeedRecyclerView.getLayoutManager();
             int lastVis = mLayoutManager.findLastVisibleItemPosition();
-            if(lastVis <=AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE)
+            if (lastVis <= AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE)
                 mFeedRecyclerView.smoothScrollToPosition(0);
-            else{
+            else {
                 mFeedRecyclerView.scrollToPosition(AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE);
                 mFeedRecyclerView.smoothScrollToPosition(0);
             }
         }
-
-
     }
 
     @Override
