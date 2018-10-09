@@ -19,7 +19,7 @@
             android:background="@color/photo_placeholder"
             android:scaleType="centerCrop" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_tag"
             style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
             android:textColor="#90949c"
             vernacular:customTextFontFamily="@string/regular_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_status"
             style="@style/TextView12spMedium"
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
             android:layout_toLeftOf="@id/contest_status"
             android:src="@drawable/vector_live_dot" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title"
             style="@style/TextView16spMedium"
             android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:layout_marginTop="4dp"
                 android:scaleType="centerCrop" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/author"
                 style="@style/TextView14spBold"
                 android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                 android:textStyle="bold"
                 vernacular:customTextFontFamily="@string/bold_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/response_views_counts"
                 style="@style/TextView12spRegular"
                 android:layout_width="match_parent"

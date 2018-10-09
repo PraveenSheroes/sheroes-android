@@ -44,7 +44,7 @@
             android:layout_weight="@integer/int_value_for_line_1"
             android:orientation="vertical">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_bell_noti_title"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
                 app:layout_constraintStart_toEndOf="@+id/fl_circle_icon"
                 vernacular:customTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_bell_view_profile"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
                     android:textSize="@dimen/sp_size_16"
                     android:visibility="visible" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_bell_noti_time"
                     style="@style/TextView12spRegular"
                     android:layout_width="wrap_content"

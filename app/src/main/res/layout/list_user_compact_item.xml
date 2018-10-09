@@ -55,7 +55,7 @@
 
             </FrameLayout>
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/name"
                 style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
@@ -70,7 +70,7 @@
                 android:textStyle="bold"
                 vernacular:customTextFontFamily="@string/bold_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/desc"
                 style="@style/TextView12spRegular"
                 android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
 
         </LinearLayout>
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/follow_button"
             style="@style/TextView14spMedium"
             android:layout_width="@dimen/user_compact_follow_width"

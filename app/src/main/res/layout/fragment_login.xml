@@ -26,7 +26,7 @@
                 android:drawableLeft="@drawable/vector_back_arrow"
                 android:padding="@dimen/dp_size_20" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 style="@style/TextView22spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
                     android:background="@color/search_shortcut_icon_color"
                     android:orientation="vertical">
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_email_description"
                         style="@style/TextView14spRegular"
                         android:layout_width="wrap_content"
@@ -147,7 +147,7 @@
                 android:textColor="@color/white"
                 vernacular:customEditTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/forgot_password"
                 style="@style/TextView14spBold"
                 android:layout_width="wrap_content"

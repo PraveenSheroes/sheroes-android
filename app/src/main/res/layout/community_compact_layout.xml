@@ -32,7 +32,7 @@
             android:paddingStart="@dimen/dp_size_10"
             android:paddingTop="@dimen/dp_size_12">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/community_join"
                 style="@style/TextView14spRegular"
                 android:layout_width="@dimen/community_join_width"
@@ -76,7 +76,7 @@
                     android:layout_marginStart="@dimen/dp_size_5"
                     android:orientation="vertical">
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/community_name"
                         style="@style/TextView16spRegular"
                         android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                             android:layout_height="match_parent"
                             android:src="@drawable/vector_member_icon" />
 
-                        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                             android:id="@+id/community_member_count"
                             style="@style/TextView14spRegular"
                             android:layout_width="wrap_content"

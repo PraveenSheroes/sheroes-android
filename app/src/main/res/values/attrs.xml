@@ -135,7 +135,7 @@
         <attr name="mBarThickness" format="dimension" />
     </declare-styleable>
 
-    <declare-styleable name="CustomTextViewFont">
+    <declare-styleable name="FontTextView">
         <attr name="customTextFontFamily" format="string" />
     </declare-styleable>
 

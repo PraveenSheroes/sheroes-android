@@ -15,7 +15,7 @@
         android:layout_marginTop="4dp"
         android:src="@drawable/vector_add_red" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_add_poll_text"
         style="@style/TextView14spMedium"
         android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
         app:layout_constraintLeft_toRightOf="@id/iv_add_poll_img"
         vernacular:customTextFontFamily="@string/medium_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_add_poll_ends_label"
         style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
@@ -44,7 +44,7 @@
         android:textColor="@color/recent_post_comment"
         vernacular:customTextFontFamily="@string/regular_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_day_selector"
         style="@style/TextView16spMedium"
         android:layout_width="wrap_content"

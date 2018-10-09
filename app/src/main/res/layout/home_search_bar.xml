@@ -15,7 +15,7 @@
         android:paddingTop="@dimen/dp_size_10"
         android:visibility="visible" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/title_text"
         style="@style/TextAppearance.Toolbar"
         android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
         android:backgroundTint="@color/footer_icon_text"
         android:visibility="gone">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_notification_read_count"
             style="@style/TextView9spMedium"
             android:layout_width="wrap_content"

@@ -29,7 +29,7 @@
     </FrameLayout>
 
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_user_name_male_error"
         style="@style/TextView18spMedium"
         android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
         android:visibility="gone"
         vernacular:customTextFontFamily="@string/medium_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_description_male_error"
         style="@style/TextView16spRegular"
         android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         android:textColor="@color/comment_text"
         vernacular:customTextFontFamily="@string/regular_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_share_sheroes_app"
         style="@style/TextView14spMedium"
         android:layout_width="match_parent"
@@ -71,7 +71,7 @@
         android:visibility="visible"
         vernacular:customTextFontFamily="@string/medium_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_care_id"
         style="@style/TextView14spRegular"
         android:layout_width="wrap_content"

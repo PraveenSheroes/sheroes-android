@@ -18,7 +18,7 @@
         android:gravity="center"
         android:paddingBottom="24dp" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/empty_text"
         style="@style/TextView16spMedium"
         android:layout_width="wrap_content"
@@ -29,7 +29,7 @@
         android:textColor="@color/recent_post_comment"
         vernacular:customTextFontFamily="@string/medium_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/empty_subtext"
         style="@style/TextView12spMedium"
         android:layout_width="wrap_content"

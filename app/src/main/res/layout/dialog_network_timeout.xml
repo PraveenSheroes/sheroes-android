@@ -31,7 +31,7 @@
             android:layout_gravity="center"
             android:src="@drawable/vector_user_deactivated" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_user_deactivate_text"
             style="@style/TextView16spMedium"
             android:layout_width="match_parent"
@@ -46,7 +46,7 @@
             android:textColor="@color/comment_text"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
             android:textColor="@color/recent_post_comment"
             vernacular:customTextFontFamily="@string/regular_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_care_sheroes"
             style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_no_connection"
             style="@style/TextView14spMedium"
             android:layout_width="match_parent"
@@ -102,7 +102,7 @@
             android:visibility="gone" />
 
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_no_conn_desc"
             style="@style/TextView14spRegular"
             android:layout_width="match_parent"
@@ -116,7 +116,7 @@
             android:textStyle="bold"
             vernacular:customTextFontFamily="@string/regular_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_try_again"
             style="@style/TextView14spMedium"
             android:layout_width="match_parent"

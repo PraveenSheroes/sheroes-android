@@ -20,7 +20,7 @@
             android:layout_marginStart="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_16" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_user_name"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
             android:textColor="@color/nav_menu_header_label"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_user_location"
             style="@style/TextView14spRegular"
             android:layout_width="wrap_content"

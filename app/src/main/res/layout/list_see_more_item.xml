@@ -19,7 +19,7 @@
         app:backgroundTint="@color/white"
         app:elevation="4dp" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/more_text"
         style="@style/TextView14spMedium"
         android:layout_width="match_parent"

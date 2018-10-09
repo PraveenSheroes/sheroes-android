@@ -75,7 +75,7 @@
                     android:src="@drawable/vector_post_as_community_17dp"
                     android:visibility="gone" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/user_name"
                     style="@style/TextView16spRegular"
                     android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
                     android:textColor="#3c3c3c"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/community_name"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
@@ -167,7 +167,7 @@
                             android:layout_marginLeft="@dimen/dp_size_10"
                             android:orientation="vertical">
 
-                            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                                 android:id="@+id/tv_link_title"
                                 style="@style/TextView16spMedium"
                                 android:layout_width="wrap_content"
@@ -175,7 +175,7 @@
                                 android:textColor="@color/pure_black"
                                 vernacular:customTextFontFamily="@string/medium_font" />
 
-                            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                                 android:id="@+id/tv_link_sub_title"
                                 style="@style/TextView14spRegular"
                                 android:layout_width="wrap_content"
@@ -219,7 +219,7 @@
                 android:layout_marginTop="@dimen/dp_size_8"
                 android:visibility="visible">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/image_count"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"

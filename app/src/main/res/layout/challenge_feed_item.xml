@@ -32,7 +32,7 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/author_name"
                 style="@style/TextView16spMedium"
                 android:layout_width="wrap_content"
@@ -59,7 +59,7 @@
                 android:tint="@color/white" />
         </RelativeLayout>
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_tag"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -73,7 +73,7 @@
             android:textStyle="normal"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title"
             style="@style/TextView16spMedium"
             android:layout_width="wrap_content"
@@ -90,7 +90,7 @@
             android:textStyle="normal"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_end_text"
             style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
@@ -103,7 +103,7 @@
             android:textStyle="normal"
             vernacular:customTextFontFamily="@string/regular_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_status"
             style="@style/TextView12spMedium"
             android:layout_width="wrap_content"
@@ -140,7 +140,7 @@
             android:layout_marginTop="16dp"
             android:background="@color/lighter_grey" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/join_challenge_text"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -166,7 +166,7 @@
             android:layout_marginTop="16dp"
             android:background="@color/lighter_grey" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/response_view_count"
             style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
@@ -179,7 +179,7 @@
             android:textColor="#90949c"
             vernacular:customTextFontFamily="@string/regular_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

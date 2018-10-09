@@ -31,7 +31,7 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

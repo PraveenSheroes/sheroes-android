@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:gravity="center">
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_welcome_text"
         style="@style/TextView16spRegular"
         android:layout_width="match_parent"

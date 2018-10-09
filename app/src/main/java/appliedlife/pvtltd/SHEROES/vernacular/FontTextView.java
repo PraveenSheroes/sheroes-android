@@ -8,26 +8,25 @@ import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
-public class CustomTextViewFont extends AppCompatTextView {
-    public CustomTextViewFont(Context context) {
+public class FontTextView extends AppCompatTextView {
+    public FontTextView(Context context) {
         super(context);
     }
 
-    public CustomTextViewFont(Context context, AttributeSet set) {
+    public FontTextView(Context context, AttributeSet set) {
         super(context, set);
         setLanguageFont(context, set);
     }
 
-    public CustomTextViewFont(Context context, AttributeSet set, int defaultStyle) {
+    public FontTextView(Context context, AttributeSet set, int defaultStyle) {
         super(context, set, defaultStyle);
         setLanguageFont(context, set);
     }
 
     private void setLanguageFont(Context context, AttributeSet attrs) {
-        TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.CustomTextViewFont);
-        CharSequence fontFamily = styledAttributes.getString(R.styleable.CustomTextViewFont_customTextFontFamily);
+        TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.FontTextView);
+        CharSequence fontFamily = styledAttributes.getString(R.styleable.FontTextView_customTextFontFamily);
         if (fontFamily != null) {
             if (!LocaleManager.getLanguage(context).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
                 Typeface typeface;

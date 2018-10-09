@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_mentor_see_insight"
             style="@style/TextView14spMedium"
             android:layout_width="0dp"
@@ -34,7 +34,7 @@
             android:layout_height="match_parent"
             android:background="@color/grey_50" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_mentor_ask_question"
             style="@style/TextView14spMedium"
             android:layout_width="0dp"

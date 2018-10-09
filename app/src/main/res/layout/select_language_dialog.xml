@@ -18,7 +18,7 @@
         app:layout_constraintHorizontal_bias="1"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_header"
         style="@style/TextView20spMedium"
         android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_continue"
         style="@style/TextView14spMedium"
         android:layout_width="150dp"

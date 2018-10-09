@@ -47,7 +47,7 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_article_card_title"
                 style="@style/TextView14spMedium"
                 android:layout_width="match_parent"
@@ -55,7 +55,7 @@
                 android:textColor="@color/comment_text"
                 vernacular:customTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_article_title_label"
                 style="@style/TextView12spRegular"
                 android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
             android:paddingStart="@dimen/feed_article_bookmark_padding_left"
             android:paddingTop="@dimen/feed_article_bookmark_padding_top" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_draft"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -112,7 +112,7 @@
         android:background="@drawable/vector_image_holder"
         android:orientation="vertical" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_feed_article_header"
         style="@style/TextView18spMedium"
         android:layout_width="match_parent"
@@ -127,7 +127,7 @@
         android:textColor="@color/feed_article_label"
         vernacular:customTextFontFamily="@string/medium_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_feed_article_header_lebel"
         style="@style/TextView14spRegular"
         android:layout_width="match_parent"
@@ -141,7 +141,7 @@
         android:textColor="@color/recent_post_comment"
         vernacular:customTextFontFamily="@string/regular_font" />
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_feed_article_view_more"
         style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
@@ -158,7 +158,7 @@
         vernacular:customTextFontFamily="@string/regular_font" />
 
 
-    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_feed_article_tag"
         style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
@@ -190,7 +190,7 @@
             android:drawableLeft="@drawable/vector_likes_heart"
             android:drawableStart="@drawable/vector_likes_heart" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_total_reactions"
             style="@style/TextView12spMedium"
             android:layout_width="wrap_content"
@@ -203,7 +203,7 @@
             android:textColor="@color/feed_card_time"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_total_replies"
             style="@style/TextView12spMedium"
             android:layout_width="wrap_content"
@@ -238,7 +238,7 @@
         android:orientation="horizontal"
         android:saveEnabled="false">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_user_reaction"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -252,7 +252,7 @@
             android:textColor="@color/recent_post_comment"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_user_share"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -273,7 +273,7 @@
             android:textColor="@color/share_color"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_user_comment"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
@@ -343,7 +343,7 @@
                 android:layout_toRightOf="@id/img_container"
                 android:orientation="vertical">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_article_user_name"
                     style="@style/TextView12spMedium"
                     android:layout_width="match_parent"
@@ -364,7 +364,7 @@
                     android:layout_marginRight="@dimen/feed_article_comment_container_margin_right"
                     android:layout_marginStart="@dimen/feed_article_comment_container_margin_left">
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_feed_article_user_comment_post"
                         style="@style/TextView12spRegular"
                         android:layout_width="match_parent"
@@ -374,7 +374,7 @@
                         android:textColor="@color/comment_text"
                         vernacular:customTextFontFamily="@string/regular_font" />
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_feed_article_user_comment_post_view_more"
                         style="@style/TextView12spRegular"
                         android:layout_width="wrap_content"
@@ -388,7 +388,7 @@
                         vernacular:customTextFontFamily="@string/regular_font" />
                 </FrameLayout>
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_article_comment_post_time"
                     style="@style/TextView12spRegular"
                     android:layout_width="match_parent"
@@ -456,7 +456,7 @@
                         android:layout_marginTop="@dimen/feed_article_spam_info_margin"
                         android:src="@drawable/vector_spam_post_message" />
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_review_description"
                         style="@style/TextView14spRegular"
                         android:layout_width="wrap_content"
@@ -525,7 +525,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_article_login_user_name"
                     style="@style/TextView12spMedium"
                     android:layout_width="wrap_content"
@@ -537,7 +537,7 @@
                     android:textColor="@color/comment_text"
                     vernacular:customTextFontFamily="@string/medium_font" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_article_join_conversation"
                     style="@style/TextView14spRegular"
                     android:layout_width="match_parent"

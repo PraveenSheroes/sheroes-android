@@ -7,7 +7,7 @@ import android.util.AttributeSet;
  * Created by Praveen on 07/11/17.
  */
 
-public class NoScrollTextView extends CustomTextViewFont {
+public class NoScrollTextView extends FontTextView {
 
     public NoScrollTextView(Context context) {
         super(context);

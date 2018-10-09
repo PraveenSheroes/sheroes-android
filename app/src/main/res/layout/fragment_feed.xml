@@ -36,7 +36,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/she" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextView16spRegular"

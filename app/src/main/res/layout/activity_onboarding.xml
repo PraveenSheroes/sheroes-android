@@ -49,7 +49,7 @@
                     android:layout_marginTop="@dimen/dp_size_18"
                     android:orientation="vertical">
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_name_user"
                         style="@style/TextView18spBold"
                         android:layout_width="wrap_content"
@@ -58,7 +58,7 @@
                         android:textStyle="bold"
                         vernacular:customTextFontFamily="@string/medium_font" />
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_on_boarding_description"
                         style="@style/TextView14spRegular"
                         android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
         android:visibility="visible"
         app:cardElevation="@dimen/dp_size_40">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_on_boarding_finish"
             style="@style/TextView14spBold"
             android:layout_width="match_parent"

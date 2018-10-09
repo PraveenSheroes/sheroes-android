@@ -13,7 +13,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="1">
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_write_a_story"
             style="@style/TextView14spMedium"
             android:layout_width="0dp"

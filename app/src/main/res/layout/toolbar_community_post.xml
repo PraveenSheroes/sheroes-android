@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title_toolbar"
             style="@style/TextAppearance.Toolbar"
             android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
             android:maxLines="@integer/int_value_for_line_1"
             vernacular:customTextFontFamily="@string/medium_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/action"
             style="@style/TextView14spMedium"
             android:layout_width="wrap_content"

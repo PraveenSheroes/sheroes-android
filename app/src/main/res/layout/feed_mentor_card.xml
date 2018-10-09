@@ -61,7 +61,7 @@
                     android:orientation="horizontal"
                     android:weightSum="@integer/int_value_for_line_1">
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_feed_mentor_card_title"
                         style="@style/TextView16spMedium"
                         android:layout_width="0dp"
@@ -72,7 +72,7 @@
                         android:textColor="@color/comment_text"
                         vernacular:customTextFontFamily="@string/medium_font" />
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_feed_mentor_status"
                         style="@style/TextView10spBold"
                         android:layout_width="0dp"
@@ -89,7 +89,7 @@
                         vernacular:customTextFontFamily="@string/bold_font" />
                 </LinearLayout>
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_mentor_follower"
                     style="@style/TextView12spRegular"
                     android:layout_width="match_parent"
@@ -103,7 +103,7 @@
                     android:textColor="@color/grey_600"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_mentor_answered"
                     style="@style/TextView12spRegular"
                     android:layout_width="match_parent"
@@ -143,7 +143,7 @@
                     android:layout_marginTop="@dimen/dp_size_8"
                     android:src="@drawable/vector_mentor_profession" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_mentor_first_profession"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
@@ -173,7 +173,7 @@
                     android:layout_marginTop="@dimen/dp_size_8"
                     android:src="@drawable/vector_mentor_profession" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_mentor_second_profession"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
@@ -204,7 +204,7 @@
                     android:layout_marginTop="@dimen/dp_size_8"
                     android:src="@drawable/vector_mentor_profession" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_mentor_third_profession"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
@@ -229,7 +229,7 @@
             android:layout_marginTop="@dimen/dp_size_16"
             android:layout_weight="@integer/int_value_for_line_1">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_mentor_follow"
                 style="@style/TextView14spMedium"
                 android:layout_width="@dimen/dp_size_40"
@@ -247,7 +247,7 @@
                 android:visibility="visible"
                 vernacular:customTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_mentor_ask_question"
                 style="@style/TextView14spMedium"
                 android:layout_width="@dimen/dp_size_40"

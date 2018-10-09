@@ -61,7 +61,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_communities_text"
                 style="@style/TextView16spMedium"
                 android:layout_width="wrap_content"
@@ -113,7 +113,7 @@
                 android:paddingRight="8dp"
                 android:src="@drawable/vector_community_search" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_explore"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"

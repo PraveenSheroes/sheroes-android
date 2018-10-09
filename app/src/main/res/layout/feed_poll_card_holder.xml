@@ -50,7 +50,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_poll_card_title"
                     style="@style/TextView14spRegular"
                     android:layout_width="match_parent"
@@ -58,7 +58,7 @@
                     android:textColor="@color/comment_text"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_feed_poll_time"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
             android:layout_marginRight="@dimen/feed_poll_impression_count_view_margin_left_right"
             android:layout_marginTop="@dimen/feed_poll_impression_count_view_margin_top">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_ends_in"
                 style="@style/TextView12spRegular"
                 android:layout_width="wrap_content"
@@ -116,7 +116,7 @@
                 android:textColor="@color/feed_card_time"
                 vernacular:customTextFontFamily="@string/regular_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_total_votes"
                 style="@style/TextView12spRegular"
                 android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_likes_heart" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_total_reactions_count"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
@@ -156,7 +156,7 @@
                 android:textColor="@color/feed_card_time"
                 vernacular:customTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_total_replies"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
@@ -189,7 +189,7 @@
             android:orientation="horizontal"
             android:saveEnabled="false">
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_user_reaction"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
@@ -202,7 +202,7 @@
                 android:textColor="@color/recent_post_comment"
                 vernacular:customTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_user_share"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
@@ -220,7 +220,7 @@
                 android:textColor="@color/share_color"
                 vernacular:customTextFontFamily="@string/medium_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_user_comment"
                 style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"

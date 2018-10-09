@@ -14,7 +14,7 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_home"
             style="@style/TextView12spRegular"
             android:layout_width="0dp"
@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:background="@color/spam_dialog_divider" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_communities"
             style="@style/TextView12spRegular"
             android:layout_width="0dp"
