@@ -1,7 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -62,6 +64,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -142,6 +145,17 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     //region Activity methods
     @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleManager.setLocale(this);
+    }
+
+    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
@@ -164,7 +178,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 finish();
             }
         }
-        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
 
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
@@ -302,9 +316,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
             if (mFeedFragment != null) {
                 mFeedFragment.refreshList();
             }
-        }else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
             Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
-            if (parcelable != null && mFeedFragment!=null) {
+            if (parcelable != null && mFeedFragment != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
                 mFeedFragment.findPositionAndUpdateItem(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
             }
@@ -619,7 +633,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL,feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
     }
 
 

@@ -506,7 +506,7 @@
     <string name="logoutUrl">/users/logout</string>
     <!--Mentor-->
     <string name="ID_MENTOR_VIEW_ALL">View All</string>
-    <string name="ID_MENTOR">Champions</string>
+    <string name="ID_MENTOR">चैंपियंस</string>
     <string name="empty_mentor_text">No champions yet!</string>
     <string name="ID_MENTOR_POST">पोस्ट्स</string>
     <string name="ID_MENTOR_Q_A">प्रo और उo</string>
