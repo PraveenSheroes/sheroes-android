@@ -158,7 +158,7 @@
                 android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:textColorLink="@color/view_more"
-                vernacular:noScrollTextFontFamily="@string/regular_font" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                 android:id="@+id/tv_feed_community_post_view_more"

@@ -86,7 +86,7 @@
         android:lineSpacingExtra="@dimen/feed_poll_description_line_spacing"
         android:textColor="@color/comment_text"
         android:textColorLink="@color/view_more"
-        vernacular:noScrollTextFontFamily="@string/regular_font" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <LinearLayout
         android:id="@+id/li_type_of_poll_view"

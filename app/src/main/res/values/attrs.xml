@@ -139,10 +139,6 @@
         <attr name="customTextFontFamily" format="string" />
     </declare-styleable>
 
-    <declare-styleable name="NoScrollTextViewFont">
-        <attr name="noScrollTextFontFamily" format="string" />
-    </declare-styleable>
-
     <declare-styleable name="FontButton">
         <attr name="customButtonFontFamily" format="string" />
     </declare-styleable>

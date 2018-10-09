@@ -196,7 +196,7 @@
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:textColor="@color/comment_text"
                 android:textColorLink="@color/view_more"
-                vernacular:noScrollTextFontFamily="@string/regular_font" />
+                vernacular:customTextFontFamily="@string/regular_font" />
         </FrameLayout>
 
         <LinearLayout
