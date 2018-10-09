@@ -1,6 +1,6 @@
 def versionMajor = 6
 def versionMinor = 9
-def versionPatch = 5
+def versionPatch = 6
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -113,7 +113,7 @@ android {
             signingConfig signingConfigs.release
             ext.crashlyticsApiSecret = "9edaf311149aaaac17a2399c76e31db5fd18706615646d41ac84e561504e4e57"
             ext.crashlyticsApiKey = "07aa242372597565df80681a25002e6e25e6ef0e"
-            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:754013124314"]
+            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
         }
@@ -155,11 +155,12 @@ dependencies {
     }
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.facebook.android:facebook-android-sdk:4.36.0'
-    implementation 'com.google.android.gms:play-services-analytics:11.8.0'
-    implementation 'com.google.android.gms:play-services-auth:11.8.0'
-    implementation 'com.google.android.gms:play-services-gcm:11.8.0'
+    implementation 'com.google.android.gms:play-services-analytics:15.0.0'
+    implementation 'com.google.android.gms:play-services-auth:15.0.0'
+    implementation 'com.google.android.gms:play-services-ads:15.0.0'
+    implementation 'com.google.android.gms:play-services-location:15.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
     implementation 'com.clevertap.android:clevertap-android-sdk:3.1.10'
-    implementation 'com.google.android.gms:play-services-location:11.8.0'
     implementation 'com.android.support:mediarouter-v7:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'

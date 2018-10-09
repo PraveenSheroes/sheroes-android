@@ -22,7 +22,7 @@ public class LoginRequest extends BaseRequest {
     private String devicetype;
     @SerializedName("gcmorapnsid")
     @Expose
-    private String gcmorapnsid;
+    private String fcmorapnsid;
     @SerializedName("password")
     @Expose
     private String password;
@@ -58,11 +58,11 @@ public class LoginRequest extends BaseRequest {
     }
 
     public String getGcmorapnsid() {
-        return gcmorapnsid;
+        return fcmorapnsid;
     }
 
-    public void setGcmorapnsid(String gcmorapnsid) {
-        this.gcmorapnsid = gcmorapnsid;
+    public void setFcmorapnsid(String fcmorapnsid) {
+        this.fcmorapnsid = fcmorapnsid;
     }
 
     public String getPassword() {

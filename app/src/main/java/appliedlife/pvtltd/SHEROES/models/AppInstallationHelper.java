@@ -23,7 +23,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import io.reactivex.Observable;
@@ -86,15 +86,15 @@ public class AppInstallationHelper {
         }
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(mContext, mContext.getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+        FCMClientManager pushClientManager = new FCMClientManager(mContext, mContext.getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 PushManager.getInstance().refreshToken(mContext, registrationId);
-                //Refresh GCM token
+                //Refresh FCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if(cleverTapAPI!=null) {
-                    cleverTapAPI.data.pushGcmRegistrationId(registrationId, true);
+                    cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                 }
                 fillAndSaveInstallation(registrationId, hasLoggedIn);
             }
@@ -237,7 +237,7 @@ public class AppInstallationHelper {
     }
 
     private void fillAndSaveInstallation(String registrationId, boolean hasLoggedIn) {
-        mAppInstallationLocal.gcmId = registrationId;
+        mAppInstallationLocal.fcmId = registrationId;
         saveInBackground(mContext, new CommonUtil.Callback() {
             @Override
             public void callBack(boolean isShown) {
