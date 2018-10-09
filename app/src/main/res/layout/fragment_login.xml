@@ -81,7 +81,7 @@
                 android:layout_marginTop="@dimen/dp_size_16"
                 android:background="@drawable/rectangle_pop_border">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomEditTextFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
                     android:id="@+id/email"
                     style="@style/TextView14spRegular"
                     android:layout_width="match_parent"
@@ -107,7 +107,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="@dimen/dp_size_16">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomEditTextFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
                     android:id="@+id/password"
                     style="@style/TextView14spRegular"
                     android:layout_width="0dp"
