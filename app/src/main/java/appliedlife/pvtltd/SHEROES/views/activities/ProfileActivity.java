@@ -896,10 +896,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         Bundle bundle = new Bundle();
         String screenName;
         if (mLoggedInUserId != mUserSolarObject.getIdOfEntityOrParticipant()) {
-            screenName = "Stories";
+            screenName = getString(R.string.stories);
             bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&userId=" + mUserSolarObject.getIdOfEntityOrParticipant());
         } else {
-            screenName = "My Stories";
+            screenName = getString(R.string.my_stories);
             bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true");
         }
         bundle.putString(AppConstants.SCREEN_NAME, "Profile Stories Screen");
@@ -1773,7 +1773,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
             } else {
-                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
@@ -1946,7 +1946,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
 
             TextView text = dialog.findViewById(R.id.title);
-            text.setText("Unfollow " + mUserSolarObject.getNameOrTitle());
+            text.setText(getString(R.string.unfollow_profile,mUserSolarObject.getNameOrTitle()));
 
             TextView dialogButton = dialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {

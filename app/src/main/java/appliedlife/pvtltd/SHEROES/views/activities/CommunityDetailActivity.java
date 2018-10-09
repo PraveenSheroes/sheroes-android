@@ -431,8 +431,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                            .show();
+                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     if (mCommunityFeedSolrObj == null) {
                         return;
                     }

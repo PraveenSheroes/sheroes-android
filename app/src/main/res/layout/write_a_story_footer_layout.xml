@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_story_footer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -13,19 +13,19 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="1">
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
             android:id="@+id/tv_write_a_story"
+            style="@style/TextView14spMedium"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight=".5"
             android:drawablePadding="@dimen/dp_size_4"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:text="@string/write_a_story"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>
 

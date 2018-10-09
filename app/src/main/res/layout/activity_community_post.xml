@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/rl_main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -35,7 +36,7 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:defaultValue="true"
             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="Share on Facebook"
+            android:text="@string/share_on_fb"
             android:textColor="#878787"
             android:textSize="14sp" />
     </RelativeLayout>
@@ -74,18 +75,20 @@
                     android:src="@drawable/vector_post_as_community_17dp"
                     android:visibility="gone" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                     android:id="@+id/user_name"
+                    style="@style/TextView16spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/user_pic"
                     android:inputType="textPersonName|textCapWords"
                     android:text="@string/anonymous"
                     android:textColor="#3c3c3c"
-                    android:textSize="16sp" />
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                     android:id="@+id/community_name"
+                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/user_name"
@@ -94,8 +97,8 @@
                     android:drawableRight="@drawable/vector_down_arrow_red_14dp"
                     android:text="@string/choose_community_option"
                     android:textColor="@color/red"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
             </RelativeLayout>
 
@@ -106,11 +109,13 @@
                 android:layout_below="@id/user_container"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16" />
+
             <View
                 android:id="@+id/view_keyboard"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_size_200"
-                android:layout_below="@id/et_view"/>
+                android:layout_below="@id/et_view" />
+
             <android.support.v7.widget.CardView
                 android:id="@+id/card_link_render"
                 android:layout_width="match_parent"
@@ -162,24 +167,24 @@
                             android:layout_marginLeft="@dimen/dp_size_10"
                             android:orientation="vertical">
 
-                            <TextView
+                            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                                 android:id="@+id/tv_link_title"
+                                style="@style/TextView16spMedium"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                                 android:textColor="@color/pure_black"
-                                android:textSize="@dimen/sp_size_16" />
+                                vernacular:customTextFontFamily="@string/medium_font" />
 
-                            <TextView
+                            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                                 android:id="@+id/tv_link_sub_title"
+                                style="@style/TextView14spRegular"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/dp_size_4"
                                 android:ellipsize="end"
-                                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                                 android:maxLines="@integer/int_value_for_line_3"
                                 android:textColor="@color/detail_page_text"
-                                android:textSize="@dimen/sp_size_14" />
+                                vernacular:customTextFontFamily="@string/regular_font" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -190,8 +195,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/card_link_render"
-                android:orientation="vertical"
                 android:layout_marginBottom="@dimen/li_main_poll_view_margin"
+                android:orientation="vertical"
                 android:visibility="gone">
 
                 <LinearLayout
@@ -214,8 +219,9 @@
                 android:layout_marginTop="@dimen/dp_size_8"
                 android:visibility="visible">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                     android:id="@+id/image_count"
+                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -223,8 +229,8 @@
                     android:layout_marginRight="16dp"
                     android:layout_marginTop="50dp"
                     android:text="0/5"
-                    android:textSize="14sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/image_list_view"

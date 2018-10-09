@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -78,7 +79,7 @@
                         android:padding="@dimen/dp_size_20"
                         android:visibility="visible" />
 
-                    <TextView
+                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                         android:id="@+id/tv_mentor_toolbar_name"
                         style="@style/TextAppearance.Toolbar"
                         android:layout_width="wrap_content"
@@ -91,10 +92,9 @@
                         android:layout_toEndOf="@id/tv_drawer_navigation"
                         android:layout_toRightOf="@id/tv_drawer_navigation"
                         android:ellipsize="end"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:maxLines="@integer/int_value_for_line_1"
                         android:textColor="@color/toolbar_title"
-                        android:textSize="@dimen/sp_size_20" />
+                        vernacular:customTextFontFamily="@string/medium_font"/>
 
                 </RelativeLayout>
 

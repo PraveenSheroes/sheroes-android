@@ -450,7 +450,6 @@
     <string name="action.mentor_post">Ask</string>
     <string name="title.create_post">Create a Post</string>
     <string name="title.ask_question">Ask a Question</string>
-    <string name="title.article_submit">Write a Story</string>
     <string name="anonymous">Anonymous</string>
     <string name="choose_community_option">Choose your community</string>
     <string name="image_count">%1$d/%2$d</string>
@@ -535,7 +534,7 @@
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">Communities for you!</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_DEC">Tap here to explore various communities of interest.</string>
-    <string name="ID_SHOW_CASE_MY_COMMUNITIES_TITLE">My Communities</string>
+
     <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
     <string name="ID_SHOW_CASE_FEED_TITLE">Hello %1$s Welcome to SHEROES</string>
     <string name="ID_SHOW_CASE_FEED_DEC">This is where conversations from communities you have joined appear along with interesting stories and useful articles</string>
@@ -543,7 +542,7 @@
     <string name="ID_NEXT">Next</string>
     <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
 
-    <string name="view_more">View More</string>
+
     <string name="followed_mentors">Followed Champions</string>
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
@@ -795,11 +794,20 @@
     <string name="days">days</string>
     <string name="hours">hrs</string>
     <string name="minutes">mins</string>
-    <string name="type_your_comment">Type your comment here&#8230;</string>Here are some trending posts on SHEROES
+    <string name="type_your_comment">Type your comment here&#8230;</string>
     <string name="top_communities_text">Here are some trending posts on SHEROES</string>
     <string name="health_tips">Health Tips</string>
     <string name="challenge_completed_text">You have completed the # %1$s challenge </string>
     <string name="winner">Winner</string>
     <string name="responses">Responses</string>
     <string name="overview">Overview</string>
+    <string name="join_challenge">Join the Challenge</string>
+    <string name="not_interested">Not Interested</string>
+    <string name="end">Ends %1$s</string>
+    <string name="unfollow_profile">Unfollow %1$s</string>
+    <string name="error_while_save">Error while save image</string>
+    <string name="share_on_fb">Share on Facebook</string>
+    <string name="stories">Stories</string>
+    <string name="my_stories">My Stories</string>
+
 </resources>

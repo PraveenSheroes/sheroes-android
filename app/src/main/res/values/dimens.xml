@@ -120,7 +120,7 @@
     <dimen name="user_comment_icon">40dp</dimen>
     <dimen name="dp_size_minus_7">-7dp</dimen>
     <dimen name="communities_icon">66dp</dimen>
-    <dimen name="toolbar_title_size">20dp</dimen>
+    <dimen name="toolbar_title_size">20sp</dimen>
     <dimen name="article_image_height_tmp">200dp</dimen>
     <dimen name="authorPicSize">44dp</dimen>
     <dimen name="mentor_profile_icon">87dp</dimen>
@@ -311,7 +311,7 @@
     <dimen name="feed_article_user_container_margin_top">16dp</dimen>
     <dimen name="feed_article_title_container_margin_right">10dp</dimen>
     <dimen name="feed_article_title_container_margin_left">8dp</dimen>
-    <dimen name="feed_article_card_title_textsize">14sp</dimen>
+
     <dimen name="tv_feed_article_card_title_label">3dp</dimen>
     <dimen name="tv_feed_article_card_title_label_size">12sp</dimen>
     <dimen name="feed_article_bookmark_padding_top">5dp</dimen>

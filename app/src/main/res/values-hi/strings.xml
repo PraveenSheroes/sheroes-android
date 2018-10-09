@@ -10,9 +10,9 @@
     <!--text names in SHEROES-->
 
     <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
-    <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">Connectivity Failure</string>
+    <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">कनेक्शन नहीं हो पाया</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">इंटरनेट कनेक्शन या कनेक्टिविटी नहीं है। कृपया अपने कनेक्शन की जांच करे और फिर से प्रयास करें।</string>
-    <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
+    <string name="IDS_STR_TRY_AGAIN_TEXT">दोबारा कोशिश करें।</string>
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
     <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
     <!-- Strings related to login -->
@@ -36,13 +36,13 @@
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
     <!--Fragment classes-->
-    <string name="ID_COMMUNITIES">कम्युनिटीज़</string>
+    <string name="ID_COMMUNITIES">समुदाय</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notifications</string>
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
-    <string name="ID_MY_COMMUNITIES">मेरी कम्युनिटीज़</string>
+    <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
     <string name="ID_FEED_IMPRESSION">feed</string>
     <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
     <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
@@ -69,7 +69,7 @@
     <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
     <string name="ID_TRENDING">ट्रेंडिंग</string>
     <string name="ID_CHOOSE_CATEGORY">केटेगरी चुने</string>
-    <string name="ID_DONE">Done</string>
+    <string name="ID_DONE">हो गया</string>
     <string name="ID_OK">Ok</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">और देखें</string>
@@ -82,7 +82,7 @@
     <string name="ID_VIEW">View</string>
     <string name="ID_APPLIED">Applied</string>
     <string name="ID_VIEWS">Views</string>
-    <string name="ID_MIN_READ">min read</string>
+    <string name="ID_MIN_READ">मिनट का लेख</string>
     <string name="ID_COMMUNITY_ANNONYMOUS">गुमनाम</string>
     <string name="ID_WISHTLE">Whistle</string>
     <string name="ID_LOVE">Love</string>
@@ -91,8 +91,8 @@
     <string name="ID_COMMENTS">Comments</string>
     <string name="ID_FACE_PALM">Face Palm</string>
     <string name="ID_XOXO">Xoxo</string>
-    <string name="ID_PROFILE">About</string>
-    <string name="ID_PROFILE_POST">Profile Post Screen</string>
+    <string name="ID_PROFILE">बारे मे</string>
+    <string name="ID_PROFILE_POST">प्रोफाइल पोस्ट स्क्रीन</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_POST">पोस्ट इन रूप में करे:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
@@ -104,20 +104,20 @@
     <string name="ID_INVITE">Invite</string>
     <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">बदले</string>
-    <string name="SHARE_PROFILE">Share Profile</string>
+    <string name="SHARE_PROFILE">प्रोफाइल शेयर करें</string>
     <string name="ID_EDIT_PROFILE">प्रोफाइल में बदलाव</string>
     <string name="ID_DELETE">हटाना</string>
     <string name="ID_APPROVE">मंज़ूर</string>
 
     <string name="ID_REPORT">Report as spam</string>
     <string name="REPORT_SPAM">स्पैम रिपोर्ट</string>
-    <string name="report_user">Report User</string>
-    <string name="deactivate_user">Deactivate User</string>
-    <string name="banned_user_device">Ban User Device</string>
+    <string name="report_user">यूज़र को रिपोर्ट करें</string>
+    <string name="deactivate_user">निष्क्रिय यूज़र</string>
+    <string name="banned_user_device">यूज़र डिवाइस पर प्रतिबंध लगाओ</string>
 
 
     <string name="ID_REFRESH">Refresh feed</string>
-    <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
+    <string name="ID_NO_RESULT_FOUND">कोई परिणाम नहीं मिला, दोबारा क्लिक करें</string>
     <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
     <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
@@ -126,7 +126,7 @@
     <string name="ID_OWNER_Mo">मालकिन</string>
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
-    <string name="ID_TAGS">Tags</string>
+    <string name="ID_TAGS">टैग</string>
     <string name="ID_BOOKMARKS">बुकमार्क्स</string>
     <string name="Bookmark">बुकमार्क</string>
     <string name="Bookmarked">बुकमार्क किया</string>
@@ -262,7 +262,7 @@
     <string name="app_name">SHEROES</string>
     <string name="ok">DONE</string>
 
-    <string name="camera">CAMERA</string>
+    <string name="camera">कैमरा</string>
     <!--Work Experience-->
 
     <string name="married">Married</string>
@@ -317,7 +317,7 @@
 
 
     <!--Google Analytics Screen Names-->
-    <string name="ID_PUBLIC_PROFILE">public profile</string>
+    <string name="ID_PUBLIC_PROFILE">पब्लिक प्रोफाइल</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
     <string name="communities_listing">Communities Screen</string>
     <string name="ID_COMMUNITIES_CATEGORY">समुदाय वर्ग स्क्रीन</string>
@@ -341,7 +341,7 @@
     <string name="ID_REVIEW_POST_NON_ZERO_UPVOTES">Upvotes</string>
 
     <string name="ID_YOU_TUBE_VIDEO_NOT_PLAYING">Sorry can not play video please check link</string>
-    <string name="MAX_IMAGE_OVERFLOW_MESSAGE">Max 5 images can be uploaded</string>
+    <string name="MAX_IMAGE_OVERFLOW_MESSAGE">अधिकतम पांच फोटो डाल सकते हैं</string>
 
 
     <string name="crop_image_activity_title"></string>
@@ -358,14 +358,14 @@
     <string name="action_share">share</string>
 
     <string name="album_title">%1$d of %2$d"</string>
-    <string name="img_saved_info">Image saved</string>
+    <string name="img_saved_info">फोटो सेव हुई</string>
 
     <string name="more_text_info">There are %1$s more comments."</string>
-    <string name="empty_followed_mentor">%1$s is not following any champion yet"</string>
-    <string name="empty_followed_community">%1$s has not joined any community yet"</string>
-    <string name="load_more">Load More</string>
+    <string name="empty_followed_mentor">%1$s ने अभी तक किसी भी चैंपियन को फॉलो नहीं किया हैं"</string>
+    <string name="empty_followed_community">%1$s ने अभी तक किसी भी समुदाय में शामिल नहीं हुए हैं"</string>
+    <string name="load_more">और लोड करें</string>
     <string name="more">और</string>
-    <string name="following">Following</string>
+    <string name="following">फॉलोइंग</string>
 
     <plurals name="numberOfComments">
         <item quantity="zero">कमैंट्स</item>
@@ -444,22 +444,21 @@
     <string name="comment_deleted">Your comment has been deleted</string>
     <string name="choose_community">Choose your community to post in</string>
     <string name="other_community">Other Communities</string>
-    <string name="add_photo">Add to your Post</string>
+    <string name="add_photo">अपनी पोस्ट में डालें </string>
     <string name="post_anonymous">गुमनाम रहे</string>
-    <string name="action.post">Post</string>
-    <string name="action.next">Next</string>
-    <string name="action.mentor_post">Ask</string>
-    <string name="title.create_post">Create a Post</string>
-    <string name="title.ask_question">Ask a Question</string>
-    <string name="title.article_submit">Write a Story</string>
+    <string name="action.post">पोस्ट</string>
+    <string name="action.next">अगला</string>
+    <string name="action.mentor_post">पूछें</string>
+    <string name="title.create_post">पोस्ट बनायें</string>
+    <string name="title.ask_question">सवाल पूछें</string>
     <string name="anonymous">गुमनाम</string>
-    <string name="choose_community_option">Choose your community</string>
+    <string name="choose_community_option">अपना समुदाय चुने</string>
     <string name="image_count">%1$d/%2$d</string>
     <string name="badge_won_times_label">Won %1$d %2$s</string>
-    <string name="error_blank">Please add something to post</string>
-    <string name="error_choose_community">Please choose the community to post in</string>
-    <string name="menu.post_as_community">Post as Community</string>
-    <string name="menu.post_as_user">Post as %1$s</string>
+    <string name="error_blank">कृपया पोस्ट पर कुछ डालें</string>
+    <string name="error_choose_community">कृपया पोस्ट करने के लिए समुदाय चुने</string>
+    <string name="menu.post_as_community">समुदाय के रूप में पोस्ट करें</string>
+    <string name="menu.post_as_user">%1$s के रूप में पोस्ट करें</string>
 
     <string name="leaderboard_user_like_comment">%1$d %2$s\t·\t%3$d %4$s</string>
 
@@ -509,10 +508,10 @@
     <string name="ID_MENTOR_VIEW_ALL">View All</string>
     <string name="ID_MENTOR">Champions</string>
     <string name="empty_mentor_text">No champions yet!</string>
-    <string name="ID_MENTOR_POST">Posts</string>
-    <string name="ID_MENTOR_Q_A">Q &amp; A</string>
-    <string name="ID_ASKING">asking</string>
-    <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
+    <string name="ID_MENTOR_POST">पोस्ट्स</string>
+    <string name="ID_MENTOR_Q_A">प्रo और उo</string>
+    <string name="ID_ASKING">पूछ रहा है</string>
+    <string name="ID_WHAT_IS_QUESTION">आपका प्रश्न क्या है?</string>
     <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
     <string name="ID_GET_EXPERT_ADVICE">चैंपियन से प्रतिष्ठित सलाह प्राप्त करें</string>
     <string name="ID_INSIGHT">Insights</string>
@@ -522,7 +521,7 @@
     <string name="ID_POSTS">Posts created in last 7 days</string>
     <string name="ID_QUESTIONS">Questions in last 7 days</string>
     <string name="ID_ANSWERS">Answered questions in last 7 days</string>
-    <string name="ID_ANSWER_QUESTION">Answer questions</string>
+    <string name="ID_ANSWER_QUESTION">सवालों के जवाब दें</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
     <string name="private_information">Private Information (Only Visible to You)</string>
 
@@ -536,7 +535,7 @@
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">एक प्रश्न पूछें और विशेषज्ञों और अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">आपके लिए समुदाय!</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_DEC">अपनी पसंद अनुसार विभिन्न समुदायों का पता लगाने के लिए यहां टैप करें।</string>
-    <string name="ID_SHOW_CASE_MY_COMMUNITIES_TITLE">My Communities</string>
+
     <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
     <string name="ID_SHOW_CASE_FEED_TITLE">हेलो %1$s SHEROES में आपका स्वागत है</string>
     <string name="ID_SHOW_CASE_FEED_DEC">यह वह जगह है जहां आप शामिल समुदायों की  बातचीत , दिलचस्प कहानियों और उपयोगी लेखों को देख सकते हैं</string>
@@ -544,21 +543,21 @@
     <string name="ID_NEXT">अगला</string>
     <string name="ID_LETS_GET_STARTED">आएँ शुरू करें!</string>
 
-    <string name="view_more">View More</string>
+
     <string name="followed_mentors">Followed Champions</string>
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="new_feature">नया</string>
     <string name="feed_header">FEED_HEADER</string>
-    <string name="add_location">Add Location</string>
-    <string name="add_skills">Add Skills</string>
-    <string name="add_desc">Add Description</string>
-    <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s &amp; you share %2$s mutual communities"</string>
+    <string name="add_location">लोकेशन डालें</string>
+    <string name="add_skills">कुशलता डालें</string>
+    <string name="add_desc">विवरण डालें</string>
+    <string name="PLACEHOLDER_MUTUAL_COMMUNITY">%1$s और आप %2$s एक जैसे समुदायों को शेयर करते हैं</string>
     <string name="profile_progress_message">Hey %1$s! \n%2$s"</string>
     <string name="post_schedule_message">You are scheduling a post for &lt;b&gt;%1$s&lt;/b&gt; Community to be posted on &lt;b&gt;%2$s&lt;/b&gt;.</string>
-    <string name="followed_communities">Communities Joined</string>
-    <string name="champions_followed">Champions Followed</string>
-    <string name="join_communities">Join Communities &amp; Connect></string>
+    <string name="followed_communities">समुदाय जिनमे आप शामिल हैं</string>
+    <string name="champions_followed">चैंपियंस जिनको फॉलो किया</string>
+    <string name="join_communities">समुदाय में शामिल हों और कनेक्ट करें</string>
 
     <string name="ID_SHARE_ON_WHATS_APP">शेयर</string>
 
@@ -571,9 +570,9 @@
 
     <string name="got_it">समझ गए</string>
 
-    <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
+    <string name="tool_tip_ask_question">इस चैंपियन से  प्रश्न पूछने के लिए यहां टैप करें।</string>
     <string name="tool_tip_notification">लाइक और टिप्पणियों के लिए आपकी व्यक्तिगत सूचनाएं यहां दिखाई देंगी।.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 समझ गए!</string>
-    <string name="tool_tip_follower">Follow her to see what she shares!</string>
+    <string name="tool_tip_follower">उसके शेयर्स देखने के लिए उसे फॉलो करें!</string>
     <string name="tool_tip_picture_share">Like this picture? Share it with friends.</string>
     <string name="tool_tip_invite_friend">Invite your friends to this community by tapping here.</string>
     <string name="tool_tip_article_share">Share this article with a friend who will love reading it.</string>
@@ -629,9 +628,9 @@
     <string name="update.description">Update now to have an awesome experience</string>
     <string name="searching">ढूँढ रहे हैं&#8230;</string>
     <string name="no_result_found">No Result Found</string>
-    <string name="user_mention_area_at_post">You can tag community owners &amp; your followers</string>
+    <string name="user_mention_area_at_post">आप समुदाय के मालिक और अपने फॉलोवर्स को टैग कर सकते हैं</string>
     <string name="user_mention_area_at_comment">आप समुदाय के मालिक को, अपने फॉलोवर्स को और इस पोस्ट से जुड़े लोगो को टैग कर सकते हैं</string>
-    <string name="reactivate_your_account">To reactivate your account write to us</string>
+    <string name="reactivate_your_account">अपने खाते को पुनः सक्रिय करने के लिए हमें लिखें</string>
     <string name="care_sheroes">care@sheroes.in</string>
     <string name="male">मैं आदमी हूँ</string>
     <string name="female">हाँ, मैं महिला हूँ</string>
@@ -651,10 +650,10 @@
     <string name="next_level">Next level</string>
     <string name="intermediate">Intermediate</string>
     <string name="all_star">All star</string>
-    <string name="progress_status_beginner">Profile Strength : Beginner</string>
-    <string name="progress_status_all_star">Profile Strength : All Star</string>
-    <string name="progress_level_status_intermediate">Profile Strength : Intermediate</string>
-    <string name="add">Add</string>
+    <string name="progress_status_beginner">प्रोफाइल स्ट्रेंथ : बिगिनर</string>
+    <string name="progress_status_all_star">प्रोफाइल स्ट्रेंथ: सभी स्टार</string>
+    <string name="progress_level_status_intermediate">"प्रोफाइल स्ट्रेंथ : इंटरमीडिएट"</string>
+    <string name="add">और डालें</string>
     <string name="all_star_filled">Yay! You have reached the All-Star League. A rich profile enhances your experience with SHEROES and is likely to get you more followers.</string>
     <string name="all_star_unfilled">Get to this level and you’ll be in our own league! Make yourself recognizable and gain more followers by adding a nice profile picture and a few more details.</string>
     <string name="intermediate_filled">Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.</string>
@@ -670,15 +669,15 @@
     <string name="location_error_msg">Please enter Current location</string>
     <string name="full_name_err_msg">Please enter full name</string>
     <string name="limit">0/140</string>
-    <string name="other">Other</string>
+    <string name="other">अन्य</string>
     <string name="explore_All">और  खोज  करें</string>
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
-    <string name="add_reason">Add the reason</string>
-    <string name="others">Others</string>
+    <string name="add_reason">कारण लिखें</string>
+    <string name="others">अन्य लोग</string>
     <string name="home_label">होम</string>
     <string name="youtube">Youtube.com</string>
     <string name="how_do_i_become_a_supersheroes">How do I become a SuperSheroes?</string>
-    <string name="poll_option">Option</string>
+    <string name="poll_option">विकल्प</string>
     <string name="post_detail_toolbar_title">%1$s पोस्ट</string>
     <string name="post_detail_toolbar_title_multiple">%1$s\'s पोस्ट</string>
     <string name="poll_detail_toolbar_title">%1$s पोल</string>
@@ -697,7 +696,7 @@
 
 
 
-    <string name="action_draft">Draft</string>
+    <string name="action_draft">ड्राफ्ट</string>
     <string name="action_info">Info</string>
 
     <string name="article.status.submitted">submitted</string>
@@ -722,19 +721,19 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="no_tag_found">No</string>
-    <string name="write_a_story">Write a story</string>
+    <string name="write_a_story">कहानी लिखें</string>
     <string name="no_story">No stories yet</string>
-    <string name="poll">Poll</string>
-    <string name="photo_video">Photo</string>
-    <string name="choose_poll">Choose your type of poll</string>
-    <string name="title.create_poll">Create a Poll</string>
-    <string name="poll_option_text">Add more options</string>
-    <string name="poll_option_end_text">Poll ends:</string>
+    <string name="poll">पोल</string>
+    <string name="photo_video">फोटो</string>
+    <string name="choose_poll">अपना पोल का चुनाव करें </string>
+    <string name="title.create_poll">पोल बनाए </string>
+    <string name="poll_option_text">और  विकल्प भरे</string>
+    <string name="poll_option_end_text">पोल समाप्त:</string>
     <string-array name="poll_time">
-        <item>1 Day</item>
-        <item>2 Days</item>
-        <item>1 Week</item>
-        <item>1 Month</item>
+        <item>1 दिन</item>
+        <item>2 दिन</item>
+        <item>1 सप्ताह</item>
+        <item>1 महीना</item>
     </string-array>
     <integer-array name="poll_days_count">
         <item>1</item>
@@ -745,22 +744,22 @@
     <string name="percent_vote">% वोट</string>
     <string name="poll_end">%1$s में समाप्त</string>
     <string name="ended">पोल समाप्त</string>
-    <string name="option_empty">Option can\'t be empty</string>
-    <string name="option_image_empty">Image can\'t be empty</string>
-    <string name="poll_text_limit">Description can\'t exceed 500 char</string>
+    <string name="option_empty">विकल्प खाली नहीं हो सकता है</string>
+    <string name="option_image_empty">फोटो खाली नहीं हो सकता है</string>
+    <string name="poll_text_limit">विवरण 500 अक्षर से अधिक नहीं हो सकता है</string>
 
-    <string name="paste_on_playstore">Paste as Review on Playstore</string>
-    <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
-    <string name="congratulation">Congratulations</string>
-    <string name="copied">Copied</string>
-    <string name="message">message</string>
-    <string name="your_response_copied">Your response copied</string>
-    <string name="list_comment_submit">Submit</string>
-    <string name="list_comment_cancel">Cancel</string>
+    <string name="paste_on_playstore">प्लेस्टोर पर समीक्षा के रूप में पेस्ट करें</string>
+    <string name="winner_msg">क्या आप Google Playstore पर हमारे बारे में कुछ बयां करना चाहते हैं?</string>
+    <string name="congratulation">बधाई हो</string>
+    <string name="copied">कॉपी किया गया</string>
+    <string name="message">संदेश</string>
+    <string name="your_response_copied">आपकी प्रतिक्रिया कॉपी की गई</string>
+    <string name="list_comment_submit">जमा करें</string>
+    <string name="list_comment_cancel">रद्द करना</string>
     <string name="leaderboard_rank_unavailable">--</string>
     <string name="edit">Edit</string>
     <string name="poll_result_percent">%</string>
-    <string name="poll_ask_question">Ask a Question? (%1$d char)</string>
+    <string name="poll_ask_question">प्रश्न पूछे (%1$d char)</string>
     <string name="poll_text_option">(%1$d char)</string>
     <string name="challenge">चैलेंज</string>
     <string name="care_msg"><![CDATA[ <html>
@@ -803,5 +802,12 @@
     <string name="winner">विजेता</string>
     <string name="responses">प्रतिक्रियाओं</string>
     <string name="overview">निरीक्षण</string>
-
+    <string name="join_challenge">चुनौती में शामिल हों</string>
+    <string name="not_interested">रुचि नहीं</string>
+    <string name="end">समाप्त %1$s</string>
+    <string name="unfollow_profile">अनफॉलो %1$s</string>
+    <string name="error_while_save">फोटो सेव करते समय गलती हो रही है</string>
+    <string name="share_on_fb">फेसबुक पर शेयर करें</string>
+    <string name="stories">कहानियां</string>
+    <string name="my_stories">मेरी कहानियां</string>
 </resources>

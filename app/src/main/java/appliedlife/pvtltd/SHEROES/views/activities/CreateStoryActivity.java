@@ -186,7 +186,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
         }
         setSupportActionBar(mToolbar);
-        toolbarTitle.setText(R.string.title_article_submit);
+        toolbarTitle.setText(R.string.write_a_story);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         invalidateToolBar();

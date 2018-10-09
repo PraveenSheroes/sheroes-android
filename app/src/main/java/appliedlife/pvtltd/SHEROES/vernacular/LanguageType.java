@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.vernacular;
 
 public enum LanguageType {
+    /*These names should be matched with server names */
     ENGLISH("en"),
     HINDI("hi");
 

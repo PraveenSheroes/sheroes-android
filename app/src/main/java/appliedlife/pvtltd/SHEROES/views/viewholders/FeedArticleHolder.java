@@ -206,12 +206,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (item instanceof ArticleSolrObj) {
             articleObj = (ArticleSolrObj) item;
         }
-        // if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-        //     tvArticleJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
-        // } else {
-        tvArticleJoinConversation.setText("Comment here...");
-        // }
-
+        tvArticleJoinConversation.setText(R.string.type_your_comment);
         articleObj.setItemPosition(position);
         this.mContext = context;
         tvFeedArticleUserBookmark.setEnabled(true);
@@ -243,14 +238,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedArticleTag.setVisibility(View.GONE);
         }
-        // TODO : ujjwal
-        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
-            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
-        } else {
-            tvFeedArticleUserMenu.setVisibility(View.GONE);
-        }*/
-
-
     }
 
     private void UpdateUserStoryVisibility() {
