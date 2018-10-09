@@ -58,7 +58,7 @@
                 android:layout_gravity="bottom"
                 android:clickable="true">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomButtonFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                     android:id="@+id/btn_bottom_bar"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"

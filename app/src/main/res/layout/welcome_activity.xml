@@ -83,7 +83,7 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomButtonFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                     android:id="@+id/click_to_join_fb_signup"
                     style="@style/Button14spRegular"
                     android:layout_width="124dp"
@@ -95,7 +95,7 @@
                     android:textColor="@color/white"
                     vernacular:customButtonFontFamily="@string/regular_font" />
 
-                <appliedlife.pvtltd.SHEROES.vernacular.CustomButtonFont
+                <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                     android:id="@+id/btn_login_google"
                     style="@style/Button14spRegular"
                     android:layout_width="124dp"
