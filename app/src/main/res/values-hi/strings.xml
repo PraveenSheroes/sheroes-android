@@ -20,7 +20,7 @@
     <string name="ID_TODAY">Today</string>
     <string name="ID_PROMPT_PASSWORD">पासवर्ड</string>
     <string name="ID_ACTION_LOG_IN_SHORT">लॉगिन</string>
-    <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
+    <string name="ID_ERROR_INVALID_EMAIL">अमान्य ईमेल आईडी</string>
     <string name="ID_ERROR_EMAIL">Enter email address</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
     <string name="ID_POSTED_IN">में पोस्ट हुआ</string>
@@ -39,7 +39,7 @@
     <string name="ID_COMMUNITIES">समुदाय</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
-    <string name="ID_NOTIFICATION">Notifications</string>
+    <string name="ID_NOTIFICATION">नोटिफ़िकेशन</string>
     <string name="ID_CARRIER">Careers</string>
     <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
@@ -58,7 +58,7 @@
     <string name="ID_DRAWER_NAVIGATION_COMMUNITIES">Right Swipe Navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
-    <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
+    <string name="ID_GENERIC_ERROR">ओह! कुछ गलत हो गया है। हम कार्यरत हैं। इसे जल्दी से ठीक कर देंगे</string>
     <string name="ID_UNABLE_TO_COMMENT"> Sorry, unable to comment. Please try again in a few minutes.</string>
     <string name="ID_UNABLE_TO_EDIT_DELETE"> Sorry unable to edit,delete the comment. Please try again in a few minutes.</string>
     <string name="ID_SERVER_PROBLEM"> The server encountered an error and could not complete your request.</string>
@@ -176,7 +176,7 @@
 
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">सवाल पूछे</string>
-    <string name="ID_SUBMIT">SUBMIT</string>
+    <string name="ID_SUBMIT">जमा करें</string>
     <string name="follow_user">फॉलो</string>
     <string name="following_user">फॉलोइंग</string>
     <!--String Related personal contact details edit page-->
@@ -303,17 +303,17 @@
     <string name="ID_EMAIL_VERIFICATION_DIALOG_RESEND_TITLE">Did’nt received the link yet?</string>
     <string name="ID_EMAIL_VERIFICATION_DIALOG_RESEND">RESEND</string>
 
-    <string name="ID_RESET_PASSWORD_TITLE">RESET PASSWORD</string>
-    <string name="ID_RESET_PASSWORD_INPUT_BOX_TEXT">Enter Email ID</string>
+    <string name="ID_RESET_PASSWORD_TITLE">पासवर्ड रिसेट करें</string>
+    <string name="ID_RESET_PASSWORD_INPUT_BOX_TEXT">ईमेल आईडी भरें</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT">We have sent a password reset link to ****@live.com, please check your inbox and follow the instructions</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">We have sent a password reset link to ***"</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2">, please check your inbox and follow the instructions</string>
-    <string name="ID_RESET_PASSWORD_FAILURE_TEXT">The email you entered is either incorrect or unregistered. Please try again.</string>
-    <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">Please enter the email ID associated with your SHEROES account</string>
+    <string name="ID_RESET_PASSWORD_FAILURE_TEXT">आपके द्वारा दर्ज किया गया ईमेल या तो गलत है या अनियंत्रित है। कृपया पुन: प्रयास करें।</string>
+    <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">कृपया अपने SHEROES खाते से जुड़े ईमेल आईडी दर्ज करें</string>
 
     <string name="ID_RESET_PASSWORD_SUCCESS_LINK_TEXT">Click here to login</string>
     <string name="ID_FORGOT_PASSWORD_TEXT">पासवर्ड भूल गए ?</string>
-    <string name="ID_ERROR_NO_EMAIL">Please enter any email ID.</string>
+    <string name="ID_ERROR_NO_EMAIL">कृपया कोई ईमेल आईडी दर्ज करें।</string>
 
 
     <!--Google Analytics Screen Names-->
@@ -574,7 +574,7 @@
     <string name="tool_tip_notification">लाइक और टिप्पणियों के लिए आपकी व्यक्तिगत सूचनाएं यहां दिखाई देंगी।.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 समझ गए!</string>
     <string name="tool_tip_follower">उसके शेयर्स देखने के लिए उसे फॉलो करें!</string>
     <string name="tool_tip_picture_share">Like this picture? Share it with friends.</string>
-    <string name="tool_tip_invite_friend">Invite your friends to this community by tapping here.</string>
+    <string name="tool_tip_invite_friend">यहाँ तप करके अपने दोस्तों को आमंत्रित करें</string>
     <string name="tool_tip_article_share">Share this article with a friend who will love reading it.</string>
     <string name="tool_tip_feed_header_profile">Check out your profile to see your posts, communities, followers &amp; more.</string>
     <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
