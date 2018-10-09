@@ -592,7 +592,6 @@
     <dimen name="leaderboard_follow_button_width">79dp</dimen>
     <dimen name="leaderboard_follow_button_height">26dp</dimen>
     <dimen name="leaderboard_follow_button_margin">16dp</dimen>
-    <dimen name="leaderbaord_follow_text">12sp</dimen>
     <dimen name="user_post_follow_width">74dp</dimen>
     <dimen name="user_post_follow_height">26dp</dimen>
     <dimen name="user_follow_post_text_size">12sp</dimen>

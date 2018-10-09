@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tooltip_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -20,8 +21,9 @@
         android:background="@drawable/ic_tool_tip_bg"
         android:orientation="horizontal">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title"
+            style="@style/TextView14spRegular"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_size_8"
@@ -29,23 +31,22 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
             android:layout_weight="@integer/int_value_for_line_1"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="left"
             android:lineSpacingExtra="@dimen/dp_size_5"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/got_it"
+            style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:padding="@dimen/dp_size_10"
             android:text="@string/got_it"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
     </LinearLayout>
 </RelativeLayout>
