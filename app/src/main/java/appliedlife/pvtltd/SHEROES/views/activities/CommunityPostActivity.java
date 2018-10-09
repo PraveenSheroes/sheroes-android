@@ -76,6 +76,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1051,8 +1053,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             photo.isNew = true;
                             File file = new File(result.getUri().getPath());
                             photo.file = file;
-                            mFilePathList.add(result.getUri().getPath());
+                            File compressedFile = compressFile(file);
+                            mFilePathList.add(compressedFile.getAbsolutePath());
                             if (mIsEditPost) {
+                                File compressedFileEdit = compressFile(file);
                               /*  Bitmap bitmap = decodeFile(photo.file);
                                 byte[] buffer = new byte[4096];
                                 if (null != bitmap) {
@@ -1064,7 +1068,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                                         }
                                     }
                                 }*/
-                                mEditFilePathList.add(result.getUri().getPath());
+                                mEditFilePathList.add(compressedFileEdit.getAbsolutePath());
                             }
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
                                 Bitmap bitmap = decodeFile(photo.file);
@@ -1306,6 +1310,44 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             etView.getEditText().setFocusableInTouchMode(false);
             etView.getEditText().setClickable(false);
         }
+    }
+
+    private File compressFile(File file) {
+        Bitmap decodedBitmap = null;
+        FileOutputStream writeBitmapFile = null;
+        try {
+            // decode image size
+            if (file == null) return null;
+            BitmapFactory.Options o = new BitmapFactory.Options();
+            o.inJustDecodeBounds = true;
+            BitmapFactory.decodeStream(new FileInputStream(file), null, o);
+
+            // Find the correct scale value. It should be the power of 2.
+            final int REQUIRED_SIZE = 512;
+            int width_tmp = o.outWidth, height_tmp = o.outHeight;
+            int scale = 1;
+            while (true) {
+                if (width_tmp / 2 < REQUIRED_SIZE || height_tmp / 2 < REQUIRED_SIZE)
+                    break;
+                width_tmp /= 2;
+                height_tmp /= 2;
+                scale *= 2;
+            }
+            BitmapFactory.Options o2 = new BitmapFactory.Options();
+            o2.inSampleSize = scale;
+            decodedBitmap = BitmapFactory.decodeStream(new FileInputStream(file), null, o2);
+            writeBitmapFile = new FileOutputStream(file);
+            decodedBitmap.compress(Bitmap.CompressFormat.JPEG, 85, writeBitmapFile);
+        } catch (FileNotFoundException e) {
+            Crashlytics.getInstance().core.logException(e);
+        } finally {
+            try {
+                writeBitmapFile.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
 
     private Bitmap decodeFile(File file) {
