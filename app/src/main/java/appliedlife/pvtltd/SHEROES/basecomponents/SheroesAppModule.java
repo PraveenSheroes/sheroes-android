@@ -114,13 +114,15 @@ public class SheroesAppModule {
                 Request original = chain.request();
                 Request.Builder builder = original.newBuilder();
                 Request request;
-                if (null != userPreference && userPreference.isSet() && CommonUtil.getPrefValue(AppConstants.IS_FEED_POST)) {
-                    builder.header("Content-Type", "multipart/form-data")
-                            .header("Authorization", userPreference.get().getToken());
-                    CommonUtil.setPrefValue(AppConstants.IS_FEED_POST, false);
-                } else if (null != userPreference && userPreference.isSet()) {
-                    builder.header("Content-Type", "application/json")
-                            .header("Authorization", userPreference.get().getToken());
+                if (null != userPreference && userPreference.isSet()) {
+                    if (CommonUtil.getPrefValue(AppConstants.CREATE_FEED_POST)) {
+                        builder.header("Content-Type", "multipart/form-data")
+                                .header("Authorization", userPreference.get().getToken());
+                        CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, false);
+                    } else {
+                        builder.header("Content-Type", "application/json")
+                                .header("Authorization", userPreference.get().getToken());
+                    }
                 } else {
                     builder.header("Content-Type", "application/json");
                 }

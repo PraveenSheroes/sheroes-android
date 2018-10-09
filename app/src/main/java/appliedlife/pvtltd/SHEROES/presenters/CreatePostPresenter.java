@@ -74,7 +74,11 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        communityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CreateCommunityResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
@@ -185,6 +189,8 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
         }
         getMvpView().startProgressBar();
         communityModel.editPostCommunity(uploadImageFileMap, communityPostCreateRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 

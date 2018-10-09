@@ -864,7 +864,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
 
         mMentionSpanList = etView.getMentionSpans();
-        CommonUtil.setPrefValue(AppConstants.IS_FEED_POST, true);
+        CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
             mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, etView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
@@ -1014,7 +1014,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (AccessToken.getCurrentAccessToken() != null) {
             accessToken = AccessToken.getCurrentAccessToken().getToken();
         }
-        CommonUtil.setPrefValue(AppConstants.IS_FEED_POST, true);
+        CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), schedulePost(mCommunityPost.community.id, getCreatorType(), etView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, scheduledTime, mHasMentions, mMentionSpanList), isSharedFromOtherApp);
     }
 
@@ -1057,17 +1057,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             mFilePathList.add(compressedFile.getAbsolutePath());
                             if (mIsEditPost) {
                                 File compressedFileEdit = compressFile(file);
-                              /*  Bitmap bitmap = decodeFile(photo.file);
-                                byte[] buffer = new byte[4096];
-                                if (null != bitmap) {
-                                    buffer = getBytesFromBitmap(bitmap);
-                                    if (null != buffer) {
-                                        String encodedImage = Base64.encodeToString(buffer, Base64.DEFAULT);
-                                        if (StringUtil.isNotNullOrEmptyString(encodedImage)) {
-                                            mNewEncodedImages.add(encodedImage);
-                                        }
-                                    }
-                                }*/
                                 mEditFilePathList.add(compressedFileEdit.getAbsolutePath());
                             }
                             if (mIvImagePollLeft != null && mIvImagePollRight != null) {
@@ -1345,6 +1334,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 writeBitmapFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
+                Crashlytics.getInstance().core.logException(e);
             }
         }
         return file;
@@ -1429,8 +1419,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     public boolean isPostModified() {
         return !mOldText.equals(etView.getEditText().getText().toString()) || !CommonUtil.isEmpty(mEditFilePathList) || !CommonUtil.isEmpty(mDeletedImageIdList);
-
-        // return !mOldText.equals(mAllText) || !CommonUtil.isEmpty(mNewEncodedImages) || !CommonUtil.isEmpty(mDeletedImageIdList);
     }
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {

@@ -58,15 +58,7 @@ public class CommunityModel {
     }
 
     public Observable<CreateCommunityResponse> addPostCommunity(Map uploadImageFileMap, CommunityPostCreateRequest communityPostCreateRequest) {
-        return sheroesAppServiceApi.createCommunityMultiPartPost(uploadImageFileMap, communityPostCreateRequest)
-                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
-                        return communityTagsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return sheroesAppServiceApi.createCommunityMultiPartPost(uploadImageFileMap, communityPostCreateRequest);
     }
 
     public Observable<CreateCommunityResponse> createChallengePost(ChallengePostCreateRequest challengePostCreateRequest) {
@@ -82,15 +74,7 @@ public class CommunityModel {
     }
 
     public Observable<CreateCommunityResponse> editPostCommunity(Map uploadImageFileMap, CommunityPostCreateRequest communityPostCreateRequest) {
-        return sheroesAppServiceApi.editCommunityMultiPartPost(uploadImageFileMap, communityPostCreateRequest)
-                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
-                        return communityTagsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+        return sheroesAppServiceApi.editCommunityMultiPartPost(uploadImageFileMap, communityPostCreateRequest);
     }
 
 
