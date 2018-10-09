@@ -60,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -99,6 +100,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
+import appliedlife.pvtltd.SHEROES.presenters.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -138,7 +140,7 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
  * Created by ujjwal on 27/12/17.
  */
 
-public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
+public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback, ImpressionCallback {
     public static String SCREEN_LABEL = "Generic Feed Fragment";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
@@ -150,7 +152,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     //TODO - make these two from remote config
     private static final int THRESHOLD_MS = 250;
     private int minimumVisibleHeightThreshold;
-    private static boolean isDirty = false;
 
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
@@ -167,6 +168,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Inject
     FeedPresenter mFeedPresenter;
+
+    @Inject
+    ImpressionPresenter impressionPresenter;
 
     @Inject
     Preference<Configuration> mConfiguration;
@@ -242,6 +246,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         mFeedPresenter.attachView(this);
+        impressionPresenter.attachView(this);
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
@@ -256,7 +261,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 minimumVisibleHeightThreshold = mConfiguration.get().configData.visibilityPercentage;
             }
 
-            impressionHelper = new ImpressionHelper(getContext(), gifLoader.getVisibility(), minimumVisibleHeightThreshold, mLoggedInUser, FeedFragment.this, mAppUtils);
+            impressionHelper = new ImpressionHelper(getContext(), gifLoader.getVisibility(), minimumVisibleHeightThreshold, mLoggedInUser, mAppUtils, this);
         }
 
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
@@ -514,6 +519,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+    @Override
+    public void storeInDatabase(List<ImpressionData> impressionData) {
+        impressionPresenter.addToDatabase(getContext(), impressionData);
+    }
 
     @Override
     public List getListData() {
@@ -2020,6 +2029,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+    @Override
+    public FeedDetail getListItemAtPos(int pos) {
+        return getListItem(pos);
+    }
+
     public FeedDetail getListItem(int index) {
         if (mAdapter == null) {
             return null;
@@ -2135,24 +2149,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 
-    enum ArticleStatusEnum {
-        PUBLIC("Public"),
-        DRAFT("Draft");
-
-
-        private final String string;
-
-        ArticleStatusEnum(final String string) {
-            this.string = string;
-        }
-
-        /* (non-Javadoc)
-         * @see java.lang.Enum#toString()
-         */
-        @Override
-        public String toString() {
-            return string;
-        }
+    @Override
+    public void onNetworkCall() {
+        Log.i("Hit Network ", "call");
     }
 
     public class OneMinuteCountDownTimer extends CountDownTimer {
@@ -2165,8 +2164,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         public void onFinish() {
             Log.i("Time Expired", "1 Min/60 sec");
 
-           // hitNetworkCall(getContext());
-           // start();
+            hitNetworkCall(getContext());
+            start();
         }
 
         @Override
@@ -2178,7 +2177,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private void hitNetworkCall(Context context) {
 
         synchronized (this) {
-            final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
+            final AppDatabase database = AppDatabase.getAppDatabase(context);
             final UserEventsContainer userEventsContainer = new UserEventsContainer();
             new Thread(new Runnable() {
                 @Override
@@ -2186,7 +2185,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     List<ImpressionData> impressionData = database.impressionDataDao().getAll();
                     if (impressionData != null && impressionData.size() > 0) {
                         userEventsContainer.setUserEvent(impressionData);
-                        mFeedPresenter.sendImpressionData(userEventsContainer);
+                        impressionPresenter.sendImpressionData(userEventsContainer);
                     }
                 }
             }).start();

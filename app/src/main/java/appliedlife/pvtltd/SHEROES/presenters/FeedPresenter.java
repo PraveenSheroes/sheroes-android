@@ -1199,40 +1199,4 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-    public void sendImpressionData(final UserEventsContainer userEventsContainer) {
-
-    Log.i("Impression hit", "Called");
-    if (!NetworkUtil.isConnected(mSheroesApplication)) {
-        getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-        return;
-    }
-    getMvpView().startProgressBar();
-    mSheroesAppServiceApi.updateImpressionData(userEventsContainer)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .compose(this.<BaseResponse>bindToLifecycle())
-            .subscribe(new DisposableObserver<BaseResponse>() {
-                @Override
-                public void onComplete() {
-                    getMvpView().stopProgressBar();
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    Crashlytics.getInstance().core.logException(e);
-                    getMvpView().showError(e.getMessage(), ERROR_TAG);
-                    getMvpView().stopProgressBar();
-                }
-
-                @Override
-                public void onNext(BaseResponse baseResponse) {
-                    getMvpView().stopProgressBar();
-                    if (null != baseResponse) {
-                        Log.i("Impression" , "responseee");
-                      // getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
-                    }
-                }
-            });
-}
-
 }

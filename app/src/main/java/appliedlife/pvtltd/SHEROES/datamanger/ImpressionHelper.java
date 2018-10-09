@@ -11,17 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 
 public class ImpressionHelper {
 
     //region private member variables
     private int minimumVisibleHeightThreshold;
-    private FeedFragment feedFragment;
     private AppUtils mAppUtils;
     private long mLoggedInUser;
     private int startViewId = -1;
@@ -32,6 +31,7 @@ public class ImpressionHelper {
     private boolean mIsTopScrolled;
     private Context mContext;
     private  boolean isLoaderVisible = false;
+    private ImpressionCallback mImpressionCallback;
 
     // ArrayList of view ids that are being considered for tracking.
     private ArrayList<Integer> currentViewed = new ArrayList<>();
@@ -39,12 +39,12 @@ public class ImpressionHelper {
     private List<ImpressionData> finalViewData = new ArrayList<>();
     //endregion
 
-    public ImpressionHelper(Context context, int minVisibilityPercentage, int visibility, long loggedInUserId, FeedFragment fragment, AppUtils appUtils) {
+    public ImpressionHelper(Context context, int minVisibilityPercentage, int visibility, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.minimumVisibleHeightThreshold = minVisibilityPercentage;
-        this.feedFragment = fragment;
         this.mAppUtils = appUtils;
         this.mLoggedInUser = loggedInUserId;
         this.mContext = context;
+        this.mImpressionCallback = impressionCallback;
         isLoaderVisible = (visibility == View.VISIBLE);
     }
 
@@ -76,13 +76,13 @@ public class ImpressionHelper {
             View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
             if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
-                FeedDetail feedDetail = feedFragment.getListItem(firstVisibleItemPosition);
+                FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(firstVisibleItemPosition);
                 if(feedDetail ==null) return;
                 trackingData.setStartTime(System.currentTimeMillis());
                 trackingData.setTimeStamp(System.currentTimeMillis());
                 trackingData.setViewId(viewPosition);
                 trackingData.setPostType(feedDetail.getSubType());
-                trackingData.setScreenName(feedFragment.getScreenName());
+                trackingData.setScreenName(mImpressionCallback.getScreenName());
                 trackingData.setPosition(viewPosition);
                 trackingData.setClientId(String.valueOf(CLIENT.ANDROID.getValue())); //For mobile android
                 trackingData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
@@ -129,12 +129,13 @@ public class ImpressionHelper {
             if (index > -1) {
                 List<ImpressionData> forDb = finalViewData.subList(0, index+1);
                 Log.i("###", "###Added to db");
-                addToDatabase(mContext, forDb);
+                mImpressionCallback.storeInDatabase(forDb);
 
                 if (finalViewData.size() > index+1) {
                     finalViewData = finalViewData.subList(index+1 , finalViewData.size());
                 }
                 Log.i("Final list", ":"+finalViewData.size());
+                mImpressionCallback.onNetworkCall();
             }
         }
 
@@ -268,21 +269,7 @@ public class ImpressionHelper {
     }
 
 
-    /**
-     * Add the item to Database
-     *
-     * @param context        context
-     * @param impressionData list of impression events
-     */
-    private void addToDatabase(Context context, final List<ImpressionData> impressionData) {
-        final AppDatabase database = AppDatabase.getAppDatabase(context);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                database.impressionDataDao().insert(impressionData);
-            }
-        }).start();
-    }
+
 
 
     private void addNewEntry(int viewPosition, ImpressionData impressionData) {
@@ -294,6 +281,7 @@ public class ImpressionHelper {
         if (viewId != -1 && viewId > viewPosition) {
             Log.i("Only add lesser value", "on top scroll");
             finalViewData.add(impressionData);
+            currentViewed.add(viewId);
         } else {
             Log.i("these are greater", "on top scroll" + viewPosition);
         }
