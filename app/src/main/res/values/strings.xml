@@ -670,7 +670,7 @@
     <string name="full_name_err_msg">Please enter full name</string>
     <string name="limit">0/140</string>
     <string name="other">Other</string>
-    <string name="explore_All">Explore all</string>
+    <string name="explore_All">Explore  all</string>
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
@@ -798,4 +798,8 @@
     <string name="type_your_comment">Type your comment here&#8230;</string>Here are some trending posts on SHEROES
     <string name="top_communities_text">Here are some trending posts on SHEROES</string>
     <string name="health_tips">Health Tips</string>
+    <string name="challenge_completed_text">You have completed the # %1$s challenge </string>
+    <string name="winner">Winner</string>
+    <string name="responses">Responses</string>
+    <string name="overview">Overview</string>
 </resources>

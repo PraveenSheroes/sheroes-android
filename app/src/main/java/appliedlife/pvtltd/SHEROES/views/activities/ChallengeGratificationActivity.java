@@ -82,17 +82,18 @@ public class ChallengeGratificationActivity extends BaseActivity {
     private void init() {
         if (null != getIntent() && null != getIntent().getExtras()) {
             mContest = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.CHALLENGE_GRATIFICATION));
-        String    shareText="You have completed the #"+mContest.tag+" challenge ";
+            String shareText = getString(R.string.challenge_completed_text, mContest.tag);
             SpannableString spannableSecond = new SpannableString(shareText);
             if (StringUtil.isNotNullOrEmptyString(shareText)) {
-                spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.email)), 22, shareText.length()-11, 0);
-                spannableSecond.setSpan(new StyleSpan(Typeface.BOLD), 22, shareText.length()-11, 0);
+                int firstIndex = shareText.indexOf(mContest.tag);
+                spannableSecond.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.email)), firstIndex, firstIndex + mContest.tag.length(), 0);
+                spannableSecond.setSpan(new StyleSpan(Typeface.BOLD), firstIndex, firstIndex + mContest.tag.length(), 0);
                 tvChallengeResponseText.setMovementMethod(LinkMovementMethod.getInstance());
                 tvChallengeResponseText.setText(spannableSecond, TextView.BufferType.SPANNABLE);
                 tvChallengeResponseText.setSelected(true);
             }
         }
-        if(StringUtil.isNotNullOrEmptyString(mContest.thumbImage)) {
+        if (StringUtil.isNotNullOrEmptyString(mContest.thumbImage)) {
             Glide.with(this)
                     .asBitmap()
                     .load(mContest.thumbImage)
@@ -127,7 +128,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
     @OnClick(R.id.ll_share)
     public void shareClick() {
         if (mContest != null) {
-            String shareText="Yay! I just completed the #"+mContest.tag+" challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: "+mContest.shortUrl;
+            String shareText = "Yay! I just completed the #" + mContest.tag + " challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: " + mContest.shortUrl;
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .challengeId(Integer.toString(mContest.remote_id))
@@ -137,7 +138,8 @@ public class ChallengeGratificationActivity extends BaseActivity {
             ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false, Event.CHALLENGE_SHARED, properties);
         }
     }
-//TODO: Will work on Challenge gratification next part where this code will be use
+
+    //TODO: Will work on Challenge gratification next part where this code will be use
     private Bitmap createShareImage() {
         View view;
         LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

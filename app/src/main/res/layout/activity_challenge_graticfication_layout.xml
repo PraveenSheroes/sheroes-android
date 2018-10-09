@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -25,32 +26,32 @@
                 android:background="@color/photo_placeholder"
                 android:scaleType="centerCrop" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                 android:id="@+id/tv_challenge_response_text_header"
+                style="@style/TextView18spMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_16"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/challenge_done"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/sp_size_18" />
+                vernacular:customTextFontFamily="@string/medium_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                 android:id="@+id/tv_challenge_response_text"
+                style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_7"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/sp_size_14" />
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -67,8 +68,9 @@
                     android:layout_marginTop="@dimen/dp_size_16"
                     android:src="@drawable/challenge_gratif" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
                     android:id="@+id/tv_gratification"
+                    style="@style/TextView14spMedium"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_gratication"
@@ -76,12 +78,11 @@
                     android:layout_marginLeft="@dimen/dp_size_16"
                     android:layout_marginRight="@dimen/dp_size_16"
                     android:layout_marginTop="@dimen/dp_size_16"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
                     android:lineSpacingExtra="@dimen/dp_size_5"
                     android:text="@string/share_with_friend_text"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_size_14" />
+                    vernacular:customTextFontFamily="@string/medium_font" />
 
                 <LinearLayout
                     android:id="@+id/ll_share"
@@ -109,17 +110,17 @@
                         android:alpha=".5"
                         android:background="@color/email" />
 
-                    <TextView
+                    <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
+                        style="@style/TextView14spMedium"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_size_16"
                         android:layout_marginRight="@dimen/dp_size_5"
-                        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                         android:text="@string/share_with_friends"
                         android:textAllCaps="true"
                         android:textColor="@color/email"
-                        android:textSize="@dimen/sp_size_14" />
+                        vernacular:customTextFontFamily="@string/medium_font" />
                 </LinearLayout>
 
             </RelativeLayout>

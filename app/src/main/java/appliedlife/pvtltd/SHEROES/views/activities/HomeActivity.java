@@ -175,6 +175,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountReq
 
 public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
+    private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
@@ -1198,8 +1199,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (null != intent) {
                 switch (requestCode) {
                     case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                        Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                                .show();
+                        Snackbar.make(mFloatActionBtn, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                         refreshCurrentFragment();
                         break;
                     case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
@@ -1762,7 +1762,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             .name(getString(R.string.carousel_outer_seemore))
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.carousel_outer_seemore), getString(R.string.ID_COMMUNITIES_CATEGORY), properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.carousel_outer_seemore), COMMUNITY_CATEGORY_SCREEN, properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 
@@ -1825,7 +1825,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.SCREEN_NAME, "Home Screen");
+        bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
         homeFragment.setArguments(bundle);
         mFragmentOpen.setFeedFragment(true);
 

@@ -127,9 +127,9 @@
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
     <string name="ID_TAGS">Tags</string>
-    <string name="ID_BOOKMARKS">Bookmarks</string>
-    <string name="Bookmark">Bookmark</string>
-    <string name="Bookmarked">Bookmarked</string>
+    <string name="ID_BOOKMARKS">बुकमार्क्स</string>
+    <string name="Bookmark">बुकमार्क</string>
+    <string name="Bookmarked">बुकमार्क किया</string>
 
     <!--text related setting_dashboard page-->
 
@@ -151,8 +151,8 @@
     <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
     <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
-    <string name="ID_BACK_PRESS">Press back again to exit the app</string>
-    <string name="ID_INVITE_WOMEN_FRIEND">Invite Friends</string>
+    <string name="ID_BACK_PRESS">एप्प से बाहर निकलने के लिए बैक बटन फिर से दबाएं</string>
+    <string name="ID_INVITE_WOMEN_FRIEND">दोस्तों को आमंत्रित करें</string>
     <string name="ID_PLAY_STORE_DATA">SHEROES से कनेक्ट हो रहा है&#8230;</string>
     <string name="ID_LOCATION">Location</string>
 
@@ -320,7 +320,7 @@
     <string name="ID_PUBLIC_PROFILE">public profile</string>
     <string name="ID_ARTICLE_LISTING">article listing</string>
     <string name="communities_listing">Communities Screen</string>
-    <string name="ID_COMMUNITIES_CATEGORY">Communities Category Screen</string>
+    <string name="ID_COMMUNITIES_CATEGORY">समुदाय वर्ग स्क्रीन</string>
     <string name="ID_INTRO_SCREEN">intro screen</string>
     <string name="ID_LOGIN_TEXT">लॉगिन</string>
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
@@ -468,24 +468,24 @@
     <string name="spam.status.user">user</string>
 
 
-    <string name="contest.status.ongoing">Live</string>
-    <string name="contest.status.upcoming">Upcoming</string>
-    <string name="contest.status.completed">Completed</string>
+    <string name="contest.status.ongoing">लाइव</string>
+    <string name="contest.status.upcoming">आगामी</string>
+    <string name="contest.status.completed">पूरा कर लिया है</string>
 
-    <string name="contest.status.expired">Challenge Ended</string>
+    <string name="contest.status.expired">चैलेंज ख़तम हो चुका है</string>
 
     <string name="endsOn">ends on</string>
     <string name="starts_at">starts at</string>
-    <string name="completed">completed</string>
+    <string name="completed">पूरा कर लिया है</string>
 
-    <string name="submit_response">Submit a response</string>
-    <string name="empty_winner_text">&lt;b&gt;No winners announced yet!&lt;/b&gt;</string>
-    <string name="empty_winner_subtext">Winner will be announced %1$s. Till then keep checking this place</string>
+    <string name="submit_response">प्रतिक्रिया जमा करें</string>
+    <string name="empty_winner_text">&lt;b&gt;अभी तक कोई विजेता घोषित नहीं किया गया है!&lt;/b&gt;</string>
+    <string name="empty_winner_subtext">विजेता की घोषणा %1$s होगी। तब तक हमारे साथ बने रहे</string>
     <string name="empty_challenge_response_text">No Responses yet!</string>
     <string name="empty_challenge_response_subtext">Be the first one to submit a response</string>
     <string name="joined">Joined</string>
-    <string name="title.contest_list">My Challenges</string>
-    <string name="soon">soon</string>
+    <string name="title.contest_list">मेरे चैलेंजेस</string>
+    <string name="soon">जल्द ही</string>
 
     <string name="hint.full_name">Full Name</string>
     <string name="hint.mobile_number">Mobile Number</string>
@@ -499,11 +499,11 @@
     <string name="error.address_blank">Please enter an address!</string>
     <string name="error.invalid_pin_code">Please enter valid pin code!</string>
 
-    <string name="title.send_address">Send Address</string>
+    <string name="title.send_address">पता भेजें</string>
     <string name="action_send">Send</string>
-    <string name="snackbar.submission_submited">Your submission has been submitted successfully</string>
-    <string name="empty_challenge_text">No Challenges yet!</string>
-    <string name="empty_challenge_sub_text">Come back after sometime</string>
+    <string name="snackbar.submission_submited">आपका सबमिशन सफलतापूर्वक जमा कर दिया गया है</string>
+    <string name="empty_challenge_text">अभी कोई चैलेंज नहीं है!</string>
+    <string name="empty_challenge_sub_text">थोड़ी देर बाद वापस आए</string>
     <string name="logoutUrl">/users/logout</string>
     <!--Mentor-->
     <string name="ID_MENTOR_VIEW_ALL">View All</string>
@@ -540,7 +540,7 @@
     <string name="ID_SHOW_CASE_MY_COMMUNITIES_DEC">Tap here to see the My Communities, the communities you are member of and are interested in.</string>
     <string name="ID_SHOW_CASE_FEED_TITLE">हेलो %1$s SHEROES में आपका स्वागत है</string>
     <string name="ID_SHOW_CASE_FEED_DEC">यह वह जगह है जहां आप शामिल समुदायों की  बातचीत , दिलचस्प कहानियों और उपयोगी लेखों को देख सकते हैं</string>
-    <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
+    <string name="ID_LOADER">"एक रानी की तरह सोचें।\n एक रानी असफल होने से  नहीं डरती है।</string>
     <string name="ID_NEXT">अगला</string>
     <string name="ID_LETS_GET_STARTED">आएँ शुरू करें!</string>
 
@@ -569,21 +569,21 @@
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
     <string name="my_communities">My Communities</string>
 
-    <string name="got_it">Got It</string>
+    <string name="got_it">समझ गए</string>
 
     <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
-    <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
+    <string name="tool_tip_notification">लाइक और टिप्पणियों के लिए आपकी व्यक्तिगत सूचनाएं यहां दिखाई देंगी।.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 समझ गए!</string>
     <string name="tool_tip_follower">Follow her to see what she shares!</string>
     <string name="tool_tip_picture_share">Like this picture? Share it with friends.</string>
     <string name="tool_tip_invite_friend">Invite your friends to this community by tapping here.</string>
     <string name="tool_tip_article_share">Share this article with a friend who will love reading it.</string>
     <string name="tool_tip_feed_header_profile">Check out your profile to see your posts, communities, followers &amp; more.</string>
     <string name="tool_tip_nav">Check out experts, read stories, view your profile activity and much more. Tap here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
-    <string name="share_with_friends">Share with friends</string>
-    <string name="share_with_friend_text">Share the happiness with your friends &amp; invite them to take up this challenge</string>
+    <string name="share_with_friends">अपने दोस्तों के साथ शेयर करें</string>
+    <string name="share_with_friend_text">अपनी ख़ुशी अपने दोस्तों  साथ शेयर करें और उन्हें इस चैलेंज में भाग लेने के लिए आमंत्रित करें</string>
     <string name="share_profile_text">Share the happiness with your friends &amp; invite them to join here</string>
     <string name="challenge_done">Wohoo!</string>
-    <string name="challenge_completed">Challenge Completed</string>
+    <string name="challenge_completed">चैलेंज पूरा हुआ</string>
     <string name="post_now">POST NOW</string>
     <string name="schedule_post">SCHEDULE POST</string>
     <string name="follow_me">follow</string>
@@ -603,10 +603,10 @@
     <string name="sheroesRelatedChannelID">sheroesRelatedChannelID</string>
     <string name="sheroesRelatedChannelName">Related to you and your posts</string>
     <string name="sheroesRelatedChannelDesc">Sheroes Channel Desc</string>
-    <string name="no_internet">OOPS! \nNo Internet Connection</string>
-    <string name="retry">Retry</string>
-    <string name="setting">Go to settings</string>
-    <string name="check_internet_Connection">Check your Internet connection and try again</string>
+    <string name="no_internet">उफ़!\n इंटरनेट कनेक्शन नहीं हैं </string>
+    <string name="retry">पुन: प्रयास</string>
+    <string name="setting">सेटिंग्स में जाओ</string>
+    <string name="check_internet_Connection">अपने इंटरनेट कनेक्शन की जांच करें और पुनः प्रयास करें</string>
     <string name="select_a_reason">Select a reason</string>
     <string name="why_is_it_inappropriate">Why is it inappropriate?</string>
     <string name="please_elaborate">Please elaborate…</string>
@@ -671,7 +671,7 @@
     <string name="full_name_err_msg">Please enter full name</string>
     <string name="limit">0/140</string>
     <string name="other">Other</string>
-    <string name="explore_All">और खोज करें</string>
+    <string name="explore_All">और  खोज  करें</string>
     <string name="keep_user_post_likes_and_comments">Delete user activity</string>
     <string name="add_reason">Add the reason</string>
     <string name="others">Others</string>
@@ -799,5 +799,9 @@
     <string name="type_your_comment">अपना कमेंट यहां टाइप करें&#8230;</string>
     <string name="top_communities_text">SHEROES पर कुछ ट्रेंडिंग पोस्ट यहां दी गई हैं</string>
     <string name="health_tips">स्वास्थ्य सुझाव</string>
+    <string name="challenge_completed_text">आपने # %1$s चुनौती पूरी कर ली है</string>
+    <string name="winner">विजेता</string>
+    <string name="responses">प्रतिक्रियाओं</string>
+    <string name="overview">निरीक्षण</string>
 
 </resources>

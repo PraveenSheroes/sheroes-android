@@ -469,4 +469,7 @@ public class AppConstants {
     //Vernacular
     public static final String SELECT_LANGUAGE_SHARE_PREF = "SELECT_LANGUAGE";
     public static final String LANGUAGE_KEY = "language_key";
+    public static final String LEADER_BOARD_CAROUSEL_STREAM = "LeaderboardCarouselStream";
+    public static final String STORY_DRAFT = "Draft";
+
 }

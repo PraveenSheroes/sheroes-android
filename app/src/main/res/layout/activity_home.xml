@@ -110,7 +110,7 @@
                 android:gravity="center"
                 android:paddingBottom="@dimen/dp_size_8"
                 android:paddingLeft="@dimen/dp_size_16"
-                android:paddingRight="@dimen/dp_size_16"
+                android:paddingRight="8dp"
                 android:src="@drawable/vector_community_search" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.CustomTextViewFont
