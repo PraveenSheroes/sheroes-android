@@ -369,7 +369,7 @@
     <string name="empty_followed_mentor">%1$s ने अभी तक किसी भी चैंपियन को फॉलो नहीं किया हैं"</string>
     <string name="empty_followed_community">%1$s ने अभी तक किसी भी समुदाय में शामिल नहीं हुए हैं"</string>
     <string name="load_more">और लोड करें</string>
-    <string name="more">और</string>
+    <string name="more">और देखें</string>
     <string name="following">फॉलोइंग</string>
 
     <plurals name="numberOfComments">
