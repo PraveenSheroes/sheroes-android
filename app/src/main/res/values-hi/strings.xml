@@ -5,6 +5,12 @@
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
     <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
+    <!--Screen related texts -->
+
+    <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
+    <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
+
+
 
 
     <!--text names in SHEROES-->
@@ -28,11 +34,10 @@
     <string name="ID_POSTED_AN">posted an</string>
     <string name="ID_NEW">NEW</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
-    <string name="ID_SPEECH_PROMPT">Say something&#8230;</string>
-    <!--String related in home page-->
+    <string name="ID_SPEECH_PROMPT">कुछ कहिये&#8230;</string>
 
-    <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
-    <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
+
+
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
     <!--Fragment classes-->
@@ -51,11 +56,10 @@
     <string name="following_toolbar_title">People I follow</string>
     <string name="follower_public_profile_toolbar_title">People who follow her</string>
     <string name="following_public_profile_toolbar_title">People she follows</string>
-    <string name="ID_CHAMPION">Champion</string>
-    <string name="ID_MENTOR_INSIGHT">mentor insight</string>
-    <string name="ID_HELP_FRAGMENT">helpline</string>
-    <string name="ID_DRAWER_NAVIGATION">Drawer navigation</string>
-    <string name="ID_DRAWER_NAVIGATION_COMMUNITIES">Right Swipe Navigation</string>
+
+    <string name="ID_MENTOR_INSIGHT">सलाहकार का विवरण</string>
+
+
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
     <string name="ID_GENERIC_ERROR">ओह! कुछ गलत हो गया है। हम कार्यरत हैं। इसे जल्दी से ठीक कर देंगे</string>
@@ -231,7 +235,7 @@
     <string name="ID_WELCOME_THIRD"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>चैंपियन से विशेषज्ञ सलाह</b></span> प्राप्‍त करें - समुदाय के भीतर से प्राप्तकर्ता
+                                                    <span style="font-weight: bold"><b>समुदाय के भीतर चैंपियन</b></span> से विशेषज्ञ सलाह प्राप्त करें
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
@@ -269,13 +273,13 @@
     <string name="unmarried">Unmarried</string>
 
     <string-array name="relationship_status_arr">
-        <item>Select Status</item>
-        <item>Single</item>
-        <item>In a Relationship</item>
-        <item>Married</item>
-        <item>Divorced</item>
-        <item>Widowed</item>
-        <item>Other</item>
+        <item>स्थिति का चयन करें</item>
+        <item>अकेला</item>
+        <item>रिश्ते में</item>
+        <item>विवाहित</item>
+        <item>तलाकशुदा</item>
+        <item>विधवा</item>
+        <item>अन्य</item>
     </string-array>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
@@ -321,14 +325,15 @@
     <string name="ID_ARTICLE_LISTING">article listing</string>
     <string name="communities_listing">Communities Screen</string>
     <string name="ID_COMMUNITIES_CATEGORY">समुदाय वर्ग स्क्रीन</string>
-    <string name="ID_INTRO_SCREEN">intro screen</string>
-    <string name="ID_LOGIN_TEXT">लॉगिन</string>
+
+    <string name="ID_FB_LOGIN_TEXT">फेसबुक लॉगिन</string>
+    <string name="ID_G_LOGIN_TEXT">गूगल लॉगिन</string>
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
     <string name="ID_COMMUNITY_LISTING_ALL_COMMUNITIES">community listing- all communties</string>
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>
     <string name="ID_REFER_SHARE_JOB">refer/ share job</string>
     <string name="ID_ARTICLE_SELECT_CATEGORY">article select category</string>
-    <string name="carousel_outer_seemore">More Top Icon</string>
+
     <string name="ID_CAROUSEL_SEE_MORE">और देखें</string>
 
 
@@ -503,33 +508,30 @@
     <string name="snackbar.submission_submited">आपका सबमिशन सफलतापूर्वक जमा कर दिया गया है</string>
     <string name="empty_challenge_text">अभी कोई चैलेंज नहीं है!</string>
     <string name="empty_challenge_sub_text">थोड़ी देर बाद वापस आए</string>
-    <string name="logoutUrl">/users/logout</string>
+
     <!--Mentor-->
     <string name="ID_MENTOR_VIEW_ALL">View All</string>
     <string name="ID_MENTOR">चैंपियंस</string>
-    <string name="empty_mentor_text">No champions yet!</string>
+    <string name="empty_mentor_text">अभी तक कोई चैंपियन नहीं है!</string>
     <string name="ID_MENTOR_POST">पोस्ट्स</string>
     <string name="ID_MENTOR_Q_A">प्रo और उo</string>
     <string name="ID_ASKING">पूछ रहा है</string>
     <string name="ID_WHAT_IS_QUESTION">आपका प्रश्न क्या है?</string>
     <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
     <string name="ID_GET_EXPERT_ADVICE">चैंपियन से प्रतिष्ठित सलाह प्राप्त करें</string>
-    <string name="ID_INSIGHT">Insights</string>
+    <string name="ID_INSIGHT">इनसाइट्स</string>
     <string name="ID_SEE_INSIGHT">इनसाइट्स देखें</string>
-    <string name="ID_PROFILE_VISITOR">Profile Visitors in last 7 days</string>
-    <string name="ID_FOLLOWER_VISITOR">Followers in last 7 days</string>
-    <string name="ID_POSTS">Posts created in last 7 days</string>
-    <string name="ID_QUESTIONS">Questions in last 7 days</string>
-    <string name="ID_ANSWERS">Answered questions in last 7 days</string>
+    <string name="ID_PROFILE_VISITOR">पिछले 7 दिनों में प्रोफाइल परिदर्शक</string>
+    <string name="ID_FOLLOWER_VISITOR">पिछले 7 दिनों में फॉलोवर्स</string>
+    <string name="ID_POSTS">पिछले 7 दिनों में बनाए गए पोस्ट</string>
+    <string name="ID_QUESTIONS">पिछले 7 दिनों में प्रश्न</string>
+    <string name="ID_ANSWERS">पिछले 7 दिनों में उत्तर दिए गए प्रश्न</string>
     <string name="ID_ANSWER_QUESTION">सवालों के जवाब दें</string>
-    <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
-    <string name="private_information">Private Information (Only Visible to You)</string>
+    <string name="ID_START_ANSWER_QUESTION">सवालों का जवाब देना शुरू करें</string>
+    <string name="private_information">निजी जानकारी (केवल आपको दिखेगी)</string>
 
-    <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
     <string name="ID_LOGIN_MSG">ईमेल लॉगिन केवल मौजूदा उपयोगकर्ताओं के लिए है। नए उपयोगकर्ताओं को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।</string>
-    <string name="ID_FIRST_WELCOME">Health Career Love</string>
-    <string name="ID_SECOND_WELCOME">Join Communities</string>
-    <string name="ID_THIRD_WELCOME"> Get Expert Advice</string>
+
     <string name="ID_GOT">समझ गए !</string>
     <string name="ID_SHOW_CASE_CREATE_POST_TITLE">किसी समस्या के अतिरिक्त मदद चाहिए?</string>
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">एक प्रश्न पूछें और विशेषज्ञों और अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
@@ -548,7 +550,7 @@
     <string name="cancel">CANCEL</string>
     <string name="unfollow">UNFOLLOW</string>
     <string name="new_feature">नया</string>
-    <string name="feed_header">FEED_HEADER</string>
+
     <string name="add_location">लोकेशन डालें</string>
     <string name="add_skills">कुशलता डालें</string>
     <string name="add_desc">विवरण डालें</string>
@@ -659,15 +661,15 @@
     <string name="intermediate_filled">Your profile is shaping up. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers.</string>
     <string name="intermediate_unfilled">Your profile is shaping up. Make your profile trustworthy by adding more details about yourself and get more followers.</string>
     <string name="beginner_message">You’re on your way now. Each time you add to your profile, it improves your overall experience with SHEROES and is likely to get you more followers and faster replies.</string>
-    <string name="city_error_msg">Invalid city name, please select again</string>
-    <string name="city_error_response">wrong id sent for city</string>
-    <string name="mobile_response_err">mobile number already registered with us</string>
+    <string name="city_error_msg">शहर का नाम मान्य नहीं हैं,कृपया फिर से चुनें</string>
+    <string name="city_error_response">शहर के लिए गलत आईडी डाला गया है</string>
+    <string name="mobile_response_err">मोबाइल नंबर पहले से ही हमारे पास पंजीकृत/ रेजिस्टरड है</string>
     <string name="add_more_to_bio">Add Bio (Complete your Bio)</string>
     <string name="tell_us_something_about_yourself_min_60_chars">Tell us something about yourself (min. 60 chars)</string>
-    <string name="bio_min_char_limit_msg">Fill min. of 60 characters to proceed</string>
-    <string name="mobile_no_error_msg">Please enter your mobile number</string>
-    <string name="location_error_msg">Please enter Current location</string>
-    <string name="full_name_err_msg">Please enter full name</string>
+    <string name="bio_min_char_limit_msg">आगे बढ़ने के लिए कम से कम 60 वर्ण भरें</string>
+    <string name="mobile_no_error_msg">अपना मोबाइल नंबर दर्ज करें</string>
+    <string name="location_error_msg">कृपया वर्तमान लोकेशन दर्ज करें</string>
+    <string name="full_name_err_msg">कृपया पूरा नाम दर्ज करें</string>
     <string name="limit">0/140</string>
     <string name="other">अन्य</string>
     <string name="explore_All">और  खोज  करें</string>
@@ -693,7 +695,6 @@
     <string name="user_card_desc">%1$s में सुपर SHEROES</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>
     <string name="view_profile">VIEW PROFILE</string>
-
 
 
     <string name="action_draft">ड्राफ्ट</string>
@@ -810,4 +811,5 @@
     <string name="share_on_fb">फेसबुक पर शेयर करें</string>
     <string name="stories">कहानियां</string>
     <string name="my_stories">मेरी कहानियां</string>
+    <string name="cropping_fail">काटना विफल:</string>
 </resources>

@@ -168,7 +168,6 @@ public class OnBoardingActivity extends BaseActivity {
             return;
         }
         doubleBackToExitPressedOnce = true;
-        //  Snackbar.make(card, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

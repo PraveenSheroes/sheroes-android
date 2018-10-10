@@ -205,7 +205,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         ButterKnife.bind(WelcomeActivity.this);
         initHomeViewPagerAndTabs();
         loginSetUp();
-        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(getString(R.string.ID_INTRO_SCREEN));
+        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
 

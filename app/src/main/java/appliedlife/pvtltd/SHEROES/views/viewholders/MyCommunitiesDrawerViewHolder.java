@@ -96,9 +96,9 @@ public class MyCommunitiesDrawerViewHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
                 if (mContext instanceof HomeActivity) {
-                    CommunityDetailActivity.navigateTo(((HomeActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, mContext.getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                    CommunityDetailActivity.navigateTo(((HomeActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, AppConstants.RIGHT_SWIPE_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 } else if (mContext instanceof CommunityDetailActivity) {
-                    CommunityDetailActivity.navigateTo(((CommunityDetailActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, mContext.getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+                    CommunityDetailActivity.navigateTo(((CommunityDetailActivity) mContext), (CommunityFeedSolrObj) mFeedDetail, AppConstants.RIGHT_SWIPE_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 }
             }
         });

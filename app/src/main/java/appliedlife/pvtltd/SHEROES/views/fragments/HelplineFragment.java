@@ -120,7 +120,7 @@ public class HelplineFragment extends BaseFragment {
         }
 
         setUpRecyclerView();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.HELPLINE);
         return view;
     }
 

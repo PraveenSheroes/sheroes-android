@@ -16,12 +16,12 @@ public class FontButton extends AppCompatButton {
 
     public FontButton(Context context, AttributeSet set) {
         super(context, set);
-        setLanguageFont(context, set);
+       // setLanguageFont(context, set);
     }
 
     public FontButton(Context context, AttributeSet set, int defaultStyle) {
         super(context, set, defaultStyle);
-        setLanguageFont(context, set);
+       // setLanguageFont(context, set);
     }
 
     private void setLanguageFont(Context context, AttributeSet attrs) {

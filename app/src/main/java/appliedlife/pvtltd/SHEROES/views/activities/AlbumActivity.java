@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -61,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumCarouselAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.AlbumGalleryAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IAlbumView;
@@ -102,6 +104,16 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     //endregion
 
     //region Activity method
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        LocaleManager.setLocale(this);
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -181,6 +181,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
     private static final int APP_BAR_ELEVATION = 10;
+    private static final String MORE_TOP_ICON = "More Top Icon";
 
     // region inject variables
     @Inject
@@ -493,7 +494,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.START);
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION));
+        ((SheroesApplication) this.getApplication()).trackScreenView(AppConstants.DRAWER_NAVIGATION);
     }
 
     @OnClick(R.id.fl_nav_communities)
@@ -600,7 +601,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             AppUtils.hideKeyboard(mTvUserName, TAG);
-            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), getScreenName(), null);
+            AnalyticsManager.trackScreenView(AppConstants.RIGHT_SWIPE_NAVIGATION, getScreenName(), null);
         }
     }
 
@@ -1277,6 +1278,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
+                    //TODO:: Change to commented method
                   //  writeAStory();
                     showSelectLanguageOption();
                 }
@@ -1658,9 +1660,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         String url = navMenuItem.getMenuUrl();
         String menuName = navMenuItem.getMenuName();
 
-        if (url.contains(getString(R.string.logoutUrl))) {
+        if (url.contains(AppConstants.LOG_OUT_URL)) {
             logOut();
-        } else if (url.contains("#") && menuName.equalsIgnoreCase(getString(R.string.ID_INVITE_WOMEN_FRIEND))) {
+        } else if (url.contains("#") && menuName.equalsIgnoreCase(AppConstants.INVITE_FRIENDS)) {
             inviteMyCommunityDialog();
         } else {
             if (navMenuItem.isNative()) {
@@ -1706,12 +1708,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             case R.id.iv_header_circle_icon:
                 mFeedDetail = (FeedDetail) baseResponse;
-                championDetailActivity(mFeedDetail.getEntityOrParticipantId(), 0, mFeedDetail.isAuthorMentor(), getString(R.string.feed_header));
+                championDetailActivity(mFeedDetail.getEntityOrParticipantId(), 0, mFeedDetail.isAuthorMentor(), AppConstants.FEED_HEADER);
                 break;
 
             case R.id.user_name:
                 mFeedDetail = (FeedDetail) baseResponse;
-                championDetailActivity(mFeedDetail.getEntityOrParticipantId(), 0, mFeedDetail.isAuthorMentor(), getString(R.string.feed_header));
+                championDetailActivity(mFeedDetail.getEntityOrParticipantId(), 0, mFeedDetail.isAuthorMentor(), AppConstants.FEED_HEADER);
                 break;
 
             case R.id.header_msg:
@@ -1769,10 +1771,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (carouselDataObj != null) {
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
-                            .name(getString(R.string.carousel_outer_seemore))
+                            .name(MORE_TOP_ICON)
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
-            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), getString(R.string.carousel_outer_seemore), COMMUNITY_CATEGORY_SCREEN, properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
+            CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), MORE_TOP_ICON, COMMUNITY_CATEGORY_SCREEN, properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
 
@@ -1784,7 +1786,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openProfileActivity(ProfileProgressDialog.ProfileLevelType profileLevelType) {
-        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, getString(R.string.ID_DRAWER_NAVIGATION), null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {

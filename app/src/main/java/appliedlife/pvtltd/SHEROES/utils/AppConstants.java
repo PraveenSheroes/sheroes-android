@@ -135,6 +135,14 @@ public class AppConstants {
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT = "helpline";
 
+    //Screen constants
+    public static final String INVITE_FRIENDS = "Invite Friends";
+    public static final String FEED_HEADER = "FEED_HEADER";
+    public static final String LOG_OUT_URL = "/users/logout";
+    public static final String DRAWER_NAVIGATION = "Drawer navigation";
+    public static final String RIGHT_SWIPE_NAVIGATION = "Right Swipe Navigation";
+    public static final String HELPLINE = "helpline";
+
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_DRAWER = "my_communities_drawer";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
@@ -471,5 +479,6 @@ public class AppConstants {
     public static final String LANGUAGE_KEY = "language_key";
     public static final String LEADER_BOARD_CAROUSEL_STREAM = "LeaderboardCarouselStream";
     public static final String STORY_DRAFT = "Draft";
+
 
 }
