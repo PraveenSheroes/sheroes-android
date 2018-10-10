@@ -432,9 +432,9 @@
     </plurals>
 
     <plurals name="numberOfViews">
-        <item quantity="zero">Views</item>
-        <item quantity="one">View</item>
-        <item quantity="other">Views</item>
+        <item quantity="zero">बार देखा</item>
+        <item quantity="one">बार देखा</item>
+        <item quantity="other">बार देखा</item>
     </plurals>
 
     <plurals name="badgeWonTime">
@@ -812,4 +812,5 @@
     <string name="stories">कहानियां</string>
     <string name="my_stories">मेरी कहानियां</string>
     <string name="cropping_fail">काटना विफल:</string>
+    <string name="ago">पूर्व</string>
 </resources>

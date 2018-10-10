@@ -1001,7 +1001,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         long createdDate = mDateUtil.getTimeInMillis(articleSolrObj.getPostedDate(), AppConstants.DATE_FORMAT);
         String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,this);
         if (!dateInWord.equalsIgnoreCase(getString(R.string.ID_JUST_NOW))) {
-            dateInWord = dateInWord + " ago ";
+            dateInWord = dateInWord + " "+getString(R.string.ago);
         }
         String minRead = "";
         if (articleSolrObj.getCharCount() > 0) {

@@ -812,5 +812,6 @@
     <string name="stories">Stories</string>
     <string name="my_stories">My Stories</string>
     <string name="cropping_fail">Cropping failed:</string>
+    <string name="ago">ago</string>
 
 </resources>
