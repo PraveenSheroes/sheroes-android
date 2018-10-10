@@ -646,6 +646,6 @@
     <dimen name="post_link_source_marginright">12dp</dimen>
     <dimen name="post_link_source_marginbottom">9dp</dimen>
     <dimen name="post_link_source_textsize">9sp</dimen>
-    <dimen name= "post_link_cardelevation">0.5dp </dimen>
+    <dimen name="post_link_cardelevation">0.5dp</dimen>
 </resources>
 
