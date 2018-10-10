@@ -48,6 +48,34 @@ public class ImpressionHelper {
         isLoaderVisible = (visibility == View.VISIBLE);
     }
 
+    public void onResume() {
+        Log.i("Resume", "On Resume");
+    }
+
+
+    public void onPause() {
+        //Fragment/ Activity get paused
+        Log.i("Pause", "On Pause");
+        updateEndTimeOfItems();
+        mImpressionCallback.storeInDatabase(finalViewData);
+    }
+
+    private void updateEndTimeOfItems() {
+        if(finalViewData.size()>0) {
+            int size = finalViewData.size();
+            for (int i = size-1; i >= 0; i--) {
+                ImpressionDataSample trackingData1 = finalViewData.get(i);
+                if (trackingData1.getEndTime() == -1) { //
+                    Log.i("Updating", "End time");
+                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
+                    float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
+                    finalViewData.get(i).setEngagementTime((int) (timeSpent / 1000.0f));
+                }
+            }
+        }
+
+    }
+
     public void onScrollChange(RecyclerView mFeedRecyclerView, int startPos, int endPos) {
         if (isLoaderVisible) {
             return;

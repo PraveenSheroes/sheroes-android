@@ -296,6 +296,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     //Send event of previous selected tab with duration, and start the time capture for current selected tab
                     AnalyticsManager.trackScreenView(screenName, getExtraProperties());
                     AnalyticsManager.timeScreenView(mScreenLabel);
+                    impressionHelper.onPause();
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
                 AnalyticsManager.timeScreenView(mScreenLabel);
@@ -522,7 +523,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void storeInDatabase(List<ImpressionDataSample> impressionData) {
-        impressionPresenter.addToDatabase(getContext(), impressionData);
+        impressionPresenter.storeBatchInDb(getContext(), impressionData);
     }
 
     @Override
@@ -1090,6 +1091,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             countDownTimer.start();
         }
 
+        impressionHelper.onPause();
+
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
         }
@@ -1102,6 +1105,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         //getImpressionDatabase();
         //Log.i("feed", finalViewData.toString());
         //finalViewData.clear();
+
+        impressionHelper.onPause();
 
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());

@@ -22,8 +22,12 @@ import appliedlife.pvtltd.SHEROES.datamanger.UserEvents;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
@@ -50,7 +54,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      * @param context        context
      * @param impressionData list of impression events
      */
-    public void addToDatabase(Context context, final List<ImpressionDataSample> impressionData) {
+    private void addToDatabase(Context context, final List<ImpressionDataSample> impressionData) {
         final AppDatabase database = AppDatabase.getAppDatabase(context);
         new Thread(new Runnable() {
             @Override
@@ -63,6 +67,36 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             }
         }).start();
     }
+
+    //Filter the list and get only those item which have more than 250ms time spend on impression
+    public void storeBatchInDb(final Context context, final List<ImpressionDataSample> impressionData) {
+        Observable.just(impressionData)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Function<List<ImpressionDataSample>, Observable<ImpressionDataSample>>() {
+                    @Override
+                    public Observable<ImpressionDataSample> apply(List<ImpressionDataSample> ints) {
+                        return Observable.fromIterable(ints);
+                    }
+                }).filter(new Predicate<ImpressionDataSample>() {
+            @Override
+            public boolean test(ImpressionDataSample impressionDataSample) throws Exception {
+                return impressionDataSample.getEngagementTime() > 0.25; //Todo - remove this time
+            }
+        }).toList().subscribe(new DisposableSingleObserver<List<ImpressionDataSample>>() {
+            @Override
+            public void onSuccess(List<ImpressionDataSample> impressionDataSampleList) {
+                addToDatabase(context, impressionDataSampleList);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Crashlytics.getInstance().core.logException(e);
+            }
+        });
+    }
+
+
 
     //Hit the network after frequency expired
     public void sendImpressionData(final Context context, final UserEventsContainer userEventsContainer) {
