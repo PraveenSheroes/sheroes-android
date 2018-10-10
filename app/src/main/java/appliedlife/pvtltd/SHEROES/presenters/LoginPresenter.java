@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -49,11 +49,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
 
     @Inject
-    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi, Preference<Configuration> mConfiguration) {
+    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi, Preference<AppConfiguration> mConfiguration) {
         this.mMasterDataModel = masterDataModel;
         this.mLoginModel = mLoginModel;
         this.mSheroesApplication = mSheroesApplication;
@@ -128,8 +128,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void onNext(ConfigurationResponse configurationResponse) {
                         if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (configurationResponse.configuration != null) {
-                                mConfiguration.set(configurationResponse.configuration);
+                            if (configurationResponse.appConfiguration != null) {
+                                mConfiguration.set(configurationResponse.appConfiguration);
                             }
                         }
                     }

@@ -1341,7 +1341,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     }
 
     /**
-     * Sets the configuration options used when creating MentionSpans.
+     * Sets the appConfiguration options used when creating MentionSpans.
      *
      * @param config the {@link MentionSpanConfig} to use
      */

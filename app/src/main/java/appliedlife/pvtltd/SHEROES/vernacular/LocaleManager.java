@@ -33,8 +33,13 @@ public class LocaleManager {
         Locale locale = new Locale(language);
         Locale.setDefault(locale);
         Resources res = context.getResources();
-        Configuration config = new Configuration();
-        /*Configuration config = new Configuration(res.getConfiguration());
+        Configuration config = new Configuration(res.getConfiguration());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            config.setLocale(locale);
+        } else {
+            config.locale = locale;
+        }
+       /* Configuration config = new Configuration(res.getConfiguration());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
         config.setLocale(locale);
         context = context.createConfigurationContext(config);

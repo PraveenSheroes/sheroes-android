@@ -364,7 +364,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
         bundle.putBoolean(BaseActivity.BRANCH_FIRST_SESSION, isBranchFirstSession);
         bundle.putString(BaseActivity.DEEP_LINK_URL, deepLinkUrl);
         intent.putExtras(bundle);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 

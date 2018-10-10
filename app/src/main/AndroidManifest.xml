@@ -163,8 +163,7 @@
         <activity
             android:name=".views.activities.WelcomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:parentActivityName=".views.activities.LanguageSelectionActivity"/>
+            android:windowSoftInputMode="stateHidden"/>
 
         <activity
             android:name=".views.activities.ProfileActivity"
