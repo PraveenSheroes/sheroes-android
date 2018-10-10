@@ -325,9 +325,8 @@
     <string name="ID_ARTICLE_LISTING">article listing</string>
     <string name="communities_listing">Communities Screen</string>
     <string name="ID_COMMUNITIES_CATEGORY">Communities Category Screen</string>
-    <string name="ID_FB_LOGIN_TEXT">login</string>
-    <string name="ID_G_LOGIN_TEXT">login</string>
-
+    <string name="fb_login_txt">login</string>
+    <string name="g_login_txt">login</string>
     <string name="ID_NOTIFICATION_SCREEN">notifications</string>
     <string name="ID_COMMUNITY_LISTING_ALL_COMMUNITIES">community listing- all communties</string>
     <string name="ID_COMMUNITY_LISTING_MY_COMMUNITIES">community listing- my communities</string>

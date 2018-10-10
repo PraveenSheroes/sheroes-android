@@ -618,6 +618,9 @@
     <dimen name="lang_bg_right_margin">2dp</dimen>
     <dimen name="welcome_back_padding">10dp</dimen>
     <dimen name="language_cross_padding">16dp</dimen>
+    <dimen name="login_btn_width">144dp</dimen>
+    <dimen name="login_btn_height">44dp</dimen>
+    <dimen name="login_btn_padding">55dp</dimen>
 
 
 </resources>
