@@ -15,7 +15,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.datamanger.AppDatabase;
+import appliedlife.pvtltd.SHEROES.datamanger.ImpressionCollection;
 import appliedlife.pvtltd.SHEROES.datamanger.ImpressionData;
+import appliedlife.pvtltd.SHEROES.datamanger.ImpressionDataSample;
+import appliedlife.pvtltd.SHEROES.datamanger.UserEvents;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -25,6 +28,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
+/**
+ * Presenter class for Impressions
+ */
 public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
     private SheroesAppServiceApi mSheroesApiEndPoints;
@@ -44,18 +50,22 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      * @param context        context
      * @param impressionData list of impression events
      */
-    public void addToDatabase(Context context, final List<ImpressionData> impressionData) {
+    public void addToDatabase(Context context, final List<ImpressionDataSample> impressionData) {
         final AppDatabase database = AppDatabase.getAppDatabase(context);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                database.impressionDataDao().insert(impressionData);
+                ImpressionCollection impressionCollection = new ImpressionCollection();
+                UserEvents userEvents = new UserEvents();
+                userEvents.setUserEvent(impressionData);
+                impressionCollection.setUserEvents(userEvents);
+                database.impressionDataDao().insert(impressionCollection);
             }
         }).start();
     }
-    
+
     //Hit the network after frequency expired
-    public void sendImpressionData(final UserEventsContainer userEventsContainer) {
+    public void sendImpressionData(final Context context, final UserEventsContainer userEventsContainer) {
 
         Log.i("Impression hit", "Called");
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -64,6 +74,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         }
         getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEventsContainer)
+                .retry(1) //Retry no of times
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
@@ -85,11 +96,30 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         getMvpView().stopProgressBar();
                         if (null != baseResponse) {
                             Log.i("Impression", "responseee");
+                            //clearDatabase(context, userEventsContainer.getUserEvent());
                             // getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
                         }
                     }
                 });
     }
 
+
+
+    //clear db items
+    /**
+     * Add the item to Database
+     *
+     * @param context        context
+     * @param impressionData list of impression events
+     */
+    public void clearDatabase(Context context, final List<ImpressionData> impressionData) {
+        final AppDatabase database = AppDatabase.getAppDatabase(context);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+               // database.impressionDataDao().deleteImpression(impressionData);
+            }
+        }).start();
+    }
 
 }

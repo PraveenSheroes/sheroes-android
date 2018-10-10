@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.datamanger.ImpressionData;
+import appliedlife.pvtltd.SHEROES.datamanger.ImpressionDataSample;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 public interface ImpressionCallback extends BaseMvpView {
@@ -13,5 +13,6 @@ public interface ImpressionCallback extends BaseMvpView {
 
     String getScreenName();
 
-    void storeInDatabase(List<ImpressionData> impressionData);
+    void storeInDatabase(List<ImpressionDataSample> impressionData);
+
 }

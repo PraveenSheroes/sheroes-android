@@ -67,6 +67,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.datamanger.AppDatabase;
 import appliedlife.pvtltd.SHEROES.datamanger.ImpressionData;
+import appliedlife.pvtltd.SHEROES.datamanger.ImpressionDataSample;
 import appliedlife.pvtltd.SHEROES.datamanger.ImpressionHelper;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
@@ -520,7 +521,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void storeInDatabase(List<ImpressionData> impressionData) {
+    public void storeInDatabase(List<ImpressionDataSample> impressionData) {
         impressionPresenter.addToDatabase(getContext(), impressionData);
     }
 
@@ -675,15 +676,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
 
-
-
-
     private void getImpressionDatabase() {
         final AppDatabase database = AppDatabase.getAppDatabase(getContext());
         new Thread(new Runnable() {
             @Override
             public void run() {
-               List<ImpressionData> impressionData =  database.impressionDataDao().getAll();
+              // List<ImpressionData> impressionData =  database.impressionDataDao().getAll();
             }
         }) .start();
     }
@@ -2174,7 +2172,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     //Handle the Request for Network call
-    private void hitNetworkCall(Context context) {
+    private void hitNetworkCall(final Context context) {
 
         synchronized (this) {
             final AppDatabase database = AppDatabase.getAppDatabase(context);
@@ -2182,11 +2180,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    List<ImpressionData> impressionData = database.impressionDataDao().getAll();
-                    if (impressionData != null && impressionData.size() > 0) {
-                        userEventsContainer.setUserEvent(impressionData);
-                        impressionPresenter.sendImpressionData(userEventsContainer);
-                    }
+                   // List<ImpressionData> impressionData = database.impressionDataDao().getAll();
+                   // if (impressionData != null && impressionData.size() > 0) {
+                   //     userEventsContainer.setUserEvent(impressionData);
+                       // impressionPresenter.sendImpressionData(context, userEventsContainer);
+                  //  }
                 }
             }).start();
         }

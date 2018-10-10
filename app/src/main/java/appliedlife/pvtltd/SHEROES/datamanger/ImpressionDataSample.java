@@ -1,67 +1,46 @@
 package appliedlife.pvtltd.SHEROES.datamanger;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.PrimaryKey;
+public class ImpressionDataSample {
 
-@Entity(tableName = "impression_data")
-public class ImpressionData {
-
-    @PrimaryKey(autoGenerate = true)
-    private int index;
-
-    @ColumnInfo(name = "userId")
     private String userId;
 
-    @ColumnInfo(name = "clientId")
     private String clientId;
 
-    @ColumnInfo(name = "postId")
     private String postId;
 
-    @ColumnInfo(name = "positionInList")
     private int position;
 
-    @ColumnInfo(name = "engagementTime")
     private double engagementTime;
 
-    @ColumnInfo(name = "timestamp")
     private long timeStamp;
 
-    @ColumnInfo(name = "screenName")
     private String screenName;
 
-    @ColumnInfo(name = "event")
     private String event;
 
-    @ColumnInfo(name = "ipAddress")
     private String ipAddress;
 
-    @ColumnInfo(name = "deviceId")
     private String deviceId;
 
-    @ColumnInfo(name = "gtid")
     private String gtId;
 
-    @ColumnInfo(name = "userAgent")
     private String userAgent = "Android";
 
-    @ColumnInfo(name = "source")
+
     private String source;
 
-    @ColumnInfo(name = "sourceCollection")
+
     private String sourceCollection;
 
-    @ColumnInfo(name = "sourceURL")
+
     private String sourceURL;
 
-    @ColumnInfo(name = "postType")
+
     private String postType;
 
-    @ColumnInfo(name = "appVersion")
+
     private String appVersion;
 
-    @ColumnInfo(name = "feedConfigVersion")
     private int feedConfigVersion;
 
     public String getAppVersion() {
@@ -218,14 +197,6 @@ public class ImpressionData {
 
     public void setEndTime(long mEndTime) {
         this.mEndTime = mEndTime;
-    }
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
     }
 
     public String getIpAddress() {

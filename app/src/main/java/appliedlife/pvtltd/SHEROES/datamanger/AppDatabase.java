@@ -3,9 +3,11 @@ package appliedlife.pvtltd.SHEROES.datamanger;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
-@Database(entities = {ImpressionData.class}, version = 1)
+@TypeConverters(RoomJsonConverter.class)
+@Database(entities = {ImpressionCollection.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "sheroes";

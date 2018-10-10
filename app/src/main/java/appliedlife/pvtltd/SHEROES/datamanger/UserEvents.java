@@ -1,14 +1,9 @@
-package appliedlife.pvtltd.SHEROES.models.entities.feed;
+package appliedlife.pvtltd.SHEROES.datamanger;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.datamanger.ImpressionDataSample;
+public class UserEvents {
 
-public class UserEventsContainer {
-
-    //@TypeConverters(RoomJsonConverter.class)
-    //@SerializedName("userEvents")
-    //@Expose
     private List<ImpressionDataSample> userEvent = null;
 
     public List<ImpressionDataSample> getUserEvent() {
@@ -18,5 +13,4 @@ public class UserEventsContainer {
     public void setUserEvent(List<ImpressionDataSample> userEvent) {
         this.userEvent = userEvent;
     }
-
 }
