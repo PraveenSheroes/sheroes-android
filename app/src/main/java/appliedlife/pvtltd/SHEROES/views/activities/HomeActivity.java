@@ -527,11 +527,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    @OnClick(R.id.invite)
-    public void onInviteClicked() {
-        AllContactActivity.navigateTo(this, getScreenName(), null);
-    }
-
     public void logOut() {
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
         logOutUser();
