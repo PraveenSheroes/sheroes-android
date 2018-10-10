@@ -84,8 +84,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -1937,7 +1939,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         pollOptionModelList.add(imagePollOptionModel);
                     }
                     pollType = TEXT;
+                    Set<String> hash_Set = new HashSet<String>();
+                    for (int i = 0; i < mEtTextPollList.size(); i++) {
+                        hash_Set.add(mEtTextPollList.get(i).getText().toString());
+                    }
+                    if (hash_Set.size() < mEtTextPollList.size()) {     //same option
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
                     break;
+
                 case IMAGE:
                     PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                     imagePollOptionModelLeft.setActive(true);
