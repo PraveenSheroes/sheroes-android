@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanger;
+package appliedlife.pvtltd.SHEROES.datamanager;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,7 +36,7 @@ public class ImpressionHelper {
     // ArrayList of view ids that are being considered for tracking.
     private ArrayList<Integer> currentViewed = new ArrayList<>();
     private ArrayList<Integer> previousViewed = new ArrayList<>();
-    private List<ImpressionDataSample> finalViewData = new ArrayList<>();
+    private List<ImpressionData> finalViewData = new ArrayList<>();
     //endregion
 
     public ImpressionHelper(Context context, int minVisibilityPercentage, int visibility, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
@@ -60,11 +60,14 @@ public class ImpressionHelper {
         mImpressionCallback.storeInDatabase(finalViewData);
     }
 
+    /**
+     * Update the end time for the item on paused
+     */
     private void updateEndTimeOfItems() {
         if(finalViewData.size()>0) {
             int size = finalViewData.size();
             for (int i = size-1; i >= 0; i--) {
-                ImpressionDataSample trackingData1 = finalViewData.get(i);
+                ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getEndTime() == -1) { //
                     Log.i("Updating", "End time");
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
@@ -76,6 +79,12 @@ public class ImpressionHelper {
 
     }
 
+    /**
+     * Get callback when recycler view is being scrolled and scroll state changing
+     * @param mFeedRecyclerView recyclerView
+     * @param startPos first visible item on screen
+     * @param endPos last visible item on screen
+     */
     public void onScrollChange(RecyclerView mFeedRecyclerView, int startPos, int endPos) {
         if (isLoaderVisible) {
             return;
@@ -91,6 +100,8 @@ public class ImpressionHelper {
             endViewId = endPos;
 
             analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
+        } else if(scrollDirectionChange) {
+            Log.i("Direction", "Changed");
         }
     }
 
@@ -100,7 +111,7 @@ public class ImpressionHelper {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         // Analyze all the views
         for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
-            ImpressionDataSample trackingData = new ImpressionDataSample();
+            ImpressionData trackingData = new ImpressionData();
             View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
             if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
@@ -155,7 +166,7 @@ public class ImpressionHelper {
         if (finalViewData.size() > 10) {
             int index = getLastIndexOfUpdatedItem();
             if (index > -1) {
-                List<ImpressionDataSample> forDb = finalViewData.subList(0, index+1);
+                List<ImpressionData> forDb = finalViewData.subList(0, index+1);
                 Log.i("###", "###Added to db");
                 mImpressionCallback.storeInDatabase(forDb);
 
@@ -189,7 +200,7 @@ public class ImpressionHelper {
         int index  = -1;
         if(finalViewData.size()>0) {
             for(int i = finalViewData.size()-1; i>=0; i--) {
-                ImpressionDataSample impressionData = finalViewData.get(i);
+                ImpressionData impressionData = finalViewData.get(i);
                 if(impressionData.getEndTime()!=-1) {
                     index=  i;
                     break;
@@ -241,7 +252,7 @@ public class ImpressionHelper {
         if(finalViewData.size()>0) {
             int size = finalViewData.size();
             for (int i = size-1; i >= 0; i--) {
-                ImpressionDataSample trackingData1 = finalViewData.get(i);
+                ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getEndTime() == -1 && id == trackingData1.getViewId()) { //
                     Log.i("Updating", "End time" + id);
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
@@ -286,7 +297,7 @@ public class ImpressionHelper {
         if (finalViewData.size() > 0) {
             int length = finalViewData.size();
             for (int i = length - 1; i >= 0; i--) {
-                ImpressionDataSample trackingData1 = finalViewData.get(i);
+                ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getPosition() == id ) { //&& trackingData1.getEndTime() != -1 //&& && id!=lastItemId && lastItemId!= -1 && trackingData.getmEndTime() == -1  &&
                     index = i;
                     break;
@@ -297,10 +308,7 @@ public class ImpressionHelper {
     }
 
 
-
-
-
-    private void addNewEntry(int viewPosition, ImpressionDataSample impressionData) {
+    private void addNewEntry(int viewPosition, ImpressionData impressionData) {
         int viewId = -1;
         if (finalViewData.size() > 0) {
             viewId = finalViewData.get(finalViewData.size() - 1).getViewId();
@@ -315,7 +323,7 @@ public class ImpressionHelper {
         }
     }
 
-    private void addNewEntry1(int viewPosition, ImpressionDataSample impressionData) {
+    private void addNewEntry1(int viewPosition, ImpressionData impressionData) {
 
         int viewId = -1;
         if (finalViewData.size() > 0) {

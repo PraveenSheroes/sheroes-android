@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanger;
+package appliedlife.pvtltd.SHEROES.datamanager;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -7,10 +7,11 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 @TypeConverters(RoomJsonConverter.class)
-@Database(entities = {ImpressionCollection.class}, version = 1)
+@Database(entities = {Impression.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "sheroes";
+    static final String TABLE_NAME = "impression";
     private static AppDatabase INSTANCE;
 
     public abstract ImpressionDataDao impressionDataDao();
@@ -18,9 +19,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public static AppDatabase getAppDatabase(Context context) {
         if (INSTANCE == null) {
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DB_NAME)
-                    // allow queries on the main thread.
-                    // Don't do this on a real app! See PersistenceBasicSample for an example.
-                    .allowMainThreadQueries() //todo - change this , not to do on main thread
                     .build();
         }
         return INSTANCE;

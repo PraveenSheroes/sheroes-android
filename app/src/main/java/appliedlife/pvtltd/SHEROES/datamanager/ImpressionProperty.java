@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanger;
+package appliedlife.pvtltd.SHEROES.datamanager;
 
 import android.text.TextUtils;
 
@@ -7,6 +7,7 @@ import java.util.HashMap;
 /**
  * Impression properties enum
  */
+@Deprecated
 public enum ImpressionProperty {
 
     USER_ID("userId"),

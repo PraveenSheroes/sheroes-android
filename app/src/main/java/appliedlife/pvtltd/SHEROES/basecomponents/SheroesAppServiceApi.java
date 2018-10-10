@@ -3,6 +3,10 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.datamanager.Impression;
+import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
+import appliedlife.pvtltd.SHEROES.datamanager.ImpressionQueryData;
+import appliedlife.pvtltd.SHEROES.datamanager.UserEvents;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
@@ -376,5 +380,5 @@ public interface SheroesAppServiceApi {
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 
     @POST("http://testevents.sheroes.in:8080/user/event/producer")
-    Observable<BaseResponse> updateImpressionData(@Body UserEventsContainer userEventsContainer);
+    Observable<BaseResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 }

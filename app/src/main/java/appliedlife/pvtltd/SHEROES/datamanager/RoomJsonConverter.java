@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanger;
+package appliedlife.pvtltd.SHEROES.datamanager;
 
 import android.arch.persistence.room.TypeConverter;
 
@@ -7,6 +7,9 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 
+/**
+ * Converter UserEvents objects to Json and vice versa
+ */
 public class RoomJsonConverter {
 
     private static Gson gson = new Gson();

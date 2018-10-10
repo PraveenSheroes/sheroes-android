@@ -1,26 +1,29 @@
-package appliedlife.pvtltd.SHEROES.datamanger;
+package appliedlife.pvtltd.SHEROES.datamanager;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 
-@Entity(tableName = "impression_collection")
-public class ImpressionCollection {
+import com.google.gson.annotations.SerializedName;
+
+
+@Entity(tableName = "impression")
+public class Impression {
 
     @PrimaryKey(autoGenerate = true)
     private int index;
 
-    @ColumnInfo(name = "option_values")
+    @ColumnInfo(name = "impressionsData")
     @TypeConverters(RoomJsonConverter.class)
-    private UserEvents userEvents;
+    private UserEvents impressionData;
 
-    public UserEvents getUserEvents() {
-        return userEvents;
+    public UserEvents getImpressionData() {
+        return impressionData;
     }
 
-    public void setUserEvents(UserEvents userEvents) {
-        this.userEvents = userEvents;
+    public void setImpressionData(UserEvents impressionData) {
+        this.impressionData = impressionData;
     }
 
     public int getIndex() {

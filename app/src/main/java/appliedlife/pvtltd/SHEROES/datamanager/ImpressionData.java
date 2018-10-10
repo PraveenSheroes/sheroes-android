@@ -1,6 +1,6 @@
-package appliedlife.pvtltd.SHEROES.datamanger;
+package appliedlife.pvtltd.SHEROES.datamanager;
 
-public class ImpressionDataSample {
+public class ImpressionData {
 
     private String userId;
 
@@ -24,20 +24,15 @@ public class ImpressionDataSample {
 
     private String gtId;
 
-    private String userAgent = "Android";
-
+    private String userAgent ;
 
     private String source;
 
-
     private String sourceCollection;
-
 
     private String sourceURL;
 
-
     private String postType;
-
 
     private String appVersion;
 

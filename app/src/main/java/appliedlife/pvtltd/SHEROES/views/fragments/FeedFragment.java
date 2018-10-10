@@ -65,10 +65,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
-import appliedlife.pvtltd.SHEROES.datamanger.AppDatabase;
-import appliedlife.pvtltd.SHEROES.datamanger.ImpressionData;
-import appliedlife.pvtltd.SHEROES.datamanger.ImpressionDataSample;
-import appliedlife.pvtltd.SHEROES.datamanger.ImpressionHelper;
+import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
+import appliedlife.pvtltd.SHEROES.datamanager.Impression;
+import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
+import appliedlife.pvtltd.SHEROES.datamanager.ImpressionHelper;
+import appliedlife.pvtltd.SHEROES.datamanager.ImpressionQueryData;
+import appliedlife.pvtltd.SHEROES.datamanager.UserEvents;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
@@ -522,8 +524,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void storeInDatabase(List<ImpressionDataSample> impressionData) {
-        impressionPresenter.storeBatchInDb(getContext(), impressionData);
+    public void storeInDatabase(List<ImpressionData> impressionData) {
+        if(impressionData.size()>0) {
+            impressionPresenter.storeBatchInDb(getContext(), impressionData);
+        }
     }
 
     @Override
@@ -1087,7 +1091,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if(countDownTimer!=null) {
                 countDownTimer.cancel();
             }
-            countDownTimer = new OneMinuteCountDownTimer(50000, 1000);
+            countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
             countDownTimer.start();
         }
 
@@ -2185,11 +2189,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                   // List<ImpressionData> impressionData = database.impressionDataDao().getAll();
-                   // if (impressionData != null && impressionData.size() > 0) {
-                   //     userEventsContainer.setUserEvent(impressionData);
-                       // impressionPresenter.sendImpressionData(context, userEventsContainer);
-                  //  }
+                    Impression impressionData = database.impressionDataDao().getAll();
+                    if (impressionData != null && impressionData.getImpressionData().getUserEvent().size() > 0) {
+                      // userEventsContainer.setUserEvent(impressionData);
+
+                        UserEvents userEvents = new UserEvents();
+                        userEvents.setUserEvent(impressionData.getImpressionData().getUserEvent());
+                        impressionPresenter.sendImpressionData(context, userEvents);
+                    }
                 }
             }).start();
         }
