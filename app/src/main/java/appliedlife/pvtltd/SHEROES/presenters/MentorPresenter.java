@@ -5,32 +5,21 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.MentorApiPresenterModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
+import appliedlife.pvtltd.SHEROES.models.MentorApiPresenterModel;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.MentorView;
 import io.reactivex.observers.DisposableObserver;
 
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.GCM_ID;
 
 /**
  * Created by Praveen on 14/12/17.

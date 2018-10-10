@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
 import android.os.Build;
 import android.text.Html;
+import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -10,6 +11,7 @@ import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * This class provide functionality to expand and collapsed the text view with see more or see less.
@@ -18,6 +20,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
  */
 public class ExpandableTextView {
 
+    private static final String TAG = ExpandableTextView.class.getName();
+    private static final String ERROR_LAYOUT_NULL = "Layout is null";
     public static final String VIEW_MORE_TEXT = "...View More";
     private static final String VIEW_LESS_TEXT = "View Less";
     private static ExpandableTextView expandableTextView;
@@ -30,6 +34,7 @@ public class ExpandableTextView {
     }
 
     public void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore, final ExpandableTextCallback expandableTextCallback) {
+        if(tv == null) return;
 
         if (tv.getTag() == null) {
             tv.setTag(tv.getText());
@@ -38,27 +43,32 @@ public class ExpandableTextView {
         tv.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                int totalLine = tv.getLayout().getLineCount();
-                if (totalLine > 1) {
-                    if (maxLine > 0 && tv.getLineCount() >= maxLine) {
-                        int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
+                Layout layout = tv.getLayout();
+                if (null != layout) {
+                    int totalLine = layout.getLineCount();
+                    if (totalLine > 1) {
+                        if (maxLine > 0 && tv.getLineCount() >= maxLine) {
+                            int lineEndIndex = tv.getLayout().getLineEnd(maxLine - 1);
 
-                        int indexPosition = lineEndIndex > expandText.length() + 2 ? lineEndIndex - expandText.length() - 2 : lineEndIndex;
-                        String text = tv.getText().subSequence(0, indexPosition) + expandText;
-                        tv.setText(text);
-                        tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        tv.setText(
-                                addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
-                                        viewMore, expandableTextCallback), TextView.BufferType.SPANNABLE);
-                    } else {
-                        int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
-                        String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
-                        tv.setText(text);
-                        tv.setMovementMethod(LinkMovementMethod.getInstance());
-                        tv.setText(
-                                addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
-                                        viewMore, expandableTextCallback), TextView.BufferType.SPANNABLE);
+                            int indexPosition = lineEndIndex > expandText.length() + 2 ? lineEndIndex - expandText.length() - 2 : lineEndIndex;
+                            String text = tv.getText().subSequence(0, indexPosition) + expandText;
+                            tv.setText(text);
+                            tv.setMovementMethod(LinkMovementMethod.getInstance());
+                            tv.setText(
+                                    addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, maxLine, expandText,
+                                            viewMore, expandableTextCallback), TextView.BufferType.SPANNABLE);
+                        } else {
+                            int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
+                            String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
+                            tv.setText(text);
+                            tv.setMovementMethod(LinkMovementMethod.getInstance());
+                            tv.setText(
+                                    addClickablePartTextViewResizable(Html.fromHtml(tv.getText().toString()), tv, lineEndIndex, expandText,
+                                            viewMore, expandableTextCallback), TextView.BufferType.SPANNABLE);
+                        }
                     }
+                } else {
+                    LogUtils.error(TAG, ERROR_LAYOUT_NULL);
                 }
 
                 ViewTreeObserver viewTreeObserver = tv.getViewTreeObserver();

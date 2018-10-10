@@ -9,33 +9,34 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.io.IOException;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 
-public class GCMClientManager {
+public class FCMClientManager {
     // Constants
-    public static final String TAG = "GCMClientManager";
+    public static final String TAG = "FCMClientManager";
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     // Member variables
-    private GoogleCloudMessaging gcm;
+    private FirebaseMessaging fcm;
     private String regid;
     private String projectNumber;
     private Context mContext;
 
-    public GCMClientManager(Context context, String projectNumber) {
+    public FCMClientManager(Context context, String projectNumber) {
         this.mContext = context;
         this.projectNumber = projectNumber;
-        this.gcm = GoogleCloudMessaging.getInstance(context);
+        this.fcm = FirebaseMessaging.getInstance();
     }
 
     /**
@@ -70,7 +71,7 @@ public class GCMClientManager {
     }
 
     /**
-     * Registers the application with GCM servers asynchronously.
+     * Registers the application with FCM servers asynchronously.
      * <p>
      * Stores the registration ID and app versionCode in the application's
      * shared preferences.
@@ -80,19 +81,19 @@ public class GCMClientManager {
             @Override
             protected String doInBackground(Void... params) {
                 try {
-                    if (gcm == null) {
-                        gcm = GoogleCloudMessaging.getInstance(getContext());
+                    if (fcm == null) {
+                        fcm = FirebaseMessaging.getInstance();
                     }
-                    InstanceID instanceID = InstanceID.getInstance(getContext());
-                    regid = instanceID.getToken(projectNumber, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
+                    regid = FirebaseInstanceId.getInstance().getToken();
                     Log.i(TAG, regid);
                     // Persist the regID - no need to register again.
                     storeRegistrationId(getContext(), regid);
-                } catch (IOException ex) {
+                } catch (Exception ex) {
                     // If there is an error, don't just keep trying to register.
                     // Require the user to click a button again, or perform
                     // exponential back-off.
                     handler.onFailure("Error :" + ex.getMessage());
+                    Crashlytics.getInstance().core.logException(ex);
                 }
                 return regid;
             }
@@ -107,7 +108,7 @@ public class GCMClientManager {
     }
 
     /**
-     * Gets the current registration ID for application on GCM service.
+     * Gets the current registration ID for application on FCM service.
      * <p>
      * If result is empty, the app needs to register.
      *
@@ -115,7 +116,7 @@ public class GCMClientManager {
      * registration ID.
      */
     private String getRegistrationId(Context context) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        final SharedPreferences prefs = getFCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
             Log.i(TAG, "Registration not found.");
@@ -141,7 +142,7 @@ public class GCMClientManager {
      * @param regId   registration ID
      */
     private void storeRegistrationId(Context context, String regId) {
-        final SharedPreferences prefs = getGCMPreferences(context);
+        final SharedPreferences prefs = getFCMPreferences(context);
         int appVersion = getAppVersion(context);
         Log.i(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
@@ -150,7 +151,7 @@ public class GCMClientManager {
         editor.apply();
     }
 
-    private SharedPreferences getGCMPreferences(Context context) {
+    private SharedPreferences getFCMPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
         return getContext().getSharedPreferences(context.getPackageName(),

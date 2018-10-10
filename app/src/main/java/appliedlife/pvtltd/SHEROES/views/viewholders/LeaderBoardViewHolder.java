@@ -296,6 +296,6 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     //region onClick methods
     @OnClick(R.id.follow_button)
     public void onFollowClicked() {
-        ((FeedItemCallback) viewInterface).onMentorFollowClicked(mLeaderBoardUserSolrObj.getUserSolrObj());
+        ((FeedItemCallback) viewInterface).onFollowClicked(mLeaderBoardUserSolrObj.getUserSolrObj());
     }
 }

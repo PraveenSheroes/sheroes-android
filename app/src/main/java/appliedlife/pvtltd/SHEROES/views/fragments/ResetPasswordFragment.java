@@ -118,7 +118,9 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
                 }
 
             } else {
-                tvPwdStatus.setText(getString(R.string.ID_RESET_PASSWORD_FAILURE_TEXT));
+                if (null != getActivity() && isAdded()) {
+                    tvPwdStatus.setText(getString(R.string.ID_RESET_PASSWORD_FAILURE_TEXT));
+                }
             }
         }
     }

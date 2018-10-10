@@ -865,9 +865,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
             //****   Hide/show options according to user
             if(userPostObj.isBookmarked()) {
-                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
             } else {
-                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_bookmark_in_active), getResources().getString(R.string.Bookmark))).setVisible(true);
+                popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmark), getResources().getString(R.string.Bookmark))).setVisible(true);
             }
 
             if (userPostObj.getAuthorId() == currentUserId || adminId == AppConstants.TWO_CONSTANT) {
@@ -1247,32 +1247,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onUserFollowedUnFollowed(UserSolrObj userSolrObj) {
-        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
-        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-
-            mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
-        } else {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
-            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
-        }
-    }
-
-    @Override
     public void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor) {
         ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant(), authorMentor, 0, mScreenLabel, mScreenProperties, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
@@ -1351,6 +1325,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
                 popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
                 popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+            }else if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                if(mUserPreference.get().getUserSummary().getUserBO().getUserTypeId()==AppConstants.ADMIN_TYPE_ID){
+                    popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
+                }
             }
         }
         if (!articleObj.getUserStoryStatus().equalsIgnoreCase(AppConstants.STORY_DRAFT)) {
@@ -1451,6 +1429,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .name(userPostSolrObj.getNameOrTitle())
                         .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                         .build();
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+            properties.putAll(getExtraProperties());
+        }
+
         if (userPostSolrObj.isSolrIgnoreIsUserFollowed()) {
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getPostAuthorUnfollowed(publicProfileListRequest, userPostSolrObj);
@@ -1695,25 +1677,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onMentorFollowClicked(UserSolrObj userSolrObj) {
+    public void onFollowClicked(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userSolrObj.getNameOrTitle())
+                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                        .build();
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+            properties.putAll(getExtraProperties());
+        }
+
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
             mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
         } else {
-            HashMap<String, Object> properties =
-                    new EventProperty.Builder()
-                            .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                            .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                            .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
         }
@@ -2025,6 +2006,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         if (getActivity() != null && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
+        }
+    }
+
+    public void scrollToTopInList() {
+        if (mFeedRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            LinearLayoutManager mLayoutManager = (LinearLayoutManager) mFeedRecyclerView.getLayoutManager();
+            int lastVis = mLayoutManager.findLastVisibleItemPosition();
+            if (lastVis <= AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE)
+                mFeedRecyclerView.smoothScrollToPosition(0);
+            else {
+                mFeedRecyclerView.scrollToPosition(AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE);
+                mFeedRecyclerView.smoothScrollToPosition(0);
+            }
         }
     }
 

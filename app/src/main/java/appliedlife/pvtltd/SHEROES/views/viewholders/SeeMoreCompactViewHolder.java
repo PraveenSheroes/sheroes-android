@@ -41,7 +41,7 @@ public class SeeMoreCompactViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    @OnClick({R.id.more_button})
+    @OnClick({R.id.more_button, R.id.more_text})
     public void showMoreClicked(){
         if(viewInterface instanceof AllCommunityItemCallback){
             ((AllCommunityItemCallback)viewInterface).onSeeMoreClicked(mCarouselDataObj);

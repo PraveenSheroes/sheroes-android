@@ -215,10 +215,10 @@ public class ContestInfoFragment extends BaseFragment {
     }
 
     private void showAuthorDetails() {
-        if (mContest == null) {
+        if (mContest == null || getActivity() == null) {
             return;
         }
-        if (mContest != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
+        if (mContest != null && getActivity() != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
             Glide.with(this)
                     .load(mContest.authorImageUrl)
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))

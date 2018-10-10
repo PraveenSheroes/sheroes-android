@@ -127,7 +127,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
-import appliedlife.pvtltd.SHEROES.service.GCMClientManager;
+import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -247,9 +247,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.fab_filter)
     public FloatingActionButton mFloatActionBtn;
 
-    @Bind(R.id.invite)
-    ImageView mInvite;
-
     @Bind(R.id.fl_notification_read_count)
     public FrameLayout flNotificationReadCount;
 
@@ -339,7 +336,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     boolean isMentor;
     private int mEventId;
     public boolean mIsFirstTimeOpen = false;
-    private String mGcmId;
+    private String mFcmId;
     private ShowcaseManager showcaseManager;
     private String mUserName;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -392,7 +389,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             }
         }
         try {
-            getGcmId();
+            getFcmId();
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -431,7 +428,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             mSnowFlakView.setVisibility(View.GONE);
         }
         pbNavDrawer.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
         mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustiomActionBarToggle);
         mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
@@ -659,7 +655,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    @OnClick(R.id.tv_home)
+    //Refresh the feed after clicking the Sheroes logo and home button
+    @OnClick({R.id.tv_home,R.id.ic_sheroes})
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
@@ -692,13 +689,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
         mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-
-        mInvite.setVisibility(View.VISIBLE);
-
     }
 
 
-    @OnClick({R.id.tv_communities, R.id.iv_communities_search})
+    @OnClick({R.id.tv_communities, R.id.tv_communities_search})
     public void communityOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
@@ -725,7 +719,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mInvite.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText(getString(R.string.ID_COMMUNITIES));
         mICSheroes.setVisibility(View.GONE);
@@ -743,8 +736,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-
     }
 
     public void inviteMyCommunityDialog() {
@@ -763,8 +754,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
-        mInvite.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -1001,8 +990,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             case NOTIFICATION_COUNT:
                 unReadNotificationCount(baseResponse);
                 break;
-            case GCM_ID:
-                gcmIdResponse(baseResponse);
+            case FCM_ID:
+                fcmIdResponse(baseResponse);
                 break;
             case USER_CONTACTS_ACCESS_SUCCESS:
                 getAppContactsListSuccess(baseResponse);
@@ -1998,12 +1987,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void gcmIdResponse(BaseResponse baseResponse) {
+    private void fcmIdResponse(BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 if (baseResponse instanceof GcmIdResponse) {
                     LoginResponse loginResponse = mUserPreference.get();
-                    loginResponse.setGcmId(mGcmId);
+                    loginResponse.setFcmId(mFcmId);
                     mUserPreference.set(loginResponse);
                     InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                     installUpdateForMoEngage.setFirstOpen(false);
@@ -2025,44 +2014,44 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    private void getGcmId() {
+    private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        GCMClientManager pushClientManager = new GCMClientManager(this, getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new GCMClientManager.RegistrationCompletedHandler() {
+        FCMClientManager pushClientManager = new FCMClientManager(this, getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mGcmId = registrationId;
-                PushManager.getInstance().refreshToken(getBaseContext(), mGcmId);
-                //Refresh GCM token
+                mFcmId = registrationId;
+                PushManager.getInstance().refreshToken(getBaseContext(), mFcmId);
+                //Refresh FCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if(cleverTapAPI!=null) {
-                    cleverTapAPI.data.pushGcmRegistrationId(mGcmId, true);
+                    cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                 }
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
                     if (mAppInstallation != null && mAppInstallation.isSet()) {
                         AppInstallation appInstallation = mAppInstallation.get();
-                        appInstallation.gcmId = registrationId;
+                        appInstallation.fcmId = registrationId;
                         mAppInstallation.set(appInstallation);
                     }
                     if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
                         if (mInstallUpdatePreference.get().isFirstOpen()) {
                             LoginRequest loginRequest = loginRequestBuilder();
-                            loginRequest.setGcmorapnsid(registrationId);
+                            loginRequest.setFcmorapnsid(registrationId);
                             if (mInstallUpdatePreference.get().isWelcome()) {
                                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                                 installUpdateForMoEngage.setWelcome(false);
                                 mInstallUpdatePreference.set(installUpdateForMoEngage);
                             }
-                            mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                            mHomePresenter.getNewFCMidFromPresenter(loginRequest);
                         } else {
-                            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getGcmId())) {
-                                String mOldGcmId = mUserPreference.get().getGcmId();
-                                if (StringUtil.isNotNullOrEmptyString(mOldGcmId)) {
-                                    if (!mOldGcmId.equalsIgnoreCase(registrationId)) {
+                            if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getFcmId())) {
+                                String mOldFcmId = mUserPreference.get().getFcmId();
+                                if (StringUtil.isNotNullOrEmptyString(mOldFcmId)) {
+                                    if (!mOldFcmId.equalsIgnoreCase(registrationId)) {
                                         LoginRequest loginRequest = loginRequestBuilder();
-                                        loginRequest.setGcmorapnsid(registrationId);
-                                        mHomePresenter.getNewGCMidFromPresenter(loginRequest);
+                                        loginRequest.setFcmorapnsid(registrationId);
+                                        mHomePresenter.getNewFCMidFromPresenter(loginRequest);
                                     }
                                 }
                             }
@@ -2074,7 +2063,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         }
                     }
                 } else {
-                    getGcmId();
+                    getFcmId();
                 }
             }
 

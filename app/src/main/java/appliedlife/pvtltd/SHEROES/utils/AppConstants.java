@@ -14,7 +14,7 @@ public class AppConstants {
     public static final String PLAY_STORE_ID_URL = "market://details?id=";
     public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
     //\b((https?|Https?|ftp)?)(:?)(\/\/?|)(www)[-a-zA-Z0-9+&@#%?=~_|!:,.;/]*[-a-zA-Z0-9+&@#%=~_|]
-    public static final String WEB_LINK_PATTERN_REGEX = "\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    public static final String WEB_LINK_PATTERN_REGEX ="\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
@@ -224,7 +224,9 @@ public class AppConstants {
     public static final int NOT_TIME = 50000;
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
+    //User id's eg: Admin,Champion etc
     public static final int CHAMPION_TYPE_ID = 7;
+    public static final int ADMIN_TYPE_ID = 2;
 
     public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
@@ -347,6 +349,8 @@ public class AppConstants {
     public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
     public static final String END_POINT_URL = "end_point_url";
+    public static final String COLLECTION_VIEW_TYPE = "view_type";
+    public static final String GRID_VIEW_TYPE = "grid";
     public static final String TOOLBAR_TITTE = "toolbar_title";
     public static final String SCREEN_NAME = "screen_name";
 
@@ -389,7 +393,7 @@ public class AppConstants {
     public static final String orgUserType = "organisations_test_user";
     public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";
     public static final String PRIVATE_FOLDER_NAME = "Sheroes";
-    public static final String webstyle = "@font-face {font-family: MyFont;src: url(\"fonts/RobotoSlab-Regular.ttf\")}body{font-family: MyFont !important;background-color:#FFFFFF ;font-size:0.987em ;font-weight:120;color: #4D4D4D ;line-height: 160%;}strong {font-family: MyFont !important;font-size:0.987em ;}span {font-family: MyFont !important;font-size: 0.987em !important;}img{display: inline;height: auto !important;max-width: 100% ;}";
+    public static final String webstyle = "@font-face {font-family: MyFont;src: url(\"fonts/RobotoSlab-Regular.ttf\")}body{font-family: sans-serif !important;background-color:#fafafa ;font-size:0.987em ;font-weight:120;color: #3c3c3c ;line-height: 160%;}strong {font-family: MyFont !important;font-size:0.987em ;}span {font-family: MyFont !important;font-size: 0.987em !important;}img{display: inline;height: auto !important;max-width: 100% ;}";
     public static final String javascriptcode = "<script type=\"text/javascript\" src=\"jquery.js\"></script> <script type=\"text/javascript\" src=\"jquerylazyload.js\"></script> <script type=\"text/javascript\" language=\"javascript\"> /*source: http://www.appelsiini.net/projects/lazyload*/ function initials() { loadVideo(); convertImages(); loadImages(); } function loadImages() { $(\"img.lazy\").lazyload({ effect: \"fadeIn\" }); $(\"img.lazy\").click(function() { image.openImageActivity($(this).attr(\"data-original\")); }); } function loadVideo() { var n, v = document.getElementsByClassName(\"youtube\"); var l = v.length; for (n = 0; n < l; n++) { var iframe = document.createElement(\"iframe\"); iframe.setAttribute(\"src\", \"https://www.youtube.com/embed/\" + v[n].dataset.id + \"?rel=0&fs=1\"); iframe.setAttribute(\"frameborder\", \"0\"); iframe.setAttribute(\"width\", \"100%\"); iframe.setAttribute(\"id\", \"player\"); iframe.setAttribute(\"height\", \"240\"); iframe.setAttribute(\"allowfullscreen\", \"1\"); while (v[n].firstChild) { v[n].removeChild(v[n].firstChild); } v[n].appendChild(iframe); } } function convertImages() { var n, v = document.getElementsByTagName(\"img\"); var l = v.length; for (n = 0; n < l; n++) { v[n].setAttribute(\"data-original\", v[n].src); v[n].setAttribute(\"src\", \"placeholder.png\"); v[n].setAttribute(\"class\", \"lazy\"); } } </script>";
     public static final String VIEW_MORE_TEXT = "View More";
     public static final String APP_NAME = "Sheroes";
@@ -481,4 +485,5 @@ public class AppConstants {
     public static final String STORY_DRAFT = "Draft";
 
 
+    public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
 }

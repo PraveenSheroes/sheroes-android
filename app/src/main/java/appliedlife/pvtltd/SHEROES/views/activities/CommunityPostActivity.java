@@ -1779,8 +1779,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     public void selectImageFromGallery() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200).setFixAspectRatio(true)
-                .start(CommunityPostActivity.this);
+        CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
+        if (mIsPollOptionClicked) {
+            activityBuilder.setFixAspectRatio(true);
+        }else{
+            activityBuilder.setFixAspectRatio(false);
+        }
+        activityBuilder.start(CommunityPostActivity.this);
     }
 
     @OnClick(R.id.camera)
@@ -1797,9 +1802,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public void selectImageFromCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(1200, 1200).setFixAspectRatio(true)
-                .start(CommunityPostActivity.this);
+        CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
+        if (mIsPollOptionClicked) {
+            activityBuilder.setFixAspectRatio(true);
+        }else{
+            activityBuilder.setFixAspectRatio(false);
+        }
+        activityBuilder.start(CommunityPostActivity.this);
     }
 
     @OnClick(R.id.poll_survey)

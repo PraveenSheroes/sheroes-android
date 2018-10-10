@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -12,7 +11,6 @@ import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,16 +27,13 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
@@ -52,16 +47,7 @@ public class BranchDeepLink extends BaseActivity {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
-    }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,11 +58,12 @@ public class BranchDeepLink extends BaseActivity {
         }
         setContentView(R.layout.activity_branch_deeplink);
     }
+
     //region Private Helper methods
     private void routeDeepLink() {
         Branch branch = Branch.getInstance();
         branch.resetUserSession();
-        if(CleverTapHelper.getCleverTapInstance(getApplicationContext())!=null) {
+        if (CleverTapHelper.getCleverTapInstance(getApplicationContext()) != null) {
             branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
                     CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
         }
@@ -94,8 +81,7 @@ public class BranchDeepLink extends BaseActivity {
                 , this.getIntent().getData(), this);
     }
 
-    private  void deepLinkingRedirection()
-    {
+    private void deepLinkingRedirection() {
         // params are the deep linked params associated with the link that the user clicked before showing up
         // params will be empty if no data found
         boolean isShareDeepLink = false;
@@ -110,7 +96,7 @@ public class BranchDeepLink extends BaseActivity {
             String url = sessionParams.has(AppConstants.DEEP_LINK_URL) ? sessionParams.getString(AppConstants.DEEP_LINK_URL) : "";
             String openWebViewFlag = sessionParams.has(AppConstants.OPEN_IN_WEBVIEW) ? sessionParams.getString(AppConstants.OPEN_IN_WEBVIEW) : "";
 
-            if(sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) && sessionParams.has(AppConstants.SHARE_TEXT)){
+            if (sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) && sessionParams.has(AppConstants.SHARE_TEXT)) {
                 shareText = sessionParams.has(AppConstants.SHARE_TEXT) ? sessionParams.getString(AppConstants.SHARE_TEXT) : "";
                 shareImage = sessionParams.has(AppConstants.SHARE_IMAGE) ? sessionParams.getString(AppConstants.SHARE_IMAGE) : "";
                 shareDeepLink = sessionParams.has(AppConstants.SHARE_DEEP_LINK_URL) ? sessionParams.getString(AppConstants.SHARE_DEEP_LINK_URL) : "";
@@ -118,7 +104,7 @@ public class BranchDeepLink extends BaseActivity {
                 shareChannel = sessionParams.has(AppConstants.SHARE_CHANNEL) ? sessionParams.getString(AppConstants.SHARE_CHANNEL) : "";
 
                 isShareDeepLink = true;
-                if(!CommonUtil.isNotEmpty(url) && isShareDeepLink){
+                if (!CommonUtil.isNotEmpty(url) && isShareDeepLink) {
                     Intent intentResult = new Intent();
                     intentResult.putExtra(AppConstants.SHARE_TEXT, shareText);
                     intentResult.putExtra(AppConstants.SHARE_IMAGE, shareImage);
@@ -132,49 +118,56 @@ public class BranchDeepLink extends BaseActivity {
                 }
             }
 
-            if(url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL) || url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL_COM)){
+            if (url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL) || url.equalsIgnoreCase(AppConstants.COLLECTION_NEW_URL_COM)) {
                 String endPointUrl = sessionParams.has(AppConstants.END_POINT_URL) ? sessionParams.getString(AppConstants.END_POINT_URL) : "";
                 String screenName = sessionParams.has(AppConstants.SCREEN_NAME) ? sessionParams.getString(AppConstants.SCREEN_NAME) : "";
-                CollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                String viewType = sessionParams.has(AppConstants.COLLECTION_VIEW_TYPE) ? sessionParams.getString(AppConstants.COLLECTION_VIEW_TYPE) : "";
+
+                if (StringUtil.isNotNullOrEmptyString(viewType)) {
+                    if (viewType.equalsIgnoreCase(AppConstants.GRID_VIEW_TYPE)) { //Redirect to User Collection i.e in Grid
+                        UsersCollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                    }
+                } else {
+                    CollectionActivity.navigateTo(this, endPointUrl, screenName, getScreenName(), screenName, null, 1);
+                }
                 finish();
                 return;
             }
 
-            if(url.equalsIgnoreCase(AppConstants.CREATE_POST_URL) || url.equalsIgnoreCase(AppConstants.CREATE_POST_URL_COM)){
+            if (url.equalsIgnoreCase(AppConstants.CREATE_POST_URL) || url.equalsIgnoreCase(AppConstants.CREATE_POST_URL_COM)) {
                 String id_for_entity = sessionParams.has(AppConstants.ID_FOR_CREATE_POST_ENTITY) ? sessionParams.getString(AppConstants.ID_FOR_CREATE_POST_ENTITY) : "";
                 String entity_name = sessionParams.has(AppConstants.CREATE_POST_ENTITY_NAME) ? sessionParams.getString(AppConstants.CREATE_POST_ENTITY_NAME) : "";
                 int createRequestFor = sessionParams.has(AppConstants.CREATE_POST_REQUEST_FOR) ? sessionParams.getInt(AppConstants.CREATE_POST_REQUEST_FOR) : 0;
                 boolean isMyEntity = sessionParams.has(AppConstants.IS_MY_ENTITY) && sessionParams.getBoolean(AppConstants.IS_MY_ENTITY);
                 String prefillText = sessionParams.has(AppConstants.PREFILL_TEXT) ? sessionParams.getString(AppConstants.PREFILL_TEXT) : "";
-                boolean isChallengeType = sessionParams.has(AppConstants.IS_CHALLENGE_TYPE) &&sessionParams.getBoolean(AppConstants.IS_CHALLENGE_TYPE);
+                boolean isChallengeType = sessionParams.has(AppConstants.IS_CHALLENGE_TYPE) && sessionParams.getBoolean(AppConstants.IS_CHALLENGE_TYPE);
                 String challengeAuthorType = sessionParams.has(AppConstants.CHALLENGE_AUTHOR_TYPE) ? sessionParams.getString(AppConstants.CHALLENGE_AUTHOR_TYPE) : "";
 
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.community = new Community();
                 communityPost.community.name = entity_name;
                 communityPost.body = prefillText;
-                communityPost.isMyPost =isMyEntity;
+                communityPost.isMyPost = isMyEntity;
                 communityPost.createPostRequestFrom = createRequestFor;
-                if(isChallengeType) {
+                if (isChallengeType) {
                     communityPost.isChallengeType = true;
                     communityPost.challengeType = challengeAuthorType;
                     communityPost.challengeHashTag = prefillText;
                     communityPost.challengeId = Integer.parseInt(id_for_entity);
-                }else
-                {
+                } else {
                     communityPost.community.id = Long.parseLong(id_for_entity);
                 }
                 HashMap<String, Object> screenProperties = new EventProperty.Builder()
                         .sourceScreenId(entity_name)
                         .build();
-                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST,  screenProperties,true);
+                CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, screenProperties, true);
                 finish();
                 return;
             }
             if (TextUtils.isEmpty(url)) {
                 startMainActivity();
             } else {
-                if (openWebViewFlag!=null && openWebViewFlag.equalsIgnoreCase("true")) {
+                if (openWebViewFlag != null && openWebViewFlag.equalsIgnoreCase("true")) {
                     Uri urlWebSite = Uri.parse(url);
                     AppUtils.openChromeTabForce(BranchDeepLink.this, urlWebSite);
                     finish();
@@ -207,7 +200,7 @@ public class BranchDeepLink extends BaseActivity {
                 } catch (JSONException e) {
                 }
             }
-            intent.putExtra(AppConstants.IS_SHARE_DEEP_LINK , isShareDeepLink);
+            intent.putExtra(AppConstants.IS_SHARE_DEEP_LINK, isShareDeepLink);
             if (isIntentAvailable(BranchDeepLink.this, intent)) {
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, getScreenName());
                 if (Uri.parse(url).getPath().equals("/home/") && intent.getExtras() != null) {
@@ -221,8 +214,9 @@ public class BranchDeepLink extends BaseActivity {
             startMainActivity();
         }
     }
+
     private void startMainActivity() {
-        if(null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             Intent intent = new Intent(BranchDeepLink.this, HomeActivity.class);
             ActivityCompat.startActivity(BranchDeepLink.this, intent, null);
             finish();

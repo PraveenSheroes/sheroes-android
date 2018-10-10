@@ -208,7 +208,7 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void run() {
                 int tabLayoutWidth = mTabLayout.getWidth();
-                if (tabLayoutWidth < CommonUtil.getWindowWidth(getContext())) {
+                if (getActivity() != null && tabLayoutWidth < CommonUtil.getWindowWidth(getActivity().getApplicationContext())) {
                     mTabLayout.setTabMode(TabLayout.MODE_FIXED);
                     ViewGroup.LayoutParams mParams = mTabLayout.getLayoutParams();
                     mParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -243,7 +243,10 @@ public class HomeFragment extends BaseFragment {
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
+                Fragment activeFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.home_view_pager + ":" + mViewPager.getCurrentItem());
+                if (AppUtils.isFragmentUIActive(activeFragment)) {
+                    ((FeedFragment) activeFragment).scrollToTopInList();
+                }
             }
         });
     }

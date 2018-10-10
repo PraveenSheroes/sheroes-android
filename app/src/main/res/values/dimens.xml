@@ -120,7 +120,7 @@
     <dimen name="user_comment_icon">40dp</dimen>
     <dimen name="dp_size_minus_7">-7dp</dimen>
     <dimen name="communities_icon">66dp</dimen>
-    <dimen name="toolbar_title_size">20sp</dimen>
+    <dimen name="toolbar_title_size">20dp</dimen>
     <dimen name="article_image_height_tmp">200dp</dimen>
     <dimen name="authorPicSize">44dp</dimen>
     <dimen name="mentor_profile_icon">87dp</dimen>
@@ -548,7 +548,7 @@
     <dimen name="user_name_margin">12dp</dimen>
     <dimen name="error_desc_margin">24dp</dimen>
     <dimen name="user_card_compact_with">150dp</dimen>
-    <dimen name="user_card_compact_height">221dp</dimen>
+    <dimen name="user_card_compact_height">225dp</dimen>
     <dimen name="user_card_compact_margin">4dp</dimen>
     <dimen name="user_compact_user_card_corner">3dp</dimen>
     <dimen name="user_compact_user_card_shadow">2dp</dimen>
@@ -566,14 +566,14 @@
     <dimen name="user_compact_card_desc_text">12sp</dimen>
     <dimen name="user_compact_follow_width">134dp</dimen>
     <dimen name="user_compact_follow_height">30dp</dimen>
-    <dimen name="user_compact__follow_margin">8dp</dimen>
+    <dimen name="user_compact_follow_margin">16dp</dimen>
     <dimen name="user_compact_follow_padding">7dp</dimen>
     <dimen name="user_compact_follow_button_text">14sp</dimen>
-    <dimen name="user_flat_card_height">215dp</dimen>
+    <dimen name="user_flat_card_height">223dp</dimen>
     <dimen name="user_flat_card_margin">4dp</dimen>
     <dimen name="user_flat_card_radius">3dp</dimen>
     <dimen name="user_flat_card_shadow">2dp</dimen>
-    <dimen name="user_flat_container_width">150dp</dimen>
+    <dimen name="user_flat_container_width">160dp</dimen>
     <dimen name="user_flat_container_margin_bottom">8dp</dimen>
     <dimen name="user_flat_card_image_container">100dp</dimen>
     <dimen name="user_flat_card_image_conatiner_margin">8dp</dimen>
@@ -593,6 +593,9 @@
     <dimen name="leaderboard_follow_button_height">26dp</dimen>
     <dimen name="leaderboard_follow_button_margin">16dp</dimen>
     <dimen name="user_post_follow_width">74dp</dimen>
+    <dimen name="leaderboard_follow_button_margin_left">8dp</dimen>
+    <dimen name="leaderbaord_follow_text">12sp</dimen>
+    <dimen name="user_post_follow_width">78dp</dimen>
     <dimen name="user_post_follow_height">26dp</dimen>
     <dimen name="user_follow_post_text_size">12sp</dimen>
     <dimen name="leader_board_follow_button_margin_top">8dp</dimen>
@@ -621,7 +624,42 @@
     <dimen name="login_btn_width">144dp</dimen>
     <dimen name="login_btn_height">44dp</dimen>
     <dimen name="login_btn_padding">55dp</dimen>
+    <dimen name="notification_icon_right_padding">10dp</dimen>
+    <dimen name="sheroes_logo_paddingleft">8dp</dimen>
+    <dimen name="sheroes_logo_paddingright">14dp</dimen>
+    <dimen name="sheroes_logo_paddingtop">8dp</dimen>
+    <dimen name="sheroes_logo_paddingbottom">8dp</dimen>
+    <dimen name="sheroes_logo_marginleft">48dp</dimen>
+    <dimen name="sheroes_logo_margintop">8dp</dimen>
+    <dimen name="user_flat_card_container_padding">8dp</dimen>
+    <dimen name="user_compact_card_container_padding">8dp</dimen>
+    <dimen name="user_compact_card_desc_margin_bottom">16dp</dimen>
+    <dimen name="user_card_flat_desc_margin_bottom">16dp</dimen>
+    <dimen name="card_without_radius">0dp</dimen>
+    <dimen name="right_drawer_margin">8dp</dimen>
+    <dimen name="community_explore_button_padding">16dp</dimen>
+    <dimen name="community_explore_button_textsize">14sp</dimen>
+    <dimen name="link_card_marginTop">-2dp</dimen>
+    <dimen name="link_card_title_textsize">16sp</dimen>
+    <dimen name="link_card_source_textsize">9sp</dimen>
+    <dimen name="feed_card_marginbottom">10dp</dimen>
+    <dimen name="right_drawer_community_margin_bottom">52dp</dimen>
+    <dimen name="right_drawer_community_margin_top">16dp</dimen>
+    <dimen name="right_drawer_explore_button_padding">16dp</dimen>
+    <dimen name="post_link_subtitle_marginleft">8dp</dimen>
+    <dimen name="post_link_subtitle_marginright">12dp</dimen>
+    <dimen name="post_link_subtitle_margintop">4dp</dimen>
+    <dimen name="post_link_title_margintop">8dp</dimen>
+    <dimen name="post_link_title_marginleft">8dp</dimen>
+    <dimen name="post_link_title_marginright">12dp</dimen>
+    <dimen name="post_link_title_textsize">16sp</dimen>
+    <dimen name="post_link_subtitle_textsize">12sp</dimen>
+    <dimen name="post_link_subtitle_marginbottom">9dp</dimen>
+    <dimen name="post_link_source_marginLeft">8dp</dimen>
+    <dimen name="post_link_source_marginright">12dp</dimen>
+    <dimen name="post_link_source_marginbottom">9dp</dimen>
+    <dimen name="post_link_source_textsize">9sp</dimen>
 
-
+    <item name="post_link_cardelevation" type="dimen" format="float">0.5dp</item>
 </resources>
 
