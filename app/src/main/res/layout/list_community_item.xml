@@ -1,59 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/community_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="10dp"
+    android:paddingTop="10dp">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/other_community"
+        style="@style/TextView18spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="22dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:textSize="18sp"
-        android:fontFamily="sans-serif"
+        android:text="@string/other_community"
         android:textColor="#89000000"
         android:visibility="gone"
-        android:text="@string/other_community" />
-    
+        vernacular:customTextFontFamily="@string/regular_font" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/other_community">
 
-    <ImageView
-        android:id="@+id/community_pic"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_centerVertical="true"
-        android:src="@drawable/vector_post_as_community_17dp"
-        android:layout_marginLeft="@dimen/dp_size_16"
-        android:layout_marginRight="20dp"/>
+        <ImageView
+            android:id="@+id/community_pic"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="20dp"
+            android:src="@drawable/vector_post_as_community_17dp" />
 
-    <TextView
-        android:id="@+id/community_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/community_pic"
-        android:layout_centerVertical="true"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="normal"
-        android:textColor="#3c3c3c"/>
-    
-    <ImageView
-        android:id="@+id/check"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="@dimen/dp_size_24"
-        android:src="@drawable/vector_check_red_24dp" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/community_name"
+            style="@style/TextView16spMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/community_pic"
+            android:textColor="#3c3c3c"
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/medium_font" />
+
+        <ImageView
+            android:id="@+id/check"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_size_24"
+            android:src="@drawable/vector_check_red_24dp" />
     </RelativeLayout>
 
 </RelativeLayout>

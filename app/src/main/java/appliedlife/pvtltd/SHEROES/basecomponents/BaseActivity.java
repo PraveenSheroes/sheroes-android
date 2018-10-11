@@ -142,6 +142,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
     private boolean isWhatsAppShare;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

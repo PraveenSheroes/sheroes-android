@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/badge_card_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -38,21 +38,21 @@
 
         </FrameLayout>
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/badge_title"
+            style="@style/TextView20spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/header_container"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/badge_title_margin_top"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="@dimen/badge_text_line_space"
             android:textColor="@color/leader_board_dialog_badge_title"
-            android:textSize="@dimen/badge_desc_title_text"
-            tools:text="Magic Pen Badge" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/badge_des_prefix"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_title"
@@ -62,15 +62,15 @@
             android:layout_marginRight="@dimen/badge_desc_margin"
             android:layout_marginStart="@dimen/badge_desc_margin"
             android:layout_marginTop="@dimen/badge_desc_margin_top"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:lineSpacingExtra="@dimen/badge_desc_line_space"
             android:gravity="center_horizontal"
+            android:lineSpacingExtra="@dimen/badge_desc_line_space"
             android:text="@string/yay"
             android:textColor="@color/badge_text"
-            android:textSize="@dimen/badge_desc_text" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/badge_desc"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/badge_des_prefix"
@@ -79,27 +79,26 @@
             android:layout_marginLeft="@dimen/badge_desc_margin"
             android:layout_marginRight="@dimen/badge_desc_margin"
             android:layout_marginStart="@dimen/badge_desc_margin"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="@dimen/badge_desc_line_space"
             android:textColor="@color/badge_text"
-            android:textSize="@dimen/badge_desc_text" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <ImageView
             android:id="@+id/playstore_icon"
             android:layout_width="@dimen/badge_share_playstore_icon_width"
             android:layout_height="@dimen/badge_share_playstore_icon_height"
-            android:layout_marginTop="@dimen/badge_share_playstore_margin_top"
             android:layout_below="@id/badge_desc"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/badge_share_playstore_margin_top"
             android:src="@drawable/ic_playstore" />
 
         <ImageView
             android:layout_width="@dimen/badge_share_sheroes_icon_width"
             android:layout_height="@dimen/badge_share_sheroes_icon_height"
             android:layout_below="@id/playstore_icon"
-            android:layout_marginTop="@dimen/badge_share_sheroes_margin_top"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/badge_share_sheroes_margin_top"
             android:src="@drawable/vector_sheroes_header" />
 
     </RelativeLayout>

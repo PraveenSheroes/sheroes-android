@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/dialog_border"
     android:minWidth="@dimen/dp_size_280"
     android:orientation="vertical">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/title"
+        style="@style/TextView20spMedium"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_size_24"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:lineSpacingExtra="8sp"
-        android:text="Schedule Post?"
+        android:text="@string/schedule_post_title"
         android:textColor="@color/feed_article_label"
-        android:textSize="@dimen/sp_size_20" />
+        vernacular:customTextFontFamily="@string/medium_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/message"
+        style="@style/TextView14spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_24"
         android:layout_marginRight="@dimen/dp_size_24"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="8sp"
         android:textColor="@color/feed_article_label"
-        android:textSize="14sp"
-        tools:text="You are scheduling a post for Health Tips Community to be posted on 11 Feb 2018,03:30 pm." />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_52"
         android:orientation="horizontal">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/ok"
+            style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -45,17 +45,17 @@
             android:layout_gravity="center"
             android:layout_marginEnd="@dimen/dp_size_24"
             android:layout_marginRight="@dimen/dp_size_24"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="bottom|center_horizontal"
             android:minWidth="@dimen/dp_size_45"
             android:padding="@dimen/dp_size_7"
             android:text="@string/ID_OK"
             android:textAllCaps="true"
             android:textColor="@color/footer_icon_text"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/edit"
+            style="@style/TextView14spMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -64,13 +64,12 @@
             android:layout_marginRight="@dimen/dp_size_10"
             android:layout_toLeftOf="@+id/ok"
             android:layout_toStartOf="@+id/ok"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:minWidth="@dimen/dp_size_45"
             android:padding="@dimen/dp_size_7"
             android:text="@string/ID_EDIT"
             android:textAllCaps="true"
             android:textColor="@color/profile_text"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
     </RelativeLayout>
 

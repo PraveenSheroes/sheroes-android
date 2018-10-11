@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -27,29 +28,32 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/comment_relative_time"
+        style="@style/TextView12spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/comment_time_margin_top"
         android:textColor="@color/text_grey"
-        android:textSize="@dimen/comment_time_text" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/author"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/comment_author_name_margin_top"
         android:layout_toEndOf="@id/author_pic_container"
         android:layout_toRightOf="@id/author_pic_container"
         android:textColor="@color/feed_title"
-        android:textSize="@dimen/comment_author_name_text"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/body"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/author"
@@ -57,10 +61,12 @@
         android:layout_toEndOf="@id/author_pic_container"
         android:layout_toRightOf="@id/author_pic_container"
         android:lineSpacingMultiplier="0.9"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <EditText
+    <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
         android:id="@+id/edit_body"
+        style="@style/TextView16spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/author"
@@ -79,8 +85,8 @@
         android:paddingStart="@dimen/comment_body_padding_left"
         android:paddingTop="@dimen/comment_body_padding_vertical"
         android:scrollbars="vertical"
-        android:textSize="16sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customEditTextFontFamily="@string/regular_font" />
 
     <ImageView
         android:id="@+id/delete"
@@ -95,8 +101,9 @@
 
     <!--android:src="@drawable/vector_report_grey_18dp"-->
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/edit"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/body"
@@ -111,9 +118,10 @@
         android:paddingTop="@dimen/comment_edit_padding_vertical"
         android:text="@string/edit"
         android:textColor="@color/text_grey"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <Button
+    <appliedlife.pvtltd.SHEROES.vernacular.FontButton
         android:id="@+id/submit"
         style="@style/Base.Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
@@ -128,7 +136,8 @@
         android:layout_toStartOf="@id/submit"
         android:text="@string/list_comment_submit"
         android:textAllCaps="false"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customButtonFontFamily="@string/medium_font" />
 
     <RelativeLayout
         android:id="@+id/cancel"
@@ -147,7 +156,8 @@
         android:paddingTop="@dimen/list_comment_padding_top"
         android:visibility="gone">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawablePadding="@dimen/list_comment_cancel_drawable_padding"
@@ -156,7 +166,7 @@
             android:paddingRight="@dimen/list_comment_cancel_padding_left"
             android:text="@string/list_comment_cancel"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="@dimen/list_comment_cancel_text" />
+            vernacular:customTextFontFamily="@string/regular_font" />
     </RelativeLayout>
 
 
@@ -178,14 +188,14 @@
             android:visibility="gone">
 
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/spam_comment_menu"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:padding="@dimen/list_comment_spam_menu_padding"
                 android:src="@drawable/vector_menu_dashboard"
-                android:padding="@dimen/list_comment_spam_menu_padding" />
+                android:visibility="gone" />
 
 
             <ImageView
@@ -194,19 +204,19 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/vector_spam_post_message" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_review_description"
+                style="@style/TextView14spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/list_comment_review_desc"
                 android:layout_marginStart="@dimen/list_comment_review_desc"
                 android:layout_toEndOf="@id/spam_icon"
                 android:layout_toRightOf="@id/spam_icon"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/review_desc_line_space"
                 android:text="@string/COMMENT_REVIEW_MESSAGE"
                 android:textColor="@color/pure_black"
-                android:textSize="@dimen/review_desc_text" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
         </RelativeLayout>
 
@@ -215,8 +225,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:drawableRight="@drawable/vector_menu_dashboard"
             android:drawableEnd="@drawable/vector_menu_dashboard"
+            android:drawableRight="@drawable/vector_menu_dashboard"
             android:padding="@dimen/review_article_comment_padding" />
     </LinearLayout>
 

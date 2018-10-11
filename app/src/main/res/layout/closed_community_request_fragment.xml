@@ -1,46 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_closed_community_dialog_header"
+        style="@style/TextView14spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:fontFamily="@string/ID_ROBOTO_BOLD"
+        android:layout_marginTop="@dimen/dp_size_25"
         android:text="@string/ID_COMMUNITY_JOIN_TXT"
         android:textColor="@color/detail_page_text"
-        android:layout_marginTop="@dimen/dp_size_25"
-        android:textSize="@dimen/sp_size_13"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        vernacular:customTextFontFamily="@string/bold_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_closed_community_highly_intrested"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/dp_size_282"
         android:layout_height="@dimen/dp_size_50"
         android:layout_gravity="center"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:gravity="center"
-        android:textColor="@color/blue"
         android:layout_marginTop="@dimen/dp_size_28"
-        android:textSize="@dimen/sp_size_13"
         android:background="@drawable/join_intrest_text_shap"
-        android:text="@string/ID_COMMUNITY_JOIN_REGION1" />
+        android:gravity="center"
+        android:text="@string/ID_COMMUNITY_JOIN_REGION1"
+        android:textColor="@color/blue"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_closed_community_already_member"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/dp_size_282"
         android:layout_height="@dimen/dp_size_50"
         android:layout_gravity="center"
         android:layout_marginBottom="@dimen/dp_size_20"
         android:layout_marginTop="@dimen/dp_size_20"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:gravity="center"
         android:background="@drawable/join_intrest_text_shap"
+        android:gravity="center"
+        android:text="@string/ID_COMMUNITY_JOIN_REGION2"
         android:textColor="@color/blue"
-        android:textSize="@dimen/sp_size_13"
-        android:text="@string/ID_COMMUNITY_JOIN_REGION2" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </LinearLayout>

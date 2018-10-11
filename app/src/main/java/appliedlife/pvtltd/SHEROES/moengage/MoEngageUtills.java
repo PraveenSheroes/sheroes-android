@@ -187,13 +187,13 @@ public class MoEngageUtills {
 
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
-                reactionType = context.getString(R.string.ID_XOXO);
+
                 break;
             case AppConstants.EMOJI_THIRD_REACTION_CONSTANT:
                 reactionType = context.getString(R.string.ID_LIKE);
                 break;
             case AppConstants.EMOJI_FOURTH_REACTION_CONSTANT:
-                reactionType = context.getString(R.string.ID_FACE_PALM);
+
                 break;
         }
         return reactionType;
