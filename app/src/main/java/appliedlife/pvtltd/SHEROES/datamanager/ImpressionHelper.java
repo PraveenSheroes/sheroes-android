@@ -1,18 +1,22 @@
 package appliedlife.pvtltd.SHEROES.datamanager;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 
+import com.f2prateek.rx.preferences2.Preference;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import appliedlife.pvtltd.SHEROES.analytics.SystemInformation;
 import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
+import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -20,8 +24,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 public class ImpressionHelper {
 
     //region private member variables
-    private int minimumVisibleHeightThreshold;
-    private AppUtils mAppUtils;
     private long mLoggedInUser;
     private int startViewId = -1;
     private int endViewId = -1;
@@ -29,54 +31,53 @@ public class ImpressionHelper {
     private boolean lastDirectionDown = true;
     private boolean scrollDirectionChange = false;
     private boolean mIsTopScrolled;
-    private Context mContext;
     private  boolean isLoaderVisible = false;
+    private int viewVisibilityThreshold = 50;
     private ImpressionCallback mImpressionCallback;
 
+    private AppUtils mAppUtils;
+    private Preference<Configuration> mConfiguration;
+
     // ArrayList of view ids that are being considered for tracking.
-    private ArrayList<Integer> currentViewed = new ArrayList<>();
     private ArrayList<Integer> previousViewed = new ArrayList<>();
+    private ArrayList<Integer> currentViewed = new ArrayList<>();
     private List<ImpressionData> finalViewData = new ArrayList<>();
     //endregion
 
-    public ImpressionHelper(Context context, int minVisibilityPercentage, int visibility, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
-        this.minimumVisibleHeightThreshold = minVisibilityPercentage;
+    //region constructor
+    public ImpressionHelper(int visibility, Preference<Configuration> configuration, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
         this.mLoggedInUser = loggedInUserId;
-        this.mContext = context;
         this.mImpressionCallback = impressionCallback;
         isLoaderVisible = (visibility == View.VISIBLE);
+        this.mConfiguration = configuration;
+        init();
     }
 
+    private void init() {
+        //Get the view min Visibility of View from remote config
+      //  viewVisibilityThreshold = new ConfigData().visibilityPercentage;
+      //  if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
+      //      viewVisibilityThreshold = mConfiguration.get().configData.visibilityPercentage;
+      //  }
+    }
+    //endregion
+
+    //region public method
+    /**
+     * Fragment/ Activity is resumed
+     */
     public void onResume() {
         Log.i("Resume", "On Resume");
     }
 
-
+    /**
+     * Fragment/ Activity is paused
+     */
     public void onPause() {
-        //Fragment/ Activity get paused
         Log.i("Pause", "On Pause");
         updateEndTimeOfItems();
-        mImpressionCallback.storeInDatabase(finalViewData);
-    }
-
-    /**
-     * Update the end time for the item on paused
-     */
-    private void updateEndTimeOfItems() {
-        if(finalViewData.size()>0) {
-            int size = finalViewData.size();
-            for (int i = size-1; i >= 0; i--) {
-                ImpressionData trackingData1 = finalViewData.get(i);
-                if (trackingData1.getEndTime() == -1) { //
-                    Log.i("Updating", "End time");
-                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
-                    finalViewData.get(i).setEngagementTime((int) (timeSpent / 1000.0f));
-                }
-            }
-        }
-
+        //mImpressionCallback.storeInDatabase(finalViewData);
     }
 
     /**
@@ -86,9 +87,9 @@ public class ImpressionHelper {
      * @param endPos last visible item on screen
      */
     public void onScrollChange(RecyclerView mFeedRecyclerView, int startPos, int endPos) {
-        if (isLoaderVisible) {
-            return;
-        }
+       // if (isLoaderVisible) {
+       //     return;
+       // }
 
         mIsTopScrolled = (startPos> 0) && startPos < lastPosition;
         lastPosition = startPos;
@@ -105,6 +106,26 @@ public class ImpressionHelper {
         }
     }
 
+    /**
+     * Update the end time for the item on paused
+     */
+    private void updateEndTimeOfItems() {
+        if(finalViewData.size()>0) {
+            int size = finalViewData.size();
+            for (int i = size-1; i >= 0; i--) {
+                ImpressionData trackingData1 = finalViewData.get(i);
+                if (trackingData1.getEndTime() == -1) { //
+                    Log.i("Updating", "End time");
+                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
+                    float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
+                    finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
+                }
+            }
+        }
+    }
+    //endregion
+
+    //region private method
     //Data request for Impression
     private synchronized void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
         Log.i(">>>>Enter event", "start");
@@ -114,7 +135,7 @@ public class ImpressionHelper {
             ImpressionData trackingData = new ImpressionData();
             View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
-            if (getVisibleHeightPercentage(itemView) >= minimumVisibleHeightThreshold) {  //>= 50%
+            if (getVisibleHeightPercentage(itemView) >= viewVisibilityThreshold) {  //Only those views which have visibility >= 50%
                 FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(firstVisibleItemPosition);
                 if(feedDetail ==null) return;
                 trackingData.setStartTime(System.currentTimeMillis());
@@ -123,17 +144,19 @@ public class ImpressionHelper {
                 trackingData.setPostType(feedDetail.getSubType());
                 trackingData.setScreenName(mImpressionCallback.getScreenName());
                 trackingData.setPosition(viewPosition);
+                trackingData.setUserAgent(USER_AGENT.ANDROID.getValue());
                 trackingData.setClientId(String.valueOf(CLIENT.ANDROID.getValue())); //For mobile android
                 trackingData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
                 trackingData.setAppVersion(mAppUtils.getAppVersionName());
-                trackingData.setIpAddress(mAppUtils.getDeviceId()); //Change ip address and all
-                trackingData.setGtId(UUID.randomUUID().toString());
+                trackingData.setDeviceId(mAppUtils.getDeviceId()); //Change ip address and all
+                trackingData.setIpAddress(SystemInformation.getIpAddress());
+                trackingData.setGtid(UUID.randomUUID().toString());
                 if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
                     trackingData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
                 }
 
-                trackingData.setUserId("" + mLoggedInUser);
-                trackingData.setPostId("" + feedDetail.getIdOfEntityOrParticipant());
+                trackingData.setUserId(mLoggedInUser == -1 ? "" : String.valueOf(mLoggedInUser));
+                trackingData.setPostId(feedDetail.getIdOfEntityOrParticipant() != -1 ? String.valueOf(feedDetail.getIdOfEntityOrParticipant()) : "");
                 currentViewed.add(viewPosition);
 
                 int indexInFinalList = checkIfItemInFinal(viewPosition);
@@ -337,8 +360,9 @@ public class ImpressionHelper {
             Log.i("these are greater", "on bottom scroll" + viewPosition);
         }
     }
+    //endregion
 
-
+    //region enum
     //Type of client
     public enum CLIENT {
         WEB(1),
@@ -359,6 +383,18 @@ public class ImpressionHelper {
         }
     }
 
+    //User Agent
+    public enum USER_AGENT {
+        ANDROID("android");
+        private final String value;
+        USER_AGENT(final String newValue) {
+            value = newValue;
+        }
+        public String getValue() {
+            return value;
+        }
+    }
+
     //Impression Event Type
     public enum EVENT_TYPE {
 
@@ -375,5 +411,6 @@ public class ImpressionHelper {
             return value;
         }
     }
+    //endregion
 
 }

@@ -1,10 +1,11 @@
-package appliedlife.pvtltd.SHEROES.presenters;
+package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.content.Context;
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -100,7 +101,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
 
     //Hit the network after frequency expired
-    public void sendImpressionData(final Context context, final UserEvents impression) {
+    public void sendImpressionData(final Context context, final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
 
         Log.i("Impression hit", "Called");
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -108,7 +109,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             return;
         }
         getMvpView().startProgressBar();
-        mSheroesApiEndPoints.updateImpressionData(impression)
+        mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .retry(1) //Retry no of times
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -131,7 +132,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         getMvpView().stopProgressBar();
                         if (null != baseResponse) {
                             Log.i("Impression", "responseee");
-                           // clearDatabase(context, impression);
+                            clearDatabase(context, fetchedRowIndex);
                             // getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
                         }
                     }
@@ -145,16 +146,46 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      * Add the item to Database
      *
      * @param context        context
-     * @param impressionData list of impression events
+     * @param clearImpressionItem list of impression events
      */
-    public void clearDatabase(Context context, final Impression impressionData) {
+    public void clearDatabase(Context context, final List<Impression> clearImpressionItem) {
         final AppDatabase database = AppDatabase.getAppDatabase(context);
         new Thread(new Runnable() {
             @Override
             public void run() {
-             //   database.impressionDataDao().deleteImpression(impressionData);
+                Log.i("Removed the record", "Yes");
+                database.impressionDataDao().deleteImpression(clearImpressionItem);
             }
         }).start();
+    }
+
+
+    //Handle the Request for Network call
+    public void hitNetworkCall(final Context context) {
+
+        synchronized (this) {
+            final AppDatabase database = AppDatabase.getAppDatabase(context);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<Impression> impressionData = database.impressionDataDao().getAll();
+                    List<Impression> rowIndex = new ArrayList<>();
+                    if (impressionData != null && impressionData.size() > 0) {
+                        UserEvents userEvents = new UserEvents();
+                        List<ImpressionData> data = new ArrayList<>();
+                        for (int i = 0; i < impressionData.size(); i++) {
+                            rowIndex.add(impressionData.get(i));
+                            if (impressionData.get(i).getImpressionDataList().size() > 0) {
+                                data.addAll(impressionData.get(i).getImpressionDataList());
+                            }
+                            if (data.size() >= 100) break;
+                        }
+                        userEvents.setUserEvent(data);
+                        sendImpressionData(context, userEvents, rowIndex);
+                    }
+                }
+            }).start();
+        }
     }
 
 }

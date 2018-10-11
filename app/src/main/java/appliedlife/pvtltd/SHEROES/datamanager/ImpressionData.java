@@ -1,41 +1,61 @@
 package appliedlife.pvtltd.SHEROES.datamanager;
 
+import com.google.gson.annotations.SerializedName;
+
 public class ImpressionData {
 
+    @SerializedName("userId")
     private String userId;
 
+    @SerializedName("clientId")
     private String clientId;
 
+    @SerializedName("postId") //*
     private String postId;
 
+    @SerializedName("position")
     private int position;
 
+    @SerializedName("engagementTime")
     private double engagementTime;
 
+    @SerializedName("timestamp") //*
     private long timeStamp;
 
+    @SerializedName("screenName")
     private String screenName;
 
+    @SerializedName("event") //*
     private String event;
 
+    @SerializedName("ipAddress")
     private String ipAddress;
 
+    @SerializedName("deviceId")
     private String deviceId;
 
-    private String gtId;
+    @SerializedName("gtid") //*
+    private String gtid;
 
+    @SerializedName("userAgent")
     private String userAgent ;
 
+    @SerializedName("source")
     private String source;
 
+    @SerializedName("sourceCollection")
     private String sourceCollection;
 
+    @SerializedName("sourceURL")
     private String sourceURL;
 
+    @SerializedName("postType")
     private String postType;
 
+    @SerializedName("appVersion")
     private String appVersion;
 
+    @SerializedName("feedConfigVersion")
     private int feedConfigVersion;
 
     public String getAppVersion() {
@@ -210,12 +230,12 @@ public class ImpressionData {
         this.deviceId = deviceId;
     }
 
-    public String getGtId() {
-        return gtId;
+    public String getGtid() {
+        return gtid;
     }
 
-    public void setGtId(String gtId) {
-        this.gtId = gtId;
+    public void setGtid(String gtid) {
+        this.gtid = gtid;
     }
 
     public String getUserAgent() {

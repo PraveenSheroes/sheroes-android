@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -66,10 +65,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
-import appliedlife.pvtltd.SHEROES.datamanager.Impression;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionHelper;
-import appliedlife.pvtltd.SHEROES.datamanager.UserEvents;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
@@ -101,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
-import appliedlife.pvtltd.SHEROES.presenters.ImpressionPresenter;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -152,7 +149,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     //TODO - make these two from remote config
     private static final int THRESHOLD_MS = 250;
-    private int minimumVisibleHeightThreshold;
+    private int viewVisibilityThreshold;
 
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
@@ -256,13 +253,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         showGifLoader();
 
         if (impressionHelper == null) {
-
-            minimumVisibleHeightThreshold = new ConfigData().visibilityPercentage;
-            if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
-                minimumVisibleHeightThreshold = mConfiguration.get().configData.visibilityPercentage;
-            }
-
-            impressionHelper = new ImpressionHelper(getContext(), gifLoader.getVisibility(), minimumVisibleHeightThreshold, mLoggedInUser, mAppUtils, this);
+            impressionHelper = new ImpressionHelper(gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
         }
 
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
@@ -308,6 +299,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
             isActiveTabFragment = false;
+        }
+
+        if(isVisibleToUser) {
+            Log.i("####", "Visibility Hint");
+            /*if (impressionHelper == null) {
+                impressionHelper = new ImpressionHelper(gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
+            }
+
+            impressionHelper.onResume();*/
         }
     }
 
@@ -676,17 +676,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
-    }
-
-
-    private void getImpressionDatabase() {
-        final AppDatabase database = AppDatabase.getAppDatabase(getContext());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-              // List<ImpressionData> impressionData =  database.impressionDataDao().getAll();
-            }
-        }) .start();
     }
 
     private void setIsLoggedInUser() {
@@ -2159,6 +2148,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Log.i("Hit Network ", "call");
     }
 
+    //Timer in android
     public class OneMinuteCountDownTimer extends CountDownTimer {
 
         public OneMinuteCountDownTimer (long startTime, long interval) {
@@ -2168,33 +2158,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         @Override
         public void onFinish() {
             Log.i("Time Expired", "1 Min/60 sec");
-
-            hitNetworkCall(getContext());
+            impressionPresenter.hitNetworkCall(getContext());
             start();
         }
 
         @Override
         public void onTick(long millisUntilFinished) {
-        }
-    }
-
-    //Handle the Request for Network call
-    private void hitNetworkCall(final Context context) {
-
-        synchronized (this) {
-            final AppDatabase database = AppDatabase.getAppDatabase(context);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    List<Impression> impressionData = database.impressionDataDao().getAll();
-                    if (impressionData != null && impressionData.size()> 0 && impressionData.get(0).getImpressionDataList().size() > 0) {
-
-                        UserEvents userEvents = new UserEvents();
-                        userEvents.setUserEvent(impressionData.get(0).getImpressionDataList());
-                        impressionPresenter.sendImpressionData(context, userEvents);
-                    }
-                }
-            }).start();
         }
     }
 
