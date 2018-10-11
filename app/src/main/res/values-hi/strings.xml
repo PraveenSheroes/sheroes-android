@@ -6,37 +6,29 @@
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
     <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
     <!--Screen related texts -->
-
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
     <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
 
-
-
-
     <!--text names in SHEROES-->
-
-    <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
+    <string name="IDS_PLAY_SERVICE">कृपया अपनी गूगल प्लेस्टोर सर्विस को अपडेट करें</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">कनेक्शन नहीं हो पाया</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">इंटरनेट कनेक्शन या कनेक्टिविटी नहीं है। कृपया अपने कनेक्शन की जांच करे और फिर से प्रयास करें।</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">दोबारा कोशिश करें।</string>
-    <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
-    <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
+    <string name="IDS_INVALID_USER_PASSWORD">अमान्य यूज़र या पासवर्ड</string>
+
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">SHEROES पर आपका ईमेल आईडी पंजीकृत है</string>
-    <string name="ID_TODAY">Today</string>
+    <string name="ID_TODAY">आज</string>
     <string name="ID_PROMPT_PASSWORD">पासवर्ड</string>
     <string name="ID_ACTION_LOG_IN_SHORT">लॉगिन</string>
     <string name="ID_ERROR_INVALID_EMAIL">अमान्य ईमेल आईडी</string>
-    <string name="ID_ERROR_EMAIL">Enter email address</string>
-    <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
-    <string name="ID_POSTED_IN">में पोस्ट हुआ</string>
+    <string name="ID_ERROR_EMAIL">ईमेल आईडी लिखें</string>
+    <string name="ID_ERROR_INVALID_PASSWORD">पासवर्ड डालें</string>
     <string name="ID_ASKED">पूछा गया</string>
     <string name="ID_POSTED_AN">posted an</string>
-    <string name="ID_NEW">NEW</string>
-    <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
+    <string name="ID_NEW">नया</string>
+    <string name="ID_LOCATION_RESULT">माफ़ कीजिये! आपकी लोकेशन आपके इनपुट से नहीं मिलती</string>
     <string name="ID_SPEECH_PROMPT">कुछ कहिये&#8230;</string>
-
-
 
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
@@ -45,67 +37,55 @@
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">नोटिफ़िकेशन</string>
-    <string name="ID_CARRIER">Careers</string>
-    <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
-    <string name="ID_FEED_IMPRESSION">feed</string>
-    <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
-    <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
-    <string name="ID_FOLLOWING_LISTING">Following listing</string>
-    <string name="follower_toolbar_title">People who follow me</string>
-    <string name="following_toolbar_title">People I follow</string>
-    <string name="follower_public_profile_toolbar_title">People who follow her</string>
-    <string name="following_public_profile_toolbar_title">People she follows</string>
+    <string name="follower_toolbar_title">मेरे फॉलोवर्स</string>
+    <string name="following_toolbar_title">जिन्हें मैं फॉलो करती हूँ</string>
+    <string name="follower_public_profile_toolbar_title">इनके फॉलोवर्स</string>
+    <string name="following_public_profile_toolbar_title">जिन्हें ये फॉलो करती हैं </string>
 
     <string name="ID_MENTOR_INSIGHT">सलाहकार का विवरण</string>
-
-
-    <string name="ID_COMMUNITIY">Community</string>
-    <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
+    <string name="ID_COMMUNITIY">कम्यूनिटी </string>
     <string name="ID_GENERIC_ERROR">ओह! कुछ गलत हो गया है। हम कार्यरत हैं। इसे जल्दी से ठीक कर देंगे</string>
-    <string name="ID_UNABLE_TO_COMMENT"> Sorry, unable to comment. Please try again in a few minutes.</string>
-    <string name="ID_UNABLE_TO_EDIT_DELETE"> Sorry unable to edit,delete the comment. Please try again in a few minutes.</string>
-    <string name="ID_SERVER_PROBLEM"> The server encountered an error and could not complete your request.</string>
-    <string name="ID_SEARCH">Search</string>
-    <string name="ID_SEARCH_LOCATION">Search Location</string>
-    <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
-    <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
-    <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
+    <string name="ID_UNABLE_TO_COMMENT">माफ़ करें, कमेंट नहीं हो पाया। कृपया कुछ देर बाद दोबारा कोशिश करे।</string>
+    <string name="ID_UNABLE_TO_EDIT_DELETE">माफ़ करें, कमेंट करने और बदलने में असमर्थ है। कृपया कुछ देर बाद दोबारा कोशिश करे।</string>
+    <string name="ID_SERVER_PROBLEM">सर्वर मे गलती है। आपका अनुरोध पूरा नहीं हो सका।</string>
+    <string name="ID_SEARCH">खोजें</string>
+    <string name="ID_SEARCH_LOCATION">लोकेशन खोजें</string>
     <string name="ID_TRENDING">ट्रेंडिंग</string>
     <string name="ID_CHOOSE_CATEGORY">केटेगरी चुने</string>
     <string name="ID_DONE">हो गया</string>
-    <string name="ID_OK">Ok</string>
-    <string name="ID_CANCEL">Cancel</string>
+    <string name="ID_OK">ठीक है</string>
+    <string name="ID_CANCEL">रद्द करें</string>
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
     <string name="ID_JOIN">जुड़े</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
-    <string name="ID_REQUESTED">Requested</string>
+    <string name="ID_REQUESTED">अनुरोध किया</string>
     <string name="ID_JOINED">जुड़ गए</string>
-    <string name="ID_VIEW">View</string>
-    <string name="ID_APPLIED">Applied</string>
-    <string name="ID_VIEWS">Views</string>
+    <string name="ID_VIEW">देखें</string>
+
+    <string name="ID_VIEWS">ने देखा</string>
     <string name="ID_MIN_READ">मिनट का लेख</string>
     <string name="ID_COMMUNITY_ANNONYMOUS">गुमनाम</string>
-    <string name="ID_WISHTLE">Whistle</string>
-    <string name="ID_LOVE">Love</string>
+
+
     <string name="ID_LIKE">लाइक</string>
     <string name="comment">कमेंट</string>
-    <string name="ID_COMMENTS">Comments</string>
-    <string name="ID_FACE_PALM">Face Palm</string>
-    <string name="ID_XOXO">Xoxo</string>
+
+
+
     <string name="ID_PROFILE">बारे मे</string>
     <string name="ID_PROFILE_POST">प्रोफाइल पोस्ट स्क्रीन</string>
-    <string name="ID_ARTICLE">Articles</string>
+    <string name="ID_ARTICLE">लेख</string>
     <string name="ID_POST">पोस्ट इन रूप में करे:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
-    <string name="ID_MEMBERS">Members</string>
-    <string name="ID_NORMAL_MEMBER">normal member</string>
+    <string name="ID_MEMBERS">सदस्य</string>
+
     <string name="ID_ADMIN">एडमिन</string>
-    <string name="ID_REMOTE">Remote</string>
-    <string name="ID_REMOVE">Remove</string>
-    <string name="ID_INVITE">Invite</string>
+
+    <string name="ID_REMOVE">हटाना</string>
+
     <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">बदले</string>
     <string name="SHARE_PROFILE">प्रोफाइल शेयर करें</string>
@@ -113,17 +93,17 @@
     <string name="ID_DELETE">हटाना</string>
     <string name="ID_APPROVE">मंज़ूर</string>
 
-    <string name="ID_REPORT">Report as spam</string>
+    <string name="ID_REPORT">स्पैम के रूप में रिपोर्ट करें</string>
     <string name="REPORT_SPAM">स्पैम रिपोर्ट</string>
     <string name="report_user">यूज़र को रिपोर्ट करें</string>
     <string name="deactivate_user">निष्क्रिय यूज़र</string>
     <string name="banned_user_device">यूज़र डिवाइस पर प्रतिबंध लगाओ</string>
 
 
-    <string name="ID_REFRESH">Refresh feed</string>
+
     <string name="ID_NO_RESULT_FOUND">कोई परिणाम नहीं मिला, दोबारा क्लिक करें</string>
-    <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
-    <string name="ID_NO_POST">No post yet</string>
+
+    <string name="ID_NO_POST">कोई पोस्ट नहीं है</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">गुमनाम</string>
     <string name="ID_OWNER">मालकिन</string>
@@ -137,7 +117,7 @@
 
     <!--text related setting_dashboard page-->
 
-    <string name="ID_FOLLOWER">Follower</string>
+    <string name="ID_FOLLOWER">फॉलोवर</string>
 
     <string name="PLACEHOLDER_PROFILE_USER_NAME">%1$s %2$s</string>
     <string name="BadgeCounter">+%1$d</string>
@@ -148,35 +128,21 @@
                                                     </div>
                                                     </body>
                                                     </html> ]]></string>
-    <string name="ID_OPEN">Open</string>
-    <string name="ID_CLOSE_PRIVACY"> Close </string>
-    <string name="ID_OPEN_MO">open</string>
-    <string name="ID_CLOSED">closed</string>
-    <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
-    <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>
-    <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
+
+
+
+
+
+    <string name="ID_REPORTED_AS_SPAM">स्पैम के रूप में रिपोर्ट किया गया</string>
     <string name="ID_BACK_PRESS">एप्प से बाहर निकलने के लिए बैक बटन फिर से दबाएं</string>
     <string name="ID_INVITE_WOMEN_FRIEND">दोस्तों को आमंत्रित करें</string>
     <string name="ID_PLAY_STORE_DATA">SHEROES से कनेक्ट हो रहा है&#8230;</string>
-    <string name="ID_LOCATION">Location</string>
-
-    <!-- String related to preferences_dashboard page-->
+    <string name="ID_LOCATION">लोकेशन</string>
 
 
-    <!--string related to setting_deactive account page-->
-    <string name="ID_CLOSE"> CLOSE </string>
-
-    <!--string related to setting_about page-->
+    <string name="ID_CLOSE">बंद हो गया</string>
 
 
-    <!--string related to setting_terms_and_condition page-->
-
-    <!-- String related to setting_preferences_basicdetails page-->
-    <!-- String related to setting_education details  page-->
-    <!--String related to spinnar of setting-->
-
-
-    <!--String related setting_preferences_deactiveaccount page -->
 
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">सवाल पूछे</string>
@@ -184,24 +150,24 @@
     <string name="follow_user">फॉलो</string>
     <string name="following_user">फॉलोइंग</string>
     <!--String Related personal contact details edit page-->
-    <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
-    <string name="ID_LOCATION_HINT">LOCATION</string>
+    <string name="ID_EMAIL_ID_HINT">ईमेल आईडी</string>
+
 
     <!--String Related personal BASIC details page-->
-    <string name="ID_PROFILE_FULL_NAME"><font size="12">FULL NAME</font></string>
-    <string name="ID_RELACTIONSHIP_HINT"><font size="12">RELATIONSHIP STATUS</font></string>
-    <string name="ID_CHILDREN_HINT"><font size="12">NUMBER OF CHILDREN</font></string>
-    <string name="ID_SAVE">SAVE</string>
+    <string name="ID_PROFILE_FULL_NAME"><font size="12">पूरा नाम</font></string>
+    <string name="ID_RELACTIONSHIP_HINT"><font size="12">रिश्ते की स्तिथि</font></string>
+    <string name="ID_CHILDREN_HINT"><font size="12">बच्चों की संख्या</font></string>
+    <string name="ID_SAVE">सेव</string>
     <string name="ID_NEED_TO_BE_REVIEWED">SHEROES समुदाय निर्देशों से संभावित विचलन के कारण आपकी पोस्ट समीक्षा अधीन है। कृपया कुछ समय बाद दोबारा देखें।</string>
     <string name="COMMENT_REVIEW_MESSAGE">SHEROES समुदाय निर्देशों से संभावित विचलन के कारण यह कमेंट समीक्षा अधीन है। कृपया कुछ समय बाद दोबारा देखें।</string>
     <!--String Related personal About_me details page-->
-    <string name="ID_ABOUT_ME"><font size="12">ABOUT ME</font></string>
+    <string name="ID_ABOUT_ME"><font size="12">मेरे बारे में</font></string>
 
     <!--string_related_profile_basic_details_card-->
 
-    <string name="ID_DATE_OF_BIRTH">DATE OF BIRTH</string>
+    <string name="ID_DATE_OF_BIRTH">जन्म तिथि</string>
 
-    <string name="ID_LEAVE">Leave</string>
+    <string name="ID_LEAVE">छोड़ना</string>
     <string name="FEATURE_POST">पोस्ट को फ़ीचर करें</string>
     <string name="UNFEATURE_POST">पोस्ट को फ़ीचर से हटाए</string>
 
@@ -214,7 +180,7 @@
 
     <!--string related welcome page-->
     <string name="login_with_email">ईमेल के साथ लॉगिन करें</string>
-    <string name="ID_FACEBOOK_LONGING">LOGGING IN&#8230;</string>
+    <string name="ID_FACEBOOK_LONGING">लॉगिन हो रहा है&#8230;</string>
     <string name="ID_INFORMATION_WARNING">हम आपकी जानकारी किसी के साथ शेयर नहीं करते हैं।</string>
     <string name="ID_ONLY_FOR_EXISTING_USER">(केवल मौजूदा उपयोगकर्ताओं के लिए)</string>
     <string name="ID_WELCOME_FIRST"> <![CDATA[ <html>
@@ -248,29 +214,29 @@
 
     <!--string relates looking_for-->
 
-    <string name="ID_POPULAR_SKILL">Popular</string>
+    <string name="ID_POPULAR_SKILL">लोकप्रिय</string>
 
 
     <!--string relates interest_in_for-->
 
     <!--close sthring through priyanka-->
 
-    <string name="ID_JOIN_REGION_TXT">I would like to join because..</string>
+    <string name="ID_JOIN_REGION_TXT">मैं शामिल होना चाहती हूं क्योंकि..</string>
     <string name="ID_COMMUNITY_JOIN_TXT">I would like to join because..</string>
-    <string name="ID_COMMUNITY_JOIN_REGION1">I am highly interested in joining this community</string>
-    <string name="ID_COMMUNITY_JOIN_REGION2">I am already a member of this community outside of SHEROES</string>
-    <string name="ID_USER_NAME">User Name</string>
+    <string name="ID_COMMUNITY_JOIN_REGION1">मुझे इस समुदाय में शामिल होने में बहुत दिलचस्पी है</string>
+    <string name="ID_COMMUNITY_JOIN_REGION2">मैं SHEROES के बाहर पहले से ही इस समुदाय की सदस्य हूं</string>
+    <string name="ID_USER_NAME">यूज़र का नाम</string>
     <string name="ID_JUST_NOW">अभी</string>
 
 
     <string name="app_name">SHEROES</string>
-    <string name="ok">DONE</string>
+
 
     <string name="camera">कैमरा</string>
     <!--Work Experience-->
 
-    <string name="married">Married</string>
-    <string name="unmarried">Unmarried</string>
+
+
 
     <string-array name="relationship_status_arr">
         <item>स्थिति का चयन करें</item>
@@ -284,15 +250,15 @@
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_SPEAKER">Speaker</string>
     <string name="ID_SPONSORS">Sponsors</string>
-    <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
-    <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
-    <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>
-    <string name="ID_ONCE_CARD_DETAIL2">from your field and other walks of life.</string>
-    <string name="ID_ONCE_CARD_DETAIL3">Share your everyday achievements and inspire others.</string>
-    <string name="ID_JUST">Just</string>
+    <string name="ID_ONCE_CARD_TITLE">SHEROES फीड में आपका स्वागत है</string>
+    <string name="ID_CIRCLE_SUPPORT">आपके समर्थन का समूह </string>
+    <string name="ID_ONCE_CARD_DETAIL1">प्रभावशाली महिलाओं के साथ जुड़े , नेटवर्क बनाएं और हैंगऑउट करें</string>
+    <string name="ID_ONCE_CARD_DETAIL2">आपके क्षेत्र और जीवन के अन्य क्षेत्रों से।</string>
+    <string name="ID_ONCE_CARD_DETAIL3">अपनी रोजमर्रा की उपलब्धियों को शेयर करें और दूसरों को प्रेरित करें।</string>
+    <string name="ID_JUST">केवल</string>
     <string name="ID_STARTED">Started</string>
 
-    <string name="ID_SIGN_UP_MOBILE_HINT"><font size="12">MOBILE NUMBER</font></string>
+    <string name="ID_SIGN_UP_MOBILE_HINT"><font size="12">मोबाइल नंबर</font></string>
 
     <string name="ID_ICC_MEMBER_TITLE">The Internal Complaints Committee (ICC) is responsible for the investigation and redressal of complaints regarding sexual harassment.</string>
 
@@ -665,7 +631,7 @@
     <string name="city_error_response">शहर के लिए गलत आईडी डाला गया है</string>
     <string name="mobile_response_err">मोबाइल नंबर पहले से ही हमारे पास पंजीकृत/ रेजिस्टरड है</string>
     <string name="add_more_to_bio">Add Bio (Complete your Bio)</string>
-    <string name="tell_us_something_about_yourself_min_60_chars">Tell us something about yourself (min. 60 chars)</string>
+    <string name="tell_us_something_about_yourself_min_60_chars">हमें अपने बारे में कुछ बताएं (न्यूनतम 60 वर्ण)</string>
     <string name="bio_min_char_limit_msg">आगे बढ़ने के लिए कम से कम 60 वर्ण भरें</string>
     <string name="mobile_no_error_msg">अपना मोबाइल नंबर दर्ज करें</string>
     <string name="location_error_msg">कृपया वर्तमान लोकेशन दर्ज करें</string>
@@ -813,4 +779,5 @@
     <string name="my_stories">मेरी कहानियां</string>
     <string name="cropping_fail">काटना विफल:</string>
     <string name="ago">पूर्व</string>
+    <string name="no_q_a">अभी तक कोई प्रo और उo नहीं</string>
 </resources>

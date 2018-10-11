@@ -184,10 +184,7 @@ public class MoEngageUtills {
                 reactionType = MoEngageConstants.LIKE_UN_DO;
                 break;
             case AppConstants.HEART_REACTION_CONSTANT:
-                reactionType = context.getString(R.string.ID_LOVE);
-                break;
-            case AppConstants.EMOJI_FIRST_REACTION_CONSTANT:
-                reactionType = context.getString(R.string.ID_WISHTLE);
+
                 break;
             case AppConstants.EMOJI_SECOND_REACTION_CONSTANT:
                 reactionType = context.getString(R.string.ID_XOXO);

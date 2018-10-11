@@ -264,6 +264,10 @@
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@string/ID_ROBOTO_REGULAR</item>
     </style>
+    <style name="TextView18spLight" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@string/ID_ROBOTO_LIGHT</item>
+    </style>
     <style name="TextView18spMedium" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
         <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>

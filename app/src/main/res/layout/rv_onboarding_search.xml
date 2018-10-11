@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -58,17 +58,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                style="@style/TextView14spMedium"
                 android:id="@+id/tv_location_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/ID_LOCATION_RESULT"
                 android:textColor="@color/dashboard_fed_text"
-                android:textSize="@dimen/sp_size_14"
-                android:visibility="gone" />
+                android:visibility="gone"
+                vernacular:customTextFontFamily="@string/medium_font"/>
         </FrameLayout>
 
     </LinearLayout>

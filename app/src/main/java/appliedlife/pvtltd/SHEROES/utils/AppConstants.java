@@ -486,4 +486,8 @@ public class AppConstants {
 
 
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
+
+
+    public static final String COMMUNITY_JOIN_DIALOG_OPEN = "Open";
+    public static final String COMMUNITY_JOIN_DIALOG_CLOSE = "Close";
 }

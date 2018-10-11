@@ -5,22 +5,18 @@
     <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
     <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
-    <!--Screen related texts -->
 
+    <!--Screen related texts -->
     <string name="ID_NAVIGATION_DRAWER_OPEN">Open navigation drawer</string>
     <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
 
-
-
-
     <!--text names in SHEROES-->
-
     <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">Connectivity Failure</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">No internet connection or connectivity low. Please check your connection and try again.</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">Try again</string>
     <string name="IDS_INVALID_USER_PASSWORD">Invalid user or password</string>
-    <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
+
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">Your Email Id Registered on Sheroes </string>
     <string name="ID_TODAY">Today</string>
@@ -29,49 +25,34 @@
     <string name="ID_ERROR_INVALID_EMAIL">This email address is invalid</string>
     <string name="ID_ERROR_EMAIL">Enter email address</string>
     <string name="ID_ERROR_INVALID_PASSWORD">Enter password</string>
-    <string name="ID_POSTED_IN">posted in</string>
     <string name="ID_ASKED">asked</string>
     <string name="ID_POSTED_AN">posted an</string>
     <string name="ID_NEW">NEW</string>
     <string name="ID_LOCATION_RESULT">Sorry! We could not find a location matching your input.</string>
     <string name="ID_SPEECH_PROMPT">Say something&#8230;</string>
 
-
-
     <!--String related to facebook integration-->
     <string name="ID_FACEBOOK_APP_ID">994271980664614</string>
+
     <!--Fragment classes-->
     <string name="ID_COMMUNITIES">Communities</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notifications</string>
-    <string name="ID_CARRIER">Careers</string>
-    <string name="ID_FEATURED">Featured</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
-    <string name="ID_FEED_IMPRESSION">feed</string>
-    <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
-    <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
-    <string name="ID_FOLLOWING_LISTING">Following listing</string>
     <string name="follower_toolbar_title">People who follow me</string>
     <string name="following_toolbar_title">People I follow</string>
     <string name="follower_public_profile_toolbar_title">People who follow her</string>
     <string name="following_public_profile_toolbar_title">People she follows</string>
 
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
-
-
-
     <string name="ID_COMMUNITIY">Community</string>
-    <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
     <string name="ID_UNABLE_TO_COMMENT"> Sorry, unable to comment. Please try again in a few minutes.</string>
     <string name="ID_UNABLE_TO_EDIT_DELETE"> Sorry unable to edit,delete the comment. Please try again in a few minutes.</string>
     <string name="ID_SERVER_PROBLEM"> The server encountered an error and could not complete your request.</string>
     <string name="ID_SEARCH">Search</string>
     <string name="ID_SEARCH_LOCATION">Search Location</string>
-    <string name="ID_SEARCH_IN_FEED">Communities, Articles &amp; Jobs</string>
-    <string name="ID_SEARCH_IN_COMMUNITIES">Search Communities</string>
-    <string name="ID_SEARCH_IN_JOBS">Search Jobs</string>
     <string name="ID_TRENDING">Trending</string>
     <string name="ID_CHOOSE_CATEGORY">Choose Category</string>
     <string name="ID_DONE">Done</string>
@@ -85,28 +66,27 @@
     <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_VIEW">View</string>
-    <string name="ID_APPLIED">Applied</string>
+
     <string name="ID_VIEWS">Views</string>
     <string name="ID_MIN_READ">min read</string>
     <string name="ID_COMMUNITY_ANNONYMOUS">ANONYMOUS</string>
-    <string name="ID_WISHTLE">Whistle</string>
-    <string name="ID_LOVE">Love</string>
+
+
     <string name="ID_LIKE">Like</string>
     <string name="comment">Comment</string>
-    <string name="ID_COMMENTS">Comments</string>
-    <string name="ID_FACE_PALM">Face Palm</string>
-    <string name="ID_XOXO">Xoxo</string>
+
+
+
     <string name="ID_PROFILE">About</string>
     <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_POST">Post as:</string>
     <string name="ID_POSTED">posted</string>
     <string name="ID_MEMBERS">Members</string>
-    <string name="ID_NORMAL_MEMBER">normal member</string>
+
     <string name="ID_ADMIN">Admin</string>
-    <string name="ID_REMOTE">Remote</string>
     <string name="ID_REMOVE">Remove</string>
-    <string name="ID_INVITE">Invite</string>
+
     <string name="ID_SHARE">Share</string>
     <string name="ID_EDIT">Edit</string>
     <string name="SHARE_PROFILE">Share Profile</string>
@@ -121,9 +101,9 @@
     <string name="banned_user_device">Ban User Device</string>
 
 
-    <string name="ID_REFRESH">Refresh feed</string>
+
     <string name="ID_NO_RESULT_FOUND">No Result found ,Please Click For Try again</string>
-    <string name="ID_FEATURE_COMMUNITY"> We are coming up with new and exciting communities very soon.</string>
+
     <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
@@ -149,35 +129,21 @@
                                                     </div>
                                                     </body>
                                                     </html> ]]></string>
-    <string name="ID_OPEN">Open</string>
-    <string name="ID_CLOSE_PRIVACY"> Close </string>
-    <string name="ID_OPEN_MO">open</string>
-    <string name="ID_CLOSED">closed</string>
-    <string name="ID_FEED_REFRESH"> Your feed has been refreshed.</string>
-    <string name="ID_FEED_ALREADY_REFRESH"> Your feed is already updated.</string>
+
+
+
+
+
     <string name="ID_REPORTED_AS_SPAM">Reported as spam</string>
     <string name="ID_BACK_PRESS">Press back again to exit the app</string>
     <string name="ID_INVITE_WOMEN_FRIEND">Invite Friends</string>
     <string name="ID_PLAY_STORE_DATA">Connecting with SHEROES&#8230;</string>
     <string name="ID_LOCATION">Location</string>
 
-    <!-- String related to preferences_dashboard page-->
 
-
-    <!--string related to setting_deactive account page-->
     <string name="ID_CLOSE"> CLOSE </string>
 
-    <!--string related to setting_about page-->
 
-
-    <!--string related to setting_terms_and_condition page-->
-
-    <!-- String related to setting_preferences_basicdetails page-->
-    <!-- String related to setting_education details  page-->
-    <!--String related to spinnar of setting-->
-
-
-    <!--String related setting_preferences_deactiveaccount page -->
 
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
@@ -186,7 +152,7 @@
     <string name="following_user">Following</string>
     <!--String Related personal contact details edit page-->
     <string name="ID_EMAIL_ID_HINT">EMAIL ID</string>
-    <string name="ID_LOCATION_HINT">LOCATION</string>
+
 
     <!--String Related personal BASIC details page-->
     <string name="ID_PROFILE_FULL_NAME"><font size="12">FULL NAME</font></string>
@@ -264,13 +230,13 @@
 
 
     <string name="app_name">SHEROES</string>
-    <string name="ok">DONE</string>
+
 
     <string name="camera">CAMERA</string>
     <!--Work Experience-->
 
-    <string name="married">Married</string>
-    <string name="unmarried">Unmarried</string>
+
+
 
     <string-array name="relationship_status_arr">
         <item>Select Status</item>
@@ -812,5 +778,6 @@
     <string name="my_stories">My Stories</string>
     <string name="cropping_fail">Cropping failed:</string>
     <string name="ago">ago</string>
+    <string name="no_q_a">No Q&amp;A yet></string>
 
 </resources>
