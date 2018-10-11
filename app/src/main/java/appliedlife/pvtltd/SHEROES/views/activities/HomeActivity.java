@@ -558,8 +558,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            AppUtils.hideKeyboard(mTvUserName, TAG);
-            AnalyticsManager.trackScreenView(getString(R.string.ID_DRAWER_NAVIGATION_COMMUNITIES), getScreenName(), null);
+             if (mNavigationViewRightDrawerWithCommunities.isShown()) {
+                AppUtils.hideKeyboard(mTvUserName, TAG);
+                AnalyticsManager.trackScreenView(getString(R.string.RightNavigationDrawer), getScreenName(), null);
+            }
+        } else if(mDrawer.isDrawerOpen(GravityCompat.START)) {
+            if (mNavigationViewLeftDrawer.isShown()) {
+                AnalyticsManager.trackScreenView(getString(R.string.LeftNavigationDrawer), getScreenName(), null);
+            }
         }
     }
 

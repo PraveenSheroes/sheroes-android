@@ -142,23 +142,19 @@ public class MaleErrorDialog extends BaseDialogFragment {
 
     @OnClick(R.id.tv_share_sheroes_app)
     public void tvShareSheroesAppClick() {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, mSharedText);
+        HashMap<String, Object> properties = new EventProperty.Builder().build();
         try {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType(AppConstants.SHARE_MENU_TYPE);
             intent.setPackage(AppConstants.WHATS_APP);
-            intent.putExtra(Intent.EXTRA_TEXT, mSharedText);
             startActivity(intent);
-            HashMap<String, Object> properties = new EventProperty.Builder().build();
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
-            AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
         } catch (Exception e) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType(AppConstants.SHARE_MENU_TYPE);
-            intent.putExtra(Intent.EXTRA_TEXT, mSharedText);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-            HashMap<String, Object> properties = new EventProperty.Builder().build();
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.SHARE_CHOOSER);
-            AnalyticsManager.trackEvent(Event.POST_SHARED, SCREEN_LABEL, properties);
+        } finally {
+            AnalyticsManager.trackEvent(Event.APP_SHARED, SCREEN_LABEL, properties);
         }
     }
 
