@@ -92,8 +92,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
-import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -350,11 +350,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleManager.setLocale(base));
     }
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         LocaleManager.setLocale(this);
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -407,7 +409,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             if (!mInstallUpdatePreference.get().isOnBoardingSkipped()) {
                 Branch branch = Branch.getInstance();
                 branch.resetUserSession();
-                if(CleverTapHelper.getCleverTapInstance(getApplicationContext())!=null) {
+                if (CleverTapHelper.getCleverTapInstance(getApplicationContext()) != null) {
                     branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
                             CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
                 }
@@ -464,8 +466,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    public void refreshHomeViews()
-    {
+    public void refreshHomeViews() {
         initHomeViewPagerAndTabs();
         mTvHome.setText(R.string.home_label);
         mTvCommunities.setText(R.string.ID_COMMUNITIES);
@@ -651,7 +652,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     //Refresh the feed after clicking the Sheroes logo and home button
-    @OnClick({R.id.tv_home,R.id.ic_sheroes})
+    @OnClick({R.id.tv_home, R.id.ic_sheroes})
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
@@ -1167,18 +1168,18 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         resetHamburgerSelectedItems();
         if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
-        } else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
             Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
             if (parcelable != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
                 invalidatePostItem(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
 
             }
-        }else if(resultCode == AppConstants.REQUEST_CODE_FOR_USER_LISTING)  {
+        } else if (resultCode == AppConstants.REQUEST_CODE_FOR_USER_LISTING) {
             Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
             if (parcelable != null) {
                 List<FeedDetail> userSolrObj = Parcels.unwrap(parcelable);
-                for(int i =0; i<userSolrObj.size(); i++) {
+                for (int i = 0; i < userSolrObj.size(); i++) {
                     FeedDetail userSolrObj1 = userSolrObj.get(i);
                     invalidatePostItem(userSolrObj1, userSolrObj1.getIdOfEntityOrParticipant());
                 }
@@ -1263,9 +1264,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
-                    //TODO:: Change to commented method
-                  //  writeAStory();
-                    showSelectLanguageOption();
+                    writeAStory();
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL)) {
@@ -1308,13 +1307,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     //endregion
 
     // region Private methods
-    private void openArticleFragment(Intent intent)
-    {
+    private void openArticleFragment(Intent intent) {
         if (intent.hasExtra(AppConstants.ARTICLE_CATEGORY_ID)) {
             long categoryId = intent.getLongExtra(AppConstants.ARTICLE_CATEGORY_ID, -1);
             if (categoryId > -1) {
                 setArticleCategoryFilterValues(categoryId);
-                if(StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
+                if (StringUtil.isNotEmptyCollection(mArticleCategoryItemList)) {
                     articleCategorySelected();
                 }
             }
@@ -2020,7 +2018,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 PushManager.getInstance().refreshToken(getBaseContext(), mFcmId);
                 //Refresh FCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
-                if(cleverTapAPI!=null) {
+                if (cleverTapAPI != null) {
                     cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                 }
                 if (StringUtil.isNotNullOrEmptyString(registrationId)) {
