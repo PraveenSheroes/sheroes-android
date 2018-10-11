@@ -256,8 +256,8 @@ public class ImpressionHelper {
                 if (trackingData1.getEndTime() == -1 && id == trackingData1.getViewId()) { //
                     Log.i("Updating", "End time" + id);
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
-                    finalViewData.get(i).setEngagementTime((int) (timeSpent / 1000.0f));
+                    double timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
+                    finalViewData.get(i).setEngagementTime((timeSpent / 1000.0f));
                     break;
                 }
             }

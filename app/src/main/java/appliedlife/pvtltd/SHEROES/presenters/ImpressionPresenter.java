@@ -17,9 +17,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
 import appliedlife.pvtltd.SHEROES.datamanager.Impression;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionQueryData;
 import appliedlife.pvtltd.SHEROES.datamanager.UserEvents;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import io.reactivex.Observable;
@@ -58,9 +56,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             @Override
             public void run() {
                 Impression impression = new Impression();
-                UserEvents userEvents = new UserEvents();
-                userEvents.setUserEvent(impressionData);
-                impression.setImpressionData(userEvents);
+                //UserEvents userEvents = new UserEvents();
+                //userEvents.setUserEvent(impressionData);
+                impression.setImpressionDataList(impressionData);//setImpressionData(userEvents);
 
                 database.impressionDataDao().insert(impression);
             }
@@ -80,7 +78,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 }).filter(new Predicate<ImpressionData>() {
             @Override
             public boolean test(ImpressionData impressionData)  {
-                return impressionData.getEngagementTime() > 0.25; //Todo - remove this time
+                return impressionData.getEngagementTime() >= 0.25; //Todo - declare in congig var, remove this time
             }
         }).toList().subscribe(new DisposableSingleObserver<List<ImpressionData>>() {
             @Override

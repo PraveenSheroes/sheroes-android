@@ -69,7 +69,6 @@ import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
 import appliedlife.pvtltd.SHEROES.datamanager.Impression;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionHelper;
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionQueryData;
 import appliedlife.pvtltd.SHEROES.datamanager.UserEvents;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
@@ -89,7 +88,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -2185,16 +2183,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         synchronized (this) {
             final AppDatabase database = AppDatabase.getAppDatabase(context);
-            final UserEventsContainer userEventsContainer = new UserEventsContainer();
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Impression impressionData = database.impressionDataDao().getAll();
-                    if (impressionData != null && impressionData.getImpressionData().getUserEvent().size() > 0) {
-                      // userEventsContainer.setUserEvent(impressionData);
+                    List<Impression> impressionData = database.impressionDataDao().getAll();
+                    if (impressionData != null && impressionData.size()> 0 && impressionData.get(0).getImpressionDataList().size() > 0) {
 
                         UserEvents userEvents = new UserEvents();
-                        userEvents.setUserEvent(impressionData.getImpressionData().getUserEvent());
+                        userEvents.setUserEvent(impressionData.get(0).getImpressionDataList());
                         impressionPresenter.sendImpressionData(context, userEvents);
                     }
                 }

@@ -7,6 +7,8 @@ import android.arch.persistence.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 
 @Entity(tableName = "impression")
 public class Impression {
@@ -16,14 +18,15 @@ public class Impression {
 
     @ColumnInfo(name = "impressionsData")
     @TypeConverters(RoomJsonConverter.class)
-    private UserEvents impressionData;
+    @SerializedName("userEvents")
+    private List<ImpressionData> impressionDataList = null;
 
-    public UserEvents getImpressionData() {
-        return impressionData;
+    public List<ImpressionData> getImpressionDataList() {
+        return impressionDataList;
     }
 
-    public void setImpressionData(UserEvents impressionData) {
-        this.impressionData = impressionData;
+    public void setImpressionDataList(List<ImpressionData> impressionDataList) {
+        this.impressionDataList = impressionDataList;
     }
 
     public int getIndex() {
