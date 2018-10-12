@@ -7,13 +7,15 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
+import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
+
 @Dao
 public interface ImpressionDataDao {
 
     @Query("SELECT * FROM impression")
     List<Impression> getAll();
 
-    @Insert
+    @Insert(onConflict = REPLACE)
     void insert(Impression impression);
 
     @Delete

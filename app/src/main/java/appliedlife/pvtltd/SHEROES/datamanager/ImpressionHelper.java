@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import appliedlife.pvtltd.SHEROES.analytics.SystemInformation;
 import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -75,14 +74,14 @@ public class ImpressionHelper {
      * Fragment/ Activity is resumed
      */
     public void onResume() {
-        Log.i("###IH-Resume", "On Resume");
+       // Log.i("###IH-Resume", "On Resume");
     }
 
     /**
      * Fragment/ Activity is paused
      */
     public void onPause() {
-        Log.i("###IH-Pause", "On Pause");
+        //Log.i("###IH-Pause", "On Pause");
         updateEndTimeOfItems();
         mImpressionCallback.storeInDatabase(finalViewData);
     }
@@ -98,45 +97,34 @@ public class ImpressionHelper {
        //     return;
        // }
 
-        if (!isSameView(startPos, endPos)) {
-            startViewId = startPos;
-            endViewId = endPos;
-
-            mIsTopScrolled = (startPos> 0) && startPos < lastPosition;
-
-            if (lastPosition < startPos) {
-                isScrollUp = false;
-                isScrollDown = true;
-                Log.i("###IH-SCROLLING DOWN", "TRUE");
-            } else if (lastPosition > startPos) {
-                isScrollUp = true;
-                isScrollDown = false;
-                Log.i("###IH-SCROLLING UP", "TRUE");
-            }
-            lastPosition=startPos;
-
-            if(isScrollUp) {
-                directionId = 1;
-            } else if(isScrollDown) {
-                directionId = 2;
-            }
-
-            //lastPosition = startPos;
-            if(lastDirectionId!= -1 && lastDirectionId!= directionId) {
-                scrollDirectionChange = true;
-            }
-
-            lastDirectionId = directionId;
-
-           // scrollDirectionChange = lastDirectionDown != mIsTopScrolled;
-            lastDirectionDown = mIsTopScrolled;
-
-            analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
-        } else if(scrollDirectionChange) {
+       if(scrollDirectionChange) {
             scrollDirectionChange = false;
-            Log.i("###IH-Direction", "Changed");
+            //Log.i("###IH-Direction", "Changed");
             storeChunks();
-        }
+        } else {
+           startViewId = startPos;
+           endViewId = endPos;
+
+           mIsTopScrolled = (startPos > 0) && startPos < lastPosition;
+
+           if (startPos > 0 && lastPosition < startPos) {
+             //  Log.i("###IH-SCROLLING DOWN", "TRUE");
+               directionId = 1;
+           } else if (lastPosition > startPos) {
+             //  Log.i("###IH-SCROLLING UP", "TRUE");
+               directionId = 2;
+           }
+
+           lastPosition = startPos;
+           if(lastDirectionId!= -1 && lastDirectionId!= directionId) {
+               scrollDirectionChange = true;
+           }
+
+           lastDirectionId = directionId;
+           lastDirectionDown = mIsTopScrolled;
+
+           analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
+       }
     }
 
     /**
@@ -148,7 +136,8 @@ public class ImpressionHelper {
             for (int i = size-1; i >= 0; i--) {
                 ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getEndTime() == -1) { //
-                    Log.i("###IH-Updating", "End time");
+                    Log.i("Screen Exit", "Update End time for all visible");
+
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
@@ -161,7 +150,7 @@ public class ImpressionHelper {
     //region private method
     //Data request for Impression
     private synchronized void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
-        Log.i(">>>>###IH-Enter event", "start");
+       // Log.i(">>>>###IH-Enter event", "start");
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         // Analyze all the views
         for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
@@ -176,6 +165,7 @@ public class ImpressionHelper {
                 impressionData.setViewId(viewPosition);
                 impressionData.setPostType(feedDetail.getSubType());
                 if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
+                    //Add position in list
                     //trackingData.setPosition();
                 }
                 //impressionData.setSourceTab(mImpressionProperty.getCommunityTab()); //with latest 1
@@ -203,22 +193,21 @@ public class ImpressionHelper {
                 int indexInFinalList = checkIfItemInFinal(viewPosition);
                 if (indexInFinalList == -1) { //new item add it in final list
                     finalViewData.add(impressionData);
-                    Log.d("###IH-New Item", "::" + viewPosition);
-                } else {
-                    if (mIsTopScrolled) {
-                        Log.d("###IH-top scroll", "happen ::" + viewPosition);
-                        addNewEntry(viewPosition, impressionData);
-                    }
+                    Log.d("@@@New Enter", "::" + viewPosition);
+                } else if (mIsTopScrolled) {
+                    mIsTopScrolled = false;
+                   // Log.d("###IH-top scroll", "happen ::" + viewPosition);
+                    addNewEntry(viewPosition, impressionData);
                 }
             }
 
             if (previousViewed.size() > 0) { //Compare if any item was present , now not in the list
                 for (int i = 0; i < previousViewed.size(); i++) {
                     int id = previousViewed.get(i);
-                    if (!checkIfItemInCurrent(id)) {
+                    if (!currentViewed.contains(id)) {
                         updateEndTimeIfItemNotExist(id);
                     } else {
-                        Log.i("###IH-Still visibile", "In current" + id);
+                      //  Log.i("###IH-Still visibile", "In current" + id);
                     }
                 }
                 previousViewed.clear();
@@ -233,27 +222,27 @@ public class ImpressionHelper {
         previousViewed.addAll(currentViewed);
         currentViewed.clear();
 
-        synchronized (this) {
+       /* synchronized (this) {
             Log.i("######", "#############################");
             for (int i = 0; i < finalViewData.size(); i++) {
                 float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
                 Log.d("###IH-", "Id> " + finalViewData.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
             }
             Log.i("######", "#############################");
-        }
+        }*/
     }
 
     private void storeChunks() {
         int index = getLastIndexOfUpdatedItem();
         if (index > -1) {
             List<ImpressionData> forDb = finalViewData.subList(0, index+1);
-            Log.i("###IH-", "###Added to db");
+            Log.i("@@@DB", "###Added to db");
             mImpressionCallback.storeInDatabase(forDb);
 
             if (finalViewData.size() > index+1) {
                 finalViewData = finalViewData.subList(index+1 , finalViewData.size());
             }
-            Log.i("###IH-Final list", ":"+finalViewData.size());
+          //  Log.i("###IH-Final list", ":"+finalViewData.size());
             // mImpressionCallback.onNetworkCall();
         }
     }
@@ -294,22 +283,6 @@ public class ImpressionHelper {
         return ((visibleHeight / height) * 100);
     }
 
-    /**
-     * Check if the view is visible in Current visible items
-     *
-     * @param itemPosition position of view
-     * @return true if item is present in current visible item list
-     */
-    private boolean checkIfItemInCurrent(int itemPosition) {
-       /* for (int i = 0; i < currentViewed.size(); i++) {
-            int viewPosition = currentViewed.get(i);
-            if (viewPosition == itemPosition) {
-                return true;
-            }
-        }
-        return false;*/
-        return currentViewed.contains(itemPosition);
-    }
 
     /**
      * Update the end time of the view which are not visible now or visibility percentage in below the minVisiblePercentage
@@ -322,10 +295,11 @@ public class ImpressionHelper {
             for (int i = size-1; i >= 0; i--) {
                 ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getEndTime() == -1 && id == trackingData1.getViewId()) { //
-                    Log.i("###IH-Updating", "End time" + id);
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     double timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
-                    finalViewData.get(i).setEngagementTime((timeSpent / 1000.0f));
+                    finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
+
+                    Log.i("@@@Screen Exit ", +id +"End time" + timeSpent / 1000.0f);
                     break;
                 }
             }
@@ -383,12 +357,12 @@ public class ImpressionHelper {
         }
 
         if (viewId != -1 && viewId > viewPosition) {
-            Log.i("###IH-add lesser value", "on top scroll");
+            //Log.i("###IH-add lesser value", "on top scroll");
+            Log.d("New Enter", "::" + viewPosition);
             finalViewData.add(impressionData);
-            currentViewed.add(viewId);
-        } else {
-            Log.i("###IH-these are greater", "on top scroll" + viewPosition);
-        }
+        } //else {
+           // Log.i("###IH-these are greater", "on top scroll" + viewPosition);
+        //}
     }
     //endregion
 

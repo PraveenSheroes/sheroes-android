@@ -297,7 +297,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
 
         if(isVisibleToUser) {
-            Log.i("####", "Visibility Hint");
+           // Log.i("####", "Visibility Hint");
             /*if (impressionHelper == null) {
                 impressionHelper = new ImpressionHelper(gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
             }*/
@@ -419,7 +419,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onImpressionResponse(boolean isSuccessFul) {
-        Log.i("Impression", "tracking response");
+       // Log.i("Impression", "tracking response");
     }
 
     @Override
@@ -632,20 +632,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                    //Scroll view visibility and duration
-
-                    if (countDownTimer == null) {
-                        countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
-                        countDownTimer.start();
-                    }
-
-                    int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
-                    int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-
-                    impressionHelper.onScrollChange(recyclerView, startPos, endPos);
-                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
                     lastScrollingEndTime = System.currentTimeMillis();
                 }
             }
@@ -653,6 +640,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+                //Scroll view visibility and duration
+                if (countDownTimer == null) {
+                    countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
+                    countDownTimer.start();
+                }
+
+                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+
+                impressionHelper.onScrollChange(recyclerView, startPos, endPos);
+
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();

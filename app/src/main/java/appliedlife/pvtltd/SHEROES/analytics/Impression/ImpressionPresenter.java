@@ -103,7 +103,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         }
-        Log.i("Impression hit", "Called");
+       // Log.i("Impression hit", "Called");
         getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .retry(1) //Retry no of times
@@ -127,7 +127,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     public void onNext(BaseResponse baseResponse) {
                         getMvpView().stopProgressBar();
                         if (null != baseResponse) {
-                            Log.i("Impression", "responseee");
+                            //Log.i("Impression", "responseee");
                             clearDatabase(context, fetchedRowIndex);
                             // getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
                         }
@@ -149,7 +149,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.i("Removed the record", "Yes");
+               // Log.i("Removed the record", "Yes");
                 database.impressionDataDao().deleteImpression(clearImpressionItem);
             }
         }).start();
@@ -178,7 +178,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         userEvents.setUserEvent(data);
                         sendImpressionData(context, userEvents, rowIndex);
                     } else {
-                        Log.i("###Impression", "No Record Found");
+                      //  Log.i("###Impression", "No Record Found");
                     }
                 }
             }).start();
