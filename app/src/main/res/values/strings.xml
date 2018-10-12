@@ -650,4 +650,13 @@
         <item quantity="other">mins</item>
     </plurals>
     <string name="challenge_gratification_share_text">Yay! I just completed the # %1$s challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: %2$s</string>
+    <string name="edit_story">Edit a Story</string>
+    <string name="add_image">Add Image</string>
+    <string name="post_anyway">Post Anyway</string>
+    <string name="story_title">Story Title</string>
+    <string name="begin_story_here">Begin your story here&#8230;</string>
+    <string name="upload_cover_photo">Upload cover photo (Optional)</string>
+    <string name="add_cover_photo">Add cover photo</string>
+    <string name="add_min_tag">(Add minimum 1 tag to post a story)</string>
+    <string name="share_via_social_media">Share via social media</string>
 </resources>

@@ -337,7 +337,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         if (article.getIdOfEntityOrParticipant() > 0) {
             mIdOfEntityOrParticipantArticle = article.getIdOfEntityOrParticipant();
         }
-        getSupportActionBar().setTitle("Edit a Story");
+        getSupportActionBar().setTitle(R.string.edit_story);
         mEditorFragment.setContent(article.getDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
         if (StringUtil.isNotEmptyCollection(mArticleSolrObj.getTag_ids())) {
@@ -415,13 +415,13 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
                     builder.setTitle(R.string.dialog_title_image);
                     builder.setMessage(R.string.dialog_image);
-                    builder.setNegativeButton("Add Image", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.add_image, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
                         }
                     });
-                    builder.setPositiveButton("Post Anyway", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.post_anyway, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -519,7 +519,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                         }
                         mArticleSubmissionPresenter.uploadFile(mEncodeImageUrl, this);
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.cropping_fail+" " + result.getError(), Toast.LENGTH_LONG).show();
                     }
 
                     break;
@@ -540,9 +540,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message = "Story Title";
+        String message = getString(R.string.story_title);
         mEditorFragment.setTitlePlaceholder(message);
-        String hintText = "Begin your story here...";
+        String hintText = getString(R.string.begin_story_here);
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
         }
@@ -776,7 +776,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                 Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
             } else {
-                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
