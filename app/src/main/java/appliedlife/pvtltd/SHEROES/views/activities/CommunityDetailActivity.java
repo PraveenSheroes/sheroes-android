@@ -120,7 +120,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         WEB("web"),
         HTML("html"),
         WEB_CUSTOM_TAB("web_custom_tab"),
-        FRAGMENT("mSelectLanguageDialog");
+        FRAGMENT("fragment");
 
         public String tabType;
         private String mCommS;

@@ -585,6 +585,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         if (mArticleSolrObj != null) {
             builder.title(mArticleSolrObj.getNameOrTitle())
                     .id(Long.toString(mArticleSolrObj.getEntityOrParticipantId()))
+                    .postId(String.valueOf(mArticleSolrObj == null ? mArticleId : (int) mArticleSolrObj.getIdOfEntityOrParticipant()))  //this is articleID
                     .streamType(mArticleSolrObj.getStreamType());
 
         }
@@ -679,7 +680,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 new EventProperty.Builder()
                         .id(Long.toString(comment.getId()))
                         .postType(getStreamType())
-                        .postId(Long.toString(comment.getEntityId()))
+                        .postId(Long.toString(comment.getEntityId())) //todo - recheck
                         .communityId(comment.getCommunityId())
                         .body(comment.getComment())
                         .build();

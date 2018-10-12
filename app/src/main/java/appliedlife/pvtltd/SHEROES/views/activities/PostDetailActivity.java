@@ -1015,6 +1015,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
             builder.title(feedDetail.getNameOrTitle())
                     .communityId(communityId)
+                    .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                     .id(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                     .streamType(feedDetail.getStreamType());
         }
