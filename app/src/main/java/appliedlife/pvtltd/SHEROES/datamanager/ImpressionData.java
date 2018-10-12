@@ -40,8 +40,11 @@ public class ImpressionData {
     @SerializedName("userAgent")
     private String userAgent ;
 
-    @SerializedName("source")
+    @SerializedName("sourceScreen")
     private String source;
+
+    @SerializedName("sourceTab")
+    private String sourceTab;
 
     @SerializedName("sourceCollection")
     private String sourceCollection;
@@ -57,6 +60,12 @@ public class ImpressionData {
 
     @SerializedName("feedConfigVersion")
     private int feedConfigVersion;
+
+    @SerializedName("configVersion")
+    private String configVersion;
+
+    @SerializedName("configType")
+    private String configType;
 
     public String getAppVersion() {
         return appVersion;
@@ -244,5 +253,29 @@ public class ImpressionData {
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
+    }
+
+    public String getConfigVersion() {
+        return configVersion;
+    }
+
+    public void setConfigVersion(String configVersion) {
+        this.configVersion = configVersion;
+    }
+
+    public String getConfigType() {
+        return configType;
+    }
+
+    public void setConfigType(String configType) {
+        this.configType = configType;
+    }
+
+    public String getSourceTab() {
+        return sourceTab;
+    }
+
+    public void setSourceTab(String sourceTab) {
+        this.sourceTab = sourceTab;
     }
 }

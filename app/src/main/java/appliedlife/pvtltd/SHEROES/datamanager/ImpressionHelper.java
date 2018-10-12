@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import appliedlife.pvtltd.SHEROES.analytics.SystemInformation;
 import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
@@ -30,6 +31,11 @@ public class ImpressionHelper {
     private int lastPosition = -1;
     private boolean lastDirectionDown = true;
     private boolean scrollDirectionChange = false;
+
+    private boolean isScrollUp = false;
+    private boolean isScrollDown = false;
+    private int directionId = -1;
+    private int lastDirectionId = -1;
     private boolean mIsTopScrolled;
     private  boolean isLoaderVisible = false;
     private int viewVisibilityThreshold = 50;
@@ -91,18 +97,44 @@ public class ImpressionHelper {
        //     return;
        // }
 
-        mIsTopScrolled = (startPos> 0) && startPos < lastPosition;
-        lastPosition = startPos;
-        scrollDirectionChange = lastDirectionDown != mIsTopScrolled;
-        lastDirectionDown = mIsTopScrolled;
-
         if (!isSameView(startPos, endPos)) {
             startViewId = startPos;
             endViewId = endPos;
 
+            mIsTopScrolled = (startPos> 0) && startPos < lastPosition;
+
+            if (lastPosition < startPos) {
+                isScrollUp = false;
+                isScrollDown = true;
+                Log.i("SCROLLING DOWN", "TRUE");
+            } else if (lastPosition > startPos) {
+                isScrollUp = true;
+                isScrollDown = false;
+                Log.i("SCROLLING UP", "TRUE");
+            }
+            lastPosition=startPos;
+
+            if(isScrollUp) {
+                directionId = 1;
+            } else if(isScrollDown) {
+                directionId = 2;
+            }
+
+            //lastPosition = startPos;
+            if(lastDirectionId!= -1 && lastDirectionId!= directionId) {
+                scrollDirectionChange = true;
+            }
+
+            lastDirectionId = directionId;
+
+           // scrollDirectionChange = lastDirectionDown != mIsTopScrolled;
+            lastDirectionDown = mIsTopScrolled;
+
             analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
         } else if(scrollDirectionChange) {
-            Log.i("Direction", "Changed");
+            scrollDirectionChange = false;
+            Log.i("###Direction", "Changed");
+            storeChunks();
         }
     }
 
@@ -142,14 +174,19 @@ public class ImpressionHelper {
                 trackingData.setTimeStamp(System.currentTimeMillis());
                 trackingData.setViewId(viewPosition);
                 trackingData.setPostType(feedDetail.getSubType());
+                if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
+                    //trackingData.setPosition();
+                }
                 trackingData.setScreenName(mImpressionCallback.getScreenName());
                 trackingData.setPosition(viewPosition);
-                trackingData.setUserAgent(USER_AGENT.ANDROID.getValue());
+                trackingData.setUserAgent(recyclerView.getContext()!=null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
                 trackingData.setClientId(String.valueOf(CLIENT.ANDROID.getValue())); //For mobile android
                 trackingData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
                 trackingData.setAppVersion(mAppUtils.getAppVersionName());
                 trackingData.setDeviceId(mAppUtils.getDeviceId()); //Change ip address and all
                 trackingData.setIpAddress(SystemInformation.getIpAddress());
+                trackingData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
+                trackingData.setConfigVersion( mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
                 trackingData.setGtid(UUID.randomUUID().toString());
                 if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
                     trackingData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
@@ -162,13 +199,12 @@ public class ImpressionHelper {
                 int indexInFinalList = checkIfItemInFinal(viewPosition);
                 if (indexInFinalList == -1) { //new item add it in final list
                     finalViewData.add(trackingData);
-                    Log.d("@@@@New Item", "::" + viewPosition);
+                    Log.d("###New Item", "::" + viewPosition);
                 } else {
                     if (mIsTopScrolled) {
-                        Log.d("@@@@top scroll", "happen ::" + viewPosition);
+                        Log.d("###top scroll", "happen ::" + viewPosition);
                         addNewEntry(viewPosition, trackingData);
                     }
-                    Log.d("@@@@New Item exist", "::" + viewPosition);
                 }
             }
 
@@ -178,7 +214,7 @@ public class ImpressionHelper {
                     if (!checkIfItemInCurrent(id)) {
                         updateEndTimeIfItemNotExist(id);
                     } else {
-                        Log.i("Still visibile", "In current" + id);
+                        Log.i("###Still visibile", "In current" + id);
                     }
                 }
                 previousViewed.clear();
@@ -187,18 +223,7 @@ public class ImpressionHelper {
 
         //store 10 events in DB
         if (finalViewData.size() > 10) {
-            int index = getLastIndexOfUpdatedItem();
-            if (index > -1) {
-                List<ImpressionData> forDb = finalViewData.subList(0, index+1);
-                Log.i("###", "###Added to db");
-                mImpressionCallback.storeInDatabase(forDb);
-
-                if (finalViewData.size() > index+1) {
-                    finalViewData = finalViewData.subList(index+1 , finalViewData.size());
-                }
-                Log.i("Final list", ":"+finalViewData.size());
-                mImpressionCallback.onNetworkCall();
-            }
+            storeChunks();
         }
 
         previousViewed.addAll(currentViewed);
@@ -214,6 +239,22 @@ public class ImpressionHelper {
             Log.i(">>>>>>>>>>>>Enter event", "exit");
         }
     }
+
+    private void storeChunks() {
+        int index = getLastIndexOfUpdatedItem();
+        if (index > -1) {
+            List<ImpressionData> forDb = finalViewData.subList(0, index+1);
+            Log.i("###", "###Added to db");
+            mImpressionCallback.storeInDatabase(forDb);
+
+            if (finalViewData.size() > index+1) {
+                finalViewData = finalViewData.subList(index+1 , finalViewData.size());
+            }
+            Log.i("Final list", ":"+finalViewData.size());
+            // mImpressionCallback.onNetworkCall();
+        }
+    }
+
 
     /**
      * Get the last item on which end time was updated
@@ -257,13 +298,14 @@ public class ImpressionHelper {
      * @return true if item is present in current visible item list
      */
     private boolean checkIfItemInCurrent(int itemPosition) {
-        for (int i = 0; i < currentViewed.size(); i++) {
+       /* for (int i = 0; i < currentViewed.size(); i++) {
             int viewPosition = currentViewed.get(i);
             if (viewPosition == itemPosition) {
                 return true;
             }
         }
-        return false;
+        return false;*/
+        return currentViewed.contains(itemPosition);
     }
 
     /**
@@ -340,7 +382,7 @@ public class ImpressionHelper {
         if (viewId != -1 && viewId > viewPosition) {
             Log.i("Only add lesser value", "on top scroll");
             finalViewData.add(impressionData);
-          //  currentViewed.add(viewId);
+            currentViewed.add(viewId);
         } else {
             Log.i("these are greater", "on top scroll" + viewPosition);
         }

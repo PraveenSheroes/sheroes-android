@@ -306,7 +306,7 @@ public class SheroesAppModule {
         return retrofit.create(SheroesAppServiceApi.class);
     }
 
-    private static String getUserAgent(Context mContext) {
+    public static String getUserAgent(Context mContext) {
         String userAgent = AppConstants.APP_NAME;
         try {
             String packageName = mContext.getPackageName();

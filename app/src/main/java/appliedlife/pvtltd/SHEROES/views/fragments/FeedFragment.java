@@ -622,9 +622,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
 
-                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                    // Do something
-                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     //Scroll view visibility and duration
                     int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                     int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
