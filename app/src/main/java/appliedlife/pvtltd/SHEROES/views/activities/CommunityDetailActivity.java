@@ -281,7 +281,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         final LinearLayout llToolTipBg = inviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
                         RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
-                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0, 0, 0);
                         llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
                         llToolTipBg.setLayoutParams(llParams);
                     } else {

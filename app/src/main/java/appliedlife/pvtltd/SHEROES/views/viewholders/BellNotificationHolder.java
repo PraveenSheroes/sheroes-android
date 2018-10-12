@@ -86,12 +86,12 @@ public class BellNotificationHolder extends BaseViewHolder<BellNotificationRespo
                 ivBellCircleIconVerified.setVisibility(View.GONE);
             }
             if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.FOLLOW.toString())) {
-                mTvBellViewProfile.setText("view profile");
+                mTvBellViewProfile.setText(R.string.notification_view_profile);
                 mTvBellViewProfile.setVisibility(View.VISIBLE);
                 mTvDot.setVisibility(View.VISIBLE);
                 mIvBellReaction.setVisibility(View.VISIBLE);
             } else if (mBellNotification.getCategory().equalsIgnoreCase(NotificationCategoryEnum.JOIN.toString())) {
-                mTvBellViewProfile.setText("view your profile");
+                mTvBellViewProfile.setText(R.string.notification_veiw_your_profile);
                 mTvBellViewProfile.setVisibility(View.VISIBLE);
                 mTvDot.setVisibility(View.GONE);
                 mIvBellReaction.setVisibility(View.GONE);

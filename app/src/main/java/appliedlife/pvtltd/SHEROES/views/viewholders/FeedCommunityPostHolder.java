@@ -680,7 +680,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+                if (mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) { //community
                     viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 } else if (!mUserPostObj.isAnonymous() && viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -1377,7 +1377,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.iv_feed_community_post_circle_icon)
     public void onFeedCommunityPostCircleIconClick() { //Open profile from feed and community post
         if (!mUserPostObj.isAnonymous()) {
-            if (mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+            if (mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) { //community
                 viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             } else {
                 viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -1388,7 +1388,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_community_post_card_title)
     public void onAuthorName() { //Open profile from feed
         if (!mUserPostObj.isAnonymous()) {
-            if (mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+            if (mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) { //community
                 viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             } else if (viewInterface instanceof FeedItemCallback) {
                 ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

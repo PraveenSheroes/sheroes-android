@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,15 +18,12 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.vernacular.LanguageType;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SelectLanguageDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Language Setting Screen";
-    //region Inject variables
-    //endregion
 
     //region View variables
     @Bind(R.id.tv_continue)
@@ -45,7 +41,6 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //endregion
 
     //region member variables
-
     private boolean isLanguageSelected;
     //endregion
 
@@ -78,7 +73,6 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //endregion
 
     //region onclick methods
-
     @OnClick(R.id.fl_hindi)
     public void onHindiClick() {
         tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
@@ -100,11 +94,8 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     @OnClick(R.id.tv_continue)
     public void onContinueClick() {
         if (isLanguageSelected) {
-          //  Intent i = new Intent(getActivity(), HomeActivity.class);
-          //  startActivity(i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK));
-            if(getActivity() instanceof HomeActivity)
-            {
-                ((HomeActivity)getActivity()).refreshHomeViews();
+            if (getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).refreshHomeViews();
             }
             dismiss();
         }
@@ -114,6 +105,5 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     public void onCrossClick() {
         dismiss();
     }
-
     //endregion
 }

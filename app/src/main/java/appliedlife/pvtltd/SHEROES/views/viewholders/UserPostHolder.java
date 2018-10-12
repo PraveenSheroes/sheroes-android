@@ -63,7 +63,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
  */
 public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(UserPostHolder.class);
-    private static final int COMMUNITY_TYPE_ID = 15;
+
     private static final float FOLLOW_BUTTON_ORIGINAL = 1.0f;
     private static final float FOLLOW_BUTTON_SEMI_TRANSPARENT = 0.3f;
 
@@ -236,7 +236,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     private void displayFollowUnFollowButton() {
-        if (mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == 13 || mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+        if (mUserPostObj.isAnonymous() || mUserId == mUserPostObj.getAuthorId() || mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_MODERATOR_TYPE || mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) {
             mFollowButton.setVisibility(View.GONE);
         } else {
             if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
@@ -467,7 +467,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                         mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     }
                 } else {
-                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) {
                         mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
                     }
                 }
@@ -526,7 +526,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (mUserPostObj != null && !mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+                if (mUserPostObj != null && !mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) {
                     mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
                 }
             }
@@ -847,7 +847,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.author_pic_icon)
     public void onFeedCommunityPostCircleIconClick() {
-        if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == COMMUNITY_TYPE_ID) {
+        if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) {
             mPostDetailCallback.onCommunityTitleClicked(mUserPostObj);
         } else if (!mUserPostObj.isAnonymous()) {
             mPostDetailCallback.onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

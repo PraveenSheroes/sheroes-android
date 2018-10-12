@@ -1267,7 +1267,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     writeAStory();
                 }
 
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL)) {
+                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
                     showSelectLanguageOption();
                 }
 
@@ -1368,7 +1368,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         mentorListActivity();
                     }
                 }
-                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL)) {
+                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
                     showSelectLanguageOption();
                 }
             }

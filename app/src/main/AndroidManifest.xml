@@ -195,8 +195,7 @@
             android:configChanges="keyboardHidden"
             android:exported="true"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="GoogleAppIndexingDeepLinkError" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".views.activities.ContestActivity"
             android:parentActivityName=".views.activities.HomeActivity"

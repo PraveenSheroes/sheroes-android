@@ -139,7 +139,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
     @OnClick(R.id.ll_share)
     public void shareClick() {
         if (mContest != null) {
-            String shareText = "Yay! I just completed the #" + mContest.tag + " challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: " + mContest.shortUrl;
+            String shareText = getString(R.string.challenge_gratification_share_text,mContest.tag,mContest.shortUrl);
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .challengeId(Integer.toString(mContest.remote_id))
@@ -148,25 +148,6 @@ public class ChallengeGratificationActivity extends BaseActivity {
             AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, properties);
             ShareBottomSheetFragment.showDialog(ChallengeGratificationActivity.this, shareText, mContest.thumbImage, mContest.shortUrl, AppConstants.CHALLENGE_GRATIFICATION_SCREEN, true, mContest.shortUrl, false, Event.CHALLENGE_SHARED, properties);
         }
-    }
-
-    //TODO: Will work on Challenge gratification next part where this code will be use
-    private Bitmap createShareImage() {
-        View view;
-        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        view = inflater.inflate(R.layout.challenge_share_card_layout, null, false);
-
-        LinearLayout userDetailContainer = view.findViewById(R.id.ll_sharable_card);
-        ImageView profilePic = view.findViewById(R.id.iv_challenge_share_card);
-        TextView shareText = view.findViewById(R.id.tv_challenge_share_text);
-        TextView shareDesc = view.findViewById(R.id.tv_challenge_share_card);
-
-        shareText.setText(mContest.title);
-        Glide.with(profilePic.getContext())
-                .load(mContest.thumbImage)
-                .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                .into(profilePic);
-        return CommonUtil.getViewBitmap(userDetailContainer);
     }
 
     @Override

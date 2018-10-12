@@ -209,30 +209,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
-
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void updateViewPagerUi(int position) {
-        if (mViewPager == null) {
-            mViewPager = this.findViewById(R.id.welcome_view_pager);
-        }
-        View view = mViewPager.getChildAt(position);
-        ImageView imageView = view.findViewById(R.id.iv_welcome_screen);
-        TextView textView = view.findViewById(R.id.tv_welcome_text);
-
-        ArrayList<String> screenText = new ArrayList<>();
-        screenText.add(getString(R.string.ID_WELCOME_FIRST));
-        screenText.add(getString(R.string.ID_WELCOME_SECOND));
-        screenText.add(getString(R.string.ID_WELCOME_THIRD));
-        int screen = mScreenNameList.get(position);
-        String text = screenText.get(position);
-        imageView.setImageResource(screen);
-        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-            textView.setText(Html.fromHtml(text, 0)); // for 24 api and more
-        } else {
-            textView.setText(Html.fromHtml(text));// or for older api
-        }
-    }
-
     private void loginSetUp() {
         currentTime = System.currentTimeMillis();
         googlePlusLogin();
@@ -327,10 +303,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mHandler = new Handler();
         mRunnable = new Runnable() {
             public void run() {
-                if (currentPage == NUM_PAGES) {
-                    currentPage = 0;
-                }
                 mViewPager.setCurrentItem(currentPage++, true);
+                mHandler.postDelayed(mRunnable, 10000);
             }
         };
         mHandler.postDelayed(mRunnable, 10000);
@@ -398,7 +372,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
      */
     @Override
     public void onPageSelected(int position) {
-        updateViewPagerUi(position);
         switch (position) {
             case AppConstants.NO_REACTION_CONSTANT:
                 ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
@@ -414,6 +387,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                 ivWelcomeThird.setImageResource(R.drawable.vector_circle_red);
                 ivWelcomeFirst.setImageResource(R.drawable.vector_circle_w);
                 ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
+                currentPage=-1;
                 break;
         }
     }

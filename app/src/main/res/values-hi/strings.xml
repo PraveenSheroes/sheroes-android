@@ -292,8 +292,8 @@
 
     <string name="ID_COMMUNITIES_CATEGORY">समुदाय वर्ग स्क्रीन</string>
 
-    <string name="fb_login_txt">फेसबुक लॉगिन</string>
-    <string name="g_login_txt">गूगल लॉगिन</string>
+    <string name="fb_login_txt">फेसबुक</string>
+    <string name="g_login_txt">गूगल</string>
 
 
     <string name="ID_CAROUSEL_SEE_MORE">और देखें</string>
@@ -736,12 +736,7 @@
     <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>
     <string name="poll_header_name_community">%1$s ने  %2$s में पोल बनाया"</string>
     <string name="poll_header_name">%1$s ने पोल बनाया"</string>
-    <string name="day">दिन</string>
-    <string name="hour">घंटे</string>
-    <string name="minute">मिनट</string>
-    <string name="days">दिन</string>
-    <string name="hours">घंटे</string>
-    <string name="minutes">मिनट</string>
+
     <string name="type_your_comment">अपना कमेंट यहां टाइप करें&#8230;</string>
     <string name="top_communities_text">SHEROES पर कुछ ट्रेंडिंग पोस्ट यहां दी गई हैं</string>
     <string name="health_tips">स्वास्थ्य सुझाव</string>
@@ -761,4 +756,22 @@
     <string name="ago">पूर्व</string>
     <string name="no_q_a">अभी तक कोई प्रo और उo नहीं</string>
     <string name="schedule_post_title">शिड्यूल पोस्ट?</string>
+    <string name="notification_view_profile">प्रोफाइल देखिये</string>
+    <string name="notification_veiw_your_profile">अपनी प्रोफाइल देखें</string>
+    <plurals name="numberOfDays">
+        <item quantity="zero">दिन</item>
+        <item quantity="one">दिन</item>
+        <item quantity="other">दिन</item>
+    </plurals>
+    <plurals name="numberOfHours">
+        <item quantity="zero">घंटे</item>
+        <item quantity="one">घंटे</item>
+        <item quantity="other">घंटे</item>
+    </plurals>
+    <plurals name="numberOfMins">
+        <item quantity="zero">मिनट</item>
+        <item quantity="one">मिनट</item>
+        <item quantity="other">मिनट</item>
+    </plurals>
+    <string name="challenge_gratification_share_text">वाह! मैंने अभी SHEROES पे # %1$s चैलेंज को पूरा किया। यह केवल एक महिला ऐप है जहां आप बिना किसी हिचकिचाहट के कुछ साझा कर सकते हैं। आपको ऐप पर भी यह चैलेंज लेना चाहिए। यहां आज़माएं: %2$s</string>
 </resources>

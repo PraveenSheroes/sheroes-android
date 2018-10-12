@@ -502,7 +502,7 @@
 
 
     <string name="cancel">CANCEL</string>
-    <string name="unfollow">UNFOLLOW</string>
+    <string name="unfollow">Unfollow</string>
     <string name="new_feature">New</string>
 
     <string name="add_location">Add Location</string>
@@ -734,12 +734,7 @@
     <string name="post_header_community">%1$s posted"</string>
     <string name="post_header_asked_community">%1$s asked %2$s"</string>
     <string name="poll_header_name_community">%1$s created poll in  %2$s"</string>
-    <string name="day">day</string>
-    <string name="hour">hr</string>
-    <string name="minute">min</string>
-    <string name="days">days</string>
-    <string name="hours">hrs</string>
-    <string name="minutes">mins</string>
+
     <string name="type_your_comment">Type your comment here&#8230;</string>
     <string name="top_communities_text">Here are some trending posts on SHEROES</string>
     <string name="health_tips">Health Tips</string>
@@ -759,5 +754,22 @@
     <string name="ago">ago</string>
     <string name="no_q_a">No Q&amp;A yet></string>
     <string name="schedule_post_title">Schedule Post?</string>
-
+    <string name="notification_view_profile">view profile</string>
+    <string name="notification_veiw_your_profile">view your profile</string>
+    <plurals name="numberOfDays">
+        <item quantity="zero">day</item>
+        <item quantity="one">day</item>
+        <item quantity="other">days</item>
+    </plurals>
+    <plurals name="numberOfHours">
+        <item quantity="zero">hr</item>
+        <item quantity="one">hr</item>
+        <item quantity="other">hrs</item>
+    </plurals>
+    <plurals name="numberOfMins">
+        <item quantity="zero">min</item>
+        <item quantity="one">min</item>
+        <item quantity="other">mins</item>
+    </plurals>
+    <string name="challenge_gratification_share_text">Yay! I just completed the # %1$s challenge on the SHEROES app. It is a women only app where you can share anything without hesitation. You should also take up this challenge on the app. Try here: %2$s</string>
 </resources>

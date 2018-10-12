@@ -37,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -408,14 +409,14 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
     private void clickOnUserNameAndCommunityName(String userNameAndCommunity, String userName, String communityName, final boolean isMentor) {
 
-        SpannableString spanString = new SpannableString(userNameAndCommunity);
+        SpannableString spannableString = new SpannableString(userNameAndCommunity);
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
+                if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.USER_POST) {
                     ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
-                } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) {
                     if (isMentor) {
                         ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                     } else {
@@ -434,13 +435,13 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View textView) {
                 if (isMentor) {
-                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 14) {
+                    if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.USER_POST) {
                         ((FeedItemCallback) viewInterface).onMentorProfileClicked(mUserPostObj);
-                    } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == 15) {
+                    } else if (!mUserPostObj.isAnonymous() && mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) {
                         ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                     }
                 } else {
-                    if (!mUserPostObj.isAnonymous() && (mUserPostObj.getCommunityId() != 0 || mUserPostObj.getCommunityId() != 299)) {
+                    if (!mUserPostObj.isAnonymous() && (mUserPostObj.getCommunityId() != 0 || mUserPostObj.getCommunityId() != AppConstants.SHEROES_EVENT_ID)) {
                         ((FeedItemCallback) viewInterface).onCommunityClicked(mUserPostObj.getCommunityId());
                     }
                 }
@@ -452,40 +453,40 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             }
         };
         if (StringUtil.isNotNullOrEmptyString(userName)) {
-            spanString.setSpan(authorTitle, 0, userName.length(), 0);
+            spannableString.setSpan(authorTitle, 0, userName.length(), 0);
             if (!userName.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                 if (mUserPostObj.isAuthorMentor()) {
-                    spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
                 } else {
-                    spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
                 }
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spanString.setSpan(typefaceSpan, 0, userName.length(), 0);
+                spannableString.setSpan(typefaceSpan, 0, userName.length(), 0);
             } else {
-                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
             }
 
             if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
-                spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
-                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
+                spannableString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spanString.setSpan(typefaceSpan, firstIndex, firstIndex + communityName.length(), 0);
+                spannableString.setSpan(typefaceSpan, firstIndex, firstIndex + communityName.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
-            mTitle.setText(spanString, TextView.BufferType.SPANNABLE);
+            mTitle.setText(spannableString, TextView.BufferType.SPANNABLE);
             mTitle.setSelected(true);
         }
     }
 
     private void clickOnCommunityName(String nameAndCommunity, String communityName) {
 
-        SpannableString SpanString = new SpannableString(nameAndCommunity);
+        SpannableString spannableString = new SpannableString(nameAndCommunity);
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                if (mUserPostObj.getEntityOrParticipantTypeId() == 15) { //community
+                if (mUserPostObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POST) { //community
                     viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 } else if (!mUserPostObj.isAnonymous() && viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -502,22 +503,22 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
             }
         };
         if (StringUtil.isNotNullOrEmptyString(communityName)) {
-            SpanString.setSpan(authorTitle, 0, communityName.length(), 0);
+            spannableString.setSpan(authorTitle, 0, communityName.length(), 0);
             if (!communityName.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                 if (mUserPostObj.isAuthorMentor()) {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
                 } else {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
+                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
                 }
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                SpanString.setSpan(typefaceSpan, 0, communityName.length(), 0);
+                spannableString.setSpan(typefaceSpan, 0, communityName.length(), 0);
             } else {
                 TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
-                SpanString.setSpan(typefaceSpan, 0, communityName.length(), 0);
-                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
+                spannableString.setSpan(typefaceSpan, 0, communityName.length(), 0);
+                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
-            mTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
+            mTitle.setText(spannableString, TextView.BufferType.SPANNABLE);
             mTitle.setSelected(true);
 
         }
@@ -749,6 +750,5 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
 
         mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
         mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
-        // tvMention.setSelected(true);
     }
 }

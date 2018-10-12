@@ -133,7 +133,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         mMentionsEditText.setMentionSpanConfig(mentionSpanConfig);
 
         // Create the tokenizer to use for the editor
-        // TODO: Allow customization of appConfiguration via XML attributes
+        // TODO: Allow customization of configuration via XML attributes
         WordTokenizerConfig tokenizerConfig = new WordTokenizerConfig.Builder().build();
         WordTokenizer tokenizer = new WordTokenizer(tokenizerConfig);
         mMentionsEditText.setTokenizer(tokenizer);

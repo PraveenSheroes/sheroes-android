@@ -52,7 +52,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagCol
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
-    private static final int POLL_ADMIN_ID = 18;
+
     //region Inject variables
     @Inject
     DateUtil mDateUtil;
@@ -475,7 +475,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
             String communityName = "";
 
             String header;
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == POLL_ADMIN_ID) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POLL_ADMIN) {
                 feedTitle = mPollSolarObj.getPollCommunityName();
                 header = mContext.getString(R.string.poll_header_name, feedTitle);
             } else {
@@ -671,13 +671,13 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     @OnClick({R.id.iv_feed_poll_circle_icon})
     public void profileImageClick() {
         if (viewInterface != null) {
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POLL_ADMIN) {
                 ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
             } else {
                 ((FeedItemCallback) viewInterface).onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }
         } else if (mPostDetailCallBack != null) {
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POLL_ADMIN) {
                 mPostDetailCallBack.onCommunityTitleClicked(mPollSolarObj);
             } else {
                 mPostDetailCallBack.onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

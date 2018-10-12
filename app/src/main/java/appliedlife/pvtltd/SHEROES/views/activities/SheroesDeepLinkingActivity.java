@@ -224,8 +224,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     } else if (urlOfSharedCard.equals(AppConstants.WRITE_STORY_URL) || urlOfSharedCard.equals(AppConstants.WRITE_STORY_URL_COM)) {
                         homeActivityCall(AppConstants.WRITE_STORY_URL);
-                    }else if (urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL) || urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM)) {
-                        homeActivityCall(AppConstants.SELECT_LANGUAGE_URL);
+                    }else if (urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM) || urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM)) {
+                        homeActivityCall(AppConstants.SELECT_LANGUAGE_URL_COM);
                     }else if (urlOfSharedCard.equals(AppConstants.MY_STORY_URL) || urlOfSharedCard.equals(AppConstants.MY_STORY_URL_COM)) {
                         try {
                             showUserProfile(true, sourceIntent);

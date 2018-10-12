@@ -14,7 +14,7 @@ public class AppConstants {
     public static final String PLAY_STORE_ID_URL = "market://details?id=";
     public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
     //\b((https?|Https?|ftp)?)(:?)(\/\/?|)(www)[-a-zA-Z0-9+&@#%?=~_|!:,.;/]*[-a-zA-Z0-9+&@#%=~_|]
-    public static final String WEB_LINK_PATTERN_REGEX ="\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    public static final String WEB_LINK_PATTERN_REGEX = "\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
@@ -60,7 +60,6 @@ public class AppConstants {
     public static final String HOURS = " Hrs ";
     public static final String DASH = "-";
     public static final String DOTS = "...";
-
     public static final String DOT = " • ";
     public static final String USER_YOU_TUBE = "youtube.com/user";
     public static final String CHANNEL_YOU_TUBE = "youtube.com/channel";
@@ -102,6 +101,7 @@ public class AppConstants {
     public static final String PROFILE_CHAMPION = "profile_champion";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
+
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
     public static final int PROFILE_NOTIFICATION_ID = -1;
@@ -224,9 +224,15 @@ public class AppConstants {
     public static final int NOT_TIME = 50000;
     public static final String EQUAL_SIGN = "=";
     public static final String AND_SIGN = "&";
+
     //User id's eg: Admin,Champion etc
     public static final int CHAMPION_TYPE_ID = 7;
     public static final int ADMIN_TYPE_ID = 2;
+    public static final int COMMUNITY_MODERATOR_TYPE = 13;
+    public static final int USER_POST = 14;
+    public static final int COMMUNITY_POST = 15;
+    public static final int COMMUNITY_POLL_ADMIN = 18;
+    public static final int SHEROES_EVENT_ID = 299;
 
     public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
@@ -266,7 +272,6 @@ public class AppConstants {
     /**/
 
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
-
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
     //Community
@@ -316,7 +321,6 @@ public class AppConstants {
     public static final String MY_CHALLENGE_NEW_URL_COM = "https://sheroes.com/my-challenges";
     public static final String COLLECTION_NEW_URL = "https://sheroes.in/app-collections";
     public static final String COLLECTION_NEW_URL_COM = "https://sheroes.com/app-collections";
-    public static final String SELECT_LANGUAGE_URL = "https://sheroes.in/language_selection";
     public static final String SELECT_LANGUAGE_URL_COM = "https://sheroes.com/language_selection";
 
     /* Create post deeplink */
