@@ -19,7 +19,8 @@ import android.support.v4.content.ContextCompat;
 
 import com.clevertap.android.sdk.CleverTapAPI;
 import com.f2prateek.rx.preferences2.Preference;
-import com.google.android.gms.gcm.GcmListenerService;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.RemoteMessage;
 import com.moe.pushlibrary.MoEHelper;
 import com.moe.pushlibrary.PayloadBuilder;
 import com.moengage.push.PushManager;
@@ -31,6 +32,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -52,7 +54,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 /**
  * Created by Ajit on 10/22/2015.
  */
-public class PushNotificationService extends GcmListenerService {
+public class PushNotificationService extends FirebaseMessagingService {
     @Inject
     Preference<LoginResponse> mUserPreference;
     Intent notificationIntent;
@@ -64,18 +66,29 @@ public class PushNotificationService extends GcmListenerService {
 
 
     @Override
-    public void onMessageReceived(String from, Bundle data) {
-        SheroesApplication.getAppComponent(this).inject(this);
-        if (null == data) return;
+    public void onMessageReceived(RemoteMessage message) {
+        if (message != null) {
+            String from = message.getFrom();
+            Bundle data = new Bundle();
 
-        String isCleverTapNotification = data.getString(AppConstants.CLEVER_TAP_IS_PRESENT);
-        if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
-            handleCleverTapNotification(data);
-        } else {
-            if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
-                handleMoEngageNotification(data);
+            if (message.getData().size() > 0) {
+                for (Map.Entry<String, String> entry : message.getData().entrySet()) {
+                    data.putString(entry.getKey(), entry.getValue());
+                }
+            }
+
+            SheroesApplication.getAppComponent(this).inject(this);
+            if (null == data) return;
+
+            String isCleverTapNotification = data.getString(AppConstants.CLEVER_TAP_IS_PRESENT);
+            if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
+                handleCleverTapNotification(data);
             } else {
-                handleOtherNotification(from, data);
+                if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
+                    handleMoEngageNotification(data);
+                } else {
+                    handleOtherNotification(from, data);
+                }
             }
         }
     }

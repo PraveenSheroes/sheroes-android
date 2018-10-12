@@ -211,11 +211,11 @@ public class CleverTapHelper {
             userSummary = mUserPreference.get().getUserSummary();
         }
 
-        if (userSummary != null) {
+        if (properties == null) {
+            properties = new HashMap<>();
+        }
 
-            if (properties == null) {
-                properties = new HashMap<>();
-            }
+        if (userSummary != null) {
             String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
             String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
 
@@ -230,10 +230,8 @@ public class CleverTapHelper {
             properties.put(SuperProperty.CONFIG_TYPE.getString(), mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
             properties.put(SuperProperty.CONFIG_VERSION.getString(), mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
             properties.put(SuperProperty.EMAIL_ID.getString(), userSummary.getEmailId());
-
-            return properties;
         }
-        return null;
+        return properties;
     }
 
     //Get the session total

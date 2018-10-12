@@ -1,7 +1,9 @@
 {
   "project_info": {
     "project_number": "409228886131",
-    "project_id": "sheroes-app-143509"
+    "firebase_url": "https://sheroes-app-143509.firebaseio.com",
+    "project_id": "sheroes-app-143509",
+    "storage_bucket": "sheroes-app-143509.appspot.com"
   },
   "client": [
     {
@@ -11,7 +13,20 @@
           "package_name": "appliedlife.pvtltd.SHEROES"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "409228886131-okarur9l6octsr6b0dcktgb4s8kcgh72.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "appliedlife.pvtltd.SHEROES",
+            "certificate_hash": "6fbc754a06f46547dc1ba470b2994ed375e82bd3"
+          }
+        },
+        {
+          "client_id": "409228886131-7n2kaatkd8qprr1r6lf67gf7mi1g875u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk"
@@ -19,17 +34,14 @@
       ],
       "services": {
         "analytics_service": {
-          "status": 2,
-          "analytics_property": {
-            "tracking_id": "UA-43289318-2"
-          }
+          "status": 1
         },
         "appinvite_service": {
           "status": 1,
           "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 1
+          "status": 2
         }
       }
     }

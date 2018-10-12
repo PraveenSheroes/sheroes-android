@@ -6,6 +6,7 @@ import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.clevertap.android.sdk.ActivityLifecycleCallback;
+import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;

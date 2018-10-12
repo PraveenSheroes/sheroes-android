@@ -1004,6 +1004,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
             builder.title(feedDetail.getNameOrTitle())
                     .communityId(communityId)
+                    .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                     .id(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                     .streamType(feedDetail.getStreamType());
         }
@@ -1390,7 +1391,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             if (mStatusBarColorEmpty) {
                 if (upArrow != null) {
-                    upArrow.setColorFilter(Color.parseColor(mToolbarIconColor), PorterDuff.Mode.SRC_ATOP);
+                    upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
                 }
                 getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
             } else {

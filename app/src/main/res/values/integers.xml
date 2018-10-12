@@ -38,5 +38,6 @@
   <integer name="user_compact_card_desc_max_line">2</integer>
   <integer name="user_flat_card_desc_max_line">2</integer>
   <integer name="leaderboard_user_name_max_line">1</integer>
+  <integer name="community_name_lines">2</integer>
 
 </resources>
