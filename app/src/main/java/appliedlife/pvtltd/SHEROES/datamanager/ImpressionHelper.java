@@ -16,7 +16,6 @@ import appliedlife.pvtltd.SHEROES.analytics.SystemInformation;
 import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -43,6 +42,7 @@ public class ImpressionHelper {
 
     private AppUtils mAppUtils;
     private Preference<Configuration> mConfiguration;
+    private ImpressionSuperProperty mImpressionProperty;
 
     // ArrayList of view ids that are being considered for tracking.
     private ArrayList<Integer> previousViewed = new ArrayList<>();
@@ -51,11 +51,12 @@ public class ImpressionHelper {
     //endregion
 
     //region constructor
-    public ImpressionHelper(int visibility, Preference<Configuration> configuration, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
+    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, int visibility, Preference<Configuration> configuration, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
         this.mLoggedInUser = loggedInUserId;
         this.mImpressionCallback = impressionCallback;
         isLoaderVisible = (visibility == View.VISIBLE);
+        this.mImpressionProperty = impressionSuperProperty;
         this.mConfiguration = configuration;
         init();
     }
@@ -74,16 +75,16 @@ public class ImpressionHelper {
      * Fragment/ Activity is resumed
      */
     public void onResume() {
-        Log.i("Resume", "On Resume");
+        Log.i("###IH-Resume", "On Resume");
     }
 
     /**
      * Fragment/ Activity is paused
      */
     public void onPause() {
-        Log.i("Pause", "On Pause");
+        Log.i("###IH-Pause", "On Pause");
         updateEndTimeOfItems();
-        //mImpressionCallback.storeInDatabase(finalViewData);
+        mImpressionCallback.storeInDatabase(finalViewData);
     }
 
     /**
@@ -106,11 +107,11 @@ public class ImpressionHelper {
             if (lastPosition < startPos) {
                 isScrollUp = false;
                 isScrollDown = true;
-                Log.i("SCROLLING DOWN", "TRUE");
+                Log.i("###IH-SCROLLING DOWN", "TRUE");
             } else if (lastPosition > startPos) {
                 isScrollUp = true;
                 isScrollDown = false;
-                Log.i("SCROLLING UP", "TRUE");
+                Log.i("###IH-SCROLLING UP", "TRUE");
             }
             lastPosition=startPos;
 
@@ -133,7 +134,7 @@ public class ImpressionHelper {
             analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
         } else if(scrollDirectionChange) {
             scrollDirectionChange = false;
-            Log.i("###Direction", "Changed");
+            Log.i("###IH-Direction", "Changed");
             storeChunks();
         }
     }
@@ -147,7 +148,7 @@ public class ImpressionHelper {
             for (int i = size-1; i >= 0; i--) {
                 ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getEndTime() == -1) { //
-                    Log.i("Updating", "End time");
+                    Log.i("###IH-Updating", "End time");
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
@@ -160,50 +161,53 @@ public class ImpressionHelper {
     //region private method
     //Data request for Impression
     private synchronized void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
-        Log.i(">>>>Enter event", "start");
+        Log.i(">>>>###IH-Enter event", "start");
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         // Analyze all the views
         for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
-            ImpressionData trackingData = new ImpressionData();
+            ImpressionData impressionData = new ImpressionData();
             View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
             if (getVisibleHeightPercentage(itemView) >= viewVisibilityThreshold) {  //Only those views which have visibility >= 50%
                 FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(firstVisibleItemPosition);
                 if(feedDetail ==null) return;
-                trackingData.setStartTime(System.currentTimeMillis());
-                trackingData.setTimeStamp(System.currentTimeMillis());
-                trackingData.setViewId(viewPosition);
-                trackingData.setPostType(feedDetail.getSubType());
+                impressionData.setStartTime(System.currentTimeMillis());
+                impressionData.setTimeStamp(System.currentTimeMillis());
+                impressionData.setViewId(viewPosition);
+                impressionData.setPostType(feedDetail.getSubType());
                 if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
                     //trackingData.setPosition();
                 }
-                trackingData.setScreenName(mImpressionCallback.getScreenName());
-                trackingData.setPosition(viewPosition);
-                trackingData.setUserAgent(recyclerView.getContext()!=null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
-                trackingData.setClientId(String.valueOf(CLIENT.ANDROID.getValue())); //For mobile android
-                trackingData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
-                trackingData.setAppVersion(mAppUtils.getAppVersionName());
-                trackingData.setDeviceId(mAppUtils.getDeviceId()); //Change ip address and all
-                trackingData.setIpAddress(SystemInformation.getIpAddress());
-                trackingData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
-                trackingData.setConfigVersion( mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
-                trackingData.setGtid(UUID.randomUUID().toString());
+                //impressionData.setSourceTab(mImpressionProperty.getCommunityTab()); //with latest 1
+                //impressionData.setSource(mImpressionCallback.getScreenName()); //with latest 2
+                impressionData.setOrderKey(mImpressionProperty.getOrderKey());
+                impressionData.setScreenName(mImpressionCallback.getScreenName()); //remove this once enable 1, 2 above and remove from POJo too
+                impressionData.setPosition(viewPosition);
+                impressionData.setUserAgent(recyclerView.getContext()!=null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
+                impressionData.setClientId(String.valueOf(CLIENT.ANDROID.getValue())); //For mobile android
+                impressionData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
+                impressionData.setAppVersion(mAppUtils.getAppVersionName());
+                impressionData.setDeviceId(mAppUtils.getDeviceId()); //Change ip address and all
+                impressionData.setIpAddress(recyclerView.getContext()!=null ? SheroesAppModule.getIpAddress() : "");
+                impressionData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
+                impressionData.setConfigVersion( mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
+                impressionData.setGtid(UUID.randomUUID().toString());
                 if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
-                    trackingData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
+                    impressionData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
                 }
 
-                trackingData.setUserId(mLoggedInUser == -1 ? "" : String.valueOf(mLoggedInUser));
-                trackingData.setPostId(feedDetail.getIdOfEntityOrParticipant() != -1 ? String.valueOf(feedDetail.getIdOfEntityOrParticipant()) : "");
+                impressionData.setUserId(mLoggedInUser == -1 ? "" : String.valueOf(mLoggedInUser));
+                impressionData.setPostId(feedDetail.getIdOfEntityOrParticipant() != -1 ? String.valueOf(feedDetail.getIdOfEntityOrParticipant()) : "");
                 currentViewed.add(viewPosition);
 
                 int indexInFinalList = checkIfItemInFinal(viewPosition);
                 if (indexInFinalList == -1) { //new item add it in final list
-                    finalViewData.add(trackingData);
-                    Log.d("###New Item", "::" + viewPosition);
+                    finalViewData.add(impressionData);
+                    Log.d("###IH-New Item", "::" + viewPosition);
                 } else {
                     if (mIsTopScrolled) {
-                        Log.d("###top scroll", "happen ::" + viewPosition);
-                        addNewEntry(viewPosition, trackingData);
+                        Log.d("###IH-top scroll", "happen ::" + viewPosition);
+                        addNewEntry(viewPosition, impressionData);
                     }
                 }
             }
@@ -214,7 +218,7 @@ public class ImpressionHelper {
                     if (!checkIfItemInCurrent(id)) {
                         updateEndTimeIfItemNotExist(id);
                     } else {
-                        Log.i("###Still visibile", "In current" + id);
+                        Log.i("###IH-Still visibile", "In current" + id);
                     }
                 }
                 previousViewed.clear();
@@ -233,10 +237,9 @@ public class ImpressionHelper {
             Log.i("######", "#############################");
             for (int i = 0; i < finalViewData.size(); i++) {
                 float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
-                Log.d("######", "Id> " + finalViewData.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
+                Log.d("###IH-", "Id> " + finalViewData.get(i).getViewId() + " > Duration:::" + (timeSpent / 1000.0f));
             }
             Log.i("######", "#############################");
-            Log.i(">>>>>>>>>>>>Enter event", "exit");
         }
     }
 
@@ -244,13 +247,13 @@ public class ImpressionHelper {
         int index = getLastIndexOfUpdatedItem();
         if (index > -1) {
             List<ImpressionData> forDb = finalViewData.subList(0, index+1);
-            Log.i("###", "###Added to db");
+            Log.i("###IH-", "###Added to db");
             mImpressionCallback.storeInDatabase(forDb);
 
             if (finalViewData.size() > index+1) {
                 finalViewData = finalViewData.subList(index+1 , finalViewData.size());
             }
-            Log.i("Final list", ":"+finalViewData.size());
+            Log.i("###IH-Final list", ":"+finalViewData.size());
             // mImpressionCallback.onNetworkCall();
         }
     }
@@ -319,7 +322,7 @@ public class ImpressionHelper {
             for (int i = size-1; i >= 0; i--) {
                 ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getEndTime() == -1 && id == trackingData1.getViewId()) { //
-                    Log.i("Updating", "End time" + id);
+                    Log.i("###IH-Updating", "End time" + id);
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     double timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
                     finalViewData.get(i).setEngagementTime((timeSpent / 1000.0f));
@@ -380,26 +383,11 @@ public class ImpressionHelper {
         }
 
         if (viewId != -1 && viewId > viewPosition) {
-            Log.i("Only add lesser value", "on top scroll");
+            Log.i("###IH-add lesser value", "on top scroll");
             finalViewData.add(impressionData);
             currentViewed.add(viewId);
         } else {
-            Log.i("these are greater", "on top scroll" + viewPosition);
-        }
-    }
-
-    private void addNewEntry1(int viewPosition, ImpressionData impressionData) {
-
-        int viewId = -1;
-        if (finalViewData.size() > 0) {
-            viewId = finalViewData.get(finalViewData.size() - 1).getViewId();
-        }
-
-        if (viewId != -1 && viewId < viewPosition) {
-            Log.i("Only add lesser value", "on bottom scroll");
-        } else {
-            finalViewData.add(impressionData);
-            Log.i("these are greater", "on bottom scroll" + viewPosition);
+            Log.i("###IH-these are greater", "on top scroll" + viewPosition);
         }
     }
     //endregion
@@ -421,18 +409,6 @@ public class ImpressionHelper {
         }
 
         public int getValue() {
-            return value;
-        }
-    }
-
-    //User Agent
-    public enum USER_AGENT {
-        ANDROID("android");
-        private final String value;
-        USER_AGENT(final String newValue) {
-            value = newValue;
-        }
-        public String getValue() {
             return value;
         }
     }

@@ -19,11 +19,11 @@ public class ImpressionData {
     @SerializedName("engagementTime")
     private double engagementTime;
 
-    @SerializedName("timestamp") //*
-    private long timeStamp;
-
     @SerializedName("screenName")
     private String screenName;
+
+    @SerializedName("timestamp") //*
+    private long timeStamp;
 
     @SerializedName("event") //*
     private String event;
@@ -67,6 +67,9 @@ public class ImpressionData {
     @SerializedName("configType")
     private String configType;
 
+    @SerializedName("setOrderKey")
+    private String setOrderKey;
+
     public String getAppVersion() {
         return appVersion;
     }
@@ -89,10 +92,6 @@ public class ImpressionData {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getClientId() {
-        return clientId;
     }
 
     public void setClientId(String clientId) {
@@ -123,20 +122,8 @@ public class ImpressionData {
         this.engagementTime = engagementTime;
     }
 
-    public long getTimeStamp() {
-        return timeStamp;
-    }
-
     public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
-    }
-
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
     }
 
     public String getSource() {
@@ -171,17 +158,9 @@ public class ImpressionData {
         this.postType = postType;
     }
 
-    public int getFeedConfigVersion() {
-        return feedConfigVersion;
-    }
-
     public void setFeedConfigVersion(int feedConfigVersion) {
         this.feedConfigVersion = feedConfigVersion;
     }
-
-    // Duration for which the view has been viewed.
-    private transient long viewDuration = -1;
-
     // ID for the view that was viewed (we'll use the position of the item here).
     private transient int viewId;
 
@@ -190,14 +169,6 @@ public class ImpressionData {
 
     //end time
     private transient long mEndTime = -1;
-
-    public long getViewDuration() {
-        return viewDuration;
-    }
-
-    public void setViewDuration(long viewDuration) {
-        this.viewDuration = viewDuration;
-    }
 
     public int getViewId() {
         return viewId;
@@ -223,10 +194,6 @@ public class ImpressionData {
         this.mEndTime = mEndTime;
     }
 
-    public String getIpAddress() {
-        return ipAddress;
-    }
-
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
@@ -239,43 +206,39 @@ public class ImpressionData {
         this.deviceId = deviceId;
     }
 
-    public String getGtid() {
-        return gtid;
-    }
-
     public void setGtid(String gtid) {
         this.gtid = gtid;
-    }
-
-    public String getUserAgent() {
-        return userAgent;
     }
 
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
 
-    public String getConfigVersion() {
-        return configVersion;
-    }
-
     public void setConfigVersion(String configVersion) {
         this.configVersion = configVersion;
-    }
-
-    public String getConfigType() {
-        return configType;
     }
 
     public void setConfigType(String configType) {
         this.configType = configType;
     }
 
-    public String getSourceTab() {
-        return sourceTab;
-    }
-
     public void setSourceTab(String sourceTab) {
         this.sourceTab = sourceTab;
+    }
+
+    public String getScreenName() {
+        return screenName;
+    }
+
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
+
+    public String getOrderKey() {
+        return setOrderKey;
+    }
+
+    public void setOrderKey(String setOrderKey) {
+        this.setOrderKey = setOrderKey;
     }
 }

@@ -218,8 +218,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);
                                     List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
-                                    getMvpView().showFeedList(feedDetails);
                                     getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                    getMvpView().showFeedList(feedDetails);
                                     break;
                                 case LOAD_MORE_REQUEST:
                                     // append in case of load more

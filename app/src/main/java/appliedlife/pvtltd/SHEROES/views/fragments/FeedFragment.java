@@ -56,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -64,11 +65,10 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
-import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionHelper;
+import appliedlife.pvtltd.SHEROES.datamanager.ImpressionSuperProperty;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
@@ -98,7 +98,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -146,6 +145,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
+    private String mSetOrderKey;
+    private long lastScrollingEndTime;
 
     //TODO - make these two from remote config
     private static final int THRESHOLD_MS = 250;
@@ -227,8 +228,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
     private boolean isActiveTabFragment;
-    ImpressionHelper impressionHelper;
-
+    private ImpressionHelper impressionHelper;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -251,10 +251,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setIsLoggedInUser();
         setupRecyclerScrollListener();
         showGifLoader();
-
-        if (impressionHelper == null) {
-            impressionHelper = new ImpressionHelper(gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
-        }
 
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
 
@@ -287,7 +283,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     //Send event of previous selected tab with duration, and start the time capture for current selected tab
                     AnalyticsManager.trackScreenView(screenName, getExtraProperties());
                     AnalyticsManager.timeScreenView(mScreenLabel);
-                    impressionHelper.onPause();
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
                 AnalyticsManager.timeScreenView(mScreenLabel);
@@ -305,9 +300,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             Log.i("####", "Visibility Hint");
             /*if (impressionHelper == null) {
                 impressionHelper = new ImpressionHelper(gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
+            }*/
+            if(impressionHelper!=null) {
+                impressionHelper.onResume();
             }
-
-            impressionHelper.onResume();*/
+        } else  {
+            if(impressionHelper!=null) {
+                impressionHelper.onPause();
+            }
         }
     }
 
@@ -330,6 +330,17 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mAdapter.notifyDataSetChanged();
         if (getActivity() != null && isAdded() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).showCaseDesign();
+        }
+
+        initializeImpression();
+    }
+
+    private void initializeImpression() {
+        if (impressionHelper == null) {
+            ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
+            impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
+            impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
         }
     }
 
@@ -624,10 +635,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     //Scroll view visibility and duration
+
+                    if (countDownTimer == null) {
+                        countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
+                        countDownTimer.start();
+                    }
+
                     int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                     int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
 
                     impressionHelper.onScrollChange(recyclerView, startPos, endPos);
+                } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    lastScrollingEndTime = System.currentTimeMillis();
                 }
             }
 
@@ -1080,7 +1099,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             countDownTimer.start();
         }
 
-        impressionHelper.onPause();
+        //impressionHelper.onResume();
 
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
@@ -1095,7 +1114,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         //Log.i("feed", finalViewData.toString());
         //finalViewData.clear();
 
-        impressionHelper.onPause();
+        //impressionHelper.onPause();
 
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
@@ -2013,11 +2032,17 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             String setOrderKey = feedResponsePojo.getSetOrderKey();
             String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
-            editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
-            editor.apply();
+            if (null != prefs) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
+                editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
+                editor.apply();
+            }
             AnalyticsManager.initializeMixpanel(getActivity(), false);
+        }
+
+        if(feedResponsePojo!=null && StringUtil.isNotNullOrEmptyString(feedResponsePojo.getSetOrderKey())) {
+            mSetOrderKey = feedResponsePojo.getSetOrderKey();
         }
     }
 
@@ -2164,9 +2189,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         @Override
         public void onFinish() {
-            Log.i("Time Expired", "1 Min/60 sec");
-            impressionPresenter.hitNetworkCall(getContext());
-            start();
+            if (System.currentTimeMillis() - lastScrollingEndTime > 100000) {
+                Log.i("MAX time expired", "stop timer now");
+                //TODO - current visible item times can be updated here and send it to the db
+                cancel();
+            } else {
+                Log.i("Time Expired", "1 Min/60 sec");
+                impressionPresenter.hitNetworkCall(getContext());
+                start();
+            }
         }
 
         @Override

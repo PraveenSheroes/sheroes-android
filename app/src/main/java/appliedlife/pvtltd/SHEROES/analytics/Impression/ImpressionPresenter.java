@@ -57,9 +57,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             @Override
             public void run() {
                 Impression impression = new Impression();
-                //UserEvents userEvents = new UserEvents();
-                //userEvents.setUserEvent(impressionData);
-                impression.setImpressionDataList(impressionData);//setImpressionData(userEvents);
+                impression.setImpressionDataList(impressionData);
 
                 database.impressionDataDao().insert(impression);
             }
@@ -98,16 +96,14 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         });
     }
 
-
-
     //Hit the network after frequency expired
     public void sendImpressionData(final Context context, final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
 
-        Log.i("Impression hit", "Called");
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         }
+        Log.i("Impression hit", "Called");
         getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .retry(1) //Retry no of times
@@ -159,7 +155,6 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         }).start();
     }
 
-
     //Handle the Request for Network call
     public void hitNetworkCall(final Context context) {
 
@@ -182,6 +177,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         }
                         userEvents.setUserEvent(data);
                         sendImpressionData(context, userEvents, rowIndex);
+                    } else {
+                        Log.i("###Impression", "No Record Found");
                     }
                 }
             }).start();
