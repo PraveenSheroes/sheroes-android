@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -52,7 +53,7 @@ public class ImpressionHelper {
     private ArrayList<Integer> currentViewed = new ArrayList<>();
     private List<ImpressionData> finalViewData = new ArrayList<>();
     private Context mContext;
-    Toast toast;
+    private Toast toast;
     //endregion
 
     //region constructor
@@ -80,20 +81,6 @@ public class ImpressionHelper {
      */
     public void onResume() {
        // Log.i("###IH-Resume", "On Resume");
-    }
-
-    public void showToast(String message) {
-        if (toast != null) {
-            toast.cancel();
-        }
-        toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    public void cancelToast() {
-        if (toast != null) {
-            toast.cancel();
-        }
     }
 
     /**
@@ -182,7 +169,7 @@ public class ImpressionHelper {
     private synchronized void analyzeAndAddViewData(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
         // Analyze all the views
         for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
-            ImpressionData impressionData = updateProperties(recyclerView, viewPosition);
+            ImpressionData impressionData = updateProperties(recyclerView, viewPosition); //> 50 visible view
             if(impressionData == null) continue;
 
             currentViewed.add(viewPosition);
@@ -191,16 +178,14 @@ public class ImpressionHelper {
 
             if (scrollDirectionChange) {
                 storeChunks();
+                addNewEntry(viewPosition, impressionData);
                 scrollDirectionChange = false;
                // mIsTopScrolled = false;
                 // Log.d("###IH-top scroll", "happen ::" + viewPosition);
-               // addNewEntry(viewPosition, impressionData);
-            }
-
-            if (indexInFinalList == -1) { //new item add it in final list
+            }else if (indexInFinalList == -1) { //new item add it in final list
                 finalViewData.add(impressionData);
                 Log.d("@@@New Enter", "::" + viewPosition);
-                showToast("Screen Enter" + viewPosition);
+                mImpressionCallback.showToast("Screen Enter" + viewPosition);
             }
         }
 
@@ -280,7 +265,7 @@ public class ImpressionHelper {
                 finalViewData = finalViewData.subList(index+1 , finalViewData.size());
             }
           //  Log.i("###IH-Final list", ":"+finalViewData.size());
-             mImpressionCallback.onNetworkCall();
+           //  mImpressionCallback.onNetworkCall();
         }
     }
 
@@ -336,7 +321,7 @@ public class ImpressionHelper {
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
 
                     Log.i("@@@Screen Exit ", +id +"End time" + timeSpent / 1000.0f);
-                    showToast("Screen Exit"+id+"::Duration"+timeSpent / 1000.0f);
+                    mImpressionCallback.showToast("Screen Exit"+id+"::Duration"+timeSpent / 1000.0f);
                     break;
                 }
             }
@@ -377,7 +362,7 @@ public class ImpressionHelper {
             int length = finalViewData.size();
             for (int i = length - 1; i >= 0; i--) {
                 ImpressionData trackingData1 = finalViewData.get(i);
-                if (trackingData1.getPosition() == id ) { //&& trackingData1.getEndTime() != -1 //&& && id!=lastItemId && lastItemId!= -1 && trackingData.getmEndTime() == -1  &&
+                if (trackingData1.getPosition() == id) { //&& trackingData1.getEndTime() != -1 //&& && id!=lastItemId && lastItemId!= -1 && trackingData.getmEndTime() == -1  &&
                     index = i;
                     break;
                 }
@@ -390,13 +375,13 @@ public class ImpressionHelper {
     private void addNewEntry(int viewPosition, ImpressionData impressionData) {
         int viewId = -1;
         if (finalViewData.size() > 0) {
-            viewId = finalViewData.get(finalViewData.size() - 1).getViewId();
+            viewId = finalViewData.get(finalViewData.size() - 1).getPosition();
         }
 
         if (viewId != -1 && viewId > viewPosition) {
             //Log.i("###IH-add lesser value", "on top scroll");
             Log.d("@@@New Enter", "::" + viewPosition);
-            showToast("Screen Enter" + viewPosition);
+            mImpressionCallback.showToast("Screen Enter" + viewPosition);
             finalViewData.add(impressionData);
         } //else {
            // Log.i("###IH-these are greater", "on top scroll" + viewPosition);

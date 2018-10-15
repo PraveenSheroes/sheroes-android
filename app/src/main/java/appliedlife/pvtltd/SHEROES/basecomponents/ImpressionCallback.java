@@ -15,4 +15,6 @@ public interface ImpressionCallback extends BaseMvpView {
 
     void storeInDatabase(List<ImpressionData> impressionData);
 
+    void showToast(String message);
+
 }

@@ -1,6 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -36,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -132,6 +136,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SEL
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -147,6 +152,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private static final int HIDE_THRESHOLD = 20;
     private String mSetOrderKey;
     private long lastScrollingEndTime;
+    private Toast toast;
 
     //TODO - make these two from remote config
     private static final int THRESHOLD_MS = 250;
@@ -535,8 +541,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void storeInDatabase(List<ImpressionData> impressionData) {
-        if(impressionData.size()>0) {
+        if(toast!=null) {
+            toast.cancel();
+        }
+
+        if(impressionData.size()>0 && getContext()!=null) {
             impressionPresenter.storeBatchInDb(getContext(), impressionData);
+        }
+    }
+
+    @Override
+    public void showToast(String message) {
+        if (toast != null) {
+            toast.cancel();
+        }
+
+        if (getContext() != null) {
+            toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
 
@@ -1114,8 +1136,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         //Log.i("feed", finalViewData.toString());
         //finalViewData.clear();
 
-        impressionHelper.cancelToast();
-
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
         }
@@ -1123,8 +1143,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onStop() {
+        if(toast!=null) {
+            toast.cancel();
+        }
+
         super.onStop();
         isActiveTabFragment = false;
+
         SheroesBus.getInstance().unregister(this);
     }
 
@@ -2201,6 +2226,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 cancel();
             } else {
                 Log.i("Time Expired", "1 Min/60 sec");
+
+                if(toast!=null) {
+                    toast.cancel();
+                }
                 impressionPresenter.hitNetworkCall(getContext());
                 start();
             }
