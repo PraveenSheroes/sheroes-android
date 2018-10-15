@@ -340,7 +340,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
-            impressionHelper = new ImpressionHelper(impressionSuperProperty, gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mLoggedInUser, mAppUtils, this);
         }
     }
 
@@ -650,7 +650,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
 
-                impressionHelper.onScrollChange(recyclerView, startPos, endPos);
+                impressionHelper.onScrollChange(gifLoader.getVisibility() == View.VISIBLE, recyclerView, startPos, endPos);
 
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
@@ -2054,13 +2054,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (mAdapter == null) {
             return null;
         }
+
+
         List<FeedDetail> feedDetails = mAdapter.getDataList();
 
         if (CommonUtil.isEmpty(feedDetails)) {
             return null;
         }
 
-        return feedDetails.get(index);
+        if(feedDetails.size()>index) {
+            return feedDetails.get(index);
+        }
+
+        return null;
     }
 
     public int findPositionById(long id) { //TODO - move to presenter
