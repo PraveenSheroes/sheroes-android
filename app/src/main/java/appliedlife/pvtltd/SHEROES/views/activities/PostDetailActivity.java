@@ -44,6 +44,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -1092,20 +1093,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
-        mMentionSpanList = etView.getMentionSpans();
-        addMentionSpanDetail();
-
-        if (mIsDirty && mEditedComment != null) {
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
+        if (etView.getText().toString().trim().length()==0) {
+            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+            return;
         } else {
-            String message = etView.getEditText().getText().toString();
-            if (!TextUtils.isEmpty(message)) {
-                mLastEditedComment.clear();
-                mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
+            mMentionSpanList = etView.getMentionSpans();
+            addMentionSpanDetail();
+
+            if (mIsDirty && mEditedComment != null) {
+                mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
+            } else {
+                String message = etView.getEditText().getText().toString();
+                if (!TextUtils.isEmpty(message)) {
+                    mLastEditedComment.clear();
+                    mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
+                }
             }
+            etView.getEditText().setText("");
+            CommonUtil.hideKeyboard(this);
         }
-        etView.getEditText().setText("");
-        CommonUtil.hideKeyboard(this);
     }
 
     private void addMentionSpanDetail() {
