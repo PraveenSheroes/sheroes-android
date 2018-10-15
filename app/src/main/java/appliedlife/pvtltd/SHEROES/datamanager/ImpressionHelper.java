@@ -22,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class ImpressionHelper {
 
     //region private member variables
@@ -36,7 +38,7 @@ public class ImpressionHelper {
     private boolean isScrollDown = false;
     private int directionId = -1;
     private int lastDirectionId = -1;
-    private boolean mIsTopScrolled;
+    //private boolean mIsTopScrolled;
     private  boolean isLoaderVisible = false;
     private int viewVisibilityThreshold = 50;
     private ImpressionCallback mImpressionCallback;
@@ -50,6 +52,7 @@ public class ImpressionHelper {
     private ArrayList<Integer> currentViewed = new ArrayList<>();
     private List<ImpressionData> finalViewData = new ArrayList<>();
     private Context mContext;
+    Toast toast;
     //endregion
 
     //region constructor
@@ -79,6 +82,20 @@ public class ImpressionHelper {
        // Log.i("###IH-Resume", "On Resume");
     }
 
+    public void showToast(String message) {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void cancelToast() {
+        if (toast != null) {
+            toast.cancel();
+        }
+    }
+
     /**
      * Fragment/ Activity is paused
      */
@@ -104,7 +121,7 @@ public class ImpressionHelper {
         if (!isSameView(startPos, endPos)) {
             startViewId = startPos;
             endViewId = endPos;
-            mIsTopScrolled = (startPos > 0) && startPos < lastPosition;
+            // mIsTopScrolled = (startPos > 0) && startPos < lastPosition;
 
             if (startPos > 0 && lastPosition < startPos) {
                 //  Log.i("###IH-SCROLLING DOWN", "TRUE");
@@ -120,12 +137,12 @@ public class ImpressionHelper {
 
             lastPosition = startPos;
             lastDirectionId = directionId;
-            lastDirectionDown = mIsTopScrolled;
 
             analyzeAndAddViewData(recyclerView, startPos, endPos);
         }
 
-        if (directionId!=2 && previousViewed.size() > 0) { //Compare if any item was present , now not in the list
+
+        if (directionId == 1 && previousViewed.size() > 0) { //Compare if any item was present , now not in the list
             for (int i = 0; i < previousViewed.size(); i++) {
                 int viewPosition = previousViewed.get(i);
                 View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
@@ -172,15 +189,18 @@ public class ImpressionHelper {
 
             int indexInFinalList = checkIfItemInFinal(viewPosition);
 
-            if (directionId == 2) {
-                mIsTopScrolled = false;
+            if (scrollDirectionChange) {
+                storeChunks();
+                scrollDirectionChange = false;
+               // mIsTopScrolled = false;
                 // Log.d("###IH-top scroll", "happen ::" + viewPosition);
-                addNewEntry(viewPosition, impressionData);
-            }else if (indexInFinalList == -1) { //new item add it in final list
+               // addNewEntry(viewPosition, impressionData);
+            }
+
+            if (indexInFinalList == -1) { //new item add it in final list
                 finalViewData.add(impressionData);
                 Log.d("@@@New Enter", "::" + viewPosition);
-
-                Toast.makeText(SheroesApplication.mContext, "Screen Enter" + viewPosition, Toast.LENGTH_SHORT).show();
+                showToast("Screen Enter" + viewPosition);
             }
         }
 
@@ -316,7 +336,7 @@ public class ImpressionHelper {
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
 
                     Log.i("@@@Screen Exit ", +id +"End time" + timeSpent / 1000.0f);
-                    Toast.makeText(SheroesApplication.mContext, "Screen Exit"+id+"::Duration"+timeSpent / 1000.0f, Toast.LENGTH_SHORT).show();
+                    showToast("Screen Exit"+id+"::Duration"+timeSpent / 1000.0f);
                     break;
                 }
             }
@@ -376,7 +396,7 @@ public class ImpressionHelper {
         if (viewId != -1 && viewId > viewPosition) {
             //Log.i("###IH-add lesser value", "on top scroll");
             Log.d("@@@New Enter", "::" + viewPosition);
-            Toast.makeText(SheroesApplication.mContext, "Screen Enter" + viewPosition, Toast.LENGTH_SHORT).show();
+            showToast("Screen Enter" + viewPosition);
             finalViewData.add(impressionData);
         } //else {
            // Log.i("###IH-these are greater", "on top scroll" + viewPosition);

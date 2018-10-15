@@ -335,6 +335,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         initializeImpression();
     }
 
+    //Initialize the impression Helper class
     private void initializeImpression() {
         if (impressionHelper == null) {
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
@@ -1113,7 +1114,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         //Log.i("feed", finalViewData.toString());
         //finalViewData.clear();
 
-        //impressionHelper.onPause();
+        impressionHelper.cancelToast();
 
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
