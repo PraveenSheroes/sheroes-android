@@ -1,10 +1,12 @@
 package appliedlife.pvtltd.SHEROES.datamanager;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -47,6 +49,7 @@ public class ImpressionHelper {
     private ArrayList<Integer> previousViewed = new ArrayList<>();
     private ArrayList<Integer> currentViewed = new ArrayList<>();
     private List<ImpressionData> finalViewData = new ArrayList<>();
+    private Context mContext;
     //endregion
 
     //region constructor
@@ -88,15 +91,16 @@ public class ImpressionHelper {
 
     /**
      * Get callback when recycler view is being scrolled and scroll state changing
-     * @param mFeedRecyclerView recyclerView
+     * @param recyclerView recyclerView
      * @param startPos first visible item on screen
      * @param endPos last visible item on screen
      */
-    public void onScrollChange(RecyclerView mFeedRecyclerView, int startPos, int endPos) {
+    public void onScrollChange(RecyclerView recyclerView, int startPos, int endPos) {
        // if (isLoaderVisible) {
        //     return;
        // }
 
+        mContext = recyclerView.getContext();
        if(scrollDirectionChange) {
             scrollDirectionChange = false;
             //Log.i("###IH-Direction", "Changed");
@@ -123,7 +127,7 @@ public class ImpressionHelper {
            lastDirectionId = directionId;
            lastDirectionDown = mIsTopScrolled;
 
-           analyzeAndAddViewData(mFeedRecyclerView, startPos, endPos);
+           analyzeAndAddViewData(recyclerView, startPos, endPos);
        }
     }
 
@@ -194,6 +198,7 @@ public class ImpressionHelper {
                 if (indexInFinalList == -1) { //new item add it in final list
                     finalViewData.add(impressionData);
                     Log.d("@@@New Enter", "::" + viewPosition);
+                    Toast.makeText(recyclerView.getContext(), "Screen Enter"+ viewPosition, Toast.LENGTH_SHORT).show();
                 } else if (mIsTopScrolled) {
                     mIsTopScrolled = false;
                    // Log.d("###IH-top scroll", "happen ::" + viewPosition);
@@ -219,7 +224,8 @@ public class ImpressionHelper {
             storeChunks();
         }
 
-        previousViewed.addAll(currentViewed);
+        lesserVisibleView(recyclerView, firstVisibleItemPosition, lastVisibleItemPosition);
+        //previousViewed.addAll(currentViewed);
         currentViewed.clear();
 
        /* synchronized (this) {
@@ -230,6 +236,16 @@ public class ImpressionHelper {
             }
             Log.i("######", "#############################");
         }*/
+    }
+
+
+    private void lesserVisibleView(RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
+        for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
+            View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
+            if (getVisibleHeightPercentage(itemView) < viewVisibilityThreshold) {
+                previousViewed.add(viewPosition);
+            }
+        }
     }
 
     private void storeChunks() {
@@ -300,6 +316,7 @@ public class ImpressionHelper {
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
 
                     Log.i("@@@Screen Exit ", +id +"End time" + timeSpent / 1000.0f);
+                    Toast.makeText(mContext, "Screen Exit"+id+"::Duration"+timeSpent / 1000.0f, Toast.LENGTH_SHORT).show();
                     break;
                 }
             }
