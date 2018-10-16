@@ -95,26 +95,25 @@ public class ImpressionHelper {
        //     return;
        // }
 
-        if (!isSameView(startPos, endPos)) {
-            startViewId = startPos;
-            endViewId = endPos;
+        startViewId = startPos;
+        endViewId = endPos;
 
-            if (startPos > 0 && lastPosition < startPos) {
-                directionId = 1;  //SCROLLING DOWN
-            } else if (lastPosition > startPos) {
-                directionId = 2; //SCROLLING UP
-            }
-
-            if (lastDirectionId != -1 && lastDirectionId != directionId) {
-                scrollDirectionChange = true;
-            }
-
-            lastPosition = startPos;
-            lastDirectionId = directionId;
-
-            analyzeAndAddViewData(recyclerView, startPos, endPos);
+        if (startPos > 0 && lastPosition < startPos) {
+            directionId = 1;  //SCROLLING DOWN
+        } else if (lastPosition > startPos) {
+            directionId = 2; //SCROLLING UP
         }
 
+        if (lastDirectionId != -1 && lastDirectionId != directionId) {
+            scrollDirectionChange = true;
+        }
+
+        lastPosition = startPos;
+        lastDirectionId = directionId;
+
+        if (isSameView(startPos, endPos)) {
+            analyzeAndAddViewData(recyclerView, startPos, endPos);
+        }
 
         if (directionId == 1 && previousViewed.size() > 0) { //Compare if any item was present , now not in the list
             for (int i = 0; i < previousViewed.size(); i++) {
