@@ -29,7 +29,7 @@ public class LoginResponse extends BaseResponse{
     private boolean sheUser;
     private String tokenType;
     private long tokenTime;
-    private String gcmId;
+    private String fcmId;
     @SerializedName("next_screen")
     @Expose
     private String nextScreen;
@@ -80,12 +80,12 @@ public class LoginResponse extends BaseResponse{
         this.nextScreen = nextScreen;
     }
 
-    public String getGcmId() {
-        return gcmId;
+    public String getFcmId() {
+        return fcmId;
     }
 
-    public void setGcmId(String gcmId) {
-        this.gcmId = gcmId;
+    public void setFcmId(String fcmId) {
+        this.fcmId = fcmId;
     }
 
     public boolean isSheUser() {
