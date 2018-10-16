@@ -1,5 +1,8 @@
-package appliedlife.pvtltd.SHEROES.datamanager;
+package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
+/**
+ * Model class with super properties required for impression helper
+ */
 public class ImpressionSuperProperty {
 
     private String communityTab;

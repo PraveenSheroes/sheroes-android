@@ -4,14 +4,14 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.datamanager.RoomJsonConverter;
 
-
+/**
+ * Model class for db table impression
+ * @author ravi
+ */
 @Entity(tableName = "impression")
 public class Impression {
 

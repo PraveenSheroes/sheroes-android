@@ -1,9 +1,6 @@
-package appliedlife.pvtltd.SHEROES.basecomponents;
+package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import java.util.List;
-
-import appliedlife.pvtltd.SHEROES.analytics.Impression.Impression;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserEventsContainer;
 
 /**
  * Impression Callback

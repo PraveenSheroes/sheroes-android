@@ -12,15 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionSuperProperty;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 
+/**
+ * Helper class for Impression help to detect visible impression and exit of impression view
+ */
 public class ImpressionHelper {
 
     //region private member variables
@@ -33,7 +35,7 @@ public class ImpressionHelper {
     private int directionId = -1;
     private int lastDirectionId = -1;
     private  boolean isLoaderVisible = false;
-    private int viewVisibilityThreshold = 50;
+    private int mImpressionVisibilityThreshold = 50;
     private ImpressionCallback mImpressionCallback;
 
     private AppUtils mAppUtils;
@@ -58,10 +60,10 @@ public class ImpressionHelper {
 
     private void init() {
         //Get the view min Visibility of View from remote config
-      //  viewVisibilityThreshold = new ConfigData().visibilityPercentage;
-      //  if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
-      //      viewVisibilityThreshold = mConfiguration.get().configData.visibilityPercentage;
-      //  }
+        mImpressionVisibilityThreshold = new ConfigData().visibilityPercentage;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
+            mImpressionVisibilityThreshold = mConfiguration.get().configData.visibilityPercentage;
+        }
     }
     //endregion
 
@@ -119,7 +121,7 @@ public class ImpressionHelper {
                 int viewPosition = previousViewed.get(i);
                 View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
-                if (getVisibleHeightPercentage(itemView) < viewVisibilityThreshold) {  //Only those views which have visibility >= 50%
+                if (getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {  //Only those views which have visibility >= 50%
                     FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
                     if (feedDetail != null) {
                         updateEndTimeIfItemNotExist(viewPosition);
@@ -201,7 +203,7 @@ public class ImpressionHelper {
         ImpressionData impressionData = new ImpressionData();
         View itemView = recyclerView.getLayoutManager().findViewByPosition(viewPosition);
 
-        if (getVisibleHeightPercentage(itemView) >= viewVisibilityThreshold) {  //Only those views which have visibility >= 50%
+        if (getVisibleHeightPercentage(itemView) >= mImpressionVisibilityThreshold) {  //Only those views which have visibility >= 50%
             FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
             if (feedDetail == null) return null;
 

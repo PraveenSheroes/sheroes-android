@@ -2,6 +2,10 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * Model class for impression
+ * @author ravi
+ */
 public class ImpressionData {
 
     @SerializedName("userId")

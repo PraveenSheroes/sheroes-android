@@ -12,7 +12,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -98,44 +97,38 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         });
     }
 
-
     @SuppressLint("CheckResult")
     private void insertImpressionsInDb(final Context context, final List<ImpressionData> impressionData) {
         Single.create(new SingleOnSubscribe<Long>() {
             @Override
-            public void subscribe(SingleEmitter<Long> emitter)  {
+            public void subscribe(SingleEmitter<Long> emitter) {
                 try {
                     Impression impression = new Impression();
                     impression.setImpressionDataList(impressionData);
                     final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
                     long id = database.impressionDataDao().insert(impression);
-                    if(id> -1) {
+                    if (id > -1) {
                         emitter.onSuccess(id);
                     }
                 } catch (Throwable t) {
                     emitter.onError(t);
                 }
-            }})
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+            }
+        }).observeOn(AndroidSchedulers.mainThread())
+          .subscribeOn(Schedulers.io())
+          .subscribe(new DisposableSingleObserver<Long>() {
+           @Override
+           public void onSuccess(Long aLong) {
+           }
 
-                .subscribeWith(new DisposableSingleObserver<Long>() {
-                    @Override
-                    public void onSuccess(Long id) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-                });
+           @Override
+           public void onError(Throwable e) {
+          }
+          });
     }
 
-
-
     //Hit the network after frequency expired
-    public void sendImpressionData(final Context context, final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
+    private void sendImpressionData(final Context context, final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
@@ -172,8 +165,6 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     }
                 });
     }
-
-
 
     //clear db items
     /**
@@ -222,5 +213,4 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             }).start();
         }
     }
-
 }

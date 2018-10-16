@@ -294,10 +294,5 @@ public class HelplineFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
-    @Override
-    public boolean shouldTrackScreen() {
-        return super.shouldTrackScreen();
-    }
 }
 

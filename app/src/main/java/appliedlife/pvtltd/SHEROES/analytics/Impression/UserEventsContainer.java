@@ -1,9 +1,10 @@
-package appliedlife.pvtltd.SHEROES.models.entities.feed;
+package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
 
+@Deprecated
 public class UserEventsContainer {
 
     //@TypeConverters(RoomJsonConverter.class)
