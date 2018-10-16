@@ -26,7 +26,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
 
 /**
  * Created by Ujjwal on 05-02-2018.
@@ -117,7 +117,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         String pluralMember = mContext.getResources().getQuantityString(R.plurals.numberOfMembers, mCommunityFeedObj.getNoOfMembers());
-        mCommunityMemberCount.setText(String.valueOf(numericToThousand(mCommunityFeedObj.getNoOfMembers()) + AppConstants.SPACE + pluralMember));
+        mCommunityMemberCount.setText(String.valueOf(beautifyNumericValue(mCommunityFeedObj.getNoOfMembers()) + AppConstants.SPACE + pluralMember));
     }
 
     @Override

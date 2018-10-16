@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -54,7 +53,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
 
 /**
  * Created by Praveen_Singh on 23-01-2017.
@@ -541,7 +540,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     rlFeedArticleViews.setVisibility(View.VISIBLE);
                     StringBuilder stringBuilder = new StringBuilder();
                     if (articleObj.getNoOfViews() > 1) {
-                        stringBuilder.append(numericToThousand(articleObj.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                        stringBuilder.append(beautifyNumericValue(articleObj.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                         tvFeedArticleTotalViews.setText(stringBuilder.toString());
                         tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
                         rlFeedArticleViews.setVisibility(View.VISIBLE);

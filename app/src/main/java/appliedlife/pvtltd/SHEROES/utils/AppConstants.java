@@ -360,7 +360,6 @@ public class AppConstants {
     public static final String OPEN_IN_WEBVIEW = "open_in_webview";
     public static final String SHEROES = "SHEROES";
     public static final String TICKER = "ticker";
-    public static final String CHECK_OUT = "Check out ";
     public static final String THOUSANDS = "K";
     public static final String TWITTER_SHARE = "com.twitter.android";
     public static final String TWITTER_SHARE_VIA_BROWSER = "https://twitter.com/intent/tweet?text=";

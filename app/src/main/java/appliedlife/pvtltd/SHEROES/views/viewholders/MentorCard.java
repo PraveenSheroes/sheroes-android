@@ -33,7 +33,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
 
 /**
  * Created by Praveen on 24/11/17.
@@ -147,14 +147,14 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         }
         if (dataItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
             String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, dataItem.getSolrIgnoreNoOfMentorFollowers());
-            tvFeedMentorFollower.setText(String.valueOf(numericToThousand(dataItem.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+            tvFeedMentorFollower.setText(String.valueOf(beautifyNumericValue(dataItem.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
             tvFeedMentorFollower.setVisibility(View.VISIBLE);
         } else {
             tvFeedMentorFollower.setVisibility(View.INVISIBLE);
         }
         if (dataItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
             StringBuilder answers = new StringBuilder();
-            answers.append(numericToThousand(dataItem.getSolrIgnoreNoOfMentorAnswers()) + AppConstants.SPACE + mContext.getString(R.string.ID_ANSWERED_QUESTIONS));
+            answers.append(beautifyNumericValue(dataItem.getSolrIgnoreNoOfMentorAnswers()) + AppConstants.SPACE + mContext.getString(R.string.ID_ANSWERED_QUESTIONS));
             tvFeedMentorAnswered.setText(answers);
             tvFeedMentorAnswered.setVisibility(View.VISIBLE);
         } else {

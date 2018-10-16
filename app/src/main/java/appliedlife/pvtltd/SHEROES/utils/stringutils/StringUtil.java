@@ -19,6 +19,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -105,8 +106,7 @@ public class StringUtil {
         return hashText;
     }
 
-
-    public static String numericToThousand(int countValue) {
+    /*public static String numericToThousand(int countValue) {
        String thousand;
         if(countValue>999)
         {
@@ -116,6 +116,14 @@ public class StringUtil {
             thousand=String.valueOf(countValue);
         }
         return thousand;
+    }*/
+
+    public static String beautifyNumericValue(long countValue) {
+        if (countValue < 1000) return "" + countValue;
+        int exp = (int) (Math.log(countValue) / Math.log(1000));
+        return String.format(Locale.US, "%.1f %c",
+                countValue / Math.pow(1000, exp),
+                "KMGTPE".charAt(exp-1));
     }
 
     public static String toString(InputStream input, Charset encoding) throws IOException {
