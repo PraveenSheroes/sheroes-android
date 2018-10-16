@@ -337,6 +337,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private LinkRenderResponse mLinkRenderResponse = null;
     private CommunityPost mCommunityPost;
     private boolean mIsEditPost;
+    private boolean mIsDisableClickOnPost = false;
     private boolean isSharedContent = false;
     private boolean mIsFromCommunity;
     private boolean mIsFromBranch;
@@ -1021,7 +1022,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private boolean validateFields() {
-        if (!isDirty() && !mIsEditPost) {
+        if (!isDirty()) {
             showMessage(R.string.error_blank);
             return false;
         }
@@ -1117,6 +1118,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void startProgressBar() {
         mIsProgressBarVisible = true;
+        mIsDisableClickOnPost = true;
         CommonUtil.hideKeyboard(this);
         mProgressBar.setVisibility(View.VISIBLE);
     }
@@ -1124,6 +1126,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void stopProgressBar() {
         mIsProgressBarVisible = false;
+        mIsDisableClickOnPost = false;
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -1419,9 +1422,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    public boolean isPostModified() {
+    /*public boolean isPostModified() {
         return !mOldText.equals(etView.getEditText().getText().toString()) || !CommonUtil.isEmpty(mEditFilePathList) || !CommonUtil.isEmpty(mDeletedImageIdList);
-    }
+    }*/
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
@@ -1602,11 +1605,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private boolean isDirty() {
-        if (mIsEditPost) {
-            return isPostModified();
-        } else {
-            return CommonUtil.isNotEmpty(etView.getEditText().getText().toString().trim()) || !CommonUtil.isEmpty(mImageList);
-        }
+        return CommonUtil.isNotEmpty(etView.getEditText().getText().toString().trim()) || !CommonUtil.isEmpty(mImageList);
     }
 
     private void setImageCount() {
@@ -1627,20 +1626,22 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPostPhotoAdapter = new PostPhotoAdapter(this, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View recyclerViewItem = (View) view.getParent();
-                int position = mImageListView.getChildAdapterPosition(recyclerViewItem);
-                if (position == -1) return;
-                Photo photo = mImageList.get(position);
-                if (mIsEditPost && !photo.isNew) {
-                    mDeletedImageIdList.add((long) photo.remote_id);
-                } else if (mIsEditPost && photo.isNew) {
-                    mEditFilePathList.remove(position - mImageListCount);
-                } else {
-                    mFilePathList.remove(position);
+                if (!mIsDisableClickOnPost) {
+                    View recyclerViewItem = (View) view.getParent();
+                    int position = mImageListView.getChildAdapterPosition(recyclerViewItem);
+                    if (position == -1) return;
+                    Photo photo = mImageList.get(position);
+                    if (mIsEditPost && !photo.isNew) {
+                        mDeletedImageIdList.add((long) photo.remote_id);
+                    } else if (mIsEditPost && photo.isNew) {
+                        mEditFilePathList.remove(position - mImageListCount);
+                    } else {
+                        mFilePathList.remove(position);
+                    }
+                    mImageList.remove(position);
+                    setImageCount();
+                    mPostPhotoAdapter.removePhoto(position);
                 }
-                mImageList.remove(position);
-                setImageCount();
-                mPostPhotoAdapter.removePhoto(position);
             }
         });
         mImageListView.setAdapter(mPostPhotoAdapter);
