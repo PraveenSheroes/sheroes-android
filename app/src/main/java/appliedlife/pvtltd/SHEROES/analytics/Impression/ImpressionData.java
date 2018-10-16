@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanager;
+package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import com.google.gson.annotations.SerializedName;
 

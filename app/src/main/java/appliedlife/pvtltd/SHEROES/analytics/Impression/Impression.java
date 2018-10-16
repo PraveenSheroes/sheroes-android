@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanager;
+package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
@@ -8,6 +8,8 @@ import android.arch.persistence.room.TypeConverters;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
+import appliedlife.pvtltd.SHEROES.datamanager.RoomJsonConverter;
 
 
 @Entity(tableName = "impression")

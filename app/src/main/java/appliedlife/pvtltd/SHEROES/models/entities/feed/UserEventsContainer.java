@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
 
 public class UserEventsContainer {
 

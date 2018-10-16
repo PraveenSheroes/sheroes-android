@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
+
 /**
  * Converter UserEvents objects to Json and vice versa
  */

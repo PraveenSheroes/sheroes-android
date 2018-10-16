@@ -7,7 +7,7 @@ import android.arch.persistence.room.Query;
 
 import java.util.List;
 
-import io.reactivex.Single;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.Impression;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 

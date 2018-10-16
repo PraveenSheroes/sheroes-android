@@ -1,9 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
@@ -69,8 +66,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionHelper;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper;
 import appliedlife.pvtltd.SHEROES.datamanager.ImpressionSuperProperty;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
@@ -136,7 +133,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SEL
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by ujjwal on 27/12/17.

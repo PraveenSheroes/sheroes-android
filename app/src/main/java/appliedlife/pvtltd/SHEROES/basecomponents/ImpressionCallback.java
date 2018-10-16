@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.datamanager.ImpressionData;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
 public interface ImpressionCallback extends BaseMvpView {
