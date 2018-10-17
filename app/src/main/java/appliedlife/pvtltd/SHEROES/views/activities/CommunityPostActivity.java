@@ -1335,11 +1335,13 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } catch (FileNotFoundException e) {
             Crashlytics.getInstance().core.logException(e);
         } finally {
-            try {
-                writeBitmapFile.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Crashlytics.getInstance().core.logException(e);
+            if (writeBitmapFile != null) {
+                try {
+                    writeBitmapFile.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Crashlytics.getInstance().core.logException(e);
+                }
             }
         }
         return file;
@@ -1421,10 +1423,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mUserDropDownView.setVisibility(View.GONE);
         }
     }
-
-    /*public boolean isPostModified() {
-        return !mOldText.equals(etView.getEditText().getText().toString()) || !CommonUtil.isEmpty(mEditFilePathList) || !CommonUtil.isEmpty(mDeletedImageIdList);
-    }*/
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
