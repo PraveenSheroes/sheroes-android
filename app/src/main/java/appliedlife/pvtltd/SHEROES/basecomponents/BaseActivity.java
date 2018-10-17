@@ -1055,7 +1055,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
 
 
                 default: {
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
                 }
             }
         } else {
