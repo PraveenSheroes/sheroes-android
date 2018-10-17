@@ -98,7 +98,7 @@ public class ImpressionData {
         this.userId = userId;
     }
 
-    void setClientId(String clientId) {
+    public void setClientId(String clientId) {
         this.clientId = clientId;
     }
 
@@ -118,15 +118,15 @@ public class ImpressionData {
         this.position = position;
     }
 
-    double getEngagementTime() {
+    public double getEngagementTime() {
         return engagementTime;
     }
 
-    void setEngagementTime(double engagementTime) {
+    public void setEngagementTime(double engagementTime) {
         this.engagementTime = engagementTime;
     }
 
-    void setTimeStamp(long timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 
@@ -158,11 +158,11 @@ public class ImpressionData {
         return postType;
     }
 
-    void setPostType(String postType) {
+    public void setPostType(String postType) {
         this.postType = postType;
     }
 
-    void setFeedConfigVersion(int feedConfigVersion) {
+    public void setFeedConfigVersion(int feedConfigVersion) {
         this.feedConfigVersion = feedConfigVersion;
     }
     // ID for the view that was viewed (we'll use the position of the item here).
@@ -182,23 +182,23 @@ public class ImpressionData {
         this.viewId = viewId;
     }
 
-    long getStartTime() {
+    public long getStartTime() {
         return mStartTime;
     }
 
-    void setStartTime(long mStartTime) {
+    public void setStartTime(long mStartTime) {
         this.mStartTime = mStartTime;
     }
 
-    long getEndTime() {
+    public long getEndTime() {
         return mEndTime;
     }
 
-    void setEndTime(long mEndTime) {
+    public void setEndTime(long mEndTime) {
         this.mEndTime = mEndTime;
     }
 
-    void setIpAddress(String ipAddress) {
+    public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
@@ -206,27 +206,27 @@ public class ImpressionData {
         return deviceId;
     }
 
-    void setDeviceId(String deviceId) {
+    public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
 
-    void setGtid(String gtid) {
+    public void setGtid(String gtid) {
         this.gtid = gtid;
     }
 
-    void setUserAgent(String userAgent) {
+    public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
     }
 
-    void setConfigVersion(String configVersion) {
+    public void setConfigVersion(String configVersion) {
         this.configVersion = configVersion;
     }
 
-    void setConfigType(String configType) {
+    public void setConfigType(String configType) {
         this.configType = configType;
     }
 
-     void setSourceTab(String sourceTab) {
+    public void setSourceTab(String sourceTab) {
         this.sourceTab = sourceTab;
     }
 
@@ -242,7 +242,7 @@ public class ImpressionData {
         return streamName;
     }
 
-    void setStreamName(String streamName) {
+    public void setStreamName(String streamName) {
         this.streamName = streamName;
     }
 }

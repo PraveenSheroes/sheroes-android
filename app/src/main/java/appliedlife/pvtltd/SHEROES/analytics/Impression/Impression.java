@@ -32,6 +32,7 @@ public class Impression {
     }
 
     public int getIndex() {
+
         return index;
     }
 
