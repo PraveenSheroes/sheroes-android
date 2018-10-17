@@ -57,7 +57,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper1;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -68,7 +68,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionSuperProperty;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
@@ -232,7 +231,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
     private boolean isActiveTabFragment;
-    private ImpressionHelper1 impressionHelper;
+    private ImpressionHelper impressionHelper;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -345,7 +344,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
-            impressionHelper = new ImpressionHelper1(impressionSuperProperty, mConfiguration, mLoggedInUser, mAppUtils, this);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mLoggedInUser, mAppUtils, this);
         }
     }
 
