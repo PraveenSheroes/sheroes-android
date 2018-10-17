@@ -469,6 +469,8 @@ public class AppConstants {
     public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
 
+    public static final String IMAGE_INITIAL_FILE_NAME = "file\"; filename=\"";
+
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
 }

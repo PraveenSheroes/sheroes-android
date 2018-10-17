@@ -1869,7 +1869,7 @@ public class AppUtils {
         for (int i = 0; i < filePath.size(); i++) {
             File file = new File(filePath.get(i));
             RequestBody fileBody = RequestBody.create(MediaType.parse(FileUtil.getMimeType(filePath.get(i))), file);
-            map.put("file\"; filename=\"" + file.getName(), fileBody);
+            map.put(AppConstants.IMAGE_INITIAL_FILE_NAME + file.getName(), fileBody);
         }
         return map;
     }
