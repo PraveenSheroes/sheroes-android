@@ -12,10 +12,19 @@ public interface ImpressionCallback extends BaseMvpView {
 
     FeedDetail getListItemAtPos(int pos);
 
+
     String getScreenName();
 
+    /**
+     * Store the impression in database
+     * @param impressionData impressions
+     */
     void storeInDatabase(List<ImpressionData> impressionData);
 
+    /**
+     * Show the toast message
+     * @param message message to be shown
+     */
     void showToast(String message);
 
 }

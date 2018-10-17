@@ -23,6 +23,7 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
@@ -65,7 +66,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     }
 
     //Filter the list and get only those item which have more than 250ms time spend on impression
-    public void storeBatchInDb(final Context context, final List<ImpressionData> impressionData) {
+    public void storeBatchInDb(final Context context, final float minEngagementTime, final List<ImpressionData> impressionData) {
         Observable.just(impressionData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,7 +78,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 }).filter(new Predicate<ImpressionData>() {
             @Override
             public boolean test(ImpressionData impressionData)  {
-                return impressionData.getEngagementTime() >= 0.25; //Todo - declare in congig var, remove this time
+                return impressionData.getEngagementTime() >= minEngagementTime; //Todo - declare in congig var, remove this time
             }
         }).toList().subscribe(new DisposableSingleObserver<List<ImpressionData>>() {
             @Override
@@ -97,7 +98,6 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         });
     }
 
-    @SuppressLint("CheckResult")
     private void insertImpressionsInDb(final Context context, final List<ImpressionData> impressionData) {
         Single.create(new SingleOnSubscribe<Long>() {
             @Override
@@ -137,7 +137,52 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
        // Log.i("Impression hit", "Called");
         getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEvents)
-                .retry(1) //Retry no of times
+                 //Retry no of times
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        retryNetworkCall(context, userEvents, fetchedRowIndex);
+                    }
+                })
+                .subscribe(new DisposableObserver<BaseResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse baseResponse) {
+                        getMvpView().stopProgressBar();
+                        if (null != baseResponse) {
+                            //Log.i("Impression", "responseee");
+                            clearDatabase(context, fetchedRowIndex);
+                            // getMvpView().onImpressionResponse(baseResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS));
+                        }
+                    }
+                });
+    }
+
+
+    //Retry this pon error
+    private void retryNetworkCall(final Context context, final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
+
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            return;
+        }
+        // Log.i("Impression hit", "Called");
+        getMvpView().startProgressBar();
+        mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
@@ -165,6 +210,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     }
                 });
     }
+
 
     //clear db items
     /**

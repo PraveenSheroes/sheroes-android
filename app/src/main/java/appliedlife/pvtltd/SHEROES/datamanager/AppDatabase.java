@@ -13,7 +13,6 @@ import appliedlife.pvtltd.SHEROES.analytics.Impression.Impression;
 public abstract class AppDatabase extends RoomDatabase {
 
     private static final String DB_NAME = "sheroes";
-    static final String TABLE_NAME = "impression";
     private static AppDatabase INSTANCE;
 
     public abstract ImpressionDataDao impressionDataDao();

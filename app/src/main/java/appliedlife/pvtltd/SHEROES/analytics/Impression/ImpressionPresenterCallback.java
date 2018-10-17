@@ -20,10 +20,4 @@ public interface ImpressionPresenterCallback {
      */
     void storeImpressions(List<Impression> impressionDataList);
 
-    /**
-     * Send the impression to Server
-     * @param userEventsContainer impressions
-     */
-    void sendImpression(UserEventsContainer userEventsContainer);
-
 }

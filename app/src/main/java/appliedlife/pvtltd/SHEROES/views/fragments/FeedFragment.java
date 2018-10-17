@@ -57,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper1;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
@@ -153,6 +154,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     //TODO - make these two from remote config
     private static final int THRESHOLD_MS = 250;
     private int viewVisibilityThreshold;
+    private int mScrollDirection;
 
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
@@ -230,7 +232,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private int mScrolledDistance = 0;
     private LinearLayoutManager mLinearLayoutManager;
     private boolean isActiveTabFragment;
-    private ImpressionHelper impressionHelper;
+    private ImpressionHelper1 impressionHelper;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -343,7 +345,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
-            impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mLoggedInUser, mAppUtils, this);
+            impressionHelper = new ImpressionHelper1(impressionSuperProperty, mConfiguration, mLoggedInUser, mAppUtils, this);
         }
     }
 
@@ -542,7 +544,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
 
         if(impressionData.size()>0 && getContext()!=null) {
-            impressionPresenter.storeBatchInDb(getContext(), impressionData);
+            impressionPresenter.storeBatchInDb(getContext(), 0.25f, impressionData);
         }
     }
 
@@ -661,16 +663,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 super.onScrolled(recyclerView, dx, dy);
 
                 //Scroll view visibility and duration
+                lastScrollingEndTime = System.currentTimeMillis();
                 if (countDownTimer == null) {
                     countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
                     countDownTimer.start();
                 }
 
+                if (dy < 0) {
+                    mScrollDirection = ImpressionHelper.SCROLL_UP;
+                    Log.i("**", "Scrolling UP");
+                } else if (dy > 0) {
+                    mScrollDirection = ImpressionHelper.SCROLL_DOWN;
+                    Log.i("**", "Scrolling down");
+                }
+
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-
-                impressionHelper.onScrollChange(gifLoader.getVisibility() == View.VISIBLE, recyclerView, startPos, endPos);
-
+                impressionHelper.onScrollChange(mScrollDirection, recyclerView, startPos, endPos);
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -2077,7 +2086,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             return null;
         }
 
-
         List<FeedDetail> feedDetails = mAdapter.getDataList();
 
         if (CommonUtil.isEmpty(feedDetails)) {
@@ -2233,6 +2241,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         @Override
         public void onTick(long millisUntilFinished) {
+           // Log.i("Time Expired", "1 Min/60 sec");
         }
     }
 

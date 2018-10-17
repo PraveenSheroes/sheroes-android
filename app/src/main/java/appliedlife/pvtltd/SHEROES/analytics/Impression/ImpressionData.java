@@ -23,8 +23,8 @@ public class ImpressionData {
     @SerializedName("engagementTime")
     private double engagementTime;
 
-    @SerializedName("screenName")
-    private String screenName;
+    @SerializedName("streamName")
+    private String streamName;
 
     @SerializedName("timestamp") //*
     private long timeStamp;
@@ -230,19 +230,19 @@ public class ImpressionData {
         this.sourceTab = sourceTab;
     }
 
-    public String getScreenName() {
-        return screenName;
-    }
-
-    public void setScreenName(String screenName) {
-        this.screenName = screenName;
-    }
-
     public String getOrderKey() {
         return setOrderKey;
     }
 
     public void setOrderKey(String setOrderKey) {
         this.setOrderKey = setOrderKey;
+    }
+
+    public String getStreamName() {
+        return streamName;
+    }
+
+    public void setStreamName(String streamName) {
+        this.streamName = streamName;
     }
 }

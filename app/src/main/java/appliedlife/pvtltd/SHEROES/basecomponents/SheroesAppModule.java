@@ -4,6 +4,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
+import android.text.format.Formatter;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
@@ -330,13 +331,12 @@ public class SheroesAppModule {
      * Get the ip address
      * @return ip address if error return empty string
      */
-    public static String getIpAddress()
-    {
+    public static String getIpAddress() {
         try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
+            for (Enumeration<NetworkInterface> networkInterfacesEnum = NetworkInterface.getNetworkInterfaces(); networkInterfacesEnum.hasMoreElements(); ) {
+                NetworkInterface networkInterface = networkInterfacesEnum.nextElement();
+                for (Enumeration<InetAddress> ipAddressEnum = networkInterface.getInetAddresses(); ipAddressEnum.hasMoreElements(); ) {
+                    InetAddress inetAddress = ipAddressEnum.nextElement();
                     if (!inetAddress.isLoopbackAddress()) {
                         return inetAddress.getHostAddress();
                     }
