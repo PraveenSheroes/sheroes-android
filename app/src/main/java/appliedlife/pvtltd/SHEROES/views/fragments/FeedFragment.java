@@ -1454,7 +1454,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onAskQuestionClicked() {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, mScreenProperties);
+        FeedDetail feedDetail;
+        CommunityPostActivity.navigateTo(getActivity(), communityPost, feedDetail , AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, mScreenProperties);
     }
 
     @Override

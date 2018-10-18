@@ -74,7 +74,6 @@
     <string name="ID_OK">Ok</string>
     <string name="ID_CANCEL">Cancel</string>
     <string name="ID_VIEW_MORE">View More</string>
-    <string name="ID_VIEW_MORE_MENTOR">...View More</string>
     <string name="ID_JOIN">Join</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
@@ -126,7 +125,6 @@
     <string name="ID_OWNER">Owner (S)</string>
     <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>
-    <string name="ID_LESS_MENTOR">...View Less</string>
     <string name="ID_TAGS">Tags</string>
     <string name="ID_BOOKMARKS">Bookmarks</string>
     <string name="Bookmark">Bookmark</string>

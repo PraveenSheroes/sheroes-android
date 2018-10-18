@@ -512,7 +512,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
 
-
     @Override
     public String getStreamType() {
         return mStreamType;
@@ -731,7 +730,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             CommunityPostActivity.navigateTo(PostDetailActivity.this, userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
                             return true;
                         case R.id.delete:
-
                             mFeedDetailObjForNameUpdation = userPostObj;
                             if (mLoggedInUser != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                                 reportSpamDialog(SpamContentType.POST, userPostObj, null);

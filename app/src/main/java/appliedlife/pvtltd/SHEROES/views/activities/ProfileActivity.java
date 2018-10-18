@@ -990,7 +990,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         CommunityPost communityPost = new CommunityPost();
         communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
         communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+        CommunityPostActivity.navigateTo(this, communityPost, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
 
     }
 
@@ -1059,7 +1059,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                 mentorPost.isEdit = false;
                 mentorPost.isCompanyAdmin = mUserSolarObject.getCompanyAdmin();
-                CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+                CommunityPostActivity.navigateTo(this, mentorPost, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
             }
         }
     }

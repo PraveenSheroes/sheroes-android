@@ -151,6 +151,7 @@ import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.TEXT;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FEED_POLL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.editCommunityPostRequestBuilder;
@@ -345,6 +346,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mPostAsCommunitySelected;
     private boolean mIsProgressBarVisible;
     private boolean mIsChallengePost;
+    private boolean mIsPoll;
     private String mPrimaryColor = "#ffffff";
     private String mTitleTextColor = "#3c3c3c";
     private String mStatusBarColor = "#aaaaaa";
@@ -384,7 +386,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
             mIsFromBranch = getIntent().getBooleanExtra(IS_FROM_BRANCH, false);
-
         }
         if (mIsFromBranch) {
             branchUrlHandle();
@@ -408,6 +409,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mCommunityPost = Parcels.unwrap(parcelable);
                     mIsEditPost = mCommunityPost.isEdit;
                     mIsChallengePost = mCommunityPost.isChallengeType;
+                    mIsPoll = mCommunityPost.isPoll;
                 }
             }
 
@@ -446,17 +448,21 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     etView.setEditText(mOldText, mCommunityPost.body.length());
                 }
                 invalidateUserDropDownView();
-            } else {
-                if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
-                    etView.getEditText().requestFocus();
-                    if (!mIsChallengePost) {
-                        fbShareContainer.setVisibility(View.VISIBLE);
-                    }
-                    if (!mIsFromCommunity && !mIsChallengePost) {
-                        PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+
+                if (!mIsPoll) {
+                    hidePollIcon();
+                }
+                } else {
+                    if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
+                        etView.getEditText().requestFocus();
+                        if (!mIsChallengePost) {
+                            fbShareContainer.setVisibility(View.VISIBLE);
+                        }
+                        if (!mIsFromCommunity && !mIsChallengePost) {
+                            PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
+                        }
                     }
                 }
-            }
 
             setSupportActionBar(mToolbar);
             if (mUserPreference == null) {
@@ -1197,6 +1203,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 Parcelable parcelable = Parcels.wrap(feedDetail);
                 bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, parcelable);
             }
+            intent.putExtra("post_id", feedDetail.getIdOfEntityOrParticipant());
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
             navigateToParentActivity();
@@ -1467,6 +1474,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (userPostObj.isHasMention()) {
                 communityPost.hasMention = userPostObj.isHasMention();
                 communityPost.userMentionList = userPostObj.getUserMentionList();
+            }
+
+            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                communityPost.isPoll=true;
             }
 
             Parcelable parcelable = Parcels.wrap(communityPost);

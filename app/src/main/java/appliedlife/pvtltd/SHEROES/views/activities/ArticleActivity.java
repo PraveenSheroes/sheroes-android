@@ -57,6 +57,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -634,7 +635,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             public boolean onMenuItemClick(MenuItem item) {
                                 if (item.getItemId() == R.id.report_spam) {
                                     reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
-
                                     return true;
                                 } else {
                                     final long adminID = adminId;
@@ -827,10 +827,15 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
             mArticlePresenter.postComment(postCommentRequestBuilder(mArticleSolrObj.getEntityOrParticipantId(), commentBody, false, hasMentions, mentionSpanList), mArticleSolrObj);
+            mCommentBody.setText("");
+            mCommentBody.clearFocus();
+            CommonUtil.hideKeyboard(ArticleActivity.this);
         }
-        mCommentBody.setText("");
-        mCommentBody.clearFocus();
-        CommonUtil.hideKeyboard(ArticleActivity.this);
+        else {
+            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
     }
 
     @OnClick(R.id.cancel)

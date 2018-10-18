@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -232,9 +233,14 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                             submit.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    hideKeyboard();
-                                    hideEditorView(comment);
-                                    mArticlePresenter.onEditComment(position, AppUtils.getInstance().editCommentRequestBuilder(comment.getEntityId(), editBody.getText().toString().trim(), false, true, comment.getId(),hasMentions,mentionSpanList));
+                                    if(editBody.getText().toString().trim().length()!=0) {
+                                        hideKeyboard();
+                                        hideEditorView(comment);
+                                        mArticlePresenter.onEditComment(position, AppUtils.getInstance().editCommentRequestBuilder(comment.getEntityId(), editBody.getText().toString().trim(), false, true, comment.getId(), hasMentions, mentionSpanList));
+                                    } else {
+                                        //Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+                                        return;
+                                    }
                                 }
                             });
                             mCancel.setOnClickListener((new View.OnClickListener() {
