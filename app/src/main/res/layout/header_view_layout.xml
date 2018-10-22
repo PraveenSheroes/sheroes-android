@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_header_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -37,37 +38,37 @@
                     android:visibility="gone" />
             </FrameLayout>
 
-                <LinearLayout
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    android:id="@+id/user_name"
+                    style="@style/TextView12spMedium"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginStart="@dimen/dp_size_8"
+                    android:padding="@dimen/dp_size_2"
+                    android:textColor="@color/feed_article_label"
+                    android:textStyle="normal"
+                    vernacular:customTextFontFamily="@string/medium_font" />
+
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    android:id="@+id/header_msg"
+                    style="@style/TextView16spRegular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_size_8"
+                    android:layout_marginStart="@dimen/dp_size_8"
+                    android:gravity="center_vertical"
+                    android:padding="@dimen/dp_size_2"
+                    android:textColor="@color/posted_in"
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
-                    <TextView
-                        android:id="@+id/user_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_size_8"
-                        android:layout_marginStart="@dimen/dp_size_8"
-                        android:fontFamily="sans-serif-medium"
-                        android:padding="@dimen/dp_size_2"
-                        android:textColor="@color/feed_article_label"
-                        android:textSize="12sp"
-                        android:textStyle="normal" />
-
-                    <TextView
-                        android:id="@+id/header_msg"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/dp_size_8"
-                        android:layout_marginStart="@dimen/dp_size_8"
-                        android:fontFamily="@string/ID_ROBOTO_LIGHT"
-                        android:gravity="center_vertical"
-                        android:padding="@dimen/dp_size_2"
-                        android:textColor="@color/posted_in"
-                        android:textSize="@dimen/sp_size_16" />
-
-                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
     </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView>
 </android.support.v7.widget.CardView>

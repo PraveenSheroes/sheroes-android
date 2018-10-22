@@ -1,10 +1,6 @@
 <resources>
     <string name="ID_PROJECT_ID">409228886131</string>
     <string name="ID_APPS_FLYER_DEV_ID">CDkJAsj9hBUkp2V6ERGWd9</string>
-    <string name="ID_ROBOTO_REGULAR">sans-serif</string>
-    <string name="ID_ROBOTO_LIGHT">sans-serif-light</string>
-    <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
-    <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
 
     <!--Roboto fonts name for widgets-->
     <string name="regular_font">regular</string>
@@ -660,4 +656,5 @@
     <string name="add_cover_photo">कवर फोटो जोड़ें</string>
     <string name="add_min_tag">(कहानी पोस्ट करने के लिए न्यूनतम 1 टैग जोड़ें)</string>
     <string name="share_via_social_media">सोशल मीडिया के माध्यम से साझा करें</string>
+    <string name="copy">कापी</string>
 </resources>

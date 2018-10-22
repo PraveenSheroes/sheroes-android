@@ -146,4 +146,8 @@
     <declare-styleable name="FontEditText">
         <attr name="customEditTextFontFamily" format="string" />
     </declare-styleable>
+
+    <declare-styleable name="FontCheckBox">
+        <attr name="customCheckBoxFontFamily" format="string" />
+    </declare-styleable>
 </resources>

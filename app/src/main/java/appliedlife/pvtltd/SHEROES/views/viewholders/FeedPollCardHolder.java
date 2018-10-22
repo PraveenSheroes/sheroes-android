@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -9,6 +10,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -642,15 +644,15 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         if (StringUtil.isNotNullOrEmptyString(userName)) {
             spanString.setSpan(authorTitle, 0, userName.length(), 0);
             spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-            TypefaceSpan typefaceSpanAuthor = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-            spanString.setSpan(typefaceSpanAuthor, 0, userName.length(), 0);
+            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+            spanString.setSpan(boldSpan, 0, userName.length(), 0);
 
             if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
                 spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
                 spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spanString.setSpan(typefaceSpan, firstIndex, firstIndex + communityName.length(), 0);
+                StyleSpan styleSpanBold = new StyleSpan(Typeface.BOLD);
+                spanString.setSpan(styleSpanBold, firstIndex, firstIndex + communityName.length(), 0);
             }
             mTvFeedPollCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTvFeedPollCardTitle.setText(spanString, TextView.BufferType.SPANNABLE);

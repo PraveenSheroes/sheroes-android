@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<appliedlife.pvtltd.SHEROES.vernacular.FontTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tv_text_poll_input"
+    style="@style/TextView14spRegular"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/rectangle_text_poll_inactive"
-    android:fontFamily="@string/ID_ROBOTO_REGULAR"
     android:paddingLeft="@dimen/text_poll_input_text_padding"
     android:paddingStart="@dimen/text_poll_input_text_padding"
     android:textColor="@color/footer_icon_text"
-    android:textSize="@dimen/poll_text_input_text_size" />
+    vernacular:customTextFontFamily="@string/regular_font" />
 

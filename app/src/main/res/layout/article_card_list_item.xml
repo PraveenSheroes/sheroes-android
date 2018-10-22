@@ -67,16 +67,17 @@
                 android:textStyle="italic"
                 vernacular:customTextFontFamily="@string/bold_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_article_bookmark"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/dp_size_10"
                 android:drawableRight="@drawable/vector_bookmark_in_active"
-                android:fontFamily="@string/ID_ROBOTO_BOLD"
                 android:paddingBottom="@dimen/dp_size_12"
                 android:paddingRight="@dimen/dp_size_15"
-                android:paddingTop="@dimen/dp_size_12" />
+                android:paddingTop="@dimen/dp_size_12"
+                vernacular:customTextFontFamily="@string/bold_font" />
 
 
             <TextView

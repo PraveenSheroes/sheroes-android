@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/li_image_poll_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -19,19 +20,19 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.NoScrollEditText
             android:id="@+id/et_image_poll_left"
+            style="@style/TextView14spRegular"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_poll_option_height"
             android:layout_marginTop="@dimen/image_poll_edit_text_margin"
             android:background="@drawable/rectangle_border"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:maxLength="@integer/poll_input_option_char_limit"
+            android:maxLines="@integer/image_poll_option_line"
             android:paddingLeft="@dimen/option_poll_padding"
             android:paddingStart="@dimen/option_poll_padding"
-            android:maxLength="@integer/poll_input_option_char_limit"
             android:textColor="@color/comment_text"
-            android:textCursorDrawable="@drawable/cursor_line"
-            android:maxLines="@integer/image_poll_option_line"
             android:textColorHint="@color/on_board_work"
-            android:textSize="@dimen/option_poll_text_size" />
+            android:textCursorDrawable="@drawable/cursor_line"
+            vernacular:customEditTextFontFamily="@string/regular_font" />
     </LinearLayout>
 
     <LinearLayout
@@ -49,19 +50,19 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.NoScrollEditText
             android:id="@+id/et_image_poll_right"
+            style="@style/TextView14spRegular"
             android:layout_width="match_parent"
             android:layout_height="@dimen/image_poll_option_height"
             android:layout_marginTop="@dimen/image_poll_edit_text_margin"
             android:background="@drawable/rectangle_border"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:maxLength="@integer/poll_input_option_char_limit"
+            android:maxLines="@integer/image_poll_option_line"
             android:paddingLeft="@dimen/option_poll_padding"
             android:paddingStart="@dimen/option_poll_padding"
-            android:maxLength="@integer/poll_input_option_char_limit"
-            android:textColor="@color/comment_text"
-            android:maxLines="@integer/image_poll_option_line"
             android:scrollbars="horizontal"
-            android:textCursorDrawable="@drawable/cursor_line"
+            android:textColor="@color/comment_text"
             android:textColorHint="@color/on_board_work"
-            android:textSize="@dimen/option_poll_text_size" />
+            android:textCursorDrawable="@drawable/cursor_line"
+            vernacular:customEditTextFontFamily="@string/regular_font" />
     </LinearLayout>
 </LinearLayout>

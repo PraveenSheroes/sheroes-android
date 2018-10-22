@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/app_intro_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_10"
     android:background="@color/white">
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:id="@+id/iv_app_intro_image"
             android:layout_width="match_parent"
@@ -19,28 +22,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_app_intro_title"
+                style="@style/TextView14spMedium"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/dp_size_18"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/pure_black"
-                android:textSize="@dimen/sp_size_14" />
+                vernacular:customTextFontFamily="@string/medium_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_app_intro_description"
+                style="@style/TextView12spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_14"
                 android:layout_marginRight="@dimen/dp_size_12"
                 android:layout_marginTop="@dimen/dp_size_14"
                 android:ellipsize="end"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:maxLines="@integer/int_value_for_line_3"
                 android:textColor="@color/text_color_follow"
-                android:textSize="@dimen/sp_size_12" />
+                vernacular:customTextFontFamily="@string/regular_font" />
         </LinearLayout>
     </FrameLayout>
 </android.support.v7.widget.CardView>

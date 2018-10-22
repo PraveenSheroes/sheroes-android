@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -12,7 +13,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
-import android.text.style.TypefaceSpan;
+import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -494,13 +495,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(userName)) {
             spanString.setSpan(authorTitle, 0, userName.length(), 0);
             if (!userName.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                if (mUserPostObj.isAuthorMentor()) {
-                    spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-                } else {
-                    spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-                }
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spanString.setSpan(typefaceSpan, 0, userName.length(), 0);
+                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                spanString.setSpan(boldSpan, 0, userName.length(), 0);
             } else {
                 spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
             }
@@ -509,8 +506,8 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
                 spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
                 spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spanString.setSpan(typefaceSpan, firstIndex, firstIndex + communityName.length(), 0);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                spanString.setSpan(boldSpan, firstIndex, firstIndex + communityName.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setText(spanString, TextView.BufferType.SPANNABLE);
@@ -539,16 +536,12 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(communityName)) {
             SpanString.setSpan(authorTitle, 0, communityName.length(), 0);
             if (!communityName.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                if (mUserPostObj.isAuthorMentor()) {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
-                } else {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
-                }
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                SpanString.setSpan(typefaceSpan, 0, communityName.length(), 0);
+                SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                SpanString.setSpan(boldSpan, 0, communityName.length(), 0);
             } else {
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
-                SpanString.setSpan(typefaceSpan, 0, communityName.length(), 0);
+                StyleSpan regularSpan = new StyleSpan(Typeface.NORMAL);
+                SpanString.setSpan(regularSpan, 0, communityName.length(), 0);
                 SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());

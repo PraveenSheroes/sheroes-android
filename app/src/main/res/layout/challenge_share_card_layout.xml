@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_sharable_card"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -14,8 +15,9 @@
         android:background="@color/photo_placeholder"
         android:scaleType="centerCrop" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_challenge_share_text_header"
+        style="@style/TextView16spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,11 +27,12 @@
         android:gravity="center"
         android:text="@string/challenge_done"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/sp_size_16"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        vernacular:customTextFontFamily="@string/bold_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_challenge_share_text"
+        style="@style/TextView16spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -39,8 +42,8 @@
         android:gravity="center"
         android:text="@string/share_with_friends"
         android:textColor="@color/email"
-        android:textSize="@dimen/sp_size_16"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        vernacular:customTextFontFamily="@string/bold_font" />
 
 
     <ImageView
@@ -51,18 +54,18 @@
         android:layout_marginTop="@dimen/dp_size_12"
         android:src="@drawable/challenge_gratif" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_challenge_share_card"
+        style="@style/TextView14spMedium"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_16"
         android:layout_marginRight="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_12"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/dp_size_5"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/sp_size_14" />
+        vernacular:customTextFontFamily="@string/medium_font" />
 
     <ImageView
         android:layout_width="92dp"
@@ -76,5 +79,5 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_size_12"
-        android:background="@drawable/vector_sheroes_name"/>
+        android:background="@drawable/vector_sheroes_name" />
 </LinearLayout>

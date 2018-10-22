@@ -35,7 +35,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_size_16"
             android:defaultValue="true"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:fontFamily="@font/noto_sans_regular"
             android:text="@string/share_on_fb"
             android:textColor="#878787"
             android:textSize="14sp" />

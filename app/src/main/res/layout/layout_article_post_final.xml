@@ -80,7 +80,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="20dp"
             android:focusableInTouchMode="true"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:fontFamily="@font/noto_sans_regular"
             android:imeOptions="actionDone"
             android:inputType="text|textNoSuggestions|textMultiLine"
             android:lineSpacingExtra="1dp"
@@ -134,7 +134,7 @@
                 android:defaultValue="true"
                 android:drawableLeft="@drawable/vector_facebook_small"
                 android:drawablePadding="12dp"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                android:fontFamily="@font/noto_sans_regular"
                 android:text="@string/share_on_fb"
                 android:textColor="@color/recent_post_comment"
                 android:textSize="14sp" />

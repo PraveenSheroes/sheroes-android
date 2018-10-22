@@ -44,7 +44,6 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_size_20"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:gravity="center"
                 android:text="@string/ID_CHOOSE_CATEGORY"
                 android:textAllCaps="true"

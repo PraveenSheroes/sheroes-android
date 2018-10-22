@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -460,8 +462,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
                 }
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spannableString.setSpan(typefaceSpan, 0, userName.length(), 0);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                spannableString.setSpan(boldSpan, 0, userName.length(), 0);
             } else {
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
             }
@@ -470,8 +472,8 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
                 spannableString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spannableString.setSpan(typefaceSpan, firstIndex, firstIndex + communityName.length(), 0);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                spannableString.setSpan(boldSpan, firstIndex, firstIndex + communityName.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setText(spannableString, TextView.BufferType.SPANNABLE);
@@ -510,11 +512,11 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
                 }
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                spannableString.setSpan(typefaceSpan, 0, communityName.length(), 0);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                spannableString.setSpan(boldSpan, 0, communityName.length(), 0);
             } else {
-                TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
-                spannableString.setSpan(typefaceSpan, 0, communityName.length(), 0);
+                StyleSpan regularSpan = new StyleSpan(Typeface.NORMAL);
+                spannableString.setSpan(regularSpan, 0, communityName.length(), 0);
                 spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_article_label)), 0, communityName.length(), 0);
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());

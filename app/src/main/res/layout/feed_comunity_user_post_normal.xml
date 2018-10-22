@@ -158,7 +158,6 @@
                 style="@style/TextViewForStandardSizeColor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:lineSpacingExtra="@dimen/dp_size_3"
                 android:textColorLink="@color/view_more"
                 vernacular:customTextFontFamily="@string/regular_font" />
@@ -185,8 +184,8 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_8"
             app:cardCornerRadius="@dimen/card_without_radius"
-            app:cardPreventCornerOverlap="false"
-            app:cardElevation="@dimen/post_link_cardelevation">
+            app:cardElevation="@dimen/post_link_cardelevation"
+            app:cardPreventCornerOverlap="false">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -205,8 +204,8 @@
                         android:layout_height="wrap_content"
                         android:adjustViewBounds="true"
                         android:background="@drawable/edit_text_line"
-                        android:visibility="gone"
-                        android:scaleType="fitXY"/>
+                        android:scaleType="fitXY"
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/iv_play"
@@ -215,13 +214,14 @@
                         android:layout_gravity="center"
                         android:src="@drawable/vector_video_play_icon"
                         android:visibility="visible" />
-                <ImageView
-                    android:id="@+id/iv_play"
-                    android:layout_width="@dimen/dp_size_50"
-                    android:layout_height="@dimen/dp_size_50"
-                    android:layout_gravity="center"
-                    android:src="@drawable/vector_video_play_icon"
-                    android:visibility="visible" />
+
+                    <ImageView
+                        android:id="@+id/iv_play"
+                        android:layout_width="@dimen/dp_size_50"
+                        android:layout_height="@dimen/dp_size_50"
+                        android:layout_gravity="center"
+                        android:src="@drawable/vector_video_play_icon"
+                        android:visibility="visible" />
 
                     <ProgressBar
                         android:id="@+id/progress_bar_post_link"
@@ -236,17 +236,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/background_color_link_card"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_post_link_title"
                         style="@style/TextView16spMedium"
-                        android:layout_marginTop="@dimen/post_link_title_margintop"
-                        android:layout_marginLeft="@dimen/post_link_title_marginleft"
-                        android:layout_marginRight="@dimen/post_link_title_marginright"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/post_link_title_marginleft"
+                        android:layout_marginRight="@dimen/post_link_title_marginright"
+                        android:layout_marginTop="@dimen/post_link_title_margintop"
                         android:textColor="@color/comment_text"
                         vernacular:customTextFontFamily="@string/medium_font" />
 
@@ -255,11 +254,11 @@
                         style="@style/TextView12spRegular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/post_link_subtitle_marginbottom"
                         android:layout_marginLeft="@dimen/post_link_subtitle_marginleft"
                         android:layout_marginRight="@dimen/post_link_subtitle_marginright"
                         android:layout_marginTop="@dimen/post_link_subtitle_margintop"
                         android:ellipsize="end"
-                        android:layout_marginBottom="@dimen/post_link_subtitle_marginbottom"
                         android:maxLines="@integer/int_value_for_line_2"
                         android:textColor="@color/comment_text"
                         vernacular:customTextFontFamily="@string/regular_font" />
@@ -267,19 +266,19 @@
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_source_name"
                         style="@style/TextView9spRegular"
-                        android:layout_marginLeft="@dimen/post_link_source_marginLeft"
-                        android:layout_marginRight="@dimen/post_link_source_marginright"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/post_link_source_marginbottom"
+                        android:layout_marginLeft="@dimen/post_link_source_marginLeft"
+                        android:layout_marginRight="@dimen/post_link_source_marginright"
                         android:layout_marginTop="@dimen/dp_size_12"
                         android:ellipsize="end"
                         android:maxLines="@integer/int_value_for_line_1"
+                        android:text="@string/youtube"
                         android:textAllCaps="true"
                         android:textColor="@color/posted_in"
-                        android:text="@string/youtube"
-                        tools:text="@string/youtube"
                         android:visibility="gone"
-                        android:layout_marginBottom="@dimen/post_link_source_marginbottom"
+                        tools:text="@string/youtube"
                         vernacular:customTextFontFamily="@string/regular_font" />
                 </LinearLayout>
             </LinearLayout>
@@ -437,14 +436,14 @@
                     android:orientation="horizontal"
                     android:weightSum="@integer/int_value_for_line_1">
 
-                        <ImageView
-                            android:id="@+id/spam_info_icon"
-                            android:layout_marginTop="@dimen/dp_size_8"
-                            android:layout_marginLeft="@dimen/dp_size_8"
-                            android:layout_marginStart="@dimen/dp_size_8"
-                            android:layout_width="wrap_content"
-                            android:src="@drawable/vector_spam_post_message"
-                            android:layout_height="wrap_content" />
+                    <ImageView
+                        android:id="@+id/spam_info_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_size_8"
+                        android:layout_marginStart="@dimen/dp_size_8"
+                        android:layout_marginTop="@dimen/dp_size_8"
+                        android:src="@drawable/vector_spam_post_message" />
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/tv_review_description11"
