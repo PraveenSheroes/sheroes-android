@@ -2141,8 +2141,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 shareProfile.setLayoutParams(params1);
             }
         } else {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                    CommonUtil.convertDpToPixel(mButtonSize, this));
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,CommonUtil.convertDpToPixel(mButtonSize, this));
             params.setMargins(0, 0, 20, 0);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             tvMentorDashBoardFollow.setLayoutParams(params);
