@@ -5,10 +5,12 @@
     <item android:id="@+id/like"
         android:title="@string/action_like"
         android:icon="@drawable/vector_unlike"
+        android:textSize="@dimen/menu_item_text_size"
         app:showAsAction="always"/>
 
     <item android:id="@+id/bookmark"
         android:title="@string/action_bookmark"
         android:icon="@drawable/vector_like"
+        android:textSize="@dimen/menu_item_text_size"
         app:showAsAction="always"/>
 </menu>

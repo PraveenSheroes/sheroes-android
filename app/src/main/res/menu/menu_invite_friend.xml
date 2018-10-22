@@ -4,12 +4,14 @@
     <item
         android:id="@+id/share"
         android:icon="@drawable/vector_share_white_24dp"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/action_share"
         app:showAsAction="always" />
     <item
         android:id="@+id/search_contact"
         android:icon="@drawable/vector_search"
         app:showAsAction="always|collapseActionView"
+        android:textSize="@dimen/menu_item_text_size"
         app:actionViewClass="android.support.v7.widget.SearchView"
         android:title="@string/ID_SEARCH"/>
 

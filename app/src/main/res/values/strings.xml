@@ -656,4 +656,8 @@
     <string name="add_min_tag">(Add minimum 1 tag to post a story)</string>
     <string name="share_via_social_media">Share via social media</string>
     <string name="copy">Copy</string>
+    <string name="text_poll">Text Poll</string>
+    <string name="image_poll">Image Poll</string>
+    <string name="post_as_community">Post as Community</string>
+    <string name="helpline_msg">Please enter your message</string>
 </resources>

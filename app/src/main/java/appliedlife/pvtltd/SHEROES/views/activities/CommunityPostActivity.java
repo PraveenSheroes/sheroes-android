@@ -1822,14 +1822,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 PollOptionType textPoll = new PollOptionType();
                 textPoll.pollType = TEXT;
                 textPoll.id = 1;
-                textPoll.title = "Text Poll";
+                textPoll.title = getString(R.string.text_poll);
                 textPoll.imgUrl = R.drawable.vector_text_poll;
                 pollOptionTypeList.add(textPoll);
 
                 PollOptionType imagePoll = new PollOptionType();
                 imagePoll.pollType = IMAGE;
                 imagePoll.id = 2;
-                imagePoll.title = "Image Poll";
+                imagePoll.title = getString(R.string.image_poll);
                 imagePoll.imgUrl = R.drawable.vector_image_poll_icon;
                 pollOptionTypeList.add(imagePoll);
                 AnalyticsManager.trackEvent(Event.POLL_CLICKED, getScreenName(), null);

@@ -2111,7 +2111,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 params.addRule(RelativeLayout.LEFT_OF, R.id.tv_mentor_dashboard_follow);
                 shareProfile.setLayoutParams(params);
                 shareProfile.setPadding(0, 0, 0, 2);
-                shareProfile.setText(AppConstants.SHARE_PROFILE);
+                shareProfile.setText(getString(R.string.SHARE_PROFILE));
                 shareProfile.setBackgroundResource(R.drawable.selecter_invite_friend);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
@@ -2128,7 +2128,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 params.addRule(RelativeLayout.CENTER_VERTICAL);
                 tvMentorDashBoardFollow.setLayoutParams(params);
                 tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
-                tvMentorDashBoardFollow.setText(AppConstants.EDIT_PROFILE);
+                tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
                 tvMentorDashBoardFollow.setBackgroundResource(0);
                 tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
 

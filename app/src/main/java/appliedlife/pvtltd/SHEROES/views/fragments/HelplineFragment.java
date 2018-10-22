@@ -132,7 +132,7 @@ public class HelplineFragment extends BaseFragment {
             sendChatButton.setEnabled(false);
             mHelplinePresenter.postQuestionHelpline(AppUtils.helplineQuestionBuilder(text));
         } else {
-            Toast.makeText(getContext(), AppConstants.HELPlINE_NO_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.helpline_msg, Toast.LENGTH_SHORT).show();
         }
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_MESSAGE, GoogleAnalyticsEventActions.SENT_A_HELPLINE_MESSAGE, AppConstants.EMPTY_STRING);
     }

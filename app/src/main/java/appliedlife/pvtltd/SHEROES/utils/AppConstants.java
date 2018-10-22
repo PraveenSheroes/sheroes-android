@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
+import appliedlife.pvtltd.SHEROES.R;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -169,8 +171,6 @@ public class AppConstants {
     public static final String FOLLOWING = "FOLLOWING";
     public static final String FOLLOWING_COUNT_CLICK = "Following Count Click";
     public static final String FOLLOWERS_COUNT_CLICK = "Followers Count Click";
-    public static final String SHARE_PROFILE = "Share profile";
-    public static final String EDIT_PROFILE = "Edit profile";
     public static final String HIDE_SPLASH_THEME = "hide_splash_theme";
     public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String GENDER_INPUT_DIALOG = "GenderInputDialog";
@@ -380,7 +380,6 @@ public class AppConstants {
     public static final String FACEBOOK_SHARE_VIA_BROSWER = "https://www.facebook.com/sharer/sharer.php?u=";
     public static final String JPG_FORMATE = ".jpg";
     public static final String HELPLINE_SUB_TYPE_QUESTION = "Q";
-    public static final String HELPlINE_NO_MESSAGE = "Please enter your message";
     public static final int REQ_CODE_SPEECH_INPUT = 100;
     public static final int EVENT_COMMUNITY_ID = 299;
     public static final String GOOGLE_PLUS = "Google plus";

@@ -661,6 +661,7 @@
     <dimen name="post_link_cardelevation">0.5dp</dimen>
     <dimen name="rectangle_gray_padding">5dp</dimen>
     <dimen name="rectangle_grey_strok">1dp</dimen>
+    <dimen name="menu_item_text_size">14sp</dimen>
 
 </resources>
 
