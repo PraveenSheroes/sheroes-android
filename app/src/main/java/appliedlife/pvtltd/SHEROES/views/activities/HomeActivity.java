@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
@@ -478,14 +477,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mDrawer.openDrawer(GravityCompat.END);
     }
 
-    @OnClick(R.id.fab_filter)
+    @OnClick(R.id.fab_filter) //floating add button in feed and trending tab
     public void createPostActivity() {
         String fabString = (String) mFloatActionBtn.getTag();
         if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {
             CommunityPost communityPost = new CommunityPost();
             communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
             createCommunityPostOnClick(communityPost);
-
         }
     }
 
@@ -688,7 +686,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void createCommunityPostOnClick(CommunityPost communityPost) {
         communityPost.isEdit = false;
         CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
-        //  PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
+         // PostBottomSheetFragment.showDialog(this, SCREEN_LABEL);
     }
 
     public void articleUi() {

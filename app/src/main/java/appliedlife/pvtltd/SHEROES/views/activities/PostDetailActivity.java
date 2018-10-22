@@ -486,7 +486,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         bundle.putBoolean(IS_POST_DELETED, true);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-        super.onBackPressed();
+        onBackPressed();
     }
 
     @Override
