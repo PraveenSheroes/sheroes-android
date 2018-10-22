@@ -41,8 +41,8 @@ public class ImpressionHelper {
     private ImpressionSuperProperty mImpressionProperty;
 
     // ArrayList of view ids that are being considered for tracking.
-    private ArrayList<Integer> previousViewed = new ArrayList<>();
     private ArrayList<Integer> currentViewed = new ArrayList<>();
+    private ArrayList<Integer> allVisibleViews = new ArrayList<>();
     private List<ImpressionData> finalViewData = new ArrayList<>();
     //endregion
 
@@ -123,54 +123,59 @@ public class ImpressionHelper {
     //Data request for Impression
     private synchronized void analyzeAndAddViewData(boolean directionChange, int scrollDirection, RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
 
-        if (directionChange) {
-            Log.d("@@@Dir beforechange-clr", "::" + finalViewData.size());
-            storeChunks(firstVisibleItemPosition, lastVisibleItemPosition);
-            Log.d("@@@Dir After change-clr", "::" + finalViewData.size());
-            for(int i=0; i<finalViewData.size(); i++) {
-                Log.i("@@@", ":"+finalViewData.get(i).getPosition() +" :"+ finalViewData.get(i).getEngagementTime());
+        synchronized (this) {
+            if (directionChange) {
+                Log.d("@@@Dir beforechange-clr", "::" + finalViewData.size());
+                storeChunks();
+                Log.d("@@@Dir After change-clr", "::" + finalViewData.size());
+                for (int i = 0; i < finalViewData.size(); i++) {
+                    Log.i("@@@", ":" + finalViewData.get(i).getPosition() + " :" + finalViewData.get(i).getEngagementTime());
+                }
+                scrollDirectionChange = false;
             }
-            scrollDirectionChange = false;
-        }
 
-        if (scrollDirection == SCROLL_UP) { //Swap loop on scroll up
-            for (int viewPosition = lastVisibleItemPosition; viewPosition >= firstVisibleItemPosition; viewPosition--) {
-                analayzeView(viewPosition, scrollDirection, recyclerView);
+            if (scrollDirection == SCROLL_UP) { //Swap loop on scroll up
+                for (int viewPosition = lastVisibleItemPosition; viewPosition >= firstVisibleItemPosition; viewPosition--) {
+                    allVisibleViews.add(viewPosition);
+                    getValidImpressionView(viewPosition, scrollDirection, recyclerView);
+                }
+            } else if (scrollDirection == SCROLL_DOWN) {
+                for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
+                    allVisibleViews.add(viewPosition);
+                    getValidImpressionView(viewPosition, scrollDirection, recyclerView);
+                }
             }
-        } else if (scrollDirection == SCROLL_DOWN) {
-            for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
-                analayzeView(viewPosition, scrollDirection, recyclerView);
-            }
-        }
 
-        if(scrollDirection == SCROLL_UP || scrollDirection == SCROLL_DOWN) {
-            if (previousViewed.size() > 0) { //Compare if any item was present , now not in the list
-                for (int i = 0; i < previousViewed.size(); i++) {
-                    int id = previousViewed.get(i);
-                    View itemView = recyclerView.getLayoutManager().findViewByPosition(id);
-                    if (itemView != null) {
-                        if (!currentViewed.contains(id) && getVisibleHeightPercentage(itemView) <= mImpressionVisibilityThreshold) {
-                            updateEndTimeIfItemNotExist(id);
+            if (scrollDirection == SCROLL_UP || scrollDirection == SCROLL_DOWN) {
+                if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
+                    for (int i = 0; i < allVisibleViews.size(); i++) {
+                        int id = allVisibleViews.get(i);
+                        View itemView = recyclerView.getLayoutManager().findViewByPosition(id);
+                        if (itemView != null) {
+                            int itemPosition = checkIfItemInFinal(id);
+                            int lastItem = getLastItemInFinalList();
+                            if (scrollDirection == SCROLL_UP) {
+                                //if final list have that and not in current list and visibility below 20% marked as exit
+                                if (itemPosition > -1 && lastItem>-1 && lastItem!= id && !currentViewed.contains(id) && getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {
+                                    updateEndTimeIfItemNotExist(id);
+                                }
+                            } else if (!currentViewed.contains(id) && getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {
+                                updateEndTimeIfItemNotExist(id);
+                            }
                         }
                     }
                 }
-                previousViewed.clear();
+                // store 10 events in DB
+                if (finalViewData.size() > 10) {
+                    storeChunks();
+                }
+                currentViewed.clear();
+                allVisibleViews.clear();
             }
-
-            if (currentViewed.size() > 0) {
-                previousViewed.addAll(currentViewed);
-            }
-
-            // store 10 events in DB
-            if (finalViewData.size() > 10) {
-                storeChunks(firstVisibleItemPosition, lastVisibleItemPosition);
-            }
-            currentViewed.clear();
         }
     }
 
-
-    private void analayzeView(int viewPosition, int scrollDirection, RecyclerView recyclerView) {
+    private void getValidImpressionView(int viewPosition, int scrollDirection, RecyclerView recyclerView) {
         ImpressionData impressionData = updateProperties(recyclerView, viewPosition); //> 50 visible view
         if (impressionData == null) return;
 
@@ -179,18 +184,11 @@ public class ImpressionHelper {
         int itemPosition = checkIfItemInFinal(viewPosition);
         if (scrollDirection == SCROLL_UP && itemPosition == -1) {
             addNewEntry(viewPosition, impressionData);
-            // finalViewData.add(impressionData);
         } else if (scrollDirection == SCROLL_DOWN && itemPosition == -1) { //new item add it in final list
             finalViewData.add(impressionData);
             Log.d("@@@New Enter- Down", "::" + viewPosition);
             mImpressionCallback.showToast("Screen Enter" + viewPosition);
         }
-
-       /* if(directionId == SCROLL_UP) {
-            Log.i("Update item in final", ""+finalViewData.size());
-            //updateEndTimeOfItems();
-           // updateItems();
-        } else*/
     }
 
 
@@ -223,7 +221,7 @@ public class ImpressionHelper {
             return null;
         }
 
-        if (getVisibleHeightPercentage(itemView) > mImpressionVisibilityThreshold) {  //Only those views which have visibility >= 50%
+        if (getVisibleHeightPercentage(itemView) >= mImpressionVisibilityThreshold) {  //Only those views which have visibility >= 50%
             ImpressionData impressionData = new ImpressionData();
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
 
@@ -239,8 +237,8 @@ public class ImpressionHelper {
                 //trackingData.setPosition();
             }
             impressionData.setStreamName(mImpressionProperty.getOrderKey());
-            impressionData.setSourceTab(mImpressionProperty.getCommunityTab()); //with latest 1
-            impressionData.setSource(mImpressionCallback.getScreenName()); //with latest 2
+            impressionData.setSourceTab(mImpressionProperty.getCommunityTab());
+            impressionData.setSource(mImpressionCallback.getScreenName());
             impressionData.setOrderKey(mImpressionProperty.getOrderKey());
             impressionData.setPosition(viewPosition);
             impressionData.setUserAgent(recyclerView.getContext() != null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
@@ -266,16 +264,12 @@ public class ImpressionHelper {
 
     /**
      * Store the final Impression in db
-     * @param firstVisibleItemPosition
-     * @param lastVisibleItemPosition
      */
-    private void storeChunks(int firstVisibleItemPosition, int lastVisibleItemPosition) {
+    private void storeChunks() {
         int index = getLastIndexOfUpdatedItem();
         if (index > -1) {
             List<ImpressionData> forDb = finalViewData.subList(0, index + 1);
             Log.i("@@@DB", "###Added to db");
-            //Check while spliting is there any item whose time not updated , update that
-
             mImpressionCallback.storeInDatabase(forDb);
 
             if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
@@ -360,10 +354,17 @@ public class ImpressionHelper {
                     break;
                 }
             }
-        } else {
-            index = 0;
         }
         return index;
+    }
+
+    private int getLastItemInFinalList() {
+        int viewId = -1;
+        if (finalViewData.size() > 0) {
+            int lastPos = finalViewData.size() - 1;
+            viewId = finalViewData.get(lastPos).getPosition();
+        }
+        return viewId;
     }
 
     //Top scroll new entry
@@ -375,13 +376,10 @@ public class ImpressionHelper {
         }
 
         if (viewId > viewPosition) {
-            //Log.i("###IH-add lesser value", "on top scroll");
             Log.d("@@@New Enter -TOP", "::" + viewPosition);
             mImpressionCallback.showToast("Screen Enter" + viewPosition);
             finalViewData.add(impressionData);
-        } //else {
-        // Log.i("###IH-these are greater", "on top scroll" + viewPosition);
-        //}
+        }
     }
     //endregion
 

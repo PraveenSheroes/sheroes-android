@@ -1151,6 +1151,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             toast.cancel();
         }
 
+        if(impressionHelper!=null) {
+            impressionHelper.onPause();
+        }
+
         super.onStop();
         isActiveTabFragment = false;
 
@@ -2233,7 +2237,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if(toast!=null) {
                     toast.cancel();
                 }
-                impressionPresenter.hitNetworkCall(getContext());
+               //  impressionPresenter.hitNetworkCall(getContext());
                 start();
             }
         }
