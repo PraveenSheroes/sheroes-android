@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -96,8 +97,12 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
 
         mName.setText(userSolrObj.getNameOrTitle());
 
-        String description = mContext.getResources().getString(R.string.user_card_desc, CommonUtil.camelCaseString(userSolrObj.getmSolarIgnoreCommunityName().toLowerCase()));
-        mDesc.setText(description);
+        try {
+            String description = mContext.getResources().getString(R.string.user_card_desc, CommonUtil.camelCaseString(userSolrObj.getmSolarIgnoreCommunityName().toLowerCase()));
+            mDesc.setText(description);
+        }catch (Exception e) {
+            Log.i("Tag", "desc is null");
+        }
 
         CommonUtil.showHideUserBadge(mContext, false, mBadgeIcon, mUserSolrObj.isSheBadgeActive(), mUserSolrObj.getProfileBadgeUrl());
     }
