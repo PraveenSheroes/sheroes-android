@@ -192,7 +192,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_total_reactions"
-            style="@style/TextView12spMedium"
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -201,18 +201,18 @@
             android:layout_toEndOf="@id/tv_feed_article_reaction1"
             android:layout_toRightOf="@id/tv_feed_article_reaction1"
             android:textColor="@color/feed_card_time"
-            vernacular:customTextFontFamily="@string/medium_font" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_feed_article_total_replies"
-            style="@style/TextView12spMedium"
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:textColor="@color/feed_card_time"
-            vernacular:customTextFontFamily="@string/medium_font" />
+            vernacular:customTextFontFamily="@string/regular_font" />
     </RelativeLayout>
 
 

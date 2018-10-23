@@ -467,6 +467,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     public void refreshHomeViews() {
+        mHomePresenter.queryConfig();
         initHomeViewPagerAndTabs();
         mTvHome.setText(R.string.home_label);
         mTvCommunities.setText(R.string.ID_COMMUNITIES);
@@ -1323,16 +1324,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     private void toolTipForNotification() {
         try {
-          //  if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
-             //   if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
+           if (CommonUtil.forGivenCountOnly(AppConstants.NOTIFICATION_SESSION_SHARE_PREF, AppConstants.NOTIFICATION_SESSION) == AppConstants.NOTIFICATION_SESSION) {
+                if (CommonUtil.ensureFirstTime(AppConstants.NOTIFICATION_SHARE_PREF)) {
                     Tooltip.Builder builder = new Tooltip.Builder(mTvNotification, R.style.Tooltip)
                             .setCancelable(true)
                             .setDismissOnClick(true)
                             .setGravity(Gravity.BOTTOM)
                             .setText(R.string.tool_tip_notification);
                     builder.show();
-             //   }
-           // }
+                }
+            }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -1823,9 +1824,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
         homeFragment.setArguments(bundle);
         mFragmentOpen.setFeedFragment(true);
-
         getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
-
     }
 
     private void initCommunityViewPagerAndTabs() {

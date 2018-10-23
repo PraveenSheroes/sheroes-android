@@ -173,14 +173,14 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     //region activity methods
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
+    protected void attachBaseContext(Context context) {
+        super.attachBaseContext(LocaleManager.setLocale(context));
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
+        LocaleManager.setLocale(CreateStoryActivity.this);
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -198,10 +198,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
         }
         setSupportActionBar(mToolbar);
-        toolbarTitle.setText(R.string.write_a_story);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        invalidateToolBar();
+
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         this.localImageSaveForChallenge = localImageSaveForChallenge;
         String articleGuideline;
@@ -216,16 +215,21 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
         }
-        if (mArticleSolrObj != null) {
-            setupEditArticleView(mArticleSolrObj);
-        }
         mArticleNextPageContainer.setVisibility(View.GONE);
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        toolbarTitle.setText(getString(R.string.write_a_story));
+        if (mArticleSolrObj != null) {
+            setupEditArticleView(mArticleSolrObj);
+        }
+        invalidateToolBar();
+    }
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isStoryPost) {
         boolean isMentor = false;

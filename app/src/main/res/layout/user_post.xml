@@ -317,7 +317,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/likes_count"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -325,18 +325,18 @@
                 android:layout_marginStart="@dimen/dp_size_8"
                 android:layout_toRightOf="@id/like_heart_icon"
                 android:textColor="@color/feed_card_time"
-                vernacular:customTextFontFamily="@string/medium_font" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/comment_counts"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:textColor="@color/feed_card_time"
-                vernacular:customTextFontFamily="@string/medium_font" />
+                vernacular:customTextFontFamily="@string/regular_font" />
         </RelativeLayout>
 
 
