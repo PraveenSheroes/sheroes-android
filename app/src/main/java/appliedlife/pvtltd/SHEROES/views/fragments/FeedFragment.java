@@ -2211,11 +2211,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 
-    @Override
-    public void onNetworkCall() {
-        Log.i("Hit Network ", "call");
-    }
-
     //Timer in android
     public class OneMinuteCountDownTimer extends CountDownTimer {
 
