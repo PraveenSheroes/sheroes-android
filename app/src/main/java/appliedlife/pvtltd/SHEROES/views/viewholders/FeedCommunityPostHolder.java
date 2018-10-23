@@ -152,6 +152,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     TextView tvFeedCommunityPostUserComment;
     @Bind(R.id.tv_feed_community_post_view_more)
     TextView tvFeedCommunityPostViewMore;
+    @Bind(R.id.tv_feed_community_post_view_less)
+    TextView tvFeedCommunityPostViewLess;
     @Bind(R.id.tv_feed_community_post_user_comment_post_view_more)
     TextView tvFeedCommunityPostUserCommentPostViewMore;
     @Bind(R.id.iv_feed_community_post_user_pic)
@@ -728,6 +730,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             tvFeedCommunityPostText.setVisibility(View.GONE);
             tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+            tvFeedCommunityPostViewLess.setVisibility(View.GONE);
             return;
         } else {
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
@@ -743,8 +746,10 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     tvFeedCommunityPostText.setVisibility(View.VISIBLE);
                     if (!mUserPostObj.isTextExpanded) {
                         tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+                        tvFeedCommunityPostViewLess.setVisibility(View.GONE);
                     } else {
                         tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
+                        tvFeedCommunityPostViewLess.setVisibility(View.GONE);
                     }
                 }
             }
@@ -776,21 +781,16 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         mUserPostObj.isTextExpanded = false;
         tvFeedCommunityPostText.setMaxLines(4);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-        String dots = LEFT_HTML_TAG + AppConstants.DOTS + RIGHT_HTML_TAG;
-        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-            tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE), 0)); // for 24 api and more
-        } else {
-            tvFeedCommunityPostViewMore.setText(Html.fromHtml(dots + mContext.getString(R.string.ID_VIEW_MORE)));// or for older api
-        }
         tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
+        tvFeedCommunityPostViewLess.setVisibility(View.GONE);
     }
 
     private void expandFeedPostText() {
         mUserPostObj.isTextExpanded = true;
         tvFeedCommunityPostText.setMaxLines(Integer.MAX_VALUE);
         tvFeedCommunityPostText.setVisibility(View.VISIBLE);
-        tvFeedCommunityPostViewMore.setText(mContext.getString(R.string.ID_LESS));
-        tvFeedCommunityPostViewMore.setVisibility(View.VISIBLE);
+        tvFeedCommunityPostViewMore.setVisibility(View.GONE);
+        tvFeedCommunityPostViewLess.setVisibility(View.VISIBLE);
     }
 
     private void userLike() {
@@ -1144,9 +1144,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_view_more)
     public void onViewMoreClicked() {
-        if (tvFeedCommunityPostViewMore.getText().equals(mContext.getString(R.string.ID_LESS))) {
-            collapseFeedPostText();
-        } else {
             if (tvFeedCommunityPostText.getLineCount() > 16) {
                 if (viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
@@ -1156,7 +1153,11 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 expandFeedPostText();
             }
-        }
+    }
+
+    @OnClick(R.id.tv_feed_community_post_view_less)
+    public void onViewLessClicked() {
+        collapseFeedPostText();
     }
 
     @Override

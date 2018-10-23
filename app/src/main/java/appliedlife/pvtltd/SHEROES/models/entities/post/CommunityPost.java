@@ -23,6 +23,7 @@ public class CommunityPost extends Post {
     public Community community;
     public boolean isEdit;
     public boolean isMyPost;
+    public boolean isPoll;
     public boolean isPostByCommunity;
     public List<Community> myCommunitiesList = new ArrayList<>();
     public int challengeId;

@@ -86,8 +86,10 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TimeZone;
 
 import javax.inject.Inject;
@@ -151,6 +153,7 @@ import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.TEXT;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FEED_POLL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityImagePostRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
@@ -347,6 +350,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private boolean mPostAsCommunitySelected;
     private boolean mIsProgressBarVisible;
     private boolean mIsChallengePost;
+    private boolean mIsPoll;
     private String mPrimaryColor = "#ffffff";
     private String mTitleTextColor = "#3c3c3c";
     private String mStatusBarColor = "#aaaaaa";
@@ -389,7 +393,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             mFeedPosition = getIntent().getIntExtra(POSITION_ON_FEED, -1);
             mIsFromCommunity = getIntent().getBooleanExtra(IS_FROM_COMMUNITY, false);
             mIsFromBranch = getIntent().getBooleanExtra(IS_FROM_BRANCH, false);
-
         }
         if (mIsFromBranch) {
             branchUrlHandle();
@@ -413,6 +416,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mCommunityPost = Parcels.unwrap(parcelable);
                     mIsEditPost = mCommunityPost.isEdit;
                     mIsChallengePost = mCommunityPost.isChallengeType;
+                    mIsPoll = mCommunityPost.isPoll;
                 }
             }
 
@@ -451,6 +455,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     etView.setEditText(mOldText, mCommunityPost.body.length());
                 }
                 invalidateUserDropDownView();
+
+                if (!mIsPoll) {
+                    hidePollIcon();
+                }
             } else {
                 if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
                     etView.getEditText().requestFocus();
@@ -1507,6 +1515,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 communityPost.userMentionList = userPostObj.getUserMentionList();
             }
 
+            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                communityPost.isPoll=true;
+            }
+
             Parcelable parcelable = Parcels.wrap(communityPost);
             intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
             intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
@@ -1980,7 +1992,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         pollOptionModelList.add(imagePollOptionModel);
                     }
                     pollType = TEXT;
+                    Set<String> hash_Set = new HashSet<String>();
+                    for (int i = 0; i < mEtTextPollList.size(); i++) {
+                        hash_Set.add(mEtTextPollList.get(i).getText().toString());
+                    }
+                    if (hash_Set.size() < mEtTextPollList.size()) {     //same option
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
                     break;
+
                 case IMAGE:
                     PollOptionRequestModel imagePollOptionModelLeft = new PollOptionRequestModel();
                     imagePollOptionModelLeft.setActive(true);

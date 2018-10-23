@@ -95,6 +95,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
     private static int flagActivity = 0;
+    private Toast myToast;
 
     @Inject
     AppUtils mAppUtils;
@@ -211,6 +212,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
+        myToast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
 
@@ -345,7 +347,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
-        if(!isFinishing()) {
+        myToast.setText(stringID);
+        myToast.show();
+        if (!isFinishing()) {
             Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
         }
     }
