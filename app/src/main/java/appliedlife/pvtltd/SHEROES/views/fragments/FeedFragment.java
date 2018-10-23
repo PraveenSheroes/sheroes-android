@@ -2231,7 +2231,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         public void onFinish() {
             if (System.currentTimeMillis() - lastScrollingEndTime > 100000) {
                 Log.i("MAX time expired", "stop timer now");
-                //TODO - current visible item times can be updated here and send it to the db
+                if(impressionHelper!=null) {
+                    impressionHelper.onPause();
+                }
                 cancel();
             } else {
                 Log.i("Time Expired", "1 Min/60 sec");
