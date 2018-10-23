@@ -487,6 +487,14 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+    public void removeTrendingFAB(int tabPosition) {
+        if (tabPosition == AppConstants.TRENDING_TAB) {
+            mFloatActionBtn.setVisibility(View.GONE);
+        } else {
+            mFloatActionBtn.setVisibility(View.VISIBLE);
+        }
+    }
+
     private void writeAStory() {
         CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
     }
