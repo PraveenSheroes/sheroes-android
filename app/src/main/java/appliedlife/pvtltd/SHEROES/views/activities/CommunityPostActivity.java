@@ -452,17 +452,17 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (!mIsPoll) {
                     hidePollIcon();
                 }
-                } else {
-                    if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
-                        etView.getEditText().requestFocus();
-                        if (!mIsChallengePost) {
-                            fbShareContainer.setVisibility(View.VISIBLE);
-                        }
-                        if (!mIsFromCommunity && !mIsChallengePost) {
-                            PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
-                        }
+            } else {
+                if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
+                    etView.getEditText().requestFocus();
+                    if (!mIsChallengePost) {
+                        fbShareContainer.setVisibility(View.VISIBLE);
+                    }
+                    if (!mIsFromCommunity && !mIsChallengePost) {
+                        PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
                     }
                 }
+            }
 
             setSupportActionBar(mToolbar);
             if (mUserPreference == null) {
