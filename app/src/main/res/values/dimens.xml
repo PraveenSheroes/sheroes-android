@@ -359,11 +359,11 @@
     <dimen name="eed_article_user_reaction_drawable_padding">8dp</dimen>
     <dimen name="feed_article_user_name_margin">10dp</dimen>
     <dimen name="feed_article_user_name_line_space">3dp</dimen>
-    <dimen name="feed_article_user_name_text_size">12sp</dimen>
+    <dimen name="feed_article_user_name_text_size">14sp</dimen>
     <dimen name="feed_article_comment_container_margin_right">5dp</dimen>
     <dimen name="feed_article_comment_container_margin_left">10dp</dimen>
     <dimen name="feed_article_user_comment_post_line_space">3dp</dimen>
-    <dimen name="feed_article_user_comment_post_text_size">12sp</dimen>
+    <dimen name="feed_article_user_comment_post_text_size">14sp</dimen>
     <dimen name="feed_article_user_comment_post_view_more_margin">2dp</dimen>
     <dimen name="feed_article_comment_post_time_margin">10dp</dimen>
     <dimen name="feed_article_comment_text_size">12sp</dimen>
@@ -650,5 +650,6 @@
     <dimen name="post_view_more_layout_marginbottom">2dp</dimen>
     <dimen name="post_view_more_layout_marginright">16dp</dimen>
     <dimen name="article_last_comment">14sp</dimen>
+    <dimen name="community_members">12sp</dimen>
 </resources>
 

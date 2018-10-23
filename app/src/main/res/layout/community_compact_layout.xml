@@ -106,10 +106,10 @@
                             android:layout_toEndOf="@id/icon"
                             android:layout_toRightOf="@id/icon"
                             android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                            android:gravity="center"
+                            android:gravity="left"
                             android:maxLines="@integer/int_value_for_line_1"
                             android:textColor="@color/recent_post_comment"
-                            android:textSize="@dimen/sp_size_14"
+                            android:textSize="@dimen/community_members"
                             tools:text="47889 Members" />
                     </RelativeLayout>
                 </LinearLayout>
