@@ -93,15 +93,7 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     private UserSolrObj mUserSolrObj;
     @Bind(R.id.empty_view)
     View emptyView;
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
+
     //endregion
     @Override
     public void onCreate(Bundle savedInstanceState) {

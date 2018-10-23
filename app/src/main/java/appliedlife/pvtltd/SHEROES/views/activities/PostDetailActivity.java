@@ -210,15 +210,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private boolean mHasMentions = false;
     private String mUserTagCommentInfoText;
     //endregion
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
+
     //region activity methods
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,7 +79,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
@@ -173,16 +171,6 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     //region activity methods
     @Override
-    protected void attachBaseContext(Context context) {
-        super.attachBaseContext(LocaleManager.setLocale(context));
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(CreateStoryActivity.this);
-    }
-    @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_submission);
@@ -200,7 +188,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        toolbarTitle.setText(R.string.write_a_story);
+        invalidateToolBar();
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         this.localImageSaveForChallenge = localImageSaveForChallenge;
         String articleGuideline;
@@ -215,20 +204,14 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
         }
+        if (mArticleSolrObj != null) {
+            setupEditArticleView(mArticleSolrObj);
+        }
         mArticleNextPageContainer.setVisibility(View.GONE);
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
-    }
-    @Override
-    public void onResume() {
-        super.onResume();
-        toolbarTitle.setText(getString(R.string.write_a_story));
-        if (mArticleSolrObj != null) {
-            setupEditArticleView(mArticleSolrObj);
-        }
-        invalidateToolBar();
     }
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isStoryPost) {
@@ -361,7 +344,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
-        if(!isFinishing()) {
+        if (!isFinishing()) {
             Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
         }
     }
@@ -523,7 +506,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                         }
                         mArticleSubmissionPresenter.uploadFile(mEncodeImageUrl, this);
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, R.string.cropping_fail+" " + result.getError(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.cropping_fail + " " + result.getError(), Toast.LENGTH_LONG).show();
                     }
 
                     break;

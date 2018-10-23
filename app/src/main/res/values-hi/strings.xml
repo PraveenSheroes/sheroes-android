@@ -661,4 +661,6 @@
     <string name="image_poll">फोटो पोल</string>
     <string name="post_as_community">समुदाय के रूप में पोस्ट करें</string>
     <string name="helpline_msg">कृपया अपना संदेश लिखें</string>
+    <string name="discard_post">पोस्ट छोड़ दें?</string>
+    <string name="discard_changes">क्या आप वाकई अपने परिवर्तनों को छोड़ना चाहते हैं?</string>
 </resources>

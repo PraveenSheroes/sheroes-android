@@ -77,15 +77,7 @@ public class OnBoardingActivity extends BaseActivity {
     public TextView tvDescription;
     private boolean doubleBackToExitPressedOnce = false;
     public static int isJoinCount = 0;
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

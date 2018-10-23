@@ -374,15 +374,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     //region Activity methods
     @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
@@ -1540,10 +1531,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void confirmationAlert() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(CommunityPostActivity.this);
-        builder.setTitle("Discard Post?");
-        builder.setMessage("Are you sure you want to discard your changes?");
-        builder.setNegativeButton("NO", null);
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.discard_post);
+        builder.setMessage(R.string.discard_changes);
+        builder.setNegativeButton(R.string.no, null);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

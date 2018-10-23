@@ -409,15 +409,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private boolean isUserDeactivated;
 
     private UserSolrObj followedUserSolrObj;
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(LocaleManager.setLocale(base));
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
