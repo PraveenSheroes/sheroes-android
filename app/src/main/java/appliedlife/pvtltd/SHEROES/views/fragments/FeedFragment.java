@@ -232,6 +232,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private LinearLayoutManager mLinearLayoutManager;
     private boolean isActiveTabFragment;
     private ImpressionHelper impressionHelper;
+    private boolean isRunning = false;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -662,7 +663,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (countDownTimer == null) {
                     countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
                     countDownTimer.start();
-                } else {
+                } else if(!isRunning){
                     countDownTimer.start();
                 }
 
@@ -2224,11 +2225,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 Log.i("MAX time expired", "stop timer now");
                 if(impressionHelper!=null) {
                     impressionHelper.onPause();
+                    isRunning = false;
                 }
                 cancel();
             } else {
                 Log.i("Time Expired", "1 Min/60 sec");
                 impressionPresenter.hitNetworkCall(getContext());
+                isRunning = true;
                 start();
             }
 
