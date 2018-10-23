@@ -157,11 +157,11 @@ dependencies {
 
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.facebook.android:facebook-android-sdk:4.36.0'
-    implementation 'com.google.android.gms:play-services-analytics:15.0.0'
-    implementation 'com.google.android.gms:play-services-auth:15.0.0'
+    implementation 'com.google.android.gms:play-services-analytics:16.0.4'
+    implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
-    implementation 'com.google.android.gms:play-services-location:15.0.0'
-    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.clevertap.android:clevertap-android-sdk:3.1.10'
     implementation 'com.android.support:mediarouter-v7:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'
