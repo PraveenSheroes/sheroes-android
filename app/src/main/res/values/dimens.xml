@@ -649,5 +649,6 @@
     <dimen name="post_link_cardelevation">0.5dp</dimen>
     <dimen name="post_view_more_layout_marginbottom">2dp</dimen>
     <dimen name="post_view_more_layout_marginright">16dp</dimen>
+    <dimen name="article_last_comment">14sp</dimen>
 </resources>
 

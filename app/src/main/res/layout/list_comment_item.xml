@@ -58,7 +58,8 @@
         android:layout_toRightOf="@id/author_pic_container"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingMultiplier="0.9"
-        android:textIsSelectable="true" />
+        android:textIsSelectable="true"
+        android:textSize="@dimen/article_last_comment" />
 
     <EditText
         android:id="@+id/edit_body"
