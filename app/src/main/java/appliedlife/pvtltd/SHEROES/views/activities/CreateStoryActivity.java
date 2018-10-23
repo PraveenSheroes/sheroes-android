@@ -863,11 +863,5 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         mDeletedTagsList.add(token.getId());
     }
 
-    @Override
-    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-        super.applyOverrideConfiguration(overrideConfiguration);
-        LocaleManager.setLocale(this);
-    }
-
 //endregion
 }

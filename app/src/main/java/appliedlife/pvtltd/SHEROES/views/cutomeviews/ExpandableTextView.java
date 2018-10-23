@@ -10,7 +10,13 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences2.Preference;
+
+import javax.inject.Inject;
+
 import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
@@ -22,8 +28,8 @@ public class ExpandableTextView {
 
     private static final String TAG = ExpandableTextView.class.getName();
     private static final String ERROR_LAYOUT_NULL = "Layout is null";
-    public static final String VIEW_MORE_TEXT = "...View More";
-    private static final String VIEW_LESS_TEXT = "View Less";
+    @Inject
+    Preference<AppConfiguration> mConfiguration;
     private static ExpandableTextView expandableTextView;
 
     public static ExpandableTextView getInstance() {
@@ -34,7 +40,7 @@ public class ExpandableTextView {
     }
 
     public void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore, final ExpandableTextCallback expandableTextCallback) {
-        if(tv == null) return;
+        if (tv == null) return;
 
         if (tv.getTag() == null) {
             tv.setTag(tv.getText());
@@ -91,16 +97,24 @@ public class ExpandableTextView {
             ssb.setSpan(new MySpannable(false) {
                 @Override
                 public void onClick(View widget) {
+                    String viewLessText, viewMoreText;
+                    if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                        viewLessText = mConfiguration.get().configData.mViewLess;
+                        viewMoreText = mConfiguration.get().configData.mViewMore;
+                    } else {
+                        viewLessText = new ConfigData().mViewLess;
+                        viewMoreText = new ConfigData().mViewMore;
+                    }
                     if (viewMore) {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, -1, VIEW_LESS_TEXT, false, expandableTextCallback);
+                        makeTextViewResizable(tv, -1, viewLessText, false, expandableTextCallback);
                     } else {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, 1, VIEW_MORE_TEXT, true, expandableTextCallback);
+                        makeTextViewResizable(tv, 1, viewMoreText, true, expandableTextCallback);
                     }
                     expandableTextCallback.onTextResize(viewMore);
                 }

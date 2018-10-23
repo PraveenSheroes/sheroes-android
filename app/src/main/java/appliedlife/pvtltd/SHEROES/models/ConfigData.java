@@ -80,6 +80,12 @@ public class ConfigData {
     @SerializedName("herStoryHintText")
     public String mHerStoryHintText = "Begin your story here...";
 
+    @SerializedName("viewMore")
+    public String mViewMore = "...View More";
+
+    @SerializedName("viewLess")
+    public String mViewLess = "View Less";
+
     @SerializedName("badgeShareMsg")
     public String mBadgeShareMsg = "I won the exciting new Super SHEROES badge on the SHEROES Community. It\'s a women only app where you can share anything without hesitation and win these badges. Check out mine here:";
 

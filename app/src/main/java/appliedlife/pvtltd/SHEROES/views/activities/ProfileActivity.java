@@ -3,11 +3,9 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.content.res.ColorStateList;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -85,10 +83,10 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.CommunityEnum;
@@ -133,7 +131,6 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.ViewPagerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
@@ -560,7 +557,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             followUnFollowMentor();
         }
 
-        if ((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(MentorsUserListingActivity.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())  {
+        if ((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(MentorsUserListingActivity.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor()) {
             isMentor = true;
         }
 
@@ -600,7 +597,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             } else {
                 tvLoc.setVisibility(View.GONE);
                 //For public profile if location is unfilled hide the container
-                if(!isMentor) {
+                if (!isMentor) {
                     locationViewContainer.setVisibility(View.GONE);
                 } else {
                     locationViewContainer.setVisibility(View.VISIBLE);
@@ -629,14 +626,14 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (isOwnProfile) {
                 userDescription.setText(description);
                 ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-                expandableTextView.makeTextViewResizable(userDescription, 1, ExpandableTextView.VIEW_MORE_TEXT, true, this);
+                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this);
             } else {
                 userDescription.setText(description);
             }
         } else {
             if (isOwnProfile) {
                 userDescription.setText(R.string.add_desc);
-            }  else {
+            } else {
                 descriptionContainer.setVisibility(View.GONE);
             }
         }
@@ -686,7 +683,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     private void toolTipForAskQuestion() {
-        if(ProfileActivity.this.isFinishing()) return;
+        if (ProfileActivity.this.isFinishing()) return;
 
         try {
             toolTipProfile.setVisibility(View.INVISIBLE);
@@ -1165,7 +1162,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     finish();
                 } else if (followedUserSolrObj != null) {
                     onFollowedActivtyResultOfParentRefresh(followedUserSolrObj);
-                 //   followedUserSolrObj = null;
+                    //   followedUserSolrObj = null;
                 } else if (!isProfileClicked) {
                     onActivtyResultOfParentRefresh();
                 }
@@ -1206,7 +1203,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
-             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
+            /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
@@ -1337,7 +1334,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
             if (ProfileActivity.this.isFinishing()) return;
 
-            if(spamResponse.isSpammed()) {
+            if (spamResponse.isSpammed()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
             } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
@@ -1370,10 +1367,10 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         int counter = 0;
         for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
             final ImageView badge = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
             layoutParams.setMargins(0, 0, bageIconMargin, 0);
             badge.setLayoutParams(layoutParams);
-            if(StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
+            if (StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
                 Glide.with(badge.getContext())
                         .load(badgeDetails.getImageUrl())
                         .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
@@ -1395,7 +1392,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             });
             counter++;
 
-            if(counter == MAX_BADGE_COUNT) break;
+            if (counter == MAX_BADGE_COUNT) break;
         }
 
         if (length > MAX_BADGE_COUNT) {
@@ -1403,7 +1400,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
             badgeCount.setTextSize(badgeCounterTextSize);
             badgeCount.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.badge_counter)));
-            LinearLayout.LayoutParams layoutParams =  new LinearLayout.LayoutParams(badgeIconSize,badgeIconSize);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
             badgeCount.setLayoutParams(layoutParams);
             badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
             badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
@@ -1413,7 +1410,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             badgeCount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    BadgeClosetActivity.navigateTo(ProfileActivity.this, userSolrObj.getUserBadgesList() , userSolrObj, SCREEN_LABEL);
+                    BadgeClosetActivity.navigateTo(ProfileActivity.this, userSolrObj.getUserBadgesList(), userSolrObj, SCREEN_LABEL);
                 }
             });
         }
@@ -1421,13 +1418,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private void setupSheBadge(UserSolrObj userSolrObj) {
 
-        if(userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
-                    userBadgeIcon.setVisibility(View.VISIBLE);
-                    Glide.with(userBadgeIcon.getContext())
+        if (userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
+            userBadgeIcon.setVisibility(View.VISIBLE);
+            Glide.with(userBadgeIcon.getContext())
                     .load(userSolrObj.getProfileBadgeUrl())
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
                     .into(userBadgeIcon);
-        } else if(!userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
+        } else if (!userSolrObj.isSheBadgeActive() && !TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
             userBadgeIcon.setVisibility(View.VISIBLE);
             Glide.with(userBadgeIcon.getContext())
                     .load(userSolrObj.getProfileBadgeUrl())
@@ -1622,7 +1619,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
 
             if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
@@ -1671,7 +1668,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                             if (isPostDeleted) {
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                                } else if(mFragment instanceof MentorQADetailFragment){
+                                } else if (mFragment instanceof MentorQADetailFragment) {
                                     ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
 
                                 }
@@ -1833,7 +1830,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             userDescription.setText(description);
             userDescription.setTag(null);
             ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-            expandableTextView.makeTextViewResizable(userDescription, 1, ExpandableTextView.VIEW_MORE_TEXT, true, this);
+            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this);
 
             mUserSolarObject.setDescription(description);
         }
@@ -1948,7 +1945,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
 
             TextView text = dialog.findViewById(R.id.title);
-            text.setText(getString(R.string.unfollow_profile,mUserSolarObject.getNameOrTitle()));
+            text.setText(getString(R.string.unfollow_profile, mUserSolarObject.getNameOrTitle()));
 
             TextView dialogButton = dialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {
@@ -2047,7 +2044,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -2132,7 +2129,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 shareProfile.setLayoutParams(params1);
             }
         } else {
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,CommonUtil.convertDpToPixel(mButtonSize, this));
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CommonUtil.convertDpToPixel(mButtonSize, this));
             params.setMargins(0, 0, 20, 0);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             tvMentorDashBoardFollow.setLayoutParams(params);
