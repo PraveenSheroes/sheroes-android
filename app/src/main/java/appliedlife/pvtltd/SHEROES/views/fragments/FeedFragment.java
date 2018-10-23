@@ -537,13 +537,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void storeInDatabase(List<ImpressionData> impressionData) {
+    public void storeInDatabase(List<ImpressionData> impressionData, boolean forceNetworkCall) {
         if(toast!=null) {
             toast.cancel();
         }
 
         if(impressionData.size()>0 && getContext()!=null) {
-            impressionPresenter.storeBatchInDb(getContext(), 0.25f, impressionData);
+            impressionPresenter.storeBatchInDb(getContext(), 0.25f, impressionData, forceNetworkCall);
         }
     }
 
@@ -2237,7 +2237,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if(toast!=null) {
                     toast.cancel();
                 }
-               //  impressionPresenter.hitNetworkCall(getContext());
+                impressionPresenter.hitNetworkCall(getContext());
                 start();
             }
         }

@@ -80,7 +80,7 @@ public class ImpressionHelper {
     public void onPause() {
         //Log.i("###IH-Pause", "On Pause");
         updateEndTimeOfItems();
-        mImpressionCallback.storeInDatabase(finalViewData);
+        mImpressionCallback.storeInDatabase(finalViewData, true);
     }
 
     /**
@@ -270,7 +270,7 @@ public class ImpressionHelper {
         if (index > -1) {
             List<ImpressionData> forDb = finalViewData.subList(0, index + 1);
             Log.i("@@@DB", "###Added to db");
-            mImpressionCallback.storeInDatabase(forDb);
+            mImpressionCallback.storeInDatabase(forDb, false);
 
             if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
                 finalViewData = finalViewData.subList(index + 1, finalViewData.size());

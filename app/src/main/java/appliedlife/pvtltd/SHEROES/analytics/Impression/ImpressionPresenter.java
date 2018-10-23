@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -46,27 +45,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         this.mSheroesApplication = sheroesApplication;
     }
 
-    /**
-     * Add the item to Database
-     *
-     * @param appContext        context
-     * @param impressionData list of impression events
-     */
-    private void addToDatabase(Context appContext, final List<ImpressionData> impressionData) {
-        final AppDatabase database = AppDatabase.getAppDatabase(appContext);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Impression impression = new Impression();
-                impression.setImpressionDataList(impressionData);
-                long rowIndex = database.impressionDataDao().insert(impression);
-                Log.i("Db RowIndex ", "::"+rowIndex);
-            }
-        }).start();
-    }
-
     //Filter the list and get only those item which have more than 250ms time spend on impression
-    public void storeBatchInDb(final Context context, final float minEngagementTime, final List<ImpressionData> impressionData) {
+    public void storeBatchInDb(final Context context, final float minEngagementTime, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
         Observable.just(impressionData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -77,15 +57,14 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     }
                 }).filter(new Predicate<ImpressionData>() {
             @Override
-            public boolean test(ImpressionData impressionData)  {
-                return impressionData.getEngagementTime() >= minEngagementTime; //Todo - declare in congig var, remove this time
+            public boolean test(ImpressionData impressionData) {
+                return impressionData.getEngagementTime() >= minEngagementTime;
             }
         }).toList().subscribe(new DisposableSingleObserver<List<ImpressionData>>() {
             @Override
             public void onSuccess(List<ImpressionData> impressionDataList) {
-                if(impressionDataList.size()>0) {
-                     addToDatabase(SheroesApplication.mContext, impressionDataList);
-                   // insertImpressionsInDb(context, impressionDataList); //convert into Rx
+                if (impressionDataList.size() > 0) {
+                    insertImpressionsInDb(context, impressionDataList, forceNetworkCall); //convert into Rx
                 } else {
                     Log.i("No item", "Have engagement more than 250 ms");
                 }
@@ -98,7 +77,13 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         });
     }
 
-    private void insertImpressionsInDb(final Context context, final List<ImpressionData> impressionData) {
+    /**
+     * Add the impressions to Database
+     *
+     * @param context
+     * @param impressionData list of impression
+     */
+    private void insertImpressionsInDb(final Context context, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
         Single.create(new SingleOnSubscribe<Long>() {
             @Override
             public void subscribe(SingleEmitter<Long> emitter) {
@@ -115,16 +100,21 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 }
             }
         }).observeOn(AndroidSchedulers.mainThread())
-          .subscribeOn(Schedulers.io())
-          .subscribe(new DisposableSingleObserver<Long>() {
-           @Override
-           public void onSuccess(Long aLong) {
-           }
+                .subscribeOn(Schedulers.io())
+                .subscribe(new DisposableSingleObserver<Long>() {
+                    @Override
+                    public void onSuccess(Long aLong) {
+                        Log.i("Inserted", "Successfully");
+                        if(forceNetworkCall) {
+                            hitNetworkCall(context);
+                        }
+                    }
 
-           @Override
-           public void onError(Throwable e) {
-          }
-          });
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.i("Inserted", "failed");
+                    }
+                });
     }
 
     //Hit the network after frequency expired
@@ -134,10 +124,10 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         }
-       // Log.i("Impression hit", "Called");
+        // Log.i("Impression hit", "Called");
         getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEvents)
-                 //Retry no of times
+                //Retry no of times
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
@@ -173,7 +163,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     }
 
 
-    //Retry this pon error
+    //Retry this on error
     private void retryNetworkCall(final Context context, final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -213,10 +203,11 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
 
     //clear db items
+
     /**
      * Add the item to Database
      *
-     * @param context        context
+     * @param context             context
      * @param clearImpressionItem list of impression events
      */
     public void clearDatabase(Context context, final List<Impression> clearImpressionItem) {
@@ -224,7 +215,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         new Thread(new Runnable() {
             @Override
             public void run() {
-               // Log.i("Removed the record", "Yes");
+                // Log.i("Removed the record", "Yes");
                 database.impressionDataDao().deleteImpression(clearImpressionItem);
             }
         }).start();
@@ -253,7 +244,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         userEvents.setUserEvent(data);
                         sendImpressionData(context, userEvents, rowIndex);
                     } else {
-                      //  Log.i("###Impression", "No Record Found");
+                        //  Log.i("###Impression", "No Record Found");
                     }
                 }
             }).start();

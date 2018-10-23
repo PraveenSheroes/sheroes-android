@@ -18,8 +18,9 @@ public interface ImpressionCallback extends BaseMvpView {
     /**
      * Store the impression in database
      * @param impressionData impressions
+     * @param forceNetworkCall true if want to fire network call immediately
      */
-    void storeInDatabase(List<ImpressionData> impressionData);
+    void storeInDatabase(List<ImpressionData> impressionData, boolean forceNetworkCall);
 
     /**
      * Show the toast message
