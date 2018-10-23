@@ -2234,7 +2234,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 isRunning = true;
                 start();
             }
-
         }
 
         @Override

@@ -254,7 +254,7 @@ public class ImpressionHelper {
                 //Add position in list
                 //trackingData.setPosition();
             }
-            impressionData.setStreamName(mImpressionProperty.getOrderKey());
+            impressionData.setStreamName(feedDetail.getStreamType());
             impressionData.setSourceTab(mImpressionProperty.getCommunityTab());
             impressionData.setSource(mImpressionCallback.getScreenName());
             impressionData.setOrderKey(mImpressionProperty.getOrderKey());
