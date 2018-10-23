@@ -41,6 +41,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -77,6 +78,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -412,7 +414,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         , this.getIntent().getData(), this);
             }
         }
-
+        Locale locale= LocaleManager.getLocale(this.getResources());
+        Log.d("Tag","############# locale home activity ->  "+locale);
         if (shouldShowSnowFlake()) {
             mSantaView.setVisibility(View.GONE);
             animateSnowFlake();

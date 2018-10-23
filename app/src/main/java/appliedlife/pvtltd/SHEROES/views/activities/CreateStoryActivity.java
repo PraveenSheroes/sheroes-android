@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -54,6 +57,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -79,12 +83,15 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static android.content.pm.PackageManager.GET_META_DATA;
 
 /**
  * Created by ujjwal on 06/09/17.
@@ -176,18 +183,19 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         setContentView(R.layout.activity_article_submission);
         SheroesApplication.getAppComponent(this).inject(this);
         ButterKnife.bind(this);
+        LocaleManager.setLocale(this);
         mArticleSubmissionPresenter.attachView(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
             if (parcelable != null) {
                 mArticleSolrObj = Parcels.unwrap(parcelable);
-
             }
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
         }
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
         toolbarTitle.setText(R.string.write_a_story);
         invalidateToolBar();
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
@@ -527,12 +535,16 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message = getString(R.string.story_title);
-        mEditorFragment.setTitlePlaceholder(message);
-        String hintText = getString(R.string.begin_story_here);
+        String message,hintText;
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
+            message=mConfiguration.get().configData.mHerStoryTitle;
+        }else
+        {
+            hintText=new ConfigData().mHerStoryHintText;
+            message=new ConfigData().mHerStoryTitle;
         }
+        mEditorFragment.setTitlePlaceholder(message);
         mEditorFragment.setContentPlaceholder(hintText);
         mEditorFragment.setLocalDraft(true);
         mEditorFragment.isActionInProgress();
@@ -648,9 +660,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             return;
         }
 
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(CreateStoryActivity.this);
-
+        AlertDialog.Builder builder =new AlertDialog.Builder(CreateStoryActivity.this);
         builder.setTitle(R.string.dialog_title_draft);
         builder.setMessage(R.string.dialog_body_draft);
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -851,6 +861,12 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     @Override
     public void onTokenRemoved(ArticleTagName token) {
         mDeletedTagsList.add(token.getId());
+    }
+
+    @Override
+    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+        super.applyOverrideConfiguration(overrideConfiguration);
+        LocaleManager.setLocale(this);
     }
 
 //endregion

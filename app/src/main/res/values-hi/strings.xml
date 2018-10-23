@@ -650,8 +650,6 @@
     <string name="edit_story">कहानी बदलें</string>
     <string name="add_image">फोटो जोड़ें</string>
     <string name="post_anyway">ऐसे ही पोस्ट करे</string>
-    <string name="story_title">कहानी शीर्षक</string>
-    <string name="begin_story_here">अपनी कहानी यहाँ शुरू करें&#8230;</string>
     <string name="upload_cover_photo">कवर फोटो अपलोड करें (वैकल्पिक)</string>
     <string name="add_cover_photo">कवर फोटो जोड़ें</string>
     <string name="add_min_tag">(कहानी पोस्ट करने के लिए न्यूनतम 1 टैग जोड़ें)</string>
