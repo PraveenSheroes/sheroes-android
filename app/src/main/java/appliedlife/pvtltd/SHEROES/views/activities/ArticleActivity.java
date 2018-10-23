@@ -836,7 +836,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
             return;
         }
-
     }
 
     @OnClick(R.id.cancel)

@@ -477,7 +477,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mDrawer.openDrawer(GravityCompat.END);
     }
 
-    @OnClick(R.id.fab_filter) //floating add button in feed and trending tab
+    @OnClick(R.id.fab_filter)
     public void createPostActivity() {
         String fabString = (String) mFloatActionBtn.getTag();
         if (fabString.equalsIgnoreCase(AppConstants.FEED_SUB_TYPE)) {

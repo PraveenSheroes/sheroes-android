@@ -1203,7 +1203,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 Parcelable parcelable = Parcels.wrap(feedDetail);
                 bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, parcelable);
             }
-            intent.putExtra("post_id", feedDetail.getIdOfEntityOrParticipant());
             intent.putExtras(bundle);
             setResult(RESULT_OK, intent);
             navigateToParentActivity();
