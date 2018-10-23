@@ -230,6 +230,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 @Override
                 public void run() {
                     List<Impression> impressionData = database.impressionDataDao().getAll();
+                    if(impressionData!=null && impressionData.size()<=0) return;
+
                     List<Impression> rowIndex = new ArrayList<>();
                     if (impressionData != null && impressionData.size() > 0) {
                         UserEvents userEvents = new UserEvents();

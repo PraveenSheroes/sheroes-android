@@ -344,7 +344,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
-            impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mLoggedInUser, mAppUtils, this);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mFeedRecyclerView, mLinearLayoutManager, mLoggedInUser, mAppUtils, this);
         }
     }
 
@@ -678,7 +678,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                impressionHelper.onScrollChange(mScrollDirection, recyclerView, startPos, endPos);
+                impressionHelper.onScrollChange(mScrollDirection, startPos, endPos);
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();

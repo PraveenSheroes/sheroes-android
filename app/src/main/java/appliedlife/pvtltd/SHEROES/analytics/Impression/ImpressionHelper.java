@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,8 @@ public class ImpressionHelper {
     private AppUtils mAppUtils;
     private Preference<Configuration> mConfiguration;
     private ImpressionSuperProperty mImpressionProperty;
+    private RecyclerView recyclerView;
+    private LinearLayoutManager linearLayoutManager;
 
     // ArrayList of view ids that are being considered for tracking.
     private ArrayList<Integer> currentViewed = new ArrayList<>();
@@ -47,12 +50,15 @@ public class ImpressionHelper {
     //endregion
 
     //region constructor
-    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, Preference<Configuration> configuration, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
+    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, Preference<Configuration> configuration, RecyclerView recyclerView, LinearLayoutManager layoutManager, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
         this.mLoggedInUser = loggedInUserId;
         this.mImpressionCallback = impressionCallback;
         this.mImpressionProperty = impressionSuperProperty;
         this.mConfiguration = configuration;
+        this.recyclerView =  recyclerView;
+        this.linearLayoutManager = layoutManager;
+        this.
         init();
     }
 
@@ -71,7 +77,7 @@ public class ImpressionHelper {
      * Fragment/ Activity is resumed
      */
     public void onResume() {
-        // Log.i("###IH-Resume", "On Resume");
+         Log.i("###IH-Resume", "On Resume");
     }
 
     /**
@@ -79,18 +85,17 @@ public class ImpressionHelper {
      */
     public void onPause() {
         //Log.i("###IH-Pause", "On Pause");
-        updateEndTimeOfItems();
+        boolean status = updateEndTimeOfItems();
         mImpressionCallback.storeInDatabase(finalViewData, true);
     }
 
     /**
      * Get callback when recycler view is being scrolled and scroll state changing
      *
-     * @param recyclerView recyclerView
      * @param startPos     first visible item on screen
      * @param endPos       last visible item on screen
      */
-    public void onScrollChange(int scrollDirection, RecyclerView recyclerView, int startPos, int endPos) {
+    public void onScrollChange(int scrollDirection, int startPos, int endPos) {
         if(scrollDirection>0 && scrollDirection!= lastDirectionId) {
             scrollDirectionChange = true;
         }
@@ -102,20 +107,23 @@ public class ImpressionHelper {
     /**
      * Update the end time for the item on paused
      */
-    private void updateEndTimeOfItems() {
+    private boolean updateEndTimeOfItems() {
         if (finalViewData.size() > 0) {
             int size = finalViewData.size();
             for (int i = size - 1; i >= 0; i--) {
                 ImpressionData trackingData1 = finalViewData.get(i);
-                if (trackingData1.getEndTime() == -1) { //
+                if (trackingData1.getEndTime() == -1) {
                     Log.i("Screen Exit", "Update End time for all visible");
 
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
+
+                    return true;
                 }
             }
         }
+        return false;
     }
     //endregion
 
@@ -143,6 +151,16 @@ public class ImpressionHelper {
                 for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
                     allVisibleViews.add(viewPosition);
                     getValidImpressionView(viewPosition, scrollDirection, recyclerView);
+                }
+            } else if( scrollDirection == 0) {
+                //Get the visible items on screen
+                int startPos = linearLayoutManager.findFirstVisibleItemPosition();
+                int endPos = linearLayoutManager.findLastVisibleItemPosition();
+                if (startPos >= 0 || endPos > 0) {
+                    for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
+                        allVisibleViews.add(viewPosition);
+                        getValidImpressionView(viewPosition, scrollDirection, recyclerView);
+                    }
                 }
             }
 
