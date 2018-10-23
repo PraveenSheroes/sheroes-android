@@ -50,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import butterknife.Bind;
@@ -112,6 +113,7 @@ public class ContestInfoFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contest_info, container, false);
         ButterKnife.bind(this, view);
+        LocaleManager.setLocale(getContext());
         Parcelable parcelable = null;
         if (getArguments() != null) {
             showFeatureImage = getArguments().getBoolean("SHOW_FEATURE_IMAGE", true);
