@@ -22,7 +22,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by ravi on 01/01/18.
@@ -164,7 +164,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
 
                 String pluralMember = mContext.getResources().getQuantityString(R.plurals.numberOfMembers, profileCommunity.getNoOfMembers());
-                member.setText(String.valueOf(beautifyNumericValue(profileCommunity.getNoOfMembers()) + AppConstants.SPACE + pluralMember));
+                member.setText(String.valueOf(changeNumberToNumericSuffix(profileCommunity.getNoOfMembers()) + AppConstants.SPACE + pluralMember));
             }
         }
     }

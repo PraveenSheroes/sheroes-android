@@ -118,7 +118,7 @@ public class StringUtil {
         return thousand;
     }*/
 
-    public static String beautifyNumericValue(long countValue) {
+    public static String changeNumberToNumericSuffix(long countValue) {
         if (countValue < 1000) return "" + countValue;
         int exp = (int) (Math.log(countValue) / Math.log(1000));
         return String.format(Locale.US, "%.1f %c",

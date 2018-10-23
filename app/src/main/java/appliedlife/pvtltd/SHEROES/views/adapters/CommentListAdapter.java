@@ -238,7 +238,6 @@ public class CommentListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                                         hideEditorView(comment);
                                         mArticlePresenter.onEditComment(position, AppUtils.getInstance().editCommentRequestBuilder(comment.getEntityId(), editBody.getText().toString().trim(), false, true, comment.getId(), hasMentions, mentionSpanList));
                                     } else {
-                                        //Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
                                 }

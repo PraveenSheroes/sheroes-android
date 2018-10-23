@@ -23,7 +23,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by ravi on 01/01/18.
@@ -167,7 +167,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
                 if (follower != null) {
                     String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
-                    follower.setText(String.valueOf(beautifyNumericValue(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+                    follower.setText(String.valueOf(changeNumberToNumericSuffix(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
                 }
             }
         }

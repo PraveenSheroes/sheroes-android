@@ -53,7 +53,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
@@ -241,7 +241,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
                     StringBuilder stringBuilder = new StringBuilder();
                     if (dataItem.getNoOfViews() > 1) {
-                        stringBuilder.append(beautifyNumericValue(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                        stringBuilder.append(changeNumberToNumericSuffix(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                         tvFeedArticleTotalViews.setText(stringBuilder.toString());
                         tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
                         rlFeedArticleViews.setVisibility(View.VISIBLE);

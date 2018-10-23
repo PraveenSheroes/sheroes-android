@@ -22,7 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.DATE_FORMAT;
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.beautifyNumericValue;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by Ravi on 24-07-18
@@ -73,7 +73,7 @@ public class BadgeClosetViewHolder extends RecyclerView.ViewHolder {
 
         badgeTitle.setText(badgeDetails.getName());
 
-        mEarnedBadgeCount.setText(String.valueOf(beautifyNumericValue(badgeDetails.getBadgeCount())));
+        mEarnedBadgeCount.setText(String.valueOf(changeNumberToNumericSuffix(badgeDetails.getBadgeCount())));
 
         if (badgeDetails.isActive()) {
             badgeWonDate.setText(mContext.getResources().getString(R.string.badge_closet_won_this_week_text));
