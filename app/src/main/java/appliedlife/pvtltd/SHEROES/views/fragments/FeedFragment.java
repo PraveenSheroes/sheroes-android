@@ -666,6 +666,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (countDownTimer == null) {
                     countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
                     countDownTimer.start();
+                } else {
+                    countDownTimer.start();
                 }
 
                 if (dy < 0) {
