@@ -538,10 +538,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void storeInDatabase(List<ImpressionData> impressionData, boolean forceNetworkCall) {
-        if(toast!=null) {
-            toast.cancel();
-        }
-
         if(impressionData.size()>0 && getContext()!=null) {
             impressionPresenter.storeBatchInDb(getContext(), 0.25f, impressionData, forceNetworkCall);
         }
@@ -2237,13 +2233,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 cancel();
             } else {
                 Log.i("Time Expired", "1 Min/60 sec");
-
-                if(toast!=null) {
-                    toast.cancel();
-                }
                 impressionPresenter.hitNetworkCall(getContext());
                 start();
             }
+
         }
 
         @Override
