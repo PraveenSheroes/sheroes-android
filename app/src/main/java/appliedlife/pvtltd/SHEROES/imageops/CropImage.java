@@ -190,10 +190,10 @@ public final class CropImage {
                 }
                 break;
             case 2:
-                List<Intent> galleryIntents = getGalleryIntent(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
+                List<Intent> galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_PICK, includeDocuments);
                 if (galleryIntents.size() == 0) {
-                    // if no intents found for get-content try pick intent action (Huawei P9).
-                    galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_PICK, includeDocuments);
+                    // if no intents found for action-pick try get-content intent action (Huawei P9).
+                    galleryIntents = getGalleryIntents(packageManager, Intent.ACTION_GET_CONTENT, includeDocuments);
                 }
                 allIntents.addAll(galleryIntents);
                 break;
@@ -218,12 +218,7 @@ public final class CropImage {
         }
 
         // Create a chooser from the main  intent
-        Intent  chooserIntent = Intent.createChooser(target, title);
-
-        // Add all other intents
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
-
-
+        Intent  chooserIntent = Intent.createChooser(target, "Select Picture");
 
         return chooserIntent;
     }

@@ -246,6 +246,7 @@ public class AppConstants {
     public static final int MIN_QUESTION_SEARCH_LENGTH = 3;
     public static final String IS_FROM_ADVERTISEMENT = "IS_FROM_ADVERTISEMENT";
     public static final String ADS_DEEP_LINK_URL = "ADS_DEEP_LINK";
+    public static final String CREATE_FEED_POST = "CREATE_FEED_POST";
 
 
     /*Master data keys for pages*/
@@ -467,6 +468,8 @@ public class AppConstants {
     public static final String PUSH_PROVIDER_SHEROES = "Sheroes";
     public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
+
+    public static final String IMAGE_INITIAL_FILE_NAME = "file\"; filename=\"";
 
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
