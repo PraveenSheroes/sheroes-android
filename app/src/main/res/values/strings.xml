@@ -56,7 +56,8 @@
     <string name="ID_MENTOR_INSIGHT">mentor insight</string>
     <string name="ID_HELP_FRAGMENT">helpline</string>
     <string name="ID_DRAWER_NAVIGATION">Drawer navigation</string>
-    <string name="ID_DRAWER_NAVIGATION_COMMUNITIES">Right Swipe Navigation</string>
+    <string name="RightNavigationDrawer">Right Swipe Navigation</string>
+    <string name="LeftNavigationDrawer">Left Swipe Navigation</string>
     <string name="ID_COMMUNITIY">Community</string>
     <string name="ID_BAD_RQUEST">Special characters are not allowed</string>
     <string name="ID_GENERIC_ERROR"> Oops, something went wrong. We are working on it, we will get it fixed as soon as we can.</string>
