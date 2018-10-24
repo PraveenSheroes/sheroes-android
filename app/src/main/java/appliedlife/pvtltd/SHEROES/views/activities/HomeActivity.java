@@ -413,8 +413,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                         , this.getIntent().getData(), this);
             }
         }
-        Locale locale= LocaleManager.getLocale(this.getResources());
-        Log.d("Tag","############# locale home activity ->  "+locale);
         if (shouldShowSnowFlake()) {
             mSantaView.setVisibility(View.GONE);
             animateSnowFlake();

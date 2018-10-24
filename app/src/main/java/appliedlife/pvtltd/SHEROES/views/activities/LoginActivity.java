@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
@@ -120,15 +121,16 @@ public class LoginActivity extends BaseActivity {
                 intent.putExtras(bundle);
                 intent.setData(url);
                 startActivity(intent);
-                finish();
             } else {
                 Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
                 Bundle bundle = new Bundle();
                 boardingIntent.putExtras(bundle);
                 boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(boardingIntent);
+                CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
             }
         }
+        finishAffinity();
     }
 
     @Override
