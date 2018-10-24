@@ -7,7 +7,10 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
+import java.util.Map;
+
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 
 public class FontEditText extends AppCompatEditText {
     public FontEditText(Context context) {
@@ -21,28 +24,27 @@ public class FontEditText extends AppCompatEditText {
 
     public FontEditText(Context context, AttributeSet set, int defaultStyle) {
         super(context, set, defaultStyle);
-       // setLanguageFont(context, set);
+        // setLanguageFont(context, set);
     }
 
     private void setLanguageFont(Context context, AttributeSet attrs) {
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.FontEditText);
         CharSequence fontFamily = styledAttributes.getString(R.styleable.FontEditText_customEditTextFontFamily);
-        if (fontFamily != null) {
-            if (!LocaleManager.getLanguage(context).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
-                Typeface typeface;
-                if (fontFamily.toString().equalsIgnoreCase("regular")) {
-                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
-                } else if (fontFamily.toString().equalsIgnoreCase("light")) {
-                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
-                } else if (fontFamily.toString().equalsIgnoreCase("medium")) {
-                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_bold);
-                } else if (fontFamily.toString().equalsIgnoreCase("bold")) {
-                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_bold);
-                } else {
-                    typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
+        if (fontFamily == null) return;
+
+        if (!LocaleManager.getLanguage(context).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
+            Typeface typeface = null;
+            Map<String, Integer> fontMapItems = CommonUtil.initFonts();
+            for (Map.Entry<String, Integer> fontMap : fontMapItems.entrySet()) {
+                if (fontFamily.toString().equalsIgnoreCase(fontMap.getKey())) {
+                    typeface = ResourcesCompat.getFont(context, fontMapItems.get(fontMap.getKey()));
+                    break;
                 }
-                setTypeface(typeface);
             }
+            if (typeface == null) {
+                typeface = ResourcesCompat.getFont(context, R.font.noto_sans_regular);
+            }
+            setTypeface(typeface);
         }
         styledAttributes.recycle();
     }

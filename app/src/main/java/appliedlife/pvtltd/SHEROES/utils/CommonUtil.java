@@ -1565,4 +1565,13 @@ public class CommonUtil {
             userPic.setVisibility(View.GONE);
         }
     }
+
+    public static Map<String, Integer> initFonts() {
+        Map<String, Integer> fontMap = new HashMap<>();
+        fontMap.put("regular", R.font.noto_sans_regular);
+        fontMap.put("light", R.font.noto_sans_regular);
+        fontMap.put("medium", R.font.noto_sans_bold);
+        fontMap.put("bold", R.font.noto_sans_bold);
+        return fontMap;
+    }
 }
