@@ -1106,9 +1106,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onResume() {
         super.onResume();
 
-//        impressionHelper.onResume();
-
         if (isActiveTabFragment) {
+            /*if(impressionHelper!=null) {
+                impressionHelper.onResume();
+            }*/
             AnalyticsManager.timeScreenView(mScreenLabel);
         }
     }
@@ -1117,11 +1118,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
-        if(impressionHelper!=null) {
-            impressionHelper.onPause();
-        }
-
         if (isActiveTabFragment) {
+            if(impressionHelper!=null) {
+                impressionHelper.onPause();
+            }
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
         }
     }

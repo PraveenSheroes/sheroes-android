@@ -156,7 +156,7 @@ public class ImpressionHelper {
     public void onPause() {
         //Log.i("###IH-Pause", "On Pause");
         updateEndTimeOfItems();
-        mImpressionCallback.storeInDatabase(finalViewData, mImpressionBatchSize, minEngagementTime, true);
+        storeChunks();
     }
 
     /**
