@@ -243,15 +243,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="TextView14spLight" parent="TextViewRegular">
-        <item name="android:textSize">14sp</item>
-    </style>
-
     <style name="TextView18spRegular" parent="TextViewRegular">
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TextView18spLight" parent="TextViewRegular">
         <item name="android:textSize">18sp</item>
     </style>
 
