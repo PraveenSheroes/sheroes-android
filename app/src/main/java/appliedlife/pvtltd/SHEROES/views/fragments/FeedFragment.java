@@ -212,18 +212,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private boolean isActiveTabFragment;
 
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-        ButterKnife.bind(this, view);
-
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        ButterKnife.bind(this, view);
+        LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
         initialSetup();
         initializeRecyclerView();
@@ -231,19 +225,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setIsLoggedInUser();
         setupRecyclerScrollListener();
         showGifLoader();
-
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
         }
-
         String underLineData = getString(R.string.setting);
         SpannableString content = new SpannableString(underLineData);
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
-
         //fetch latest all communities and save it in sharePref
         if (isHomeFeed) {
             mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));

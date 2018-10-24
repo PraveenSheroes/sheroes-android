@@ -660,4 +660,5 @@
     <string name="helpline_msg">Please enter your message</string>
     <string name="discard_post">Discard Post?</string>
     <string name="discard_changes">Are you sure you want to discard your changes?</string>
+    <string name="mutual_communities">%d Mutual Communities</string>
 </resources>

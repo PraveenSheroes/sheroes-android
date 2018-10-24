@@ -69,7 +69,6 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
         dialog.setContentView(containerView);
         ButterKnife.bind(this, containerView);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-
         ConfigData configData = new ConfigData();
         String howToBeSuperSheroesContent = configData.superSheroesCriteriaMsg;
         if (mConfiguration.isSet() && mConfiguration.get().configData.superSheroesCriteriaMsg != null) {

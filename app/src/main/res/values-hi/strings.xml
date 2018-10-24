@@ -420,7 +420,7 @@
     <!-- String related to tooltip -->
     <string name="tool_tip_user_profile">इस उपभोक्ता के बारे में और जानें</string>
     <string name="ID_JOIN_COMMUNITY">अपनी फ़ीड को निजीकृत करने के लिए , कम से कम एक समुदाय में शामिल हों।</string>
-    <string name="my_communities">मेरे समुदाये!</string>
+    <string name="my_communities">मेरे समुदाय</string>
     <string name="got_it">समझ गए</string>
     <string name="tool_tip_ask_question">इस चैंपियन से  प्रश्न पूछने के लिए यहां टैप करें।</string>
     <string name="tool_tip_notification">लाइक और टिप्पणियों के लिए आपकी व्यक्तिगत सूचनाएं यहां दिखाई देंगी।.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 समझ गए!</string>
@@ -661,4 +661,5 @@
     <string name="helpline_msg">कृपया अपना संदेश लिखें</string>
     <string name="discard_post">पोस्ट छोड़ दें?</string>
     <string name="discard_changes">क्या आप वाकई अपने परिवर्तनों को छोड़ना चाहते हैं?</string>
+    <string name="mutual_communities">%d एक जैसे समुदाय</string>
 </resources>

@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -108,9 +109,8 @@ public class ContestInfoFragment extends BaseFragment {
     //endregion
 
     //region fragment lifecycle
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contest_info, container, false);
         ButterKnife.bind(this, view);
         LocaleManager.setLocale(getContext());
@@ -132,7 +132,6 @@ public class ContestInfoFragment extends BaseFragment {
 
         return view;
     }
-
     @Override
     public void onPause() {
         super.onPause();

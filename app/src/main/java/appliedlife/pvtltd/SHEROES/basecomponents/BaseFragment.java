@@ -198,7 +198,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         if (getPresenter() != null) {
             getPresenter().onCreate();
         }
-
     }
 
     @Override
