@@ -149,6 +149,11 @@ public class CleverTapHelper {
             Location location = cleverTapAPI.getLocation();
             cleverTapAPI.setLocation(location);
 
+            //enable sdk to send data to clevertap (non-GDPR compliance)
+            cleverTapAPI.setOptOut(false);
+            //to capture any kind of personal information like WiFi, Bluetooth, Network Information and user IP information  (non-GDPR compliance)
+            cleverTapAPI.enableDeviceNetworkInfoReporting(true);
+
             profileUpdate.put("MSG-sms", true);                         // Enable email notifications
             profileUpdate.put("MSG-push", true);                        // Enable push notifications
             profileUpdate.put("MSG-sms", true);                        // Enable SMS notifications

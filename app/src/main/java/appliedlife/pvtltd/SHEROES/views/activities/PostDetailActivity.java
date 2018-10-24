@@ -46,6 +46,7 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -488,7 +489,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         bundle.putBoolean(IS_POST_DELETED, true);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-        super.onBackPressed();
+        onBackPressed();
     }
 
     @Override
@@ -513,7 +514,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         }
     }
-
 
     @Override
     public String getStreamType() {
@@ -733,7 +733,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                             CommunityPostActivity.navigateTo(PostDetailActivity.this, userPostObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
                             return true;
                         case R.id.delete:
-
                             mFeedDetailObjForNameUpdation = userPostObj;
                             if (mLoggedInUser != userPostObj.getAuthorId() && adminId == AppConstants.TWO_CONSTANT) {
                                 reportSpamDialog(SpamContentType.POST, userPostObj, null);
@@ -1096,20 +1095,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
-        mMentionSpanList = etView.getMentionSpans();
-        addMentionSpanDetail();
-
-        if (mIsDirty && mEditedComment != null) {
-            mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
+        if (etView.getText().toString().trim().length()==0) {
+            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+            return;
         } else {
-            String message = etView.getEditText().getText().toString();
-            if (!TextUtils.isEmpty(message)) {
-                mLastEditedComment.clear();
-                mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
+            mMentionSpanList = etView.getMentionSpans();
+            addMentionSpanDetail();
+
+            if (mIsDirty && mEditedComment != null) {
+                mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
+            } else {
+                String message = etView.getEditText().getText().toString();
+                if (!TextUtils.isEmpty(message)) {
+                    mLastEditedComment.clear();
+                    mPostDetailPresenter.addComment(message, mIsAnonymous, mHasMentions, mMentionSpanList);
+                }
             }
+            etView.getEditText().setText("");
+            CommonUtil.hideKeyboard(this);
         }
-        etView.getEditText().setText("");
-        CommonUtil.hideKeyboard(this);
     }
 
     private void addMentionSpanDetail() {

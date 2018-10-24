@@ -41,8 +41,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by Praveen on 11/12/17.
@@ -245,7 +244,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mUserSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
             rlFollower.setVisibility(View.VISIBLE);
             String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, mUserSolrObj.getSolrIgnoreNoOfMentorFollowers());
-            tvMentorInsightFollowerCount.setText(String.valueOf(numericToThousand(mUserSolrObj.getSolrIgnoreNoOfMentorFollowers())));
+            tvMentorInsightFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolrObj.getSolrIgnoreNoOfMentorFollowers())));
             tvMentorInsightFollower.setText(pluralComments);
             if(mentorInsightResponse.getNoOfFollowers7Days()>0) {
                 String str = AppConstants.PLUS + mentorInsightResponse.getNoOfFollowers7Days();
@@ -263,7 +262,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mentorInsightResponse.getTotalNoOfImpressions() > 0) {
             liImpression.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfImpression, mentorInsightResponse.getTotalNoOfImpressions());
-            tvImpressionCount.setText(String.valueOf(numericToThousand(mentorInsightResponse.getTotalNoOfImpressions())));
+            tvImpressionCount.setText(String.valueOf(changeNumberToNumericSuffix(mentorInsightResponse.getTotalNoOfImpressions())));
             tvImpressions.setText(plural);
         } else {
             liImpression.setVisibility(View.GONE);
@@ -271,7 +270,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mUserSolrObj.getSolrIgnoreNoOfMentorPosts() > 0) {
             rlPost.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfPosts, mentorInsightResponse.getTotalNoOfPostCreated());
-            tvMentorInsightPostCount.setText(String.valueOf(numericToThousand(mUserSolrObj.getSolrIgnoreNoOfMentorPosts())));
+            tvMentorInsightPostCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolrObj.getSolrIgnoreNoOfMentorPosts())));
             tvMentorInsightPost.setText(plural);
 
             if(mentorInsightResponse.getTotalNoOfPost7Days()>0) {
@@ -291,7 +290,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mentorInsightResponse.getTotalNoOfLikes() > 0) {
             rlLike.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfLikes, mentorInsightResponse.getTotalNoOfLikes());
-            tvInsightLikeCount.setText(String.valueOf(numericToThousand(mentorInsightResponse.getTotalNoOfLikes())));
+            tvInsightLikeCount.setText(String.valueOf(changeNumberToNumericSuffix(mentorInsightResponse.getTotalNoOfLikes())));
             tvInsightLike.setText(plural);
         } else {
             rlLike.setVisibility(View.GONE);
@@ -299,7 +298,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mentorInsightResponse.getTotalNoOfCommentsOnUserPost() > 0) {
             rlComment.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfComments, mentorInsightResponse.getTotalNoOfCommentsOnUserPost());
-            tvInsightComentCount.setText(String.valueOf(numericToThousand(mentorInsightResponse.getTotalNoOfCommentsOnUserPost())));
+            tvInsightComentCount.setText(String.valueOf(changeNumberToNumericSuffix(mentorInsightResponse.getTotalNoOfCommentsOnUserPost())));
             tvInsightComent.setText(plural);
         } else {
             rlComment.setVisibility(View.GONE);
@@ -307,7 +306,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mentorInsightResponse.getTotalNoOfQuestions() > 0) {
             rlQuestion.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfQuestions, mentorInsightResponse.getTotalNoOfQuestions());
-            tvMentorInsightQuestionCount.setText(String.valueOf(numericToThousand(mentorInsightResponse.getTotalNoOfCommentsOnUserPost())));
+            tvMentorInsightQuestionCount.setText(String.valueOf(changeNumberToNumericSuffix(mentorInsightResponse.getTotalNoOfCommentsOnUserPost())));
             tvMentorInsightQuestion.setText(plural);
             if(mentorInsightResponse.getTotalNoOfQuestions7Days()>0) {
                 String quest = AppConstants.PLUS + mentorInsightResponse.getTotalNoOfQuestions7Days();
@@ -326,7 +325,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
         if (mUserSolrObj.getSolrIgnoreNoOfMentorAnswers() > 0) {
             rlAnswer.setVisibility(View.VISIBLE);
             String plural = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolrObj.getSolrIgnoreNoOfMentorAnswers());
-            tvMentorInsightAnswerCount.setText(String.valueOf(numericToThousand(mUserSolrObj.getSolrIgnoreNoOfMentorAnswers())));
+            tvMentorInsightAnswerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolrObj.getSolrIgnoreNoOfMentorAnswers())));
             tvMentorInsightAnswer.setText(plural);
             if(mentorInsightResponse.getTotalNoOfAnswers7Days()>0) {
                 String quest = AppConstants.PLUS + mentorInsightResponse.getTotalNoOfAnswers7Days();

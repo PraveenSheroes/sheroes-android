@@ -156,7 +156,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPIO
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_EDIT_PROFILE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 import static appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity.BIO_MAX_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.ALL_STAR_END_LIMIT;
 import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog.BEGINNER_START_LIMIT;
@@ -487,7 +487,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     public void profileActivitiesRefresh() {
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
-        tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
+        tvMentorAnswerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
         tvMentorAnswer.setText(pluralAnswer);
     }
 
@@ -657,20 +657,20 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
         tvMentorPost.setText(pluralAnswer);
         if (isMentor) {
-            userTotalPostCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
+            userTotalPostCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolarObject.getSolrIgnoreNoOfMentorPosts())));
         }
         liPost.setVisibility(View.VISIBLE);
 
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, mUserSolarObject.getSolrIgnoreNoOfMentorFollowers());
         userFollower.setText(pluralFollower);
         if (isMentor) {
-            userFollowerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
+            userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
         }
 
         if (isMentor) {
             liFollowing.setVisibility(View.GONE);
             pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
-            tvMentorAnswerCount.setText(String.valueOf(numericToThousand(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
+            tvMentorAnswerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
             tvMentorAnswer.setText(pluralAnswer);
             liAnswer.setVisibility(View.VISIBLE);
         } else {
@@ -1448,7 +1448,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
                 followedUserSolrObj = userSolrObj;
                 tvMentorDashBoardFollow.setEnabled(true);
-                userFollowerCount.setText(String.valueOf(numericToThousand(userSolrObj.getSolrIgnoreNoOfMentorFollowers())));
+                userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getSolrIgnoreNoOfMentorFollowers())));
                 followUnFollowMentor();
                 break;
             default:
@@ -1911,7 +1911,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private void setUsersFollowerCount(int numFound) {
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
         mUserSolarObject.setSolrIgnoreNoOfMentorFollowers(numFound);
-        userFollowerCount.setText(String.valueOf(numericToThousand(numFound)));
+        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(numFound)));
         userFollower.setText(pluralFollower);
         liFollower.setVisibility(View.VISIBLE);
 
@@ -1920,7 +1920,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private void setUsersPostCount(int postCount) {
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, postCount);
         mUserSolarObject.setSolrIgnoreNoOfMentorPosts(postCount);
-        userTotalPostCount.setText(String.valueOf(numericToThousand(postCount)));
+        userTotalPostCount.setText(String.valueOf(changeNumberToNumericSuffix(postCount)));
         tvMentorPost.setText(pluralAnswer);
         liPost.setVisibility(View.VISIBLE);
     }

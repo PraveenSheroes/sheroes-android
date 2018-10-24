@@ -575,6 +575,7 @@
     <string name="poll_end">Ends in: %1$s</string>
     <string name="ended">Poll ended</string>
     <string name="option_empty">Option can\'t be empty</string>
+    <string name="option_same">Two or more options can\'t be same</string>
     <string name="option_image_empty">Image can\'t be empty</string>
     <string name="poll_text_limit">Description can\'t exceed 500 char</string>
     <string name="paste_on_playstore">Paste as Review on Playstore</string>

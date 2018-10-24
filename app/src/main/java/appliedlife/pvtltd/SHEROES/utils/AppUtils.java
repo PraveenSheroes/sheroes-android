@@ -63,8 +63,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -118,7 +120,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 public class AppUtils {
     private static final String TAG = LogUtils.makeLogTag(AppUtils.class);
@@ -1855,14 +1858,23 @@ public class AppUtils {
         return bellNotificationRequest;
     }
 
-    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime, boolean hasMention, List<MentionSpan> userMentionList) {
-        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, imag, mIdForEditPost, linkRenderResponse, hasPermission, accessToken, hasMention, userMentionList);
+    public static CommunityPostCreateRequest schedulePost(Long communityId, String createType, String description, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, String mDateTime, boolean hasMention, List<MentionSpan> userMentionList) {
+        CommunityPostCreateRequest communityPostCreateRequest = createCommunityPostRequestBuilder(communityId, createType, description, mIdForEditPost, linkRenderResponse, hasPermission, accessToken, hasMention, userMentionList);
         communityPostCreateRequest.setSchedulePost(mDateTime);
         return communityPostCreateRequest;
     }
 
+    public static Map createCommunityImagePostRequest(List<String> filePath) {
+        LinkedHashMap<String, RequestBody> map = new LinkedHashMap<>();
+        for (int i = 0; i < filePath.size(); i++) {
+            File file = new File(filePath.get(i));
+            RequestBody fileBody = RequestBody.create(MediaType.parse(FileUtil.getMimeType(filePath.get(i))), file);
+            map.put(AppConstants.IMAGE_INITIAL_FILE_NAME + file.getName(), fileBody);
+        }
+        return map;
+    }
 
-    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean hasMention, List<MentionSpan> userMentionList) {
+    public static CommunityPostCreateRequest createCommunityPostRequestBuilder(Long communityId, String createType, String description, Long mIdForEditPost, LinkRenderResponse linkRenderResponse, boolean hasPermission, String accessToken, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1871,7 +1883,6 @@ public class AppUtils {
         communityPostCreateRequest.setCommunityId(communityId);
         communityPostCreateRequest.setCreatorType(createType);
         communityPostCreateRequest.setDescription(description);
-        communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setPostToFacebook(hasPermission);
         communityPostCreateRequest.setUserFbAccessToken(accessToken);
         communityPostCreateRequest.setId(mIdForEditPost);
@@ -1974,7 +1985,7 @@ public class AppUtils {
         return linkRequest;
     }
 
-    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long communityId, String createType, String description, List<String> imag, Long mIdForEditPost, List<Long> deletedImageId, LinkRenderResponse linkRenderResponse, boolean hasMention, List<MentionSpan> userMentionList) {
+    public static CommunityPostCreateRequest editCommunityPostRequestBuilder(Long communityId, String createType, String description, Long mIdForEditPost, List<Long> deletedImageId, LinkRenderResponse linkRenderResponse, boolean hasMention, List<MentionSpan> userMentionList) {
         AppUtils appUtils = AppUtils.getInstance();
         CommunityPostCreateRequest communityPostCreateRequest = new CommunityPostCreateRequest();
         communityPostCreateRequest.setAppVersion(appUtils.getAppVersionName());
@@ -1983,7 +1994,6 @@ public class AppUtils {
         communityPostCreateRequest.setCommunityId(communityId);
         communityPostCreateRequest.setCreatorType(createType);
         communityPostCreateRequest.setDescription(description);
-        communityPostCreateRequest.setImages(imag);
         communityPostCreateRequest.setId(mIdForEditPost);
         communityPostCreateRequest.setDeleteImagesIds(deletedImageId);
         if (null != linkRenderResponse) {

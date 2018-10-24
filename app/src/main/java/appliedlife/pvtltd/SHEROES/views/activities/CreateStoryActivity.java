@@ -23,7 +23,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
-import android.util.Log;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -102,6 +101,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
     private static int flagActivity = 0;
+    private Toast myToast;
 
     @Inject
     AppUtils mAppUtils;
@@ -219,6 +219,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
+        myToast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
     @Override
@@ -352,6 +353,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
+        myToast.setText(stringID);
+        myToast.show();
         if (!isFinishing()) {
             Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
         }

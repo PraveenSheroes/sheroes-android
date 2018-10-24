@@ -1244,6 +1244,18 @@ public class CommonUtil {
             LogUtils.error(TAG, e.toString());
         }
     }
+
+    public static synchronized void setPrefValue(String key, boolean value) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null) {
+                prefs.edit().putBoolean(key, value).apply();
+            }
+        } catch (Exception e) {
+            LogUtils.error(TAG, e.toString());
+        }
+    }
+
     public static synchronized void setPrefStringValue(String key,String value) {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();

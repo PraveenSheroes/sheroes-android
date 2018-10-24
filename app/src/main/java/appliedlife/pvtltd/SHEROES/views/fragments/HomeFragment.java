@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -226,6 +227,9 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
+                if (getActivity() instanceof HomeActivity) {
+                    ((HomeActivity) getActivity()).removeTrendingFAB(tab.getPosition());
+                }
             }
 
             @Override

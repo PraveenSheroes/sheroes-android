@@ -53,7 +53,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by Praveen_Singh on 23-01-2017.
@@ -527,7 +527,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                     rlFeedArticleViews.setVisibility(View.VISIBLE);
                     StringBuilder stringBuilder = new StringBuilder();
                     if (articleObj.getNoOfViews() > 1) {
-                        stringBuilder.append(numericToThousand(articleObj.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                        stringBuilder.append(changeNumberToNumericSuffix(articleObj.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                         tvFeedArticleTotalViews.setText(stringBuilder.toString());
                         tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
                         rlFeedArticleViews.setVisibility(View.VISIBLE);
