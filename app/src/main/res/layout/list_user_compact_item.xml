@@ -84,7 +84,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/follow_button"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="@dimen/user_compact_follow_width"
             android:layout_height="@dimen/user_compact_follow_height"
             android:layout_alignParentBottom="true"

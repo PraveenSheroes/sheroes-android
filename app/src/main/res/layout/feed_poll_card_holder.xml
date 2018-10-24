@@ -145,7 +145,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_total_reactions_count"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -158,7 +158,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_total_replies"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -191,7 +191,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_user_reaction"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_heart_in_active"
@@ -204,7 +204,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_user_share"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -222,7 +222,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_feed_poll_user_comment"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"

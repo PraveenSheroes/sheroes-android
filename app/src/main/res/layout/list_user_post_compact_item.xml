@@ -50,7 +50,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/post_title"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -119,7 +119,7 @@
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/more_image_count"
-                        style="@style/TextView16spMedium"
+                        style="@style/TextView16spBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -177,7 +177,7 @@
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/link_description"
-                        style="@style/TextView16spMedium"
+                        style="@style/TextView16spBold"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -270,7 +270,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/post_like_button"
-                    style="@style/TextView14spMedium"
+                    style="@style/TextView14spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -283,7 +283,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/post_comment_button"
-                    style="@style/TextView14spMedium"
+                    style="@style/TextView14spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30.5dp"
@@ -297,7 +297,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/post_share_button"
-                    style="@style/TextView14spMedium"
+                    style="@style/TextView14spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30.5dp"

@@ -40,7 +40,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/cancel"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -60,7 +60,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/unfollow"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"

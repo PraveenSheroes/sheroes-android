@@ -9,7 +9,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_mentor_answering_question"
-        style="@style/TextView14spMedium"
+        style="@style/TextView14spBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

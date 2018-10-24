@@ -45,7 +45,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/badge_title"
-        style="@style/TextView20spMedium"
+        style="@style/TextView20spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/header_container"
@@ -113,7 +113,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/share"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -127,7 +127,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/ok"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
@@ -143,7 +143,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/show_leaderBoard"
-        style="@style/TextView14spMedium"
+        style="@style/TextView14spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/badge_desc"
@@ -163,7 +163,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/view_profile"
-        style="@style/TextView14spMedium"
+        style="@style/TextView14spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/badge_desc"

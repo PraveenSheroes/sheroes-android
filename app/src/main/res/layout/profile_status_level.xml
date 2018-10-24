@@ -35,7 +35,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/profile_status_level"
-                    style="@style/TextView16spMedium"
+                    style="@style/TextView16spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_size_2"
@@ -144,7 +144,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontButton
             android:id="@+id/buttonPanel"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="@dimen/dp_size_160"
             android:layout_height="@dimen/dp_size_36"
             android:layout_below="@id/tick"

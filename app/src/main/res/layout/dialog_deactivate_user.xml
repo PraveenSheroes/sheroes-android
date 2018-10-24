@@ -9,7 +9,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/reason_title"
-        style="@style/TextView14spMedium"
+        style="@style/TextView14spBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_16"

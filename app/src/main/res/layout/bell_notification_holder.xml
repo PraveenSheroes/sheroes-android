@@ -46,7 +46,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_bell_noti_title"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/bell_notification_li_title_left_margin"
@@ -59,7 +59,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_bell_view_profile"
-                style="@style/TextView14spMedium"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/bell_notification_tv_bell_view_profile_left_margin"

@@ -264,7 +264,7 @@
     </style>
 
     <!--Textview bold fonts-->
-    <style name="TextView9spMedium" parent="TextViewBold">
+    <style name="TextView9spBold" parent="TextViewBold">
         <item name="android:textSize">9sp</item>
     </style>
 
@@ -272,20 +272,12 @@
         <item name="android:textSize">10sp</item>
     </style>
 
-    <style name="TextView12spMedium" parent="TextViewBold">
+    <style name="TextView12spBold" parent="TextViewBold">
         <item name="android:textSize">12sp</item>
-    </style>
-
-    <style name="TextView14spMedium" parent="TextViewBold">
-        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="TextView14spBold" parent="TextViewBold">
         <item name="android:textSize">14sp</item>
-    </style>
-
-    <style name="TextView16spMedium" parent="TextViewBold">
-        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextView16spBold" parent="TextViewBold">
@@ -296,15 +288,11 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="TextView18spMedium" parent="TextViewBold">
-        <item name="android:textSize">18sp</item>
-    </style>
-
     <style name="TextView22spBold" parent="TextViewBold">
         <item name="android:textSize">22sp</item>
     </style>
 
-    <style name="TextView20spMedium" parent="TextViewBold">
+    <style name="TextView20spBold" parent="TextViewBold">
         <item name="android:textSize">20sp</item>
     </style>
 

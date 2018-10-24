@@ -9,7 +9,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/title"
-        style="@style/TextView20spMedium"
+        style="@style/TextView20spBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_size_24"
@@ -36,7 +36,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/ok"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -55,7 +55,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/edit"
-            style="@style/TextView14spMedium"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

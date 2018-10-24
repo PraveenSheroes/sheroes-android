@@ -19,7 +19,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/earned_badge_count"
-        style="@style/TextView12spMedium"
+        style="@style/TextView12spBold"
         android:layout_width="@dimen/badge_counter_icon"
         android:layout_height="@dimen/badge_counter_icon"
         android:layout_alignParentEnd="true"
