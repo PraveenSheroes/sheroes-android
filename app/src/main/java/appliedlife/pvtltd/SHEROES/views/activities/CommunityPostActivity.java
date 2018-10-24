@@ -1678,7 +1678,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             mCommunityName.setVisibility(View.VISIBLE);
             if (mIsAnonymous) {
-                mUserName.setText("Anonymous");
+                mUserName.setText(R.string.ID_ANONYMOUS);
                 mShareToFacebook.setChecked(false);
             } else {
                 mUserName.setText(CommonUtil.capitalizeString(mUserSummary.getFirstName() + " " + mUserSummary.getLastName()));

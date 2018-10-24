@@ -13,12 +13,12 @@
     <string name="ID_NAVIGATION_DRAWER_CLOSE">Close navigation drawer</string>
 
     <!--text names in SHEROES-->
-    <string name="IDS_PLAY_SERVICE">कृपया अपनी गूगल प्लेस्टोर सर्विस को अपडेट करें</string>
+    <string name="IDS_PLAY_SERVICE">कृपया अपनी गूगल प्लेस्टोर सर्विस को अप्डेट करें</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_TITLE">कनेक्शन नहीं हो पाया</string>
     <string name="IDS_STR_NETWORK_TIME_OUT_DESCRIPTION">इंटरनेट कनेक्शन या कनेक्टिविटी नहीं है। कृपया अपने कनेक्शन की जांच करे और फिर से प्रयास करें।</string>
     <string name="IDS_STR_TRY_AGAIN_TEXT">दोबारा कोशिश करें।</string>
     <string name="IDS_INVALID_USER_PASSWORD">अमान्य यूज़र या पासवर्ड</string>
-    <string name="IDS_UN_AUTHORIZE">The server encountered an error. Please try to log out and log in again or write to us on care@sheroes.in.</string>
+    <string name="IDS_UN_AUTHORIZE">एक एरर है। कृपया लॉगआउट कर के दोबारा लॉगिन करें। अथवा हमें care@sheroes.in पर ईमेल भेजें।</string>
 
     <!-- Strings related to login -->
     <string name="ID_PROMPT_EMAIL">SHEROES पर आपका ईमेल आईडी पंजीकृत है</string>
@@ -46,18 +46,18 @@
     <string name="follower_toolbar_title">मेरे फॉलोवर्स</string>
     <string name="following_toolbar_title">जिन्हें मैं फॉलो करती हूँ</string>
     <string name="follower_public_profile_toolbar_title">इनके फॉलोवर्स</string>
-    <string name="following_public_profile_toolbar_title">जिन्हें ये फॉलो करती हैं </string>
+    <string name="following_public_profile_toolbar_title">जिन्हें ये फॉलो करती हैं</string>
     <string name="ID_MENTOR_INSIGHT">सलाहकार का विवरण</string>
-    <string name="ID_COMMUNITIY">कम्यूनिटी </string>
+    <string name="ID_COMMUNITIY">समुदाय</string>
     <string name="ID_GENERIC_ERROR">ओह! कुछ गलत हो गया है। हम कार्यरत हैं। इसे जल्दी से ठीक कर देंगे</string>
     <string name="ID_UNABLE_TO_COMMENT">माफ़ करें, कमेंट नहीं हो पाया। कृपया कुछ देर बाद दोबारा कोशिश करे।</string>
     <string name="ID_UNABLE_TO_EDIT_DELETE">माफ़ करें, कमेंट करने और बदलने में असमर्थ है। कृपया कुछ देर बाद दोबारा कोशिश करे।</string>
-    <string name="ID_SERVER_PROBLEM">सर्वर मे गलती है। आपका अनुरोध पूरा नहीं हो सका।</string>
+    <string name="ID_SERVER_PROBLEM">सर्वर मे एरर है। आपका अनुरोध पूरा नहीं हो सका।</string>
     <string name="ID_SEARCH">खोजें</string>
     <string name="ID_SEARCH_LOCATION">लोकेशन खोजें</string>
     <string name="ID_TRENDING">ट्रेंडिंग</string>
-    <string name="ID_CHOOSE_CATEGORY">केटेगरी चुने</string>
-    <string name="ID_DONE">हो गया</string>
+    <string name="ID_CHOOSE_CATEGORY">कैटेगरी चुने</string>
+    <string name="ID_DONE">चुनें</string>
     <string name="ID_OK">ठीक है</string>
     <string name="ID_CANCEL">रद्द करें</string>
     <string name="ID_VIEW_MORE">और देखें</string>
@@ -76,7 +76,7 @@
     <string name="ID_PROFILE">बारे मे</string>
     <string name="ID_PROFILE_POST">प्रोफाइल पोस्ट स्क्रीन</string>
     <string name="ID_ARTICLE">लेख</string>
-    <string name="ID_POST">पोस्ट इन रूप में करे:</string>
+    <string name="ID_POST">कमेंट इस रूप में करे:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
     <string name="ID_MEMBERS">सदस्य</string>
     <string name="ID_ADMIN">एडमिन</string>
@@ -508,13 +508,13 @@
     <string name="full_name_err_msg">कृपया पूरा नाम दर्ज करें</string>
     <string name="limit">0/140</string>
     <string name="other">अन्य</string>
-    <string name="explore_All">और  खोज  करें</string>
+    <string name="explore_All">समुदाय खोजें</string>
     <string name="keep_user_post_likes_and_comments">उपभोक्ता की गतिविधि हटाएं</string>
     <string name="add_reason">कारण लिखें</string>
     <string name="others">अन्य लोग</string>
     <string name="home_label">होम</string>
     <string name="youtube">Youtube.com</string>
-    <string name="how_do_i_become_a_supersheroes">सुपर SHEROE / शीरो कैसे बने ?</string>
+    <string name="how_do_i_become_a_supersheroes">सुपर SHEROES कैसे बनें?</string>
     <string name="poll_option">विकल्प</string>
     <string name="post_detail_toolbar_title">%1$s पोस्ट</string>
     <string name="post_detail_toolbar_title_multiple">%1$s\'s पोस्ट</string>
@@ -605,7 +605,7 @@
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
     <string name="top_post">शीर्ष पोस्ट</string>
-    <string name="my_feed">मेरा फीड</string>
+    <string name="my_feed">फीड</string>
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
     <string name="post_header_community">%1$s ने पोस्ट किया"</string>
     <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>

@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class ConfigurationResponse {
-    @SerializedName("appConfiguration")
+    @SerializedName("configuration")
     public AppConfiguration appConfiguration;
 
     @SerializedName("message")

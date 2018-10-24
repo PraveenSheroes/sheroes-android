@@ -179,6 +179,4 @@ public class SheroesApplication extends MultiDexApplication {
         // Build and send an Event.
         t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
     }
-
-
 }
