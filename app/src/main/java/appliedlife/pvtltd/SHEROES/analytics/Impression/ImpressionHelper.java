@@ -2,10 +2,12 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.os.Build;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -58,7 +60,6 @@ public class ImpressionHelper {
         this.mConfiguration = configuration;
         this.recyclerView =  recyclerView;
         this.linearLayoutManager = layoutManager;
-        this.
         init();
     }
 
@@ -78,14 +79,46 @@ public class ImpressionHelper {
      */
     public void onResume() {
          Log.i("###IH-Resume", "On Resume");
+        //Get the visible items on screen
+        int startPos = linearLayoutManager.findFirstVisibleItemPosition();
+        int endPos = linearLayoutManager.findLastVisibleItemPosition();
+        if (startPos >= 0 || endPos > 0) {
+            for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
+                allVisibleViews.add(viewPosition);
+                getValidImpressionView(viewPosition, SCROLL_DOWN, recyclerView);
+            }
+        }
     }
+
+    public void getGlobalLayoutChanges(final RecyclerView recyclerView) {
+
+        final ViewTreeObserver viewTreeObserver = recyclerView.getViewTreeObserver();
+        ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                    recyclerView.getViewTreeObserver()
+                            .removeOnGlobalLayoutListener(this);
+                } else {
+                    recyclerView.getViewTreeObserver()
+                            .removeOnGlobalLayoutListener(this);
+                }
+
+                Log.i("Global layout change", "here");
+                onResume();
+            }
+        };
+        viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener);
+    }
+
 
     /**
      * Fragment/ Activity is paused
      */
     public void onPause() {
         //Log.i("###IH-Pause", "On Pause");
-        boolean status = updateEndTimeOfItems();
+        updateEndTimeOfItems();
         mImpressionCallback.storeInDatabase(finalViewData, true);
     }
 
@@ -107,7 +140,7 @@ public class ImpressionHelper {
     /**
      * Update the end time for the item on paused
      */
-    private boolean updateEndTimeOfItems() {
+    private void updateEndTimeOfItems() {
         if (finalViewData.size() > 0) {
             int size = finalViewData.size();
             for (int i = size - 1; i >= 0; i--) {
@@ -118,12 +151,9 @@ public class ImpressionHelper {
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
                     finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
-
-                    return true;
                 }
             }
         }
-        return false;
     }
     //endregion
 
@@ -201,7 +231,10 @@ public class ImpressionHelper {
 
         int itemPosition = checkIfItemInFinal(viewPosition);
         if (scrollDirection == SCROLL_UP && itemPosition == -1) {
-            addNewEntry(viewPosition, impressionData);
+           // addNewEntry(viewPosition, impressionData);
+            finalViewData.add(impressionData);
+            Log.d("@@@New Enter -TOP", "::" + viewPosition);
+            mImpressionCallback.showToast("Screen Enter" + viewPosition);
         } else if (scrollDirection == SCROLL_DOWN && itemPosition == -1) { //new item add it in final list
             finalViewData.add(impressionData);
             Log.d("@@@New Enter- Down", "::" + viewPosition);
@@ -245,6 +278,9 @@ public class ImpressionHelper {
 
             FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
             if (feedDetail == null) return null;
+
+            //Ignore header
+            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)) return null;
 
             impressionData.setStartTime(System.currentTimeMillis());
             impressionData.setTimeStamp(System.currentTimeMillis());

@@ -287,6 +287,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     //Send event of previous selected tab with duration, and start the time capture for current selected tab
                     AnalyticsManager.trackScreenView(screenName, getExtraProperties());
                     AnalyticsManager.timeScreenView(mScreenLabel);
+
+                   // if(impressionHelper!=null) {
+                   //     impressionHelper.onPause();
+                   // }
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
                 AnalyticsManager.timeScreenView(mScreenLabel);
@@ -297,21 +301,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
-            isActiveTabFragment = false;
-        }
 
-        if(isVisibleToUser) {
-           // Log.i("####", "Visibility Hint");
-            /*if (impressionHelper == null) {
-                impressionHelper = new ImpressionHelper(gifLoader.getVisibility(), mConfiguration, mLoggedInUser, mAppUtils, this);
-            }*/
-            if(impressionHelper!=null) {
-                impressionHelper.onResume();
-            }
-        } else  {
             if(impressionHelper!=null) {
                 impressionHelper.onPause();
             }
+            isActiveTabFragment = false;
         }
     }
 
@@ -347,6 +341,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
             impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mFeedRecyclerView, mLinearLayoutManager, mLoggedInUser, mAppUtils, this);
         }
+
+        impressionHelper.getGlobalLayoutChanges(mFeedRecyclerView);
     }
 
     public boolean showUpdateCard() {
@@ -1135,9 +1131,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
-        //getImpressionDatabase();
-        //Log.i("feed", finalViewData.toString());
-        //finalViewData.clear();
+       // if(impressionHelper!=null) {
+       //     impressionHelper.onPause();
+       // }
 
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
@@ -1148,10 +1144,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onStop() {
         if(toast!=null) {
             toast.cancel();
-        }
-
-        if(impressionHelper!=null) {
-            impressionHelper.onPause();
         }
 
         super.onStop();

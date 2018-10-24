@@ -127,7 +127,6 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         // Log.i("Impression hit", "Called");
         getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEvents)
-                //Retry no of times
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
