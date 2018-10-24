@@ -161,7 +161,7 @@ public class ImpressionHelper {
      * @param startPos     first visible item on screen
      * @param endPos       last visible item on screen
      */
-    public void onScrollChange(int scrollDirection, int startPos, int endPos) {
+    public void onScrollChange(RecyclerView recyclerView, int scrollDirection, int startPos, int endPos) {
         if(scrollDirection>0 && scrollDirection!= lastDirectionId) {
             scrollDirectionChange = true;
         }

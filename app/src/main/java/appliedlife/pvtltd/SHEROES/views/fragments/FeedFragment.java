@@ -230,7 +230,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private LinearLayoutManager mLinearLayoutManager;
     private boolean isActiveTabFragment;
     private ImpressionHelper impressionHelper;
-    private boolean isRunning = false;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -668,7 +667,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                impressionHelper.onScrollChange(mScrollDirection, startPos, endPos);
+                impressionHelper.onScrollChange(recyclerView, mScrollDirection, startPos, endPos);
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
