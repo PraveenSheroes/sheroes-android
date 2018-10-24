@@ -46,7 +46,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     }
 
     //Filter the list and get only those item which have more than 250ms time spend on impression
-    public void storeBatchInDb(final Context context, final float minEngagementTime, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
+    public void storeBatchInDb(final Context context, final float minEngagementTime, final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
         Observable.just(impressionData)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -64,7 +64,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             @Override
             public void onSuccess(List<ImpressionData> impressionDataList) {
                 if (impressionDataList.size() > 0) {
-                    insertImpressionsInDb(context, impressionDataList, forceNetworkCall); //convert into Rx
+                    insertImpressionsInDb(context, batchSize, impressionDataList, forceNetworkCall); //convert into Rx
                 } else {
                     Log.i("No item", "Have engagement more than 250 ms");
                 }
@@ -83,7 +83,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      * @param context
      * @param impressionData list of impression
      */
-    private void insertImpressionsInDb(final Context context, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
+    private void insertImpressionsInDb(final Context context, final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
         Single.create(new SingleOnSubscribe<Long>() {
             @Override
             public void subscribe(SingleEmitter<Long> emitter) {
@@ -91,9 +91,19 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     Impression impression = new Impression();
                     impression.setImpressionDataList(impressionData);
                     final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
+                    List<Impression> data = database.impressionDataDao().getAll();
                     long id = database.impressionDataDao().insert(impression);
                     if (id > -1) {
-                        emitter.onSuccess(id);
+                        int totalCount = 0;
+                        for (Impression impression1 : data) {
+                            totalCount = totalCount + impression1.getImpressionDataList().size();
+                        }
+                        if (totalCount >= batchSize && !forceNetworkCall) {
+                            Log.i("Db value", "250 ms >" + totalCount);
+                            hitNetworkCall(context);
+                        } else {
+                            emitter.onSuccess(id);
+                        }
                     }
                 } catch (Throwable t) {
                     emitter.onError(t);
@@ -105,7 +115,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     @Override
                     public void onSuccess(Long aLong) {
                         Log.i("Inserted", "Successfully");
-                        if(forceNetworkCall) {
+                        if (forceNetworkCall) {
                             hitNetworkCall(context);
                         }
                     }
@@ -229,7 +239,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 @Override
                 public void run() {
                     List<Impression> impressionData = database.impressionDataDao().getAll();
-                    if(impressionData!=null && impressionData.size()<=0) return;
+                    if (impressionData != null && impressionData.size() <= 0) return;
 
                     List<Impression> rowIndex = new ArrayList<>();
                     if (impressionData != null && impressionData.size() > 0) {

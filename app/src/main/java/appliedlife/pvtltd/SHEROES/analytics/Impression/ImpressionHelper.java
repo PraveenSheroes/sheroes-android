@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -32,13 +33,19 @@ public class ImpressionHelper {
     public static final int SCROLL_UP = 2;
     public static final int SCROLL_DOWN = 1;
 
-    private long mLoggedInUser;
     private boolean scrollDirectionChange = false;
+    private boolean isRunning;
 
     private int lastDirectionId = -1;
-    private int mImpressionVisibilityThreshold = 20;
-    private ImpressionCallback mImpressionCallback;
+    private int mImpressionVisibilityThreshold;
+    private int mImpressionBatchSize;
+    private int mImpressionFrequency;
+    private float minEngagementTime;
+    private long mLoggedInUser;
+    private long lastScrollingEndTime;
 
+    private ImpressionCallback mImpressionCallback;
+    private CountDownTimer countDownTimer;
     private AppUtils mAppUtils;
     private Preference<Configuration> mConfiguration;
     private ImpressionSuperProperty mImpressionProperty;
@@ -49,6 +56,7 @@ public class ImpressionHelper {
     private ArrayList<Integer> currentViewed = new ArrayList<>();
     private ArrayList<Integer> allVisibleViews = new ArrayList<>();
     private List<ImpressionData> finalViewData = new ArrayList<>();
+
     //endregion
 
     //region constructor
@@ -64,21 +72,50 @@ public class ImpressionHelper {
     }
 
     private void init() {
-        //Get the view min Visibility of View from remote config
         mImpressionVisibilityThreshold = new ConfigData().visibilityPercentage;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
             mImpressionVisibilityThreshold = mConfiguration.get().configData.visibilityPercentage;
         }
+
+        minEngagementTime = new ConfigData().minEngagementTime;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get min engagement time for impression
+            minEngagementTime = mConfiguration.get().configData.minEngagementTime;
+        }
+
+        minEngagementTime = minEngagementTime/1000f; //i.e 0.25 ms
+
+        mImpressionBatchSize = new ConfigData().frequencyBatchRequest;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get the batch size
+            mImpressionBatchSize = mConfiguration.get().configData.frequencyBatchRequest;
+        }
+
+        mImpressionFrequency = new ConfigData().impressionFrequency;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get impression frequency in ms
+            mImpressionFrequency = mConfiguration.get().configData.impressionFrequency;
+        }
+
+        mImpressionFrequency = mImpressionFrequency/3; //todo - testing purpose
     }
     //endregion
 
     //region public method
+
+    public void scrollingIdle(long idleTime) {
+        lastScrollingEndTime = idleTime;
+    }
 
     /**
      * Fragment/ Activity is resumed
      */
     public void onResume() {
          Log.i("###IH-Resume", "On Resume");
+
+       /* if(countDownTimer!=null) {
+            countDownTimer.cancel();
+        }
+        countDownTimer = new ImpressionTimer(10000, 1000);
+        countDownTimer.start();*/
+
         //Get the visible items on screen
         int startPos = linearLayoutManager.findFirstVisibleItemPosition();
         int endPos = linearLayoutManager.findLastVisibleItemPosition();
@@ -119,7 +156,7 @@ public class ImpressionHelper {
     public void onPause() {
         //Log.i("###IH-Pause", "On Pause");
         updateEndTimeOfItems();
-        mImpressionCallback.storeInDatabase(finalViewData, true);
+        mImpressionCallback.storeInDatabase(finalViewData, mImpressionBatchSize, minEngagementTime, true);
     }
 
     /**
@@ -133,6 +170,15 @@ public class ImpressionHelper {
             scrollDirectionChange = true;
         }
         lastDirectionId = scrollDirection;
+
+        //Scroll view visibility and duration
+        lastScrollingEndTime = System.currentTimeMillis();
+        if (countDownTimer == null) {
+            countDownTimer = new ImpressionTimer(mImpressionFrequency, 1000);
+            countDownTimer.start();
+        } else if (!isRunning) {
+            countDownTimer.start();
+        }
 
         analyzeAndAddViewData(scrollDirectionChange, scrollDirection, recyclerView, startPos, endPos);
     }
@@ -322,9 +368,9 @@ public class ImpressionHelper {
     private void storeChunks() {
         int index = getLastIndexOfUpdatedItem();
         if (index > -1) {
-            List<ImpressionData> forDb = finalViewData.subList(0, index + 1);
+            List<ImpressionData> updatedImpressions = finalViewData.subList(0, index + 1);
             Log.i("@@@DB", "###Added to db");
-            mImpressionCallback.storeInDatabase(forDb, false);
+            mImpressionCallback.storeInDatabase(updatedImpressions,mImpressionBatchSize, minEngagementTime, false);
 
             if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
                 finalViewData = finalViewData.subList(index + 1, finalViewData.size());
@@ -475,4 +521,34 @@ public class ImpressionHelper {
         }
     }
     //endregion
+
+
+    //Timer in android
+    public class ImpressionTimer extends CountDownTimer {
+
+        public ImpressionTimer(long startTime, long interval) {
+            super(startTime, interval);
+        }
+
+        @Override
+        public void onFinish() {
+            if (System.currentTimeMillis() - lastScrollingEndTime > 100000) {
+                Log.i("MAX time expired", "stop timer now");
+                    onPause();
+                    isRunning = false;
+                cancel();
+            } else {
+                Log.i("Time Expired", "1 Min/60 sec");
+
+                mImpressionCallback.sendImpression();
+                isRunning = true;
+                start();
+            }
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            // Log.i("Time Expired", "1 Min/60 sec");
+        }
+    }
 }

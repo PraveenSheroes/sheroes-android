@@ -118,6 +118,12 @@ public class ConfigData {
     public int visibilityPercentage = 20;
 
     @SerializedName("frequency_batch_request")
-    public int frequencyBatchRequest;
+    public int frequencyBatchRequest = 10;
+
+    @SerializedName("min_engagement_time")
+    public int minEngagementTime = 250;
+
+    @SerializedName("impressionFrequency")
+    public int impressionFrequency = 60000;
 
 }

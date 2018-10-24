@@ -147,7 +147,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
     private String mSetOrderKey;
-    private long lastScrollingEndTime;
+
     private Toast toast;
 
     //TODO - make these two from remote config
@@ -162,8 +162,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private static final int REPORT_MENU_ID = 4;
     private static final int FEATURED_POST_MENU_ID = 5;
     private static final int BOOKMARK_MENU_ID = 6;
-
-    OneMinuteCountDownTimer countDownTimer;
 
     @Inject
     AppUtils mAppUtils;
@@ -343,6 +341,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
 
         impressionHelper.getGlobalLayoutChanges(mFeedRecyclerView);
+       // impressionHelper.onResume();
     }
 
     public boolean showUpdateCard() {
@@ -534,9 +533,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void storeInDatabase(List<ImpressionData> impressionData, boolean forceNetworkCall) {
+    public void storeInDatabase(List<ImpressionData> impressionData, int batchSize, float minEngagementTime, boolean forceNetworkCall) {
         if(impressionData.size()>0 && getContext()!=null) {
-            impressionPresenter.storeBatchInDb(getContext(), 0.25f, impressionData, forceNetworkCall);
+            impressionPresenter.storeBatchInDb(getContext(), minEngagementTime, batchSize, impressionData, forceNetworkCall);
         }
     }
 
@@ -550,6 +549,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
+    @Override
+    public void sendImpression() {
+     impressionPresenter.hitNetworkCall(getContext());
     }
 
     @Override
@@ -646,22 +650,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    lastScrollingEndTime = System.currentTimeMillis();
+                    impressionHelper.scrollingIdle(System.currentTimeMillis());
                 }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
-                //Scroll view visibility and duration
-                lastScrollingEndTime = System.currentTimeMillis();
-                if (countDownTimer == null) {
-                    countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
-                    countDownTimer.start();
-                } else if(!isRunning){
-                    countDownTimer.start();
-                }
 
                 if (dy < 0) {
                     mScrollDirection = ImpressionHelper.SCROLL_UP;
@@ -1111,16 +1106,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onResume() {
         super.onResume();
 
-        //Uncomment for network hit
-        if(isActiveTabFragment) {
-            if(countDownTimer!=null) {
-                countDownTimer.cancel();
-            }
-            countDownTimer = new OneMinuteCountDownTimer(10000, 1000);
-            countDownTimer.start();
-        }
-
-        //impressionHelper.onResume();
+//        impressionHelper.onResume();
 
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
@@ -2202,36 +2188,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @OnClick({R.id.tv_goto_setting})
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-    }
-
-    //Timer in android
-    public class OneMinuteCountDownTimer extends CountDownTimer {
-
-        public OneMinuteCountDownTimer (long startTime, long interval) {
-            super(startTime, interval);
-        }
-
-        @Override
-        public void onFinish() {
-            if (System.currentTimeMillis() - lastScrollingEndTime > 100000) {
-                Log.i("MAX time expired", "stop timer now");
-                if(impressionHelper!=null) {
-                    impressionHelper.onPause();
-                    isRunning = false;
-                }
-                cancel();
-            } else {
-                Log.i("Time Expired", "1 Min/60 sec");
-                impressionPresenter.hitNetworkCall(getContext());
-                isRunning = true;
-                start();
-            }
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-           // Log.i("Time Expired", "1 Min/60 sec");
-        }
     }
 
 }
