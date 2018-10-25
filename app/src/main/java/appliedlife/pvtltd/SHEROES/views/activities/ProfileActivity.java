@@ -717,12 +717,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             popupWindowFollowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
             final ImageView ivArrow = popupFollowToolTip.findViewById(R.id.iv_arrow);
             RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0);
             imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
             ivArrow.setLayoutParams(imageParams);
             final LinearLayout llToolTipBg = popupFollowToolTip.findViewById(R.id.ll_tool_tip_bg);
             RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, ProfileActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
-            llParams.setMargins(CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+            llParams.setMargins(CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0, 0, 0);
             llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
             llToolTipBg.setLayoutParams(llParams);
             final TextView tvGotIt = popupFollowToolTip.findViewById(R.id.got_it);
@@ -1162,7 +1162,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                     finish();
                 } else if (followedUserSolrObj != null) {
                     onFollowedActivtyResultOfParentRefresh(followedUserSolrObj);
-                    //   followedUserSolrObj = null;
                 } else if (!isProfileClicked) {
                     onActivtyResultOfParentRefresh();
                 }
@@ -1631,9 +1630,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             }
 
             switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_LISTING:
-                    //  refetchCommunity()
-                    break;
                 case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
                     if (null != mViewPagerAdapter) {
                         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);

@@ -55,7 +55,6 @@ public class CollectionActivity extends BaseActivity {
     //endregion
 
     //region Activity methods
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

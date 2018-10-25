@@ -193,6 +193,13 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
+    private int mWidthPixel=300;
+    private int mMarginLeft=20;
+    private int mMarginLeftToolTip=10;
+    private int mScreenWidthMdpi=600;
+    private int mScreenWidthHdpi=750;
+    private int mDelayToolTip=1000;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -247,12 +254,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             AnalyticsManager.trackScreenView(AppConstants.RIGHT_SWIPE_NAVIGATION, getScreenName(), null);
         }
-
     }
 
     @Override
     public void onDrawerClosed() {
-
     }
 
     private void toolTipForInviteFriends() {
@@ -262,15 +267,15 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             public void run() {
                 try {
                     int width = AppUtils.getWindowWidth(CommunityDetailActivity.this);
-                    if (width < 600) {
+                    if (width < mScreenWidthMdpi) {
                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                         popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         popupWindowInviteFriendTooTip.setOutsideTouchable(false);
                         popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         final LinearLayout llToolTipBg = inviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
-                        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
-                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0, 0, 0);
+                        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mWidthPixel, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
+                        llParams.setMargins(CommonUtil.convertDpToPixel(mMarginLeft, CommunityDetailActivity.this), 0, 0, 0);
                         llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
                         llToolTipBg.setLayoutParams(llParams);
                     } else {
@@ -278,7 +283,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                         popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         popupWindowInviteFriendTooTip.setOutsideTouchable(false);
-                        if (width < 750) {
+                        if (width < mScreenWidthHdpi) {
                             popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         } else {
                             popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
@@ -287,7 +292,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                     final ImageView ivArrow = inviteFriendToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, CommunityDetailActivity.this), 0);
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(mMarginLeftToolTip, CommunityDetailActivity.this), 0);
                     imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
                     ivArrow.setLayoutParams(imageParams);
                     final TextView tvGotIt = inviteFriendToolTip.findViewById(R.id.got_it);
@@ -303,7 +308,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     Crashlytics.getInstance().core.logException(e);
                 }
             }
-        }, 1000);
+        }, mDelayToolTip);
 
 
     }

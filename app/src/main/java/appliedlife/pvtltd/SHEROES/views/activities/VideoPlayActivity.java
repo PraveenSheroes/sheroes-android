@@ -29,7 +29,6 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
     // endregion
 
     // region overridden methods
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
