@@ -21,7 +21,7 @@
     <string name="IDS_UN_AUTHORIZE">एक एरर है। कृपया लॉगआउट कर के दोबारा लॉगिन करें। अथवा हमें care@sheroes.in पर ईमेल भेजें।</string>
 
     <!-- Strings related to login -->
-    <string name="ID_PROMPT_EMAIL">SHEROES पर आपका ईमेल आईडी पंजीकृत है</string>
+    <string name="ID_PROMPT_EMAIL">SHEROES पर अपनी पंजीकृत ईमेल आईडी डाले</string>
     <string name="ID_TODAY">आज</string>
     <string name="ID_PROMPT_PASSWORD">पासवर्ड</string>
     <string name="ID_ACTION_LOG_IN_SHORT">लॉगिन</string>
@@ -153,26 +153,26 @@
     <string name="login_with_email">ईमेल के साथ लॉगिन करें</string>
     <string name="ID_FACEBOOK_LONGING">लॉगिन हो रहा है&#8230;</string>
     <string name="ID_INFORMATION_WARNING">हम आपकी जानकारी किसी के साथ शेयर नहीं करते हैं।</string>
-    <string name="ID_ONLY_FOR_EXISTING_USER">(केवल मौजूदा उपयोगकर्ताओं के लिए)</string>
+    <string name="ID_ONLY_FOR_EXISTING_USER">(केवल मौजूदा यूज़र्स के लिए)</string>
     <string name="ID_WELCOME_FIRST"> <![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर, रिश्तों </b></span> और अधिक के बारे में चर्चा करें और प्रश्न पूछें&#8230;
+                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर, रिश्तों </b></span> और अधिक के बारे में चर्चा करें और सवाल पूछें&#8230;
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
     <string name="ID_WELCOME_SECOND"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    अपने <span style="font-weight: bold"><b>पसंदीदा समुदायों</b></span> में शामिल हों और
-                                                    <span style="font-weight: bold"><b>गुमनाम रूप</b></span> से अन्य महिलाओं से बात करो
+                                                    35+ मौजूदा <span style="font-weight: bold"><b> समुदायों</b></span> में से अपनी
+                                                    <span style="font-weight: bold"><b>पसंद</b></span> के किसी भी समुदाय में शामिल हों।
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
     <string name="ID_WELCOME_THIRD"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>समुदाय के भीतर चैंपियन</b></span> से विशेषज्ञ सलाह प्राप्त करें
+                                                    <span style="font-weight: bold"><b> अकेलापन महसूस</b></span> करती हैं? हमारे सलाहकारों से बात करें और परामर्श लें।
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
@@ -392,14 +392,14 @@
     <string name="ID_ANSWER_QUESTION">सवालों के जवाब दें</string>
     <string name="ID_START_ANSWER_QUESTION">सवालों का जवाब देना शुरू करें</string>
     <string name="private_information">निजी जानकारी (केवल आपको दिखेगी)</string>
-    <string name="ID_LOGIN_MSG">ईमेल लॉगिन केवल मौजूदा उपयोगकर्ताओं के लिए है। नए उपयोगकर्ताओं को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।</string>
+    <string name="ID_LOGIN_MSG">ईमेल लॉगिन केवल मौजूदा यूज़र्स के लिए है। नए यूज़र्स को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।</string>
     <string name="ID_GOT">समझ गए !</string>
-    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">किसी समस्या के अतिरिक्त मदद चाहिए?</string>
-    <string name="ID_SHOW_CASE_CREATE_POST_DESC">एक प्रश्न पूछें और विशेषज्ञों और अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_TITLE">किसी प्रकार की मदद चाहिए?</string>
+    <string name="ID_SHOW_CASE_CREATE_POST_DESC">अपने सवाल पूँछे और विशेषज्ञों व अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_TITLE">आपके लिए समुदाय!</string>
     <string name="ID_SHOW_CASE_COMMUNITIES_DEC">अपनी पसंद अनुसार विभिन्न समुदायों का पता लगाने के लिए यहां टैप करें।</string>
-    <string name="ID_SHOW_CASE_FEED_TITLE">हेलो %1$s SHEROES में आपका स्वागत है</string>
-    <string name="ID_SHOW_CASE_FEED_DEC">यह वह जगह है जहां आप शामिल समुदायों की  बातचीत , दिलचस्प कहानियों और उपयोगी लेखों को देख सकते हैं</string>
+    <string name="ID_SHOW_CASE_FEED_TITLE">हैलो %1$s SHEROES में आपका स्वागत है।</string>
+    <string name="ID_SHOW_CASE_FEED_DEC">इधर आप आप शामिल समुदायों की  बातचीत , दिलचस्प कहानियों और उपयोगी लेखों को देख सकते हैं</string>
     <string name="ID_LOADER">आप जितना सोचती हैं \n आप उससे कई ज़्यादा मज़बूत हैं।</string>
     <string name="ID_NEXT">अगला</string>
     <string name="ID_LETS_GET_STARTED">आएँ शुरू करें!</string>
@@ -475,7 +475,7 @@
     <string name="care_sheroes">care@sheroes.in</string>
     <string name="male">मैं आदमी हूँ</string>
     <string name="female">हाँ, मैं महिला हूँ</string>
-    <string name="share_sheroes_app">SHEROES ऐप्प शेयर करें </string>
+    <string name="share_sheroes_app">SHEROES ऐप शेयर करें </string>
     <string name="sheroes_msg"><![CDATA[ <html> <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px;">
                                                     <span style="color:#dc4541;"><b>SHEROES</b> केवल महिलाओं के लिए एक मंच है।</span>
@@ -489,9 +489,9 @@
     <string name="next_level">अगला स्तर</string>
     <string name="intermediate">इंटरमीडिएट </string>
     <string name="all_star">सभी स्टार</string>
-    <string name="progress_status_beginner">प्रोफाइल स्ट्रेंथ : बिगिनर</string>
-    <string name="progress_status_all_star">प्रोफाइल स्ट्रेंथ: सभी स्टार</string>
-    <string name="progress_level_status_intermediate">"प्रोफाइल स्ट्रेंथ : इंटरमीडिएट"</string>
+    <string name="progress_status_beginner">प्रोफाइल स्तर : बिगिनर</string>
+    <string name="progress_status_all_star">प्रोफाइल स्तर : सभी स्टार</string>
+    <string name="progress_level_status_intermediate">"प्रोफाइल स्तर : इंटरमीडिएट"</string>
     <string name="add">और डालें</string>
     <string name="all_star_filled">वाह! आप ऑल-स्टार लीग पहुंचे चुके हैं। एक समृद्ध प्रोफ़ाइल SHEROES के साथ आपके अनुभव को बढ़ाती है और आपको अनुयायियों बढाती हैं </string>
     <string name="all_star_unfilled">इस स्तर पर जाओ और आप हमारे अपने लीग में होंगे! खुद को पहचानने योग्य बनाएं और एक अच्छी प्रोफ़ाइल तस्वीर और कुछ और विवरण से  जुड़कर अधिक अनुयायियों को प्राप्त करें।</string>
