@@ -107,6 +107,11 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
+import retrofit2.http.Multipart;
+import okhttp3.RequestBody;
+import java.util.Map;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -224,6 +229,15 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/post/add")
     Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
+
+
+    @Multipart
+    @POST("participation/post/add_post_with_multipart_image")
+    Observable<CreateCommunityResponse> createCommunityMultiPartPost(@PartMap Map<String, RequestBody> params, @Part("postContent") CommunityPostCreateRequest communityPostCreateRequest);
+
+    @Multipart
+    @POST("participation/post/edit_post_with_multipart_image")
+    Observable<CreateCommunityResponse> editCommunityMultiPartPost(@PartMap Map<String, RequestBody> params, @Part("postContent") CommunityPostCreateRequest communityPostCreateRequest);
 
     @POST("participation/poll/add")
     Observable<CreatePollResponse> createPoll(@Body CreatePollRequest createPollRequest);
