@@ -118,7 +118,7 @@ public class ImpressionHelper {
         if (startPos >= 0 || endPos > 0) {
             for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
                 allVisibleViews.add(viewPosition);
-                getValidImpressionView(viewPosition, SCROLL_DOWN, recyclerView);
+                getValidImpressionView(viewPosition, recyclerView);
             }
         }
     }
@@ -211,7 +211,7 @@ public class ImpressionHelper {
 
             for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
                 allVisibleViews.add(viewPosition);
-                getValidImpressionView(viewPosition, scrollDirection, recyclerView);
+                getValidImpressionView(viewPosition, recyclerView);
             }
 
             if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
@@ -241,7 +241,7 @@ public class ImpressionHelper {
         }
     }
 
-    private void getValidImpressionView(int viewPosition, int scrollDirection, RecyclerView recyclerView) {
+    private void getValidImpressionView(int viewPosition, RecyclerView recyclerView) {
         ImpressionData impressionData = updateProperties(recyclerView, viewPosition); //> 50 visible view
         if (impressionData == null) return;
 
