@@ -277,7 +277,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                 AnalyticsManager.trackScreenView(getScreenName());
             }
             mLoginPresenter.getMasterDataToPresenter();
-            mLoginPresenter.queryConfig();
         }
     }
 

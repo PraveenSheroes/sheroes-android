@@ -1,6 +1,8 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import org.wordpress.android.editor.EditorFragmentAbstract;
+
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
@@ -75,6 +77,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificatio
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
@@ -361,6 +364,8 @@ public interface SheroesAppComponent {
     void inject(LanguageSelectionActivity languageSelectionActivity);
 
     void inject(SelectLanguageDialog selectLanguageDialog);
+
+    void inject(MaleErrorDialog maleErrorDialog);
 }
 
 

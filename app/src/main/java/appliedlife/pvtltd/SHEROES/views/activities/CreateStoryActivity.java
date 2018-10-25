@@ -168,15 +168,27 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     private ArticleSolrObj mArticleSolrObj = null;
     private Long mIdOfEntityOrParticipantArticle;
     private List<ArticleTagName> mArticleTagNameList = new ArrayList<>();
-    private String mSourceScreen, mStoryTagText;
+    private String mSourceScreen, mStoryTagText, mHerStoryBodyMsg, mHerStoryTitle;
     //endregion
 
     //region activity methods
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_submission);
         SheroesApplication.getAppComponent(this).inject(this);
+        String articleGuideline;
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            articleGuideline = mConfiguration.get().configData.articleGuideline;
+            mStoryTagText = mConfiguration.get().configData.mWriteStoryTag;
+            mHerStoryTitle = mConfiguration.get().configData.mHerStoryHintText;
+            mHerStoryBodyMsg = mConfiguration.get().configData.mHerStoryTitle;
+        } else {
+            articleGuideline = new ConfigData().articleGuideline;
+            mStoryTagText = new ConfigData().mWriteStoryTag;
+            mHerStoryTitle = new ConfigData().mHerStoryHintText;
+            mHerStoryBodyMsg = new ConfigData().mHerStoryTitle;
+        }
+        setContentView(R.layout.activity_article_submission);
         ButterKnife.bind(this);
         LocaleManager.setLocale(this);
         mArticleSubmissionPresenter.attachView(this);
@@ -193,16 +205,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         getSupportActionBar().setTitle("");
         toolbarTitle.setText(R.string.write_a_story);
         invalidateToolBar();
-        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-        this.localImageSaveForChallenge = localImageSaveForChallenge;
-        String articleGuideline;
-        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            articleGuideline = mConfiguration.get().configData.articleGuideline;
-            mStoryTagText = mConfiguration.get().configData.mWriteStoryTag;
-        } else {
-            articleGuideline = new ConfigData().articleGuideline;
-            mStoryTagText = new ConfigData().mWriteStoryTag;
-        }
+        this.localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         mBody.setText(Html.fromHtml(articleGuideline));
         if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
@@ -534,16 +537,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message, hintText;
-        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            hintText = mConfiguration.get().configData.mHerStoryHintText;
-            message = mConfiguration.get().configData.mHerStoryTitle;
-        } else {
-            hintText = new ConfigData().mHerStoryHintText;
-            message = new ConfigData().mHerStoryTitle;
-        }
-        mEditorFragment.setTitlePlaceholder(message);
-        mEditorFragment.setContentPlaceholder(hintText);
+        mEditorFragment.setTitlePlaceholder(mHerStoryBodyMsg);
+        mEditorFragment.setContentPlaceholder(mHerStoryTitle);
         mEditorFragment.setLocalDraft(true);
         mEditorFragment.isActionInProgress();
     }

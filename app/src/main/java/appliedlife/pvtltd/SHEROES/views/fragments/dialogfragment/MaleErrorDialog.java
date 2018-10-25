@@ -26,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -73,7 +74,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.male_error_dialog, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {

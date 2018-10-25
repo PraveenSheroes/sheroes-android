@@ -1,7 +1,5 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
-import appliedlife.pvtltd.SHEROES.R;
-
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -12,11 +10,10 @@ import appliedlife.pvtltd.SHEROES.R;
  */
 public class AppConstants {
     public static final String YOUTUBE_DEVELOPER_KEY = "AIzaSyBb6FQ0snY-RF9QjGV_RdGSgpWtclRMSvk";
-
     public static final String PLAY_STORE_ID_URL = "market://details?id=";
     public static final String PLAY_STORE_URL_PATH = "https://play.google.com/store/apps/details?id=";
     //\b((https?|Https?|ftp)?)(:?)(\/\/?|)(www)[-a-zA-Z0-9+&@#%?=~_|!:,.;/]*[-a-zA-Z0-9+&@#%=~_|]
-    public static final String WEB_LINK_PATTERN_REGEX ="\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+    public static final String WEB_LINK_PATTERN_REGEX = "\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     // YouTube video id
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
@@ -54,7 +51,6 @@ public class AppConstants {
     public static final String EMPTY_STRING = "";
     public static final String COMMA = ",";
     public static final String AT_THE_RATE_OF = "@";
-
     public static final String SHARED_PREFS = "SHARED_PREFS";
     public static final String ARTICLE_CATEGORY_SPINNER_FRAGMENT = "spinner_fragment";
     public static final String ANDROID_VIEW_PAGER = "android:switcher:";
@@ -69,24 +65,19 @@ public class AppConstants {
     public static final String AVAILABLE = "Available";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
-
     public static final String USER_SUB_TYPE = "U";
     public static final String CAROUSEL_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "LB";
     public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String IMAGE_SUBTYPE = "I";
-
     public static final String FEED_SCREEN = "feed";
     public static final String COMMUNITIES_ONBOARDING_SCREEN = "community_onboarding";
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
-
     public static final String USER = "USER";
-
     public static final String ASKING_QUESTION = "asking_question";
     public static final int ASKING_QUESTION_CALL = 101;
-
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_ARTICLE = "A";
     public static final String FEED_EVENT = "E";
@@ -103,7 +94,6 @@ public class AppConstants {
     public static final String PROFILE_CHAMPION = "profile_champion";
     public static final String SPAM_LIST_FRAGMENT = "spam_list_fragment";
     public static final String MASTER_SKILL = "master_data_skill";
-
     public static final int REQUEST_CODE_FOR_LOCATION = 1401;
     public static final int REQUEST_CODE_FOR_ARTICLE_DETAIL = 1001;
     public static final int PROFILE_NOTIFICATION_ID = -1;
@@ -112,7 +102,6 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
     public static final int REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL = 2002;
     public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
-
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_ADDRESS = 50011;
@@ -144,7 +133,6 @@ public class AppConstants {
     public static final String DRAWER_NAVIGATION = "Drawer navigation";
     public static final String RIGHT_SWIPE_NAVIGATION = "Right Swipe Navigation";
     public static final String HELPLINE = "helpline";
-
     public static final String FEATURE_FRAGMENT = "feature";
     public static final String MY_COMMUNITIES_DRAWER = "my_communities_drawer";
     public static final String MY_COMMUNITIES_FRAGMENT = "my_communities";
@@ -164,7 +152,6 @@ public class AppConstants {
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String IMAGE = "Img";
-
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
     public static final String FOLLOWED_CHAMPION_LABEL = "Followed Champions Screen";
     public static final String FOLLOWERS = "FOLLOWERS";
@@ -176,25 +163,17 @@ public class AppConstants {
     public static final String GENDER_INPUT_DIALOG = "GenderInputDialog";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
-    public static final String LEADER_BOARD_SCREEN = "Leaderboard Screen";
+    public static final String LEADERBOARD_SCREEN = "Leaderboard Screen";
     public static final String USER_FOLLOWED_DETAIL = "USER_FOLLOWED_DETAIL";
-
     public static final String EMAIL = "email";
-
     public static final String BACK_SLASH = "/";
-
     public static final String EVENT_DETAIL = "event_detail";
-
-
     public static final String ARTICLE_DETAIL = "article_detail";
-
-
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String CHALLENGE_GRATIFICATION = "challenge_gratification";
     public static final String INVITE_FRIEND = "invite_friend";
-
     public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
     public static final String MARK_AS_SPAM = "Reported as spam";
@@ -208,7 +187,6 @@ public class AppConstants {
     public static final int TWO_CONSTANT = 2;
     public static final int THREE_CONSTANT = 3;
     public static final int FOURTH_CONSTANT = 4;
-
     public static final int PAGE_SIZE = 10;
     public static final int PAGE_SIZE_FOR_COMMENTS = 25;
     public static final int PAGE_SIZE_CHAT = 20;
@@ -233,7 +211,6 @@ public class AppConstants {
     public static final int COMMUNITY_POST = 15;
     public static final int COMMUNITY_POLL_ADMIN = 18;
     public static final int SHEROES_EVENT_ID = 299;
-
     public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
     public static final String CREATE_POST_SHARE_PREF = "CREATE_POST_ANONYMOUS";
@@ -262,16 +239,12 @@ public class AppConstants {
     public static final String ADS_DEEP_LINK_URL = "ADS_DEEP_LINK";
     public static final String CREATE_FEED_POST = "CREATE_FEED_POST";
 
-
     /*Master data keys for pages*/
     public static final String MASTER_DATA_ARTICLE_KEY = "ARTICLE_CATEGORY";//article category drop down
 
     /*Get all data keys*/
-
     public static final String JOB_AT_GET_ALL_DATA_KEY = "skill";
     public static final String BAD_RQUEST = "HTTP 400 Bad Request";
-    /**/
-
     public static final String MASTER_DATA_POPULAR_CATEGORY = "POPULAR"; // on second map lavele key
     public static final String ERROR_OCCUR = "Some error occured. Press back and try again.";
 
@@ -334,15 +307,11 @@ public class AppConstants {
     public static final String PREFILL_TEXT = "prefill_text";
     public static final String IS_CHALLENGE_TYPE = "is_challenge_type";
     public static final String CHALLENGE_AUTHOR_TYPE = "challenge_author_type";
-
-
     public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String FAQ_URL = "https://sheroes.com/faq";
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
-
-
     public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
@@ -364,7 +333,6 @@ public class AppConstants {
     public static final String CLEVER_TAP_TITLE = "nt";
     public static final String CLEVER_TAP_BODY = "nm";
     public static final String CLEVER_TAP_DEEP_LINK_URL = "wzrk_dl";
-
     public static final String MESSAGE = "message";
     public static final String NOTIFICATION_ID = "notification_id";
     public static final String TITLE = "title";
@@ -412,15 +380,11 @@ public class AppConstants {
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
     public static final String STORY_STREAM = "story_stream";
-
-
     public static final String PROFILE_FOLLOWED_CHAMPION = "Profile Followed Champion";
     public static final String WHATS_APP = "com.whatsapp";
-
     public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
     public static final String APP_SNOW = "SNOW";
     public static final String APP_SHARE_OPTION = "SHARE_OPTION";
-
     public static final String FROM_PUSH_NOTIFICATION = "From Push Notification";
     public static final String IS_FROM_PUSH = "Is From Push";
     public static final String SHARED_EXTRA_SUBJECT = "Check out this post on the SHEROES App. I loved it. ";
@@ -438,7 +402,6 @@ public class AppConstants {
     public static final String LIST_TYPE_TAGGING = "COMMENT";
     public static final String CONFIG_KEY = "appliedlife.pvtltd.SHEROES.sharedprefs.CONFIG_KEY";
     public static final String APP_INSTALLATION = "appliedlife.pvtltd.SHEROES.sharedprefs.APP_INSTALLATION";
-
     public static final String SHARE_TEXT = "share_text";
     public static final String SHARE_IMAGE = "share_image";
     public static final String SHARE_DEEP_LINK_URL = "share_deep_link_url";
@@ -446,60 +409,43 @@ public class AppConstants {
     public static final String IS_SHARE_DEEP_LINK = "is share deep link";
     public static final String SHARE_CHANNEL = "channel";
     public static final String IS_MOENGAGE = "Is Moengage";
-
     public static final String LOGOUT_USER = "Logout_user";
     public static final String PROJECT_ID = "409228886131";
-
     public static final String REFERRER = "Referrer";
     public static final String UTM_SOURCE = "utm_source";
     public static final String UTM_MEDIUM = "utm_medium";
     public static final String UTM_CAMPAIGN = "utm_campaign";
     public static final String UTM_CONTENT = "utm_content";
     public static final String UTM_TERM = "utm_term";
-
     public static final String THUMBOR_KEY = "ThumborKey";
-
     public static final double MAX_IMAGE_RATIO = 1.5;
-
     public static final String SET_ORDER_KEY = "set order key";
     public static final String FEED_CONFIG_VERSION = "feed config version";
     public static final String REFERRER_BRANCH_LINK_URL = "Referrer branch link url";
     public static final int MENTOR_USER_TYPE_FOR_TAGGING = 7;
-
     public static final String NEXT_DAY_DATE = "NEXT_DAY_DATE";
-
     public static final int USER_MENTION_HEADER = 1;
     public static final int USER_MENTION_NO_RESULT_FOUND = 0;
-
-
     public static final String ARTICLE_GUIDELINE = "<h3> Hello! Here are 7 things to keep in mind when writing a story on SHEROES </h3><p>1. We welcome you to share your experiences and expertise with the SHEROES community. If you think you can help the women on the SHEROES platform in some way or have a really interesting story to tell, do write a story on SHEROES.</p><p>2. Word length for a story should be between 200 words to 1000 words.</p><p>3. By submitting a story you grant us a license to re-use, edit, and modify the content, if need be.</p><p>4. Please ensure the content you submit is your original work.</p><p>5. Promotional or Spammy content in any form will not be accepted.</p><p>6. Email us at care@sheroes.in in case you have any further queries regarding submitting a story.</p><p>7. All the best!</p>";
 
     //Push provider name
     public static final String PUSH_PROVIDER_SHEROES = "Sheroes";
     public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
-
     public static final String IMAGE_INITIAL_FILE_NAME = "file\"; filename=\"";
-
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
 
     //Vernacular
     public static final String SELECT_LANGUAGE_SHARE_PREF = "SELECT_LANGUAGE";
     public static final String LANGUAGE_KEY = "language_key";
-    public static final String LEADER_BOARD_CAROUSEL_STREAM = "LeaderboardCarouselStream";
+    public static final String LEADERBOARD_CAROUSEL_STREAM = "LeaderboardCarouselStream";
     public static final String STORY_DRAFT = "Draft";
-
-
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
     public static final int TRENDING_TAB = 1;
-
-
     public static final String COMMUNITY_JOIN_DIALOG_OPEN = "Open";
     public static final String COMMUNITY_JOIN_DIALOG_CLOSE = "Close";
-
     public static final String ARTICLE_LISTING = "article listing";
     public static final String ARTICLE_SELECT_CATEGORY = "article select category";
-
     public static final String CLEVER_TAP_CHANNEL_ID = "sheroesRelatedChannelID";
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";
