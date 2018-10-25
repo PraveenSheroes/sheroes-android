@@ -214,32 +214,30 @@ public class ImpressionHelper {
                 getValidImpressionView(viewPosition, scrollDirection, recyclerView);
             }
 
-            if (scrollDirection == SCROLL_UP || scrollDirection == SCROLL_DOWN) {
-                if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
-                    for (int i = 0; i < allVisibleViews.size(); i++) {
-                        int id = allVisibleViews.get(i);
-                        View itemView = recyclerView.getLayoutManager().findViewByPosition(id);
-                        if (itemView != null) {
-                            int itemPosition = checkIfItemInFinal(id);
-                            int lastItem = getLastItemInFinalList();
-                            if (scrollDirection == SCROLL_UP) {
-                                //if final list have that and not in current list and visibility below 20% marked as exit
-                                if (itemPosition > -1 && lastItem>-1 && lastItem!= id && !currentViewed.contains(id) && getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {
-                                    updateEndTimeIfItemNotExist(id);
-                                }
-                            } else if (!currentViewed.contains(id) && getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {
+            if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
+                for (int i = 0; i < allVisibleViews.size(); i++) {
+                    int id = allVisibleViews.get(i);
+                    View itemView = recyclerView.getLayoutManager().findViewByPosition(id);
+                    if (itemView != null) {
+                        int itemPosition = checkIfItemInFinal(id);
+                        int lastItem = getLastItemInFinalList();
+                        if (scrollDirection == SCROLL_UP) {
+                            //if final list have that and not in current list and visibility below 20% marked as exit
+                            if (itemPosition > -1 && lastItem > -1 && lastItem != id && !currentViewed.contains(id) && getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {
                                 updateEndTimeIfItemNotExist(id);
                             }
+                        } else if (!currentViewed.contains(id) && getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold) {
+                            updateEndTimeIfItemNotExist(id);
                         }
                     }
                 }
-                // store 10 events in DB
-                if (finalViewData.size() > 10) {
-                    storeChunks();
-                }
-                currentViewed.clear();
-                allVisibleViews.clear();
             }
+            // store 10 events in DB
+            if (finalViewData.size() > 10) {
+                storeChunks();
+            }
+            currentViewed.clear();
+            allVisibleViews.clear();
         }
     }
 
@@ -265,21 +263,26 @@ public class ImpressionHelper {
         if (getVisibleHeightPercentage(itemView) >= mImpressionVisibilityThreshold) {  //Only those views which have visibility >= 50%
             ImpressionData impressionData = new ImpressionData();
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-
             FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
+
             if (feedDetail == null) return null;
 
             //Ignore header
-            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)) return null;
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER))
+                return null;
 
-            impressionData.setStartTime(System.currentTimeMillis());
-            impressionData.setTimeStamp(System.currentTimeMillis());
-           // impressionData.setViewId(viewPosition);
-            impressionData.setPostType(feedDetail.getSubType());
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
                 //Add position in list
                 //trackingData.setPosition();
             }
+
+            if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
+                impressionData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
+            }
+
+            impressionData.setStartTime(System.currentTimeMillis());
+            impressionData.setTimeStamp(System.currentTimeMillis());
+            impressionData.setPostType(feedDetail.getSubType());
             impressionData.setStreamName(feedDetail.getStreamType());
             impressionData.setSourceTab(mImpressionProperty.getCommunityTab());
             impressionData.setSource(mImpressionCallback.getScreenName());
@@ -294,13 +297,8 @@ public class ImpressionHelper {
             impressionData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
             impressionData.setConfigVersion(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
             impressionData.setGtid(UUID.randomUUID().toString());
-            if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
-                impressionData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
-            }
-
             impressionData.setUserId(mLoggedInUser == -1 ? "" : String.valueOf(mLoggedInUser));
             impressionData.setPostId(feedDetail.getIdOfEntityOrParticipant() != -1 ? String.valueOf(feedDetail.getIdOfEntityOrParticipant()) : "");
-
             return impressionData;
         }
         return null;
@@ -348,12 +346,11 @@ public class ImpressionHelper {
      * @return visibility percentage
      */
     private double getVisibleHeightPercentage(View view) {
+        final Rect itemRect = new Rect();
 
         if (view == null || view.getVisibility() != View.VISIBLE || view.getParent() == null) {
             return -1;
         }
-
-        Rect itemRect = new Rect();
 
         if (!view.getGlobalVisibleRect(itemRect)) {
             return -1;
