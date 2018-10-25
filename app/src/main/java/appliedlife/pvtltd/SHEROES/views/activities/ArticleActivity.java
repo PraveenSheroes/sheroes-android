@@ -105,7 +105,6 @@ import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommentListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
@@ -812,7 +811,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @OnClick({R.id.author_pic, R.id.author, R.id.author_description__pic, R.id.author_description_name})
     public void onUserDetailClick() {
-        if(mArticleSolrObj.isUserStory()) {
+        if (mArticleSolrObj.isUserStory()) {
             boolean isMentor = false;
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isMentor = true;
@@ -833,8 +832,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             mCommentBody.setText("");
             mCommentBody.clearFocus();
             CommonUtil.hideKeyboard(ArticleActivity.this);
-        }
-        else {
+        } else {
             Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -993,9 +991,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mLikeCount.setText(CommonUtil.getRoundedMetricFormat(articleSolrObj.likesCount) + " " + pluralLikes);
         String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, articleSolrObj.getNoOfViews());
         long createdDate = mDateUtil.getTimeInMillis(articleSolrObj.getPostedDate(), AppConstants.DATE_FORMAT);
-        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,this);
+        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate, this);
         if (!dateInWord.equalsIgnoreCase(getString(R.string.ID_JUST_NOW))) {
-            dateInWord = dateInWord + " "+getString(R.string.ago);
+            dateInWord = dateInWord + " " + getString(R.string.ago);
         }
         String minRead = "";
         if (articleSolrObj.getCharCount() > 0) {
@@ -1261,7 +1259,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             if (ArticleActivity.this.isFinishing()) return;
 
-            if(spamResponse.isSpammed()) {
+            if (spamResponse.isSpammed()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, SpamContentType.COMMENT.name()));
             } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));

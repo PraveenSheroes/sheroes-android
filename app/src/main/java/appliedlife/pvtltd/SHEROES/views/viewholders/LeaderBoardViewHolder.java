@@ -281,13 +281,13 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             switch (view.getId()) {
                 case R.id.name:
                 case R.id.user_pic_icon:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), AppConstants.LEADER_BOARD_SCREEN);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), AppConstants.LEADERBOARD_SCREEN);
                     break;
                 case R.id.leader_board_users_container:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj, AppConstants.LEADERBOARD_SCREEN);
                     break;
                 case R.id.about_leaderboard:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj, AppConstants.LEADERBOARD_SCREEN);
                     break;
             }
         }

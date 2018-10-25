@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -16,24 +14,18 @@ import android.widget.TextView;
 
 import org.parceler.Parcels;
 
-import java.util.HashMap;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.BadgeClosetAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 
 /**
  * Created by ravi on 03/01/18.
@@ -97,7 +89,7 @@ public class BadgeClosetActivity extends BaseActivity {
         BadgeClosetAdapter mAdapter = new BadgeClosetAdapter(this, badgeDetailsList, new BadgeClosetAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BadgeDetails badgeDetails) {
-                if(mUserSolrObj!=null) {
+                if (mUserSolrObj != null) {
                     BadgeDetailsDialogFragment.showDialog(BadgeClosetActivity.this, mUserSolrObj, badgeDetails, SCREEN_LABEL, false);
                 }
             }

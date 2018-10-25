@@ -154,7 +154,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4, AppConstants.VIEW_MORE_TEXT, true);
+            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
         } else {
             tvArticleDescriptionText.setVisibility(View.GONE);
         }

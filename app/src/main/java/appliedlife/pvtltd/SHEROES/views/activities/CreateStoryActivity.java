@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,7 +54,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -89,8 +86,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissi
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static android.content.pm.PackageManager.GET_META_DATA;
 
 /**
  * Created by ujjwal on 06/09/17.
@@ -222,6 +217,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         myToast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
+
     @Override
     public void articleSubmitResponse(ArticleSolrObj articleSolrObj, boolean isStoryPost) {
         boolean isMentor = false;
@@ -538,14 +534,13 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message,hintText;
+        String message, hintText;
         if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             hintText = mConfiguration.get().configData.mHerStoryHintText;
-            message=mConfiguration.get().configData.mHerStoryTitle;
-        }else
-        {
-            hintText=new ConfigData().mHerStoryHintText;
-            message=new ConfigData().mHerStoryTitle;
+            message = mConfiguration.get().configData.mHerStoryTitle;
+        } else {
+            hintText = new ConfigData().mHerStoryHintText;
+            message = new ConfigData().mHerStoryTitle;
         }
         mEditorFragment.setTitlePlaceholder(message);
         mEditorFragment.setContentPlaceholder(hintText);
@@ -663,7 +658,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             return;
         }
 
-        AlertDialog.Builder builder =new AlertDialog.Builder(CreateStoryActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateStoryActivity.this);
         builder.setTitle(R.string.dialog_title_draft);
         builder.setMessage(R.string.dialog_body_draft);
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {

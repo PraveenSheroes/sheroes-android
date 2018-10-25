@@ -1,10 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,11 +14,8 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -42,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -131,7 +124,7 @@ public class ChallengeGratificationActivity extends BaseActivity {
     @OnClick(R.id.ll_share)
     public void shareClick() {
         if (mContest != null) {
-            String shareText = getString(R.string.challenge_gratification_share_text,mContest.tag,mContest.shortUrl);
+            String shareText = getString(R.string.challenge_gratification_share_text, mContest.tag, mContest.shortUrl);
             HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .challengeId(Integer.toString(mContest.remote_id))

@@ -2,15 +2,10 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +75,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             mPersonnelEmailId = getArguments().getString(EMAIL_ID);
         }
         if (StringUtil.isNotNullOrEmptyString(mUserName)) {
-            tvUserName.setText(getString(R.string.hi)+" " + mUserName);
+            tvUserName.setText(getString(R.string.hi) + " " + mUserName);
         }
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
             tvMsg.setText(Html.fromHtml(getString(R.string.sheroes_msg), 0)); // for 24 api and more

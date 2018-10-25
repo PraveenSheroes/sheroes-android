@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -28,7 +26,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -150,7 +147,7 @@ public class CollectionActivity extends BaseActivity {
     }
 
     public void setData(List<FeedDetail> feedDetails) {
-        if(StringUtil.isNotEmptyCollection(feedDetails)) {
+        if (StringUtil.isNotEmptyCollection(feedDetails)) {
             mFeedDetailList = feedDetails;
         }
     }

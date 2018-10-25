@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -24,7 +22,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import butterknife.Bind;
@@ -105,7 +102,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     }
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile,  String sourceScreen, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile, String sourceScreen, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, ProfileCommunitiesActivity.class);
         intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
         intent.putExtra(SELF_PROFILE, isSelfProfile);

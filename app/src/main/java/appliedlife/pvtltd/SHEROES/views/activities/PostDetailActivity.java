@@ -2,9 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
@@ -88,8 +86,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
@@ -106,7 +104,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -197,7 +194,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region presenter region
     private PostDetailAdapter mPostDetailListAdapter;
     private FeedDetail mFeedDetail;
-    private String mFeedDetailObjId,mCommunityPostDetailDeepLink;
+    private String mFeedDetailObjId, mCommunityPostDetailDeepLink;
     private boolean mIsAnonymous;
     private String mPrimaryColor = "#ffffff";
     private String mTitleTextColor = "#3c3c3c";
@@ -236,7 +233,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         initAdapter();
 
-        mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId,mCommunityPostDetailDeepLink);
+        mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId, mCommunityPostDetailDeepLink);
         mPostDetailPresenter.fetchUserPost();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
@@ -429,16 +426,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (feedDetail instanceof UserPostSolrObj) {
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                 if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title,userPostSolrObj.getPostCommunityName()));
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
                 } else {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple,userPostSolrObj.getAuthorName()));
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
                 }
             } else if (feedDetail instanceof PollSolarObj) {
                 PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
                 if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title,pollSolarObj.getPollCommunityName()));
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
                 } else {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple,pollSolarObj.getAuthorName()));
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
                 }
             }
         }
@@ -669,7 +666,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             menu.add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             //****   Hide/show options according to user
-            if(userPostObj.isBookmarked()) {
+            if (userPostObj.isBookmarked()) {
                 popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
             } else {
                 popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmark), getResources().getString(R.string.Bookmark))).setVisible(true);
@@ -905,7 +902,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
-        mPostDetailPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj,pollOptionModel);
+        mPostDetailPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj, pollOptionModel);
     }
 
     @Override
@@ -1080,7 +1077,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
             if (PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
 
-            if(spamResponse.isSpammed()) {
+            if (spamResponse.isSpammed()) {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
             } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
@@ -1095,7 +1092,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
-        if (etView.getText().toString().trim().length()==0) {
+        if (etView.getText().toString().trim().length() == 0) {
             Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
             return;
         } else {

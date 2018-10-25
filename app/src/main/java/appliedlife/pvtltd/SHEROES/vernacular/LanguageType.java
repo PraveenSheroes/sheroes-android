@@ -5,14 +5,14 @@ public enum LanguageType {
     ENGLISH("en"),
     HINDI("hi");
 
-    private final String string;
+    private final String languageName;
 
-    LanguageType(final String string) {
-        this.string = string;
+    LanguageType(final String languageName) {
+        this.languageName = languageName;
     }
 
     @Override
     public String toString() {
-        return string;
+        return languageName;
     }
 }

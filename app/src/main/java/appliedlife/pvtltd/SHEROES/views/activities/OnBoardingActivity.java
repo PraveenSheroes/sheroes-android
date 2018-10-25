@@ -1,21 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.StyleSpan;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -47,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.errorview.OnBoardingMsgDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -114,9 +105,10 @@ public class OnBoardingActivity extends BaseActivity {
             finish();
         }
     }
+
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void onBoardingFragment() {
-        tvNameUser.setText(getString(R.string.welcome)+" "+ userPreference.get().getUserSummary().getFirstName() + "!");
+        tvNameUser.setText(getString(R.string.welcome) + " " + userPreference.get().getUserSummary().getFirstName() + "!");
         isJoinCount = 0;
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES), 0)); // for 24 api and more

@@ -300,7 +300,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 4, AppConstants.VIEW_MORE_TEXT, true);
+            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
         } else {
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
@@ -463,7 +463,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 @Override
                 public void run() {
                     if (tvFeedArticleUserCommentPost.getLineCount() > 3) {
-                        ArticleTextView.doResizeTextView(tvFeedArticleUserCommentPost, 4, AppConstants.VIEW_MORE_TEXT, true);
+                        ArticleTextView.doResizeTextView(tvFeedArticleUserCommentPost, 4, mContext.getString(R.string.ID_VIEW_MORE), true);
                     }
                 }
             });

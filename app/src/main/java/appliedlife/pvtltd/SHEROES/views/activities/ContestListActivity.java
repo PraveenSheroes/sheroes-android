@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -39,7 +37,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.ContestsListAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestListView;
@@ -50,7 +47,7 @@ import butterknife.ButterKnife;
  * Created by ujjwal on 28/04/17.
  */
 
-public class ContestListActivity extends BaseActivity implements IContestListView,ContestListCallBack {
+public class ContestListActivity extends BaseActivity implements IContestListView, ContestListCallBack {
     public static final String SCREEN_LABEL = "Contest List";
     public static final int CONTEST_LIST_ACTIVITY = 10;
 
@@ -123,6 +120,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTitleToolbar.setText(R.string.title_contest_list);
     }
+
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -231,7 +229,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
     @Override
     public void onContactClicked(Contest contest, View view) {
         if (CommonUtil.getContestStatus(contest.getStartAt(), contest.getEndAt()) == ContestStatus.UPCOMING) {
-                   /* ContestPreviewActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, CONTEST_LIST_ACTIVITY);*/
+            /* ContestPreviewActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, CONTEST_LIST_ACTIVITY);*/
         } else {
             ContestActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, ContestListActivity.CONTEST_LIST_ACTIVITY, -1, 1);
         }

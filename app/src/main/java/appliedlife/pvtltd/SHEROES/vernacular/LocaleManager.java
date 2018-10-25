@@ -42,9 +42,4 @@ public class LocaleManager {
         res.updateConfiguration(config, res.getDisplayMetrics());
         return context;
     }
-
-    public static Locale getLocale(Resources res) {
-        Configuration config = res.getConfiguration();
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.N ? config.getLocales().get(0) : config.locale;
-    }
 }

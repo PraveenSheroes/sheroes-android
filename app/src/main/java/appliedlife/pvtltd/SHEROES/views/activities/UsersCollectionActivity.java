@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -33,7 +31,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserGridFragment;
 import butterknife.Bind;
@@ -124,7 +121,7 @@ public class UsersCollectionActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-         if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+        if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
             Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
             if (parcelable != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
@@ -176,14 +173,14 @@ public class UsersCollectionActivity extends BaseActivity {
     }
 
     public void setData(List<FeedDetail> feedDetails) {
-        if(StringUtil.isNotEmptyCollection(feedDetails)) {
+        if (StringUtil.isNotEmptyCollection(feedDetails)) {
             mFeedDetailList = feedDetails;
         }
     }
 
     public void updateTopCarouselUsers(Set<FeedDetail> feedDetails) {
         if (StringUtil.isNotEmptyCollection(feedDetails)) {
-            if(mDirtyListItems ==null) {
+            if (mDirtyListItems == null) {
                 mDirtyListItems = new ArrayList<>();
             }
             mDirtyListItems.addAll(feedDetails);

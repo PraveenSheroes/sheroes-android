@@ -5,10 +5,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -107,8 +105,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -139,7 +137,6 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.adapters.PostPhotoAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
@@ -156,7 +153,6 @@ import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.TEXT;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FEED_POLL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityImagePostRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
@@ -1518,8 +1514,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 communityPost.userMentionList = userPostObj.getUserMentionList();
             }
 
-            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
-                communityPost.isPoll=true;
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                communityPost.isPoll = true;
             }
 
             Parcelable parcelable = Parcels.wrap(communityPost);
@@ -1828,7 +1824,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
         if (mIsPollOptionClicked) {
             activityBuilder.setFixAspectRatio(true);
-        }else{
+        } else {
             activityBuilder.setFixAspectRatio(false);
         }
         activityBuilder.start(CommunityPostActivity.this);
@@ -1851,7 +1847,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
         if (mIsPollOptionClicked) {
             activityBuilder.setFixAspectRatio(true);
-        }else{
+        } else {
             activityBuilder.setFixAspectRatio(false);
         }
         activityBuilder.start(CommunityPostActivity.this);
