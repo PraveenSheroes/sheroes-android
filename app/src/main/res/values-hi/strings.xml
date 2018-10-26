@@ -255,16 +255,16 @@
     <string name="action_share">शेयर</string>
     <string name="album_title">%1$d of %2$d"</string>
     <string name="img_saved_info">फोटो सेव हुई</string>
-    <string name="more_text_info">%1$s और कमैंट्स</string>
+    <string name="more_text_info">%1$s और कमेंट्स</string>
     <string name="empty_followed_mentor">%1$s ने अभी तक किसी भी चैंपियन को फॉलो नहीं किया हैं"</string>
     <string name="empty_followed_community">%1$s ने अभी तक किसी भी समुदाय में शामिल नहीं हुए हैं"</string>
     <string name="load_more">और लोड करें</string>
     <string name="more">और देखें</string>
     <string name="following">फॉलोइंग</string>
     <plurals name="numberOfComments">
-        <item quantity="zero">कमैंट्स</item>
+        <item quantity="zero">कमेंट्स</item>
         <item quantity="one">कमेंट</item>
-        <item quantity="other">कमैंट्स</item>
+        <item quantity="other">कमेंट्स</item>
     </plurals>
     <plurals name="numberOfVotes">
         <item quantity="zero">वोटस</item>
@@ -666,4 +666,6 @@
     <string name="invalid_time">अमान्य समय</string>
     <string name="invalid_url">अमान्य	लिंक</string>
     <string name="discard_address">पता छोड़ दें?</string>
+    <string name="not_empty">खाली नहीं</string>
+    <string name="challenge_winner">विजेता</string>
 </resources>

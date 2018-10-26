@@ -265,7 +265,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 case AppConstants.REQUEST_CODE_FOR_ADDRESS:
                     Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     if (null != mContest) {
-                        mContest.mWinnerAddress = "not empty";
+                        mContest.mWinnerAddress = getString(R.string.not_empty);
                         mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                         mContestInfoFragment.setContest(mContest);
                         mFeedFragment.refreshList();
