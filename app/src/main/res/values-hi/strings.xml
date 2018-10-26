@@ -665,4 +665,5 @@
     <string name="mutual_communities">%d एक जैसे समुदाय</string>
     <string name="invalid_time">अमान्य समय</string>
     <string name="invalid_url">अमान्य	लिंक</string>
+    <string name="discard_address">पता छोड़ दें?</string>
 </resources>

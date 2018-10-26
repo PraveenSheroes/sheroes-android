@@ -246,10 +246,10 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             AlertDialog.Builder builder =
                     new AlertDialog.Builder(AddressActivity.this);
 
-            builder.setTitle("Discard Address?");
-            builder.setMessage("Are you sure you want to discard your changes?");
-            builder.setNegativeButton("NO", null);
-            builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+            builder.setTitle(R.string.discard_address);
+            builder.setMessage(R.string.discard_changes);
+            builder.setNegativeButton(R.string.no, null);
+            builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();

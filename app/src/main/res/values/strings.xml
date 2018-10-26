@@ -664,4 +664,5 @@
     <string name="mutual_communities">%d Mutual Communities</string>
     <string name="invalid_time">Invalid Time</string>
     <string name="invalid_url">Invalid Url</string>
+    <string name="discard_address">Discard Address?</string>
 </resources>
