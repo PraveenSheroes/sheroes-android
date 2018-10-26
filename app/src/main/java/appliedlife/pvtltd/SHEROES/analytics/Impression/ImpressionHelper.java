@@ -31,7 +31,7 @@ public class ImpressionHelper {
 
     //region private member variables
     private static final String TAG = ImpressionHelper.class.getName();
-    private static final String CLIENT_ID = "2";
+    private static final String CLIENT_ID = "2"; //i.e 2 = Android
     public static final int SCROLL_UP = 2;
     public static final int SCROLL_DOWN = 1;
 
@@ -68,7 +68,7 @@ public class ImpressionHelper {
         this.mImpressionCallback = impressionCallback;
         this.mImpressionProperty = impressionSuperProperty;
         this.mConfiguration = configuration;
-        this.recyclerView =  recyclerView;
+        this.recyclerView = recyclerView;
         this.linearLayoutManager = layoutManager;
         init();
     }
@@ -84,7 +84,7 @@ public class ImpressionHelper {
             minEngagementTime = mConfiguration.get().configData.minEngagementTime;
         }
 
-        minEngagementTime = minEngagementTime/1000f; //i.e 0.25 ms
+        minEngagementTime = minEngagementTime / 1000f; //i.e 0.25 ms
 
         mImpressionBatchSize = new ConfigData().frequencyBatchRequest;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get the batch size
@@ -96,7 +96,7 @@ public class ImpressionHelper {
             mImpressionFrequency = mConfiguration.get().configData.impressionFrequency;
         }
 
-        mImpressionFrequency = mImpressionFrequency/3; //todo - testing purpose
+        mImpressionFrequency = mImpressionFrequency / 3; //todo - testing purpose
     }
     //endregion
 
@@ -113,13 +113,12 @@ public class ImpressionHelper {
         LogUtils.info(TAG, "On Resume");
 
         //Get the visible items on screen
+        allVisibleViews.clear();
         int startPos = linearLayoutManager.findFirstVisibleItemPosition();
         int endPos = linearLayoutManager.findLastVisibleItemPosition();
-        if (startPos >= 0 || endPos > 0) {
-            for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
-                allVisibleViews.add(viewPosition);
-                getValidImpressionView(viewPosition, recyclerView);
-            }
+        for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
+            allVisibleViews.add(viewPosition);
+            getValidImpressionView(viewPosition, recyclerView);
         }
     }
 
@@ -152,17 +151,21 @@ public class ImpressionHelper {
     public void onPause() {
         LogUtils.info(TAG, "On Pause");
         updateEndTimeOfItems();
-        storeChunks();
+        storeChunks(true);
+
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
     }
 
     /**
      * Get callback when recycler view is being scrolled and scroll state changing
      *
-     * @param startPos     first visible item on screen
-     * @param endPos       last visible item on screen
+     * @param startPos first visible item on screen
+     * @param endPos   last visible item on screen
      */
     public void onScrollChange(RecyclerView recyclerView, int scrollDirection, int startPos, int endPos) {
-        if(scrollDirection>0 && scrollDirection!= lastDirectionId) {
+        if (scrollDirection > 0 && scrollDirection != lastDirectionId) {
             scrollDirectionChange = true;
         }
         lastDirectionId = scrollDirection;
@@ -191,8 +194,8 @@ public class ImpressionHelper {
                     LogUtils.info(TAG, "Screen Exit: Update End time for all visible");
 
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    float timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
-                    finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
+                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime());
+                    finalViewData.get(i).setEngagementTime(timeSpent);
                 }
             }
         }
@@ -205,7 +208,7 @@ public class ImpressionHelper {
 
         synchronized (this) {
             if (directionChange) {
-                storeChunks();
+                storeChunks(false);
                 scrollDirectionChange = false;
             }
 
@@ -234,7 +237,7 @@ public class ImpressionHelper {
             }
             // store 10 events in DB
             if (finalViewData.size() > 10) {
-                storeChunks();
+                storeChunks(false);
             }
             currentViewed.clear();
             allVisibleViews.clear();
@@ -293,7 +296,6 @@ public class ImpressionHelper {
             impressionData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
             impressionData.setAppVersion(mAppUtils.getAppVersionName());
             impressionData.setDeviceId(mAppUtils.getDeviceId());
-            impressionData.setIpAddress(recyclerView.getContext() != null ? SheroesAppModule.getIpAddress() : "");
             impressionData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
             impressionData.setConfigVersion(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
             impressionData.setGtid(UUID.randomUUID().toString());
@@ -307,12 +309,12 @@ public class ImpressionHelper {
     /**
      * Store the final Impression in db
      */
-    private void storeChunks() {
+    private void storeChunks(boolean forceNetworkCall) {
         int index = getLastIndexOfUpdatedItem();
         if (index > -1) {
             List<ImpressionData> updatedImpressions = finalViewData.subList(0, index + 1);
             LogUtils.info(TAG, "###Added to db");
-            mImpressionCallback.storeInDatabase(updatedImpressions,mImpressionBatchSize, minEngagementTime, false);
+            mImpressionCallback.storeInDatabase(updatedImpressions, mImpressionBatchSize, minEngagementTime, forceNetworkCall);
 
             if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
                 finalViewData = finalViewData.subList(index + 1, finalViewData.size());
@@ -375,10 +377,10 @@ public class ImpressionHelper {
                 ImpressionData trackingData1 = finalViewData.get(i);
                 if (trackingData1.getStartTime() != -1 && trackingData1.getEndTime() == -1 && id == trackingData1.getPosition()) {
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    double timeSpent = finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime();
-                    finalViewData.get(i).setEngagementTime(timeSpent / 1000.0f);
+                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getStartTime());
+                    finalViewData.get(i).setEngagementTime(timeSpent);
 
-                    LogUtils.info(TAG, "@@@Screen Exit " +id + "End time" + timeSpent / 1000.0f);
+                    LogUtils.info(TAG, "@@@Screen Exit " + id + "End time" + timeSpent / 1000.0f);
                     mImpressionCallback.showToast("Screen Exit" + id + "::Duration" + timeSpent / 1000.0f);
                     break;
                 }
@@ -442,7 +444,7 @@ public class ImpressionHelper {
     //Timer in android
     public class ImpressionTimer extends CountDownTimer {
 
-        public ImpressionTimer(long startTime, long interval) {
+        private ImpressionTimer(long startTime, long interval) {
             super(startTime, interval);
         }
 
@@ -450,8 +452,8 @@ public class ImpressionHelper {
         public void onFinish() {
             if (System.currentTimeMillis() - lastScrollingEndTime > 100000) {
                 LogUtils.info(TAG, "MAX time expired");
-                    onPause();
-                    isRunning = false;
+                onPause();
+                isRunning = false;
                 cancel();
             } else {
                 LogUtils.info(TAG, "Time Expired");

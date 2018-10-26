@@ -15,15 +15,15 @@ import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
 public class RoomJsonConverter {
 
     private static Gson gson = new Gson();
-    private static Type type = new TypeToken<List<ImpressionData>>() {}.getType();
+    private static Type type = new TypeToken<ImpressionData>() {}.getType();
 
     @TypeConverter
-    public static List<ImpressionData> stringToNestedData(String json) {
+    public static ImpressionData stringToNestedData(String json) {
         return gson.fromJson(json, type);
     }
 
     @TypeConverter
-    public static String nestedDataToString(List<ImpressionData> nestedData) {
-        return gson.toJson(nestedData, type);
+    public static String nestedDataToString(ImpressionData impressionData) {
+        return gson.toJson(impressionData, type);
     }
 }

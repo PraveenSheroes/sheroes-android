@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Model class for impression
+ *
  * @author ravi
  */
 public class ImpressionData {
@@ -21,7 +22,7 @@ public class ImpressionData {
     private int position;
 
     @SerializedName("engagementTime")
-    private double engagementTime;
+    private int engagementTime;
 
     @SerializedName("streamName")
     private String streamName;
@@ -32,9 +33,6 @@ public class ImpressionData {
     @SerializedName("event") //*
     private String event;
 
-    @SerializedName("ipAddress")
-    private String ipAddress;
-
     @SerializedName("deviceId")
     private String deviceId;
 
@@ -42,7 +40,7 @@ public class ImpressionData {
     private String gtid;
 
     @SerializedName("userAgent")
-    private String userAgent ;
+    private String userAgent;
 
     @SerializedName("sourceScreen")
     private String source;
@@ -122,7 +120,7 @@ public class ImpressionData {
         return engagementTime;
     }
 
-    void setEngagementTime(double engagementTime) {
+    void setEngagementTime(int engagementTime) {
         this.engagementTime = engagementTime;
     }
 
@@ -165,6 +163,7 @@ public class ImpressionData {
     void setFeedConfigVersion(int feedConfigVersion) {
         this.feedConfigVersion = feedConfigVersion;
     }
+
     // ID for the view that was viewed (we'll use the position of the item here).
     private transient int viewId;
 
@@ -198,10 +197,6 @@ public class ImpressionData {
         this.mEndTime = mEndTime;
     }
 
-    void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
-    }
-
     public String getDeviceId() {
         return deviceId;
     }
@@ -226,7 +221,7 @@ public class ImpressionData {
         this.configType = configType;
     }
 
-     void setSourceTab(String sourceTab) {
+    void setSourceTab(String sourceTab) {
         this.sourceTab = sourceTab;
     }
 
@@ -244,5 +239,9 @@ public class ImpressionData {
 
     void setStreamName(String streamName) {
         this.streamName = streamName;
+    }
+
+    public String getGtid() {
+        return gtid;
     }
 }

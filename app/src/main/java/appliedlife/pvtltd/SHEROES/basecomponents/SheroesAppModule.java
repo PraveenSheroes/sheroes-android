@@ -327,28 +327,6 @@ public class SheroesAppModule {
         return userAgent;
     }
 
-    /**
-     * Get the ip address
-     * @return ip address if error return empty string
-     */
-    public static String getIpAddress() {
-        try {
-            for (Enumeration<NetworkInterface> networkInterfacesEnum = NetworkInterface.getNetworkInterfaces(); networkInterfacesEnum.hasMoreElements(); ) {
-                NetworkInterface networkInterface = networkInterfacesEnum.nextElement();
-                for (Enumeration<InetAddress> ipAddressEnum = networkInterface.getInetAddresses(); ipAddressEnum.hasMoreElements(); ) {
-                    InetAddress inetAddress = ipAddressEnum.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        return inetAddress.getHostAddress();
-                    }
-                }
-            }
-        } catch (Exception ex) {
-            LogUtil.e("IP Address", ex.toString());
-            return null;
-        }
-        return null;
-    }
-
     private static String getAppVersionCode(Context mContext) {
         String version = "0";
         try {
