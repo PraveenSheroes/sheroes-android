@@ -43,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -366,6 +367,8 @@ public interface SheroesAppComponent {
     void inject(SelectLanguageDialog selectLanguageDialog);
 
     void inject(MaleErrorDialog maleErrorDialog);
+
+    void inject(ExpandableTextView expandableTextView);
 }
 
 

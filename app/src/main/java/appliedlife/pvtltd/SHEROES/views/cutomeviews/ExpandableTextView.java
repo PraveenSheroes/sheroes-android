@@ -31,6 +31,7 @@ public class ExpandableTextView {
     @Inject
     Preference<AppConfiguration> mConfiguration;
     private static ExpandableTextView expandableTextView;
+    private String viewLessText, viewMoreText;
 
     public static ExpandableTextView getInstance() {
         if (expandableTextView == null) {
@@ -39,9 +40,10 @@ public class ExpandableTextView {
         return expandableTextView;
     }
 
-    public void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore, final ExpandableTextCallback expandableTextCallback) {
+    public void makeTextViewResizable(final TextView tv, final int maxLine, final String expandText, final boolean viewMore, final ExpandableTextCallback expandableTextCallback,String viewMoreText,String viewLessText) {
         if (tv == null) return;
-
+        this.viewMoreText=viewMoreText;
+        this.viewLessText=viewLessText;
         if (tv.getTag() == null) {
             tv.setTag(tv.getText());
         }
@@ -97,24 +99,16 @@ public class ExpandableTextView {
             ssb.setSpan(new MySpannable(false) {
                 @Override
                 public void onClick(View widget) {
-                    String viewLessText, viewMoreText;
-                    if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                        viewLessText = mConfiguration.get().configData.mViewLess;
-                        viewMoreText = mConfiguration.get().configData.mViewMore;
-                    } else {
-                        viewLessText = new ConfigData().mViewLess;
-                        viewMoreText = new ConfigData().mViewMore;
-                    }
                     if (viewMore) {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, -1, viewLessText, false, expandableTextCallback);
+                        makeTextViewResizable(tv, -1, viewLessText, false, expandableTextCallback,viewMoreText,viewLessText);
                     } else {
                         tv.setLayoutParams(tv.getLayoutParams());
                         tv.setText(tv.getTag().toString(), TextView.BufferType.SPANNABLE);
                         tv.invalidate();
-                        makeTextViewResizable(tv, 1, viewMoreText, true, expandableTextCallback);
+                        makeTextViewResizable(tv, 1, viewMoreText, true, expandableTextCallback,viewMoreText,viewLessText);
                     }
                     expandableTextCallback.onTextResize(viewMore);
                 }

@@ -406,7 +406,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     private boolean isUserDeactivated;
 
     private UserSolrObj followedUserSolrObj;
-
+    String viewLessText, viewMoreText;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -415,6 +415,13 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mHomePresenter.attachView(this);
         profilePresenter.attachView(this);
         ButterKnife.bind(this);
+        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            viewLessText = mConfiguration.get().configData.mViewLess;
+            viewMoreText = mConfiguration.get().configData.mViewMore;
+        } else {
+            viewLessText = new ConfigData().mViewLess;
+            viewMoreText = new ConfigData().mViewMore;
+        }
         setupToolbarItemsColor();
         invalidateOptionsMenu();
         mAppBarLayout.addOnOffsetChangedListener(this);
@@ -626,7 +633,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (isOwnProfile) {
                 userDescription.setText(description);
                 ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this);
+                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this,viewMoreText,viewLessText);
             } else {
                 userDescription.setText(description);
             }
@@ -1826,7 +1833,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             userDescription.setText(description);
             userDescription.setTag(null);
             ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this);
+            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this,viewMoreText,viewLessText);
 
             mUserSolarObject.setDescription(description);
         }
