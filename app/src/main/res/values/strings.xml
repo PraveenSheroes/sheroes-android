@@ -96,8 +96,6 @@
     <string name="ID_NO_POST">No post yet</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">Anonymous</string>
-    <string name="ID_OWNER">Owner (S)</string>
-    <string name="ID_OWNER_Mo">owner</string>
     <string name="ID_LESS">View Less</string>
     <string name="ID_LESS_MENTOR">&#8230;View Less</string>
     <string name="ID_TAGS">Tags</string>

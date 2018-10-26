@@ -96,8 +96,6 @@
     <string name="ID_NO_POST">कोई पोस्ट नहीं है</string>
     <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">गुमनाम</string>
-    <string name="ID_OWNER">मालकिन</string>
-    <string name="ID_OWNER_Mo">मालकिन</string>
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
     <string name="ID_TAGS">टैग</string>

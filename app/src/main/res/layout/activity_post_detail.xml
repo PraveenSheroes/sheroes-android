@@ -93,7 +93,6 @@
                 android:ellipsize="end"
                 style="@style/TextView12spBold"
                 android:maxLines="@integer/int_value_for_line_1"
-                android:text="@string/ID_OWNER"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
                 vernacular:customTextFontFamily="@string/medium_font"/>

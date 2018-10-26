@@ -116,8 +116,7 @@ public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerVi
             public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
                 return feedResponsePojo;
             }
-        })
-                .subscribeOn(Schedulers.io())
+        }) .subscribeOn(Schedulers.io())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
@@ -128,14 +127,11 @@ public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerVi
             @Override
             public void onError(Throwable e) {
                 Crashlytics.getInstance().core.logException(e);
-
                 getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
-
             }
 
             @Override
             public void onNext(FeedResponsePojo feedResponsePojo) {
-
                 if (null != feedResponsePojo) {
                     getMvpView().showMyCommunities(feedResponsePojo);
                 }

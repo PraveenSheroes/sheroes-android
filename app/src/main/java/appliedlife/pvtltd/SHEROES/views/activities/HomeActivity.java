@@ -286,6 +286,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Bind(R.id.title_text)
     TextView mTitleText;
 
+    @Bind(R.id.tv_communities_text)
+    TextView mTvCommunitiesText;
+
+    @Bind(R.id.tv_communities_search)
+    TextView mTvCommunitiesSearch;
+
     @Bind(R.id.ic_sheroes)
     ImageView mICSheroes;
 
@@ -458,8 +464,16 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvHome.setText(R.string.home_label);
         mTvCommunities.setText(R.string.ID_COMMUNITIES);
         mTitleText.setText("");
+        mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
+        mTvCommunitiesSearch.setText(R.string.explore_All);
         mICSheroes.setVisibility(View.VISIBLE);
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
+        mRecyclerViewDrawerCommunities.setVisibility(View.GONE);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
     }
 
     @Override
@@ -900,11 +914,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
         List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
         pbCommunitiesDrawer.setVisibility(View.GONE);
+        mRecyclerViewDrawerCommunities.setVisibility(View.VISIBLE);
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
             mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
             mPullRefreshList.allListData(feedDetailList);
-
             List<FeedDetail> data = null;
             FeedDetail feedProgressBar = new FeedDetail();
             feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
@@ -914,16 +928,13 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 data.remove(position - 1);
             }
             data.add(feedProgressBar);
-
             mMyCommunitiesAdapter.setData(data);
             mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
-
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
             mMyCommunitiesAdapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
