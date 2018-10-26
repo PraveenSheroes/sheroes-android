@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
+import appliedlife.pvtltd.SHEROES.R;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -258,7 +260,6 @@ public class AppConstants {
     public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY = "SUMMARY";
     public static final String USER_SUMMARY_SERVICE = "USER_SUMMARY_SERVICE";
-    public static final String INVALID_URL = "Invalid Url";
     public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
     public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";

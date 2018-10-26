@@ -1010,7 +1010,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             String dateMessage = timeFormatter.format(calendar.getTime());
                             scheduleConfirmation(formattedDateTime, dateMessage);
                         } else
-                            Toast.makeText(getApplicationContext(), "Invalid Time", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.invalid_time, Toast.LENGTH_LONG).show();
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE) + 1, false);
 

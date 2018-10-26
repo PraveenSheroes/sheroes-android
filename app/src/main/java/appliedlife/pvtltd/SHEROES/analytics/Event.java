@@ -16,6 +16,7 @@ public enum Event {
 
     //region APP related events
     APP_LOGIN(AnalyticsEventType.APP, "Login"),
+    LANGUAGE_SELECTED(AnalyticsEventType.LANGUAGE_SELECTED, ""),
     //endregion
 
     //region post related events

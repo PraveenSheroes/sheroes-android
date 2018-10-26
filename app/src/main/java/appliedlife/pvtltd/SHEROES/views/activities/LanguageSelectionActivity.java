@@ -29,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.SuperProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -59,6 +60,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 
 public class LanguageSelectionActivity extends BaseActivity implements LoginView {
     private static final String SCREEN_LABEL = "Select Language Screen";
@@ -354,6 +357,9 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     public void onContinueClick() {
         if (isLanguageSelected) {
             openWelcomeScreen();
+            final HashMap<String, Object> properties = new EventProperty.Builder().build();
+            properties.put(SuperProperty.LANGUAGE.getString(), CommonUtil.getPrefStringValue(LANGUAGE_KEY));
+            AnalyticsManager.trackEvent(Event.LANGUAGE_SELECTED, SCREEN_LABEL, properties);
         }
     }
 

@@ -27,6 +27,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
+
 /**
  * Created by ravi on 21/06/18.
  * Helper class for cleverTap analytics used for setup cleverTap profile, screen and event track
@@ -144,6 +146,9 @@ public class CleverTapHelper {
             if (userBio != null && !TextUtils.isEmpty(userBio.getCityMaster())) {
                 profileUpdate.put(LOCATION, userSummary.getUserBO().getCityMaster());
             }
+
+            String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            profileUpdate.put(SuperProperty.LANGUAGE.getString(),languageName);
 
             //requires Location Permission in AndroidManifest e.g. "android.permission.ACCESS_COARSE_LOCATION"
             Location location = cleverTapAPI.getLocation();

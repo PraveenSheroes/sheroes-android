@@ -663,4 +663,6 @@
     <string name="discard_post">पोस्ट छोड़ दें?</string>
     <string name="discard_changes">क्या आप वाकई अपने परिवर्तनों को छोड़ना चाहते हैं?</string>
     <string name="mutual_communities">%d एक जैसे समुदाय</string>
+    <string name="invalid_time">अमान्य समय</string>
+    <string name="invalid_url">अमान्य	लिंक</string>
 </resources>

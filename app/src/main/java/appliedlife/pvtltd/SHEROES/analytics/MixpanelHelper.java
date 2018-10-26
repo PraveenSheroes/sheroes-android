@@ -35,6 +35,8 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.branch.referral.Branch;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
+
 @Singleton
 public class MixpanelHelper {
 
@@ -85,7 +87,7 @@ public class MixpanelHelper {
 
             String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
             String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
-
+            String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
             final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
@@ -97,7 +99,8 @@ public class MixpanelHelper {
                     .appsflyerID(AppsFlyerLib.getInstance().getAppsFlyerUID(context))
                     .configType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "")
                     .configVersion(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "")
-                    .emailId(userSummary.getEmailId());
+                    .emailId(userSummary.getEmailId())
+                    .language(languageName);
 
         /*int year = YearClass.get(CareApplication.getAppContext());
         if (year > 0) {

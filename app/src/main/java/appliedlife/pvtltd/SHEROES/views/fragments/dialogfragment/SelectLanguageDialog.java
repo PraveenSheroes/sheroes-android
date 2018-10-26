@@ -10,17 +10,25 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.SuperProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LanguageType;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 
 public class SelectLanguageDialog extends BaseDialogFragment {
     private static final String SCREEN_LABEL = "Language Setting Screen";
@@ -96,6 +104,9 @@ public class SelectLanguageDialog extends BaseDialogFragment {
         if (isLanguageSelected) {
             if (getActivity() instanceof HomeActivity) {
                 ((HomeActivity) getActivity()).refreshHomeViews();
+                final HashMap<String, Object> properties =new EventProperty.Builder().build();
+                properties.put(SuperProperty.LANGUAGE.getString(), CommonUtil.getPrefStringValue(LANGUAGE_KEY));
+                AnalyticsManager.trackEvent(Event.LANGUAGE_SELECTED, SCREEN_LABEL, properties);
             }
             dismiss();
         }
