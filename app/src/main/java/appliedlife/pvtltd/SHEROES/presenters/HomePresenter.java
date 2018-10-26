@@ -9,6 +9,7 @@ import com.f2prateek.rx.preferences2.Preference;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
@@ -46,7 +47,9 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -79,6 +82,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
     HomeModel mHomeModel;
     SheroesApplication mSheroesApplication;
+    SheroesAppServiceApi mSheroesAppServiceApi;
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -95,14 +99,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
     ProfileModel profileModel;
 
     @Inject
-    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<AppConfiguration> mConfiguration) {
+    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<AppConfiguration> mConfiguration,SheroesAppServiceApi sheroesAppServiceApi) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
         this.mConfiguration = mConfiguration;
         this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-
+        this.mSheroesAppServiceApi=sheroesAppServiceApi;
     }
 
     public void getMasterDataToPresenter() {
@@ -726,7 +730,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        mHomeModel.getConfig()
+        mSheroesAppServiceApi.getConfig()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ConfigurationResponse>() {
                     @Override
@@ -735,7 +741,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
+                          Crashlytics.getInstance().core.logException(e);
                     }
 
                     @Override

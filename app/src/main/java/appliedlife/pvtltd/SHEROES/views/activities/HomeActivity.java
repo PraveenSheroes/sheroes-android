@@ -457,6 +457,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         initHomeViewPagerAndTabs();
         mTvHome.setText(R.string.home_label);
         mTvCommunities.setText(R.string.ID_COMMUNITIES);
+        mTitleText.setText("");
+        mICSheroes.setVisibility(View.VISIBLE);
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
     }
 
