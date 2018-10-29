@@ -415,13 +415,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mHomePresenter.attachView(this);
         profilePresenter.attachView(this);
         ButterKnife.bind(this);
-        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            viewLessText = mConfiguration.get().configData.mViewLess;
-            viewMoreText = mConfiguration.get().configData.mViewMore;
-        } else {
-            viewLessText = new ConfigData().mViewLess;
-            viewMoreText = new ConfigData().mViewMore;
-        }
+        viewMoreText = getString(R.string.ID_VIEW_MORE_MENTOR);
+        viewLessText = getString(R.string.ID_LESS);
         setupToolbarItemsColor();
         invalidateOptionsMenu();
         mAppBarLayout.addOnOffsetChangedListener(this);
