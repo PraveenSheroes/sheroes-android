@@ -97,14 +97,12 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
         }
 
         mName.setText(userSolrObj.getNameOrTitle());
-
         try {
             String description = mContext.getResources().getString(R.string.user_card_desc, CommonUtil.camelCaseString(userSolrObj.getmSolarIgnoreCommunityName().toLowerCase()));
             mDesc.setText(description);
-        }catch (Exception e) {
-            Log.i("Tag", "desc is null");
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
         }
-
         CommonUtil.showHideUserBadge(mContext, false, mBadgeIcon, mUserSolrObj.isSheBadgeActive(), mUserSolrObj.getProfileBadgeUrl());
     }
 
