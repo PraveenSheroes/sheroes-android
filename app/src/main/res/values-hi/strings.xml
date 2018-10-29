@@ -598,7 +598,7 @@
                                             </body>
                                             </html> ]]></string>
     <string name="not_available">NA</string>
-    <string name="welcome">स्वागत है</string>
+    <string name="welcome">स्वागत है %1$s !</string>
     <string name="hi">नमस्ते %1$s</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>

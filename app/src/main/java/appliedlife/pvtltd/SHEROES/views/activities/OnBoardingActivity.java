@@ -108,7 +108,7 @@ public class OnBoardingActivity extends BaseActivity {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void onBoardingFragment() {
-        tvNameUser.setText(getString(R.string.welcome) + " " + userPreference.get().getUserSummary().getFirstName() + "!");
+        tvNameUser.setText(getString(R.string.welcome,userPreference.get().getUserSummary().getFirstName()));
         isJoinCount = 0;
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES), 0)); // for 24 api and more

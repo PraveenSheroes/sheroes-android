@@ -598,7 +598,7 @@
                                             </body>
                                             </html> ]]></string>
     <string name="not_available">NA</string>
-    <string name="welcome">Welcome</string>
+    <string name="welcome">Welcome %1$s !</string>
     <string name="hi">Hi %1$s</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
