@@ -492,14 +492,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         };
         if (StringUtil.isNotNullOrEmptyString(userName)) {
             spanString.setSpan(authorTitle, 0, userName.length(), 0);
-            if (!userName.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-                spanString.setSpan(boldSpan, 0, userName.length(), 0);
-            } else {
-                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-            }
-
+            spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
+            StyleSpan boldNameSpan = new StyleSpan(Typeface.BOLD);
+            spanString.setSpan(boldNameSpan, 0, userName.length(), 0);
             if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
                 spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
