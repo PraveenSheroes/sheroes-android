@@ -169,8 +169,9 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
                 ImpressionData impressionData = finalViewData.get(i);
                 if (impressionData.getEndTime() == -1) {
                     LogUtils.info(TAG, "Screen Exit: Update End time for all visible");
+                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
 
-                    int timeSpent = (int) (System.currentTimeMillis() - finalViewData.get(i).getTimeStamp());
+                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
                 }
             }
@@ -364,7 +365,8 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             for (int i = size - 1; i >= 0; i--) {
                 ImpressionData impressionData = finalViewData.get(i);
                 if (impressionData.getTimeStamp() != -1 && impressionData.getEndTime() == -1 && impressionData.getPostId().equalsIgnoreCase(String.valueOf(postId))) {
-                    int timeSpent = (int) (System.currentTimeMillis() - finalViewData.get(i).getTimeStamp());
+                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
+                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
 
                     LogUtils.info(TAG, "@@@Screen Exit " + postId + "End time" + timeSpent / 1000.0f);

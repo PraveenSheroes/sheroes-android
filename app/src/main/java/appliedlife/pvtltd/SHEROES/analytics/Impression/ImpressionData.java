@@ -163,7 +163,18 @@ public class ImpressionData {
     void setFeedConfigVersion(int feedConfigVersion) {
         this.feedConfigVersion = feedConfigVersion;
     }
-    
+
+    //end time
+    private transient long mEndTime = -1;
+
+    long getEndTime() {
+        return mEndTime;
+    }
+
+    void setEndTime(long mEndTime) {
+        this.mEndTime = mEndTime;
+    }
+
     public String getDeviceId() {
         return deviceId;
     }
