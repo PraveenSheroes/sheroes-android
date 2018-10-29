@@ -39,8 +39,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     //region private variables
     private SheroesAppServiceApi mSheroesApiEndPoints;
     private SheroesApplication mSheroesApplication;
+    public static volatile boolean mIsNetworkCallRunning = false;
 
-    private boolean mInNetworkCall = true;
     //endregion
 
     //region constructor
@@ -120,12 +120,12 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     //Send impression to backend after getting value from request model
     private void sendImpressions(List<Impression> impressions, int batchSize, boolean forceNetworkCall) {
         if (impressions == null || impressions.size() <= 0) return;
-
-        int totalCount = impressions.size();
-        if ((totalCount >= batchSize && !forceNetworkCall && mInNetworkCall) || (forceNetworkCall && mInNetworkCall)) {
-            Log.i("Db value", "250 ms >" + totalCount);
-            LogUtils.info("hit 1", "77");
-            sendImpressionData(getRequestModel(impressions), impressions);
+        if (!mIsNetworkCallRunning) {
+            int totalCount = impressions.size();
+            if ((totalCount >= batchSize && !forceNetworkCall) || (forceNetworkCall)) {
+                mIsNetworkCallRunning = true;
+                sendImpressionData(getRequestModel(impressions), impressions);
+            }
         }
     }
 
@@ -149,10 +149,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     private void sendImpressionData(final UserEvents userEvents, final List<Impression> Impressions) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            mInNetworkCall = true;
+            mIsNetworkCallRunning = false;
             return;
         }
-        LogUtils.info("hit", "network call happening");
 
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
@@ -172,7 +171,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        mInNetworkCall = true;
+                        mIsNetworkCallRunning = false;
                     }
 
                     @Override
@@ -180,7 +179,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         if (null != baseResponse) {
                             clearDatabase(Impressions);
                         }
-                        mInNetworkCall = true;
+                        mIsNetworkCallRunning = false;
                     }
                 });
     }
@@ -189,7 +188,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     private void retryFailedImpression(final UserEvents userEvents, final List<Impression> impressions) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            mInNetworkCall = true;
+            mIsNetworkCallRunning = false;
             return;
         }
         mSheroesApiEndPoints.updateImpressionData(userEvents)
@@ -204,7 +203,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        mInNetworkCall = true;
+                        mIsNetworkCallRunning = false;
                     }
 
                     @Override
@@ -212,7 +211,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         if (null != baseResponse) {
                             clearDatabase(impressions);
                         }
-                        mInNetworkCall = true;
+                        mIsNetworkCallRunning = false;
                     }
                 });
     }
