@@ -6,6 +6,7 @@
         android:id="@+id/share"
         android:icon="@drawable/ic_whatsapp_30dp"
         android:title="@string/ID_SHARE_ON_WHATS_APP"
+        android:textSize="@dimen/menu_item_text_size"
         app:showAsAction="always" />
 
 </menu>

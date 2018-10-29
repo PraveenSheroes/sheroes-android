@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/dialog_border"
     android:minHeight="@dimen/dp_size_209"
     android:minWidth="@dimen/dp_size_280"
-    android:background="@drawable/dialog_border"
-    android:layout_height="wrap_content">
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_marginTop="@dimen/dp_size_24"
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/title"
-        android:fontFamily="sans-serif"
+        style="@style/TextView14spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:layout_marginTop="@dimen/dp_size_24"
+        android:gravity="center_horizontal"
         android:textColor="@color/feed_article_label"
         android:textStyle="normal"
-        android:gravity="center_horizontal"
-        tools:text="Unfollow Anupriya Kashyap?"/>
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
         android:id="@+id/user_img_icon"
-        android:layout_gravity="center_horizontal"
         android:layout_width="@dimen/mentor_profile_icon"
         android:layout_height="@dimen/mentor_profile_icon"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/dp_size_16" />
 
     <View
-        android:layout_marginTop="@dimen/dp_size_24"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/on_board_work"/>
+        android:layout_marginTop="@dimen/dp_size_24"
+        android:background="@color/on_board_work" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,41 +38,39 @@
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/cancel"
+            style="@style/TextView14spBold"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight=".5"
-            android:textAllCaps="true"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/cancel"
-            android:textColor="@color/footer_icon_text"
-            android:paddingTop="@dimen/dp_size_20"
-            android:paddingBottom="@dimen/dp_size_20"
             android:drawablePadding="@dimen/dp_size_4"
-            android:textSize="@dimen/sp_size_14" />
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textAllCaps="true"
+            android:textColor="@color/footer_icon_text"
+            vernacular:customTextFontFamily="@string/medium_font" />
+
         <View
             android:id="@+id/view_footer"
             android:layout_width="@dimen/dp_size_1"
             android:layout_height="match_parent"
-            android:background="@color/on_board_work"/>
-        <TextView
+            android:background="@color/on_board_work" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/unfollow"
+            style="@style/TextView14spBold"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight=".5"
-            android:textAllCaps="true"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/unfollow"
-            android:textColor="@color/profile_text"
-            android:paddingTop="@dimen/dp_size_20"
-            android:paddingBottom="@dimen/dp_size_20"
             android:drawablePadding="@dimen/dp_size_4"
-            android:textSize="@dimen/sp_size_14" />
+            android:gravity="center"
+            android:text="@string/unfollow"
+            android:textAllCaps="true"
+            android:textColor="@color/profile_text"
+            vernacular:customTextFontFamily="@string/medium_font" />
     </LinearLayout>
 
 </LinearLayout>

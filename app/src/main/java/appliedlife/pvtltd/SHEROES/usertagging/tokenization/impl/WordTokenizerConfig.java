@@ -51,7 +51,7 @@ public class WordTokenizerConfig {
 
     public static class Builder {
 
-        // Default values for configuration
+        // Default values for appConfiguration
         private String lineSeparator = System.getProperty("line.separator");
         private int threshold = 4;
         private int maxNumKeywords = 1;

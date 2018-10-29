@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/article_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -29,8 +30,9 @@
                 android:layout_marginTop="15dp"
                 android:src="@drawable/vector_updateapp_icon" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/update_title"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -38,10 +40,11 @@
                 android:layout_toRightOf="@id/speakerimage"
                 android:text="@string/update.title"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/update_description"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/update_title"
@@ -50,7 +53,7 @@
                 android:layout_toRightOf="@id/speakerimage"
                 android:text="@string/update.description"
                 android:textColor="#BF000000"
-                android:textSize="14sp" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
         </RelativeLayout>
 
@@ -72,30 +75,32 @@
             android:layout_marginBottom="12dp"
             android:orientation="horizontal">
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/update_later"
+                style="@style/TextView14spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/later"
                 android:textColor="@color/email"
-                android:textSize="14sp" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
             <View
                 android:layout_width="1px"
                 android:layout_height="22dp"
                 android:background="@color/divider" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/update_now"
+                style="@style/TextView14spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/update"
                 android:textColor="@color/email"
-                android:textSize="14sp" />
+                vernacular:customTextFontFamily="@string/regular_font" />
         </LinearLayout>
 
     </RelativeLayout>

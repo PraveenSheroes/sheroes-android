@@ -33,7 +33,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -66,7 +66,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
     @Inject
     DateUtil mDateUtil;
     @Bind(R.id.li_feed_article_images)
@@ -205,12 +205,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (item instanceof ArticleSolrObj) {
             articleObj = (ArticleSolrObj) item;
         }
-        // if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-        //     tvArticleJoinConversation.setText(mConfiguration.get().configData.mCommentHolderText);
-        // } else {
-        tvArticleJoinConversation.setText("Comment here...");
-        // }
-
+        tvArticleJoinConversation.setText(R.string.type_your_comment);
         articleObj.setItemPosition(position);
         this.mContext = context;
         tvFeedArticleUserBookmark.setEnabled(true);
@@ -242,14 +237,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedArticleTag.setVisibility(View.GONE);
         }
-        // TODO : ujjwal
-        /* if (articleObj.getAuthorId() == mUserId *//*|| articleObj.isOwner()*//*) {
-            tvFeedArticleUserMenu.setVisibility(View.VISIBLE);
-        } else {
-            tvFeedArticleUserMenu.setVisibility(View.GONE);
-        }*/
-
-
     }
 
     private void UpdateUserStoryVisibility() {
@@ -313,7 +300,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvFeedArticleHeaderLebel.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 4, AppConstants.VIEW_MORE_TEXT, true);
+            ArticleTextView.doResizeTextView(tvFeedArticleHeaderLebel, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
         } else {
             tvFeedArticleHeaderLebel.setVisibility(View.GONE);
         }
@@ -325,7 +312,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(articleObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(articleObj.getCreatedDate(), AppConstants.DATE_FORMAT);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             if (articleObj.getCharCount() > 0) {
                 stringBuilder.append(AppConstants.DOT).append(articleObj.getCharCount()).append(AppConstants.SPACE).append(context.getString(R.string.ID_MIN_READ));
             }
@@ -476,7 +463,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 @Override
                 public void run() {
                     if (tvFeedArticleUserCommentPost.getLineCount() > 3) {
-                        ArticleTextView.doResizeTextView(tvFeedArticleUserCommentPost, 4, AppConstants.VIEW_MORE_TEXT, true);
+                        ArticleTextView.doResizeTextView(tvFeedArticleUserCommentPost, 4, mContext.getString(R.string.ID_VIEW_MORE), true);
                     }
                 }
             });
@@ -493,7 +480,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             }
             if (StringUtil.isNotNullOrEmptyString(lastComment.getLastModifiedOn())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
-                tvFeedArticleCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+                tvFeedArticleCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             }
            /* if (lastComment.isMyOwnParticipation()) {
                 tvFeedArticleUserCommentPostMenu.setVisibility(View.VISIBLE);

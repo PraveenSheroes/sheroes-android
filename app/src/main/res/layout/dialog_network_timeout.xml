@@ -1,4 +1,5 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
@@ -30,8 +31,9 @@
             android:layout_gravity="center"
             android:src="@drawable/vector_user_deactivated" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_user_deactivate_text"
+            style="@style/TextView16spBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -39,37 +41,36 @@
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginTop="@dimen/dp_size_24"
             android:background="@drawable/user_deactivate_text_bg"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:padding="@dimen/dp_size_8"
             android:textColor="@color/comment_text"
-            android:textSize="@dimen/sp_size_16" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_8"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:padding="@dimen/dp_size_4"
             android:text="@string/reactivate_your_account"
             android:textColor="@color/recent_post_comment"
-            android:textSize="@dimen/sp_size_12" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_care_sheroes"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/dp_size_24"
             android:layout_marginTop="@dimen/dp_size_8"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:padding="@dimen/dp_size_4"
             android:text="@string/care_sheroes"
             android:textColor="@color/footer_icon_text"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/regular_font" />
     </LinearLayout>
 
     <RelativeLayout
@@ -79,18 +80,18 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_no_connection"
+            style="@style/TextView14spBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:paddingBottom="@dimen/dp_size_10"
             android:paddingTop="@dimen/dp_size_15"
             android:text="@string/IDS_STR_NETWORK_TIME_OUT_TITLE"
             android:textColor="@color/noConnection"
-            android:textSize="14sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
         <ImageView
             android:id="@+id/imv_no_connection_img"
@@ -100,33 +101,33 @@
             android:visibility="gone" />
 
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_no_conn_desc"
+            style="@style/TextView14spRegular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/imv_no_connection_img"
             android:layout_marginTop="@dimen/dp_size_30"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center"
             android:paddingLeft="@dimen/dp_size_31"
             android:paddingRight="@dimen/dp_size_30"
             android:textColor="@color/grey2"
-            android:textSize="@dimen/sp_size_14"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_try_again"
+            style="@style/TextView14spBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_no_conn_desc"
             android:layout_marginTop="@dimen/dp_size_20"
             android:background="@color/white"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:paddingBottom="@dimen/dp_size_16"
             android:paddingTop="@dimen/dp_size_15"
             android:textAllCaps="true"
             android:textColor="@color/red"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </RelativeLayout>
 </LinearLayout>

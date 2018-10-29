@@ -110,7 +110,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
         mMoEHelper = MoEHelper.getInstance(getActivity());
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_LOGIN_TEXT));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     @Override

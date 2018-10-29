@@ -41,7 +41,7 @@ public class NoCommunityHolder  extends BaseViewHolder<FeedDetail> {
         this.mContext = context;
         if(dataItem instanceof UserSolrObj) {
             if (((UserSolrObj) dataItem).isSuggested()) {
-                tvNoCommunity.setText("No Q&A yet");
+                tvNoCommunity.setText(R.string.no_q_a);
             }else
             {
                 tvNoCommunity.setText(context.getString(R.string.ID_NO_POST));

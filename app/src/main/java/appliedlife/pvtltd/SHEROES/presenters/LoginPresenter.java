@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.LoginModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -24,7 +24,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_TOKEN;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
@@ -49,11 +51,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
 
     @Inject
-    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi, Preference<Configuration> mConfiguration) {
+    public LoginPresenter(MasterDataModel masterDataModel, LoginModel mLoginModel, SheroesApplication mSheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi sheroesAppServiceApi, Preference<AppConfiguration> mConfiguration) {
         this.mMasterDataModel = masterDataModel;
         this.mLoginModel = mLoginModel;
         this.mSheroesApplication = mSheroesApplication;
@@ -112,8 +114,9 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        mSheroesAppServiceApi.
-                getConfig()
+        mSheroesAppServiceApi.getConfig()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ConfigurationResponse>() {
                     @Override
@@ -128,8 +131,8 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     @Override
                     public void onNext(ConfigurationResponse configurationResponse) {
                         if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (configurationResponse.configuration != null) {
-                                mConfiguration.set(configurationResponse.configuration);
+                            if (configurationResponse.appConfiguration != null) {
+                                mConfiguration.set(configurationResponse.appConfiguration);
                             }
                         }
                     }

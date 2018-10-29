@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
@@ -53,8 +54,9 @@
         android:orientation="vertical"
         android:visibility="visible">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_add_photo_lable"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/add_photo_width"
@@ -62,11 +64,10 @@
             android:layout_marginRight="@dimen/add_photo_width"
             android:layout_marginStart="@dimen/photo_poll_icon_container_margin"
             android:layout_marginTop="@dimen/photo_poll_icon_container_margin"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/add_photo"
             android:textColor="@color/comment_text"
-            android:textSize="@dimen/tv_add_photo_lable_text_size"
-            android:visibility="gone" />
+            android:visibility="gone"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
             android:id="@+id/add_image"
@@ -83,18 +84,18 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/vector_photo_grey_24dp" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_photo_lable"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/post_icon_lable_margin"
                 android:layout_marginStart="@dimen/post_icon_lable_margin"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/photo_video"
                 android:textAllCaps="true"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/photo_poll_lable_text_size" />
+                vernacular:customTextFontFamily="@string/medium_font" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
 
 
@@ -113,17 +114,17 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/vector_camera_grey_24dp" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_camera_lable"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/post_icon_lable_margin"
                 android:layout_marginStart="@dimen/post_icon_lable_margin"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/camera"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/photo_poll_lable_text_size" />
+                vernacular:customTextFontFamily="@string/medium_font" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
 
         <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear
@@ -141,18 +142,18 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/vector_poll" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_poll_survey_lable"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/post_icon_lable_margin"
                 android:layout_marginStart="@dimen/post_icon_lable_margin"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:text="@string/poll"
                 android:textAllCaps="true"
                 android:textColor="@color/comment_text"
-                android:textSize="@dimen/photo_poll_lable_text_size" />
+                vernacular:customTextFontFamily="@string/medium_font" />
         </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>
     </LinearLayout>
 

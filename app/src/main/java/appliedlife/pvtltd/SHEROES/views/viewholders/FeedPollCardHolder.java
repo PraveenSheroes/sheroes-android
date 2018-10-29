@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -9,6 +10,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +34,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
@@ -52,7 +54,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.hashTagCol
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
 public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
-    private static final int POLL_ADMIN_ID = 18;
+
     //region Inject variables
     @Inject
     DateUtil mDateUtil;
@@ -61,7 +63,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     Preference<LoginResponse> mUserPreference;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
@@ -439,9 +441,9 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getEndsAt())) {
             mTvFeedPollEndsIn.setVisibility(View.VISIBLE);
             long endDateTime = mDateUtil.getTimeInMillisWithUTC(mPollSolarObj.getEndsAt(), AppConstants.DATE_FORMAT);
-            String endsIn = mDateUtil.getDifferenceInTime(endDateTime, System.currentTimeMillis());
+            String endsIn = mDateUtil.getDifferenceInTime(endDateTime, System.currentTimeMillis(),mContext);
             if (StringUtil.isNotNullOrEmptyString(endsIn)) {
-                endsIn = mContext.getString(R.string.ends_in) + " " + endsIn;
+                endsIn = mContext.getString(R.string.poll_end, endsIn);
                 mTvFeedPollEndsIn.setText(endsIn);
             } else {
                 mTvFeedPollEndsIn.setText(mContext.getString(R.string.ended));
@@ -471,22 +473,19 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
 
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getAuthorName())) {
-            StringBuilder completeText = new StringBuilder();
             String feedTitle;
-            String feedCommunityName;
-            String createdIn;
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == POLL_ADMIN_ID) {
+            String communityName = "";
+
+            String header;
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POLL_ADMIN) {
                 feedTitle = mPollSolarObj.getPollCommunityName();
-                feedCommunityName = "";
-                createdIn = mContext.getString(R.string.created_poll);
+                header = mContext.getString(R.string.poll_header_name, feedTitle);
             } else {
                 feedTitle = mPollSolarObj.getAuthorName();
-                feedCommunityName = mPollSolarObj.getPollCommunityName();
-                createdIn = mContext.getString(R.string.created_poll) + " in";
+                communityName = mPollSolarObj.getPollCommunityName();
+                header = mContext.getString(R.string.poll_header_name_community, feedTitle, communityName);
             }
-            completeText.append(feedTitle).append(AppConstants.SPACE).append(createdIn).append(AppConstants.SPACE);
-            completeText.append(feedCommunityName);
-            clickOnUserAndCommunityName(completeText.toString(), feedTitle, createdIn, false);
+            clickOnUserNameAndCommunityName(header, feedTitle, communityName);
 
             mTvFeedPollCardTitle.setVisibility(View.VISIBLE);
         } else {
@@ -494,7 +493,7 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
         if (StringUtil.isNotNullOrEmptyString(mPollSolarObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mPollSolarObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+            String time = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext);
             if (StringUtil.isNotNullOrEmptyString(time)) {
                 mTvFeedCommunityPostTime.setText(time);
                 mTvFeedCommunityPostTime.setVisibility(View.VISIBLE);
@@ -611,26 +610,14 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
         }
     }
 
-    private void clickOnUserAndCommunityName(String nameAndCommunity, String feedTitle, String createdIn, boolean isCommunityName) {
+    private void clickOnUserNameAndCommunityName(String userNameAndCommunity, String userName, String communityName) {
 
-        SpannableString SpanString = new SpannableString(nameAndCommunity);
+        SpannableString spanString = new SpannableString(userNameAndCommunity);
 
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
                 profileImageClick();
-            }
-
-            @Override
-            public void updateDrawState(final TextPaint textPaint) {
-                textPaint.setUnderlineText(false);
-            }
-        };
-        ClickableSpan createdInClick = new ClickableSpan() {
-            @Override
-            public void onClick(View textView) {
-
-
             }
 
             @Override
@@ -654,38 +641,24 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
                 textPaint.setUnderlineText(false);
             }
         };
-        if (StringUtil.isNotNullOrEmptyString(feedTitle)) {
-            SpanString.setSpan(authorTitle, 0, feedTitle.length(), 0);
-            TypefaceSpan typefaceSpanAuthor = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-            SpanString.setSpan(typefaceSpanAuthor, 0, feedTitle.length(), 0);
-            SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, feedTitle.length(), 0);
-            if (isCommunityName) {
-                if (StringUtil.isNotNullOrEmptyString(createdIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
-                    SpanString.setSpan(createdInClick, feedTitle.length(), feedTitle.length() + createdIn.length() + 3, 0);
-                    SpanString.setSpan(community, feedTitle.length() + createdIn.length() + 2, nameAndCommunity.length(), 0);
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + createdIn.length() + 3, 0);
-                    TypefaceSpan typefaceSpan = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_REGULAR));
-                    SpanString.setSpan(typefaceSpan, feedTitle.length(), feedTitle.length() + createdIn.length() + 3, 0);
-                    TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                    SpanString.setSpan(typefaceSpanCommunity, feedTitle.length() + createdIn.length() + 2, nameAndCommunity.length(), 0);
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + createdIn.length() + 2, nameAndCommunity.length(), 0);
-                }
-            } else {
-                if (StringUtil.isNotNullOrEmptyString(createdIn) && StringUtil.isNotNullOrEmptyString(nameAndCommunity)) {
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length(), feedTitle.length() + createdIn.length() + 1, 0);
-                    SpanString.setSpan(community, feedTitle.length() + createdIn.length() + 2, nameAndCommunity.length(), 0);
-                    TypefaceSpan typefaceSpanCommunity = new TypefaceSpan(mContext.getResources().getString(R.string.ID_ROBOTO_MEDIUM));
-                    SpanString.setSpan(typefaceSpanCommunity, feedTitle.length() + createdIn.length() + 2, nameAndCommunity.length(), 0);
-                    SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), feedTitle.length() + createdIn.length() + 2, nameAndCommunity.length(), 0);
-                }
-            }
+        if (StringUtil.isNotNullOrEmptyString(userName)) {
+            spanString.setSpan(authorTitle, 0, userName.length(), 0);
+            spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
+            StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+            spanString.setSpan(boldSpan, 0, userName.length(), 0);
 
+            if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
+                int firstIndex = userNameAndCommunity.indexOf(communityName);
+                spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
+                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
+                StyleSpan styleSpanBold = new StyleSpan(Typeface.BOLD);
+                spanString.setSpan(styleSpanBold, firstIndex, firstIndex + communityName.length(), 0);
+            }
             mTvFeedPollCardTitle.setMovementMethod(LinkMovementMethod.getInstance());
-            mTvFeedPollCardTitle.setText(SpanString, TextView.BufferType.SPANNABLE);
+            mTvFeedPollCardTitle.setText(spanString, TextView.BufferType.SPANNABLE);
             mTvFeedPollCardTitle.setSelected(true);
         }
     }
-
     //endregion
 
     @OnClick({R.id.tv_feed_poll_user_comment, R.id.li_poll_main_layout})
@@ -700,13 +673,13 @@ public class FeedPollCardHolder extends BaseViewHolder<PollSolarObj> {
     @OnClick({R.id.iv_feed_poll_circle_icon})
     public void profileImageClick() {
         if (viewInterface != null) {
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POLL_ADMIN) {
                 ((FeedItemCallback) viewInterface).onCommunityTitleClicked(mPollSolarObj);
             } else {
                 ((FeedItemCallback) viewInterface).onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
             }
         } else if (mPostDetailCallBack != null) {
-            if (mPollSolarObj.getEntityOrParticipantTypeId() == 18) {
+            if (mPollSolarObj.getEntityOrParticipantTypeId() == AppConstants.COMMUNITY_POLL_ADMIN) {
                 mPostDetailCallBack.onCommunityTitleClicked(mPollSolarObj);
             } else {
                 mPostDetailCallBack.onChampionProfileClicked(mPollSolarObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);

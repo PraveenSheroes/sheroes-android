@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/iv_language_cross"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/language_cross_padding"
+        android:src="@drawable/vector_cross"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        android:id="@+id/tv_header"
+        style="@style/TextView20spBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/lang_header_top_margin"
+        android:text="@string/select_your_preferred_language"
+        android:textColor="@color/comment_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        vernacular:customTextFontFamily="@string/medium_font" />
+
+    <FrameLayout
+        android:id="@+id/fl_english"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/lang_selector_left_margin"
+        android:layout_marginLeft="@dimen/lang_selector_left_margin"
+        android:layout_marginRight="@dimen/lang_selector_right_margin"
+        android:layout_marginStart="@dimen/lang_selector_right_margin"
+        android:layout_marginTop="@dimen/lang_eng_top_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:layout_marginRight="@dimen/lang_bg_right_margin"
+            android:layout_marginTop="@dimen/lang_bg_top_margin"
+            android:background="@drawable/lang_eng" />
+
+        <ImageView
+            android:id="@+id/iv_lang_eng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:background="@drawable/vector_tick"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_hindi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/lang_selector_left_margin"
+        android:layout_marginLeft="@dimen/lang_selector_left_margin"
+        android:layout_marginRight="@dimen/lang_selector_right_margin"
+        android:layout_marginStart="@dimen/lang_selector_right_margin"
+        android:layout_marginTop="@dimen/lang_hind_top_margin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fl_english">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:layout_marginRight="@dimen/lang_bg_right_margin"
+            android:layout_marginTop="@dimen/lang_bg_top_margin"
+            android:background="@drawable/lang_hind" />
+
+        <ImageView
+            android:id="@+id/iv_lang_hind"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:background="@drawable/vector_tick"
+            android:visibility="gone" />
+    </FrameLayout>
+
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        android:id="@+id/tv_continue"
+        style="@style/TextView14spBold"
+        android:layout_width="150dp"
+        android:layout_height="36dp"
+        android:background="@drawable/rectangle_grey"
+        android:gravity="center"
+        android:text="@string/lang_continue"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.655"
+        vernacular:customTextFontFamily="@string/medium_font" />
+
+</android.support.constraint.ConstraintLayout>

@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:minWidth="312dp"
     android:orientation="vertical">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/reason_title"
+        style="@style/TextView14spBold"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_16"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:lineSpacingExtra="9sp"
         android:text="@string/select_a_reason"
         android:textColor="#3c3c3c"
-        android:textSize="14sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        vernacular:customButtonFontFamily="@string/medium_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/reason_sub_title"
+        style="@style/TextView14spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:lineSpacingExtra="9sp"
         android:text="@string/why_is_it_inappropriate"
         android:textColor="#3c3c3c"
-        android:textSize="14sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        vernacular:customButtonFontFamily="@string/regular_font" />
 
     <TextView
         android:layout_width="match_parent"
@@ -51,7 +52,7 @@
 
     </ScrollView>
 
-    <EditText
+    <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
         android:id="@+id/edit_text_reason"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_100"
@@ -63,10 +64,12 @@
         android:inputType="textMultiLine"
         android:padding="@dimen/dp_size_2"
         android:scrollHorizontally="false"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customEditTextFontFamily="@string/medium_font" />
 
-    <Button
+    <appliedlife.pvtltd.SHEROES.vernacular.FontButton
         android:id="@+id/submit"
+        style="@style/Button14spRegular"
         android:layout_width="180dp"
         android:layout_height="36dp"
         android:layout_gravity="center_horizontal"
@@ -76,6 +79,7 @@
         android:gravity="center"
         android:text="@string/ID_SUBMIT"
         android:textAllCaps="true"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        vernacular:customButtonFontFamily="@string/regular_font" />
 
 </LinearLayout>

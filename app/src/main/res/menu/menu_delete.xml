@@ -2,9 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/delete"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/delete"/>
 
     <item
         android:id="@+id/report_spam"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/REPORT_SPAM"/>
 </menu>

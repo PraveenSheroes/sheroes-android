@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -8,18 +9,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/upload_photo_text_view"
+            style="@style/TextView16spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif"
             android:lineSpacingExtra="8sp"
-            android:text="Upload cover photo (Optional)"
+            android:text="@string/upload_cover_photo"
             android:textColor="@color/toolbar_title"
-            android:textSize="16sp"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <ImageView
             android:id="@+id/iv_close_img"
@@ -30,8 +31,8 @@
             android:layout_alignTop="@+id/upload_photo_text_view"
             android:layout_marginRight="@dimen/dp_size_8"
             android:layout_marginTop="16dp"
-            android:visibility="gone"
-            android:src="@drawable/vector_cancel_grey" />
+            android:src="@drawable/vector_cancel_grey"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/add_photo_container"
@@ -51,8 +52,9 @@
                 android:adjustViewBounds="true"
                 android:visibility="gone" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/add_cover_text_view"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -61,12 +63,11 @@
                 android:layout_toRightOf="@id/add_photo_image_view"
                 android:drawableLeft="@drawable/vector_add_circle"
                 android:drawablePadding="@dimen/dp_size_8"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="Add cover photo"
+                android:text="@string/add_cover_photo"
                 android:textColor="@color/posted_in"
-                android:textSize="14sp"
                 android:textStyle="normal"
-                android:visibility="visible" />
+                android:visibility="visible"
+                vernacular:customTextFontFamily="@string/regular_font" />
         </RelativeLayout>
 
 
@@ -79,7 +80,7 @@
             android:layout_marginRight="16dp"
             android:layout_marginTop="20dp"
             android:focusableInTouchMode="true"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+            android:fontFamily="@font/noto_sans_regular"
             android:imeOptions="actionDone"
             android:inputType="text|textNoSuggestions|textMultiLine"
             android:lineSpacingExtra="1dp"
@@ -87,33 +88,33 @@
             android:textColor="@color/recent_post_comment"
             android:textSize="14sp" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_tag_lable"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tag_search_view"
             android:layout_marginLeft="16dp"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:text="(Add minimum 1 tag to post a story)"
+            android:text="@string/add_min_tag"
             android:textColor="@color/footer_icon_text"
-            android:textSize="14sp"
             android:textStyle="normal"
-            android:visibility="gone" />
+            android:visibility="gone"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/share_social_title_text_view"
+            style="@style/TextView16spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_tag_lable"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="26dp"
-            android:fontFamily="sans-serif"
             android:lineSpacingExtra="8sp"
-            android:text="Share via social media"
+            android:text="@string/share_via_social_media"
             android:textColor="@color/toolbar_title"
-            android:textSize="16sp"
             android:textStyle="normal"
-            android:visibility="gone" />
+            android:visibility="gone"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <RelativeLayout
             android:id="@+id/fb_share_container"
@@ -133,8 +134,8 @@
                 android:defaultValue="true"
                 android:drawableLeft="@drawable/vector_facebook_small"
                 android:drawablePadding="12dp"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                android:text="Share on Facebook"
+                android:fontFamily="@font/noto_sans_regular"
+                android:text="@string/share_on_fb"
                 android:textColor="@color/recent_post_comment"
                 android:textSize="14sp" />
         </RelativeLayout>

@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -70,6 +71,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
@@ -113,6 +115,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String STORIES_TAB = "write a story";
     public static final String USER_STORY = "USER_STORY";
     public static final String KEY_FOR_DEEPLINK_DETAIL = "post_detail_deep_link";
+    public static final String BRANCH_FIRST_SESSION = "is_branch_first_session";
+    public static final String DEEP_LINK_URL = "deep_link_url";
     public static final int BRANCH_REQUEST_CODE = 1290;
     public static final int ASK_QUESTION_POST = 3;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
@@ -136,6 +140,10 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
     private boolean isWhatsAppShare;
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -735,7 +743,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + deepLinkUrl);
+        intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
@@ -805,7 +813,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());

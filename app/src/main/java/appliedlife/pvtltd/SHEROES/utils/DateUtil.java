@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
+import android.content.Context;
 import android.text.format.DateUtils;
 
 import java.text.ParseException;
@@ -10,7 +11,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 
 /**
  * Created by Praveen_Singh on 19-02-2017.
@@ -106,83 +106,76 @@ public class DateUtil {
     /**
      * @return absolute rounded off difference in days
      */
-    public String getRoundedDifferenceInHours(long timeOne, long timeTwo) {
-        //long Millis24Hrs = 24 * 60 * 60 * 1000;
+    public String getRoundedDifferenceInHours(long timeOne, long timeTwo, Context context) {
         long differenceInMinutes = Math.round((timeOne - timeTwo) / (60 * 1000));
-        //long  seconds =(long)difference % 60;
-        //difference=(long)difference/60;
         int day = (int) (differenceInMinutes / (24 * 60));
         differenceInMinutes = differenceInMinutes - (day * 24 * 60);
         int hour = (int) (differenceInMinutes / 60);
         differenceInMinutes = differenceInMinutes - (hour * 60);
         StringBuilder sb = new StringBuilder();
-
         if (day > 0) {
             sb.append(day);
-            if (day == 1) {
-                sb.append(AppConstants.DAY);
-            } else {
-                sb.append(AppConstants.DAY + AppConstants.S);
-            }
+            String pluralDays;
+            pluralDays = context.getResources().getQuantityString(R.plurals.numberOfDays, day);
+            sb.append(" ").append(pluralDays);
         } else if (hour > 0) {
             sb.append(hour);
-            if (hour == 1) {
-                sb.append(AppConstants.HOUR);
-            } else {
-                sb.append(AppConstants.HOUR + AppConstants.S);
-            }
+            String pluralHours;
+            pluralHours = context.getResources().getQuantityString(R.plurals.numberOfHours, hour);
+            sb.append(" ").append(pluralHours);
         } else if (differenceInMinutes > 0) {
             sb.append(differenceInMinutes);
-            if (differenceInMinutes == 1) {
-                sb.append(AppConstants.MINUTE);
-            } else {
-                sb.append(AppConstants.MINUTE + AppConstants.S);
-            }
+            String pluralMins;
+            pluralMins = context.getResources().getQuantityString(R.plurals.numberOfMins, (int) differenceInMinutes);
+            sb.append(" ").append(pluralMins);
         } else {
-            sb.append(SheroesApplication.mContext.getString(R.string.ID_JUST_NOW));
+            sb.append(context.getString(R.string.ID_JUST_NOW));
         }
         return sb.toString();
     }
 
-    public String getDifferenceInTime(long timeOne, long timeTwo) {
-        //long Millis24Hrs = 24 * 60 * 60 * 1000;
+    public String getDifferenceInTime(long timeOne, long timeTwo, Context context) {
         long differenceInMinutes = Math.round((timeOne - timeTwo) / (60 * 1000));
-        //long  seconds =(long)difference % 60;
-        //difference=(long)difference/60;
         int day = (int) (differenceInMinutes / (24 * 60));
         differenceInMinutes = differenceInMinutes - (day * 24 * 60);
         int hour = (int) (differenceInMinutes / 60);
         differenceInMinutes = differenceInMinutes - (hour * 60);
         StringBuilder sb = new StringBuilder();
-
         if (day > 0) {
+            String pluralDays;
+
             if (differenceInMinutes > 0 || hour > 0) {
                 sb.append(day + 1);
-                sb.append(AppConstants.DAY + AppConstants.S);
+                pluralDays = context.getResources().getQuantityString(R.plurals.numberOfDays, day + 1);
             } else {
                 sb.append(day);
-                sb.append(AppConstants.DAY);
+                pluralDays = context.getResources().getQuantityString(R.plurals.numberOfDays, day);
             }
+            sb.append(" ").append(pluralDays);
+
         } else if (hour > 0) {
+            String pluralHours;
             if (hour == 1) {
                 sb.append(hour);
-                sb.append(AppConstants.HOUR);
+                pluralHours = context.getResources().getQuantityString(R.plurals.numberOfHours, hour);
+                sb.append(" ").append(pluralHours);
             } else {
                 if (differenceInMinutes > 0) {
                     sb.append(hour + 1);
-                    sb.append(AppConstants.HOUR + AppConstants.S);
+                    pluralHours = context.getResources().getQuantityString(R.plurals.numberOfHours, hour + 1);
+                    sb.append(" ").append(pluralHours);
                 } else {
                     sb.append(hour);
-                    sb.append(AppConstants.HOUR + AppConstants.S);
+                    pluralHours = context.getResources().getQuantityString(R.plurals.numberOfHours, hour);
+                    sb.append(" ").append(pluralHours);
                 }
             }
+
         } else if (differenceInMinutes > 0) {
+            String pluralMins;
             sb.append(differenceInMinutes);
-            if (differenceInMinutes == 1) {
-                sb.append(AppConstants.MINUTE);
-            } else {
-                sb.append(AppConstants.MINUTE + AppConstants.S);
-            }
+            pluralMins = context.getResources().getQuantityString(R.plurals.numberOfMins, (int) differenceInMinutes);
+            sb.append(" ").append(pluralMins);
         }
         return sb.toString();
     }
