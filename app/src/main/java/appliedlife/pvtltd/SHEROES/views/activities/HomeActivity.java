@@ -311,8 +311,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     public TextView tvDrawerNavigation;
 
 
-    @Bind(R.id.iv_new_tag)
-    public ImageView ivNewTag;
+    @Bind(R.id.tv_new_tag)
+    public TextView mTvNewTag;
 
     @BindDimen(R.dimen.dp_size_64)
     int navProfileSize;
@@ -390,7 +390,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         toolTipForNotification();
         if (CommonUtil.ensureFirstTime(AppConstants.NEW_TAG_FOR_RIGHT_SWIP)) {
-            ivNewTag.setVisibility(View.VISIBLE);
+            mTvNewTag.setVisibility(View.VISIBLE);
         }
     }
 
@@ -466,6 +466,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTitleText.setText("");
         mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
         mTvCommunitiesSearch.setText(R.string.explore_All);
+        mTvNewTag.setText(R.string.new_tag);
         mICSheroes.setVisibility(View.VISIBLE);
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
@@ -500,7 +501,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @OnClick(R.id.fl_nav_communities)
     public void onClickNavigationCommunities() {
-        ivNewTag.setVisibility(View.GONE);
+        mTvNewTag.setVisibility(View.GONE);
         mDrawer.openDrawer(GravityCompat.END);
     }
 

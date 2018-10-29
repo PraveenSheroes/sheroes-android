@@ -36,14 +36,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:paddingLeft="@dimen/sheroes_logo_paddingleft"
-        android:paddingStart="@dimen/sheroes_logo_paddingleft"
-        android:paddingEnd="@dimen/sheroes_logo_paddingright"
-        android:paddingRight="@dimen/sheroes_logo_paddingright"
         android:layout_marginLeft="@dimen/sheroes_logo_marginleft"
-        android:paddingTop="@dimen/sheroes_logo_paddingtop"
         android:layout_marginTop="@dimen/sheroes_logo_margintop"
         android:paddingBottom="@dimen/sheroes_logo_paddingbottom"
+        android:paddingEnd="@dimen/sheroes_logo_paddingright"
+        android:paddingLeft="@dimen/sheroes_logo_paddingleft"
+        android:paddingRight="@dimen/sheroes_logo_paddingright"
+        android:paddingStart="@dimen/sheroes_logo_paddingleft"
+        android:paddingTop="@dimen/sheroes_logo_paddingtop"
         android:src="@drawable/vector_sheroes_header" />
 
 
@@ -59,18 +59,28 @@
         android:paddingTop="@dimen/dp_size_10"
         android:src="@drawable/vector_communities_nav_icon" />
 
-    <ImageView
-        android:id="@+id/iv_new_tag"
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        android:id="@+id/tv_new_tag"
+        style="@style/TextView12spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fl_nav_communities"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-8dp"
+        android:layout_marginLeft="@dimen/new_tag_margin_left"
+        android:layout_marginStart="@dimen/new_tag_margin_left"
+        android:layout_marginTop="@dimen/new_tag_margin_top"
         android:layout_toEndOf="@+id/tv_home_notification_icon"
         android:layout_toRightOf="@+id/tv_home_notification_icon"
-        android:src="@drawable/vector_new_tag"
-        android:visibility="gone" />
+        android:background="@drawable/vector_new_tag"
+        android:paddingEnd="@dimen/new_tag_padding_right"
+        android:paddingLeft="@dimen/new_tag_padding_left"
+        android:paddingRight="@dimen/new_tag_padding_right"
+        android:paddingStart="@dimen/new_tag_padding_left"
+        android:paddingTop="@dimen/new_tag_padding_top"
+        android:text="@string/new_tag"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <TextView
         android:id="@+id/tv_home_notification_icon"

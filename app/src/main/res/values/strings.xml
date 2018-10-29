@@ -665,4 +665,5 @@
     <string name="discard_address">Discard Address?</string>
     <string name="not_empty">not empty</string>
     <string name="challenge_winner">Winner</string>
+    <string name="new_tag">New</string>
 </resources>
