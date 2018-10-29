@@ -31,6 +31,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     private static final String TAG = ImpressionHelper.class.getName();
 
     private static final String CLIENT_ID = "2"; //i.e 2 = Android
+    private static final String EVENT_TYPE_VI = "vi"; //view impression
     public static final int SCROLL_UP = 2;
     public static final int SCROLL_DOWN = 1;
 
@@ -41,7 +42,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     private int mImpressionBatchSize;
     private float mMinEngagementTime;
     private long mLoggedInUser;
-    //private long mLastScrollingEndTime;
 
     private ImpressionCallback mImpressionCallback;
     private AppUtils mAppUtils;
@@ -170,8 +170,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
                 if (impressionData.getEndTime() == -1) {
                     LogUtils.info(TAG, "Screen Exit: Update End time for all visible");
 
-                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
+                    int timeSpent = (int) (System.currentTimeMillis() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
                 }
             }
@@ -282,7 +281,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             impressionData.setPosition(viewPosition);
             impressionData.setUserAgent(recyclerView.getContext() != null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
             impressionData.setClientId(CLIENT_ID); //For mobile android
-            impressionData.setEvent(EVENT_TYPE.VIEW_IMPRESSION.getValue());
+            impressionData.setEvent(EVENT_TYPE_VI);
             impressionData.setAppVersion(mAppUtils.getAppVersionName());
             impressionData.setDeviceId(mAppUtils.getDeviceId());
             impressionData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
@@ -365,8 +364,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             for (int i = size - 1; i >= 0; i--) {
                 ImpressionData impressionData = finalViewData.get(i);
                 if (impressionData.getTimeStamp() != -1 && impressionData.getEndTime() == -1 && impressionData.getPostId().equalsIgnoreCase(String.valueOf(postId))) {
-                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
+                    int timeSpent = (int) (System.currentTimeMillis() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
 
                     LogUtils.info(TAG, "@@@Screen Exit " + postId + "End time" + timeSpent / 1000.0f);
@@ -417,25 +415,5 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         mImpressionPresenter.impressionObserver(mImpressionBatchSize, true);
     }
 
-    //endregion
-
-    //region enum
-
-    //Impression Event Type
-    public enum EVENT_TYPE {
-
-        VIEW_IMPRESSION("vi"),
-        VIEW_CLICK("cl");
-
-        private final String value;
-
-        EVENT_TYPE(final String newValue) {
-            value = newValue;
-        }
-
-        public String getValue() {
-            return value;
-        }
-    }
     //endregion
 }

@@ -197,7 +197,6 @@ public class SheroesAppModule {
     public Gson provideGson() {
         return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .setExclusionStrategies(new AnnotationExclusionStrategy())
-                .excludeFieldsWithModifiers(Modifier.TRANSIENT)
                 .create();
     }
 
