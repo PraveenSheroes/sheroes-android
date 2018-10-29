@@ -164,30 +164,8 @@ public class ImpressionData {
         this.feedConfigVersion = feedConfigVersion;
     }
 
-    // ID for the view that was viewed (we'll use the position of the item here).
-    private transient int viewId;
-
-    //start time
-    private transient long mStartTime = -1;
-
     //end time
     private transient long mEndTime = -1;
-
-    public int getViewId() {
-        return viewId;
-    }
-
-    public void setViewId(int viewId) {
-        this.viewId = viewId;
-    }
-
-    long getStartTime() {
-        return mStartTime;
-    }
-
-    void setStartTime(long mStartTime) {
-        this.mStartTime = mStartTime;
-    }
 
     long getEndTime() {
         return mEndTime;
@@ -243,5 +221,9 @@ public class ImpressionData {
 
     public String getGtid() {
         return gtid;
+    }
+
+    public long getTimeStamp() {
+        return timeStamp;
     }
 }

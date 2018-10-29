@@ -18,6 +18,13 @@ public interface ImpressionCallback extends BaseMvpView {
     FeedDetail getListItemAtPos(int pos);
 
     /**
+     * Return the position of particular post
+     * @param postId post id
+     * @return position in recycler
+     */
+    int findPositionById(long postId);
+
+    /**
      * Get the screen Name
      * @return screen Name
      */

@@ -290,10 +290,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
 
             if (isActiveTabFragment && impressionHelper != null) {
-                impressionHelper.onPause();
+                impressionHelper.stopImpression();
             }
             isActiveTabFragment = false;
-    }
+        }
     }
 
     @Override
@@ -1105,10 +1105,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
-        }
-
-        if(impressionHelper!=null) {
-            impressionHelper.onPause();
         }
     }
 
@@ -2059,6 +2055,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return null;
     }
 
+    @Override
     public int findPositionById(long id) { //TODO - move to presenter
         if (mAdapter == null) {
             return -1;

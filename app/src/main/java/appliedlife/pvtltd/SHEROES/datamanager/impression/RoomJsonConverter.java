@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.datamanager;
+package appliedlife.pvtltd.SHEROES.datamanager.impression;
 
 import android.arch.persistence.room.TypeConverter;
 import com.google.gson.Gson;

@@ -6,7 +6,7 @@ import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
 
-import appliedlife.pvtltd.SHEROES.datamanager.RoomJsonConverter;
+import appliedlife.pvtltd.SHEROES.datamanager.impression.RoomJsonConverter;
 
 /**
  * Model class for db table impression

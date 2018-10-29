@@ -7,6 +7,8 @@ import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import appliedlife.pvtltd.SHEROES.analytics.Impression.Impression;
+import appliedlife.pvtltd.SHEROES.datamanager.impression.ImpressionDataDao;
+import appliedlife.pvtltd.SHEROES.datamanager.impression.RoomJsonConverter;
 
 @TypeConverters(RoomJsonConverter.class)
 @Database(entities = {Impression.class}, version = 1)

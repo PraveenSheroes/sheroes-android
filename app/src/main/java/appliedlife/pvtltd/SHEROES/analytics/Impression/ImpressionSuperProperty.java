@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 /**
  * Model class with super properties required for impression helper
+ *
+ * @author ravi
  */
 public class ImpressionSuperProperty {
 
