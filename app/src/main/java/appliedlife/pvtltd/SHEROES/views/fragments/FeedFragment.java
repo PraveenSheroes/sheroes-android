@@ -7,7 +7,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -22,11 +21,11 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.widget.AbsListView;
 import android.widget.Button;
@@ -57,18 +56,18 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionCallback;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionSuperProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionSuperProperty;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
@@ -103,6 +102,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -149,11 +149,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private String mSetOrderKey;
 
     private Toast toast;
-
-    //TODO - make these two from remote config
-    private static final int THRESHOLD_MS = 250;
-    private int viewVisibilityThreshold;
-    private int mScrollDirection;
+    private int mScrollDirection = -1;
 
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
@@ -278,11 +274,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (isVisibleToUser) {  //When UI is visible to user
 
             isActiveTabFragment = true;
-
-            if (impressionHelper != null) {
-                impressionHelper.getGlobalLayoutChanges(mFeedRecyclerView);
-            }
-
             if (getParentFragment() instanceof HomeFragment) {
                 String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
                 if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
@@ -304,7 +295,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 impressionHelper.onPause();
             }
             isActiveTabFragment = false;
-        }
+    }
     }
 
     @Override
@@ -337,7 +328,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
-            impressionHelper = new ImpressionHelper(impressionSuperProperty, mConfiguration, mFeedRecyclerView, mLinearLayoutManager, mLoggedInUser, mAppUtils, this);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, impressionPresenter, mConfiguration, mFeedRecyclerView, mLoggedInUser, mAppUtils, this);
         }
     }
 
@@ -530,27 +521,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void storeInDatabase(List<ImpressionData> impressionData, int batchSize, float minEngagementTime, boolean forceNetworkCall) {
-        if(impressionData.size()>0 && getContext()!=null) {
-            impressionPresenter.storeBatchInDb(minEngagementTime, batchSize, impressionData, forceNetworkCall);
-        }
-    }
-
-    @Override
+    @Deprecated
     public void showToast(String message) {
         if (toast != null) {
             toast.cancel();
         }
 
-        if (getContext() != null) {
+        if (getContext() != null && getActivity()!=null && !getActivity().isFinishing()) {
             toast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
             toast.show();
         }
-    }
-
-    @Override
-    public void sendImpression() {
-     impressionPresenter.hitNetworkCall();
     }
 
     @Override
@@ -641,13 +621,31 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private void setupRecyclerScrollListener() {
+
+        final ViewTreeObserver viewTreeObserver = mFeedRecyclerView.getViewTreeObserver();
+        ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+            @Override
+            public void onGlobalLayout() {
+                mFeedRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+                if(impressionHelper!=null) {
+                    impressionHelper.getVisibleViews(startPos, endPos);
+                }
+            }
+        };
+        viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener);
+
         mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    impressionHelper.scrollingIdle(System.currentTimeMillis());
+                    if(impressionHelper!=null) {
+                        impressionHelper.scrollingIdle(System.currentTimeMillis());
+                    }
                 }
             }
 
@@ -663,7 +661,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                impressionHelper.onScrollChange(recyclerView, mScrollDirection, startPos, endPos);
+                if(impressionHelper!=null) {
+                    impressionHelper.onScrollChange(recyclerView, mScrollDirection, startPos, endPos);
+                }
 
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
@@ -1102,9 +1102,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         super.onResume();
 
         if (isActiveTabFragment) {
-            if(impressionHelper!=null) {
-                impressionHelper.getGlobalLayoutChanges(mFeedRecyclerView);
-            }
             AnalyticsManager.timeScreenView(mScreenLabel);
         }
     }

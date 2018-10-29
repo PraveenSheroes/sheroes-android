@@ -8,6 +8,7 @@ import android.arch.persistence.room.Query;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.analytics.Impression.Impression;
+import io.reactivex.Single;
 
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
@@ -15,10 +16,10 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface ImpressionDataDao {
 
     @Query("SELECT * FROM impression")
-    List<Impression> getAll();
+    Single<List<Impression>> getAllImpressions();
 
     @Insert(onConflict = REPLACE)
-    Long insert(Impression impression);
+    List<Long> insert(List<Impression> impression);
 
     @Delete
     void deleteImpression(List<Impression> impressions);

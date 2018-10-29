@@ -126,4 +126,7 @@ public class ConfigData {
     @SerializedName("impressionFrequency")
     public int impressionFrequency = 60000;
 
+    @SerializedName("impressionMaxTimeout")
+    public int impressionMaxTimeout = 180000;
+
 }

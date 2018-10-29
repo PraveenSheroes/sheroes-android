@@ -2,9 +2,6 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.os.Build;
-import android.os.CountDownTimer;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -27,32 +24,31 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 /**
  * Helper class for Impression help to detect visible impression and exit of impression view
  */
-public class ImpressionHelper {
+public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     //region private member variables
     private static final String TAG = ImpressionHelper.class.getName();
+
     private static final String CLIENT_ID = "2"; //i.e 2 = Android
     public static final int SCROLL_UP = 2;
     public static final int SCROLL_DOWN = 1;
 
-    private boolean scrollDirectionChange = false;
-    private boolean isRunning;
+    private boolean mScrollDirectionChange = false;
 
-    private int lastDirectionId = -1;
+    private int mLastDirectionId = -1;
     private int mImpressionVisibilityThreshold;
     private int mImpressionBatchSize;
-    private int mImpressionFrequency;
-    private float minEngagementTime;
+    private float mMinEngagementTime;
     private long mLoggedInUser;
-    private long lastScrollingEndTime;
+    //private long mLastScrollingEndTime;
 
     private ImpressionCallback mImpressionCallback;
-    private CountDownTimer countDownTimer;
     private AppUtils mAppUtils;
     private Preference<Configuration> mConfiguration;
     private ImpressionSuperProperty mImpressionProperty;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
+    private ImpressionPresenter mImpressionPresenter;
+    private RecyclerView mRecyclerView;
+    private ImpressionTimer mImpressionTimer;
 
     // ArrayList of view ids that are being considered for tracking.
     private ArrayList<Integer> currentViewed = new ArrayList<>();
@@ -62,88 +58,69 @@ public class ImpressionHelper {
     //endregion
 
     //region constructor
-    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, Preference<Configuration> configuration, RecyclerView recyclerView, LinearLayoutManager layoutManager, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
+    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<Configuration> configuration, RecyclerView recyclerView, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
         this.mLoggedInUser = loggedInUserId;
-        this.mImpressionCallback = impressionCallback;
         this.mImpressionProperty = impressionSuperProperty;
         this.mConfiguration = configuration;
-        this.recyclerView = recyclerView;
-        this.linearLayoutManager = layoutManager;
+        this.mRecyclerView = recyclerView;
+        this.mImpressionPresenter = impressionPresenter;
+        this.mImpressionCallback = impressionCallback;
         init();
     }
 
     private void init() {
-        mImpressionVisibilityThreshold = new ConfigData().visibilityPercentage;
+        ConfigData configData = new ConfigData();
+
+        mImpressionVisibilityThreshold = configData.visibilityPercentage;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
             mImpressionVisibilityThreshold = mConfiguration.get().configData.visibilityPercentage;
         }
 
-        minEngagementTime = new ConfigData().minEngagementTime;
+        mMinEngagementTime = configData.minEngagementTime;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get min engagement time for impression
-            minEngagementTime = mConfiguration.get().configData.minEngagementTime;
+            mMinEngagementTime = mConfiguration.get().configData.minEngagementTime;
         }
 
-        minEngagementTime = minEngagementTime / 1000f; //i.e 0.25 ms
-
-        mImpressionBatchSize = new ConfigData().frequencyBatchRequest;
+        mImpressionBatchSize = configData.frequencyBatchRequest;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get the batch size
             mImpressionBatchSize = mConfiguration.get().configData.frequencyBatchRequest;
         }
 
-        mImpressionFrequency = new ConfigData().impressionFrequency;
+        int mImpressionFrequency = configData.impressionFrequency;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get impression frequency in ms
             mImpressionFrequency = mConfiguration.get().configData.impressionFrequency;
         }
+        mImpressionFrequency = mImpressionFrequency/3;
 
-        mImpressionFrequency = mImpressionFrequency / 3; //todo - testing purpose
+        int mImpressionMaxTimeout = configData.impressionMaxTimeout;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get impression frequency in ms
+            mImpressionMaxTimeout = mConfiguration.get().configData.impressionMaxTimeout;
+        }
+
+         mImpressionTimer = ImpressionTimer.getInstance(mImpressionFrequency, mImpressionFrequency, mImpressionMaxTimeout, this);
     }
     //endregion
 
     //region public method
 
     public void scrollingIdle(long idleTime) {
-        lastScrollingEndTime = idleTime;
+        mImpressionTimer.setLastScrollingEndTime(idleTime);
     }
 
     /**
      * Fragment/ Activity is resumed
      */
-    public void onResume() {
-        LogUtils.info(TAG, "On Resume");
+    public void getVisibleViews(int startPos, int endPos) {
+        LogUtils.info(TAG, "On Global layout changes");
 
         //Get the visible items on screen
         allVisibleViews.clear();
-        int startPos = linearLayoutManager.findFirstVisibleItemPosition();
-        int endPos = linearLayoutManager.findLastVisibleItemPosition();
         for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
             allVisibleViews.add(viewPosition);
-            getValidImpressionView(viewPosition, recyclerView);
+            getValidImpressionView(viewPosition, mRecyclerView);
         }
     }
-
-    public void getGlobalLayoutChanges(final RecyclerView recyclerView) {
-
-        final ViewTreeObserver viewTreeObserver = recyclerView.getViewTreeObserver();
-        ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    recyclerView.getViewTreeObserver()
-                            .removeOnGlobalLayoutListener(this);
-                } else {
-                    recyclerView.getViewTreeObserver()
-                            .removeOnGlobalLayoutListener(this);
-                }
-
-                LogUtils.info(TAG, "Global layout change");
-                onResume();
-            }
-        };
-        viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener);
-    }
-
 
     /**
      * Fragment/ Activity is paused
@@ -153,8 +130,9 @@ public class ImpressionHelper {
         updateEndTimeOfItems();
         storeChunks(true);
 
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
+        if (mImpressionTimer != null) {
+            mImpressionTimer.setTimerRunning(false);
+            mImpressionTimer.cancel();
         }
     }
 
@@ -165,21 +143,20 @@ public class ImpressionHelper {
      * @param endPos   last visible item on screen
      */
     public void onScrollChange(RecyclerView recyclerView, int scrollDirection, int startPos, int endPos) {
-        if (scrollDirection > 0 && scrollDirection != lastDirectionId) {
-            scrollDirectionChange = true;
+        if (scrollDirection > 0 && scrollDirection != mLastDirectionId) {
+            mScrollDirectionChange = true;
         }
-        lastDirectionId = scrollDirection;
+        mLastDirectionId = scrollDirection;
 
         //Scroll view visibility and duration
-        lastScrollingEndTime = System.currentTimeMillis();
-        if (countDownTimer == null) {
-            countDownTimer = new ImpressionTimer(mImpressionFrequency, 1000);
-            countDownTimer.start();
-        } else if (!isRunning) {
-            countDownTimer.start();
-        }
 
-        analyzeAndAddViewData(scrollDirectionChange, scrollDirection, recyclerView, startPos, endPos);
+        if (!mImpressionTimer.isTimerRunning()) {
+            mImpressionTimer.setTimerRunning(true);
+            mImpressionTimer.start();
+        }
+        mImpressionTimer.setLastScrollingEndTime(System.currentTimeMillis());
+
+        analyzeAndAddViewData(mScrollDirectionChange, scrollDirection, recyclerView, startPos, endPos);
     }
 
     /**
@@ -209,7 +186,7 @@ public class ImpressionHelper {
         synchronized (this) {
             if (directionChange) {
                 storeChunks(false);
-                scrollDirectionChange = false;
+                mScrollDirectionChange = false;
             }
 
             for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
@@ -235,8 +212,9 @@ public class ImpressionHelper {
                     }
                 }
             }
+
             // store 10 events in DB
-            if (finalViewData.size() > 10) {
+            if (finalViewData.size() >= mImpressionBatchSize) { //split when final list reach batch size but it may have impression which are below min engagement time , will get filter later
                 storeChunks(false);
             }
             currentViewed.clear();
@@ -314,7 +292,7 @@ public class ImpressionHelper {
         if (index > -1) {
             List<ImpressionData> updatedImpressions = finalViewData.subList(0, index + 1);
             LogUtils.info(TAG, "###Added to db");
-            mImpressionCallback.storeInDatabase(updatedImpressions, mImpressionBatchSize, minEngagementTime, forceNetworkCall);
+            mImpressionPresenter.storeBatchInDb(mMinEngagementTime, mImpressionBatchSize, updatedImpressions, forceNetworkCall);
 
             if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
                 finalViewData = finalViewData.subList(index + 1, finalViewData.size());
@@ -418,6 +396,16 @@ public class ImpressionHelper {
         return viewId;
     }
 
+    @Override
+    public void stopTimer() {
+        onPause();
+    }
+
+    @Override
+    public void sendImpressions() {
+        mImpressionPresenter.impressionObserver(mImpressionBatchSize, true);
+    }
+
     //endregion
 
     //region enum
@@ -439,34 +427,4 @@ public class ImpressionHelper {
         }
     }
     //endregion
-
-
-    //Timer in android
-    public class ImpressionTimer extends CountDownTimer {
-
-        private ImpressionTimer(long startTime, long interval) {
-            super(startTime, interval);
-        }
-
-        @Override
-        public void onFinish() {
-            if (System.currentTimeMillis() - lastScrollingEndTime > 100000) {
-                LogUtils.info(TAG, "MAX time expired");
-                onPause();
-                isRunning = false;
-                cancel();
-            } else {
-                LogUtils.info(TAG, "Time Expired");
-
-                mImpressionCallback.sendImpression();
-                isRunning = true;
-                start();
-            }
-        }
-
-        @Override
-        public void onTick(long millisUntilFinished) {
-            // Log.i("Time Expired", "1 Min/60 sec");
-        }
-    }
 }

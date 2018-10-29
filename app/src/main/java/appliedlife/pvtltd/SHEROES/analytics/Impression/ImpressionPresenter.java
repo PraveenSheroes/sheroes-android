@@ -14,23 +14,20 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 /**
  * Presenter class for Impressions
@@ -40,6 +37,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     //region private variables
     private SheroesAppServiceApi mSheroesApiEndPoints;
     private SheroesApplication mSheroesApplication;
+
+    private boolean mInNetworkCall = true;
     //endregion
 
     //region constructor
@@ -57,25 +56,22 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      *
      * @param impressionData list of impression
      */
-    private void insertImpressionsInDb(final int batchSize, final ImpressionData impressionData, final boolean forceNetworkCall) {
-        Single.create(new SingleOnSubscribe<Long>() {
+    private void insertImpressionsInDb(final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
+        Single.create(new SingleOnSubscribe<List<Long>>() {
             @Override
-            public void subscribe(SingleEmitter<Long> emitter) {
+            public void subscribe(SingleEmitter<List<Long>> emitter) {
                 try {
-                    Impression impression = new Impression();
-                    impression.setGtid(impressionData.getGtid());
-                    impression.setImpressionData(impressionData);
+                    List<Impression> data = new ArrayList<>();
+                    for (ImpressionData impression : impressionData) {
+                        Impression impression1 = new Impression();
+                        impression1.setGtid(impression.getGtid());
+                        impression1.setImpressionData(impression);
+                        data.add(impression1);
+                    }
                     final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
-                    long id = database.impressionDataDao().insert(impression);
-                    if (id > -1) {
-                        List<Impression> impressions = database.impressionDataDao().getAll();
-                        int totalCount = impressions.size();
-                        if (totalCount >= batchSize && !forceNetworkCall) {
-                            Log.i("Db value", "250 ms >" + totalCount);
-                            hitNetworkCall();
-                        } else {
-                            emitter.onSuccess(id);
-                        }
+                    List<Long> rowsAffected = database.impressionDataDao().insert(data);
+                    if (rowsAffected.size() > 0) {
+                        emitter.onSuccess(rowsAffected);
                     }
                 } catch (Throwable t) {
                     emitter.onError(t);
@@ -83,13 +79,11 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
             }
         }).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new DisposableSingleObserver<Long>() {
+                .subscribe(new DisposableSingleObserver<List<Long>>() {
                     @Override
-                    public void onSuccess(Long aLong) {
+                    public void onSuccess(List<Long> rowsAffected) {
                         Log.i("Inserted", "Successfully");
-                        if (forceNetworkCall) {
-                            hitNetworkCall();
-                        }
+                        impressionObserver(batchSize, forceNetworkCall);
                     }
 
                     @Override
@@ -100,46 +94,91 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 });
     }
 
+    //Get impression data from database
+    void impressionObserver(final int batchSize, final boolean forceNetworkCall) {
+        final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
+
+        database.impressionDataDao().getAllImpressions()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<List<Impression>>bindToLifecycle())
+                .subscribe(new DisposableSingleObserver<List<Impression>>() {
+                    @Override
+                    public void onSuccess(List<Impression> impressions) {
+                        sendImpressions(impressions, batchSize, forceNetworkCall);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
+                });
+    }
+
+    //Send impression to backend after getting value from request model
+    private void sendImpressions(List<Impression> impressions, int batchSize, boolean forceNetworkCall) {
+        if (impressions == null || impressions.size() <= 0) return;
+
+        int totalCount = impressions.size();
+        if ((totalCount >= batchSize && !forceNetworkCall && mInNetworkCall) || (forceNetworkCall && mInNetworkCall)) {
+            Log.i("Db value", "250 ms >" + totalCount);
+            LogUtils.info("hit 1", "77");
+            sendImpressionData(getRequestModel(impressions), impressions);
+        }
+    }
+
+    //Request model to send impression to backend
+    private UserEvents getRequestModel(List<Impression> impressions) {
+        UserEvents userEvents = new UserEvents();
+        List<ImpressionData> impressionData = new ArrayList<>();
+        for (int i = 0; i < impressions.size(); i++) {
+            impressionData.add(impressions.get(i).getImpressionData());
+        }
+        userEvents.setUserEvent(impressionData);
+        return userEvents;
+    }
+
     /**
      * Send the impression to server
-     * @param userEvents request format data
-     * @param fetchedRowIndex data that need to clear from db on success
+     *
+     * @param userEvents  request format data
+     * @param Impressions data that need to clear from db on success
      */
-    private void sendImpressionData(final UserEvents userEvents, final List<Impression> fetchedRowIndex) {
+    private void sendImpressionData(final UserEvents userEvents, final List<Impression> Impressions) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            mInNetworkCall = true;
             return;
         }
-        getMvpView().startProgressBar();
+        LogUtils.info("hit", "network call happening");
+
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
                 .doOnError(new Consumer<Throwable>() {
                     @Override
-                    public void accept(Throwable throwable) throws Exception {
-                         retryFailedImpression(userEvents, fetchedRowIndex);
+                    public void accept(Throwable throwable) {
+                        retryFailedImpression(userEvents, Impressions);
                     }
                 })
                 .subscribe(new DisposableObserver<BaseResponse>() {
                     @Override
                     public void onComplete() {
-                        getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
+                        mInNetworkCall = true;
                     }
 
                     @Override
                     public void onNext(BaseResponse baseResponse) {
-                        getMvpView().stopProgressBar();
                         if (null != baseResponse) {
-                            clearDatabase(fetchedRowIndex);
+                            clearDatabase(Impressions);
                         }
+                        mInNetworkCall = true;
                     }
                 });
     }
@@ -148,10 +187,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     private void retryFailedImpression(final UserEvents userEvents, final List<Impression> impressions) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            mInNetworkCall = true;
             return;
         }
-        getMvpView().startProgressBar();
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -159,21 +197,20 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 .subscribe(new DisposableObserver<BaseResponse>() {
                     @Override
                     public void onComplete() {
-                        getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
+                        mInNetworkCall = true;
                     }
 
                     @Override
                     public void onNext(BaseResponse baseResponse) {
-                        getMvpView().stopProgressBar();
                         if (null != baseResponse) {
                             clearDatabase(impressions);
                         }
+                        mInNetworkCall = true;
                     }
                 });
     }
@@ -184,74 +221,54 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      * @param clearImpressionItem list of impression events
      */
     private void clearDatabase(final List<Impression> clearImpressionItem) {
-        final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
-        new Thread(new Runnable() {
+
+        Observable.create(new ObservableOnSubscribe<String>() {
             @Override
-            public void run() {
+            public void subscribe(ObservableEmitter<String> subscriber) {
+                final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
                 database.impressionDataDao().deleteImpression(clearImpressionItem);
             }
-        }).start();
+        }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<String>() {
+                    @Override
+                    public void onComplete() {
+                        Log.i("hit", "cleared");
+                    }
+                    
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
+
+                    @Override
+                    public void onNext(String id) {
+                        Log.i("hit", "cleared");
+                    }
+                });
     }
     //endregion
 
     //region public method
     //Filter the list and get only those item which have more than 250ms time spend on impression
-    public void storeBatchInDb(final float minEngagementTime, final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
-        Observable.just(impressionData)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .flatMap(new Function<List<ImpressionData>, Observable<ImpressionData>>() {
-                    @Override
-                    public Observable<ImpressionData> apply(List<ImpressionData> ints) {
-                        return Observable.fromIterable(ints);
-                    }
-                }).filter(new Predicate<ImpressionData>() {
+    void storeBatchInDb(final float minEngagementTime, final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
+        Observable.fromIterable(impressionData).filter(new Predicate<ImpressionData>() { //iterate it
             @Override
-            public boolean test(ImpressionData impressionData) throws Exception { //Filter impression which satisfy min engagement time
+            public boolean test(ImpressionData impressionData) { //Filter impression which satisfy min engagement time
                 return impressionData.getEngagementTime() >= minEngagementTime;
             }
-        }).subscribe(new Observer<ImpressionData>() {
+        }).toList().subscribe(new DisposableSingleObserver<List<ImpressionData>>() {
             @Override
-            public void onSubscribe(Disposable d) {
-            }
-
-            @Override
-            public void onNext(ImpressionData impressionData) {
-                System.out.println("onNext: " + impressionData.getPostId() + "::" + impressionData.getEngagementTime());
-                insertImpressionsInDb(batchSize, impressionData, forceNetworkCall);
+            public void onSuccess(List<ImpressionData> impressionData) {
+                insertImpressionsInDb(batchSize, impressionData, forceNetworkCall); //insert in db
             }
 
             @Override
             public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onComplete() {
+                Crashlytics.getInstance().core.logException(e);
             }
         });
     }
 
-    //Handle the Request for Network call
-    public void hitNetworkCall() {
-
-        synchronized (this) {
-            final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    List<Impression> impressions = database.impressionDataDao().getAll();
-                    if (impressions == null || impressions.size() <= 0) return;
-
-                    UserEvents userEvents = new UserEvents();
-                    List<ImpressionData> impressionData = new ArrayList<>();
-                    for (int i = 0; i < impressions.size(); i++) {
-                        impressionData.add(impressions.get(i).getImpressionData());
-                    }
-                    userEvents.setUserEvent(impressionData);
-                    sendImpressionData(userEvents, impressions);
-                }
-            }).start();
-        }
-    }
     //endregion
 }
