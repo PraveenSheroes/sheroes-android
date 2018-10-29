@@ -430,7 +430,7 @@ public class CommonUtil {
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories")|| url.getPath().startsWith("/language_selection")) {
                 return true;
             }
         }
@@ -1245,6 +1245,38 @@ public class CommonUtil {
         }
     }
 
+    public static synchronized void setPrefValue(String key, boolean value) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null) {
+                prefs.edit().putBoolean(key, value).apply();
+            }
+        } catch (Exception e) {
+            LogUtils.error(TAG, e.toString());
+        }
+    }
+
+    public static synchronized void setPrefStringValue(String key,String value) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null) {
+                prefs.edit().putString(key, value).apply();
+            }
+        } catch (Exception e) {
+            LogUtils.error(TAG, e.toString());
+        }
+    }
+    public static synchronized String getPrefStringValue(String key) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null && prefs.contains(key)) {
+                return prefs.getString(key,"");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+        return "";
+    }
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (null == prefs) {
@@ -1349,7 +1381,7 @@ public class CommonUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
@@ -1361,7 +1393,7 @@ public class CommonUtil {
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);
             intent.setType("image/jpeg");
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-            intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+            intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
             context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         }
     }
@@ -1532,5 +1564,14 @@ public class CommonUtil {
         } else {
             userPic.setVisibility(View.GONE);
         }
+    }
+
+    public static Map<String, Integer> initFonts() {
+        Map<String, Integer> fontMap = new HashMap<>();
+        fontMap.put("regular", R.font.noto_sans_regular);
+        fontMap.put("light", R.font.noto_sans_regular);
+        fontMap.put("medium", R.font.noto_sans_bold);
+        fontMap.put("bold", R.font.noto_sans_bold);
+        return fontMap;
     }
 }

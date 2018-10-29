@@ -67,8 +67,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagName;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -79,6 +79,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ContactsCompletionView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IArticleSubmissionView;
@@ -95,6 +96,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
     private static int flagActivity = 0;
+    private Toast myToast;
 
     @Inject
     AppUtils mAppUtils;
@@ -103,7 +105,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     ArticleSubmissionPresenterImpl mArticleSubmissionPresenter;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -166,40 +168,44 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     private ArticleSolrObj mArticleSolrObj = null;
     private Long mIdOfEntityOrParticipantArticle;
     private List<ArticleTagName> mArticleTagNameList = new ArrayList<>();
-    private String mSourceScreen, mStoryTagText;
+    private String mSourceScreen, mStoryTagText, mHerStoryBodyMsg, mHerStoryTitle;
     //endregion
 
     //region activity methods
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_article_submission);
         SheroesApplication.getAppComponent(this).inject(this);
+        String articleGuideline;
+        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            articleGuideline = mConfiguration.get().configData.articleGuideline;
+            mStoryTagText = mConfiguration.get().configData.mWriteStoryTag;
+            mHerStoryTitle = mConfiguration.get().configData.mHerStoryHintText;
+            mHerStoryBodyMsg = mConfiguration.get().configData.mHerStoryTitle;
+        } else {
+            articleGuideline = new ConfigData().articleGuideline;
+            mStoryTagText = new ConfigData().mWriteStoryTag;
+            mHerStoryTitle = new ConfigData().mHerStoryHintText;
+            mHerStoryBodyMsg = new ConfigData().mHerStoryTitle;
+        }
+        setContentView(R.layout.activity_article_submission);
         ButterKnife.bind(this);
+        LocaleManager.setLocale(this);
         mArticleSubmissionPresenter.attachView(this);
         if (getIntent() != null && getIntent().getExtras() != null) {
             Parcelable parcelable = getIntent().getParcelableExtra(ArticleSolrObj.ARTICLE_OBJ);
             if (parcelable != null) {
                 mArticleSolrObj = Parcels.unwrap(parcelable);
-
             }
             mSourceScreen = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
         }
         setSupportActionBar(mToolbar);
-        toolbarTitle.setText(R.string.title_article_submit);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        toolbarTitle.setText(R.string.write_a_story);
         invalidateToolBar();
-        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-        this.localImageSaveForChallenge = localImageSaveForChallenge;
-        String articleGuideline;
-        if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            articleGuideline = mConfiguration.get().configData.articleGuideline;
-            mStoryTagText = mConfiguration.get().configData.mWriteStoryTag;
-        } else {
-            articleGuideline = new ConfigData().articleGuideline;
-            mStoryTagText = new ConfigData().mWriteStoryTag;
-        }
+        this.localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         mBody.setText(Html.fromHtml(articleGuideline));
         if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
@@ -211,6 +217,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
+        myToast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
 
@@ -325,7 +332,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         if (article.getIdOfEntityOrParticipant() > 0) {
             mIdOfEntityOrParticipantArticle = article.getIdOfEntityOrParticipant();
         }
-        getSupportActionBar().setTitle("Edit a Story");
+        getSupportActionBar().setTitle(R.string.edit_story);
         mEditorFragment.setContent(article.getDescription());
         mEditorFragment.setTitle(article.getNameOrTitle());
         if (StringUtil.isNotEmptyCollection(mArticleSolrObj.getTag_ids())) {
@@ -345,7 +352,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
-        if(!isFinishing()) {
+        myToast.setText(stringID);
+        myToast.show();
+        if (!isFinishing()) {
             Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
         }
     }
@@ -403,13 +412,13 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
                     builder.setTitle(R.string.dialog_title_image);
                     builder.setMessage(R.string.dialog_image);
-                    builder.setNegativeButton("Add Image", new DialogInterface.OnClickListener() {
+                    builder.setNegativeButton(R.string.add_image, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int i) {
                             dialog.dismiss();
                         }
                     });
-                    builder.setPositiveButton("Post Anyway", new DialogInterface.OnClickListener() {
+                    builder.setPositiveButton(R.string.post_anyway, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -507,7 +516,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                         }
                         mArticleSubmissionPresenter.uploadFile(mEncodeImageUrl, this);
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, R.string.cropping_fail + " " + result.getError(), Toast.LENGTH_LONG).show();
                     }
 
                     break;
@@ -528,13 +537,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onEditorFragmentInitialized() {
-        String message = "Story Title";
-        mEditorFragment.setTitlePlaceholder(message);
-        String hintText = "Begin your story here...";
-        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            hintText = mConfiguration.get().configData.mHerStoryHintText;
-        }
-        mEditorFragment.setContentPlaceholder(hintText);
+        mEditorFragment.setTitlePlaceholder(mHerStoryBodyMsg);
+        mEditorFragment.setContentPlaceholder(mHerStoryTitle);
         mEditorFragment.setLocalDraft(true);
         mEditorFragment.isActionInProgress();
     }
@@ -649,9 +653,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             return;
         }
 
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(CreateStoryActivity.this);
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(CreateStoryActivity.this);
         builder.setTitle(R.string.dialog_title_draft);
         builder.setMessage(R.string.dialog_body_draft);
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
@@ -764,7 +766,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                 Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
             } else {
-                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);

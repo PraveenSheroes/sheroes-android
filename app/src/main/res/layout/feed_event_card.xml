@@ -42,7 +42,6 @@
                 android:id="@+id/tv_feed_event_card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_15" />
 
@@ -51,7 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_3"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
                 android:textColor="@color/feed_article_label"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>
@@ -90,7 +89,7 @@
                 android:id="@+id/tv_event_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
                 android:textAllCaps="true"
                 android:textColor="@color/footer_icon_text"
                 android:textSize="@dimen/sp_size_10" />
@@ -99,7 +98,7 @@
                 android:id="@+id/tv_event_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
                 android:textColor="@color/faq_question_color"
                 android:textSize="@dimen/sp_size_18" />
 
@@ -110,7 +109,6 @@
             android:layout_width="@dimen/dp_size_200"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dp_size_30"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:lineSpacingExtra="@dimen/dp_size_4"
             android:textColor="@color/detail_page_text"
             android:textSize="@dimen/sp_size_16" />
@@ -124,7 +122,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_size_70"
         android:layout_marginTop="@dimen/dp_size_6"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
         android:textColor="@color/event_text"
         android:textSize="@dimen/sp_size_10" />
 
@@ -142,7 +140,7 @@
             android:layout_height="@dimen/dp_size_30"
             android:layout_marginRight="@dimen/dp_size_8"
             android:background="@drawable/rectangle_feed_commnity_join"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
             android:gravity="center"
             android:text="@string/ID_INTERESTED"
             android:textAllCaps="true"
@@ -155,7 +153,7 @@
             android:layout_height="@dimen/dp_size_30"
             android:layout_marginRight="@dimen/dp_size_8"
             android:background="@drawable/rectangle_feed_commnity_join"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
             android:gravity="center"
             android:text="@string/ID_GOING"
             android:textAllCaps="true"
@@ -168,7 +166,7 @@
             android:layout_height="@dimen/dp_size_30"
             android:layout_marginRight="@dimen/dp_size_52"
             android:background="@drawable/selector_event_share"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
+
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@color/footer_icon_text"

@@ -17,6 +17,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -29,7 +30,7 @@ import butterknife.OnClick;
 
 public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
-
+    private final String TAG = LogUtils.makeLogTag(UserProfileCompactViewHolder.class);
     // region ButterKnife Bindings
     @Bind(R.id.user_compact_card)
     CardView mUserCompactCard;

@@ -74,6 +74,9 @@ public class ConfigData {
     @SerializedName("articleGuideline")
     public String articleGuideline= AppConstants.ARTICLE_GUIDELINE;
 
+    @SerializedName("herStoryTitle")
+    public String mHerStoryTitle = "Story Title";
+
     @SerializedName("herStoryHintText")
     public String mHerStoryHintText = "Begin your story here...";
 

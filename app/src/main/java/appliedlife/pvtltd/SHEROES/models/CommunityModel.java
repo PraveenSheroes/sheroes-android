@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -56,16 +57,8 @@ public class CommunityModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<CreateCommunityResponse> addPostCommunity(CommunityPostCreateRequest communityPostCreateRequest) {
-        return sheroesAppServiceApi.createCommunityPost(communityPostCreateRequest)
-                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
-                        return communityTagsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<CreateCommunityResponse> addPostCommunity(Map uploadImageFileMap, CommunityPostCreateRequest communityPostCreateRequest) {
+        return sheroesAppServiceApi.createCommunityMultiPartPost(uploadImageFileMap, communityPostCreateRequest);
     }
 
     public Observable<CreateCommunityResponse> createChallengePost(ChallengePostCreateRequest challengePostCreateRequest) {
@@ -80,16 +73,8 @@ public class CommunityModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<CreateCommunityResponse> editPostCommunity(CommunityPostCreateRequest communityPostCreateRequest) {
-        return sheroesAppServiceApi.editCommunityPost(communityPostCreateRequest)
-                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
-                        return communityTagsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+    public Observable<CreateCommunityResponse> editPostCommunity(Map uploadImageFileMap, CommunityPostCreateRequest communityPostCreateRequest) {
+        return sheroesAppServiceApi.editCommunityMultiPartPost(uploadImageFileMap, communityPostCreateRequest);
     }
 
 

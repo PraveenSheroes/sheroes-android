@@ -8,6 +8,7 @@ public interface ProgressbarView {
 
     /**
      * On prgress bar rendering complete
+     *
      * @param dashWidth width of the dash
      */
     void onViewRendered(float dashWidth);

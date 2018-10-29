@@ -311,7 +311,7 @@
     <dimen name="feed_article_user_container_margin_top">16dp</dimen>
     <dimen name="feed_article_title_container_margin_right">10dp</dimen>
     <dimen name="feed_article_title_container_margin_left">8dp</dimen>
-    <dimen name="feed_article_card_title_textsize">14sp</dimen>
+
     <dimen name="tv_feed_article_card_title_label">3dp</dimen>
     <dimen name="tv_feed_article_card_title_label_size">12sp</dimen>
     <dimen name="feed_article_bookmark_padding_top">5dp</dimen>
@@ -611,6 +611,18 @@
     <dimen name="leaderboard_user_name_text">16sp</dimen>
     <dimen name="leaderbaord_desc_text">14sp</dimen>
     <dimen name="leaderboard_follow_button_margin_right">4dp</dimen>
+    <dimen name="lang_selector_left_margin">24dp</dimen>
+    <dimen name="lang_selector_right_margin">24dp</dimen>
+    <dimen name="lang_eng_top_margin">24dp</dimen>
+    <dimen name="lang_hind_top_margin">24dp</dimen>
+    <dimen name="lang_header_top_margin">92dp</dimen>
+    <dimen name="lang_bg_top_margin">4dp</dimen>
+    <dimen name="lang_bg_right_margin">2dp</dimen>
+    <dimen name="welcome_back_padding">10dp</dimen>
+    <dimen name="language_cross_padding">16dp</dimen>
+    <dimen name="login_btn_width">144dp</dimen>
+    <dimen name="login_btn_height">44dp</dimen>
+    <dimen name="login_btn_padding">55dp</dimen>
     <dimen name="notification_icon_right_padding">10dp</dimen>
     <dimen name="sheroes_logo_paddingleft">8dp</dimen>
     <dimen name="sheroes_logo_paddingright">14dp</dimen>
@@ -647,5 +659,16 @@
     <dimen name="post_link_source_marginbottom">9dp</dimen>
     <dimen name="post_link_source_textsize">9sp</dimen>
     <dimen name="post_link_cardelevation">0.5dp</dimen>
+    <dimen name="post_view_more_layout_marginbottom">2dp</dimen>
+    <dimen name="post_view_more_layout_marginright">16dp</dimen>
+    <dimen name="article_last_comment">14sp</dimen>
+    <dimen name="rectangle_gray_padding">5dp</dimen>
+    <dimen name="rectangle_grey_strok">1dp</dimen>
+    <dimen name="menu_item_text_size">14sp</dimen>
+    <dimen name="new_tag_padding_top">5dp</dimen>
+    <dimen name="new_tag_padding_left">8dp</dimen>
+    <dimen name="new_tag_padding_right">4dp</dimen>
+    <dimen name="new_tag_margin_left">6dp</dimen>
+    <dimen name="new_tag_margin_top">-8dp</dimen>
 </resources>
 

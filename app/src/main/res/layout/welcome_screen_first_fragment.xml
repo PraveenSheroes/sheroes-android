@@ -2,27 +2,28 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center"
-    android:background="@color/white">
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:gravity="center">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_welcome_text"
+        style="@style/TextView16spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dp_size_20"
-        android:layout_marginLeft="@dimen/dp_size_20"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:maxLines="@integer/int_value_for_line_2"
         android:layout_alignParentBottom="true"
-        android:textAlignment="center"
-        android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_16" />
+        android:layout_marginLeft="@dimen/dp_size_20"
+        android:layout_marginRight="@dimen/dp_size_20"
+        android:maxLines="@integer/int_value_for_line_2"
+        android:textColor="@color/feed_article_label"
+        vernacular:customTextFontFamily="@string/regular_font"
+        android:textAlignment="center" />
 
     <ImageView
         android:id="@+id/iv_welcome_screen"
         android:layout_width="wrap_content"
-        android:layout_above="@id/tv_welcome_text"
         android:layout_height="wrap_content"
+        android:layout_above="@id/tv_welcome_text"
         android:layout_marginBottom="@dimen/dp_size_32" />
 
 </RelativeLayout>

@@ -102,7 +102,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
     //endregion
 
     //region Activity method
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

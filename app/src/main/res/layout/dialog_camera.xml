@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="#ffffff"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="#ffffff">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/title"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="26dp"
         android:layout_marginTop="12dp"
-        android:fontFamily="sans-serif"
         android:letterSpacing="0.04"
-        android:text="Select Source"
+        android:text="@string/pick_image_intent_chooser_title"
         android:textColor="#878787"
-        android:textSize="14sp"
-        android:textStyle="normal" />
+        android:textStyle="normal"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,15 +55,16 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/text_camera"
+                    style="@style/TextView12spRegular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:gravity="center"
                     android:text="@string/action.camera"
                     android:textColor="@color/light_grey"
-                    android:textSize="12sp" />
+                    vernacular:customTextFontFamily="@string/regular_font" />
             </LinearLayout>
         </LinearLayout>
 
@@ -97,15 +99,16 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/text_gallery"
+                    style="@style/TextView12spRegular"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
                     android:gravity="center"
                     android:text="@string/action.gallery"
                     android:textColor="@color/light_grey"
-                    android:textSize="12sp" />
+                    vernacular:customTextFontFamily="@string/regular_font" />
             </LinearLayout>
         </LinearLayout>
 

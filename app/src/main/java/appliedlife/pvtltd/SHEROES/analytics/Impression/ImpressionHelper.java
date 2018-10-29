@@ -13,8 +13,8 @@ import java.util.UUID;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -45,7 +45,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     private ImpressionCallback mImpressionCallback;
     private AppUtils mAppUtils;
-    private Preference<Configuration> mConfiguration;
+    private Preference<AppConfiguration> mConfiguration;
     private ImpressionSuperProperty mImpressionProperty;
     private ImpressionPresenter mImpressionPresenter;
     private RecyclerView mRecyclerView;
@@ -59,7 +59,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     //endregion
 
     //region constructor
-    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<Configuration> configuration, RecyclerView recyclerView, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
+    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<AppConfiguration> configuration, RecyclerView recyclerView, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
         this.mLoggedInUser = loggedInUserId;
         this.mImpressionProperty = impressionSuperProperty;

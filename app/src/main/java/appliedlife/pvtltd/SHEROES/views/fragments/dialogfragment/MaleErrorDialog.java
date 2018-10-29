@@ -6,11 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +26,12 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -47,7 +45,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
     //region Inject variables
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
     //endregion
 
     //region View variables
@@ -76,7 +74,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.male_error_dialog, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {
@@ -96,15 +94,15 @@ public class MaleErrorDialog extends BaseDialogFragment {
             } else {
                 tvDescriptionMaleError.setText(Html.fromHtml(mErrorText));// or for older api
             }
+            String msg = getString(R.string.care_msg);
+            if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+                tvCareId.setText(Html.fromHtml(msg, 0)); // for 24 api and more
+            } else {
+                tvCareId.setText(Html.fromHtml(msg));// or for older api
+            }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-        String msg = getString(R.string.care_msg);
-        SpannableString spannableString = new SpannableString(msg);
-        spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.view_more)), 11, msg.length(), 0);
-        tvCareId.setMovementMethod(LinkMovementMethod.getInstance());
-        tvCareId.setText(spannableString, TextView.BufferType.SPANNABLE);
-        tvCareId.setSelected(true);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
         CommonUtil.setPrefValue(AppConstants.MALE_ERROR_SHARE_PREF);
@@ -127,18 +125,16 @@ public class MaleErrorDialog extends BaseDialogFragment {
         return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
             @Override
             public void onBackPressed() {
-                tryAgainClick();
+                Intent intent = new Intent(getActivity(), LanguageSelectionActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                dismiss();
             }
         };
     }
     //endregion
 
     //region onclick methods
-    @OnClick(R.id.iv_close)
-    public void tryAgainClick() {
-        dismiss();
-        getActivity().finish();
-    }
 
     @OnClick(R.id.tv_share_sheroes_app)
     public void tvShareSheroesAppClick() {

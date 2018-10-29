@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@color/fully_transparent"
@@ -23,33 +24,33 @@
         android:background="@color/white"
         android:orientation="vertical">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_winner_dialog_title"
+            style="@style/TextView20spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/winner_title_margin"
             android:layout_marginRight="@dimen/winner_title_margin"
-            android:fontFamily="@string/ID_ROBOTO_BOLD"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="@dimen/sp_size_winner_dialog_title_line_space"
             android:textColor="@color/comment_text"
             android:textSize="@dimen/sp_size_winner_dialog_title"
-            android:textStyle="bold" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_winner_dialog_intro"
+            style="@style/TextView16spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/winner_intro_margin"
             android:layout_marginRight="@dimen/winner_intro_margin"
             android:layout_marginTop="@dimen/winner_intro_margin"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="@dimen/sp_size_winner_dialog_intro_line_space"
             android:textColor="@color/comment_text"
-            android:textSize="@dimen/sp_size_winner_dialog_intro"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
         <ImageView
             android:layout_width="@dimen/winner_heart_height_width"
@@ -58,66 +59,66 @@
             android:layout_marginTop="@dimen/dp_size_16"
             android:src="@drawable/ic_heart_active" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_winner_dialog_msg"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/winner_msg_margin"
             android:layout_marginRight="@dimen/winner_msg_margin"
             android:layout_marginTop="@dimen/winner_msg_margin"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_horizontal"
             android:lineSpacingExtra="@dimen/sp_size_winner_dialog_intro_line_space"
             android:text="@string/winner_msg"
             android:textColor="@color/comment_text"
-            android:textSize="@dimen/sp_size_winner_dialog_msg" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="@dimen/winner_copy_scroll_height"
-            android:background="@drawable/dash_border"
             android:layout_marginLeft="@dimen/winner_copy_text_margin"
             android:layout_marginRight="@dimen/winner_copy_text_margin"
-            android:layout_marginTop="@dimen/winner_copy_text_margin">
+            android:layout_marginTop="@dimen/winner_copy_text_margin"
+            android:background="@drawable/dash_border">
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_cover_text_view"
+                style="@style/TextView14spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:padding="@dimen/winner_copy_text_padding"
                 android:textColor="@color/posted_in"
-                android:textSize="@dimen/sp_size_winner_copy_text"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                vernacular:customTextFontFamily="@string/regular_font" />
         </ScrollView>
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_copy"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:layout_marginRight="@dimen/winner_copy_margin"
             android:layout_marginTop="8dp"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:text="Copy"
+            android:text="@string/copy"
             android:textAllCaps="true"
             android:textColor="@color/footer_icon_text"
-            android:textSize="@dimen/sp_size_winner_copy_text"
-            android:visibility="visible" />
+            android:visibility="visible"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_winner_dialog_button"
+            style="@style/TextView14spBold"
             android:layout_width="match_parent"
             android:layout_height="@dimen/winner_play_store_height"
             android:layout_margin="@dimen/winner_play_store_margin"
             android:background="@drawable/rectangle_grey_winner_dialog"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center"
             android:text="@string/paste_on_playstore"
             android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_winner_button" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </LinearLayout>
 
 </RelativeLayout>

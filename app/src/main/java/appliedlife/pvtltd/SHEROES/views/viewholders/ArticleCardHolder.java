@@ -35,7 +35,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -53,7 +53,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     private final String TAG = LogUtils.makeLogTag(ArticleCardHolder.class);
@@ -61,7 +61,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
@@ -154,12 +154,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4, AppConstants.VIEW_MORE_TEXT, true);
+            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
         } else {
             tvArticleDescriptionText.setVisibility(View.GONE);
         }
         if (dataItem.isTrending()) {
-            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING));
+            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING)+" ");
         } else {
             tvArticleTrendingLabel.setText(AppConstants.EMPTY_STRING);
         }
@@ -189,7 +189,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             if (dataItem.getCharCount() > 0) {
                 stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_MIN_READ));
             }
@@ -241,7 +241,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
 
                     StringBuilder stringBuilder = new StringBuilder();
                     if (dataItem.getNoOfViews() > 1) {
-                        stringBuilder.append(numericToThousand(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
+                        stringBuilder.append(changeNumberToNumericSuffix(dataItem.getNoOfViews())).append(AppConstants.SPACE).append(context.getString(R.string.ID_VIEWS));
                         tvFeedArticleTotalViews.setText(stringBuilder.toString());
                         tvFeedArticleTotalViews.setVisibility(View.VISIBLE);
                         rlFeedArticleViews.setVisibility(View.VISIBLE);

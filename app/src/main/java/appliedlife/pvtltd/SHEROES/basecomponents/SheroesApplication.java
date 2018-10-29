@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.support.multidex.MultiDexApplication;
 
 import com.clevertap.android.sdk.ActivityLifecycleCallback;
@@ -22,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import io.branch.referral.Branch;
 import io.fabric.sdk.android.Fabric;
 
@@ -46,6 +48,11 @@ public class SheroesApplication extends MultiDexApplication {
 
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
         this.mSheroesAppComponent = sheroesAppComponent;
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
     }
 
     @SuppressWarnings("deprecation")

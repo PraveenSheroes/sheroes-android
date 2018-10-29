@@ -102,7 +102,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     }
 
     //region static methods
-    public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile,  String sourceScreen, HashMap<String, Object> properties) {
+    public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile, String sourceScreen, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, ProfileCommunitiesActivity.class);
         intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
         intent.putExtra(SELF_PROFILE, isSelfProfile);
