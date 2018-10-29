@@ -29,4 +29,11 @@ public interface ImpressionCallback extends BaseMvpView {
      * @return screen Name
      */
     String getScreenName();
+
+    /**
+     * Show the toast message
+     * @param message message to be shown
+     */
+    @Deprecated
+    void showToast(String message);
 }

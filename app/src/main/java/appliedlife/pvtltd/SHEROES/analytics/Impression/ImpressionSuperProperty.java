@@ -7,43 +7,43 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
  */
 public class ImpressionSuperProperty {
 
-    private String communityTab;
+    private String mCommunityTab;
 
-    private long loggedInUserId = -1;
+    private long mLoggedInUserId = -1;
 
-    private String sourceCollection;
+    private String mSourceCollection;
 
-    private String orderKey;
+    private String mOrderKey;
 
     public String getCommunityTab() {
-        return communityTab;
+        return mCommunityTab;
     }
 
-    public void setCommunityTab(String communityTab) {
-        this.communityTab = communityTab;
+    public void setCommunityTab(String mCommunityTab) {
+        this.mCommunityTab = mCommunityTab;
     }
 
     public long getLoggedInUserId() {
-        return loggedInUserId;
+        return mLoggedInUserId;
     }
 
-    public void setLoggedInUserId(long loggedInUserId) {
-        this.loggedInUserId = loggedInUserId;
+    public void setLoggedInUserId(long mLoggedInUserId) {
+        this.mLoggedInUserId = mLoggedInUserId;
     }
 
     public String getSourceCollection() {
-        return sourceCollection;
+        return mSourceCollection;
     }
 
-    public void setSourceCollection(String sourceCollection) {
-        this.sourceCollection = sourceCollection;
+    public void setSourceCollection(String mSourceCollection) {
+        this.mSourceCollection = mSourceCollection;
     }
 
     public String getOrderKey() {
-        return orderKey;
+        return mOrderKey;
     }
 
-    public void setOrderKey(String orderKey) {
-        this.orderKey = orderKey;
+    public void setOrderKey(String mOrderKey) {
+        this.mOrderKey = mOrderKey;
     }
 }

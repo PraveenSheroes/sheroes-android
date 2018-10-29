@@ -35,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -232,6 +233,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private EventDetailDialogFragment eventDetailDialogFragment;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
+    private Toast mToast;
     //endregion
 
     //region fragment lifecycle method
@@ -307,14 +309,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
     //endregion
 
-    //region priavte methods
+    //region private methods
     //Initialize the impression Helper class
     private void initializeImpression() {
         if (impressionHelper == null) {
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
-            impressionHelper = new ImpressionHelper(impressionSuperProperty, impressionPresenter, mConfiguration, mFeedRecyclerView, mLoggedInUser, mAppUtils, this);
+            impressionSuperProperty.setLoggedInUserId(mLoggedInUser);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, impressionPresenter, mConfiguration, mFeedRecyclerView, mAppUtils, this);
         }
     }
 
@@ -552,6 +555,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public List getListData() {
         return null;
+    }
+
+    @Override
+    @Deprecated
+    public void showToast(String message) {
+        if (mToast != null) {
+            mToast.cancel();
+        }
+
+        if (getContext() != null && getActivity()!=null && !getActivity().isFinishing()) {
+            mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+            mToast.show();
+        }
     }
 
     @Override
@@ -911,6 +927,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
                 if (impressionHelper != null) {
+                    impressionHelper.setHeaderEnabled(isHomeFeed);
                     impressionHelper.getVisibleViews(startPos, endPos);
                 }
             }
@@ -942,6 +959,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
                 int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
                 if (impressionHelper != null) {
+                    impressionHelper.setHeaderEnabled(isHomeFeed);
                     impressionHelper.onScrollChange(recyclerView, mScrollDirection, startPos, endPos);
                 }
 

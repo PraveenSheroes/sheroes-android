@@ -35,12 +35,12 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     public static final int SCROLL_DOWN = 1;
 
     private boolean mScrollDirectionChange = false;
+    private boolean isHeaderEnabled;
 
     private int mLastDirectionId = -1;
     private int mImpressionVisibilityThreshold;
     private int mImpressionBatchSize;
     private float mMinEngagementTime;
-    private long mLoggedInUser;
 
     private ImpressionCallback mImpressionCallback;
     private AppUtils mAppUtils;
@@ -58,9 +58,8 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     //endregion
 
     //region constructor
-    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<Configuration> configuration, RecyclerView recyclerView, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
+    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<Configuration> configuration, RecyclerView recyclerView, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
-        this.mLoggedInUser = loggedInUserId;
         this.mImpressionProperty = impressionSuperProperty;
         this.mConfiguration = configuration;
         this.mRecyclerView = recyclerView;
@@ -119,6 +118,14 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         }
     }
 
+    public boolean isHeaderEnabled() {
+        return isHeaderEnabled;
+    }
+
+    public void setHeaderEnabled(boolean headerEnabled) {
+        isHeaderEnabled = headerEnabled;
+    }
+
     /**
      * Fragment/ Activity is paused
      */
@@ -168,6 +175,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
                     int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
+                    //mImpressionCallback.showToast("Screen Exit" + impressionData.getPosition() + "::Duration" + timeSpent / 1000.0f);
                 }
             }
         }
@@ -237,6 +245,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         int itemPosition = checkIfItemInFinal(postId);
         if (itemPosition == -1) { //new item add it in final list
             finalViewData.add(impressionData);
+            mImpressionCallback.showToast("Screen Enter" + viewPosition);
         }
     }
 
@@ -263,14 +272,13 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
                 impressionData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
             }
 
-            //impressionData.setStartTime(System.currentTimeMillis());
             impressionData.setTimeStamp(System.currentTimeMillis());
             impressionData.setPostType(feedDetail.getSubType());
             impressionData.setStreamName(feedDetail.getStreamType());
             impressionData.setSourceTab(mImpressionProperty.getCommunityTab());
             impressionData.setSource(mImpressionCallback.getScreenName());
             impressionData.setOrderKey(mImpressionProperty.getOrderKey());
-            impressionData.setPosition(viewPosition);
+            impressionData.setPosition(isHeaderEnabled ? viewPosition : viewPosition+1);
             impressionData.setUserAgent(recyclerView.getContext() != null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
             impressionData.setClientId(CLIENT_ID); //For mobile android
             impressionData.setEvent(EVENT_TYPE_VI);
@@ -279,7 +287,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             impressionData.setConfigType(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configType != null ? mConfiguration.get().configType : "");
             impressionData.setConfigVersion(mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configVersion != null ? mConfiguration.get().configVersion : "");
             impressionData.setGtid(UUID.randomUUID().toString());
-            impressionData.setUserId(mLoggedInUser == -1 ? "" : String.valueOf(mLoggedInUser));
+            impressionData.setUserId(mImpressionProperty.getLoggedInUserId() == -1 ? "" : String.valueOf(mImpressionProperty.getLoggedInUserId()));
             impressionData.setPostId(feedDetail.getIdOfEntityOrParticipant() != -1 ? String.valueOf(feedDetail.getIdOfEntityOrParticipant()) : "");
             return impressionData;
         }
@@ -358,6 +366,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
+                    mImpressionCallback.showToast("Screen Exit" + impressionData.getPosition() + "::Duration" + timeSpent / 1000.0f);
                     break;
                 }
             }
