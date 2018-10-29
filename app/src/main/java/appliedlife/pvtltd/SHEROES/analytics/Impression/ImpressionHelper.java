@@ -58,7 +58,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     //endregion
 
     //region constructor
-    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<AppConfiguration> configuration, RecyclerView recyclerView, long loggedInUserId, AppUtils appUtils, ImpressionCallback impressionCallback) {
+    public ImpressionHelper(ImpressionSuperProperty impressionSuperProperty, ImpressionPresenter impressionPresenter, Preference<AppConfiguration> configuration, RecyclerView recyclerView, AppUtils appUtils, ImpressionCallback impressionCallback) {
         this.mAppUtils = appUtils;
         this.mImpressionProperty = impressionSuperProperty;
         this.mConfiguration = configuration;
