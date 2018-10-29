@@ -57,7 +57,6 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionCallback;
-import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionData;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionSuperProperty;
@@ -102,7 +101,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SheroesBus;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -403,11 +401,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (feedDetail instanceof PollSolarObj) {
             AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName(),polOptionId);
         }
-    }
-
-    @Override
-    public void onImpressionResponse(boolean isSuccessFul) {
-       // Log.i("Impression", "tracking response");
     }
 
     @Override
@@ -2050,25 +2043,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public FeedDetail getListItemAtPos(int pos) {
-        return getListItem(pos);
-    }
-
-    public FeedDetail getListItem(int index) {
+    public FeedDetail getListItemAtPos(int index) {
         if (mAdapter == null) {
             return null;
         }
 
         List<FeedDetail> feedDetails = mAdapter.getDataList();
-
         if (CommonUtil.isEmpty(feedDetails)) {
             return null;
         }
 
-        if(feedDetails.size()>index) {
+        if (feedDetails.size() > index) {
             return feedDetails.get(index);
         }
-
         return null;
     }
 

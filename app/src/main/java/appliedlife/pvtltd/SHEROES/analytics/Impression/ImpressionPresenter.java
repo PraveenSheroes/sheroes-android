@@ -31,6 +31,8 @@ import io.reactivex.schedulers.Schedulers;
 
 /**
  * Presenter class for Impressions
+ *
+ * @author ravi
  */
 public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
@@ -233,9 +235,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 .subscribe(new DisposableObserver<String>() {
                     @Override
                     public void onComplete() {
-                        Log.i("hit", "cleared");
                     }
-                    
+
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);

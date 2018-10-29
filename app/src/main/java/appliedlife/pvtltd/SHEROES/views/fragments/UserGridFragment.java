@@ -275,10 +275,6 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     }
 
     @Override
-    public void onImpressionResponse(boolean isSuccessFul) {
-    }
-
-    @Override
     public void likeUnlikeResponse(FeedDetail feedDetail, boolean isLike) {
     }
 

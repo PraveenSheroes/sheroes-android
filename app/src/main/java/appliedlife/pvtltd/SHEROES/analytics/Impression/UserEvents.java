@@ -6,6 +6,8 @@ import java.util.List;
 
 /**
  * Model class to pass impression to backend
+ *
+ * @author ravi
  */
 public class UserEvents {
 

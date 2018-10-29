@@ -5,8 +5,9 @@ import android.os.CountDownTimer;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
- * Created by Ravi
  * Timer for impressions
+ *
+ * @author ravi
  */
 public class ImpressionTimer extends CountDownTimer {
 

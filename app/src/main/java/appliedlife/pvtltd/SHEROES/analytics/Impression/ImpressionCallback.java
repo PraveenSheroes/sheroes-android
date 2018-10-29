@@ -1,10 +1,13 @@
 package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 
+/**
+ * Callback for impression helper
+ *
+ * @author ravi
+ */
 public interface ImpressionCallback extends BaseMvpView {
 
     /**

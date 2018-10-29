@@ -32,11 +32,12 @@ public class Impression {
         this.impressionData = impressionData;
     }
 
+    @NonNull
     public String getGtid() {
         return gtid;
     }
 
-    public void setGtid(String gtid) {
+    public void setGtid(@NonNull String gtid) {
         this.gtid = gtid;
     }
 }

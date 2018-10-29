@@ -4,7 +4,6 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -23,6 +22,8 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Helper class for Impression help to detect visible impression and exit of impression view
+ *
+ * @author ravi
  */
 public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
