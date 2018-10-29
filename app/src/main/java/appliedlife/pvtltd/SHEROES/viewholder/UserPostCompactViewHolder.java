@@ -455,18 +455,9 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
         };
         if (StringUtil.isNotNullOrEmptyString(userName)) {
             spannableString.setSpan(authorTitle, 0, userName.length(), 0);
-            if (!userName.equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
-                if (mUserPostObj.isAuthorMentor()) {
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-                } else {
-                    spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-                }
-                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-                spannableString.setSpan(boldSpan, 0, userName.length(), 0);
-            } else {
-                spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
-            }
-
+            StyleSpan boldNameSpan = new StyleSpan(Typeface.BOLD);
+            spannableString.setSpan(boldNameSpan, 0, userName.length(), 0);
+            spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
             if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
                 spannableString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
