@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Model class for impression
- *
+ * Here all the * marked fields are mandatory . Mandatory fields marked as //*
  * @author ravi
  */
 public class ImpressionData {

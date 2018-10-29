@@ -1,7 +1,5 @@
 package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;

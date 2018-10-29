@@ -66,10 +66,10 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         this.mRecyclerView = recyclerView;
         this.mImpressionPresenter = impressionPresenter;
         this.mImpressionCallback = impressionCallback;
-        init();
+        initializeImpressionData();
     }
 
-    private void init() {
+    private void initializeImpressionData() {
         ConfigData configData = new ConfigData();
 
         mImpressionVisibilityThreshold = configData.visibilityPercentage;
@@ -176,50 +176,48 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     //region private method
     //Data request for Impression
-    private synchronized void analyzeAndAddViewData(boolean directionChange, int scrollDirection, RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
+    private void analyzeAndAddViewData(boolean directionChange, int scrollDirection, RecyclerView recyclerView, int firstVisibleItemPosition, int lastVisibleItemPosition) {
 
-        synchronized (this) {
-            if (directionChange) {
-                storeChunks(false);
-                mScrollDirectionChange = false;
-            }
+        if (directionChange) {
+            storeChunks(false);
+            mScrollDirectionChange = false;
+        }
 
-            for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
-                getValidImpressionView(viewPosition, recyclerView);
-            }
+        for (int viewPosition = firstVisibleItemPosition; viewPosition <= lastVisibleItemPosition; viewPosition++) {
+            getValidImpressionView(viewPosition, recyclerView);
+        }
 
-            if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
-                for (long postId : allVisibleViews) {
-                    if (postId == -1) continue;
+        if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
+            for (long postId : allVisibleViews) {
+                if (postId == -1) continue;
 
-                    int positionOfView = mImpressionCallback.findPositionById(postId);
-                    if (positionOfView == -1) continue; //skip if position not found
+                int positionOfView = mImpressionCallback.findPositionById(postId);
+                if (positionOfView == -1) continue; //skip if position not found
 
-                    View itemView = recyclerView.getLayoutManager().findViewByPosition(positionOfView);
-                    if (itemView == null) continue; //skip if view not found
+                View itemView = recyclerView.getLayoutManager().findViewByPosition(positionOfView);
+                if (itemView == null) continue; //skip if view not found
 
-                    int itemPosition = checkIfItemInFinal(postId);
-                    long lastItem = getLastItemInFinalList();
-                    boolean validImpression = getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold;
+                int itemPosition = checkIfItemInFinal(postId);
+                long lastItem = getLastUpdatedItem();
+                boolean validImpression = getVisibleHeightPercentage(itemView) < mImpressionVisibilityThreshold;
 
-                    if (scrollDirection == SCROLL_UP) {
-                        //if final list have that and not in current list and visibility below 20% marked as exit
-                        if (itemPosition > -1 && lastItem > -1 && lastItem != postId && !currentViewed.contains(postId) && validImpression) {
-                            updateEndTimeIfItemNotExist(postId);
-                        }
-                    } else if (!currentViewed.contains(postId) && validImpression) {
+                if (scrollDirection == SCROLL_UP) {
+                    //if final list have that and not in current list and visibility below 20% marked as exit
+                    if (itemPosition > -1 && lastItem > -1 && lastItem != postId && !currentViewed.contains(postId) && validImpression) {
                         updateEndTimeIfItemNotExist(postId);
                     }
+                } else if (!currentViewed.contains(postId) && validImpression) {
+                    updateEndTimeIfItemNotExist(postId);
                 }
             }
-
-            // store 10 events in DB
-            if (finalViewData.size() >= mImpressionBatchSize) { //split when final list reach batch size but it may have impression which are below min engagement time , will get filter later
-                storeChunks(false);
-            }
-            currentViewed.clear();
-            allVisibleViews.clear();
         }
+
+        // store 10 events in DB
+        if (finalViewData.size() >= mImpressionBatchSize) { //split when final list reach batch size but it may have impression which are below min engagement time , will get filter later
+            storeChunks(false);
+        }
+        currentViewed.clear();
+        allVisibleViews.clear();
     }
 
     private void getValidImpressionView(int viewPosition, RecyclerView recyclerView) {
@@ -387,7 +385,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         return index;
     }
 
-    private long getLastItemInFinalList() {
+    private long getLastUpdatedItem() {
         long viewId = -1;
         if (finalViewData.size() > 0) {
             int lastPos = finalViewData.size() - 1;
