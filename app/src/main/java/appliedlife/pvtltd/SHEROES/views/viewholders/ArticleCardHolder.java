@@ -159,7 +159,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             tvArticleDescriptionText.setVisibility(View.GONE);
         }
         if (dataItem.isTrending()) {
-            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING));
+            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING)+" ");
         } else {
             tvArticleTrendingLabel.setText(AppConstants.EMPTY_STRING);
         }
