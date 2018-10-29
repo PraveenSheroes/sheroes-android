@@ -146,11 +146,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(this);
-    }
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mMoEHelper = MoEHelper.getInstance(this);

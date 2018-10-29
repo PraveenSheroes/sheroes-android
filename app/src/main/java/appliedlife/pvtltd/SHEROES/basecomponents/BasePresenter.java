@@ -108,22 +108,17 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
     @Override
     public void attachView(T mvpView) {
         mMvpView = mvpView;
+        onCreate();
         if (mMvpView instanceof Fragment) {
             lifecycleFragmentSubject = BehaviorSubject.create();
-            onCreate();
             onAttach();
         } else {
             lifecycleSubject = BehaviorSubject.create();
-            onCreate();
         }
     }
 
     @Override
     public void detachView() {
-       /* mMvpView = null;
-        if (compositeDisposables != null && !compositeDisposables.isDisposed()) {
-            compositeDisposables.dispose();
-        }*/
     }
 
     public boolean isViewAttached() {

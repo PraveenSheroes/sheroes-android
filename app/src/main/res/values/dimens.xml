@@ -666,10 +666,9 @@
     <dimen name="rectangle_grey_strok">1dp</dimen>
     <dimen name="menu_item_text_size">14sp</dimen>
     <dimen name="new_tag_padding_top">5dp</dimen>
-    <dimen name="new_tag_padding_left">4dp</dimen>
+    <dimen name="new_tag_padding_left">8dp</dimen>
     <dimen name="new_tag_padding_right">4dp</dimen>
-    <dimen name="new_tag_margin_left">4dp</dimen>
+    <dimen name="new_tag_margin_left">6dp</dimen>
     <dimen name="new_tag_margin_top">-8dp</dimen>
-
 </resources>
 

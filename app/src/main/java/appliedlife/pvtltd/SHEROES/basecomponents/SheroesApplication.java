@@ -55,12 +55,6 @@ public class SheroesApplication extends MultiDexApplication {
         super.attachBaseContext(LocaleManager.setLocale(base));
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        LocaleManager.setLocale(mContext);
-    }
-
     @SuppressWarnings("deprecation")
     @Override
     public void onCreate() {
