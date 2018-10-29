@@ -418,18 +418,17 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 boolean isMentor;
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
                     isMentor = true;
+                    String header;
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                        String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
+                        header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
                     } else if (feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         feedTitle = mUserPostObj.getPostCommunityName();
-                        String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
+                        header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
                     } else {
                         feedTitle = mContext.getString(R.string.ID_ANONYMOUS);
-                        String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
+                        header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
                     }
+                    clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                 } else {
                     isMentor = false;
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
@@ -445,7 +444,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                         clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     }
                 }
-
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getCreatedDate())) {

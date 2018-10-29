@@ -18,7 +18,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.text.style.TypefaceSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +60,6 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView;
@@ -575,18 +573,17 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 CommonUtil.showHideUserBadge(mContext, mUserPostObj.isAnonymous(), badgeOnPic, mUserPostObj.isBadgeShownOnPic(), mUserPostObj.getProfilePicBadgeUrl());
 
                 if (mUserPostObj.getCommunityTypeId() == AppConstants.ASKED_QUESTION_TO_MENTOR) {
+                    String header;
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
-                        String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
                     } else if (feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         feedTitle = mUserPostObj.getPostCommunityName();
-                        String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
                     } else {
                         feedTitle = mContext.getString(R.string.ID_ANONYMOUS);
-                        String header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
-                        clickOnUserNameAndCommunityName(header, feedTitle, communityName);
+                        header = mContext.getString(R.string.post_header_asked_community, feedTitle, communityName);
                     }
+                    clickOnUserNameAndCommunityName(header, feedTitle, communityName);
                 } else {
                     if (!feedTitle.equalsIgnoreCase(mContext.getString(R.string.ID_ADMIN))) {
                         String header = mContext.getString(R.string.post_header_name_community, feedTitle, communityName);
@@ -606,7 +603,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(mUserPostObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
+            tvFeedCommunityPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate, mContext));
         } else {
             tvFeedCommunityPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
@@ -963,7 +960,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
             if (StringUtil.isNotNullOrEmptyString(lastComment.getPostedDate())) {
                 long createdDate = mDateUtil.getTimeInMillis(lastComment.getLastModifiedOn(), AppConstants.DATE_FORMAT);
-                tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
+                tvFeedCommunityPostUserCommentPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate, mContext));
             } else {
                 tvFeedCommunityPostUserCommentPostTime.setText(mContext.getString(R.string.ID_JUST_NOW));
             }
@@ -1215,15 +1212,15 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_community_post_view_more)
     public void onViewMoreClicked() {
-            if (tvFeedCommunityPostText.getLineCount() > 16) {
-                if (viewInterface instanceof FeedItemCallback) {
-                    ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
-                } else {
-                    viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
-                }
+        if (tvFeedCommunityPostText.getLineCount() > 16) {
+            if (viewInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) viewInterface).onUserPostClicked(mUserPostObj);
             } else {
-                expandFeedPostText();
+                viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserComment);
             }
+        } else {
+            expandFeedPostText();
+        }
     }
 
     @OnClick(R.id.tv_feed_community_post_view_less)

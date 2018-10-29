@@ -122,7 +122,7 @@
     <string name="ID_CLOSE">बंद हो गया</string>
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">सवाल पूंछे</string>
+    <string name="ID_ASK_QUESTION">सवाल पूछें</string>
     <string name="ID_SUBMIT">जमा करें</string>
     <string name="follow_user">फॉलो</string>
     <string name="following_user">फॉलोइंग</string>
