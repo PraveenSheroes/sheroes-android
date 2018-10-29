@@ -203,7 +203,6 @@
     <style name="PollProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/poll_progress_layer</item>
-
         <item name="android:minWidth">200dp</item>
     </style>
 
