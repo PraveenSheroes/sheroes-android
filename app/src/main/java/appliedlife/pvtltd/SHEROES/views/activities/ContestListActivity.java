@@ -228,11 +228,7 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
 
     @Override
     public void onContactClicked(Contest contest, View view) {
-        if (CommonUtil.getContestStatus(contest.getStartAt(), contest.getEndAt()) == ContestStatus.UPCOMING) {
-            /* ContestPreviewActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, CONTEST_LIST_ACTIVITY);*/
-        } else {
-            ContestActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, ContestListActivity.CONTEST_LIST_ACTIVITY, -1, 1);
-        }
+        ContestActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, ContestListActivity.CONTEST_LIST_ACTIVITY, -1, 1);
     }
     //endregion
 }

@@ -87,7 +87,7 @@ public class MixpanelHelper {
 
             String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
             String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
-            String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            String languageName= CommonUtil.getPrefStringValue(LANGUAGE_KEY);
             final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())

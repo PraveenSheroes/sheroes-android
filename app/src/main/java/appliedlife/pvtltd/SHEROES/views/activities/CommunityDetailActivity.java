@@ -200,7 +200,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private int mScreenWidthHdpi=750;
     private int mDelayToolTip=1000;
 
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

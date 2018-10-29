@@ -1381,7 +1381,7 @@ public class CommonUtil {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
     }
 
@@ -1393,7 +1393,7 @@ public class CommonUtil {
             intent.putExtra(Intent.EXTRA_STREAM, contentUri);
             intent.setType("image/jpeg");
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-            intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+            intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
             context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         }
     }

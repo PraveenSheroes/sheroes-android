@@ -599,7 +599,7 @@
                                             </html> ]]></string>
     <string name="not_available">NA</string>
     <string name="welcome">स्वागत है</string>
-    <string name="hi">नमस्ते</string>
+    <string name="hi">नमस्ते %1$s</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
     <string name="top_post">शीर्ष पोस्ट</string>
@@ -667,4 +667,5 @@
     <string name="not_empty">खाली नहीं</string>
     <string name="challenge_winner">विजेता</string>
     <string name="new_tag">नया</string>
+    <string name="check_out_share_msg">SHEROES ऐप के इस पोस्ट को देखा? मुझे ये बहुत पसंद आया।</string>
 </resources>

@@ -599,7 +599,7 @@
                                             </html> ]]></string>
     <string name="not_available">NA</string>
     <string name="welcome">Welcome</string>
-    <string name="hi">Hi</string>
+    <string name="hi">Hi %1$s</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
     <string name="top_post">Top Post</string>
@@ -666,4 +666,5 @@
     <string name="not_empty">not empty</string>
     <string name="challenge_winner">Winner</string>
     <string name="new_tag">New</string>
+    <string name="check_out_share_msg">Check out this post on the SHEROES App. I loved it.</string>
 </resources>

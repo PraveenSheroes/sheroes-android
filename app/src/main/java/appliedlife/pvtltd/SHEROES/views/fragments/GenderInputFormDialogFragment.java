@@ -75,7 +75,7 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             mPersonnelEmailId = getArguments().getString(EMAIL_ID);
         }
         if (StringUtil.isNotNullOrEmptyString(mUserName)) {
-            tvUserName.setText(getString(R.string.hi) + " " + mUserName);
+            tvUserName.setText(getString(R.string.hi,mUserName));
         }
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
             tvMsg.setText(Html.fromHtml(getString(R.string.sheroes_msg), 0)); // for 24 api and more

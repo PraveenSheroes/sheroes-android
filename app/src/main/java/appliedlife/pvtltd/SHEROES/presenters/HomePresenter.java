@@ -106,7 +106,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         this.mConfiguration = mConfiguration;
         this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-        this.mSheroesAppServiceApi=sheroesAppServiceApi;
+        this.mSheroesAppServiceApi= sheroesAppServiceApi;
     }
 
     public void getMasterDataToPresenter() {

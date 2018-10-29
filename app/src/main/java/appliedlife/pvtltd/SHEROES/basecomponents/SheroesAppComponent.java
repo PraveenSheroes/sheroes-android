@@ -367,8 +367,6 @@ public interface SheroesAppComponent {
     void inject(SelectLanguageDialog selectLanguageDialog);
 
     void inject(MaleErrorDialog maleErrorDialog);
-
-    void inject(ExpandableTextView expandableTextView);
 }
 
 

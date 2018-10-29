@@ -218,7 +218,12 @@ public final class CropImage {
         }
 
         // Create a chooser from the main  intent
-        Intent  chooserIntent = Intent.createChooser(target, "Select Picture");
+        Intent  chooserIntent = Intent.createChooser(target, title);
+
+        // Add all other intents
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, allIntents.toArray(new Parcelable[allIntents.size()]));
+
+
 
         return chooserIntent;
     }
