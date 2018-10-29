@@ -14,7 +14,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.datamanager.AppDatabase;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -39,7 +38,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     //region private variables
     private SheroesAppServiceApi mSheroesApiEndPoints;
     private SheroesApplication mSheroesApplication;
-    public static volatile boolean mIsNetworkCallRunning = false;
+    private static volatile boolean mIsNetworkCallRunning = false;
 
     //endregion
 
@@ -84,13 +83,11 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                 .subscribe(new DisposableSingleObserver<List<Long>>() {
                     @Override
                     public void onSuccess(List<Long> rowsAffected) {
-                        Log.i("Inserted", "Successfully");
                         impressionObserver(batchSize, forceNetworkCall);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.i("Inserted", "failed");
                         Crashlytics.getInstance().core.logException(e);
                     }
                 });
@@ -243,7 +240,6 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
                     @Override
                     public void onNext(String id) {
-                        Log.i("hit", "cleared");
                     }
                 });
     }

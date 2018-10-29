@@ -18,7 +18,6 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Helper class for Impression help to detect visible impression and exit of impression view
@@ -113,8 +112,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      * Fragment/ Activity is resumed
      */
     public void getVisibleViews(int startPos, int endPos) {
-        LogUtils.info(TAG, "On Global layout changes");
-
         //Get the visible items on screen
         allVisibleViews.clear();
         for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
@@ -126,7 +123,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      * Fragment/ Activity is paused
      */
     public void stopImpression() {
-        LogUtils.info(TAG, "On Pause");
         updateEndTimeOfItems();
         storeChunks(true);
 
@@ -168,7 +164,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             for (int i = size - 1; i >= 0; i--) {
                 ImpressionData impressionData = finalViewData.get(i);
                 if (impressionData.getEndTime() == -1) {
-                    LogUtils.info(TAG, "Screen Exit: Update End time for all visible");
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
 
                     int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
@@ -232,7 +227,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
         if (feedDetail == null) return;
         long postId = feedDetail.getIdOfEntityOrParticipant();
-        if(postId == -1) return;
+        if (postId == -1) return;
 
         allVisibleViews.add(postId);
 
@@ -244,8 +239,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         int itemPosition = checkIfItemInFinal(postId);
         if (itemPosition == -1) { //new item add it in final list
             finalViewData.add(impressionData);
-            LogUtils.info(TAG, "@@@Screen Enter " + impressionData.getPostId() + ":::::"+ viewPosition);
-            mImpressionCallback.showToast("Screen Enter" + viewPosition);
         }
     }
 
@@ -299,10 +292,9 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      * Store the final Impression in db
      */
     private void storeChunks(boolean forceNetworkCall) {
-        int index = getLastIndexOfUpdatedItem();
+        int index = getItemWithUpdatedEngagementTime();
         if (index > -1) {
             List<ImpressionData> updatedImpressions = finalViewData.subList(0, index + 1);
-            LogUtils.info(TAG, "###Added to db");
             mImpressionPresenter.storeBatchInDb(mMinEngagementTime, mImpressionBatchSize, updatedImpressions, forceNetworkCall);
 
             if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
@@ -316,7 +308,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      *
      * @return index of item which have end time updated
      */
-    private int getLastIndexOfUpdatedItem() {
+    private int getItemWithUpdatedEngagementTime() {
         int index = -1;
         if (finalViewData.size() > 0) {
             for (int i = finalViewData.size() - 1; i >= 0; i--) {
@@ -368,9 +360,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
                     finalViewData.get(i).setEndTime(System.currentTimeMillis());
                     int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
                     finalViewData.get(i).setEngagementTime(timeSpent);
-
-                    LogUtils.info(TAG, "@@@Screen Exit " + postId + "End time" + timeSpent / 1000.0f);
-                    mImpressionCallback.showToast("Screen Exit" + postId + "::Duration" + timeSpent / 1000.0f);
                     break;
                 }
             }
