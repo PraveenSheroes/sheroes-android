@@ -57,6 +57,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -82,7 +83,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -162,7 +163,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     ArticlePresenterImpl mArticlePresenter;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -635,7 +636,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                             public boolean onMenuItemClick(MenuItem item) {
                                 if (item.getItemId() == R.id.report_spam) {
                                     reportSpamDialog(SpamContentType.ARTICLE_COMMENT, selectedComment, position);
-
                                     return true;
                                 } else {
                                     final long adminID = adminId;
@@ -810,7 +810,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @OnClick({R.id.author_pic, R.id.author, R.id.author_description__pic, R.id.author_description_name})
     public void onUserDetailClick() {
-        if(mArticleSolrObj.isUserStory()) {
+        if (mArticleSolrObj.isUserStory()) {
             boolean isMentor = false;
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                 isMentor = true;
@@ -828,10 +828,13 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         String commentBody = mCommentBody.getText().toString().trim();
         if (CommonUtil.isNotEmpty(commentBody)) {
             mArticlePresenter.postComment(postCommentRequestBuilder(mArticleSolrObj.getEntityOrParticipantId(), commentBody, false, hasMentions, mentionSpanList), mArticleSolrObj);
+            mCommentBody.setText("");
+            mCommentBody.clearFocus();
+            CommonUtil.hideKeyboard(ArticleActivity.this);
+        } else {
+            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+            return;
         }
-        mCommentBody.setText("");
-        mCommentBody.clearFocus();
-        CommonUtil.hideKeyboard(ArticleActivity.this);
     }
 
     @OnClick(R.id.cancel)
@@ -987,9 +990,9 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         mLikeCount.setText(CommonUtil.getRoundedMetricFormat(articleSolrObj.likesCount) + " " + pluralLikes);
         String pluralViews = getResources().getQuantityString(R.plurals.numberOfViews, articleSolrObj.getNoOfViews());
         long createdDate = mDateUtil.getTimeInMillis(articleSolrObj.getPostedDate(), AppConstants.DATE_FORMAT);
-        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate);
+        String dateInWord = mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate, this);
         if (!dateInWord.equalsIgnoreCase(getString(R.string.ID_JUST_NOW))) {
-            dateInWord = dateInWord + " ago ";
+            dateInWord = dateInWord + " " + getString(R.string.ago);
         }
         String minRead = "";
         if (articleSolrObj.getCharCount() > 0) {
@@ -1255,7 +1258,7 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
             if (ArticleActivity.this.isFinishing()) return;
 
-            if(spamResponse.isSpammed()) {
+            if (spamResponse.isSpammed()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, SpamContentType.COMMENT.name()));
             } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(ArticleActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));

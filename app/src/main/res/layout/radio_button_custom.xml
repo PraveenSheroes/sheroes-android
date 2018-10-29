@@ -7,7 +7,7 @@
     android:drawableEnd="@drawable/radio_button_selector"
     android:drawablePadding="30dp"
     android:drawableRight="@drawable/radio_button_selector"
-    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+    android:fontFamily="@font/noto_sans_regular"
     android:textColor="@color/gray_light"
     android:textSize="@dimen/sp_size_14"
     android:textStyle="normal" />

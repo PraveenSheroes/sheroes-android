@@ -113,7 +113,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     private String mAboutMe = "";
     private LoginResponse userDetailsResponse;
     private float profileProgress = -1;
-    private String filledDetails ;
+    private String filledDetails;
     private String unfilledDetails;
     //endregion
 
@@ -196,6 +196,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     //endregion
 
     //region activity method
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -251,7 +252,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_GALLERY:
@@ -284,7 +285,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         requestForUpdateProfileImage();
 
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.cropping_fail) + " " + result.getError(), Toast.LENGTH_LONG).show();
                     }
 
                     break;
@@ -322,8 +323,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.mobile_response_err))) {
             inputMobileNumberHolder.setError(message.toUpperCase());
             requestFocus(inputMobileNumberHolder);
-            scrollView.scrollTo(0,  mobileNumber.getScrollY());
-        } else if(StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.city_error_response))) {
+            scrollView.scrollTo(0, mobileNumber.getScrollY());
+        } else if (StringUtil.isNotNullOrEmptyString(message) && message.contains(getString(R.string.city_error_response))) {
             location.setError(getString(R.string.city_error_msg));
             requestFocus(location);
             scrollView.scrollTo(0, location.getScrollY());
@@ -387,7 +388,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (relationStatus == null || relationStatus.isEmpty()) { //reset the martial status if comes empty
             relationshipStatus.setSelection(0);
         } else {
-            if(isRelationStatusValueAvailable(relationStatus)) {
+            if (isRelationStatusValueAvailable(relationStatus)) {
                 relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(relationStatus));
             } else { //if value not available select the other
                 relationshipStatus.setSelection(((ArrayAdapter<String>) relationshipStatus.getAdapter()).getPosition(getString(R.string.other)));
@@ -832,7 +833,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 e.printStackTrace();
             }
 
-            personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItemPosition() > 0 ? relationshipStatus.getSelectedItem().toString(): "");
+            personalBasicDetailsRequest.setMaritalStatus(relationshipStatus.getSelectedItemPosition() > 0 ? relationshipStatus.getSelectedItem().toString() : "");
 
             if (StringUtil.isNotNullOrEmptyString(noOfChildren.getText().toString())) {
                 personalBasicDetailsRequest.setNoOfChildren(Integer.parseInt(noOfChildren.getText().toString()));
@@ -879,7 +880,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     if (userName.contains(AppConstants.SPACE)) {
                         String name[] = userName.split(AppConstants.SPACE);
                         String firstName = name[0];
-                        String lastName = userName.substring(firstName.length()+1, userName.length());
+                        String lastName = userName.substring(firstName.length() + 1, userName.length());
                         userSummary.setFirstName(firstName);
                         userSummary.setLastName(lastName);
                         userSummary.getUserBO().setName(userName);

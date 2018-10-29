@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
     style="@style/TextAppearance.Toolbar"
     android:layout_width="match_parent"
@@ -14,36 +15,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/title_toolbar"
-        style="@style/TextAppearance.Toolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_size_10"
-        android:layout_marginStart="@dimen/dp_size_10"
-        android:layout_toEndOf="@id/tv_drawer_navigation"
-        android:layout_toRightOf="@id/tv_drawer_navigation"
-        android:ellipsize="end"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-        android:gravity="center_vertical"
-        android:maxLines="@integer/int_value_for_line_1" />
-
-        <TextView
-            android:id="@+id/action"
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/title_toolbar"
+            style="@style/TextAppearance.Toolbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/post_action_btn_text_size"
-            android:paddingRight="@dimen/post_action_btn_padding"
-            android:paddingLeft="@dimen/post_action_btn_padding"
-            android:paddingTop="@dimen/post_action_btn_padding_top_bottom"
-            android:paddingBottom="@dimen/post_action_btn_padding_top_bottom"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_size_10"
+            android:layout_marginStart="@dimen/dp_size_10"
+            android:layout_toEndOf="@id/tv_drawer_navigation"
+            android:layout_toRightOf="@id/tv_drawer_navigation"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:maxLines="@integer/int_value_for_line_1"
+            vernacular:customTextFontFamily="@string/medium_font" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/action"
+            style="@style/TextView14spBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:alpha=".9"
+            android:lineSpacingExtra="6sp"
+            android:paddingBottom="@dimen/post_action_btn_padding_top_bottom"
+            android:paddingLeft="@dimen/post_action_btn_padding"
+            android:paddingRight="@dimen/post_action_btn_padding"
+            android:paddingTop="@dimen/post_action_btn_padding_top_bottom"
             android:textAllCaps="true"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="@color/post_action"
-            android:lineSpacingExtra="6sp" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </RelativeLayout>
 </android.support.v7.widget.Toolbar>

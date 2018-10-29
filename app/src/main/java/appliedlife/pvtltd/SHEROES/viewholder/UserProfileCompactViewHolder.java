@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,6 +16,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -29,7 +29,7 @@ import butterknife.OnClick;
 
 public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
     private Context mContext;
-
+    private final String TAG = LogUtils.makeLogTag(UserProfileCompactViewHolder.class);
     // region ButterKnife Bindings
     @Bind(R.id.user_compact_card)
     CardView mUserCompactCard;
@@ -96,14 +96,12 @@ public class UserProfileCompactViewHolder extends RecyclerView.ViewHolder {
         }
 
         mName.setText(userSolrObj.getNameOrTitle());
-
         try {
             String description = mContext.getResources().getString(R.string.user_card_desc, CommonUtil.camelCaseString(userSolrObj.getmSolarIgnoreCommunityName().toLowerCase()));
             mDesc.setText(description);
-        }catch (Exception e) {
-            Log.i("Tag", "desc is null");
+        } catch (Exception e) {
+            LogUtils.error(TAG, e);
         }
-
         CommonUtil.showHideUserBadge(mContext, false, mBadgeIcon, mUserSolrObj.isSheBadgeActive(), mUserSolrObj.getProfileBadgeUrl());
     }
 

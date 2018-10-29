@@ -4,10 +4,12 @@
 
     <item android:id="@+id/next_article_submit"
         android:title="@string/action.next"
+        android:textSize="@dimen/menu_item_text_size"
         app:showAsAction="always"/>
 
     <item android:id="@+id/post_article_submit"
         android:title="@string/action.post"
+        android:textSize="@dimen/menu_item_text_size"
         app:showAsAction="always"/>
 
 </menu>

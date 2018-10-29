@@ -156,7 +156,7 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(userPostObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(userPostObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvReviewPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            tvReviewPostTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
         }
 
         if (!userPostObj.isTrending()) {

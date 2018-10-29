@@ -58,7 +58,7 @@ public class FollowingActivity extends BaseActivity {
         if (getIntent().getExtras() != null) {
             userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
             isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
-            mMembersType = (FollowingEnum)getIntent().getSerializableExtra(MEMBERS_TYPE);
+            mMembersType = (FollowingEnum) getIntent().getSerializableExtra(MEMBERS_TYPE);
         }
 
         setupToolbarItemsColor();
@@ -68,15 +68,15 @@ public class FollowingActivity extends BaseActivity {
         if (mMembersType == FollowingEnum.FOLLOWED_CHAMPIONS) {
             titleName.setText(R.string.champions_followed);
         } else if (mMembersType == FollowingEnum.FOLLOWERS) {
-            if(isSelfProfile) {
+            if (isSelfProfile) {
                 titleName.setText(R.string.follower_toolbar_title);
-            } else{
+            } else {
                 titleName.setText(R.string.follower_public_profile_toolbar_title);
             }
         } else if (mMembersType == FollowingEnum.FOLLOWING) {
-            if(isSelfProfile) {
+            if (isSelfProfile) {
                 titleName.setText(R.string.following_toolbar_title);
-            } else{
+            } else {
                 titleName.setText(R.string.following_public_profile_toolbar_title);
             }
         }
@@ -132,7 +132,7 @@ public class FollowingActivity extends BaseActivity {
     @Override
     public String getScreenName() {
         String screenLabel = "";
-        if(mMembersType!=null) {
+        if (mMembersType != null) {
             if (mMembersType == FollowingEnum.FOLLOWED_CHAMPIONS) {
                 screenLabel = FOLLOWED_CHAMPION_LABEL;
             } else if (mMembersType == FollowingEnum.FOLLOWERS) {

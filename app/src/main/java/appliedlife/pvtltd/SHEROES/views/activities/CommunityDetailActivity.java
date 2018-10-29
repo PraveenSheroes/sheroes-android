@@ -74,7 +74,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -194,6 +193,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
+    private int mWidthPixel=300;
+    private int mMarginLeft=20;
+    private int mMarginLeftToolTip=10;
+    private int mScreenWidthMdpi=600;
+    private int mScreenWidthHdpi=750;
+    private int mDelayToolTip=1000;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -246,13 +251,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     @Override
     public void onDrawerOpened() {
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            AnalyticsManager.trackScreenView(getString(R.string.RightNavigationDrawer),getScreenName(),null);
+            AnalyticsManager.trackScreenView(AppConstants.RIGHT_SWIPE_NAVIGATION, getScreenName(), null);
         }
     }
 
     @Override
     public void onDrawerClosed() {
-
     }
 
     private void toolTipForInviteFriends() {
@@ -262,15 +266,15 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             public void run() {
                 try {
                     int width = AppUtils.getWindowWidth(CommunityDetailActivity.this);
-                    if (width < 600) {
+                    if (width < mScreenWidthMdpi) {
                         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                         inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                         popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         popupWindowInviteFriendTooTip.setOutsideTouchable(false);
                         popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         final LinearLayout llToolTipBg = inviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
-                        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(300, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
-                        llParams.setMargins(CommonUtil.convertDpToPixel(20, CommunityDetailActivity.this), 0, 0, 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                        RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mWidthPixel, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
+                        llParams.setMargins(CommonUtil.convertDpToPixel(mMarginLeft, CommunityDetailActivity.this), 0, 0, 0);
                         llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
                         llToolTipBg.setLayoutParams(llParams);
                     } else {
@@ -278,7 +282,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                         inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
                         popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                         popupWindowInviteFriendTooTip.setOutsideTouchable(false);
-                        if (width < 750) {
+                        if (width < mScreenWidthHdpi) {
                             popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
                         } else {
                             popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
@@ -287,7 +291,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
                     final ImageView ivArrow = inviteFriendToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(10, CommunityDetailActivity.this), 0);//CommonUtil.convertDpToPixel(10, HomeActivity.this)
+                    imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(mMarginLeftToolTip, CommunityDetailActivity.this), 0);
                     imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
                     ivArrow.setLayoutParams(imageParams);
                     final TextView tvGotIt = inviteFriendToolTip.findViewById(R.id.got_it);
@@ -303,7 +307,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                     Crashlytics.getInstance().core.logException(e);
                 }
             }
-        }, 1000);
+        }, mDelayToolTip);
 
 
     }
@@ -430,8 +434,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT)
-                            .show();
+                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     if (mCommunityFeedSolrObj == null) {
                         return;
                     }
@@ -477,7 +480,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
             }
         } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
             refreshCurrentFragment();
-        } else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
             Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
             if (parcelable != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
@@ -506,15 +509,6 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-       /* if (mCommunityFeedSolrObj != null) {
-            boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
-            if (mCommunityFeedSolrObj != null) {
-                menu.findItem(R.id.leave_join).setTitle(isOwnerOrMember ? R.string.ID_LEAVE : R.string.ID_JOIN);
-            }
-            if (mCommunityFeedSolrObj != null && mCommunityFeedSolrObj.getIdOfEntityOrParticipant() == AppConstants.SHEROES_COMMUNITY_ID) {
-                menu.findItem(R.id.leave_join).setVisible(false);
-            }
-        }*/
         MenuItem menuItem = menu.findItem(R.id.share);
         menuItem.getIcon().mutate();
         menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);

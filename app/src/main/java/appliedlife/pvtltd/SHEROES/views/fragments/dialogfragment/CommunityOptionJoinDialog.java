@@ -138,10 +138,10 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_NAME, communityName);
         payloadBuilder.putAttrLong(MoEngageConstants.COMMUNITY_ID, communityId);
         if (isClose) {
-            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, getString(R.string.ID_CLOSE_PRIVACY));
+            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, AppConstants.COMMUNITY_JOIN_DIALOG_CLOSE);
 
         } else {
-            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, getString(R.string.ID_OPEN));
+            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, AppConstants.COMMUNITY_JOIN_DIALOG_OPEN);
         }
         payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_TAG, communityTag);
         payloadBuilder.putAttrString(MoEngageConstants.SCREEN_NAME, screenName);

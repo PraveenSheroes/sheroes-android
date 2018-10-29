@@ -22,7 +22,7 @@ public interface PostDetailCallBack {
 
     void onShareButtonClicked(UserPostSolrObj userPostObj, TextView shareView);
 
-    void onPollVote(PollSolarObj pollSolarObj,PollOptionModel pollOptionModel);
+    void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel);
 
     void onPostLikeClicked(UserPostSolrObj userPostObj);
 

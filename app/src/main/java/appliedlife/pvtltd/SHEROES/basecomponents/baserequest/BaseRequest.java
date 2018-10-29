@@ -5,8 +5,6 @@ import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
 
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 /**
@@ -37,13 +35,13 @@ public class BaseRequest {
     private String lastScreenName;
     @SerializedName("page_no")
     @Expose
-    private int pageNo=1;
+    private int pageNo = 1;
     @SerializedName("page_size")
     @Expose
-    private int pageSize=10;
+    private int pageSize = 10;
     @SerializedName("source")
     @Expose
-    private String source= AppConstants.SOURCE_NAME;
+    private String source = AppConstants.SOURCE_NAME;
     @SerializedName("lat")
     @Expose
     private Double lattitude;

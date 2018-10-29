@@ -582,7 +582,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
-
                     }
 
                     @Override
@@ -591,7 +590,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().notifyAllItemRemoved(feedDetail);
                     }
                 });
-
     }
 
     public void deletePollFromPresenter(DeletePollRequest deletePollRequest, final PollSolarObj pollSolarObj) {

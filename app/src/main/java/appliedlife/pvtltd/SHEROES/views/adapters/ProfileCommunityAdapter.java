@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +22,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by ravi on 01/01/18.
@@ -43,14 +44,15 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     }
 
     //endregion
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         return new ProfileCommunityAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.profile_communities_listing, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ProfileCommunityAdapter.FollowedUserListItemViewHolder commentListItemViewHolder = (ProfileCommunityAdapter.FollowedUserListItemViewHolder) holder;
         CommunityFeedSolrObj communityFeedSolrObj = communities.get(position);
         commentListItemViewHolder.bindData(communityFeedSolrObj);
@@ -129,9 +131,9 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if (profileCommunity.isMutualCommunityFirstItem() && getAdapterPosition() ==0) {
                     subTitleHeaderContainer.setVisibility(View.VISIBLE);
-                    community_subtitle.setText(String.format(Locale.US, "%d Mutual Communities", profileCommunity.getMutualCommunityCount()));
+                    community_subtitle.setText(String.format(Locale.US, mContext.getString(R.string.mutual_communities), profileCommunity.getMutualCommunityCount()));
                 } else if (profileCommunity.isOtherCommunityFirstItem()) {
-                    String label = isOwnProfile ? "My Communities" : "Communities";
+                    String label = isOwnProfile ? mContext.getString(R.string.my_communities) : mContext.getString(R.string.ID_COMMUNITIES);
                     community_subtitle.setText(label);
                     subTitleHeaderContainer.setVisibility(View.VISIBLE);
                 } else {
@@ -162,7 +164,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
                 }
 
                 String pluralMember = mContext.getResources().getQuantityString(R.plurals.numberOfMembers, profileCommunity.getNoOfMembers());
-                member.setText(String.valueOf(numericToThousand(profileCommunity.getNoOfMembers()) + AppConstants.SPACE + pluralMember));
+                member.setText(String.valueOf(changeNumberToNumericSuffix(profileCommunity.getNoOfMembers()) + AppConstants.SPACE + pluralMember));
             }
         }
     }

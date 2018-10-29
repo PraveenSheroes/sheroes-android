@@ -9,6 +9,7 @@ public enum AnalyticsEventType {
 
     // region Types
     APP("App"),
+    LANGUAGE_SELECTED("Language Selected"),
     POST("Post"),
     POLL("Poll"),
     GENDER_SELECTED("Gender Selected"),

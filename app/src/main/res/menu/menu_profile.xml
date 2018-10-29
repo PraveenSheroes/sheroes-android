@@ -4,14 +4,17 @@
     <item
         android:id="@+id/deactivate_user"
         android:icon="@drawable/ic_deactivate_user"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/deactivate_user" />
     <item
         android:id="@+id/ban_user_device"
         android:icon="@drawable/vector_create"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/banned_user_device" />
 
     <item
         android:id="@+id/report_user"
         android:icon="@drawable/vector_report_spam"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/report_user" />
 </menu>

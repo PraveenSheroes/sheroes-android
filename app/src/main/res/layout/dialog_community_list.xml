@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -9,7 +10,9 @@
         android:background="#ffffff"
         android:orientation="vertical">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            vernacular:customTextFontFamily="@string/regular_font"
+            style="@style/TextView18spRegular"
             android:id="@+id/tv_choose_community"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -17,10 +20,8 @@
             android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginBottom="@dimen/dp_size_16"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:text="@string/choose_community"
-            android:textColor="#89000000"
-            android:textSize="18sp" />
+            android:textColor="#89000000" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/community_list"

@@ -24,7 +24,6 @@
                 android:id="@+id/tv_event_speaker_card_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:textColor="@color/faq_question_color"
                 android:textSize="@dimen/sp_size_15" />
 
@@ -33,7 +32,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_5"
-                android:fontFamily="@string/ID_ROBOTO_REGULAR"
                 android:textColor="@color/detail_page_text"
                 android:textSize="@dimen/sp_size_12" />
         </LinearLayout>

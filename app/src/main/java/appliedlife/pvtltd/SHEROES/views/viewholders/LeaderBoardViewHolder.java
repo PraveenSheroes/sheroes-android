@@ -22,7 +22,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -96,7 +96,7 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
     Preference<LoginResponse> mUserPreference;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     private long mLoggedInUserId = -1;
     private BaseHolderInterface viewInterface;
@@ -281,13 +281,13 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             switch (view.getId()) {
                 case R.id.name:
                 case R.id.user_pic_icon:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), AppConstants.LEADER_BOARD_SCREEN);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardUserClick(mLeaderBoardUserSolrObj.getUserSolrObj().getIdOfEntityOrParticipant(), AppConstants.LEADERBOARD_SCREEN);
                     break;
                 case R.id.leader_board_users_container:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardItemClick(mLeaderBoardUserSolrObj, AppConstants.LEADERBOARD_SCREEN);
                     break;
                 case R.id.about_leaderboard:
-                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj, AppConstants.LEADER_BOARD_SCREEN);
+                    ((FeedItemCallback) viewInterface).onLeaderBoardHeaderClick(mLeaderBoardUserSolrObj, AppConstants.LEADERBOARD_SCREEN);
                     break;
             }
         }

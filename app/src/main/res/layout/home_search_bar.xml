@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -14,7 +15,7 @@
         android:paddingTop="@dimen/dp_size_10"
         android:visibility="visible" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/title_text"
         style="@style/TextAppearance.Toolbar"
         android:layout_width="wrap_content"
@@ -26,23 +27,23 @@
         android:layout_toEndOf="@+id/tv_drawer_navigation"
         android:layout_toRightOf="@+id/tv_drawer_navigation"
         android:ellipsize="end"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center_vertical"
-        android:maxLines="@integer/int_value_for_line_1" />
+        android:maxLines="@integer/int_value_for_line_1"
+        vernacular:customTextFontFamily="@string/medium_font" />
 
     <ImageView
         android:id="@+id/ic_sheroes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
-        android:paddingLeft="@dimen/sheroes_logo_paddingleft"
-        android:paddingStart="@dimen/sheroes_logo_paddingleft"
-        android:paddingEnd="@dimen/sheroes_logo_paddingright"
-        android:paddingRight="@dimen/sheroes_logo_paddingright"
         android:layout_marginLeft="@dimen/sheroes_logo_marginleft"
-        android:paddingTop="@dimen/sheroes_logo_paddingtop"
         android:layout_marginTop="@dimen/sheroes_logo_margintop"
         android:paddingBottom="@dimen/sheroes_logo_paddingbottom"
+        android:paddingEnd="@dimen/sheroes_logo_paddingright"
+        android:paddingLeft="@dimen/sheroes_logo_paddingleft"
+        android:paddingRight="@dimen/sheroes_logo_paddingright"
+        android:paddingStart="@dimen/sheroes_logo_paddingleft"
+        android:paddingTop="@dimen/sheroes_logo_paddingtop"
         android:src="@drawable/vector_sheroes_header" />
 
 
@@ -58,18 +59,28 @@
         android:paddingTop="@dimen/dp_size_10"
         android:src="@drawable/vector_communities_nav_icon" />
 
-    <ImageView
-        android:id="@+id/iv_new_tag"
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        android:id="@+id/tv_new_tag"
+        style="@style/TextView12spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/fl_nav_communities"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="-8dp"
+        android:layout_marginLeft="@dimen/new_tag_margin_left"
+        android:layout_marginStart="@dimen/new_tag_margin_left"
+        android:layout_marginTop="@dimen/new_tag_margin_top"
         android:layout_toEndOf="@+id/tv_home_notification_icon"
         android:layout_toRightOf="@+id/tv_home_notification_icon"
-        android:src="@drawable/vector_new_tag"
-        android:visibility="gone" />
+        android:background="@drawable/vector_new_tag"
+        android:paddingEnd="@dimen/new_tag_padding_right"
+        android:paddingLeft="@dimen/new_tag_padding_left"
+        android:paddingRight="@dimen/new_tag_padding_right"
+        android:paddingStart="@dimen/new_tag_padding_left"
+        android:paddingTop="@dimen/new_tag_padding_top"
+        android:text="@string/new_tag"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <TextView
         android:id="@+id/tv_home_notification_icon"
@@ -95,14 +106,14 @@
         android:backgroundTint="@color/footer_icon_text"
         android:visibility="gone">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_notification_read_count"
+            style="@style/TextView9spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_9" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </FrameLayout>
 
 

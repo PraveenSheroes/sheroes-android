@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/li_feed_text_poll_row"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -8,42 +9,45 @@
         android:layout_width="@dimen/text_poll_result_frame_width"
         android:layout_height="wrap_content"
         android:layout_weight="@integer/feed_text_poll_row_value">
+
         <ProgressBar
             android:id="@+id/pb_poll_percent"
             style="@style/PollProgressBar"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <TextView
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_text_poll_desc"
+            style="@style/TextView14spRegular"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textColor="@color/comment_text"
             android:layout_gravity="center|left"
-            android:layout_marginStart="@dimen/text_poll_result_desc_margin"
-            android:layout_marginLeft="@dimen/text_poll_result_desc_margin"
-            android:paddingTop="@dimen/text_poll_result_desc_padding"
-            android:paddingBottom="@dimen/text_poll_result_desc_padding"
             android:layout_marginEnd="@dimen/text_poll_result_desc_margin_right"
+            android:layout_marginLeft="@dimen/text_poll_result_desc_margin"
             android:layout_marginRight="@dimen/text_poll_result_desc_margin_right"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textSize="@dimen/text_pol_percent_number_text_size"/>
+            android:layout_marginStart="@dimen/text_poll_result_desc_margin"
+            android:paddingBottom="@dimen/text_poll_result_desc_padding"
+            android:paddingTop="@dimen/text_poll_result_desc_padding"
+            android:textColor="@color/comment_text"
+            vernacular:customTextFontFamily="@string/regular_font" />
+
         <ImageView
             android:id="@+id/iv_percent_verified"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|right"
             android:layout_marginRight="@dimen/text_poll_verified_margin"
-            android:src="@drawable/vector_poll_percent_verified"/>
+            android:src="@drawable/vector_poll_percent_verified" />
     </FrameLayout>
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_poll_percent_number"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/text_poll_percent_number_width"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/text_pol_percent_number_text_size" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </LinearLayout>

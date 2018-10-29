@@ -16,6 +16,7 @@ import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -224,6 +225,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         }
                     } else if (urlOfSharedCard.equals(AppConstants.WRITE_STORY_URL) || urlOfSharedCard.equals(AppConstants.WRITE_STORY_URL_COM)) {
                         homeActivityCall(AppConstants.WRITE_STORY_URL);
+                    } else if (urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM) || urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM)) {
+                        homeActivityCall(AppConstants.SELECT_LANGUAGE_URL_COM);
                     } else if (urlOfSharedCard.equals(AppConstants.MY_STORY_URL) || urlOfSharedCard.equals(AppConstants.MY_STORY_URL_COM)) {
                         try {
                             showUserProfile(true, sourceIntent);
@@ -277,7 +280,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
 
         } else {
-            Toast.makeText(getApplicationContext(), AppConstants.INVALID_URL, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.invalid_url, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -535,7 +538,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
     }
 
-    //Article fragment category id
+    //Article category id
     private void homeActivityCallForArticleCategory(String articleCategoryUrl) {
         try {
             int articleCategoryId = articleCategoryUrl.lastIndexOf(AppConstants.BACK_SLASH);

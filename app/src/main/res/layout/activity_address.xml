@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -22,14 +23,16 @@
             android:paddingRight="16dp"
             android:paddingTop="4dp">
 
-            <EditText
+            <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
                 android:id="@+id/name"
+                style="@style/TextView20spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint.full_name"
                 android:inputType="textPersonName|textCapWords"
                 android:maxLines="1"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                vernacular:customEditTextFontFamily="@string/regular_font"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -43,15 +46,16 @@
             android:paddingRight="16dp"
             android:paddingTop="4dp">
 
-            <EditText
+            <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
+                vernacular:customEditTextFontFamily="@string/regular_font"
+                style="@style/TextView20spRegular"
                 android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint.mobile_number"
                 android:inputType="phone"
                 android:maxLength="10"
-                android:maxLines="1"
-                android:textSize="20sp" />
+                android:maxLines="1" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -65,14 +69,15 @@
             android:paddingRight="16dp"
             android:paddingTop="4dp">
 
-            <EditText
+            <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
+                vernacular:customEditTextFontFamily="@string/regular_font"
+                style="@style/TextView20spRegular"
                 android:id="@+id/address"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint.full_address"
                 android:inputType="textPostalAddress"
-                android:maxLines="1"
-                android:textSize="20sp" />
+                android:maxLines="1"/>
 
         </android.support.design.widget.TextInputLayout>
 
@@ -108,14 +113,15 @@
             android:paddingRight="16dp"
             android:paddingTop="4dp">
 
-            <EditText
+            <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
+                vernacular:customEditTextFontFamily="@string/regular_font"
+                style="@style/TextView20spRegular"
                 android:id="@+id/pin_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:hint="@string/hint.pin_code"
-                android:maxLines="1"
-                android:textSize="20sp" />
+                android:maxLines="1"/>
         </android.support.design.widget.TextInputLayout>
 
     </LinearLayout>

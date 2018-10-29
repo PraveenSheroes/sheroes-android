@@ -146,7 +146,7 @@ public class CollectionActivity extends BaseActivity {
     }
 
     public void setData(List<FeedDetail> feedDetails) {
-        if(StringUtil.isNotEmptyCollection(feedDetails)) {
+        if (StringUtil.isNotEmptyCollection(feedDetails)) {
             mFeedDetailList = feedDetails;
         }
     }

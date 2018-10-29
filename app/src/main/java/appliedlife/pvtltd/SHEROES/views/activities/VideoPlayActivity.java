@@ -10,14 +10,11 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
@@ -119,6 +116,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
             getYouTubePlayerProvider().initialize(AppConstants.YOUTUBE_DEVELOPER_KEY, this);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -131,6 +129,7 @@ public class VideoPlayActivity extends YouTubeBaseActivity implements YouTubePla
         HashMap<String, Object> properties = new EventProperty.Builder().url(videoString).build();
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
     }
+
     @Override
     public void onBackPressed() {
         if (player != null) {

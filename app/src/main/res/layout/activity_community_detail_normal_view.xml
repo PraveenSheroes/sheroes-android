@@ -1,5 +1,6 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/tools"
     android:id="@+id/main_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -59,7 +60,7 @@
                 android:layout_gravity="bottom"
                 android:clickable="true">
 
-                <Button
+                <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                     android:id="@+id/btn_bottom_bar"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
@@ -70,7 +71,8 @@
                     android:gravity="center"
                     android:text="@string/ID_JOIN"
                     android:textColor="@color/white"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    vernacular:customButtonFontFamily="@string/regular_font"/>
             </FrameLayout>
         </LinearLayout>
 

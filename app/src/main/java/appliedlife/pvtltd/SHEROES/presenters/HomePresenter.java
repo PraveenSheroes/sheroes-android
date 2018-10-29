@@ -6,13 +6,12 @@ import android.content.SharedPreferences;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -26,14 +25,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesRespon
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -51,7 +47,9 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
@@ -84,6 +82,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
     HomeModel mHomeModel;
     SheroesApplication mSheroesApplication;
+    SheroesAppServiceApi mSheroesAppServiceApi;
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -93,21 +92,21 @@ public class HomePresenter extends BasePresenter<HomeView> {
     Preference<AllCommunitiesResponse> mAllCommunities;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     MasterDataModel mMasterDataModel;
     @Inject
     ProfileModel profileModel;
 
     @Inject
-    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<Configuration> mConfiguration) {
+    public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<AppConfiguration> mConfiguration,SheroesAppServiceApi sheroesAppServiceApi) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
         this.mConfiguration = mConfiguration;
         this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-
+        this.mSheroesAppServiceApi= sheroesAppServiceApi;
     }
 
     public void getMasterDataToPresenter() {
@@ -731,7 +730,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        mHomeModel.getConfig()
+        mSheroesAppServiceApi.getConfig()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ConfigurationResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<ConfigurationResponse>() {
                     @Override
@@ -740,18 +741,18 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
+                          Crashlytics.getInstance().core.logException(e);
                     }
 
                     @Override
                     public void onNext(ConfigurationResponse configurationResponse) {
                         if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (configurationResponse.configuration != null) {
-                                mConfiguration.set(configurationResponse.configuration);
-                                if (configurationResponse.configuration.configData != null && CommonUtil.isNotEmpty(configurationResponse.configuration.configData.thumborKey)) {
+                            if (configurationResponse.appConfiguration != null) {
+                                mConfiguration.set(configurationResponse.appConfiguration);
+                                if (configurationResponse.appConfiguration.configData != null && CommonUtil.isNotEmpty(configurationResponse.appConfiguration.configData.thumborKey)) {
                                     SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
                                     SharedPreferences.Editor editor = prefs.edit();
-                                    editor.putString(AppConstants.THUMBOR_KEY, configurationResponse.configuration.configData.thumborKey);
+                                    editor.putString(AppConstants.THUMBOR_KEY, configurationResponse.appConfiguration.configData.thumborKey);
                                     editor.apply();
                                 }
                                 getMvpView().onConfigFetched();

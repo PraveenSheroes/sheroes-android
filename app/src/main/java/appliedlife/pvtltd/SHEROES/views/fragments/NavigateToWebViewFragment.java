@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
@@ -96,10 +97,10 @@ public class NavigateToWebViewFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_web_url, container, false);
         ButterKnife.bind(this, view);
+        LocaleManager.setLocale(getContext());
         pbWebView.setVisibility(View.VISIBLE);
         webPagesView.getSettings().setJavaScriptEnabled(true);
         webPagesView.setVerticalScrollBarEnabled(false);

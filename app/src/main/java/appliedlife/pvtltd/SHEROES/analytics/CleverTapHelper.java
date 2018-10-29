@@ -20,12 +20,14 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 
 /**
  * Created by ravi on 21/06/18.
@@ -60,7 +62,7 @@ public class CleverTapHelper {
     Preference<LoginResponse> mUserPreference;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
     //endregion
 
     //region public methods
@@ -145,9 +147,17 @@ public class CleverTapHelper {
                 profileUpdate.put(LOCATION, userSummary.getUserBO().getCityMaster());
             }
 
+            String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            profileUpdate.put(SuperProperty.LANGUAGE.getString(),languageName);
+
             //requires Location Permission in AndroidManifest e.g. "android.permission.ACCESS_COARSE_LOCATION"
             Location location = cleverTapAPI.getLocation();
             cleverTapAPI.setLocation(location);
+
+            //enable sdk to send data to clevertap (non-GDPR compliance)
+            cleverTapAPI.setOptOut(false);
+            //to capture any kind of personal information like WiFi, Bluetooth, Network Information and user IP information  (non-GDPR compliance)
+            cleverTapAPI.enableDeviceNetworkInfoReporting(true);
 
             profileUpdate.put("MSG-sms", true);                         // Enable email notifications
             profileUpdate.put("MSG-push", true);                        // Enable push notifications

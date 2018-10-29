@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.view.View;
 
-import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 
 /**

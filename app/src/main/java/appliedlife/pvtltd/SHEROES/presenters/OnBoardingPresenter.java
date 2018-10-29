@@ -1,22 +1,16 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppModule;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.OnBoardingModel;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
@@ -52,10 +46,10 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     MasterDataModel mMasterDataModel;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
-    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData,Preference<Configuration> mConfiguration) {
+    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData,Preference<AppConfiguration> mConfiguration) {
         this.mMasterDataModel = masterDataModel;
         this.onBoardingModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
@@ -221,8 +215,8 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
             @Override
             public void onNext(ConfigurationResponse configurationResponse) {
                 if (configurationResponse != null && configurationResponse.status.equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    if(configurationResponse.configuration!=null){
-                        mConfiguration.set(configurationResponse.configuration);
+                    if(configurationResponse.appConfiguration !=null){
+                        mConfiguration.set(configurationResponse.appConfiguration);
                         getMvpView().onConfigFetched();
                     }
                 }

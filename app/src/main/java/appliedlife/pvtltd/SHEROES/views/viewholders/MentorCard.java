@@ -33,7 +33,7 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.numericToThousand;
+import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
  * Created by Praveen on 24/11/17.
@@ -94,7 +94,6 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         mContext = context;
         dataItem.setItemPosition(position);
         tvMentorFollow.setEnabled(true);
-        LogUtils.info(TAG, "########Metor data " + item.isSuggested());
         if (item.isCompactView()) {
             int width = AppUtils.getWindowWidth(mContext);
             FrameLayout.LayoutParams liHolderLayout = (FrameLayout.LayoutParams) liMentor.getLayoutParams();
@@ -147,14 +146,14 @@ public class MentorCard extends BaseViewHolder<UserSolrObj> {
         }
         if (dataItem.getSolrIgnoreNoOfMentorFollowers() > 0) {
             String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, dataItem.getSolrIgnoreNoOfMentorFollowers());
-            tvFeedMentorFollower.setText(String.valueOf(numericToThousand(dataItem.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+            tvFeedMentorFollower.setText(String.valueOf(changeNumberToNumericSuffix(dataItem.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
             tvFeedMentorFollower.setVisibility(View.VISIBLE);
         } else {
             tvFeedMentorFollower.setVisibility(View.INVISIBLE);
         }
         if (dataItem.getSolrIgnoreNoOfMentorAnswers() > 0) {
             StringBuilder answers = new StringBuilder();
-            answers.append(numericToThousand(dataItem.getSolrIgnoreNoOfMentorAnswers()) + AppConstants.SPACE + mContext.getString(R.string.ID_ANSWERED_QUESTIONS));
+            answers.append(changeNumberToNumericSuffix(dataItem.getSolrIgnoreNoOfMentorAnswers()) + AppConstants.SPACE + mContext.getString(R.string.ID_ANSWERED_QUESTIONS));
             tvFeedMentorAnswered.setText(answers);
             tvFeedMentorAnswered.setVisibility(View.VISIBLE);
         } else {

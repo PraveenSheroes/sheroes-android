@@ -43,7 +43,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactCallBackListener;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -86,7 +86,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
     Preference<LoginResponse> mUserPreference;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
     //endregion
 
     //region Member variables
@@ -97,6 +97,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
     //endregion
 
     //region Activity method
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -173,11 +174,11 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
             String search = LEFT_HTML_TAG + getString(R.string.ID_SEARCH) + AppConstants.DOTS + RIGHT_HTML_TAG;
             etInviteSearchBox.setQueryHint(Html.fromHtml(search));
             etInviteSearchBox.setIconifiedByDefault(false);
-            EditText searchEditText =etInviteSearchBox.findViewById(R.id.search_src_text);
+            EditText searchEditText = etInviteSearchBox.findViewById(R.id.search_src_text);
             searchEditText.setTextColor(getResources().getColor(R.color.comment_text));
             ImageView searchIcon = etInviteSearchBox.findViewById(R.id.search_mag_icon);
             searchIcon.setImageDrawable(null);
-            
+
             ImageView searchClose = etInviteSearchBox.findViewById(R.id.search_close_btn);
             searchClose.setImageResource(R.drawable.vector_clear_black_24dp);
             View v = etInviteSearchBox.findViewById(R.id.search_plate);
@@ -209,7 +210,7 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL:
@@ -391,14 +392,14 @@ public class AllContactActivity extends BaseActivity implements ViewPager.OnPage
     @Override
     public void onUserDetailsCallBack() {
         if (!this.isFinishing()) {
-            if(etInviteSearchBox!=null) {
+            if (etInviteSearchBox != null) {
                 etInviteSearchBox.setQuery("", true);
             }
-            boolean showInviteFriendTab=false;
+            boolean showInviteFriendTab = false;
             if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 showInviteFriendTab = mConfiguration.get().configData.showInviteFriendTab;
             }
-            if(!showInviteFriendTab) {
+            if (!showInviteFriendTab) {
                 mViewPager.setCurrentItem(0);
             }
         }

@@ -68,7 +68,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -103,6 +103,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -168,7 +169,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     ImpressionPresenter impressionPresenter;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -238,18 +239,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     //region fragment lifecycle method
     @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-        ButterKnife.bind(this, view);
-
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        ButterKnife.bind(this, view);
+        LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
         impressionPresenter.attachView(this);
         initialSetup();
@@ -258,19 +253,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setIsLoggedInUser();
         setupRecyclerScrollListener();
         showGifLoader();
-
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-
         isWhatsappShare = isWhatsAppShare();
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
         }
-
         String underLineData = getString(R.string.setting);
         SpannableString content = new SpannableString(underLineData);
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
-
         //fetch latest all communities and save it in sharePref
         if (isHomeFeed) {
             mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
@@ -1599,7 +1590,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
 
-            if (carouselDataObj.getStreamType() != null && carouselDataObj.getStreamType().equalsIgnoreCase("LeaderboardCarouselStream")) {
+            if(carouselDataObj.getStreamType()!=null && carouselDataObj.getStreamType().equalsIgnoreCase(AppConstants.LEADERBOARD_CAROUSEL_STREAM)) {
                 UsersCollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             } else {
                 CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -1723,7 +1714,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
         }
-        if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
+        if (!articleObj.getUserStoryStatus().equalsIgnoreCase(AppConstants.STORY_DRAFT)) {
             popup.getMenu().add(0, R.id.share, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.ID_SHARE)));
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {

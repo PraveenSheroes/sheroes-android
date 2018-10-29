@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
  */
 public enum SuperProperty {
     // NOTE: Capitalize the first letter
+    LANGUAGE("Language"),
     USER_ID("User Id"),
     DATE_OF_BIRTH("Date Of Birth"),
     CREATED_DATE("Created Date"),
@@ -60,7 +61,10 @@ public enum SuperProperty {
             }
             return value != null;
         }
-
+        public Builder language(String value) {
+            put(LANGUAGE, value);
+            return this;
+        }
         public Builder userName(String value) {
             put(USER_NAME, value);
             return this;

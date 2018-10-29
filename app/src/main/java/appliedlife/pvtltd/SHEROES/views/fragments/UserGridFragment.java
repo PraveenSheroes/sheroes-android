@@ -57,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
@@ -151,8 +152,8 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
 
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         ButterKnife.bind(this, view);
-
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        LocaleManager.setLocale(getContext());
         mUserListPresenter.attachView(this);
         initialSetup();
         initializeRecyclerView();
