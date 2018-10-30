@@ -1620,30 +1620,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) {
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mFeedPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj); //submit
                                     spamReasonsDialog.dismiss();
-
-
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
-
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
                             } else {
                                 reason.setVisibility(View.VISIBLE);
@@ -1652,7 +1646,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         } else {
                             mFeedPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj);  //submit request
                             spamReasonsDialog.dismiss();
-
                             if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                             } else if (spamContentType == SpamContentType.COMMENT) {
@@ -1663,7 +1656,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 

@@ -32,7 +32,7 @@ public class ArticleTextView {
                         tv.setText(text);
                         tv.setMovementMethod(LinkMovementMethod.getInstance());
                         if (text.length() > 10) {
-                            String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                            String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 9, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                             if (text.length() > 20) {
                                 text = text.substring(0, text.length() - 20) + AppConstants.DOTS;
                                 tv.setText(Html.fromHtml(text + data));
@@ -45,7 +45,7 @@ public class ArticleTextView {
                     if(lineEndIndex>=expandText.length()) {
                         String text = tv.getText().subSequence(0, lineEndIndex - expandText.length() + 1) + " " + expandText;
                         if (text.length() > 10) {
-                            String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                            String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 9, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                             //  tv.setText(text+data);
                             tv.setMovementMethod(LinkMovementMethod.getInstance());
                             if (text.length() > 20) {
@@ -58,7 +58,7 @@ public class ArticleTextView {
                     int lineEndIndex = tv.getLayout().getLineEnd(tv.getLayout().getLineCount() - 1);
                     String text = tv.getText().subSequence(0, lineEndIndex) + " " + expandText;
                     if (text.length() > 10) {
-                        String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 10, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
+                        String data = LEFT_HTML_VEIW_TAG_FOR_COLOR + text.substring(text.length() - 9, text.length()) + RIGHT_HTML_VIEW_TAG_FOR_COLOR;
                         // tv.setText(text+data);
                         if (text.length() > 20) {
                             text = text.substring(0, text.length() - 20) + AppConstants.DOTS;

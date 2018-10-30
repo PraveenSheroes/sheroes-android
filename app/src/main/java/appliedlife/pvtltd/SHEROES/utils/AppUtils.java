@@ -131,7 +131,6 @@ public class AppUtils {
 
     private static final int MIN_AMOUNT_FOR_WALLET_CARD = 200;
     private static final int WALLET_CARD_EARN_UPTO = 4000;
-    public static final String OTHER = "other";
     public static final String DEVICE_SCREEN_RESOLUTION_LDPI = "ldpi";
     public static final String DEVICE_SCREEN_RESOLUTION_MDPI = "mdpi";
     public static final String DEVICE_SCREEN_RESOLUTION_HDPI = "hdpi";

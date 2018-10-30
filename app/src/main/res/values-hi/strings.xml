@@ -56,13 +56,13 @@
     <string name="ID_SEARCH">खोजें</string>
     <string name="ID_SEARCH_LOCATION">लोकेशन खोजें</string>
     <string name="ID_TRENDING">ट्रेंडिंग</string>
-    <string name="ID_CHOOSE_CATEGORY">कैटेगरी चुने</string>
+    <string name="ID_CHOOSE_CATEGORY">कैटेगरी चुनें</string>
     <string name="ID_DONE">चुनें</string>
     <string name="ID_OK">ठीक है</string>
     <string name="ID_CANCEL">रद्द करें</string>
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
-    <string name="ID_JOIN">जुड़े</string>
+    <string name="ID_JOIN">जुड़ें</string>
     <string name="ID_INTERESTED">Interested</string>
     <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">अनुरोध किया</string>
@@ -76,13 +76,13 @@
     <string name="ID_PROFILE">परिचय</string>
     <string name="ID_PROFILE_POST">प्रोफाइल पोस्ट स्क्रीन</string>
     <string name="ID_ARTICLE">लेख</string>
-    <string name="ID_POST">कमेंट इस रूप में करे:</string>
+    <string name="ID_POST">कमेंट इस रूप में करें:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
     <string name="ID_MEMBERS">सदस्य</string>
     <string name="ID_ADMIN">एडमिन</string>
     <string name="ID_REMOVE">हटाएं</string>
     <string name="ID_SHARE">शेयर</string>
-    <string name="ID_EDIT">बदले</string>
+    <string name="ID_EDIT">बदलें</string>
     <string name="SHARE_PROFILE">प्रोफाइल शेयर करें</string>
     <string name="ID_EDIT_PROFILE">प्रोफाइल में बदलाव</string>
     <string name="ID_DELETE">हटाएं</string>
@@ -199,7 +199,7 @@
     <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">SHEROES फीड में आपका स्वागत है</string>
     <string name="ID_CIRCLE_SUPPORT">आपकी महिला साथियों का समूह</string>
-    <string name="ID_ONCE_CARD_DETAIL1">प्रभावशाली महिलाओं के साथ जुड़े , नेटवर्क बनाएं और हैंगऑउट करें</string>
+    <string name="ID_ONCE_CARD_DETAIL1">प्रभावशाली महिलाओं के साथ जुड़ें , नेटवर्क बनाएं और हैंगऑउट करें</string>
     <string name="ID_ONCE_CARD_DETAIL2">आपके क्षेत्र और जीवन के अन्य क्षेत्रों से।</string>
     <string name="ID_ONCE_CARD_DETAIL3">अपनी रोजमर्रा की उपलब्धियों को शेयर करें और दूसरों को प्रेरित करें।</string>
     <string name="ID_JUST">केवल</string>
@@ -375,7 +375,7 @@
     <string name="ID_MENTOR">चैंपियंस</string>
     <string name="empty_mentor_text">अभी तक कोई चैंपियन नहीं है!</string>
     <string name="ID_MENTOR_POST">पोस्ट्स</string>
-    <string name="ID_MENTOR_Q_A">प्रo और उo</string>
+    <string name="ID_MENTOR_Q_A">प्र• और उ•</string>
     <string name="ID_ASKING">पूछ रहा है</string>
     <string name="ID_WHAT_IS_QUESTION">आपका क्या सवाल है?</string>
     <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
@@ -509,7 +509,7 @@
     <string name="explore_All">समुदाय खोजें</string>
     <string name="keep_user_post_likes_and_comments">यूज़र की गतिविधि हटाएं</string>
     <string name="add_reason">कारण लिखें</string>
-    <string name="others">अन्य लोग</string>
+    <string name="others">अन्य</string>
     <string name="home_label">होम</string>
     <string name="youtube">Youtube.com</string>
     <string name="how_do_i_become_a_supersheroes">सुपर SHEROES कैसे बनें?</string>
@@ -585,7 +585,7 @@
     <string name="list_comment_submit">जमा करें</string>
     <string name="list_comment_cancel">रद्द करें</string>
     <string name="leaderboard_rank_unavailable">--</string>
-    <string name="edit">बदले</string>
+    <string name="edit">बदलें</string>
     <string name="poll_result_percent">%</string>
     <string name="poll_ask_question">सवाल पूछे (%1$d वर्ण)</string>
     <string name="poll_text_option">(%1$d वर्ण)</string>
@@ -598,7 +598,7 @@
                                             </body>
                                             </html> ]]></string>
     <string name="not_available">NA</string>
-    <string name="welcome">स्वागत है %1$s !</string>
+    <string name="welcome">स्वागत है </string>
     <string name="hi">नमस्ते %1$s</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
@@ -626,7 +626,7 @@
     <string name="my_stories">मेरी कहानियाँ</string>
     <string name="cropping_fail">काटना विफल:</string>
     <string name="ago">पूर्व</string>
-    <string name="no_q_a">अभी तक कोई प्रo और उo नही</string>
+    <string name="no_q_a">अभी तक कोई प्र• और उ• नही</string>
     <string name="schedule_post_title">शिड्यूल पोस्ट?</string>
     <string name="notification_view_profile">प्रोफाइल देखिये</string>
     <string name="notification_veiw_your_profile">अपनी प्रोफाइल देखें</string>

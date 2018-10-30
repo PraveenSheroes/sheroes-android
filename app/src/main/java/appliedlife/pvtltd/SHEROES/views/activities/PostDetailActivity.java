@@ -1311,31 +1311,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) { //If reason "other" is selected
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) { //If reason "other" is selected
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment); //submit
                                     spamReasonsDialog.dismiss();
-
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
-
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
@@ -1354,7 +1348,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 

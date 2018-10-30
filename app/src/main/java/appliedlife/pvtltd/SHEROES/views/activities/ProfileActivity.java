@@ -2281,28 +2281,23 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
                         if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) {
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     profilePresenter.reportSpamPostOrComment(finalSpamRequest); //submit
                                     spamReasonsDialog.dismiss();
-
                                     if (spamContentType == SpamContentType.USER) {
                                         onProfileReported(userSolrObj);   //report the profile
                                     }
                                 } else {
                                     reason.setError(getString(R.string.add_reason));
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
@@ -2310,7 +2305,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                         } else {
                             profilePresenter.reportSpamPostOrComment(finalSpamRequest);  //submit request
                             spamReasonsDialog.dismiss();
-
                             if (spamContentType == SpamContentType.USER) {
                                 onProfileReported(userSolrObj);   //report the profile
                             }
@@ -2319,7 +2313,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 
