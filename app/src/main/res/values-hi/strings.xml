@@ -49,7 +49,7 @@
     <string name="following_public_profile_toolbar_title">जिन्हें ये फॉलो करती हैं</string>
     <string name="ID_MENTOR_INSIGHT">सलाहकार का विवरण</string>
     <string name="ID_COMMUNITIY">समुदाय</string>
-    <string name="ID_GENERIC_ERROR">ओह! कुछ गलत हो गया है। हम कार्यरत हैं। इसे जल्दी से ठीक कर देंगे</string>
+    <string name="ID_GENERIC_ERROR">ओह! कुछ गलत हो गया है। हम इसे जल्दी से ठीक कर देंगे</string>
     <string name="ID_UNABLE_TO_COMMENT">माफ़ करें, कमेंट नहीं हो पाया। कृपया कुछ देर बाद दोबारा कोशिश करे।</string>
     <string name="ID_UNABLE_TO_EDIT_DELETE">माफ़ करें, कमेंट करने और बदलने में असमर्थ है। कृपया कुछ देर बाद दोबारा कोशिश करे।</string>
     <string name="ID_SERVER_PROBLEM">सर्वर मे एरर है। आपका अनुरोध पूरा नहीं हो सका।</string>
