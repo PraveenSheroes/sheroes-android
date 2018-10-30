@@ -1,41 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="horizontal">
+
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
         android:id="@+id/iv_contact_card_circle_icon"
         android:layout_width="@dimen/contact_icon_circle"
         android:layout_height="@dimen/contact_icon_circle"
-        android:layout_marginTop="@dimen/dp_size_8"
-        android:layout_marginBottom="@dimen/dp_size_8"
         android:layout_gravity="center"
-        android:src="@drawable/vector_default_img"
-        android:layout_marginLeft="@dimen/dp_size_16"/>
-    <TextView
+        android:layout_marginBottom="@dimen/dp_size_8"
+        android:layout_marginLeft="@dimen/dp_size_16"
+        android:layout_marginTop="@dimen/dp_size_8"
+        android:src="@drawable/vector_default_img" />
+
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_contact_name"
+        style="@style/TextView16spRegular"
         android:layout_width="0dp"
-        android:layout_weight="@integer/int_value_for_line_1"
         android:layout_height="wrap_content"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:textColor="@color/comment_text"
         android:layout_marginLeft="@dimen/dp_size_20"
         android:layout_marginTop="@dimen/dp_size_16"
-        android:textSize="@dimen/sp_size_16"/>
-    <Button
+        android:layout_weight="@integer/int_value_for_line_1"
+        android:textColor="@color/comment_text"
+        vernacular:customTextFontFamily="@string/regular_font" />
+
+    <appliedlife.pvtltd.SHEROES.vernacular.FontButton
         android:id="@+id/btn_invite_friend"
+        style="@style/TextView14spBold"
         android:layout_width="@dimen/invite_btn_width"
         android:layout_height="@dimen/invite_btn_height"
+        android:layout_gravity="center"
         android:layout_marginLeft="@dimen/dp_size_8"
         android:layout_marginRight="@dimen/sp_size_16"
         android:background="@drawable/selecter_invite_friend"
-        android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
-        android:layout_gravity="center"
         android:text="@string/contact_invite_friend"
         android:textAllCaps="true"
         android:textColor="@drawable/selecter_contact_text_color"
-        android:textSize="@dimen/sp_size_14" />
+        vernacular:customButtonFontFamily="@string/medium_font" />
 
 </LinearLayout>

@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -99,6 +100,7 @@ public class HelplineFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.helpline_fragment, container, false);
         ButterKnife.bind(this, view);
+        LocaleManager.setLocale(getContext());
         mAppUtils = AppUtils.getInstance();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.HELPLINE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
@@ -120,7 +122,7 @@ public class HelplineFragment extends BaseFragment {
         }
 
         setUpRecyclerView();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.HELPLINE);
         return view;
     }
 
@@ -132,7 +134,7 @@ public class HelplineFragment extends BaseFragment {
             sendChatButton.setEnabled(false);
             mHelplinePresenter.postQuestionHelpline(AppUtils.helplineQuestionBuilder(text));
         } else {
-            Toast.makeText(getContext(), AppConstants.HELPlINE_NO_MESSAGE, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.helpline_msg, Toast.LENGTH_SHORT).show();
         }
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_MESSAGE, GoogleAnalyticsEventActions.SENT_A_HELPLINE_MESSAGE, AppConstants.EMPTY_STRING);
     }

@@ -4,7 +4,6 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
@@ -36,8 +35,8 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -126,14 +125,15 @@ public class SheroesAppModule {
                 } else {
                     builder.header("Content-Type", "application/json");
                 }
+                builder.header("X-Language", CommonUtil.getPrefStringValue(AppConstants.LANGUAGE_KEY));
                 builder.header("user-agent", getUserAgent(SheroesApplication.mContext));
                 builder.header("X-app-version-code", getAppVersionCode(SheroesApplication.mContext));
                 if (NetworkUtil.isConnected(mApplication)) {
-                     int maxAge =0; // read from cache for 0 minute if connected
-                     builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
+                    int maxAge = 0; // read from cache for 0 minute if connected
+                    builder.addHeader("Cache-Control", "public, max-age=" + maxAge);
                 } else {
-                     int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
-                     builder.addHeader("Cache-Control","public, only-if-cached, max-stale=" + maxStale);
+                    int maxStale = AppConstants.SECONDS_IN_MIN * AppConstants.MINUTES_IN_HOUR * AppConstants.HOURS_IN_DAY * AppConstants.CACHE_VALID_DAYS; // tolerate 2-weeks stale
+                    builder.addHeader("Cache-Control", "public, only-if-cached, max-stale=" + maxStale);
                 }
                 request = builder.build();
 
@@ -239,8 +239,8 @@ public class SheroesAppModule {
 
     @Singleton
     @Provides
-    public Preference<Configuration> provideConfiguration(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.CONFIG_KEY, new Configuration(), new GsonConverter<>(gson, Configuration.class));
+    public Preference<AppConfiguration> provideConfiguration(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.CONFIG_KEY, new AppConfiguration(), new GsonConverter<>(gson, AppConfiguration.class));
     }
 
     @Singleton
@@ -279,7 +279,7 @@ public class SheroesAppModule {
                 .cache(cache);
 
         if (BuildConfig.DEBUG) {
-           okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
+            okHttpClientBuilder.addNetworkInterceptor(new StethoInterceptor());
         }
 
         return okHttpClientBuilder.build();

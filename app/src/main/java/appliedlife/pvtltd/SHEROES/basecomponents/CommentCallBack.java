@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 
@@ -17,5 +16,5 @@ public interface CommentCallBack {
 
     void userProfileNameClick(Comment comment, View view);
 
-    void userProfilePicClick(Comment comment, View  view);
+    void userProfilePicClick(Comment comment, View view);
 }

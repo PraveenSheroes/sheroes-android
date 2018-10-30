@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +68,7 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
         moEngageUtills = MoEngageUtills.getInstance();
         startedTime = System.currentTimeMillis();
         payloadBuilder = new PayloadBuilder();
-        moEngageUtills.entityMoEngageForgotPassword(getActivity(),mMoEHelper,payloadBuilder,startedTime);
+        moEngageUtills.entityMoEngageForgotPassword(getActivity(), mMoEHelper, payloadBuilder, startedTime);
         return view;
     }
 
@@ -79,15 +78,15 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
         mLogInPresenter.detachView();
 
         long timeSpent = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageForgotPassword(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+        moEngageUtills.entityMoEngageForgotPassword(getActivity(), mMoEHelper, payloadBuilder, timeSpent);
     }
 
     @OnClick(R.id.tv_forgot_password_submit)
-    public void sendForgotPassword(){
-        if ( eTInputEmail.getText() == null || !StringUtil.isNotNullOrEmptyString(eTInputEmail.getText().toString())) {
+    public void sendForgotPassword() {
+        if (eTInputEmail.getText() == null || !StringUtil.isNotNullOrEmptyString(eTInputEmail.getText().toString())) {
             eTInputEmail.setError(getString(R.string.ID_ERROR_NO_EMAIL));
             eTInputEmail.requestFocus();
-        } else if(!mAppUtils.checkEmail(eTInputEmail.getText().toString())){
+        } else if (!mAppUtils.checkEmail(eTInputEmail.getText().toString())) {
             eTInputEmail.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             eTInputEmail.requestFocus();
         } else {
@@ -97,14 +96,15 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
         }
 
     }
+
     @Override
     public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
-        if(forgotPasswordResponse!=null){
-            if(forgotPasswordResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())){
+        if (forgotPasswordResponse != null) {
+            if (forgotPasswordResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())) {
 
                 ResetPasswordSuccessFragment resetPasswordSuccessFragment = new ResetPasswordSuccessFragment();
 
-                if(eTInputEmail != null && StringUtil.isNotNullOrEmptyString(eTInputEmail.getText().toString())){
+                if (eTInputEmail != null && StringUtil.isNotNullOrEmptyString(eTInputEmail.getText().toString())) {
                     Bundle bundle = new Bundle();
                     bundle.putString(AppConstants.EMAIL, eTInputEmail.getText().toString());
                     resetPasswordSuccessFragment.setArguments(bundle);
@@ -132,8 +132,8 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
 
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
-        if(getActivity() == null || getActivity().isFinishing())  return;
-        ((LoginActivity)getActivity()).renderLoginFragmentView();
+        if (getActivity() == null || getActivity().isFinishing()) return;
+        ((LoginActivity) getActivity()).renderLoginFragmentView();
     }
 
     @Override

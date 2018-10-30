@@ -1,9 +1,10 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/contest_content"
-    android:background="@color/theme"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/theme">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_layout"
@@ -30,19 +31,21 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <View
             android:id="@+id/bottom_view"
-            android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true" />
+
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/bottom_view" />
     </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -58,7 +61,7 @@
             android:background="@color/red"
             android:clickable="true">
 
-            <Button
+            <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                 android:id="@+id/btn_bottom_bar"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
@@ -69,17 +72,20 @@
                 android:gravity="center"
                 android:text="@string/submit_response"
                 android:textColor="@color/white"
-                android:visibility="visible" />
+                android:visibility="visible"
+                vernacular:customButtonFontFamily="@string/medium_font" />
         </FrameLayout>
     </LinearLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ProgressBar
             android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </RelativeLayout>
 </android.support.design.widget.CoordinatorLayout>

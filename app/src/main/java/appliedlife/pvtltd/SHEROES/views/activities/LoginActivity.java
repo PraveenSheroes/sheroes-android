@@ -20,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
@@ -40,22 +41,23 @@ public class LoginActivity extends BaseActivity {
 
     //For ads Navigation
     private boolean isBranchFirstSession = false;
-    private String deepLinkUrl  = null;
+    private String deepLinkUrl = null;
     private String defaultTab = null;
 
     @Inject
     Preference<LoginResponse> userPreference;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken())&&StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getToken()) && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.FEED_SCREEN)) {
                 Intent homeIntent = new Intent(this, HomeActivity.class);
                 startActivity(homeIntent);
-            } else if ( userPreference.get().isSheUser() && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)){
+            } else if (userPreference.get().isSheUser() && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
                 renderEmailVerifyFragmentView();
-            }else {
+            } else {
                 Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
                 boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(boardingIntent);
@@ -71,31 +73,29 @@ public class LoginActivity extends BaseActivity {
         Bundle bundle = getIntent().getExtras();
         LoginFragment frag = new LoginFragment();
         frag.setArguments(bundle);
-        if(bundle!=null) {
-           isBranchFirstSession = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
-           deepLinkUrl =  bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
-           defaultTab = bundle.getString(CommunityDetailActivity.TAB_KEY);
+        if (bundle != null) {
+            isBranchFirstSession = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
+            deepLinkUrl = bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
+            defaultTab = bundle.getString(CommunityDetailActivity.TAB_KEY);
         }
 
         callFirstFragment(R.id.fragment_login, frag);
     }
 
-    public void onErrorOccurence(String errorMessage,String isDeactivated) {
+    public void onErrorOccurence(String errorMessage, String isDeactivated) {
         if (!StringUtil.isNotNullOrEmptyString(errorMessage)) {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
-        if(StringUtil.isNotNullOrEmptyString(isDeactivated)&&isDeactivated.equalsIgnoreCase("true"))
-        {
-            showErrorDialogOnUserAction(true,false,errorMessage,"true");
-        }else
-        {
+        if (StringUtil.isNotNullOrEmptyString(isDeactivated) && isDeactivated.equalsIgnoreCase("true")) {
+            showErrorDialogOnUserAction(true, false, errorMessage, "true");
+        } else {
             showNetworkTimeoutDoalog(true, false, errorMessage);
         }
     }
 
 
     public void onLoginAuthToken() {
-        if ( userPreference.get().isSheUser()  && userPreference.get().getNextScreen()!=null && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
+        if (userPreference.get().isSheUser() && userPreference.get().getNextScreen() != null && userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
             renderEmailVerifyFragmentView();
         } else {
 
@@ -110,21 +110,22 @@ public class LoginActivity extends BaseActivity {
                 Bundle bundle = new Bundle();
                 bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
                 bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
-                if(StringUtil.isNotNullOrEmptyString(defaultTab)) {
+                if (StringUtil.isNotNullOrEmptyString(defaultTab)) {
                     bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
                 }
                 intent.putExtras(bundle);
                 intent.setData(url);
                 startActivity(intent);
-                finish();
             } else {
                 Intent boardingIntent = new Intent(this, OnBoardingActivity.class);
                 Bundle bundle = new Bundle();
                 boardingIntent.putExtras(bundle);
                 boardingIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
                 startActivity(boardingIntent);
+                CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
             }
         }
+        finishAffinity();
     }
 
     @Override
@@ -136,7 +137,7 @@ public class LoginActivity extends BaseActivity {
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                     break;
                 default: {
-                    super.onShowErrorDialog(errorReason,feedParticipationEnum);
+                    super.onShowErrorDialog(errorReason, feedParticipationEnum);
                 }
             }
         }
@@ -170,7 +171,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void renderEmailVerifyFragmentView(){
+    public void renderEmailVerifyFragmentView() {
         setContentView(R.layout.activity_login);
         EmailVerificationFragment emailVerificationFragment = new EmailVerificationFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_login, emailVerificationFragment, EmailVerificationFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();

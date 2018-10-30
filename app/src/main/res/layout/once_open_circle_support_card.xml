@@ -1,67 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/article_card"
     android:layout_width="match_parent"
-    android:background="@color/white"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/dp_size_10">
+    android:layout_marginBottom="@dimen/dp_size_10"
+    android:background="@color/white">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/once_open_card"
         android:layout_marginBottom="@dimen/dp_size_10"
+        android:background="@drawable/once_open_card"
         android:orientation="vertical">
-        <TextView
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
-            android:textSize="@dimen/sp_size_14"
-            android:textColor="@color/once_card"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_18"
             android:text="@string/ID_ONCE_CARD_TITLE"
-            android:layout_height="wrap_content" />
-        <TextView
+            android:textColor="@color/once_card"
+            vernacular:customTextFontFamily="@string/medium_font" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textSize="@dimen/sp_size_12"
-            android:textColor="@color/footer_icon_text"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_12"
             android:text="@string/ID_CIRCLE_SUPPORT"
-            android:layout_height="wrap_content" />
-        <TextView
+            android:textColor="@color/footer_icon_text"
+            vernacular:customTextFontFamily="@string/regular_font" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textSize="@dimen/sp_size_12"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_14"
             android:layout_marginRight="@dimen/dp_size_12"
-            android:textColor="@color/text_color_follow"
-            android:layout_gravity="center"
             android:layout_marginTop="@dimen/dp_size_14"
             android:text="@string/ID_ONCE_CARD_DETAIL1"
-            android:layout_height="wrap_content" />
-        <TextView
+            android:textColor="@color/text_color_follow"
+            vernacular:customTextFontFamily="@string/regular_font" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textSize="@dimen/sp_size_12"
-            android:layout_marginTop="@dimen/dp_size_5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_14"
             android:layout_marginRight="@dimen/dp_size_12"
-            android:textColor="@color/text_color_follow"
-            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_5"
             android:text="@string/ID_ONCE_CARD_DETAIL2"
-            android:layout_height="wrap_content" />
-        <TextView
+            android:textColor="@color/text_color_follow"
+            vernacular:customTextFontFamily="@string/regular_font" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView12spRegular"
             android:layout_width="wrap_content"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
-            android:textSize="@dimen/sp_size_12"
-            android:layout_marginTop="@dimen/dp_size_5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="@dimen/dp_size_14"
             android:layout_marginRight="@dimen/dp_size_12"
-            android:textColor="@color/text_color_follow"
-            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dp_size_5"
             android:text="@string/ID_ONCE_CARD_DETAIL3"
-            android:layout_height="wrap_content" />
+            android:textColor="@color/text_color_follow"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

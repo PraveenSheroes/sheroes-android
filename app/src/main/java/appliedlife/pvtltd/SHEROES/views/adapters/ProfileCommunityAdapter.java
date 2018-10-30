@@ -131,9 +131,9 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
 
                 if (profileCommunity.isMutualCommunityFirstItem() && getAdapterPosition() ==0) {
                     subTitleHeaderContainer.setVisibility(View.VISIBLE);
-                    community_subtitle.setText(String.format(Locale.US, "%d Mutual Communities", profileCommunity.getMutualCommunityCount()));
+                    community_subtitle.setText(String.format(Locale.US, mContext.getString(R.string.mutual_communities), profileCommunity.getMutualCommunityCount()));
                 } else if (profileCommunity.isOtherCommunityFirstItem()) {
-                    String label = isOwnProfile ? "My Communities" : "Communities";
+                    String label = isOwnProfile ? mContext.getString(R.string.my_communities) : mContext.getString(R.string.ID_COMMUNITIES);
                     community_subtitle.setText(label);
                     subTitleHeaderContainer.setVisibility(View.VISIBLE);
                 } else {

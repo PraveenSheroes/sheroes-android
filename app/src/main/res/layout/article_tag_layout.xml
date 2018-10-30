@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<appliedlife.pvtltd.SHEROES.vernacular.FontTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tv_article_tag"
+    style="@style/TextView14spRegular"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-    android:textColor="@color/comment_text"
+    android:paddingBottom="@dimen/dp_size_12"
     android:paddingLeft="@dimen/dp_size_16"
     android:paddingTop="@dimen/dp_size_12"
-    android:paddingBottom="@dimen/dp_size_12"
-    android:textSize="@dimen/sp_size_14"
-    android:textStyle="normal">
+    android:textColor="@color/comment_text"
+    vernacular:customTextFontFamily="@string/regular_font" />
 
-</TextView>

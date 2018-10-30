@@ -1,9 +1,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:paddingBottom="10dp"
     android:paddingLeft="20dp"
-    android:paddingRight="20dp"
-    android:layout_height="wrap_content" >
+    android:paddingRight="20dp">
 
     <ProgressBar
         android:id="@+id/progressBar1"
@@ -14,15 +15,16 @@
         android:layout_marginLeft="5dp"
         android:layout_marginTop="10dp" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        style="@style/TextView16spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@id/progressBar1"
         android:layout_marginLeft="@dimen/dp_size_10"
-        android:textSize="@dimen/sp_size_15"
         android:layout_marginTop="@dimen/dp_size_15"
         android:layout_toRightOf="@id/progressBar1"
         android:text="@string/ID_FACEBOOK_LONGING"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/black"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </RelativeLayout>

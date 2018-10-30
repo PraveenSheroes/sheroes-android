@@ -1,53 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/tooltip_center_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/ll_tool_tip_bg"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_tool_tip_bg">
+        android:background="@drawable/ic_tool_tip_bg"
+        android:orientation="horizontal">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title"
+            style="@style/TextView14spRegular"
             android:layout_width="0dp"
-            android:layout_weight="@integer/int_value_for_line_1"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_size_8"
-            android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginBottom="@dimen/dp_size_24"
+            android:layout_marginLeft="@dimen/dp_size_16"
             android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/dp_size_8"
+            android:layout_weight="@integer/int_value_for_line_1"
             android:gravity="left"
             android:lineSpacingExtra="@dimen/dp_size_5"
-            android:fontFamily="@string/ID_ROBOTO_REGULAR"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/got_it"
-            android:layout_gravity="center"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp_size_10"
-            android:paddingRight="@dimen/dp_size_10"
-            android:paddingLeft="@dimen/dp_size_10"
+            android:layout_gravity="center"
             android:paddingBottom="@dimen/sp_size_10"
-            android:textAllCaps="true"
+            android:paddingLeft="@dimen/dp_size_10"
+            android:paddingRight="@dimen/dp_size_10"
+            android:paddingTop="@dimen/dp_size_10"
             android:text="@string/got_it"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
+            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_size_14" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
     </LinearLayout>
+
     <ImageView
         android:id="@+id/iv_arrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/ll_tool_tip_bg"
         android:layout_centerHorizontal="true"
-        android:rotation="180"
-        android:background="@drawable/share_tooltip" />
+        android:background="@drawable/share_tooltip"
+        android:rotation="180" />
 </RelativeLayout>

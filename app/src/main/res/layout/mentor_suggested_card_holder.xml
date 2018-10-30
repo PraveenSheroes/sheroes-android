@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/dp_size_8">
@@ -23,44 +24,44 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    style="@style/TextView14spBold"
                     android:layout_marginEnd="@dimen/dp_size_16"
                     android:layout_marginLeft="@dimen/dp_size_16"
                     android:layout_marginRight="@dimen/dp_size_16"
                     android:layout_marginStart="@dimen/dp_size_16"
                     android:layout_marginTop="@dimen/dp_size_16"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center"
                     android:letterSpacing="0.07"
                     android:padding="@dimen/dp_size_2"
                     android:text="@string/more"
                     android:textAllCaps="true"
                     android:textColor="@color/footer_icon_text"
-                    android:textSize="@dimen/sp_size_14"
-                    tools:text="More" />
+                    tools:text="@string/more"
+                    vernacular:customTextFontFamily="@string/medium_font"/>
             </FrameLayout>
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/TextView16spRegular"
                 android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginStart="@dimen/dp_size_16"
                 android:layout_marginTop="16dp"
                 android:layout_toLeftOf="@id/icon_container"
                 android:layout_toStartOf="@id/icon_container"
-                android:fontFamily="sans-serif"
                 android:letterSpacing="0.04"
                 android:text="@string/ID_GET_EXPERT_ADVICE"
                 android:textColor="#3c3c3c"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                vernacular:customTextFontFamily="@string/regular_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/body"
+                style="@style/TextView14spRegular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
@@ -68,12 +69,10 @@
                 android:layout_marginStart="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_4"
                 android:ellipsize="end"
-                android:fontFamily="@string/ID_ROBOTO_LIGHT"
                 android:maxLines="3"
                 android:textColor="@color/gray_light"
-                android:textSize="@dimen/sp_size_14"
-                android:textStyle="normal"
-                tools:text="Here are some trending posts on SHEROES" />
+                vernacular:customTextFontFamily="@string/regular_font"
+                tools:text="@string/top_communities_text" />
 
         </RelativeLayout>
 

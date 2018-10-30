@@ -13,7 +13,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 /**
  * Created by ujjwal on 13/02/17.
  */
-public class Configuration extends BaseRequest {
+public class AppConfiguration extends BaseRequest {
     public String id;
 
     @SerializedName("config_type")
