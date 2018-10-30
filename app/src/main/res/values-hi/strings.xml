@@ -118,7 +118,7 @@
     <string name="ID_BACK_PRESS">ऐप से बाहर निकलने के लिए बैक बटन फिर से दबाएं</string>
     <string name="ID_INVITE_WOMEN_FRIEND">दोस्तों को आमंत्रित करें</string>
     <string name="ID_PLAY_STORE_DATA">SHEROES से कनेक्ट हो रहा है&#8230;</string>
-    <string name="ID_LOCATION">लोकेशन</string>
+    <string name="ID_LOCATION">स्थान</string>
     <string name="ID_CLOSE">बंद हो गया</string>
 
     <!-- String related to setting_feedback page-->
@@ -218,7 +218,7 @@
     <string name="ID_RESET_PASSWORD_TITLE">पासवर्ड रिसेट करें</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_TEXT">ईमेल आईडी लिखें</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT">हमने ****@live.com पर एक पासवर्ड रीसेट लिंक भेजा है, कृपया अपना इनबॉक्स जांचें और निर्देशों का पालन करें</string>
-    <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">हमने *** पर एक पासवर्ड रीसेट लिंक भेजा है "</string>
+    <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">हमने ***%1$s पर एक पासवर्ड रीसेट लिंक भेजा है "</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2">, कृपया अपना इनबॉक्स जांचें और निर्देशों का पालन करें</string>
     <string name="ID_RESET_PASSWORD_FAILURE_TEXT">आपके द्वारा दर्ज किया गया ईमेल या तो गलत है या अनियंत्रित है। कृपया पुन: प्रयास करें।</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">कृपया अपने SHEROES खाते से जुड़ी ईमेल आईडी दर्ज करें</string>
@@ -437,9 +437,9 @@
     <string name="answers">उत्तर</string>
     <string name="followers">फॉलोवर्स</string>
     <string name="invite_friend">दोस्तों को ढूंढें और आमंत्रित करें</string>
-    <string name="suggested_friend">सुझाये दोस्त</string>
+    <string name="suggested_friend">दोस्त ढूंढें</string>
     <string name="contact_list_friend">संपर्क</string>
-    <string name="contact_invite_friend">बुलाना</string>
+    <string name="contact_invite_friend">आमंत्रित करें</string>
     <string name="suggested_list_blank">देखना चाहते हैं कि SHEROES पर आपके कितने दोस्त हैं?</string>
     <string name="invite_friend_request_to_join">केवल महिलाओं के लिए बनी SHEROES ऐप पर मुझसे जुड़ें। आप महिलाओं से संबंधित चर्चाओं में भाग ले सकती हैं (गुमनाम रूप से भी) और भारत वर्ष की अन्य महिलाओं के जीवन में योगदान देने में मदद कर सकती हैं।</string>
     <string name="invite_sync_contact">SHEROES में मौजूद अपने दोस्तों को मोबाइल संपर्क द्वारा ढूंढ़ने की अनुमति दें!</string>
@@ -468,7 +468,7 @@
     <string name="searching">ढूँढ रहे हैं&#8230;</string>
     <string name="no_result_found">कोई परिणाम नहीं मिला</string>
     <string name="user_mention_area_at_post">आप समुदाय के एडमिन और अपने फॉलोवर्स को टैग कर सकते हैं</string>
-    <string name="user_mention_area_at_comment">आप समुदाय के एडमिन को, अपने फॉलोवर्स को और इस पोस्ट से जुड़े लोगो को टैग कर सकते हैं</string>
+    <string name="user_mention_area_at_comment">आप समुदाय के एडमिन को, अपने फॉलोवर्स को और इस पोस्ट से जुड़ीं महिलाओं को को टैग कर सकते हैं</string>
     <string name="reactivate_your_account">अपने खाते को पुनः सक्रिय करने के लिए हमें लिखें</string>
     <string name="care_sheroes">care@sheroes.in</string>
     <string name="male">मैं आदमी हूँ</string>
@@ -491,9 +491,9 @@
     <string name="progress_status_all_star">प्रोफाइल स्तर : श्रेष्ठ</string>
     <string name="progress_level_status_intermediate">"प्रोफाइल स्तर : मध्यम"</string>
     <string name="add">और जोड़ें</string>
-    <string name="all_star_filled">वाह! आप श्रेष्ठ स्तर पर पहुंच चुकी हैं। एक लाजवाब प्रोफ़ाइल SHEROES के साथ आपके अनुभव को सुधारती और आपके फोल्लोवेर्स को बढाती हैं।</string>
-    <string name="all_star_unfilled">इस स्तर पर पहुचें! एक अच्छी प्रोफ़ाइल तस्वीर लगाकर और अपना थोड़ा परिचय देकर अधिक फोल्लोवेर्स को प्राप्त करें।</string>
-    <string name="intermediate_filled">आपकी प्रोफ़ाइल आकार ले रही है। प्रत्येक बार जब आप अपनी प्रोफ़ाइल में कुछ जोड़ती हैं तो यह और भी लाजवाब बन जाती है। इस से आपके फोल्लोवेर्स की संख्या बढती है। </string>
+    <string name="all_star_filled">वाह! आप श्रेष्ठ स्तर पर पहुंच चुकी हैं। एक लाजवाब प्रोफ़ाइल SHEROES के साथ आपके अनुभव को सुधारती और आपके फॉलोवर्स को बढाती हैं।</string>
+    <string name="all_star_unfilled">इस स्तर पर पहुचें! एक अच्छी प्रोफ़ाइल तस्वीर लगाकर और अपना थोड़ा परिचय देकर अधिक फॉलोवर्स को प्राप्त करें।</string>
+    <string name="intermediate_filled">आपकी प्रोफ़ाइल आकार ले रही है। प्रत्येक बार जब आप अपनी प्रोफ़ाइल में कुछ जोड़ती हैं तो यह और भी लाजवाब बन जाती है। इस से आपके फॉलोवर्स की संख्या बढती है। </string>
     <string name="intermediate_unfilled">आपकी प्रोफ़ाइल आकार ले रही है। अपने बारे में अधिक जानकारी भरे और अधिक फोल्लोवर्स को प्राप्त करके अपनी प्रोफ़ाइल को भरोसेमंद बनाएं।</string>
     <string name="beginner_message">अब एक कदम और आगे बढ़ गयी हैं। SHEROES के साथ आपका पूर्ण अनुभव को बेहतर होता जा रहा है। यह आपको अधिक फोल्लोवर्स और तेज़ उत्तर पानें में मदद करता है।</string>
     <string name="city_error_msg">शहर का नाम मान्य नहीं हैं,कृपया फिर से चुनें</string>
@@ -518,14 +518,14 @@
     <string name="post_detail_toolbar_title_multiple">%1$s का पोस्ट</string>
     <string name="poll_detail_toolbar_title">%1$s का पोल</string>
     <string name="poll_detail_toolbar_title_multiple">%1$s का पोल</string>
-    <string name="leaderbaord_top_10_user">शीर्ष %1$d इस सप्ताह</string>
+    <string name="leaderbaord_top_10_user">टॉप %1$d इस सप्ताह</string>
     <string name="yay">वाह !</string>
     <string name="badge_active_period_date_text">इस सप्ताह जीत गयी हैं: %1$s - %2$s</string>
     <string name="badge_inactive_period_date_text">नयी जीत: %1$s - %2$s</string>
     <string name="badge_closet_won_date_text">नयी जीत हुई: %1$s</string>
     <string name="badge_closet_won_this_week_text">इस सप्ताह जीत गयी हैं</string>
-    <string name="badge_desc">%1$s %2$s में सुपर SHEROE हैं</string>
-    <string name="inactive_badge_desc">%1$s %2$s में सुपर शीरो/ SHEROE थी</string>
+    <string name="badge_desc">%1$s %2$s में सुपर SHEROES हैं</string>
+    <string name="inactive_badge_desc">%1$s %2$s में सुपर SHEROES थी</string>
     <string name="user_card_desc">%1$s में सुपर SHEROES</string>
     <string name="show_leaderboard">लीडरबोर्ड दिखाओ</string>
     <string name="view_profile">प्रोफाइल देखें</string>
@@ -602,7 +602,7 @@
     <string name="hi">नमस्ते %1$s</string>
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
-    <string name="top_post">शीर्ष पोस्ट</string>
+    <string name="top_post">टॉप पोस्ट</string>
     <string name="my_feed">फीड</string>
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
     <string name="post_header_community">%1$s ने पोस्ट किया"</string>
@@ -615,7 +615,7 @@
     <string name="challenge_completed_text">आपने # %1$s चुनौती पूरी कर ली है</string>
     <string name="winner">विजेता</string>
     <string name="responses">प्रतिक्रियाओं</string>
-    <string name="overview">निरीक्षण</string>
+    <string name="overview">परिचय</string>
     <string name="join_challenge">चैलेंज में शामिल हों</string>
     <string name="not_interested">रुचि नहीं</string>
     <string name="end">समाप्त %1$s</string>
