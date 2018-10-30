@@ -393,7 +393,7 @@
                     android:paddingRight="@dimen/dp_size_10"
                     android:paddingTop="@dimen/dp_size_7"
                     android:text="@string/ID_SHARE_ON_WHATS_APP"
-                    android:textColor="@color/share_color"
+                    android:textColor="@color/recent_post_comment"
                     vernacular:customTextFontFamily="@string/medium_font" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView

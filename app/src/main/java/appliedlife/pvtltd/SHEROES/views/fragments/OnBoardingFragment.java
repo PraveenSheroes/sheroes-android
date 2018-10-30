@@ -258,6 +258,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     @Override
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(getContext(), false);
+        AnalyticsManager.initializeCleverTap(getContext(), false);
     }
 
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {

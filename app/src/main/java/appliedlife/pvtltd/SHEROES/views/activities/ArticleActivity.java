@@ -726,29 +726,23 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) {
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mArticlePresenter.reportSpamPostOrComment(finalSpamRequest, comment, commentPos); //submit
                                     spamReasonsDialog.dismiss();
-
                                     if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
                                         onCommentReported(comment);   //report the article comment
                                     }
-
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
@@ -756,7 +750,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                         } else {
                             mArticlePresenter.reportSpamPostOrComment(finalSpamRequest, comment, commentPos);  //submit request
                             spamReasonsDialog.dismiss();
-
                             if (spamContentType == SpamContentType.ARTICLE_COMMENT) {
                                 onCommentReported(comment);   //report the article comment
                             }
@@ -765,7 +758,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 

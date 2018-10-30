@@ -594,7 +594,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     profileImageDialogFragment.setUserProfileData(true, photo);
                 }
             } else {
-                Toast.makeText(this, "Error while save image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
@@ -692,7 +692,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        onShowErrorDialog(s, feedParticipationEnum);
+        showNetworkTimeoutDialog(true, false, s);
         mProgressBar.setVisibility(View.GONE);
     }
 
@@ -739,7 +739,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateMobileNumber() {
-        if (!StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())) {
+        if (StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) && mobileNumber.getText().toString().length() < 10) {
             inputMobileNumberHolder.setError(getString(R.string.mobile_no_error_msg));
             requestFocus(mobileNumber);
             scrollView.scrollTo(0, mobileNumber.getBottom());

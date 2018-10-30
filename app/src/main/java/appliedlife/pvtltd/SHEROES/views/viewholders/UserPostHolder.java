@@ -605,9 +605,11 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         if (isWhatappShareOption) {
             mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.vector_share_card), null, null, null);
             mShare.setText(mContext.getString(R.string.ID_SHARE_ON_WHATS_APP));
+            mShare.setTextColor(ContextCompat.getColor(mContext, R.color.share_color));
         } else {
             mShare.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(mContext, R.drawable.vector_share_white_out), null, null, null);
             mShare.setText(mContext.getString(R.string.ID_SHARE));
+            mShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
         }
         final String listDescription = mUserPostObj.getListDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {

@@ -89,7 +89,7 @@ public class LoginActivity extends BaseActivity {
         if (StringUtil.isNotNullOrEmptyString(isDeactivated) && isDeactivated.equalsIgnoreCase("true")) {
             showErrorDialogOnUserAction(true, false, errorMessage, "true");
         } else {
-            showNetworkTimeoutDoalog(true, false, errorMessage);
+            showNetworkTimeoutDialog(true, false, errorMessage);
         }
     }
 
@@ -134,7 +134,7 @@ public class LoginActivity extends BaseActivity {
             switch (errorReason) {
                 case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                 case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.IDS_INVALID_USER_PASSWORD));
                     break;
                 default: {
                     super.onShowErrorDialog(errorReason, feedParticipationEnum);
