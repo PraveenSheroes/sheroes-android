@@ -275,6 +275,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (isVisibleToUser) {  //When UI is visible to user
 
             isActiveTabFragment = true;
+
+            if (impressionHelper != null) {
+                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+                impressionHelper.setHeaderEnabled(isHomeFeed);
+                impressionHelper.getVisibleViews(startPos, endPos);
+            }
+
             if (getParentFragment() instanceof HomeFragment) {
                 String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
                 if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {

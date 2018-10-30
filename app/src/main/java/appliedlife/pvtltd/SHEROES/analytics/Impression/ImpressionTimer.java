@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.os.CountDownTimer;
-
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
@@ -33,7 +32,6 @@ public class ImpressionTimer extends CountDownTimer {
     //region public method
     @Override
     public void onTick(long l) {
-        LogUtils.info(TAG, "Time Tick");
     }
 
     @Override
