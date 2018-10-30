@@ -457,7 +457,7 @@
     <string name="spam_confirmation_dialog_title">आपकी प्रतिक्रिया के लिए आपका धन्यवाद!</string>
     <string name="reported_spam_confirmation_dialog_message">आपने पहले ही इस %1$s को स्पैम के रूप में रिपोर्ट कर दिया है, और यह समीक्षा में है। धन्यवाद!</string>
     <string name="reported_spam_marked_dialog_message">%1$s को स्पैम के रूप में चिह्नित किया गया है और यह समीक्षा में है। धन्यवाद!</string>
-    <string name="reported_spam_confirmation_dialog_title">पहले की सूचना दी थी</string>
+    <string name="reported_spam_confirmation_dialog_title">आप सूचना दे चुकी हैं</string>
     <string name="spam_confirmation_dialog_message">आपकी प्रतिक्रिया हमें SHEROES में आपके अनुभव को बेहतर बनाने में मदद करेगी।</string>
 
     <!--spam region end-->
