@@ -692,7 +692,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        showNetworkTimeoutDoalog(true, false, s);
+        showNetworkTimeoutDialog(true, false, s);
         mProgressBar.setVisibility(View.GONE);
     }
 

@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -290,7 +289,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
      *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
      * @return
      */
-    public void showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
+    public void showNetworkTimeoutDialog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
         showErrorDialogOnUserAction(finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
     }
 
@@ -1051,21 +1050,21 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
                 case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
                 case AppConstants.MARK_AS_SPAM:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    showNetworkTimeoutDialog(true, false, errorReason);
                     break;
                 case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                 case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                     break;
                 default: {
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
                 }
             }
         } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+            showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
     }

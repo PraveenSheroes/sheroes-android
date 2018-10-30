@@ -243,7 +243,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         mUserPreference.delete();
                         dismissProgressDialog(LOGGING_IN_DIALOG);
                         dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-                        (WelcomeActivity.this).showNetworkTimeoutDoalog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
+                        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
                     }
 
                     @Override
@@ -251,7 +251,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         mUserPreference.delete();
                         dismissProgressDialog(LOGGING_IN_DIALOG);
                         dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-                        (WelcomeActivity.this).showNetworkTimeoutDoalog(true, false, exception.getMessage());
+                        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, exception.getMessage());
                     }
                 });
 
@@ -619,7 +619,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         switch (checkCall) {
             case FACEBOOK_CALL:
                 if (!NetworkUtil.isConnected(getApplicationContext())) {
-                    (WelcomeActivity.this).showNetworkTimeoutDoalog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
+                    (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
                     return;
                 } else {
                     LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
@@ -675,7 +675,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     break;
             }
         } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+            showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
     }
