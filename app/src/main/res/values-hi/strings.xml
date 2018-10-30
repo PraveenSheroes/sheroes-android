@@ -668,4 +668,5 @@
     <string name="challenge_winner">विजेता</string>
     <string name="new_tag">नया</string>
     <string name="check_out_share_msg">SHEROES ऐप के इस पोस्ट को देखा? मुझे ये बहुत पसंद आया।</string>
+    <string name="empty_comment">खाली कमेंट!</string>
 </resources>

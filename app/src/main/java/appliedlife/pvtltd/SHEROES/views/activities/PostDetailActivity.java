@@ -1093,7 +1093,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         if (etView.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.empty_comment, Toast.LENGTH_SHORT).show();
             return;
         } else {
             mMentionSpanList = etView.getMentionSpans();

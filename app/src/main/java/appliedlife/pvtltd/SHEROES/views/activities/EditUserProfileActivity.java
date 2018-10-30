@@ -739,7 +739,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateMobileNumber() {
-        if (StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString())&&mobileNumber.getText().toString().length()<10) {
+        if (StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) && mobileNumber.getText().toString().length() < 10) {
             inputMobileNumberHolder.setError(getString(R.string.mobile_no_error_msg));
             requestFocus(mobileNumber);
             scrollView.scrollTo(0, mobileNumber.getBottom());
