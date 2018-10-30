@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -116,6 +117,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
             getValidImpressionView(viewPosition, mRecyclerView);
         }
+        Log.i("Final data :" , ""+finalViewData.size());
     }
 
     public boolean isHeaderEnabled() {
@@ -266,7 +268,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
                 //Add position in list
-                //trackingData.setPosition();
             }
 
             if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
@@ -279,7 +280,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             impressionData.setSourceTab(mImpressionProperty.getCommunityTab());
             impressionData.setSource(mImpressionCallback.getScreenName());
             impressionData.setOrderKey(mImpressionProperty.getOrderKey());
-            impressionData.setPosition(isHeaderEnabled ? viewPosition : viewPosition+1);
+            impressionData.setPosition(isHeaderEnabled() ? viewPosition : viewPosition+1);
             impressionData.setUserAgent(recyclerView.getContext() != null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
             impressionData.setClientId(CLIENT_ID); //For mobile android
             impressionData.setEvent(EVENT_TYPE_VI);
