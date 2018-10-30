@@ -27,7 +27,6 @@
         android:paddingTop="@dimen/dp_size_13"
         android:text="@string/ID_SHARE"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_12"
         android:visibility="gone"
         vernacular:customTextFontFamily="@string/regular_font" />
 
