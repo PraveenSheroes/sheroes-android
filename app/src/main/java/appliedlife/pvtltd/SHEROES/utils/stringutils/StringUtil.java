@@ -109,9 +109,9 @@ public class StringUtil {
     public static String changeNumberToNumericSuffix(int countValue) {
         if (countValue < 1000) return "" + countValue;
         int exp = (int) (Math.log(countValue) / Math.log(1000));
-        String suffixedNumber=String.format(Locale.US, "%.1f %c",
+        String suffixedNumber = String.format(Locale.US, "%.1f %c",
                 countValue / Math.pow(1000, exp),
-                "KMGTPE".charAt(exp-1));
+                "KMGTPE".charAt(exp - 1));
         return suffixedNumber;
     }
 
