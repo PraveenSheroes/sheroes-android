@@ -1407,6 +1407,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
+        if (isActiveTabFragment && impressionHelper != null) {
+            impressionHelper.stopImpression();
+        }
+
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
         }
