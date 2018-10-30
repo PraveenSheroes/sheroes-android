@@ -101,6 +101,12 @@ public class AnalyticsManager {
         if (!TextUtils.isEmpty(previousScreenName)) {
             properties.put(EventProperty.SOURCE.getString(), previousScreenName);
         }
+
+        String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+        if (StringUtil.isNotNullOrEmptyString(languageName)) {
+            properties.put(SuperProperty.LANGUAGE.getString(), languageName);
+        }
+
         MixpanelHelper.trackScreenOpen(sAppContext, screenName, properties);
 
         // track all event to Moengage

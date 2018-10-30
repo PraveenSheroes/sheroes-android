@@ -1919,6 +1919,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
             editor.apply();
             AnalyticsManager.initializeMixpanel(getActivity(), false);
+            AnalyticsManager.initializeCleverTap(getActivity(), false);
         }
     }
 

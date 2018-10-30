@@ -1008,6 +1008,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(this, false);
+        AnalyticsManager.initializeCleverTap(this, false);
     }
 
     public void fetchAllCommunity() {

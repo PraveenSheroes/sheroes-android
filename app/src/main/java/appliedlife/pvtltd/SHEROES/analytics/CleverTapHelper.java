@@ -147,8 +147,8 @@ public class CleverTapHelper {
                 profileUpdate.put(LOCATION, userSummary.getUserBO().getCityMaster());
             }
 
-            String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
-            profileUpdate.put(SuperProperty.LANGUAGE.getString(),languageName);
+            String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            profileUpdate.put(SuperProperty.LANGUAGE.getString(), languageName);
 
             //requires Location Permission in AndroidManifest e.g. "android.permission.ACCESS_COARSE_LOCATION"
             Location location = cleverTapAPI.getLocation();
