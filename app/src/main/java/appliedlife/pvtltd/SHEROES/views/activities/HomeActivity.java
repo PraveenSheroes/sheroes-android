@@ -392,6 +392,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (CommonUtil.ensureFirstTime(AppConstants.NEW_TAG_FOR_RIGHT_SWIP)) {
             mTvNewTag.setVisibility(View.VISIBLE);
         }
+        if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
+            showSelectLanguageOption();
+            CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
+        }
     }
 
     public void renderHomeFragmentView() {
