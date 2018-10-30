@@ -173,8 +173,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     public void onNext(ImpressionResponse impressionResponse) {
                         if (null != impressionResponse && impressionResponse.isSuccessFul()) {
                             clearDatabase(Impressions);
+                        } else {
+                            mIsNetworkCallRunning = false;
                         }
-                        mIsNetworkCallRunning = false;
                     }
                 });
     }
@@ -205,8 +206,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     public void onNext(ImpressionResponse impressionResponse) {
                         if (null != impressionResponse && impressionResponse.isSuccessFul()) {
                             clearDatabase(impressions);
+                        } else {
+                            mIsNetworkCallRunning = false;
                         }
-                        mIsNetworkCallRunning = false;
                     }
                 });
     }
@@ -221,19 +223,26 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> subscriber) {
-                final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
-                database.impressionDataDao().deleteImpression(clearImpressionItem);
+                try {
+                    final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
+                    database.impressionDataDao().deleteImpression(clearImpressionItem);
+                    subscriber.onComplete();
+                } catch (Exception e) {
+                    subscriber.onError(e);
+                }
             }
         }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<String>() {
                     @Override
                     public void onComplete() {
+                        mIsNetworkCallRunning = false;
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
+                        mIsNetworkCallRunning = false;
                     }
 
                     @Override
