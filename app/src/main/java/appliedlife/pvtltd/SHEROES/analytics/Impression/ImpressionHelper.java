@@ -229,6 +229,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     }
 
     private void getValidImpressionView(int viewPosition, RecyclerView recyclerView) {
+        if(viewPosition == -1) return;
 
         FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
         if (feedDetail == null) return;
