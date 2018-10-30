@@ -218,7 +218,7 @@
     <string name="ID_RESET_PASSWORD_TITLE">पासवर्ड रिसेट करें</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_TEXT">ईमेल आईडी लिखें</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT">हमने ****@live.com पर एक पासवर्ड रीसेट लिंक भेजा है, कृपया अपना इनबॉक्स जांचें और निर्देशों का पालन करें</string>
-    <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">हमने *** पर एक पासवर्ड रीसेट लिंक भेजा है "</string>
+    <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">हमने ***%1$s पर एक पासवर्ड रीसेट लिंक भेजा है "</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2">, कृपया अपना इनबॉक्स जांचें और निर्देशों का पालन करें</string>
     <string name="ID_RESET_PASSWORD_FAILURE_TEXT">आपके द्वारा दर्ज किया गया ईमेल या तो गलत है या अनियंत्रित है। कृपया पुन: प्रयास करें।</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">कृपया अपने SHEROES खाते से जुड़ी ईमेल आईडी दर्ज करें</string>

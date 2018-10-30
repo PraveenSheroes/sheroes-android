@@ -215,7 +215,7 @@
     <string name="ID_RESET_PASSWORD_TITLE">RESET PASSWORD</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_TEXT">Enter Email ID</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT">We have sent a password reset link to ****@live.com, please check your inbox and follow the instructions</string>
-    <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">We have sent a password reset link to ***"</string>
+    <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1">We have sent a password reset link to ***%1$s"</string>
     <string name="ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2">, please check your inbox and follow the instructions</string>
     <string name="ID_RESET_PASSWORD_FAILURE_TEXT">The email you entered is either incorrect or unregistered. Please try again.</string>
     <string name="ID_RESET_PASSWORD_INPUT_BOX_BOTTOM_TEXT">Please enter the email ID associated with your SHEROES account</string>
