@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.UserEvents;
@@ -390,5 +391,5 @@ public interface SheroesAppServiceApi {
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 
     @POST("http://testevents.sheroes.in:8080/user/event/producer")
-    Observable<BaseResponse> updateImpressionData(@Body UserEvents userEventsContainer);
+    Observable<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 }

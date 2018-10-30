@@ -151,14 +151,14 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<BaseResponse>bindToLifecycle())
+                .compose(this.<ImpressionResponse>bindToLifecycle())
                 .doOnError(new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) {
                         retryFailedImpression(userEvents, Impressions);
                     }
                 })
-                .subscribe(new DisposableObserver<BaseResponse>() {
+                .subscribe(new DisposableObserver<ImpressionResponse>() {
                     @Override
                     public void onComplete() {
                     }
@@ -170,8 +170,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     }
 
                     @Override
-                    public void onNext(BaseResponse baseResponse) {
-                        if (null != baseResponse) {
+                    public void onNext(ImpressionResponse impressionResponse) {
+                        if (null != impressionResponse && impressionResponse.isSuccessFul()) {
                             clearDatabase(Impressions);
                         }
                         mIsNetworkCallRunning = false;
@@ -189,8 +189,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<BaseResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<BaseResponse>() {
+                .compose(this.<ImpressionResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ImpressionResponse>() {
                     @Override
                     public void onComplete() {
                     }
@@ -202,8 +202,8 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     }
 
                     @Override
-                    public void onNext(BaseResponse baseResponse) {
-                        if (null != baseResponse) {
+                    public void onNext(ImpressionResponse impressionResponse) {
+                        if (null != impressionResponse && impressionResponse.isSuccessFul()) {
                             clearDatabase(impressions);
                         }
                         mIsNetworkCallRunning = false;
