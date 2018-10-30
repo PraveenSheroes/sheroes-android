@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<LinearLayout
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    card_view:cardBackgroundColor="@color/feed_back_color"
-    card_view:cardCornerRadius="@dimen/helpline_card_corner_radius">
+    android:background="@color/helpline_background">
     <LinearLayout
         android:id="@+id/LinearLayout1"
         android:layout_width="wrap_content"
@@ -23,7 +22,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginLeft="@dimen/helpline_margin"
+                android:layout_marginLeft="80dp"
+                android:layout_marginRight="@dimen/dp_size_16"
                 android:background="@drawable/outgoing_shap"
                 android:shadowColor="@color/green"
                 android:layout_alignParentRight="true"
@@ -45,28 +45,29 @@
                     android:textColorLink="@color/view_more"
                     android:focusable="true"
                     android:longClickable="true"
-                    android:layout_marginBottom="@dimen/helpline_margin"
                     android:layout_marginTop="@dimen/helpline_margin"
                     android:minHeight="@dimen/help_card_min_height"
                     android:layout_marginLeft="@dimen/helpline_margin"
-                    android:textColor="@color/comment_text" />
+                    android:textColor="@color/comment_text"
+                    android:textSize="@dimen/dp_size_16"/>
+
+                <TextView
+                    android:id="@+id/time_question"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/helpline_time_marginBottom"
+                    android:textAllCaps="false"
+                    android:textColor="@color/helpline_text_time_color"
+                    android:layout_below="@+id/LinearLayout2"
+                    android:textSize="@dimen/helpline_time_text_size"
+                    android:layout_marginRight="@dimen/helpline_time_marginRight"
+                    android:layout_marginTop="@dimen/helpline_time_marginTop"
+                    android:gravity="right" />
 
             </LinearLayout>
-            <TextView
-                android:id="@+id/time_question"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/helpline_time_margin"
-                android:layout_marginBottom="@dimen/helpline_time_margin"
-                android:textAllCaps="false"
-                android:textColor="@color/helpline_text_time_color"
-                android:layout_below="@+id/LinearLayout2"
-                android:textSize="@dimen/helpline_time_text_size"
-                android:layout_marginRight="@dimen/helpline_time_margin"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentLeft="false" />
+
 
         </RelativeLayout>
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</LinearLayout>

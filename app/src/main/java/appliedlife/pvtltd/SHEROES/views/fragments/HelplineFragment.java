@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -74,6 +75,8 @@ public class HelplineFragment extends BaseFragment {
     EditText questionText;
     @Bind(R.id.btn_chat_send)
     Button sendChatButton;
+    @Bind(R.id.date_stamp)
+    TextView dateStamp;
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -81,7 +84,6 @@ public class HelplineFragment extends BaseFragment {
     private AppUtils mAppUtils;
     private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-    private long startedTime;
     private String sourceScreen ;
 
 

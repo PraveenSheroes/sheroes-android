@@ -543,7 +543,9 @@
     <dimen name="helpline_margin">16dp</dimen>
     <dimen name="help_card_min_height">10dp</dimen>
     <dimen name="helpline_time_text_size">12sp</dimen>
-    <dimen name="helpline_time_margin">5dp</dimen>
+    <dimen name="helpline_time_marginRight">16dp</dimen>
+    <dimen name="helpline_time_marginBottom">8dp</dimen>
+    <dimen name="helpline_time_marginTop">8dp</dimen>
     <dimen name="care_id_margin">10dp</dimen>
     <dimen name="user_name_margin">12dp</dimen>
     <dimen name="error_desc_margin">24dp</dimen>
@@ -650,5 +652,6 @@
     <dimen name="post_view_more_layout_marginbottom">2dp</dimen>
     <dimen name="post_view_more_layout_marginright">16dp</dimen>
     <dimen name="article_last_comment">14sp</dimen>
+    <dimen name="counselor_image_size">44dp</dimen>
 </resources>
 

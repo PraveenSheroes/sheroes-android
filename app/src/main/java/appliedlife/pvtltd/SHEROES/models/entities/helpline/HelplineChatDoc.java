@@ -50,10 +50,11 @@ public class HelplineChatDoc extends BaseResponse {
     @SerializedName("solr_ignore_participant_attendant_image_url")
     @Expose
     private String solrIgnoreParticipantAttendantImageUrl;
-
     @SerializedName("solr_ignore_created_on")
     @Expose
     private String formatedDate;
+    @SerializedName(value = "thumbnail_image_url")
+    private String thumbnailImageUrl;
 
     public String getId() {
         return id;
@@ -183,5 +184,13 @@ public class HelplineChatDoc extends BaseResponse {
 
     public void setFormatedDate(String formatedDate) {
         this.formatedDate = formatedDate;
+    }
+
+    public String getThumbnailImageUrl() {
+        return thumbnailImageUrl;
+    }
+
+    public void setThumbnailImageUrl(String thumbnailImageUrl) {
+        this.thumbnailImageUrl = thumbnailImageUrl;
     }
 }

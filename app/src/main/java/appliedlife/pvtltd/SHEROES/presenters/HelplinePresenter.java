@@ -80,8 +80,6 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 }
             }
         });
-
-
     }
 
     public void getHelplineChatDetails(HelplineGetChatThreadRequest helplineGetChatThreadRequest){
@@ -111,12 +109,7 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 }
             }
         });
-
-
     }
-
-
-
 
     public void onStop() {
         detachView();

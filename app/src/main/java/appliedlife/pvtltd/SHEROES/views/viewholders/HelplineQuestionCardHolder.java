@@ -43,13 +43,17 @@ public class HelplineQuestionCardHolder extends BaseViewHolder<HelplineChatDoc> 
     @Override
     public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position) {
         this.dataItem = helplineChatDoc;
-        if(StringUtil.isNotNullOrEmptyString(dataItem.getSearchText())) {
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getSearchText())) {
             question.setText(dataItem.getSearchText());
             linkifyURLs(question);
+
         }
-        if(StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
-            questionTime.setText(dataItem.getFormatedDate());
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
+            String date = dataItem.getFormatedDate().substring(0, 11);
+            String time = dataItem.getFormatedDate().substring(12);
+            questionTime.setText(time);
         }
+
     }
 
     @Override

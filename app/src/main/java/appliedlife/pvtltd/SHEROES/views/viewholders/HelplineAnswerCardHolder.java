@@ -11,9 +11,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
@@ -31,6 +34,12 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
 
     @Bind(R.id.time_answer)
     TextView answerTime;
+
+    @Bind(R.id.iv_mentor_full_view_icon)
+    CircleImageView counselorImage;
+
+    @BindDimen(R.dimen.counselor_image_size)
+    int counselorImageSize;
 
     BaseHolderInterface viewInterface;
     private HelplineChatDoc dataItem;
@@ -51,7 +60,14 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
             linkifyURLs(answer);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
-            answerTime.setText(dataItem.getFormatedDate());
+            String date = dataItem.getFormatedDate().substring(0, 11);
+            String time = dataItem.getFormatedDate().substring(12);
+            answerTime.setText(time);
+        }
+        if (helplineChatDoc.getThumbnailImageUrl() != null) {  //mentor image icon
+            counselorImage.setCircularImage(true);
+            String authorThumborUrl = CommonUtil.getThumborUri(helplineChatDoc.getThumbnailImageUrl(), counselorImageSize, counselorImageSize);
+            counselorImage.bindImage(authorThumborUrl);
         }
     }
 
