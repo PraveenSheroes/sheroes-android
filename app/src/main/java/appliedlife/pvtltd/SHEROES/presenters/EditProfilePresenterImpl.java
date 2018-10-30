@@ -145,7 +145,7 @@ public class EditProfilePresenterImpl extends BasePresenter<IEditProfileView> {
                     if(boardingDataResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED))  {
                         if(boardingDataResponse.getFieldErrorMessageMap().containsKey(AppConstants.INAVLID_DATA)) {
                             String errorMessage = boardingDataResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
-                            getMvpView().errorMessage(errorMessage);
+                            getMvpView().showError(errorMessage,null);
                         } else {
                             getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
                         }

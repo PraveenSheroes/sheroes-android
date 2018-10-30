@@ -1060,8 +1060,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 case AppConstants.HTTP_401_UNAUTHORIZED:
                     showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                     break;
-
-
                 default: {
                     showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
                 }
