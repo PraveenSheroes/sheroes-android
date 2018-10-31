@@ -31,10 +31,9 @@
             style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
             android:gravity="center_horizontal"
             android:text="@string/load_more_comments"
-            android:textColor="#90949c"
+            android:textColor="@color/posted_in"
             android:textStyle="normal"
             vernacular:customTextFontFamily="@string/bold_font" />
     </LinearLayout>
