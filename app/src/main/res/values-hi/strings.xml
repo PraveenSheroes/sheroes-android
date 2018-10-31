@@ -421,7 +421,7 @@
     <string name="my_communities">मेरे समुदाय</string>
     <string name="got_it">समझ गए</string>
     <string name="tool_tip_ask_question">इस चैंपियन से सवाल पूछने के लिए यहां टैप करें।</string>
-    <string name="tool_tip_notification">लाइक और कमैंट्स के लिए आपकी व्यक्तिगत सूचनाएं यहां दिखाई देंगी।.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 समझ गए!</string>
+    <string name="tool_tip_notification">लाइक और कमैंट्स के लिए आपकी व्यक्तिगत सूचनाएं यहां दिखाई देंगी।.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020  समझ गए!</string>
     <string name="tool_tip_follower">इनके पोस्ट देखने के लिए इन्हे फॉलो करें!</string>
     <string name="tool_tip_picture_share">यह तस्वीर अच्छी लगी? अपने दोस्तों के साथ शेयर करें</string>
     <string name="tool_tip_invite_friend">यहाँ टैप करके अपने दोस्तों को आमंत्रित करें</string>
@@ -669,4 +669,5 @@
     <string name="new_tag">नया</string>
     <string name="check_out_share_msg">SHEROES ऐप के इस पोस्ट को देखा? मुझे ये बहुत पसंद आया।</string>
     <string name="empty_comment">खाली कमेंट!</string>
+    <string name="load_more_comments">अधिक कमेंट्स लोड करें</string>
 </resources>
