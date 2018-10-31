@@ -235,14 +235,6 @@
                         android:src="@drawable/vector_video_play_icon"
                         android:visibility="visible" />
 
-                    <ImageView
-                        android:id="@+id/iv_play"
-                        android:layout_width="@dimen/dp_size_50"
-                        android:layout_height="@dimen/dp_size_50"
-                        android:layout_gravity="center"
-                        android:src="@drawable/vector_video_play_icon"
-                        android:visibility="visible" />
-
                     <ProgressBar
                         android:id="@+id/progress_bar_post_link"
                         android:layout_width="@dimen/dp_size_50"

@@ -41,7 +41,7 @@
     <string name="ID_COMMUNITIES">समुदाय</string>
     <string name="ID_PEOPLE_INTERESTED">people are interested</string>
     <string name="ID_TOTAL_GOING"> are going</string>
-    <string name="ID_NOTIFICATION">नोटिफ़िकेशन</string>
+    <string name="ID_NOTIFICATION">सूचनाएं</string>
     <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
     <string name="follower_toolbar_title">मेरे फॉलोवर्स</string>
     <string name="following_toolbar_title">जिन्हें मैं फॉलो करती हूँ</string>
@@ -84,7 +84,7 @@
     <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">बदलें</string>
     <string name="SHARE_PROFILE">प्रोफाइल शेयर करें</string>
-    <string name="ID_EDIT_PROFILE">प्रोफाइल में बदलाव</string>
+    <string name="ID_EDIT_PROFILE">प्रोफाइल भरें</string>
     <string name="ID_DELETE">हटाएं</string>
     <string name="ID_APPROVE">मंज़ूर</string>
     <string name="ID_REPORT">स्पैम के रूप में रिपोर्ट करें</string>
@@ -603,7 +603,7 @@
     <string name="select_your_preferred_language">Select your Preferred Language</string>
     <string name="lang_continue">Continue</string>
     <string name="top_post">टॉप पोस्ट</string>
-    <string name="my_feed">फीड</string>
+    <string name="my_feed">मेरी फीड</string>
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
     <string name="post_header_community">%1$s ने पोस्ट किया"</string>
     <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>
@@ -614,7 +614,7 @@
     <string name="health_tips">स्वास्थ्य सुझाव</string>
     <string name="challenge_completed_text">आपने # %1$s चुनौती पूरी कर ली है</string>
     <string name="winner">विजेता</string>
-    <string name="responses">प्रतिक्रियाओं</string>
+    <string name="responses">प्रतिक्रियाएँ</string>
     <string name="overview">परिचय</string>
     <string name="join_challenge">चैलेंज में शामिल हों</string>
     <string name="not_interested">रुचि नहीं</string>
@@ -670,4 +670,6 @@
     <string name="check_out_share_msg">SHEROES ऐप के इस पोस्ट को देखा? मुझे ये बहुत पसंद आया।</string>
     <string name="empty_comment">खाली कमेंट!</string>
     <string name="load_more_comments">अधिक कमेंट्स लोड करें</string>
+    <string name="contact_not_on_whats">यह कॉन्टेक्ट व्हाट्सएप पर नहीं है</string>
+    <string name="this_user">आप</string>
 </resources>
