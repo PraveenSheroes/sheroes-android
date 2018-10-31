@@ -108,9 +108,11 @@
                             android:layout_marginTop="@dimen/dp_size_1"
                             android:layout_toEndOf="@id/icon"
                             android:layout_toRightOf="@id/icon"
-                            android:gravity="center"
+                            android:gravity="left"
                             android:maxLines="@integer/int_value_for_line_1"
                             android:textColor="@color/recent_post_comment"
+                            android:textSize="@dimen/community_members"
+                            tools:text="47889 Members" />
                             vernacular:customTextFontFamily="@string/regular_font" />
                     </RelativeLayout>
                 </LinearLayout>

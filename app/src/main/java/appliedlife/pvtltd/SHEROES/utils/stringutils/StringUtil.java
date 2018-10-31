@@ -106,24 +106,13 @@ public class StringUtil {
         return hashText;
     }
 
-    /*public static String numericToThousand(int countValue) {
-       String thousand;
-        if(countValue>999)
-        {
-            thousand=(countValue/1000)+ AppConstants.THOUSANDS;
-        }else
-        {
-            thousand=String.valueOf(countValue);
-        }
-        return thousand;
-    }*/
-
-    public static String changeNumberToNumericSuffix(long countValue) {
+    public static String changeNumberToNumericSuffix(int countValue) {
         if (countValue < 1000) return "" + countValue;
         int exp = (int) (Math.log(countValue) / Math.log(1000));
-        return String.format(Locale.US, "%.1f %c",
+        String suffixedNumber = String.format(Locale.US, "%.1f %c",
                 countValue / Math.pow(1000, exp),
-                "KMGTPE".charAt(exp-1));
+                "KMGTPE".charAt(exp - 1));
+        return suffixedNumber;
     }
 
     public static String toString(InputStream input, Charset encoding) throws IOException {
