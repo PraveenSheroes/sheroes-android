@@ -335,7 +335,7 @@
     <string name="anonymous">गुमनाम</string>
     <string name="choose_community_option">अपना समुदाय चुनें</string>
     <string name="image_count">%1$d/%2$d</string>
-    <string name="badge_won_times_label">%1$d जीता %2$s </string>
+    <string name="badge_won_times_label">%1$d  %2$s जीती है</string>
     <string name="error_blank">कृपया पोस्ट पर कुछ डालें</string>
     <string name="error_choose_community">कृपया पोस्ट करने के लिए समुदाय चुनें</string>
     <string name="menu.post_as_community">समुदाय के रूप में पोस्ट करें</string>
