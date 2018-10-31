@@ -471,6 +471,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
         mTvCommunitiesSearch.setText(R.string.explore_All);
         mTvNewTag.setText(R.string.new_tag);
+        mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
         mICSheroes.setVisibility(View.VISIBLE);
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
