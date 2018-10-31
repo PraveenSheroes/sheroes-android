@@ -252,26 +252,26 @@
             android:screenOrientation="portrait">
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="shrs.me"
-                    android:pathPrefix="/"
                     android:scheme="https" />
                 <data
                     android:host="shrs.me"
-                    android:pathPrefix="/"
                     android:scheme="http" />
                 <data
                     android:host="dpjo.test-app.link"
-                    android:pathPrefix="/"
                     android:scheme="https" />
                 <data
                     android:host="dpjo.test-app.link"
-                    android:pathPrefix="/"
                     android:scheme="http" />
+             <!--   <data
+                    android:host="dpjo-alternate.app.link"
+                    android:scheme="https" />
+                <data
+                    android:host="dpjo-alternate.app.link"
+                    android:scheme="http" />-->
                 <data android:scheme="appliedlife.pvtltd.sheroes" />
             </intent-filter>
         </activity>
@@ -287,7 +287,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:host="sheroes.com" />
-                <data android:host="sheroes.in" />
+               <!-- <data android:host="sheroes.in" />-->
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs" />
                 <data android:pathPrefix="/articles" />

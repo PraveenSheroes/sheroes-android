@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -25,16 +26,17 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:src="@drawable/vector_add" />
-        <TextView
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
             android:fontFamily="sans-serif-medium"
-            android:textStyle="normal"
-            android:textColor="#90949c"
             android:gravity="center_horizontal"
-            android:text="Load more comments"
-            />
+            android:text="@string/load_more_comments"
+            android:textColor="#90949c"
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/bold_font" />
     </LinearLayout>
 </RelativeLayout>
 

@@ -533,7 +533,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (null == mFeedDetail) {
             FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
             if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-                mTitleToolbar.setText(feedDetail.getAuthorName() + "'s" + " post");
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, feedDetail.getAuthorName()));
             }
         }
     }
