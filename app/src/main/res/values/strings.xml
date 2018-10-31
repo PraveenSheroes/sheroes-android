@@ -608,6 +608,7 @@
     <string name="post_header_community">%1$s posted"</string>
     <string name="post_header_asked_community">%1$s asked %2$s"</string>
     <string name="poll_header_name_community">%1$s created poll in  %2$s"</string>
+    <string name="poll_header_name">%1$s created poll"</string>
     <string name="type_your_comment">Type your comment here&#8230;</string>
     <string name="top_communities_text">Here are some trending posts on SHEROES</string>
     <string name="health_tips">Health Tips</string>
@@ -669,4 +670,6 @@
     <string name="check_out_share_msg">Check out this post on the SHEROES App. I loved it.</string>
     <string name="empty_comment">Empty Comment!</string>
     <string name="load_more_comments">Load more comments</string>
+    <string name="contact_not_on_whats">This contact is not on Whatsapp</string>
+    <string name="this_user">This User</string>
 </resources>
