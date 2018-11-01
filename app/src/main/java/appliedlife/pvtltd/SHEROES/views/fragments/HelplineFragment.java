@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -13,9 +14,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -47,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HelplineActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -123,8 +127,18 @@ public class HelplineFragment extends BaseFragment {
         }
 
         setUpRecyclerView();
-        questionText.addTextChangedListener(InputQuestionTextWatcher());
-        questionText.clearFocus();
+        questionText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!keyboardShown(questionText.getRootView())) {
+                    sendChatButton.setVisibility(View.GONE);
+                    chatVoiceButton.setVisibility(View.VISIBLE);
+                } else {
+                    sendChatButton.setVisibility(View.VISIBLE);
+                    chatVoiceButton.setVisibility(View.GONE);
+                }
+            }
+        });
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
         return view;
     }
@@ -261,8 +275,8 @@ public class HelplineFragment extends BaseFragment {
 
     public void setUpRecyclerView(){
         mLayoutManager = new LinearLayoutManager(getContext());
-        if(getActivity() instanceof HomeActivity){
-            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        if(getActivity() instanceof HelplineActivity){
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HelplineActivity) getActivity());
         }
         if(getActivity() instanceof CommunityDetailActivity){
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunityDetailActivity) getActivity());
@@ -300,27 +314,13 @@ public class HelplineFragment extends BaseFragment {
         return SCREEN_LABEL;
     }
 
-    private TextWatcher InputQuestionTextWatcher() {
-
-        return new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                sendChatButton.setVisibility(View.GONE);
-                chatVoiceButton.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(sendChatButton.getVisibility() != View.VISIBLE) {
-                    sendChatButton.setVisibility(View.VISIBLE);
-                }
-                chatVoiceButton.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void afterTextChanged(Editable inputSearch) {
-            }
-        };
+    private boolean keyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
     }
 }
 
