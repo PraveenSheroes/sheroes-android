@@ -155,7 +155,6 @@ public class HelplineChatDoc extends BaseResponse {
 
     }
 
-
     public void setParticipantAttendantid(int participantAttendantid) {
         this.participantAttendantid = participantAttendantid;
     }

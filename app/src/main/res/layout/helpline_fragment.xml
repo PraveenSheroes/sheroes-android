@@ -16,27 +16,6 @@
         android:indeterminateTint="@color/white" />
 
     <LinearLayout
-        android:id="@+id/date_stamp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/helpline_background"
-        android:gravity="center"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:background="@drawable/helpline_datestamp"
-            android:paddingBottom="@dimen/dp_size_8"
-            android:paddingLeft="@dimen/dp_size_16"
-            android:paddingRight="@dimen/sp_size_16"
-            android:paddingTop="@dimen/dp_size_8"
-            android:text="DATE"
-            android:textSize="@dimen/sp_size_14" />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

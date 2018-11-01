@@ -75,8 +75,6 @@ public class HelplineFragment extends BaseFragment {
     EditText questionText;
     @Bind(R.id.btn_chat_send)
     Button sendChatButton;
-    @Bind(R.id.date_stamp)
-    TextView dateStamp;
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;

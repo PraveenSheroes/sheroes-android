@@ -3,7 +3,23 @@
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/helpline_background">
+    android:background="@color/helpline_background"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/date_stamp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/helpline_datestamp"
+        android:paddingBottom="@dimen/dp_size_8"
+        android:paddingLeft="@dimen/dp_size_16"
+        android:paddingRight="@dimen/sp_size_16"
+        android:paddingTop="@dimen/dp_size_8"
+        android:text="DATE"
+        android:textSize="@dimen/sp_size_14" />
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -69,11 +85,13 @@
                     android:layout_marginBottom="@dimen/helpline_time_marginBottom"
                     android:layout_marginTop="@dimen/helpline_time_marginTop"
                     android:layout_marginRight="@dimen/helpline_time_marginRight"
+                    android:layout_marginLeft="@dimen/helpline_time_marginRight"
                     android:textAllCaps="false"
                     android:textColor="@color/helpline_answer_text"
                     android:textSize="@dimen/helpline_time_text_size"
                     android:gravity="right"
-                    android:textAlignment="gravity"/>
+                    android:textAlignment="gravity"
+                    android:maxLines="@integer/int_value_for_line_1"/>
 
             </LinearLayout>
 

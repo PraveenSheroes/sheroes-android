@@ -122,11 +122,15 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineQuestionCardHolder(view, viewInterface);
         }
-    },
-    HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
+    }, HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineAnswerCardHolder(view, viewInterface);
+        }
+    }, HELPLINE_RATE_US_CARD(R.layout.helpline_rate_us) {
+        @Override
+        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
+            return new HelplineRateUsHolder(view, viewInterface);
         }
     }, ICC_MEMBER_CARD(R.layout.icc_member_card) {
         @Override
@@ -331,6 +335,10 @@ public enum HolderMapping {
                     } else {
                         returnView = HELPLINE_CHAT_ANSWER_CARD.ordinal();
                     }
+
+
+                    //check for rateus subtype
+
                 } else if (item instanceof ICCMember) {
                     returnView = ICC_MEMBER_CARD.ordinal();
                 } else if (item instanceof FAQS) {

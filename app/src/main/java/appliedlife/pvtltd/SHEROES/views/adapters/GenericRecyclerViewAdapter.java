@@ -14,10 +14,12 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.HelplineViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -117,7 +119,6 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return holder;
     }
 
@@ -130,8 +131,18 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
                 userSolrObj.setSuggested(true);
                 filterListData.set(position, (T) userSolrObj);
             }
+
         }
+        if(filterListData.get(position) instanceof HelplineChatDoc && holder instanceof HelplineViewHolder) {
+            T prevObj = null;
+            if (position > 0) {
+                prevObj = filterListData.get(position-1);
+            }
+            ((HelplineViewHolder)holder).bindData(filterListData.get(position), context, position, prevObj);
+        } else {
             holder.bindData(filterListData.get(position), context, position);
+        }
+
     }
 
 

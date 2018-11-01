@@ -739,5 +739,9 @@
     <string name="care_msg">Need help? care@sheroes.in</string>
     <string name="follow_text">Follow</string>
     <string name="not_available">NA</string>
+    <string name="helpline_rateus_title">Enjoy chating with SHEROES counselor? </string>
+    <string name="helpline_rateus_body"> Would you mind taking a moment to rate us ?\n It won’t take more than a minute.\n Thanks for your support !</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="not_now">Not Now</string>
 
 </resources>

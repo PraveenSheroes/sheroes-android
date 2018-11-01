@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
+import appliedlife.pvtltd.SHEROES.basecomponents.HelplineViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -25,7 +25,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURL
  * Created by SHEROES-TECH on 23-05-2017.
  */
 
-public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
+public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc> {
 
     private final String TAG = LogUtils.makeLogTag(HelplineAnswerCardHolder.class);
 
@@ -37,6 +37,9 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
 
     @Bind(R.id.iv_mentor_full_view_icon)
     CircleImageView counselorImage;
+
+    @Bind(R.id.date_stamp)
+    TextView dateStamp;
 
     @BindDimen(R.dimen.counselor_image_size)
     int counselorImageSize;
@@ -51,16 +54,14 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
 
-    @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
-    public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position) {
+    public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position,HelplineChatDoc prevObj) {
         this.dataItem = helplineChatDoc;
         if (StringUtil.isNotNullOrEmptyString(dataItem.getSearchText())) {
             answer.setText(dataItem.getSearchText());
             linkifyURLs(answer);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
-            String date = dataItem.getFormatedDate().substring(0, 11);
             String time = dataItem.getFormatedDate().substring(12);
             answerTime.setText(time);
         }
@@ -69,6 +70,14 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
             String authorThumborUrl = CommonUtil.getThumborUri(helplineChatDoc.getThumbnailImageUrl(), counselorImageSize, counselorImageSize);
             counselorImage.bindImage(authorThumborUrl);
         }
+
+        setDate(prevObj, helplineChatDoc, position);
+    }
+
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    @Override
+    public void bindData(Object obj, Context context, int position) {
+
     }
 
     @Override
@@ -79,5 +88,26 @@ public class HelplineAnswerCardHolder extends BaseViewHolder<HelplineChatDoc> {
     @Override
     public void onClick(View v) {
 
+    }
+
+    private void setDate(HelplineChatDoc prevObj, HelplineChatDoc helplineChatDoc, int position) {
+        String prevDate = null;
+        String currDate = helplineChatDoc.getFormatedDate().substring(0, 11);
+
+        if (prevObj != null) {
+            prevDate = prevObj.getFormatedDate().substring(0, 11);
+        }
+
+        if (prevObj != null && position > 0) {
+            if (prevDate.equals(currDate)) {
+                dateStamp.setVisibility(View.GONE);
+            } else {
+                dateStamp.setText(currDate);
+                dateStamp.setVisibility(View.VISIBLE);
+            }
+        } else {
+            dateStamp.setText(currDate);
+            dateStamp.setVisibility(View.VISIBLE);
+        }
     }
 }

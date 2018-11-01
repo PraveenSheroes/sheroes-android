@@ -653,5 +653,7 @@
     <dimen name="post_view_more_layout_marginright">16dp</dimen>
     <dimen name="article_last_comment">14sp</dimen>
     <dimen name="counselor_image_size">44dp</dimen>
+    <dimen name="helpline_rateus_title_textsize">18sp</dimen>
+    <dimen name="helpline_rateus_body_textsize">14sp</dimen>
 </resources>
 
