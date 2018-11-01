@@ -62,6 +62,10 @@ android {
         vectorDrawables.useSupportLibrary = false
     }
 
+    buildTypes.each { type ->
+        type.buildConfigField "String", 'IMPRESSION_AUTH', "\"Basic c2hlcm9lczp6IWN0NnNtSDlneHUkaGBeZFNHIXthViZ+YFd5KSE5Wg==\""
+    }
+
     signingConfigs {
         debug {
             keyAlias 'debug'
@@ -104,6 +108,7 @@ android {
             manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
+            buildConfigField 'String', 'IMPRESSION_URL', "\"http://testevents.sheroes.in:8080/\""
         }
         release {
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
@@ -116,6 +121,7 @@ android {
             manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
+            buildConfigField 'String', 'IMPRESSION_URL', "\"https://prod-events.sheroes.in/\""
         }
     }
     lintOptions {

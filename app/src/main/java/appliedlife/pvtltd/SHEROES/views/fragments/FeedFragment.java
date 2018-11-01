@@ -277,10 +277,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             isActiveTabFragment = true;
 
             if (impressionHelper != null) {
-                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
-                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                impressionHelper.setHeaderEnabled(isHomeFeed);
-                impressionHelper.getVisibleViews(startPos, endPos);
+                updateVisibleImpressionViews();
             }
 
             if (getParentFragment() instanceof HomeFragment) {
@@ -300,7 +297,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
 
-            if (isActiveTabFragment && impressionHelper != null) {
+            if (impressionHelper != null) {
                 impressionHelper.stopImpression();
             }
             isActiveTabFragment = false;
@@ -318,6 +315,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             impressionSuperProperty.setLoggedInUserId(mLoggedInUser);
             impressionHelper = new ImpressionHelper(impressionSuperProperty, impressionPresenter, mConfiguration, mFeedRecyclerView, mAppUtils, this);
         }
+    }
+
+    //update the visible views on screen , update to impression helper about visible views
+    private void updateVisibleImpressionViews() {
+        int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+        int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+        impressionHelper.setHeaderEnabled(isHomeFeed);
+        impressionHelper.getVisibleViews(startPos, endPos);
     }
 
     public boolean showUpdateCard() {
@@ -1398,6 +1403,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onResume() {
         super.onResume();
 
+        if (!isActiveTabFragment && impressionHelper != null) { // resume from back-stack cases
+            updateVisibleImpressionViews();
+        }
+
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
         }
@@ -1407,7 +1416,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
-        if (isActiveTabFragment && impressionHelper != null) {
+        if (impressionHelper != null) { //app exit cases and back-stack of activity
             impressionHelper.stopImpression();
         }
 

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -106,6 +107,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResp
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -390,6 +392,7 @@ public interface SheroesAppServiceApi {
     @POST("participation/global/image/add")
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 
-    @POST("http://testevents.sheroes.in:8080/user/event/producer")
+    //@Headers("Authorization: " + BuildConfig.IMPRESSION_AUTH)
+    @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
     Observable<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 }

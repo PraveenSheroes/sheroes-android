@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -36,7 +35,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     public static final int SCROLL_DOWN = 1;
 
     private boolean mScrollDirectionChange = false;
-    private boolean isHeaderEnabled;
+    private boolean mIsHeaderEnabled;
 
     private int mLastDirectionId = -1;
     private int mImpressionVisibilityThreshold;
@@ -52,9 +51,9 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     private ImpressionTimer mImpressionTimer;
 
     // ArrayList of view ids that are being considered for tracking.
-    private ArrayList<Long> currentViewed = new ArrayList<>();
-    private ArrayList<Long> allVisibleViews = new ArrayList<>();
-    private List<ImpressionData> finalViewData = new ArrayList<>();
+    private ArrayList<Long> mCurrentViewed = new ArrayList<>();
+    private ArrayList<Long> mAllVisibleViews = new ArrayList<>();
+    private List<ImpressionData> mFinalViewData = new ArrayList<>();
 
     //endregion
 
@@ -113,19 +112,18 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      */
     public void getVisibleViews(int startPos, int endPos) {
         //Get the visible items on screen
-        allVisibleViews.clear();
+        mAllVisibleViews.clear();
         for (int viewPosition = startPos; viewPosition <= endPos; viewPosition++) {
             getValidImpressionView(viewPosition, mRecyclerView);
         }
-        Log.i("Final data :" , ""+finalViewData.size());
     }
 
-    public boolean isHeaderEnabled() {
-        return isHeaderEnabled;
+    private boolean isHeaderEnabled() {
+        return mIsHeaderEnabled;
     }
 
-    public void setHeaderEnabled(boolean headerEnabled) {
-        isHeaderEnabled = headerEnabled;
+    public void setHeaderEnabled(boolean mIsHeaderEnabled) {
+        this.mIsHeaderEnabled = mIsHeaderEnabled;
     }
 
     /**
@@ -168,16 +166,15 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      * Update the end time for the item on paused
      */
     private void updateEndTimeOfItems() {
-        if (finalViewData.size() > 0) {
-            int size = finalViewData.size();
+        if (mFinalViewData.size() > 0) {
+            int size = mFinalViewData.size();
             for (int i = size - 1; i >= 0; i--) {
-                ImpressionData impressionData = finalViewData.get(i);
+                ImpressionData impressionData = mFinalViewData.get(i);
                 if (impressionData.getEndTime() == -1) {
-                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
+                    mFinalViewData.get(i).setEndTime(System.currentTimeMillis());
 
-                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
-                    finalViewData.get(i).setEngagementTime(timeSpent);
-                    //mImpressionCallback.showToast("Screen Exit" + impressionData.getPosition() + "::Duration" + timeSpent / 1000.0f);
+                    int timeSpent = (int) (mFinalViewData.get(i).getEndTime() - mFinalViewData.get(i).getTimeStamp());
+                    mFinalViewData.get(i).setEngagementTime(timeSpent);
                 }
             }
         }
@@ -197,8 +194,8 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             getValidImpressionView(viewPosition, recyclerView);
         }
 
-        if (allVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
-            for (long postId : allVisibleViews) {
+        if (mAllVisibleViews.size() > 0) { //Compare if any item was present , now not in the list
+            for (long postId : mAllVisibleViews) {
                 if (postId == -1) continue;
 
                 int positionOfView = mImpressionCallback.findPositionById(postId);
@@ -213,41 +210,41 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
                 if (scrollDirection == SCROLL_UP) {
                     //if final list have that and not in current list and visibility below 20% marked as exit
-                    if (itemPosition > -1 && lastItem > -1 && lastItem != postId && !currentViewed.contains(postId) && validImpression) {
+                    if (itemPosition > -1 && lastItem > -1 && lastItem != postId && !mCurrentViewed.contains(postId) && validImpression) {
                         updateEndTimeIfItemNotExist(postId);
                     }
-                } else if (!currentViewed.contains(postId) && validImpression) {
+                } else if (!mCurrentViewed.contains(postId) && validImpression) {
                     updateEndTimeIfItemNotExist(postId);
                 }
             }
         }
 
         // store 10 events in DB
-        if (finalViewData.size() >= mImpressionBatchSize) { //split when final list reach batch size but it may have impression which are below min engagement time , will get filter later
+        if (mFinalViewData.size() >= mImpressionBatchSize) { //split when final list reach batch size but it may have impression which are below min engagement time , will get filter later
             storeChunks(false);
         }
-        currentViewed.clear();
-        allVisibleViews.clear();
+        mCurrentViewed.clear();
+        mAllVisibleViews.clear();
     }
 
     private void getValidImpressionView(int viewPosition, RecyclerView recyclerView) {
-        if(viewPosition == -1) return;
+        if (viewPosition == -1) return;
 
         FeedDetail feedDetail = mImpressionCallback.getListItemAtPos(viewPosition);
         if (feedDetail == null) return;
         long postId = feedDetail.getIdOfEntityOrParticipant();
         if (postId == -1) return;
 
-        allVisibleViews.add(postId);
+        mAllVisibleViews.add(postId);
 
         ImpressionData impressionData = updateProperties(recyclerView, feedDetail, viewPosition); //> 20 visible view
         if (impressionData == null) return;
 
-        currentViewed.add(postId);
+        mCurrentViewed.add(postId);
 
         int itemPosition = checkIfItemInFinal(postId);
         if (itemPosition == -1) { //new item add it in final list
-            finalViewData.add(impressionData);
+            mFinalViewData.add(impressionData);
             mImpressionCallback.showToast("Screen Enter" + viewPosition);
         }
     }
@@ -280,7 +277,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             impressionData.setSourceTab(mImpressionProperty.getCommunityTab());
             impressionData.setSource(mImpressionCallback.getScreenName());
             impressionData.setOrderKey(mImpressionProperty.getOrderKey());
-            impressionData.setPosition(isHeaderEnabled() ? viewPosition : viewPosition+1);
+            impressionData.setPosition(isHeaderEnabled() ? viewPosition : viewPosition + 1);
             impressionData.setUserAgent(recyclerView.getContext() != null ? SheroesAppModule.getUserAgent(recyclerView.getContext()) : "");
             impressionData.setClientId(CLIENT_ID); //For mobile android
             impressionData.setEvent(EVENT_TYPE_VI);
@@ -302,11 +299,11 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     private void storeChunks(boolean forceNetworkCall) {
         int index = getItemWithUpdatedEngagementTime();
         if (index > -1) {
-            List<ImpressionData> updatedImpressions = finalViewData.subList(0, index + 1);
+            List<ImpressionData> updatedImpressions = mFinalViewData.subList(0, index + 1);
             mImpressionPresenter.storeBatchInDb(mMinEngagementTime, mImpressionBatchSize, updatedImpressions, forceNetworkCall);
 
-            if (finalViewData.size() >= index + 1) { //recheck sublist in multiple case
-                finalViewData = finalViewData.subList(index + 1, finalViewData.size());
+            if (mFinalViewData.size() >= index + 1) { //recheck sublist in multiple case
+                mFinalViewData = mFinalViewData.subList(index + 1, mFinalViewData.size());
             }
         }
     }
@@ -318,9 +315,9 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      */
     private int getItemWithUpdatedEngagementTime() {
         int index = -1;
-        if (finalViewData.size() > 0) {
-            for (int i = finalViewData.size() - 1; i >= 0; i--) {
-                ImpressionData impressionData = finalViewData.get(i);
+        if (mFinalViewData.size() > 0) {
+            for (int i = mFinalViewData.size() - 1; i >= 0; i--) {
+                ImpressionData impressionData = mFinalViewData.get(i);
                 if (impressionData.getEndTime() != -1) {
                     index = i;
                     break;
@@ -360,14 +357,14 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      * @param postId id of view
      */
     private void updateEndTimeIfItemNotExist(long postId) {
-        if (finalViewData.size() > 0) {
-            int size = finalViewData.size();
+        if (mFinalViewData.size() > 0) {
+            int size = mFinalViewData.size();
             for (int i = size - 1; i >= 0; i--) {
-                ImpressionData impressionData = finalViewData.get(i);
+                ImpressionData impressionData = mFinalViewData.get(i);
                 if (impressionData.getTimeStamp() != -1 && impressionData.getEndTime() == -1 && impressionData.getPostId().equalsIgnoreCase(String.valueOf(postId))) {
-                    finalViewData.get(i).setEndTime(System.currentTimeMillis());
-                    int timeSpent = (int) (finalViewData.get(i).getEndTime() - finalViewData.get(i).getTimeStamp());
-                    finalViewData.get(i).setEngagementTime(timeSpent);
+                    mFinalViewData.get(i).setEndTime(System.currentTimeMillis());
+                    int timeSpent = (int) (mFinalViewData.get(i).getEndTime() - mFinalViewData.get(i).getTimeStamp());
+                    mFinalViewData.get(i).setEngagementTime(timeSpent);
                     mImpressionCallback.showToast("Screen Exit" + impressionData.getPosition() + "::Duration" + timeSpent / 1000.0f);
                     break;
                 }
@@ -383,10 +380,10 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
      */
     private int checkIfItemInFinal(long postId) {
         int index = -1;
-        if (finalViewData.size() > 0) {
-            int length = finalViewData.size();
+        if (mFinalViewData.size() > 0) {
+            int length = mFinalViewData.size();
             for (int i = length - 1; i >= 0; i--) {
-                ImpressionData impressionData = finalViewData.get(i);
+                ImpressionData impressionData = mFinalViewData.get(i);
                 if (impressionData.getPostId().equalsIgnoreCase(String.valueOf(postId))) {
                     index = i;
                     break;
@@ -398,9 +395,9 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     private long getLastUpdatedItem() {
         long viewId = -1;
-        if (finalViewData.size() > 0) {
-            int lastPos = finalViewData.size() - 1;
-            viewId = Long.valueOf(finalViewData.get(lastPos).getPostId());
+        if (mFinalViewData.size() > 0) {
+            int lastPos = mFinalViewData.size() - 1;
+            viewId = Long.valueOf(mFinalViewData.get(lastPos).getPostId());
         }
         return viewId;
     }
