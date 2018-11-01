@@ -250,12 +250,10 @@
         <activity
             android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data
                     android:host="shrs.me"
                     android:pathPrefix="/"
@@ -275,6 +273,7 @@
                 <data android:scheme="appliedlife.pvtltd.sheroes" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".views.activities.SheroesDeepLinkingActivity"
             android:exported="true"

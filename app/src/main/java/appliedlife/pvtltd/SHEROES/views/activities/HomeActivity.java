@@ -392,6 +392,10 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (CommonUtil.ensureFirstTime(AppConstants.NEW_TAG_FOR_RIGHT_SWIP)) {
             mTvNewTag.setVisibility(View.VISIBLE);
         }
+        if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
+            showSelectLanguageOption();
+            CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
+        }
     }
 
     public void renderHomeFragmentView() {
@@ -467,6 +471,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
         mTvCommunitiesSearch.setText(R.string.explore_All);
         mTvNewTag.setText(R.string.new_tag);
+        mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
         mICSheroes.setVisibility(View.VISIBLE);
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
@@ -1008,6 +1013,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Override
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(this, false);
+        AnalyticsManager.initializeCleverTap(this, false);
     }
 
     public void fetchAllCommunity() {

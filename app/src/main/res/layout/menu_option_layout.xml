@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/li_feed_menu"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -11,8 +12,9 @@
     android:paddingLeft="@dimen/dp_size_1"
     android:paddingRight="@dimen/dp_size_1">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_article_menu_share"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/dp_size_150"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -25,8 +27,8 @@
         android:paddingTop="@dimen/dp_size_13"
         android:text="@string/ID_SHARE"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_12"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <TextView
         android:id="@+id/tv_article_menu_edit"
@@ -42,11 +44,11 @@
         android:paddingTop="@dimen/dp_size_13"
         android:text="@string/ID_EDIT"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_12"
         android:visibility="gone" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_article_menu_delete"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/dp_size_150"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -59,11 +61,12 @@
         android:paddingTop="@dimen/dp_size_13"
         android:text="@string/ID_DELETE"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_12"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_article_menu_report"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/dp_size_150"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -75,26 +78,27 @@
         android:paddingTop="@dimen/dp_size_13"
         android:text="@string/ID_REPORT"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_12"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/report_spam"
+        style="@style/TextView14spRegular"
         android:layout_width="@dimen/dp_size_150"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:background="@drawable/menu_selector"
+        android:drawableLeft="@drawable/vector_report_spam"
+        android:drawablePadding="@dimen/dp_size_20"
         android:gravity="center"
         android:paddingBottom="@dimen/dp_size_13"
-        android:paddingTop="@dimen/dp_size_13"
-        android:text="@string/REPORT_SPAM"
-        android:drawablePadding="@dimen/dp_size_20"
         android:paddingLeft="@dimen/dp_size_24"
         android:paddingRight="@dimen/dp_size_10"
-        android:drawableLeft="@drawable/vector_report_spam"
+        android:paddingTop="@dimen/dp_size_13"
+        android:text="@string/REPORT_SPAM"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_12"
-        android:visibility="gone" />
+        android:visibility="gone"
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </LinearLayout>

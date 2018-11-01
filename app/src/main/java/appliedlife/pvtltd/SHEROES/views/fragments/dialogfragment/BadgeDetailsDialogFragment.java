@@ -195,7 +195,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
             //For profile if badge is inactive show message "Won last on" & for other "Won Latest on"
             if (!isLeaderBoard) {
-                String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : "This User";
+                String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : getString(R.string.this_user);
                 if (mBadgeDetails.isActive()) {
                     showLeaderBoard.setVisibility(View.VISIBLE);
                     badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));

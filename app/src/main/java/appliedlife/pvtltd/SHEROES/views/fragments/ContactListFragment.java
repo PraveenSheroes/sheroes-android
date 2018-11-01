@@ -355,7 +355,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (resultCode) {
             case 0:
-                Toast.makeText(getActivity(), "This contact is not on Whatsapp", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.contact_not_on_whats, Toast.LENGTH_SHORT).show();
                 smsIntent();
                 break;
             default:

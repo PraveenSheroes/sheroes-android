@@ -533,7 +533,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (null == mFeedDetail) {
             FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
             if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-                mTitleToolbar.setText(feedDetail.getAuthorName() + "'s" + " post");
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, feedDetail.getAuthorName()));
             }
         }
     }
@@ -1093,7 +1093,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
         if (etView.getText().toString().trim().length() == 0) {
-            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.empty_comment, Toast.LENGTH_SHORT).show();
             return;
         } else {
             mMentionSpanList = etView.getMentionSpans();
@@ -1311,31 +1311,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) { //If reason "other" is selected
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) { //If reason "other" is selected
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment); //submit
                                     spamReasonsDialog.dismiss();
-
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
-
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
@@ -1354,7 +1348,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 

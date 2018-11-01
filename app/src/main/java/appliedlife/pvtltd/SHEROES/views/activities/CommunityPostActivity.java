@@ -451,7 +451,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mMentionSpanList = mCommunityPost.userMentionList;
                     editUserMentionWithFullDescriptionText(mMentionSpanList, mOldText);
                 } else {
-                    etView.setEditText(mOldText, mCommunityPost.body.length());
+                    if (StringUtil.isNotNullOrEmptyString(mOldText)) {
+                        etView.setEditText(mOldText, mOldText.length());
+                    }
                 }
                 invalidateUserDropDownView();
 
