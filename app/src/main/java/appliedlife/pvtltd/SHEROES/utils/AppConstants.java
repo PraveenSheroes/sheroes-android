@@ -382,7 +382,6 @@ public class AppConstants {
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
     public static final String STORY_STREAM = "story_stream";
     public static final String PROFILE_FOLLOWED_CHAMPION = "Profile Followed Champion";
-    public static final String WHATS_APP = "com.whatsapp";
     public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
     public static final String APP_SNOW = "SNOW";
     public static final String APP_SHARE_OPTION = "SHARE_OPTION";

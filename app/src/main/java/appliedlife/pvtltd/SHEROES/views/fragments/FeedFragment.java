@@ -80,9 +80,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -158,9 +157,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Inject
     Preference<LoginResponse> mUserPreference;
 
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     // region View variables
     @Bind(R.id.swipeRefreshContainer)
     SwipeRefreshLayout mSwipeRefresh;
@@ -225,7 +221,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setupRecyclerScrollListener();
         showGifLoader();
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-        isWhatsappShare = isWhatsAppShare();
+        isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
         }
@@ -545,20 +541,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    private boolean isWhatsAppShare() {
-        boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
-            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareText)) {
-                if (shareText.equalsIgnoreCase("true")) {
-                    isWhatsappShare = true;
-                }
-            }
-        }
-        return isWhatsappShare;
-    }
-
     private void setupRecyclerScrollListener() {
         mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -746,11 +728,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         if (isWhatsappShare) {
-            if (CommonUtil.isAppInstalled(getActivity(), "com.whatsapp")) {
-                intent.setPackage(AppConstants.WHATS_APP);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(intent);
-            }
+            intent.setPackage(AppConstants.WHATS_APP_URI);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
