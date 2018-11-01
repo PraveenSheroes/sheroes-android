@@ -743,7 +743,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.setPackage(AppConstants.WHATS_APP_URI);
-        intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.check_out_share_msg) + deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
