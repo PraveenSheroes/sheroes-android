@@ -143,7 +143,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
         intent.putExtra(Intent.EXTRA_TEXT, mSharedText);
         HashMap<String, Object> properties = new EventProperty.Builder().build();
         try {
-            intent.setPackage(AppConstants.WHATS_APP);
+            intent.setPackage(AppConstants.WHATS_APP_URI);
             startActivity(intent);
             properties.put(EventProperty.SHARED_TO.getString(), AppConstants.WHATSAPP_ICON);
         } catch (Exception e) {

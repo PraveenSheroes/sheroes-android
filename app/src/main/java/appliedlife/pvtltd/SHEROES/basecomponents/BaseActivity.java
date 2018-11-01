@@ -139,6 +139,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
     private boolean isWhatsAppShare;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleManager.setLocale(base));
@@ -741,13 +742,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
+        intent.setPackage(AppConstants.WHATS_APP_URI);
         intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
-
-
     }
 
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {
