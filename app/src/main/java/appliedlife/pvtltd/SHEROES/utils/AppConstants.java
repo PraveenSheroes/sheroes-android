@@ -449,4 +449,5 @@ public class AppConstants {
     public static final String CLEVER_TAP_CHANNEL_ID = "sheroesRelatedChannelID";
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";
+    public static final String WHATS_APP_URI = "com.whatsapp";
 }

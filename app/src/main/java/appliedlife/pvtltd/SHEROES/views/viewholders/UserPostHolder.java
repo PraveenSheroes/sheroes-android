@@ -41,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -174,15 +173,9 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
     private UserPostSolrObj mUserPostObj;
     private Context mContext;
-
     private long mUserId;
     private int mAdminId;
-
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     private PostDetailCallBack mPostDetailCallback;
-
     private boolean isWhatappShareOption;
 
     public UserPostHolder(View itemView, PostDetailCallBack postDetailCallBack) {
@@ -196,15 +189,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
         }
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareOption = "";
-            shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareOption)) {
-                if (shareOption.equalsIgnoreCase("true")) {
-                    isWhatappShareOption = true;
-                }
-            }
-        }
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
     }
 
     @Override

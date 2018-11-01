@@ -275,6 +275,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             finish();
         } else {
             setContentView(R.layout.select_language_dialog);
+            mLoginPresenter.attachView(this);
             ButterKnife.bind(LanguageSelectionActivity.this);
             if (isFirstTimeUser) {
                 AnalyticsManager.trackScreenView(getScreenName());

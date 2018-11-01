@@ -52,7 +52,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -223,7 +222,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     @BindDimen(R.dimen.dp_size_40)
     int authorPicSizeFourty;
 
-    BaseHolderInterface viewInterface;
+    private BaseHolderInterface viewInterface;
     private UserPostSolrObj mUserPostObj;
     private Context mContext;
     private int mItemPosition;
@@ -234,9 +233,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private Handler mHandler;
     private boolean isWhatappShareOption = false;
     private boolean isToolTipForUser;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     @Inject
     Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     private LayoutInflater inflater = null;
@@ -263,15 +259,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = first + AppConstants.SPACE + last;
             }
         }
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareOption = "";
-            shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareOption)) {
-                if (shareOption.equalsIgnoreCase("true")) {
-                    isWhatappShareOption = true;
-                }
-            }
-        }
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (mInstallUpdatePreference.get().isWalkThroughShown()) {
             if (CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
                 isToolTipForUser = true;

@@ -108,13 +108,13 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
     @Override
     public void attachView(T mvpView) {
         mMvpView = mvpView;
-        onCreate();
         if (mMvpView instanceof Fragment) {
             lifecycleFragmentSubject = BehaviorSubject.create();
             onAttach();
         } else {
             lifecycleSubject = BehaviorSubject.create();
         }
+        onCreate();
     }
 
     @Override
