@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
+import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -473,4 +475,7 @@ public class AppConstants {
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
     public static final int TRENDING_TAB = 1;
+    public static final int HELPLINE_TIME_START = 12;
+    public static final int HELPLINE_DATE_START = 0;
+    public static final int HELPLINE_DATE_END = 11;
 }

@@ -542,7 +542,7 @@
     <dimen name="helpline_card_corner_radius">2dp</dimen>
     <dimen name="helpline_margin">16dp</dimen>
     <dimen name="help_card_min_height">10dp</dimen>
-    <dimen name="helpline_time_text_size">12sp</dimen>
+    <dimen name="helpline_time_text_size">10sp</dimen>
     <dimen name="helpline_time_marginRight">16dp</dimen>
     <dimen name="helpline_time_marginBottom">8dp</dimen>
     <dimen name="helpline_time_marginTop">8dp</dimen>
@@ -655,5 +655,20 @@
     <dimen name="counselor_image_size">44dp</dimen>
     <dimen name="helpline_rateus_title_textsize">18sp</dimen>
     <dimen name="helpline_rateus_body_textsize">14sp</dimen>
+    <dimen name="helpline_notnow_background_padding">8dp</dimen>
+    <dimen name="helpline_notnow_background_radius">4dp</dimen>
+    <dimen name="helpline_rateusImage_height">170dp</dimen>
+    <dimen name="helpline_rateusImage_paddingBottom">29dp</dimen>
+    <dimen name="helpline_rateusImage_paddingTop">39dp</dimen>
+    <dimen name="helpline_rateusTitle_paddingBottom">8dp</dimen>
+    <dimen name="helpline_rateus_body_lineSpacingExtra">4sp</dimen>
+    <dimen name="helpline_rateus_body_paddingBottom">16dp</dimen>
+    <dimen name="helpline_buttonsLayout_marginBottom">16dp</dimen>
+    <dimen name="helpline_rateusButton_marginRight">16dp</dimen>
+    <dimen name="helpline_date_marginBottom">4dp</dimen>
+    <dimen name="helpline_date_marginTop">4dp</dimen>
+    <dimen name="helpline_date_paddingLeftRight">16dp</dimen>
+    <dimen name="helpline_date_paddingTopBottom">8dp</dimen>
+    <dimen name="helpline_date_textsize">12sp</dimen>
 </resources>
 

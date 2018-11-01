@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -13,15 +12,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/helpline_date_marginBottom"
+        android:layout_marginTop="@dimen/helpline_date_marginTop"
         android:background="@drawable/helpline_datestamp"
-        android:paddingBottom="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_16"
-        android:paddingRight="@dimen/sp_size_16"
-        android:paddingTop="@dimen/dp_size_8"
+        android:paddingBottom="@dimen/helpline_date_paddingTopBottom"
+        android:paddingLeft="@dimen/helpline_date_paddingLeftRight"
+        android:paddingRight="@dimen/helpline_date_paddingLeftRight"
+        android:paddingTop="@dimen/helpline_date_paddingTopBottom"
         android:text="DATE"
-        android:textSize="@dimen/sp_size_14"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"/>
+        android:textSize="@dimen/helpline_date_textsize" />
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -38,55 +37,52 @@
                 android:id="@+id/LinearLayout2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="80dp"
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:background="@drawable/outgoing_shap"
-                android:shadowColor="@color/green"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_centerVertical="true">
+                android:orientation="vertical"
+                android:shadowColor="@color/green">
 
                 <TextView
                     android:id="@+id/question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAllCaps="false"
+                    android:layout_gravity="center|right"
+                    android:layout_marginLeft="@dimen/helpline_margin"
+                    android:layout_marginRight="@dimen/helpline_margin"
+                    android:layout_marginTop="@dimen/helpline_margin"
+                    android:enabled="true"
+                    android:focusable="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="left|center_horizontal"
-                    android:layout_marginRight="@dimen/helpline_margin"
-                    android:layout_gravity="center|right"
-                    android:textIsSelectable="true"
                     android:linksClickable="true"
-                    android:enabled="true"
-                    android:textColorLink="@color/view_more"
-                    android:focusable="true"
                     android:longClickable="true"
-                    android:layout_marginTop="@dimen/helpline_margin"
                     android:minHeight="@dimen/help_card_min_height"
-                    android:layout_marginLeft="@dimen/helpline_margin"
+                    android:textAllCaps="false"
                     android:textColor="@color/comment_text"
-                    android:textSize="@dimen/dp_size_16"/>
+                    android:textColorLink="@color/view_more"
+                    android:textIsSelectable="true"
+                    android:textSize="@dimen/dp_size_16" />
 
                 <TextView
                     android:id="@+id/time_question"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/helpline_time_marginBottom"
-                    android:textAllCaps="false"
-                    android:textColor="@color/helpline_text_time_color"
                     android:layout_below="@+id/LinearLayout2"
-                    android:textSize="@dimen/helpline_time_text_size"
-                    android:layout_marginRight="@dimen/helpline_time_marginRight"
+                    android:layout_marginBottom="@dimen/helpline_time_marginBottom"
                     android:layout_marginLeft="@dimen/helpline_time_marginRight"
+                    android:layout_marginRight="@dimen/helpline_time_marginRight"
                     android:layout_marginTop="@dimen/helpline_time_marginTop"
                     android:gravity="right"
-                    android:maxLines="@integer/int_value_for_line_1"/>
+                    android:maxLines="@integer/int_value_for_line_1"
+                    android:textAllCaps="false"
+                    android:textColor="@color/helpline_text_time_color"
+                    android:textSize="@dimen/helpline_time_text_size" />
 
             </LinearLayout>
-
-
         </RelativeLayout>
     </LinearLayout>
-
 </LinearLayout>

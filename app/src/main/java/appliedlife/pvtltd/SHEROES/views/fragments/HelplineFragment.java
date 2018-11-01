@@ -11,13 +11,14 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -54,7 +55,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 
 /**
@@ -75,6 +75,8 @@ public class HelplineFragment extends BaseFragment {
     EditText questionText;
     @Bind(R.id.btn_chat_send)
     Button sendChatButton;
+    @Bind(R.id.btn_chat_voice)
+    Button chatVoiceButton;
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -104,6 +106,7 @@ public class HelplineFragment extends BaseFragment {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
+        sendChatButton.setVisibility(View.GONE);
 
         if(getArguments()!=null) {
            sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
@@ -120,6 +123,8 @@ public class HelplineFragment extends BaseFragment {
         }
 
         setUpRecyclerView();
+        questionText.addTextChangedListener(InputQuestionTextWatcher());
+        questionText.clearFocus();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_HELP_FRAGMENT));
         return view;
     }
@@ -293,6 +298,29 @@ public class HelplineFragment extends BaseFragment {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    private TextWatcher InputQuestionTextWatcher() {
+
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                sendChatButton.setVisibility(View.GONE);
+                chatVoiceButton.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(sendChatButton.getVisibility() != View.VISIBLE) {
+                    sendChatButton.setVisibility(View.VISIBLE);
+                }
+                chatVoiceButton.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable inputSearch) {
+            }
+        };
     }
 }
 

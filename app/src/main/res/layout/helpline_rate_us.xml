@@ -7,9 +7,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:paddingBottom="29dp"
-        android:paddingTop="39dp"
+        android:layout_height="@dimen/helpline_rateusImage_height"
+        android:paddingBottom="@dimen/helpline_rateusImage_paddingBottom"
+        android:paddingTop="@dimen/helpline_rateusImage_paddingTop"
         android:src="@drawable/ic_rateus" />
 
     <TextView
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_MEDIUM"
         android:gravity="center"
-        android:paddingBottom="@dimen/dp_size_8"
+        android:paddingBottom="@dimen/helpline_rateusTitle_paddingBottom"
         android:text="@string/helpline_rateus_title"
         android:textColor="@color/tab_text"
         android:textSize="@dimen/helpline_rateus_title_textsize" />
@@ -27,15 +27,15 @@
         android:layout_height="wrap_content"
         android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
-        android:lineSpacingExtra="@dimen/sp_size_4"
-        android:paddingBottom="@dimen/dp_size_16"
+        android:lineSpacingExtra="@dimen/helpline_rateus_body_lineSpacingExtra"
+        android:paddingBottom="@dimen/helpline_rateus_body_paddingBottom"
         android:text="@string/helpline_rateus_body"
         android:textSize="@dimen/helpline_rateus_body_textsize" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/dp_size_16"
+        android:layout_marginBottom="@dimen/helpline_buttonsLayout_marginBottom"
         android:gravity="center"
         android:orientation="horizontal">
 
@@ -43,7 +43,7 @@
             android:id="@+id/rate_us"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/helpline_rateusButton_marginRight"
             android:background="@drawable/rectangle_text_poll_active"
             android:text="@string/rate_us"
             android:textAllCaps="true"

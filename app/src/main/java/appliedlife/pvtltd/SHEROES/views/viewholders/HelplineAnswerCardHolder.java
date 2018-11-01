@@ -62,7 +62,7 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
             linkifyURLs(answer);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
-            String time = dataItem.getFormatedDate().substring(12);
+            String time = dataItem.getFormatedDate().substring(AppConstants.HELPLINE_TIME_START);
             answerTime.setText(time);
         }
         if (helplineChatDoc.getThumbnailImageUrl() != null) {  //mentor image icon
@@ -70,32 +70,28 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
             String authorThumborUrl = CommonUtil.getThumborUri(helplineChatDoc.getThumbnailImageUrl(), counselorImageSize, counselorImageSize);
             counselorImage.bindImage(authorThumborUrl);
         }
-
         setDate(prevObj, helplineChatDoc, position);
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void bindData(Object obj, Context context, int position) {
-
     }
 
     @Override
     public void viewRecycled() {
-
     }
 
     @Override
     public void onClick(View v) {
-
     }
 
     private void setDate(HelplineChatDoc prevObj, HelplineChatDoc helplineChatDoc, int position) {
         String prevDate = null;
-        String currDate = helplineChatDoc.getFormatedDate().substring(0, 11);
+        String currDate = helplineChatDoc.getFormatedDate().substring(AppConstants.HELPLINE_DATE_START, AppConstants.HELPLINE_DATE_END);
 
         if (prevObj != null) {
-            prevDate = prevObj.getFormatedDate().substring(0, 11);
+            prevDate = prevObj.getFormatedDate().substring(AppConstants.HELPLINE_DATE_START, AppConstants.HELPLINE_DATE_END);
         }
 
         if (prevObj != null && position > 0) {

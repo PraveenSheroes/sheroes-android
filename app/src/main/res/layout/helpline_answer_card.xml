@@ -11,15 +11,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="@dimen/helpline_date_marginBottom"
+        android:layout_marginTop="@dimen/helpline_date_marginTop"
         android:background="@drawable/helpline_datestamp"
-        android:paddingBottom="@dimen/dp_size_8"
-        android:paddingLeft="@dimen/dp_size_16"
-        android:paddingRight="@dimen/sp_size_16"
-        android:paddingTop="@dimen/dp_size_8"
+        android:paddingBottom="@dimen/helpline_date_paddingTopBottom"
+        android:paddingLeft="@dimen/helpline_date_paddingLeftRight"
+        android:paddingRight="@dimen/helpline_date_paddingLeftRight"
+        android:paddingTop="@dimen/helpline_date_paddingTopBottom"
         android:text="DATE"
-        android:textSize="@dimen/sp_size_14" />
+        android:textSize="@dimen/helpline_date_textsize" />
 
     <LinearLayout
         android:id="@+id/LinearLayout1"

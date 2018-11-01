@@ -9,6 +9,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.HelplineViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
@@ -51,8 +52,7 @@ public class HelplineQuestionCardHolder extends HelplineViewHolder<HelplineChatD
             linkifyURLs(question);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
-            String date = dataItem.getFormatedDate().substring(0, 11);
-            String time = dataItem.getFormatedDate().substring(12);
+            String time = dataItem.getFormatedDate().substring(AppConstants.HELPLINE_TIME_START);
             questionTime.setText(time);
         }
         setDate(prevObj, helplineChatDoc, position);
@@ -60,25 +60,22 @@ public class HelplineQuestionCardHolder extends HelplineViewHolder<HelplineChatD
 
     @Override
     public void bindData(Object obj, Context context, int position) {
-
     }
 
     @Override
     public void viewRecycled() {
-
     }
 
     @Override
     public void onClick(View v) {
-
     }
 
     private void setDate(HelplineChatDoc prevObj, HelplineChatDoc helplineChatDoc, int position) {
         String prevDate = null;
-        String currDate = helplineChatDoc.getFormatedDate().substring(0, 11);
+        String currDate = helplineChatDoc.getFormatedDate().substring(AppConstants.HELPLINE_DATE_START, AppConstants.HELPLINE_DATE_END);
 
         if (prevObj != null) {
-            prevDate = prevObj.getFormatedDate().substring(0, 11);
+            prevDate = prevObj.getFormatedDate().substring(AppConstants.HELPLINE_DATE_START, AppConstants.HELPLINE_DATE_END);
         }
 
         if (prevObj != null && position > 0) {

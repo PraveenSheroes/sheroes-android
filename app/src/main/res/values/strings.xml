@@ -7,7 +7,6 @@
     <string name="ID_ROBOTO_MEDIUM">sans-serif-medium</string>
     <string name="ID_ROBOTO_BOLD">sans-serif-bold</string>
 
-
     <!--text names in SHEROES-->
 
     <string name="IDS_PLAY_SERVICE">Please update you Google play services</string>
@@ -169,7 +168,7 @@
     <!--String related setting_preferences_deactiveaccount page -->
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">Ask a Question</string>
+    <string name="ID_ASK_QUESTION">Type your question…</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">Follow</string>
     <string name="following_user">Following</string>
@@ -501,7 +500,6 @@
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
     <string name="private_information">Private Information (Only Visible to You)</string>
-
     <string name="ID_WELCOME_SHEROES">Welcome to SHEROES!</string>
     <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
     <string name="ID_FIRST_WELCOME">Health Career Love</string>
@@ -519,7 +517,6 @@
     <string name="ID_LOADER">\"Think like a Queen.\n A Queen is not afraid to fail.\"</string>
     <string name="ID_NEXT">Next</string>
     <string name="ID_LETS_GET_STARTED">Let\'s get started!</string>
-
     <string name="view_more">View More</string>
     <string name="followed_mentors">Followed Champions</string>
     <string name="cancel">CANCEL</string>
@@ -535,18 +532,13 @@
     <string name="followed_communities">Communities Joined</string>
     <string name="champions_followed">Champions Followed</string>
     <string name="join_communities">Join Communities &amp; Connect></string>
-
     <string name="ID_SHARE_ON_WHATS_APP">Share</string>
 
     <!-- String related to tooltip -->
     <string name="tool_tip_user_profile">Find out more about this user</string>
-
-
     <string name="ID_JOIN_COMMUNITY">Please join at least one community to personalise your feed.</string>
     <string name="my_communities">My Communities</string>
-
     <string name="got_it">Got It</string>
-
     <string name="tool_tip_ask_question">Tap here to ask a question to this champion.</string>
     <string name="tool_tip_notification">Your personalized notifications for likes and comments will appear here.\u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 \u0020 GOT IT</string>
     <string name="tool_tip_follower">Follow her to see what she shares!</string>
@@ -591,12 +583,9 @@
     <string name="spam_confirmation_dialog_title">Thank you for your feedback!</string>
     <string name="reported_spam_confirmation_dialog_message">You have already reported this %1$s as spam, and it is in review. Thank You!</string>
     <string name="reported_spam_marked_dialog_message">The %1$s has been marked as SPAM and it is in review. Thank You!</string>
-
     <string name="reported_spam_confirmation_dialog_title">Reported Earlier</string>
     <string name="spam_confirmation_dialog_message">Your response will help us to improve your experience with SHEROES.</string>
     <string name="deactivation_dialog_message">Thank you, user has been deactivated.</string>
-
-
     <!--spam region end-->
 
     <string name="later">LATER</string>
@@ -614,8 +603,6 @@
     <string name="share_sheroes_app">Share sheroes app</string>
     <string name="sheroes_msg">SHEROES is a platform only for women. Please declare that you are a woman before continuing.</string>
     <string name="sheroes_gender_error">SHEROES is a women only platform. How about you share the SHEROES app with the women in your life?</string>
-
-
     <string name="achieved">( Achieved )</string>
     <string name="beginner">Beginner</string>
     <string name="next_level">Next level</string>
@@ -664,12 +651,8 @@
     <string name="user_card_desc">Super SHEROES in %1$s</string>
     <string name="show_leaderboard">SHOW LEADERBOARD</string>
     <string name="view_profile">VIEW PROFILE</string>
-
-
-
     <string name="action_draft">Draft</string>
     <string name="action_info">Info</string>
-
     <string name="article.status.submitted">submitted</string>
     <string name="article.status.draft">draft</string>
     <string name="article.status.under_review">under-review</string>
@@ -677,7 +660,6 @@
     <string name="article.status.scheduled">scheduled</string>
     <string name="article.status.published">published</string>
     <string name="untited_article">Untitled Article</string>
-
     <string name="dialog.title_image">Cover Image Missing</string>
     <string name="dialog.image">Stories with a cover image get 10 times higher views!</string>
     <string name="dialog.title_draft">Save as draft?</string>
@@ -720,8 +702,6 @@
     <string name="option_same">Two or more options can\'t be same</string>
     <string name="option_image_empty">Image can\'t be empty</string>
     <string name="poll_text_limit">Description can\'t exceed 500 char</string>
-
-
     <string name="paste_on_playstore">Paste as Review on Playstore</string>
     <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
     <string name="congratulation">Congratulations</string>

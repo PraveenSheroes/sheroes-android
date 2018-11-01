@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,25 +123,23 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public void onBindViewHolder(BaseViewHolder holder, int position) {
-        if(mCallFromType.equalsIgnoreCase(AppConstants.FOR_ALL)) {
+        if (mCallFromType.equalsIgnoreCase(AppConstants.FOR_ALL)) {
             if (filterListData.get(position) instanceof UserSolrObj) {
                 UserSolrObj userSolrObj = (UserSolrObj) filterListData.get(position);
-                userSolrObj.currentItemPosition=mPosition;
+                userSolrObj.currentItemPosition = mPosition;
                 userSolrObj.setSuggested(true);
                 filterListData.set(position, (T) userSolrObj);
             }
-
         }
-        if(filterListData.get(position) instanceof HelplineChatDoc && holder instanceof HelplineViewHolder) {
+        if (filterListData.get(position) instanceof HelplineChatDoc && holder instanceof HelplineViewHolder) {
             T prevObj = null;
             if (position > 0) {
-                prevObj = filterListData.get(position-1);
+                prevObj = filterListData.get(position - 1);
             }
-            ((HelplineViewHolder)holder).bindData(filterListData.get(position), context, position, prevObj);
+            ((HelplineViewHolder) holder).bindData(filterListData.get(position), context, position, prevObj);
         } else {
             holder.bindData(filterListData.get(position), context, position);
         }
-
     }
 
 
