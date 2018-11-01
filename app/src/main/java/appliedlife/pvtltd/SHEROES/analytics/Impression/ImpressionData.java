@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Model class for impression
- * Here all the * marked fields are mandatory . Mandatory fields marked as //*
  * @author ravi
  */
 public class ImpressionData {
@@ -15,7 +14,7 @@ public class ImpressionData {
     @SerializedName("clientId")
     private String clientId;
 
-    @SerializedName("postId") //*
+    @SerializedName("postId")
     private String postId;
 
     @SerializedName("position")
@@ -27,32 +26,31 @@ public class ImpressionData {
     @SerializedName("streamName")
     private String streamName;
 
-    @SerializedName("timestamp") //*
+    @SerializedName("timestamp")
     private long timeStamp;
 
-    @SerializedName("event") //*
+    @SerializedName("event")
     private String event;
 
     @SerializedName("deviceId")
     private String deviceId;
 
-    @SerializedName("gtid") //*
+    @SerializedName("gtid")
     private String gtid;
 
     @SerializedName("userAgent")
     private String userAgent;
 
+    //current screen name
     @SerializedName("sourceScreen")
     private String source;
 
     @SerializedName("sourceTab")
     private String sourceTab;
 
+    //for carousel
     @SerializedName("sourceCollection")
     private String sourceCollection;
-
-    @SerializedName("sourceURL")
-    private String sourceURL;
 
     @SerializedName("postType")
     private String postType;
@@ -136,26 +134,6 @@ public class ImpressionData {
         this.source = source;
     }
 
-    public String getSourceCollection() {
-        return sourceCollection;
-    }
-
-    public void setSourceCollection(String sourceCollection) {
-        this.sourceCollection = sourceCollection;
-    }
-
-    public String getSourceURL() {
-        return sourceURL;
-    }
-
-    public void setSourceURL(String sourceURL) {
-        this.sourceURL = sourceURL;
-    }
-
-    public String getPostType() {
-        return postType;
-    }
-
     void setPostType(String postType) {
         this.postType = postType;
     }
@@ -173,10 +151,6 @@ public class ImpressionData {
 
     void setEndTime(long mEndTime) {
         this.mEndTime = mEndTime;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
     }
 
     void setDeviceId(String deviceId) {
@@ -203,16 +177,8 @@ public class ImpressionData {
         this.sourceTab = sourceTab;
     }
 
-    public String getOrderKey() {
-        return setOrderKey;
-    }
-
     public void setOrderKey(String setOrderKey) {
         this.setOrderKey = setOrderKey;
-    }
-
-    public String getStreamName() {
-        return streamName;
     }
 
     void setStreamName(String streamName) {

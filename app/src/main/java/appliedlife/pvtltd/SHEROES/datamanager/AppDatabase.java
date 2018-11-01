@@ -20,15 +20,17 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ImpressionDataDao impressionDataDao();
 
     public static AppDatabase getAppDatabase(Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, DB_NAME)
+        if (INSTANCE == null && context != null) {
+            INSTANCE = Room.databaseBuilder(context, AppDatabase.class, DB_NAME)
                     .build();
         }
         return INSTANCE;
     }
 
     public static void destroyInstance() {
-        if (INSTANCE.isOpen()) INSTANCE.close();
+        if (INSTANCE.isOpen()) {
+            INSTANCE.close();
+        }
         INSTANCE = null;
     }
 }

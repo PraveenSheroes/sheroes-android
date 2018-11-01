@@ -52,6 +52,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -568,7 +569,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             mToast.cancel();
         }
 
-        if (getContext() != null && getActivity()!=null && !getActivity().isFinishing()) {
+        if (BuildConfig.DEBUG && getContext() != null && getActivity()!=null && !getActivity().isFinishing()) {
             mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
             mToast.show();
         }

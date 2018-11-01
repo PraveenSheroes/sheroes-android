@@ -121,7 +121,7 @@ public class ConfigData {
     public int visibilityPercentage = 20;
 
     @SerializedName("frequency_batch_request")
-    public int frequencyBatchRequest = 10;
+    public int frequencyBatchRequest = 50;
 
     @SerializedName("min_engagement_time")
     public int minEngagementTime = 250;

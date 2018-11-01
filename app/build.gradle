@@ -63,7 +63,7 @@ android {
     }
 
     buildTypes.each { type ->
-        type.buildConfigField "String", 'IMPRESSION_AUTH', "\"Basic c2hlcm9lczp6IWN0NnNtSDlneHUkaGBeZFNHIXthViZ+YFd5KSE5Wg==\""
+        type.buildConfigField "String", 'IMPRESSION_AUTH', "\"c2hlcm9lczp6IWN0NnNtSDlneHUkaGBeZFNHIXthViZ+YFd5KSE5Wg==\""
     }
 
     signingConfigs {

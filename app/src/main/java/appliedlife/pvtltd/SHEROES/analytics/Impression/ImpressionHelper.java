@@ -40,7 +40,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
     private int mLastDirectionId = -1;
     private int mImpressionVisibilityThreshold;
     private int mImpressionBatchSize;
-    private float mMinEngagementTime;
+    private int mMinEngagementTime;
 
     private ImpressionCallback mImpressionCallback;
     private AppUtils mAppUtils;
@@ -90,7 +90,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get impression frequency in ms
             mImpressionFrequency = mConfiguration.get().configData.impressionFrequency;
         }
-        mImpressionFrequency = mImpressionFrequency / 3;
 
         int mImpressionMaxTimeout = configData.impressionMaxTimeout;
         if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //get impression frequency in ms

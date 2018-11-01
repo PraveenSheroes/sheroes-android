@@ -19,7 +19,6 @@ import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Predicate;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
@@ -36,6 +35,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     private SheroesAppServiceApi mSheroesApiEndPoints;
     private SheroesApplication mSheroesApplication;
     private static volatile boolean mIsNetworkCallRunning = false;
+    private static int retryCounter;
+    private static final int MAX_RETRY_COUNTER = 1;
+    private final AppDatabase mDatabase = AppDatabase.getAppDatabase(SheroesApplication.mContext);
 
     //endregion
 
@@ -66,8 +68,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                         impression1.setImpressionData(impression);
                         data.add(impression1);
                     }
-                    final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
-                    List<Long> rowsAffected = database.impressionDataDao().insert(data);
+                    List<Long> rowsAffected = mDatabase.impressionDataDao().insert(data);
                     if (rowsAffected.size() > 0) {
                         emitter.onSuccess(rowsAffected);
                     }
@@ -75,8 +76,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     emitter.onError(t);
                 }
             }
-        }).observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
+        }).subscribeOn(Schedulers.io())
                 .subscribe(new DisposableSingleObserver<List<Long>>() {
                     @Override
                     public void onSuccess(List<Long> rowsAffected) {
@@ -92,11 +92,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
     //Get impression data from database
     void impressionObserver(final int batchSize, final boolean forceNetworkCall) {
-        final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
 
-        database.impressionDataDao().getAllImpressions()
+        mDatabase.impressionDataDao().getAllImpressions()
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<List<Impression>>bindToLifecycle())
                 .subscribe(new DisposableSingleObserver<List<Impression>>() {
                     @Override
@@ -138,9 +136,9 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      * Send the impression to server
      *
      * @param userEvents  request format data
-     * @param Impressions data that need to clear from db on success
+     * @param impressions data that need to clear from db on success
      */
-    private void sendImpressionData(final UserEvents userEvents, final List<Impression> Impressions) {
+    private void sendImpressionData(final UserEvents userEvents, final List<Impression> impressions) {
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             mIsNetworkCallRunning = false;
@@ -149,14 +147,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
         mSheroesApiEndPoints.updateImpressionData(userEvents)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ImpressionResponse>bindToLifecycle())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        retryFailedImpression(userEvents, Impressions);
-                    }
-                })
                 .subscribe(new DisposableObserver<ImpressionResponse>() {
                     @Override
                     public void onComplete() {
@@ -164,39 +155,11 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
 
                     @Override
                     public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        mIsNetworkCallRunning = false;
-                    }
-
-                    @Override
-                    public void onNext(ImpressionResponse impressionResponse) {
-                        if (null != impressionResponse && impressionResponse.isSuccessFul()) {
-                            clearDatabase(Impressions);
-                        } else {
-                            mIsNetworkCallRunning = false;
+                        retryCounter ++;
+                        if(retryCounter <= MAX_RETRY_COUNTER){
+                            sendImpressionData(userEvents, impressions);
                         }
-                    }
-                });
-    }
 
-    //Retry this on error
-    private void retryFailedImpression(final UserEvents userEvents, final List<Impression> impressions) {
-
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            mIsNetworkCallRunning = false;
-            return;
-        }
-        mSheroesApiEndPoints.updateImpressionData(userEvents)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<ImpressionResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<ImpressionResponse>() {
-                    @Override
-                    public void onComplete() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
                         mIsNetworkCallRunning = false;
                     }
@@ -204,7 +167,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     @Override
                     public void onNext(ImpressionResponse impressionResponse) {
                         if (null != impressionResponse && impressionResponse.isSuccessFul()) {
-                            clearDatabase(impressions);
+                            clearSentImpressions(impressions);
                         } else {
                             mIsNetworkCallRunning = false;
                         }
@@ -213,18 +176,17 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
     }
 
     /**
-     * clear db items
+     * clear  successful impression
      *
      * @param clearImpressionItem list of impression events
      */
-    private void clearDatabase(final List<Impression> clearImpressionItem) {
+    private void clearSentImpressions(final List<Impression> clearImpressionItem) {
 
         Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(ObservableEmitter<String> subscriber) {
                 try {
-                    final AppDatabase database = AppDatabase.getAppDatabase(SheroesApplication.mContext);
-                    database.impressionDataDao().deleteImpression(clearImpressionItem);
+                    mDatabase.impressionDataDao().deleteImpression(clearImpressionItem);
                     subscriber.onComplete();
                 } catch (Exception e) {
                     subscriber.onError(e);

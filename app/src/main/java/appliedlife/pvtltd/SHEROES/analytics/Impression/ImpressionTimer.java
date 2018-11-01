@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.os.CountDownTimer;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Timer for impressions
@@ -37,12 +36,10 @@ public class ImpressionTimer extends CountDownTimer {
     @Override
     public void onFinish() {
         if (System.currentTimeMillis() - mLastScrollingEndTime > mImpressionMaxTimeout) {
-            LogUtils.info(TAG, "MAX time expired");
             mIsTimerRunning = false;
             mTimerCallback.stopTimer();
             cancel();
         } else {
-            LogUtils.info(TAG, "Time Expired");
             mTimerCallback.sendImpressions();
             mIsTimerRunning = true;
             start();

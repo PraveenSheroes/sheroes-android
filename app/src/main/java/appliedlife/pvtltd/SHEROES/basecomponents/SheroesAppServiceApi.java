@@ -123,7 +123,7 @@ import java.util.Map;
  * @author Praveen Singh
  * @version 5.0
  * @since 29/12/2016.
- * Title: All network calls api whill be register here and all get ,post will be redirect .
+ * Title: All network calls api will be register here and all get ,post will be redirect .
  */
 public interface SheroesAppServiceApi {
     /*Participant*/
@@ -392,7 +392,7 @@ public interface SheroesAppServiceApi {
     @POST("participation/global/image/add")
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
 
-    //@Headers("Authorization: " + BuildConfig.IMPRESSION_AUTH)
+    @Headers("X-Producer-Authorization: " + BuildConfig.IMPRESSION_AUTH)
     @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
     Observable<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 }
