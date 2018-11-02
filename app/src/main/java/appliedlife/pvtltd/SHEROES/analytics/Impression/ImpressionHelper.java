@@ -244,7 +244,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
         int itemPosition = checkIfItemInFinal(postId);
         if (itemPosition == -1) { //new item add it in final list
             mFinalViewData.add(impressionData);
-            mImpressionCallback.showToast("Screen Enter" + viewPosition);
         }
     }
 
@@ -364,7 +363,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
                     mFinalViewData.get(i).setEndTime(System.currentTimeMillis());
                     int timeSpent = (int) (mFinalViewData.get(i).getEndTime() - mFinalViewData.get(i).getTimeStamp());
                     mFinalViewData.get(i).setEngagementTime(timeSpent);
-                    mImpressionCallback.showToast("Screen Exit" + impressionData.getPosition() + "::Duration" + timeSpent / 1000.0f);
                     break;
                 }
             }

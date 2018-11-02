@@ -563,19 +563,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    @Deprecated
-    public void showToast(String message) {
-        if (mToast != null) {
-            mToast.cancel();
-        }
-
-        if (BuildConfig.DEBUG && getContext() != null && getActivity()!=null && !getActivity().isFinishing()) {
-            mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
-            mToast.show();
-        }
-    }
-
-    @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }

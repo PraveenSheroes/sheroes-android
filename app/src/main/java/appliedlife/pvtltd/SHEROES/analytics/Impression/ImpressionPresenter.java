@@ -75,7 +75,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
                     emitter.onError(t);
                 }
             }
-        }).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableSingleObserver<Integer>() {
+        }).subscribeOn(Schedulers.computation()).observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableSingleObserver<Integer>() {
             @Override
             public void onSuccess(Integer integer) {
                 flushDB(batchSize, forceNetworkCall);
