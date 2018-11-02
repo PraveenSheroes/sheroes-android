@@ -251,10 +251,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         communitiesContainer.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {

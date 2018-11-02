@@ -130,6 +130,8 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -205,6 +207,12 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     @Inject
     AppUtils mAppUtils;
+
+    @Inject
+    LogOutUtils logOutUtils;
+
+    @Inject
+    FeedUtils feedUtils;
     //endregion
 
     // region View variables
@@ -448,7 +456,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 eventDetailDialog(mEventId);
             }
         }
-        setConfigurableShareOption(isWhatsAppShare());
+        feedUtils.setConfigurableShareOption(isWhatsAppShare());
     }
 
     public void showCaseDesign() {
@@ -546,7 +554,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
 
     public void logOut() {
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
-        logOutUser();
+        logOutUtils.logOutUser(getScreenName(), this);
     }
 
     @Override
@@ -559,7 +567,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+            feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
+//            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         } else if (baseResponse instanceof FAQS) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
@@ -1758,7 +1767,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
                 setAllValues(mFragmentOpen);
-                super.feedCardsHandled(view, baseResponse);
+                feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
+
+//                super.feedCardsHandled(view, baseResponse);
 
         }
 

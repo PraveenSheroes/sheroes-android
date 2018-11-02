@@ -62,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -101,6 +102,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    FeedUtils feedUtils;
 
     //region Bind view variables
     @Bind(R.id.toolbar)
@@ -177,7 +181,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             initializeAllViews();
         }
         setupToolbarItemsColor();
-        setConfigurableShareOption(isWhatsAppShare());
+        feedUtils.setConfigurableShareOption(isWhatsAppShare());
     }
 
     private boolean isWhatsAppShare() {
@@ -596,7 +600,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (baseResponse instanceof Comment) {
             // setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+            feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
+
+//            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
     }
 
@@ -604,10 +610,14 @@ public class ContestActivity extends BaseActivity implements IContestView {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_community_post_user_comment:
-                super.feedCardsHandled(view, baseResponse);
+                feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
+
+//                super.feedCardsHandled(view, baseResponse);
                 break;
             default:
-                super.feedCardsHandled(view, baseResponse);
+                feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
+
+//                super.feedCardsHandled(view, baseResponse);
 
         }
     }

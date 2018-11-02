@@ -128,6 +128,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -227,6 +228,9 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+
+    @Inject
+    FeedUtils feedUtils;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -457,7 +461,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
 
-        setConfigurableShareOption(isWhatsAppShare());
+        feedUtils.setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
@@ -1205,17 +1209,21 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+            feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
+
+//            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+
         }
     }
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
-        setFragment(mFragment);
+        feedUtils.setFragment(mFragment);
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
         setAllValues(mFragmentOpen);
-        super.feedCardsHandled(view, baseResponse);
+        feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
+//        super.feedCardsHandled(view, baseResponse);
     }
 
 

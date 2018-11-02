@@ -59,6 +59,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
+import appliedlife.pvtltd.SHEROES.utils.ShareUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import dagger.Module;
 import dagger.Provides;
@@ -217,6 +220,24 @@ public class SheroesAppModule {
     @Provides
     public AppUtils provideAppUtil() {
         return AppUtils.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public ShareUtils provideShareUtils() {
+        return ShareUtils.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public LogOutUtils provideLogoutUtils() {
+        return LogOutUtils.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public FeedUtils provideFeedUtils() {
+        return FeedUtils.getInstance();
     }
 
     @Singleton

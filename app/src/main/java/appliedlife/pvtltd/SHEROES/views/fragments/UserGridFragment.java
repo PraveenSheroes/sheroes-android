@@ -321,10 +321,6 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
     }
 
-    @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {

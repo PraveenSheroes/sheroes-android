@@ -219,11 +219,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     }
 
     @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
-
-    @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
     }

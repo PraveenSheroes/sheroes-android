@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
@@ -136,6 +137,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Inject
     Preference<LoginResponse> userPreference;
+
+    @Inject
+    FeedUtils feedUtils;
 
     @Bind(R.id.pb_communities_drawer)
     ProgressBar pbCommunitiesDrawer;
@@ -961,7 +965,7 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         }
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
-            showCommunityJoinReason(mCommunityFeedSolrObj);
+            feedUtils.showCommunityJoinReason(mCommunityFeedSolrObj, this);
             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
         } else {
             if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {

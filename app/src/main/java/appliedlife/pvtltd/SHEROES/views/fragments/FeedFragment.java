@@ -483,11 +483,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
-
-    @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
     }
