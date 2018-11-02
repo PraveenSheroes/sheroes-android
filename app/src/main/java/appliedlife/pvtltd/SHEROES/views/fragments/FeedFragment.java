@@ -267,7 +267,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         ConfigData configData = new ConfigData();
         isTrackingEnabled  = configData.isImpressionTrackEnabled;
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {//impression tracking flag
             isTrackingEnabled = mConfiguration.get().configData.isImpressionTrackEnabled;
         }
 
@@ -924,9 +924,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             @Override
             public void onGlobalLayout() {
                 mFeedRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
-                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                if (impressionHelper != null) {
+                if (isTrackingEnabled && impressionHelper != null) {
+                    int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
                     impressionHelper.setHeaderEnabled(isHomeFeed);
                     impressionHelper.getVisibleViews(startPos, endPos);
                 }
