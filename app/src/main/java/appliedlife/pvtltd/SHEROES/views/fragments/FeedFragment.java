@@ -70,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -235,7 +236,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private EventDetailDialogFragment eventDetailDialogFragment;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
-    private Toast mToast;
+    private boolean isTrackingEnabled = true;
     //endregion
 
     //region fragment lifecycle method
@@ -263,6 +264,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         SpannableString content = new SpannableString(underLineData);
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
+
+        ConfigData configData = new ConfigData();
+        isTrackingEnabled  = configData.isImpressionTrackEnabled;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) { //Get the view visibility percentage from remote config
+            isTrackingEnabled = mConfiguration.get().configData.isImpressionTrackEnabled;
+        }
+
         //fetch latest all communities and save it in sharePref
         if (isHomeFeed) {
             mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
@@ -277,7 +285,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             isActiveTabFragment = true;
 
-            if (impressionHelper != null) {
+            if (isTrackingEnabled && impressionHelper != null) {
                 updateVisibleImpressionViews();
             }
 
@@ -298,7 +306,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
 
-            if (impressionHelper != null) {
+            if (isTrackingEnabled && impressionHelper != null) {
                 impressionHelper.stopImpression();
             }
             isActiveTabFragment = false;
@@ -309,7 +317,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     //region private methods
     //Initialize the impression Helper class
     private void initializeImpression() {
-        if (impressionHelper == null) {
+        if (impressionHelper == null && isTrackingEnabled) {
             ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
@@ -932,7 +940,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
-                    if (impressionHelper != null) {
+                    if (isTrackingEnabled && impressionHelper != null) {
                         impressionHelper.scrollingIdle(System.currentTimeMillis());
                     }
                 }
@@ -948,9 +956,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     mScrollDirection = ImpressionHelper.SCROLL_DOWN;
                 }
 
-                int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
-                int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                if (impressionHelper != null) {
+                if (isTrackingEnabled && impressionHelper != null) {
+                    int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
                     impressionHelper.setHeaderEnabled(isHomeFeed);
                     impressionHelper.onScrollChange(recyclerView, mScrollDirection, startPos, endPos);
                 }
