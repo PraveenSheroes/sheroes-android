@@ -54,8 +54,8 @@ public class HelplineQuestionCardHolder extends HelplineViewHolder<HelplineChatD
         if (StringUtil.isNotNullOrEmptyString(dataItem.getFormatedDate())) {
             String time = dataItem.getFormatedDate().substring(AppConstants.HELPLINE_TIME_START);
             questionTime.setText(time);
+            setDate(prevObj, helplineChatDoc, position);
         }
-        setDate(prevObj, helplineChatDoc, position);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class HelplineQuestionCardHolder extends HelplineViewHolder<HelplineChatD
             prevDate = prevObj.getFormatedDate().substring(AppConstants.HELPLINE_DATE_START, AppConstants.HELPLINE_DATE_END);
         }
 
-        if (prevObj != null && position > 0) {
+        if (prevObj != null) {
             if (prevDate.equals(currDate)) {
                 dateStamp.setVisibility(View.GONE);
             } else {

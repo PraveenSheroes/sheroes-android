@@ -44,16 +44,14 @@
                 android:layout_marginRight="@dimen/dp_size_16"
                 android:background="@drawable/outgoing_shap"
                 android:orientation="vertical"
-                android:shadowColor="@color/green">
+                android:shadowColor="@color/green"
+                android:padding="@dimen/dp_size_16">
 
                 <TextView
                     android:id="@+id/question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
-                    android:layout_marginLeft="@dimen/helpline_margin"
-                    android:layout_marginRight="@dimen/helpline_margin"
-                    android:layout_marginTop="@dimen/helpline_margin"
                     android:enabled="true"
                     android:focusable="true"
                     android:fontFamily="@string/ID_ROBOTO_REGULAR"
@@ -69,16 +67,13 @@
 
                 <TextView
                     android:id="@+id/time_question"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/LinearLayout2"
-                    android:layout_marginBottom="@dimen/helpline_time_marginBottom"
-                    android:layout_marginLeft="@dimen/helpline_time_marginRight"
-                    android:layout_marginRight="@dimen/helpline_time_marginRight"
                     android:layout_marginTop="@dimen/helpline_time_marginTop"
                     android:gravity="right"
+                    android:layout_gravity="right"
                     android:maxLines="@integer/int_value_for_line_1"
-                    android:textAllCaps="false"
                     android:textColor="@color/helpline_text_time_color"
                     android:textSize="@dimen/helpline_time_text_size" />
 

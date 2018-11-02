@@ -133,8 +133,8 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         }
         if (filterListData.get(position) instanceof HelplineChatDoc && holder instanceof HelplineViewHolder) {
             T prevObj = null;
-            if (position > 0) {
-                prevObj = filterListData.get(position - 1);
+            if (position+1 < filterListData.size()) {
+                prevObj = filterListData.get(position + 1);
             }
             ((HelplineViewHolder) holder).bindData(filterListData.get(position), context, position, prevObj);
         } else {

@@ -127,12 +127,18 @@ public class HelplineFragment extends BaseFragment {
         }
 
         setUpRecyclerView();
+        questionText.addTextChangedListener(editTextWatcher());
         questionText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (!keyboardShown(questionText.getRootView())) {
-                    sendChatButton.setVisibility(View.GONE);
-                    chatVoiceButton.setVisibility(View.VISIBLE);
+                    if(questionText.getText().toString().length()!=0){
+                        sendChatButton.setVisibility(View.VISIBLE);
+                        chatVoiceButton.setVisibility(View.GONE);
+                    } else {
+                        sendChatButton.setVisibility(View.GONE);
+                        chatVoiceButton.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     sendChatButton.setVisibility(View.VISIBLE);
                     chatVoiceButton.setVisibility(View.GONE);
@@ -303,6 +309,7 @@ public class HelplineFragment extends BaseFragment {
         super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
     }
+
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg,feedParticipationEnum);
@@ -321,6 +328,39 @@ public class HelplineFragment extends BaseFragment {
         DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
         int heightDiff = rootView.getBottom() - r.bottom;
         return heightDiff > softKeyboardHeight * dm.density;
+    }
+
+    private TextWatcher editTextWatcher() {
+
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable inputSearch) {
+
+                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > 0) {
+                    if (!keyboardShown(questionText.getRootView())) {
+                        if(questionText.getText().toString().length()!=0){
+                            sendChatButton.setVisibility(View.VISIBLE);
+                            chatVoiceButton.setVisibility(View.GONE);
+                        } else {
+                            sendChatButton.setVisibility(View.GONE);
+                            chatVoiceButton.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        sendChatButton.setVisibility(View.VISIBLE);
+                        chatVoiceButton.setVisibility(View.GONE);
+                    }
+                }
+            }
+        };
     }
 }
 

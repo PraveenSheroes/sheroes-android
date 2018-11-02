@@ -94,7 +94,7 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
             prevDate = prevObj.getFormatedDate().substring(AppConstants.HELPLINE_DATE_START, AppConstants.HELPLINE_DATE_END);
         }
 
-        if (prevObj != null && position > 0) {
+        if (prevObj != null) {
             if (prevDate.equals(currDate)) {
                 dateStamp.setVisibility(View.GONE);
             } else {
