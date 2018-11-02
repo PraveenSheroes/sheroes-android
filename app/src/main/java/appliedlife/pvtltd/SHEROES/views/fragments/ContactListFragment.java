@@ -313,13 +313,13 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     }
 
                     isWhatsAppNumber = isWhatsAppNumber.replaceAll("[\\D]", "");
-                    boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
+                    boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP_URI);
                     if (isWhatsappInstalled) {
                         Intent sendIntent = new Intent("android.intent.action.MAIN");
                         //when user want only conversation
                         // sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.setPackage(AppConstants.WHATS_APP);
+                        sendIntent.setPackage(AppConstants.WHATS_APP_URI);
                         sendIntent.setType("text/plain");
                         sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(isWhatsAppNumber) + "@s.whatsapp.net");//phone number without "+" prefix
                         sendIntent.putExtra(Intent.EXTRA_TEXT, mSmsShareLink);

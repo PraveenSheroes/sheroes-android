@@ -23,6 +23,7 @@ import com.google.gson.JsonSerializer;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -207,6 +208,7 @@ public class SheroesAppModule {
     public Gson provideGson() {
         return new GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
                 .setExclusionStrategies(new AnnotationExclusionStrategy())
+                .excludeFieldsWithModifiers(Modifier.TRANSIENT)
                 .create();
     }
 
@@ -333,7 +335,7 @@ public class SheroesAppModule {
         return retrofit.create(SheroesAppServiceApi.class);
     }
 
-    private static String getUserAgent(Context mContext) {
+    public static String getUserAgent(Context mContext) {
         String userAgent = AppConstants.APP_NAME;
         try {
             String packageName = mContext.getPackageName();

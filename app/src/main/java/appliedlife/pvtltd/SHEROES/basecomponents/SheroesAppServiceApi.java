@@ -1,8 +1,11 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.UserEvents;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
@@ -102,8 +105,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -119,7 +124,7 @@ import java.util.Map;
  * @author Praveen Singh
  * @version 5.0
  * @since 29/12/2016.
- * Title: All network calls api whill be register here and all get ,post will be redirect .
+ * Title: All network calls api will be register here and all get ,post will be redirect .
  */
 public interface SheroesAppServiceApi {
     /*Participant*/
@@ -387,4 +392,8 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/global/image/add")
     Observable<UpLoadImageResponse> uploadImageForAnyModule(@Body UploadImageRequest uploadImageRequest);
+
+    @Headers("X-Producer-Authorization: " + BuildConfig.IMPRESSION_AUTH)
+    @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
+    Single<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 }

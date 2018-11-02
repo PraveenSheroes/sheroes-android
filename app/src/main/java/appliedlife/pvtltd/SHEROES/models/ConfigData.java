@@ -116,4 +116,23 @@ public class ConfigData {
 
     @SerializedName("challengeWinnerDailogMessage")
     public String challengeWinnerDialogMassage = "You have won the Invitation to SHEROES Summit 2018. We loved your response to our Challenge.";
+
+    @SerializedName("view_visibility")
+    public int visibilityPercentage = 20;
+
+    @SerializedName("frequency_batch_request")
+    public int frequencyBatchRequest = 50;
+
+    @SerializedName("min_engagement_time")
+    public int minEngagementTime = 250;
+
+    @SerializedName("impressionFrequency")
+    public int impressionFrequency = 60000;
+
+    @SerializedName("impressionMaxTimeout")
+    public int impressionMaxTimeout = 180000;
+
+    @SerializedName("shouldTrackImpressions")
+    public boolean isImpressionTrackEnabled = true;
+
 }

@@ -146,6 +146,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     //endregion
 
 
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleManager.setLocale(base));
