@@ -157,7 +157,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
         mResponseViewCount.setText(Integer.toString(mContest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
         if (CommonUtil.isNotEmpty(mContest.tag)) {
             String tag = "#" + mContest.tag;
-            String tagText = tag + " " + R.string.challenge;
+            String tagText = tag + " " + mContext.getString(R.string.challenge);
             final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.email));
             spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);

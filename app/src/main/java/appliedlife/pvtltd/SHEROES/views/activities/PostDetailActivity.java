@@ -85,7 +85,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -145,9 +144,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Inject
     PostDetailViewImpl mPostDetailPresenter;
-
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -315,20 +311,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
         int heightDiff = rootView.getBottom() - r.bottom;
         return heightDiff > softKeyboardHeight * dm.density;
-    }
-
-    private boolean isWhatsAppShare() {
-        boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
-            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareText)) {
-                if (shareText.equalsIgnoreCase("true")) {
-                    isWhatsappShare = true;
-                }
-            }
-        }
-        return isWhatsappShare;
     }
 
     private void setIsLoggedInUser() {
@@ -850,7 +832,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onShareButtonClicked(UserPostSolrObj userPostObj, TextView shareView) {
-
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(userPostObj.getPostShortBranchUrls())) {
             deepLinkUrl = userPostObj.getPostShortBranchUrls();
@@ -859,16 +840,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        if (isWhatsAppShare()) {
-            if (CommonUtil.isAppInstalled(this, "com.whatsapp")) {
-                intent.setPackage(AppConstants.WHATS_APP);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(intent);
-            }
+        if (CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
+            intent.setPackage(AppConstants.WHATS_APP_URI);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
@@ -885,12 +863,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        if (isWhatsAppShare()) {
-            if (CommonUtil.isAppInstalled(this, "com.whatsapp")) {
-                intent.setPackage(AppConstants.WHATS_APP);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(intent);
-            }
+        if (CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
+            intent.setPackage(AppConstants.WHATS_APP_URI);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
