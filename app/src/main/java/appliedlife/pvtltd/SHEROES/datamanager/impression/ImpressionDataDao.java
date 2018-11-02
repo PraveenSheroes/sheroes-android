@@ -16,7 +16,7 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 public interface ImpressionDataDao {
 
     @Query("SELECT * FROM impression")
-    Single<List<Impression>> getAllImpressions();
+    List<Impression> getAllImpressionsSync();
 
     @Insert(onConflict = REPLACE)
     List<Long> insert(List<Impression> impression);

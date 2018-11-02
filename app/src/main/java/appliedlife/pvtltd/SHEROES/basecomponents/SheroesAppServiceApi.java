@@ -105,6 +105,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
@@ -394,5 +395,5 @@ public interface SheroesAppServiceApi {
 
     @Headers("X-Producer-Authorization: " + BuildConfig.IMPRESSION_AUTH)
     @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
-    Observable<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
+    Single<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 }

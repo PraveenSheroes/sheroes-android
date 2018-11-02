@@ -408,7 +408,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     @Override
     public void sendImpressions() {
-        mImpressionPresenter.impressionObserver(mImpressionBatchSize, true);
+        mImpressionPresenter.sendImpressions(mImpressionBatchSize,null, true);
     }
 
     //endregion
