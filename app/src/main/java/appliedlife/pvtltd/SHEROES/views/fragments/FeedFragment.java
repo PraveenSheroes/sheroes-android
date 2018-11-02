@@ -918,21 +918,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     private void setupRecyclerScrollListener() {
 
-        final ViewTreeObserver viewTreeObserver = mFeedRecyclerView.getViewTreeObserver();
-        ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        if (isTrackingEnabled) {
+            final ViewTreeObserver viewTreeObserver = mFeedRecyclerView.getViewTreeObserver();
+            ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
 
-            @Override
-            public void onGlobalLayout() {
-                mFeedRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                if (isTrackingEnabled && impressionHelper != null) {
-                    int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
-                    int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
-                    impressionHelper.setHeaderEnabled(isHomeFeed);
-                    impressionHelper.getVisibleViews(startPos, endPos);
+                @Override
+                public void onGlobalLayout() {
+                    mFeedRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    if (impressionHelper != null) {
+                        int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                        int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+                        impressionHelper.setHeaderEnabled(isHomeFeed);
+                        impressionHelper.getVisibleViews(startPos, endPos);
+                    }
                 }
-            }
-        };
-        viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener);
+            };
+            viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener);
+        }
 
         mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
