@@ -62,6 +62,10 @@ android {
         vectorDrawables.useSupportLibrary = false
     }
 
+    buildTypes.each { type ->
+        type.buildConfigField "String", 'IMPRESSION_AUTH', "\"c2hlcm9lczp6IWN0NnNtSDlneHUkaGBeZFNHIXthViZ+YFd5KSE5Wg==\""
+    }
+
     signingConfigs {
         debug {
             keyAlias 'debug'
@@ -104,6 +108,7 @@ android {
             manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
+            buildConfigField 'String', 'IMPRESSION_URL', "\"http://testevents.sheroes.in:8080/\""
         }
         release {
             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
@@ -116,6 +121,7 @@ android {
             manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:409228886131"]
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
+            buildConfigField 'String', 'IMPRESSION_URL', "\"https://prod-events.sheroes.in/\""
         }
     }
     lintOptions {
@@ -153,6 +159,8 @@ dependencies {
     configurations {
         all*.exclude group: 'com.android.support', module: 'support-v13'
     }
+    def room_version = "1.1.1"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.facebook.android:facebook-android-sdk:4.36.0'
     implementation 'com.google.android.gms:play-services-analytics:16.0.4'
@@ -160,7 +168,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.clevertap.android:clevertap-android-sdk:3.1.10'
+    implementation 'com.clevertap.android:clevertap-android-sdk:3.3.1'
     implementation 'com.android.support:mediarouter-v7:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -217,6 +225,11 @@ dependencies {
     implementation "com.splitwise:tokenautocomplete:2.0.8@aar"
     annotationProcessor 'org.parceler:parceler:1.1.6'
     androidTestImplementation 'junit:junit:4.12'
+
+    //room
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+    implementation "android.arch.persistence.room:rxjava2:$room_version"
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'io.fabric'
