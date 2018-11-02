@@ -54,7 +54,7 @@ public class ImpressionPresenter extends BasePresenter<ImpressionCallback> {
      *
      * @param impressionData list of impression
      */
-    private void sendImpressions(final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
+    public void sendImpressions(final int batchSize, final List<ImpressionData> impressionData, final boolean forceNetworkCall) {
 
         Single.create(new SingleOnSubscribe<Integer>() {
             @Override
