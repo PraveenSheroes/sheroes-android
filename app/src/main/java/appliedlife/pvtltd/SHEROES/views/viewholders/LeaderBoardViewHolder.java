@@ -248,7 +248,6 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             } else {
                 badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
             }
-
             mProfilePic.setBackgroundResource(R.drawable.circular_leaderbaord_user_icon_background_grey);
         }
     }

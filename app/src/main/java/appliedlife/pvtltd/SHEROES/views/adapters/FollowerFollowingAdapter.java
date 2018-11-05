@@ -44,7 +44,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     private BaseHolderInterface baseHolderInterface;
     private long mLoggedInUserId = -1;
     private Preference<LoginResponse> mUserPreference;
-    private UserSolrObj mentorDetails;
 
     //region Constructor
     public FollowerFollowingAdapter(Context context, BaseHolderInterface baseHolderInterface, Preference<LoginResponse> mUserPreference) {
@@ -144,13 +143,13 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((FollowerFollowingCallback)baseHolderInterface).onItemClick(mentor);
+                        ((FollowerFollowingCallback) baseHolderInterface).onItemClick(mentor);
                     }
                 });
 
-                if(mentor.getEntityOrParticipantTypeId() ==  AppConstants.CHAMPION_TYPE_ID) {
+                if (mentor.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                     verifiedChampionsIcon.setVisibility(View.VISIBLE);
-                } else{
+                } else {
                     verifiedChampionsIcon.setVisibility(View.GONE);
                 }
 
@@ -164,7 +163,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     mentorName.setText(mentor.getNameOrTitle());
                 }
 
-                if(mentor.getEntityOrParticipantTypeId() ==  AppConstants.CHAMPION_TYPE_ID ) {
+                if (mentor.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                     List<String> canHelpInArea = mentor.getCanHelpIns();
                     if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
                         StringBuilder expertFields = new StringBuilder();
@@ -179,9 +178,10 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     } else {
                         expertAt.setVisibility(View.GONE);
                     }
-                } else{
+                } else {
                     if (CommonUtil.isNotEmpty(mentor.getCityName())) {
                         expertAt.setText(mentor.getCityName());
+                        expertAt.setVisibility(View.VISIBLE);
                     } else {
                         expertAt.setVisibility(View.GONE);
                     }
@@ -206,13 +206,15 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
 
-        public void showFollow(){
+        //Follow button
+        private void showFollow() {
             followFollowingBtn.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             followFollowingBtn.setText(mContext.getString(R.string.follow_user));
             followFollowingBtn.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
 
-        public void showFollowing(){
+        //Following button
+        private void showFollowing() {
             followFollowingBtn.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             followFollowingBtn.setText(mContext.getString(R.string.following_user));
             followFollowingBtn.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
