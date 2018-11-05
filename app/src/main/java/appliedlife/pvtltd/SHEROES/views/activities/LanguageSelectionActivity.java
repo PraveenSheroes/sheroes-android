@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -35,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
