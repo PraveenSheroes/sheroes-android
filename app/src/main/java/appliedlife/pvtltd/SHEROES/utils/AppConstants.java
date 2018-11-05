@@ -407,7 +407,6 @@ public class AppConstants {
     public static final String SHARE_DIALOG_TITLE = "share_dialog_title";
     public static final String IS_SHARE_DEEP_LINK = "is share deep link";
     public static final String SHARE_CHANNEL = "channel";
-    public static final String IS_MOENGAGE = "Is Moengage";
     public static final String LOGOUT_USER = "Logout_user";
     public static final String PROJECT_ID = "409228886131";
     public static final String REFERRER = "Referrer";
@@ -429,7 +428,6 @@ public class AppConstants {
 
     //Push provider name
     public static final String PUSH_PROVIDER_SHEROES = "Sheroes";
-    public static final String PUSH_PROVIDER_MOENGAGE = "MoEngage";
     public static final String PUSH_PROVIDER_CLEVER_TAP = "CleverTap";
     public static final String IMAGE_INITIAL_FILE_NAME = "file\"; filename=\"";
     public static final int BACK_SLASH_OCCURRENCE_IN_POST_LINK = 4; // https://sheroes.com/communities/carrer-community/MTI3NQ==/MTIx

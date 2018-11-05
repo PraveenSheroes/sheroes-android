@@ -8,9 +8,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -20,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.ResponseStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -50,11 +46,6 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     @Inject
     AppUtils mAppUtils;
 
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private long startedTime;
-    private PayloadBuilder payloadBuilder;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -64,11 +55,6 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
         setProgressBar(pbResetPwd);
         mLogInPresenter.attachView(this);
 
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        moEngageUtills = MoEngageUtills.getInstance();
-        startedTime = System.currentTimeMillis();
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills.entityMoEngageForgotPassword(getActivity(), mMoEHelper, payloadBuilder, startedTime);
         return view;
     }
 
@@ -76,9 +62,6 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     public void onDestroyView() {
         super.onDestroyView();
         mLogInPresenter.detachView();
-
-        long timeSpent = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageForgotPassword(getActivity(), mMoEHelper, payloadBuilder, timeSpent);
     }
 
     @OnClick(R.id.tv_forgot_password_submit)

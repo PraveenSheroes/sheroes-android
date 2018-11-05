@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
@@ -23,19 +21,14 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageEvent;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -55,16 +48,13 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
     HomePresenter mHomePresenter;
     @Inject
     AppUtils mAppUtils;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.join_community_region_dialog, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        payloadBuilder = new PayloadBuilder();
         mCommunityFeedObj = Parcels.unwrap(getArguments().getParcelable(DISMISS_PARENT_ON_OK_OR_BACK));
         setCancelable(true);
         return view;
@@ -134,22 +124,5 @@ public class CommunityOptionJoinDialog extends BaseDialogFragment implements Hom
         }
 
     }
-    public void entityMoEngageJoinedCommunity(String communityName, long communityId, boolean isClose, String communityTag, String screenName, int position) {
-        payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_NAME, communityName);
-        payloadBuilder.putAttrLong(MoEngageConstants.COMMUNITY_ID, communityId);
-        if (isClose) {
-            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, AppConstants.COMMUNITY_JOIN_DIALOG_CLOSE);
-
-        } else {
-            payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_PRIVACY, AppConstants.COMMUNITY_JOIN_DIALOG_OPEN);
-        }
-        payloadBuilder.putAttrString(MoEngageConstants.COMMUNITY_TAG, communityTag);
-        payloadBuilder.putAttrString(MoEngageConstants.SCREEN_NAME, screenName);
-        payloadBuilder.putAttrInt(MoEngageConstants.POSITION_OF_ENTITY, position);
-        mMoEHelper.trackEvent(MoEngageEvent.EVENT_JOINED_COMMUNITY.value, payloadBuilder.build());
-    }
-
-
-
 }
 
