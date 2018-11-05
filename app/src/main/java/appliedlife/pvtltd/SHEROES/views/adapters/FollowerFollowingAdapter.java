@@ -42,7 +42,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     private List<UserSolrObj> mChampionUsersList;
     private final Context mContext;
     private BaseHolderInterface baseHolderInterface;
-    private long mLoggedInUserId = -1;
     private Preference<LoginResponse> mUserPreference;
 
     //region Constructor
@@ -126,12 +125,17 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         Button followFollowingBtn;
         private UserSolrObj mMentor;
         private int position = -1;
+        private long loggedInUserId = -1;
 
         // endregion
 
         public FollowedUserListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+                loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
+            }
         }
 
 
@@ -191,17 +195,17 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
                     follower.setText(String.valueOf(changeNumberToNumericSuffix(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
                 }
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                    mLoggedInUserId = mUserPreference.get().getUserSummary().getUserId();
-                    if (mLoggedInUserId != mentor.getIdOfEntityOrParticipant()) {
-                        if (mentor.isSolrIgnoreIsMentorFollowed()) {
-                            showFollowing();
-                        } else {
-                            showFollow();
-                        }
+
+                if (loggedInUserId != mentor.getIdOfEntityOrParticipant()) {
+                    followFollowingBtn.setVisibility(View.VISIBLE);
+
+                    if (mentor.isSolrIgnoreIsMentorFollowed()) {
+                        showFollowing();
                     } else {
-                        followFollowingBtn.setVisibility(View.GONE);
+                        showFollow();
                     }
+                } else {
+                    followFollowingBtn.setVisibility(View.GONE);
                 }
             }
         }
