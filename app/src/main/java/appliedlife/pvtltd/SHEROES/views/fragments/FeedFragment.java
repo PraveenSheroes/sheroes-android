@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -52,7 +51,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -89,7 +87,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -149,7 +146,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String IS_HOME_FEED = "Is Home Feed";
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
-    private Dialog dialog = null;
+    private Dialog mDialog = null;
     private static final int HIDE_THRESHOLD = 20;
     //endregion
 
@@ -208,7 +205,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     TextView tvGoToSetting;
 
     @BindDimen(R.dimen.imagesize_unfollow_dialog)
-    int profileSizeSmall;
+    int mProfileSizeSmall;
     // endregion
 
     //region private variables
@@ -2081,29 +2078,29 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     public void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
         if (userSolrObj != null) {
-            if (dialog != null) {
-                dialog.dismiss();
+            if (mDialog != null) {
+                mDialog.dismiss();
             }
-            dialog = new Dialog(getContext());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setCancelable(false);
-            dialog.setContentView(R.layout.unfollow_confirmation_dialog);
-            CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
+            mDialog = new Dialog(getContext());
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mDialog.setCancelable(false);
+            mDialog.setContentView(R.layout.unfollow_confirmation_dialog);
+            CircleImageView circleImageView = mDialog.findViewById(R.id.user_img_icon);
             if (StringUtil.isNotNullOrEmptyString(userSolrObj.getImageUrl())) {
-                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getImageUrl(), profileSizeSmall, profileSizeSmall);
+                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getImageUrl(), mProfileSizeSmall, mProfileSizeSmall);
                 circleImageView.setCircularImage(true);
                 circleImageView.bindImage(authorThumborUrl);
             }
-            TextView text = dialog.findViewById(R.id.title);
-            text.setText("Unfollow " + userSolrObj.getNameOrTitle());
-            TextView dialogButton = dialog.findViewById(R.id.cancel);
+            TextView text = mDialog.findViewById(R.id.title);
+            text.setText(getString(R.string.unfollow_profile, userSolrObj.getNameOrTitle()));
+            TextView dialogButton = mDialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    dialog.dismiss();
+                    mDialog.dismiss();
                 }
             });
-            TextView unFollowButton = dialog.findViewById(R.id.unfollow);
+            TextView unFollowButton = mDialog.findViewById(R.id.unfollow);
             unFollowButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -2114,10 +2111,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                                     .build();
                     AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
                     mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
-                    dialog.dismiss();
+                    mDialog.dismiss();
                 }
             });
-            dialog.show();
+            mDialog.show();
         }
     }
 
