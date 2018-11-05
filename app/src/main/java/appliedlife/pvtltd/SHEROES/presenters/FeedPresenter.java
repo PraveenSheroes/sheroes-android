@@ -876,7 +876,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus().equals(AppConstants.FAILED)) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             comment.isLiked = true;
                             comment.likeCount++;
                         }
