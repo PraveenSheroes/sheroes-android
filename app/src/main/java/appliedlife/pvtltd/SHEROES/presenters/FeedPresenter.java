@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
@@ -403,22 +402,12 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                            } else {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
-                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
-                            }
-                            getMvpView().invalidateItem(userSolrObj);
+                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
-                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
-                            } else {
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                            }
-                            getMvpView().invalidateItem(userSolrObj);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         }
+                        getMvpView().invalidateItem(userSolrObj);
                     }
                 });
 
