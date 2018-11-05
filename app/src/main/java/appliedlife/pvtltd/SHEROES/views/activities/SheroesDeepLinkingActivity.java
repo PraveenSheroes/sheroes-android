@@ -9,11 +9,7 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
 import java.net.URISyntaxException;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -23,7 +19,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -43,9 +38,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     public static final int COMMUNITY_DEEP_LINK_URL_BACK_SLASH = 4;
     private Uri mData;
     private int mIndexOfBackSlaceInPostDeeplink;
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
     private int mFromNotification;
     private String mSource;
     private Intent mIntent;
@@ -55,10 +47,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
-        moEngageUtills.entityMoEngageDeeplink(this, mMoEHelper, payloadBuilder);
         SheroesApplication.getAppComponent(this).inject(this);
     }
 
@@ -75,9 +63,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (null != mMoEHelper) {
-            mMoEHelper.onStart(this);
-        }
         try {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
                 callDeepLinkingData();
@@ -89,12 +74,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             logout();
         }
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mMoEHelper.onResume(this);
     }
 
     @Override

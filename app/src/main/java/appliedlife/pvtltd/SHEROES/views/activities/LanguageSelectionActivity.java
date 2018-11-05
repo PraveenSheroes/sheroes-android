@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import com.appsflyer.AppsFlyerLib;
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,8 +40,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -94,9 +89,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     //endregion
 
     //region member variables
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
     private boolean isBranchFirstSession = false;
     private boolean isFirstTimeUser = false;
     private String deepLinkUrl = null;
@@ -109,9 +101,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError("");
@@ -176,7 +165,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
 
     private void initializeAllDataAfterGCMId() {
         int versionCode = BuildConfig.VERSION_CODE;
-        moEngageUtills.entityMoEngageAppVersion(this, mMoEHelper, payloadBuilder, versionCode);
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
             if (mInstallUpdatePreference.get().getAppVersion() < versionCode) {
                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
@@ -186,7 +174,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                 installUpdateForMoEngage.setAppInstallFirstTime(true);
                 mInstallUpdatePreference.set(installUpdateForMoEngage);
             }
-            mMoEHelper.setExistingUser(true);
             if (mInstallUpdatePreference.get().isAppInstallFirstTime()) {
                 InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
                 installUpdateForMoEngage.setWalkThroughShown(true);
@@ -199,11 +186,8 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             installUpdateForMoEngage.setAppInstallFirstTime(false);
             installUpdateForMoEngage.setWalkThroughShown(false);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
-            mMoEHelper.setExistingUser(false);
-            mMoEHelper.setUserAttribute(MoEngageConstants.FIRST_APP_OPEN, new Date());
             isFirstTimeUser = true;
         }
-        moEngageUtills.entityMoEngageLastOpen(this, mMoEHelper, payloadBuilder, new Date());
 
         if (null != mUserPreference && mUserPreference.isSet() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getToken())) {
             isFirstTimeUser = false;

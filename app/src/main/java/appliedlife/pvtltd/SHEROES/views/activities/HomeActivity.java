@@ -56,9 +56,6 @@ import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-import com.moengage.push.PushManager;
 import com.tooltip.Tooltip;
 
 import org.json.JSONException;
@@ -122,7 +119,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
@@ -325,9 +321,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
     private long mChallengeId;
     private String mHelpLineChat;
     private EventDetailDialogFragment eventDetailDialogFragment;
@@ -356,10 +349,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         SheroesApplication.getAppComponent(this).inject(this);
         activityDataPresenter.attachView(this);
         mHomePresenter.attachView(this);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
-        moEngageUtills.entityMoEngageViewFeed(this, mMoEHelper, payloadBuilder, 0);
+
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             isSheUser = mUserPreference.get().isSheUser();
             mUserId = mUserPreference.get().getUserSummary().getUserId();
@@ -2027,7 +2017,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mFcmId = registrationId;
-                PushManager.getInstance().refreshToken(getBaseContext(), mFcmId);
                 //Refresh FCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if (cleverTapAPI != null) {

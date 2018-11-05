@@ -243,10 +243,6 @@ public enum EventProperty {
             return this;
         }
 
-        public Builder isMonengage(boolean value) {
-            put(IS_MOENGAGE, value);
-            return this;
-        }
         public Builder pushProvider(String value) {
             put(PUSH_PROVIDER, value);
             return this;
