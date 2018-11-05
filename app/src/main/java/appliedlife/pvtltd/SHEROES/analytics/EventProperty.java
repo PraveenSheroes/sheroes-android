@@ -45,8 +45,7 @@ public enum EventProperty {
     SOURCE_SCREEN_ID("Source Screen Id"),
     SOURCE_TAB_KEY("Source Tab Key"),
     SOURCE_TAB_TITLE("Source Tab Title"),
-    IS_MOENGAGE("Is Moengage"),
-    PUSH_PROVIDER("Push Notification Provider"), // Sheroes, MoEngage, CleverTap
+    PUSH_PROVIDER("Push Notification Provider"), // Sheroes, CleverTap
     POSITION_IN_SEQUENCE("Position In Sequence"),
     IS_MENTOR("Is Mentor"),
     IS_OWN_PROFILE("Is Own Profile"),
