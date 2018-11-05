@@ -6,6 +6,7 @@
         android:id="@+id/share"
         android:icon="@drawable/vector_share_white_24dp"
         android:title="@string/action_share"
+        android:textSize="@dimen/menu_item_text_size"
         app:showAsAction="always" />
 
 </menu>

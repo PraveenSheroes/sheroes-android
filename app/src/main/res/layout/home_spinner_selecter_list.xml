@@ -1,33 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/li_article_spinner_iten"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:orientation="horizontal"
     android:background="@drawable/article_spinner_selecter"
+    android:orientation="horizontal"
     android:weightSum="1">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_spinner"
+        style="@style/TextView14spRegular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         android:layout_marginLeft="@dimen/dp_size_20"
         android:layout_weight="1"
         android:ellipsize="marquee"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center_vertical"
         android:lines="@integer/int_value_for_line_1"
         android:padding="@dimen/dp_size_12"
         android:textAllCaps="true"
         android:textColor="@color/black"
-        android:textSize="@dimen/sp_size_13" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
     <CheckBox
         android:id="@+id/checkbox_spinner"
+        style="@style/CheckBoxStyle"
         android:layout_width="@dimen/dp_size_40"
         android:layout_height="@dimen/dp_size_40"
-        android:layout_marginRight="@dimen/dp_size_10"
         android:layout_gravity="center"
-        style="@style/CheckBoxStyle"/>
+        android:layout_marginRight="@dimen/dp_size_10" />
 </LinearLayout>

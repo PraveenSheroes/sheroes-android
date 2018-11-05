@@ -128,7 +128,7 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
 
         ContestStatus contestStatus = CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt());
         if (contestStatus == ContestStatus.ONGOING) {
-            mContestEndText.setText("Ends" + " " + DateUtil.getRelativeTimeSpanString(mContest.getEndAt()));
+            mContestEndText.setText(mContext.getString(R.string.end," " + DateUtil.getRelativeTimeSpanString(mContest.getEndAt())));
             mContestStatus.setText(R.string.contest_status_ongoing);
             mLiveDot.setImageResource(R.drawable.vector_live_dot);
             animateLiveDot();
@@ -146,24 +146,24 @@ public class ChallengeFeedHolder extends BaseViewHolder<FeedDetail> {
             mContestStatus.setVisibility(View.VISIBLE);
         }
         if (mContest.hasMyPost) {
-            mJoinChallengeText.setText("completed");
+            mJoinChallengeText.setText(R.string.completed);
             mJoinChallengeText.setTextColor(context.getResources().getColor(R.color.light_green));
             mJoinChallengeText.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
         } else {
-            mJoinChallengeText.setText("Join the Challenge");
+            mJoinChallengeText.setText(R.string.join_challenge);
             mJoinChallengeText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             mJoinChallengeText.setTextColor(context.getResources().getColor(R.color.email));
         }
         mResponseViewCount.setText(Integer.toString(mContest.submissionCount) + " " + mContext.getResources().getQuantityString(R.plurals.numberOfResponses, mContest.submissionCount));
         if (CommonUtil.isNotEmpty(mContest.tag)) {
             String tag = "#" + mContest.tag;
-            String tagText = tag + " " + "Challenge";
+            String tagText = tag + " " + mContext.getString(R.string.challenge);
             final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
             final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.email));
             spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             mContestTag.setText(spannableStringBuilder);
         } else {
-            mContestTag.setText("Challenge");
+            mContestTag.setText(R.string.challenge);
         }
 
         if (CommonUtil.isNotEmpty(mContest.thumbImage)) {

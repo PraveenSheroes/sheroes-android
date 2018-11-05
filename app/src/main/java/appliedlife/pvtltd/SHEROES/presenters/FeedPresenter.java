@@ -48,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
@@ -215,8 +214,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);
                                     List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
-                                    getMvpView().showFeedList(feedDetails);
                                     getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                    getMvpView().showFeedList(feedDetails);
                                     break;
                                 case LOAD_MORE_REQUEST:
                                     // append in case of load more

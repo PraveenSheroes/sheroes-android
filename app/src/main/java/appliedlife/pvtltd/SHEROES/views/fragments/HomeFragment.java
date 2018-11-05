@@ -46,26 +46,11 @@ public class HomeFragment extends BaseFragment {
     private String mCommunityPrimaryColor = "#ffffff";
     private String mCommunityTitleTextColor = "#3c3c3c";
     private List<Fragment> mTabFragments = new ArrayList<>();
-    private String mDefaultTabKey = "My Feed";
+    private String mDefaultTabKey;
     private List<String> homeTabs = new ArrayList<>();
     private String mUnSelectedFragment;
     //endregion
 
-    // region Enum
-    public enum TabType {
-        FEED("My Feed"),
-        TRENDING("Trending");
-        public String tabType;
-
-        TabType(String tabType) {
-            this.tabType = tabType;
-        }
-
-        public String getName() {
-            return tabType;
-        }
-    }
-    //endregion
 
     // region Public methods
     @Override
@@ -74,6 +59,7 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        mDefaultTabKey=getString(R.string.my_feed);
         initializeHomeViews();
         return view;
     }
@@ -139,8 +125,8 @@ public class HomeFragment extends BaseFragment {
 
     // region Private methods
     private void initializeHomeViews() {
-        homeTabs.add(TabType.FEED.getName());
-        homeTabs.add(TabType.TRENDING.getName());
+        homeTabs.add(getString(R.string.my_feed));
+        homeTabs.add(getString(R.string.ID_TRENDING));
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
         String alphaColor = mCommunityTitleTextColor;
         alphaColor = alphaColor.replace("#", "#" + "BF");
@@ -168,25 +154,25 @@ public class HomeFragment extends BaseFragment {
     private void setupViewPager(final ViewPager viewPager) {
         mFragmentAdapter = new Adapter(getChildFragmentManager());
         for (String name : homeTabs) {
-            if (name.equalsIgnoreCase(TabType.FEED.getName())) {
+            if (name.equalsIgnoreCase(getString(R.string.my_feed))) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
                 bundle.putString(AppConstants.SCREEN_NAME, FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
-                mFragmentAdapter.addFragment(feedFragment, TabType.FEED.getName());
+                mFragmentAdapter.addFragment(feedFragment, getString(R.string.my_feed));
                 mTabFragments.add(feedFragment);
 
             }
-            if (name.equalsIgnoreCase(TabType.TRENDING.getName())) {
+            if (name.equalsIgnoreCase(getString(R.string.ID_TRENDING))) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
                 bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
-                mFragmentAdapter.addFragment(feedFragment, TabType.TRENDING.getName());
+                mFragmentAdapter.addFragment(feedFragment,getString(R.string.ID_TRENDING));
                 mTabFragments.add(feedFragment);
             }
         }

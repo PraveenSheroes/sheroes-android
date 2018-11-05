@@ -125,12 +125,12 @@ public class CommentNewViewHolder extends BaseViewHolder<Comment> {
         this.mComment = comment;
         this.mComment.setItemPosition(position);
         this.mContext = context;
-        if (StringUtil.isNotNullOrEmptyString(mComment.getPostedDate())) {
-            mCommentTime.setText(mComment.getPostedDate());
+        if (StringUtil.isNotNullOrEmptyString(mComment.getCreatedOn())) {
+            long createdDate = mDateUtil.getTimeInMillis(mComment.getCreatedOn(), AppConstants.DATE_FORMAT);
+            mCommentTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate, mContext));
         } else {
             mCommentTime.setText(mContext.getString(R.string.ID_JUST_NOW));
         }
-
         mCommentAuthorName.setText(mComment.getParticipantName());
         mUserProfilePic.setCircularImage(true);
         invalidateLikeView(comment);

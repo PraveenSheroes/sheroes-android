@@ -118,7 +118,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         liFeedEventImages.removeAllViewsInLayout();
         if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getAuthorName())) {
             StringBuilder posted = new StringBuilder();
-            String feedTitle = mContext.getString(R.string.ID_APP_NAME);
+            String feedTitle = mContext.getString(R.string.app_name);
             String feedCommunityName = mContext.getString(R.string.ID_EVENT);
             posted.append(feedTitle).append(AppConstants.SPACE).append(LEFT_POSTED).append(mContext.getString(R.string.ID_POSTED_AN)).append(RIGHT_POSTED).append(AppConstants.SPACE);
             posted.append(LEFT_HTML_VEIW_TAG_FOR_COLOR).append(feedCommunityName).append(RIGHT_HTML_VIEW_TAG_FOR_COLOR);
@@ -130,7 +130,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         }
         if (StringUtil.isNotNullOrEmptyString(userPostSolrObj.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(userPostSolrObj.getCreatedDate(), AppConstants.DATE_FORMAT);
-            tvFeedEventTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            tvFeedEventTime.setText(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
         }
 
         String authorImageUrl = userPostSolrObj.getAuthorImageUrl();

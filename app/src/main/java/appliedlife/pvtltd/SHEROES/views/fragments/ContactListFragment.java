@@ -313,13 +313,13 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                     }
 
                     isWhatsAppNumber = isWhatsAppNumber.replaceAll("[\\D]", "");
-                    boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP);
+                    boolean isWhatsappInstalled = whatsAppInstalledOrNot(AppConstants.WHATS_APP_URI);
                     if (isWhatsappInstalled) {
                         Intent sendIntent = new Intent("android.intent.action.MAIN");
                         //when user want only conversation
                         // sendIntent.setComponent(new ComponentName(AppConstants.WHATS_APP, "com.whatsapp.Conversation"));
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.setPackage(AppConstants.WHATS_APP);
+                        sendIntent.setPackage(AppConstants.WHATS_APP_URI);
                         sendIntent.setType("text/plain");
                         sendIntent.putExtra("jid", PhoneNumberUtils.stripSeparators(isWhatsAppNumber) + "@s.whatsapp.net");//phone number without "+" prefix
                         sendIntent.putExtra(Intent.EXTRA_TEXT, mSmsShareLink);
@@ -355,7 +355,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         switch (resultCode) {
             case 0:
-                Toast.makeText(getActivity(), "This contact is not on Whatsapp", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), R.string.contact_not_on_whats, Toast.LENGTH_SHORT).show();
                 smsIntent();
                 break;
             default:

@@ -185,11 +185,11 @@ public class HelplineChatDoc extends BaseResponse {
         this.formatedDate = formatedDate;
     }
 
-    public String getThumbnailImageUrl() {
+    /*public String getThumbnailImageUrl() {
         return thumbnailImageUrl;
     }
 
-    public void setThumbnailImageUrl(String thumbnailImageUrl) {
-        this.thumbnailImageUrl = thumbnailImageUrl;
-    }
+    public void setThumbnailImageUrl(String solrIgnoreParticipantAttendantImageUrl) {
+        this.solrIgnoreParticipantAttendantImageUrl = solrIgnoreParticipantAttendantImageUrl;
+    }*/
 }

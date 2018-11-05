@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_notification"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -43,28 +44,28 @@
             android:layout_weight="@integer/int_value_for_line_1"
             android:orientation="vertical">
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_bell_noti_title"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/bell_notification_li_title_left_margin"
                 android:layout_marginStart="@dimen/bell_notification_li_title_left_margin"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:lineSpacingExtra="6sp"
                 android:textColor="@color/comment_text"
-                android:textSize="14sp"
                 android:textStyle="normal"
-                app:layout_constraintStart_toEndOf="@+id/fl_circle_icon" />
+                app:layout_constraintStart_toEndOf="@+id/fl_circle_icon"
+                vernacular:customTextFontFamily="@string/medium_font" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_bell_view_profile"
+                style="@style/TextView14spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/bell_notification_tv_bell_view_profile_left_margin"
                 android:layout_marginStart="@dimen/bell_notification_tv_bell_view_profile_left_margin"
                 android:layout_marginTop="@dimen/bell_notification_tv_bell_view_profile_top_margin"
                 android:background="@drawable/selecter_invite_friend"
-                android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                 android:gravity="center"
                 android:paddingBottom="@dimen/bell_notification_tv_bell_view_profile_padding_margin"
                 android:paddingLeft="@dimen/bell_notification_tv_bell_view_profile_left_margin"
@@ -72,8 +73,8 @@
                 android:paddingTop="@dimen/bell_notification_tv_bell_view_profile_padding_margin"
                 android:textAllCaps="true"
                 android:textColor="@drawable/selecter_contact_text_color"
-                android:textSize="@dimen/sp_size_14"
-                android:visibility="gone" />
+                android:visibility="gone"
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -102,17 +103,17 @@
                     android:textSize="@dimen/sp_size_16"
                     android:visibility="visible" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_bell_noti_time"
+                    style="@style/TextView12spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/bell_notification_tv_bell_noti_time_right_margin"
                     android:layout_marginStart="@dimen/bell_notification_tv_bell_noti_time_right_margin"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:lineSpacingExtra="6sp"
                     android:textColor="@color/recent_post_comment"
-                    android:textSize="12sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
             </LinearLayout>
 

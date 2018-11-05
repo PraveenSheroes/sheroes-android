@@ -49,7 +49,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onPollLiked(PollSolarObj pollSolarObj);
 
-    void onPollVote(PollSolarObj pollSolarObj,PollOptionModel pollOptionModel);
+    void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel);
 
     void onUserPostUnLiked(UserPostSolrObj userPostObj);
 
@@ -97,7 +97,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
 
-    void onCommunityClicked(long  communityId);
+    void onCommunityClicked(long communityId);
 
     void onAskQuestionClicked();
 

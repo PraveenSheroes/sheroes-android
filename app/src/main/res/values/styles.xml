@@ -5,7 +5,8 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/status_bar</item>
         <item name="colorAccent">@color/toolbar_title_text</item>
-        </style>
+    </style>
+
     <style name="SplashTheme" parent="AppTheme">
         <item name="android:windowBackground">@drawable/splash</item>
         <item name="colorPrimaryDark">@color/email</item>
@@ -35,13 +36,14 @@
 
     <style name="TextAppearance" />
 
-    <style name="AppTheme.PopupMenu" parent="Theme.AppCompat.Light.DarkActionBar" >
-    <item name="android:homeAsUpIndicator">@drawable/vector_back_arrow</item>
+    <style name="AppTheme.PopupMenu" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:homeAsUpIndicator">@drawable/vector_back_arrow</item>
     </style>
 
     <style name="TextAppearance.Toolbar">
         <item name="android:textSize">@dimen/toolbar_title_size</item>
         <item name="android:textColor">@color/toolbar_title</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
     </style>
 
     <style name="AppTheme.Toolbar" parent="Theme.AppCompat.Light.NoActionBar">
@@ -91,23 +93,26 @@
         <item name="pressedTranslationZ">12dp</item>
         <!--<item name="rippleColor">@android:color/white</item>-->
     </style>
+
     <style name="NavigationTabTextAppeareance" parent="TextAppearance.Design.Tab">
-        <item name="android:fontFamily">@string/ID_ROBOTO_MEDIUM</item>
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textSize">@dimen/sp_size_14</item>
         <item name="android:textAllCaps">true</item>
     </style>
-    <style name="SubtitleCollapsingToolbar"
-        parent="@style/Widget.Design.CollapsingToolbar">
+
+    <style name="SubtitleCollapsingToolbar" parent="@style/Widget.Design.CollapsingToolbar">
         <item name="android:gravity">right</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
     </style>
+
     <style name="CollapsedSubtitleAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">13sp</item>
         <item name="android:gravity">right</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
     </style>
+
     <style name="ExpandedSubtitleAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">right</item>
@@ -115,13 +120,14 @@
         <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
     </style>
 
-    <style name="title" >
+    <style name="title">
         <item name="android:textColor">#fff</item>
     </style>
 
     <style name="title.expanded">
         <item name="android:textSize">30dp</item>
     </style>
+
     <style name="title.collapsed">
         <item name="android:textSize">20dp</item>
     </style>
@@ -135,7 +141,7 @@
     </style>
 
     <style name="subtitle_collapsed">
-        <item  name="android:textColor">@color/white</item>
+        <item name="android:textColor">@color/white</item>
         <item name="android:gravity">right</item>
         <item name="android:layout_gravity">right</item>
         <item name="android:layout_marginLeft">@dimen/dp_size_50</item>
@@ -146,6 +152,7 @@
         <item name="android:windowMinWidthMinor">0dip</item>
         <item name="android:windowMinWidthMajor">0dip</item>
     </style>
+
     <style name="MyTextInputLayout" parent="AppTheme">
         <item name="colorAccent">@color/gray_light</item>
     </style>
@@ -177,6 +184,7 @@
         <item name="android:gravity">bottom</item>
         <item name="android:layout_gravity">bottom</item>
     </style>
+
     <style name="Tooltip">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">14sp</item>
@@ -191,15 +199,129 @@
         <item name="colorControlNormal">@color/gray_light</item>
         <item name="colorControlActivated">@color/red</item>
     </style>
+
     <style name="PollProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/poll_progress_layer</item>
-
         <item name="android:minWidth">200dp</item>
     </style>
+
     <style name="ImagePollProgressBar" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
         <item name="android:indeterminateOnly">false</item>
         <item name="android:progressDrawable">@drawable/poll_image_progress_layer</item>
         <item name="android:minWidth">200dp</item>
+    </style>
+
+    <!--Textview fonts-->
+    <style name="TextViewRegular" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+    </style>
+
+    <style name="TextViewBold" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
+
+    <style name="TextViewForStandardSizeColor" parent="TextViewRegular">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/comment_text</item>
+    </style>
+
+    <style name="TextView9spRegular" parent="TextViewRegular">
+        <item name="android:textSize">9sp</item>
+    </style>
+
+    <style name="TextView12spRegular" parent="TextViewRegular">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextView16spRegular" parent="TextViewRegular">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextView14spRegular" parent="TextViewRegular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextView18spRegular" parent="TextViewRegular">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextView22spRegular" parent="TextViewRegular">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextView20spRegular" parent="TextViewRegular">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextView32spRegular" parent="TextViewRegular">
+        <item name="android:textSize">32sp</item>
+    </style>
+
+    <style name="TextView24spRegular" parent="TextViewRegular">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <!--Textview bold fonts-->
+    <style name="TextView9spBold" parent="TextViewBold">
+        <item name="android:textSize">9sp</item>
+    </style>
+
+    <style name="TextView10spBold" parent="TextViewBold">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextView12spBold" parent="TextViewBold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextView14spBold" parent="TextViewBold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextView16spBold" parent="TextViewBold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextView18spBold" parent="TextViewBold">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextView22spBold" parent="TextViewBold">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextView20spBold" parent="TextViewBold">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="TextView24spBold" parent="TextViewBold">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <!-- Button text fonts-->
+    <style name="ButtonRegular" parent="Base.Widget.AppCompat.Button">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+    </style>
+
+    <style name="ButtonBold" parent="Base.Widget.AppCompat.Button">
+        <item name="android:fontFamily">@font/noto_sans_bold</item>
+    </style>
+
+    <style name="Button14spRegular" parent="ButtonRegular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Button14spBold" parent="ButtonBold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!--Checkbox text fonts-->
+    <style name="CheckBoxRegular" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/noto_sans_regular</item>
+    </style>
+
+    <style name="CheckBox14spRegular" parent="CheckBoxRegular">
+        <item name="android:textSize">14sp</item>
     </style>
 </resources>

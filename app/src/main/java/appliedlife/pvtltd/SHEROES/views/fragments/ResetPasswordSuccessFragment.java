@@ -28,13 +28,12 @@ public class ResetPasswordSuccessFragment extends BaseFragment {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.fragment_reset_password_success, container, false);
         ButterKnife.bind(this, view);
-
         Bundle bundle = getArguments();
         if(bundle!=null && bundle.getString(AppConstants.EMAIL)!=null){
             int index = bundle.getString(AppConstants.EMAIL).indexOf(AppConstants.AT_THE_RATE_OF);
             if(index < bundle.getString(AppConstants.EMAIL).length()){
                 String domain = bundle.getString(AppConstants.EMAIL).substring(index);
-                tvResetPwd.setText(getString(R.string.ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1) + domain + getString(R.string.ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2));
+                tvResetPwd.setText(getString(R.string.ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1, domain) + getString(R.string.ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2));
             }
         }
 

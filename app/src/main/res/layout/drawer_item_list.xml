@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/ll_drawer_item"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_size_48">
@@ -14,38 +15,37 @@
         android:layout_marginStart="@dimen/dp_size_16"
         android:layout_marginTop="@dimen/dp_size_12" />
 
-    <TextView
-        android:layout_toRightOf="@id/tv_drawer_image"
-        android:layout_toEndOf="@id/tv_drawer_image"
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_drawer_item"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp_size_12"
         android:layout_marginLeft="@dimen/dp_size_32"
         android:layout_marginStart="@dimen/dp_size_32"
-        android:layout_marginBottom="@dimen/dp_size_12"
         android:layout_marginTop="@dimen/dp_size_12"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:layout_toEndOf="@id/tv_drawer_image"
+        android:layout_toRightOf="@id/tv_drawer_image"
         android:lineSpacingExtra="10sp"
         android:textColor="@color/black"
-        android:textSize="@dimen/sp_size_13" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
-    <TextView
-        android:visibility="gone"
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/new_feature"
+        style="@style/TextView12spRegular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_size_10"
         android:layout_toEndOf="@id/tv_drawer_item"
         android:layout_toRightOf="@id/tv_drawer_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textStyle="normal"
-        tools:text="New"
         android:background="@drawable/border_new_feature"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
+        android:paddingBottom="@dimen/dp_size_2"
         android:paddingLeft="@dimen/dp_size_8"
         android:paddingRight="@dimen/dp_size_8"
-        android:paddingBottom="@dimen/dp_size_2"
         android:text="@string/new_feature"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:visibility="gone"
+        tools:text="@string/new_feature"
+        vernacular:customTextFontFamily="@string/regular_font" />
 </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleView>

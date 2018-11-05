@@ -13,8 +13,10 @@ import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.isNotNullOrEmptyString;
 
 /**
@@ -53,7 +55,7 @@ public class AnalyticsManager {
         mixpanelHelper.setupUser(context, isNewUser);
     }
 
-    public static void initializeMixpanel(Context context){
+    public static void initializeMixpanel(Context context) {
         initializeMixpanel(context, true);
     }
 
@@ -64,14 +66,14 @@ public class AnalyticsManager {
         cleverTapHelper.setupUser(context, isNewUser);
     }
 
-    public static void initializeFbAnalytics(Context context){
+    public static void initializeFbAnalytics(Context context) {
         FBAnalyticsHelper.initializeAnalyticsTracker(context);
     }
 
     //endregion
 
     // region Primary Event Methods
-    public static void trackAppOpen(Context context){
+    public static void trackAppOpen(Context context) {
         MixpanelHelper.incrementAppOpens(context);
     }
 
@@ -88,7 +90,7 @@ public class AnalyticsManager {
     }
 
     public static void trackScreenView(String screenName, String previousScreenName, Map<String, Object> properties) {
-        if(!canSend()) {
+        if (!canSend()) {
             return;
         }
 
@@ -96,9 +98,15 @@ public class AnalyticsManager {
             properties = new HashMap<>();
         }
 
-        if(!TextUtils.isEmpty(previousScreenName)) {
+        if (!TextUtils.isEmpty(previousScreenName)) {
             properties.put(EventProperty.SOURCE.getString(), previousScreenName);
         }
+
+        String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+        if (StringUtil.isNotNullOrEmptyString(languageName)) {
+            properties.put(SuperProperty.LANGUAGE.getString(), languageName);
+        }
+
         MixpanelHelper.trackScreenOpen(sAppContext, screenName, properties);
 
         // track all event to Moengage
@@ -111,7 +119,7 @@ public class AnalyticsManager {
     }
 
     public static void timeScreenView(String screenName) {
-        if(!canSend()) {
+        if (!canSend()) {
             return;
         }
 
@@ -120,16 +128,16 @@ public class AnalyticsManager {
     }
 
     @Deprecated
-    public static void trackEvent(Event event, Map<String, Object> properties, String sourceScreen){
+    public static void trackEvent(Event event, Map<String, Object> properties, String sourceScreen) {
         trackEvent(event, sourceScreen, properties);
     }
 
-    public static void trackNonInteractionEvent(Event event, Map<String, Object> properties){
-        if(!canSend()) {
+    public static void trackNonInteractionEvent(Event event, Map<String, Object> properties) {
+        if (!canSend()) {
             return;
         }
 
-        if(properties == null) {
+        if (properties == null) {
             properties = new HashMap<>();
         }
 
@@ -139,16 +147,20 @@ public class AnalyticsManager {
         MixpanelHelper.trackEvent(sAppContext, event.type.name + " " + event.name, properties);
     }
 
-    public static void trackEvent(Event event, String screenName, Map<String, Object> properties){
-        if(!canSend()) {
+    public static void trackEvent(Event event, String screenName, Map<String, Object> properties) {
+        if (!canSend()) {
             return;
         }
 
-        if(properties == null) {
+        if (properties == null) {
             properties = new HashMap<>();
         }
 
         event.addProperties(properties);
+        String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+        if(StringUtil.isNotNullOrEmptyString(languageName)) {
+            properties.put(SuperProperty.LANGUAGE.getString(),languageName);
+        }
 
         if (isNotNullOrEmptyString(screenName) && !properties.containsKey(screenName)) {
             properties.put(EventProperty.SOURCE.getString(), screenName);
@@ -170,7 +182,7 @@ public class AnalyticsManager {
         MoEHelper.getInstance(sAppContext).trackEvent(event.getFullName(), jsonObj);
 
         //track all event to CleverTap
-        CleverTapHelper.trackEvent(sAppContext,event, properties);
+        CleverTapHelper.trackEvent(sAppContext, event, properties);
 
     }
 
@@ -187,23 +199,26 @@ public class AnalyticsManager {
         }
         MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName);
     }
-    public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName,long pollOptionId) {
+
+    public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName, long pollOptionId) {
         if (!canSend()) {
             return;
         }
-        MixpanelHelper.trackPollActionEvent(event, feedDetail, screenName,pollOptionId);
+        MixpanelHelper.trackPollActionEvent(event, feedDetail, screenName, pollOptionId);
     }
+
     public static void trackPollAction(Event event, FeedDetail feedDetail, String screenName) {
         if (!canSend()) {
             return;
         }
         MixpanelHelper.trackPollActionEvent(event, feedDetail, screenName);
     }
-    public static void trackPostAction(Event event, FeedDetail feedDetail, String screenName,HashMap<String, Object> properties) {
+
+    public static void trackPostAction(Event event, FeedDetail feedDetail, String screenName, HashMap<String, Object> properties) {
         if (!canSend()) {
             return;
         }
-        MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName,properties);
+        MixpanelHelper.trackPostActionEvent(event, feedDetail, screenName, properties);
     }
 
 
@@ -224,24 +239,24 @@ public class AnalyticsManager {
     //--------
 
     public static void timeEvent(Event event) {
-        MixpanelHelper.timeEvent(sAppContext,  event.getFullName());
+        MixpanelHelper.timeEvent(sAppContext, event.getFullName());
     }
 
-    public static void incrementPeopleProperty(PeopleProperty peopleProperty){
-        if(peopleProperty != null) {
+    public static void incrementPeopleProperty(PeopleProperty peopleProperty) {
+        if (peopleProperty != null) {
             MixpanelHelper.getInstance(sAppContext).getPeople().increment(peopleProperty.getString(), 1);
 
         }
     }
 
-    public static void flushEvents(){
+    public static void flushEvents() {
         MixpanelHelper.flushEvents(sAppContext);
     }
 
-    public static void ensureTelemetry(Context context, final Boolean isNewUser){
-        if(isNewUser==null){
+    public static void ensureTelemetry(Context context, final Boolean isNewUser) {
+        if (isNewUser == null) {
             AnalyticsManager.initializeMixpanel(context);
-        }else {
+        } else {
             AnalyticsManager.initializeMixpanel(context, isNewUser);
         }
     }

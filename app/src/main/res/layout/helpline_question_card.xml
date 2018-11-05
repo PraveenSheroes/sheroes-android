@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
@@ -47,14 +48,14 @@
                 android:shadowColor="@color/green"
                 android:padding="@dimen/dp_size_16">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/question"
+                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
                     android:enabled="true"
                     android:focusable="true"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:gravity="left|center_horizontal"
                     android:linksClickable="true"
                     android:longClickable="true"
@@ -64,8 +65,13 @@
                     android:textColorLink="@color/view_more"
                     android:textIsSelectable="true"
                     android:textSize="@dimen/dp_size_16" />
+                    android:textAllCaps="false"
+                    android:textColor="@color/comment_text"
+                    android:textColorLink="@color/view_more"
+                    android:textIsSelectable="true"
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/time_question"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -75,7 +81,8 @@
                     android:layout_gravity="right"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:textColor="@color/helpline_text_time_color"
-                    android:textSize="@dimen/helpline_time_text_size" />
+                    android:textSize="@dimen/helpline_time_text_size"
+                    vernacular:customTextFontFamily="@string/regular_font"/>
 
             </LinearLayout>
         </RelativeLayout>

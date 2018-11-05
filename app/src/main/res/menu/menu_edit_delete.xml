@@ -4,24 +4,29 @@
     <item
         android:id="@+id/share"
         android:icon="@drawable/vector_share_black"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/ID_SHARE" />
     <item
         android:id="@+id/edit"
         android:icon="@drawable/vector_create"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/ID_EDIT" />
 
     <item
         android:id="@+id/delete"
         android:icon="@drawable/vector_delete"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/delete" />
 
     <item
         android:id="@+id/report_spam"
         android:icon="@drawable/vector_report_spam"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/REPORT_SPAM" />
 
     <item
         android:id="@+id/top_post"
         android:icon="@drawable/vector_feature_post"
+        android:textSize="@dimen/menu_item_text_size"
         android:title="@string/FEATURE_POST" />
 </menu>

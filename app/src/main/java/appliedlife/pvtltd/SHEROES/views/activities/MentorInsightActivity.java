@@ -38,6 +38,7 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumberToNumericSuffix;
 
 /**
@@ -196,6 +197,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
 
 
     //endregion
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -242,12 +244,11 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
             String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, mUserSolrObj.getSolrIgnoreNoOfMentorFollowers());
             tvMentorInsightFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolrObj.getSolrIgnoreNoOfMentorFollowers())));
             tvMentorInsightFollower.setText(pluralComments);
-            if(mentorInsightResponse.getNoOfFollowers7Days()>0) {
+            if (mentorInsightResponse.getNoOfFollowers7Days() > 0) {
                 String str = AppConstants.PLUS + mentorInsightResponse.getNoOfFollowers7Days();
                 tvMentorInsightFollowerDate.setText(str);
                 viewMentor.setVisibility(View.VISIBLE);
-            }else
-            {
+            } else {
                 viewMentor.setVisibility(View.GONE);
                 tvMentorInsightFollowerDate.setVisibility(View.GONE);
                 tvMentorInsightFollowerDateLable.setVisibility(View.GONE);
@@ -269,13 +270,12 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
             tvMentorInsightPostCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolrObj.getSolrIgnoreNoOfMentorPosts())));
             tvMentorInsightPost.setText(plural);
 
-            if(mentorInsightResponse.getTotalNoOfPost7Days()>0) {
+            if (mentorInsightResponse.getTotalNoOfPost7Days() > 0) {
                 String post = AppConstants.PLUS + mentorInsightResponse.getTotalNoOfPost7Days();
                 tvMentorInsightPostCreateDate.setText(post);
                 viewInsight.setVisibility(View.VISIBLE);
                 tvMentorInsightPostCreateDate.setVisibility(View.VISIBLE);
-            }else
-            {
+            } else {
                 viewInsight.setVisibility(View.GONE);
                 tvMentorInsightPostCreateDate.setVisibility(View.GONE);
                 tvMentorInsightPostCreateLable.setVisibility(View.GONE);
@@ -304,13 +304,12 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
             String plural = getResources().getQuantityString(R.plurals.numberOfQuestions, mentorInsightResponse.getTotalNoOfQuestions());
             tvMentorInsightQuestionCount.setText(String.valueOf(changeNumberToNumericSuffix(mentorInsightResponse.getTotalNoOfCommentsOnUserPost())));
             tvMentorInsightQuestion.setText(plural);
-            if(mentorInsightResponse.getTotalNoOfQuestions7Days()>0) {
+            if (mentorInsightResponse.getTotalNoOfQuestions7Days() > 0) {
                 String quest = AppConstants.PLUS + mentorInsightResponse.getTotalNoOfQuestions7Days();
                 tvMentorInsightQuestionDate.setText(quest);
                 viewQuestion.setVisibility(View.VISIBLE);
                 tvMentorInsightQuestionDate.setVisibility(View.VISIBLE);
-            }else
-            {
+            } else {
                 tvMentorInsightQuestionDate.setVisibility(View.GONE);
                 tvMentorInsightQuestionDateLable.setVisibility(View.GONE);
                 viewQuestion.setVisibility(View.GONE);
@@ -323,13 +322,12 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
             String plural = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolrObj.getSolrIgnoreNoOfMentorAnswers());
             tvMentorInsightAnswerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolrObj.getSolrIgnoreNoOfMentorAnswers())));
             tvMentorInsightAnswer.setText(plural);
-            if(mentorInsightResponse.getTotalNoOfAnswers7Days()>0) {
+            if (mentorInsightResponse.getTotalNoOfAnswers7Days() > 0) {
                 String quest = AppConstants.PLUS + mentorInsightResponse.getTotalNoOfAnswers7Days();
                 tvMentorInsightAnswerDate.setText(quest);
                 tvMentorInsightAnswerDate.setVisibility(View.VISIBLE);
                 viewAnswer.setVisibility(View.VISIBLE);
-            }else
-            {
+            } else {
                 viewAnswer.setVisibility(View.GONE);
                 tvMentorInsightAnswerDate.setVisibility(View.GONE);
                 tvMentorInsightAnswerDateLable.setVisibility(View.GONE);
@@ -364,7 +362,7 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:

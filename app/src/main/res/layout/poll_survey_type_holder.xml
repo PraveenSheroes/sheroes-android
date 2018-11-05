@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/poll_type_item"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:gravity="center"
     android:layout_gravity="center"
+    android:gravity="center"
     android:orientation="vertical"
     android:paddingLeft="@dimen/poll_type_holder_margin_left_right"
     android:paddingRight="@dimen/poll_type_holder_margin_left_right">
@@ -15,16 +16,16 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/poll_type_holder_image_margin" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/poll_type_name"
+        style="@style/TextView16spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/poll_type_holder_name_margin"
         android:ellipsize="end"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:gravity="center"
         android:maxLines="@integer/int_value_for_line_1"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/poll_title_size" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>

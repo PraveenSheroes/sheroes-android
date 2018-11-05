@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -85,7 +85,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
     //region inject variables
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -195,7 +195,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
 
             //For profile if badge is inactive show message "Won last on" & for other "Won Latest on"
             if (!isLeaderBoard) {
-                String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : "This User";
+                String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : getString(R.string.this_user);
                 if (mBadgeDetails.isActive()) {
                     showLeaderBoard.setVisibility(View.VISIBLE);
                     badgeWonPeriod.setText(getResources().getString(R.string.badge_active_period_date_text, day, endDateText));

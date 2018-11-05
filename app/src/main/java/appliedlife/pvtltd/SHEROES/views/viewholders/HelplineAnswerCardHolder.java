@@ -65,10 +65,10 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
             String time = dataItem.getFormatedDate().substring(AppConstants.HELPLINE_TIME_START);
             answerTime.setText(time);
         }
-        if (helplineChatDoc.getThumbnailImageUrl() != null) {  //mentor image icon
+        if (helplineChatDoc.getSolrIgnoreParticipantAttendantName() != null) {  //mentor image icon
             counselorImage.setCircularImage(true);
-            String authorThumborUrl = CommonUtil.getThumborUri(helplineChatDoc.getThumbnailImageUrl(), counselorImageSize, counselorImageSize);
-            counselorImage.bindImage(authorThumborUrl);
+            String AttendantImageUrl = CommonUtil.getThumborUri(helplineChatDoc.getSolrIgnoreParticipantAttendantName(), counselorImageSize, counselorImageSize);
+            counselorImage.bindImage(AttendantImageUrl);
         }
         setDate(prevObj, helplineChatDoc, position);
     }

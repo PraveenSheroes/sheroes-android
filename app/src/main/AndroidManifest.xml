@@ -36,7 +36,7 @@
         android:name=".basecomponents.SheroesApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_sheroes_launcher"
-        android:label="@string/ID_APP_NAME"
+        android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
@@ -142,7 +142,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".views.activities.WelcomeActivity"
+            android:name=".views.activities.LanguageSelectionActivity"
             android:clearTaskOnLaunch="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -150,10 +150,14 @@
             android:windowSoftInputMode="stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".views.activities.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"/>
+
         <activity
             android:name=".views.activities.HelplineActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -196,8 +200,7 @@
             android:configChanges="keyboardHidden"
             android:exported="true"
             android:parentActivityName=".views.activities.HomeActivity"
-            android:screenOrientation="portrait"
-            tools:ignore="GoogleAppIndexingDeepLinkError"/>
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".views.activities.ContestActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -230,7 +233,7 @@
             android:name=".views.activities.CommunityPostActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize"/>
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".views.activities.CommunityDetailActivity"
             android:parentActivityName=".views.activities.HomeActivity"
@@ -252,31 +255,52 @@
         <activity
             android:name=".views.activities.BranchDeepLink"
             android:screenOrientation="portrait">
-            <intent-filter>
+            <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
-
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data
+                    android:host="shrs.me"
+                    android:pathPrefix="/"
+                    android:scheme="https" />
+                <data
+                    android:host="shrs.me"
+                    android:pathPrefix="/"
+                    android:scheme="http" />
+                <data
+                    android:host="dpjo-alternate.app.link"
+                    android:pathPrefix="/"
+                    android:scheme="https" />
+                <data
+                    android:host="dpjo-alternate.app.link"
+                    android:pathPrefix="/"
+                    android:scheme="http" />
+                <data
+                    android:host="dpjo.app.link"
+                    android:pathPrefix="/"
+                    android:scheme="https" />
+                <data
+                    android:host="dpjo.app.link"
+                    android:pathPrefix="/"
+                    android:scheme="http" />
+                <data
+                    android:host="dpjo.test-app.link"
+                    android:pathPrefix="/"
+                    android:scheme="http" />
+                <data
+                    android:host="dpjo.test-app.link"
+                    android:pathPrefix="/"
+                    android:scheme="https" />
+            </intent-filter>
+            <intent-filter >
+                <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="shrs.me"
-                    android:pathPrefix="/"
-                    android:scheme="https" />
-                <data
-                    android:host="shrs.me"
-                    android:pathPrefix="/"
-                    android:scheme="http" />
-                <data
-                    android:host="dpjo.test-app.link"
-                    android:pathPrefix="/"
-                    android:scheme="https" />
-                <data
-                    android:host="dpjo.test-app.link"
-                    android:pathPrefix="/"
-                    android:scheme="http" />
-                <data android:scheme="appliedlife.pvtltd.sheroes" />
+                <data android:scheme="appliedlife.pvtltd.sheroes"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".views.activities.SheroesDeepLinkingActivity"
             android:exported="true"
@@ -289,7 +313,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data android:host="sheroes.com" />
-                <data android:host="sheroes.in" />
+
                 <data android:scheme="https" />
                 <data android:pathPrefix="/jobs" />
                 <data android:pathPrefix="/articles" />

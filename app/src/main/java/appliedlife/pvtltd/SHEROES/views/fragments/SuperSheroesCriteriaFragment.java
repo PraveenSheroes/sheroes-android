@@ -24,7 +24,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -47,7 +47,7 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
     TextView contentText;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     //region Fragment LifeCycle Methods
     @NonNull
@@ -69,7 +69,6 @@ public class SuperSheroesCriteriaFragment extends BottomSheetDialogFragment {
         dialog.setContentView(containerView);
         ButterKnife.bind(this, containerView);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-
         ConfigData configData = new ConfigData();
         String howToBeSuperSheroesContent = configData.superSheroesCriteriaMsg;
         if (mConfiguration.isSet() && mConfiguration.get().configData.superSheroesCriteriaMsg != null) {

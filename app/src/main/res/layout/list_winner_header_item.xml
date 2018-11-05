@@ -15,5 +15,5 @@
         android:textStyle="normal"
         android:textColor="#3c3c3c"
         android:textAllCaps="true"
-        android:text="Winner" />
+        android:text="@string/challenge_winner" />
 </RelativeLayout>

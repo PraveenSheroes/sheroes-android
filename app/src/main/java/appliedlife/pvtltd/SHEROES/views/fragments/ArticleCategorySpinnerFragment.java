@@ -85,7 +85,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         } else {
             mHomePresenter.getMasterDataToPresenter();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(getString(R.string.ID_ARTICLE_SELECT_CATEGORY));
+        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.ARTICLE_SELECT_CATEGORY);
         return view;
     }
 

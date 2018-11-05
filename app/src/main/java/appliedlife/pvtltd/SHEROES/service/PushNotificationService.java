@@ -192,9 +192,9 @@ public class PushNotificationService extends FirebaseMessagingService {
         String cleverTypeDeepLink = data.getString(AppConstants.CLEVER_TAP_DEEP_LINK_URL);
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            String relatedChannelId = getString(R.string.sheroesRelatedChannelID);
-            CharSequence channelName = getString(R.string.sheroesRelatedChannelName);
-            String channelDescription = getString(R.string.sheroesRelatedChannelDesc);
+            String relatedChannelId = AppConstants.CLEVER_TAP_CHANNEL_ID;
+            CharSequence channelName = AppConstants.CLEVER_TAP_CHANNEL_NAME;
+            String channelDescription = AppConstants.CLEVER_TAP_CHANNEL_DESC;
             CleverTapAPI.createNotificationChannel(getApplicationContext(), relatedChannelId, channelName, channelDescription, NotificationManager.IMPORTANCE_MAX, true);
         }
 
@@ -273,8 +273,8 @@ public class PushNotificationService extends FirebaseMessagingService {
 
                 NotificationManager notificationManager = (NotificationManager) PushNotificationService.this.getSystemService(Activity.NOTIFICATION_SERVICE);
 
-                String relatedChannelId = getString(R.string.sheroesRelatedChannelID);
-                CharSequence channelName = getString(R.string.sheroesRelatedChannelName);
+                String relatedChannelId =AppConstants.CLEVER_TAP_CHANNEL_ID;
+                CharSequence channelName = AppConstants.CLEVER_TAP_CHANNEL_NAME;
                 int importance = NotificationManagerCompat.IMPORTANCE_HIGH;
                 NotificationChannel notificationChannel = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {

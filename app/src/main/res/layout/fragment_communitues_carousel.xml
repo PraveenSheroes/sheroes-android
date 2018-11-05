@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nested_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,16 +27,16 @@
                 android:elevation="@dimen/dp_size_5">
 
                 <LinearLayout
-                    android:background="@color/carousel_card_bg"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/carousel_card_bg"
                     android:orientation="vertical">
 
-                    <TextView
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/title"
+                        style="@style/TextView14spRegular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@string/ID_ROBOTO_REGULAR"
                         android:paddingEnd="@dimen/dp_size_1"
                         android:paddingLeft="@dimen/dp_size_16"
                         android:paddingRight="@dimen/dp_size_1"
@@ -43,7 +44,7 @@
                         android:paddingTop="@dimen/dp_size_8"
                         android:text="@string/my_communities"
                         android:textColor="@color/comment_text"
-                        android:textSize="@dimen/sp_size_14" />
+                        vernacular:customTextFontFamily="@string/regular_font" />
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/my_communities"
@@ -68,6 +69,7 @@
         <include
             layout="@layout/gif_loader"
             android:visibility="gone" />
+
         <include
             layout="@layout/no_internet_connection_layout"
             android:visibility="gone" />

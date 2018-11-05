@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -25,22 +26,22 @@
             android:elevation="@dimen/dp_size_5"
             app:cardCornerRadius="@dimen/dp_size_2">
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                style="@style/TextView16spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:fontFamily="sans-serif"
                 android:gravity="center_horizontal"
                 android:minHeight="@dimen/dp_size_150"
                 android:padding="@dimen/dp_size_36"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                vernacular:customTextFontFamily="@string/regular_font" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/empty_community_view_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_191">
+                android:layout_height="@dimen/dp_size_191"
+                android:visibility="gone">
 
                 <FrameLayout
                     android:id="@+id/dotted_border_container_community"
@@ -48,16 +49,16 @@
                     android:layout_height="match_parent"
                     android:layout_margin="@dimen/dp_size_15">
 
-                    <TextView
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/empty_community_view"
+                        style="@style/TextView16spRegular"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:background="@color/white"
                         android:drawableTop="@drawable/vector_add_community"
-                        android:fontFamily="sans-serif"
                         android:gravity="center"
-                        android:textSize="16sp" />
+                        vernacular:customTextFontFamily="@string/regular_font" />
                 </FrameLayout>
             </LinearLayout>
 
@@ -68,22 +69,22 @@
                 android:layout_below="@id/toolbar"
                 android:orientation="vertical">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    style="@style/TextView16spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_size_16"
-                    android:fontFamily="sans-serif-medium"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:text="@string/followed_communities"
                     android:textColor="#3c3c3c"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    vernacular:customTextFontFamily="@string/medium_font" />
 
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_size_1"
-                    android:background="@color/on_board_work" />
+                    android:background="@color/on_board_work"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/mutual_community_container"
@@ -94,63 +95,64 @@
                     android:layout_marginStart="@dimen/dp_size_16"
                     android:orientation="horizontal" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/mutual_community_label"
+                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/dp_size_16"
                     android:layout_marginLeft="@dimen/dp_size_16"
                     android:layout_marginStart="@dimen/dp_size_16"
-                    android:fontFamily="sans-serif"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
+                    android:textStyle="normal"
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
                 <TextView
-                    android:visibility="gone"
                     android:id="@+id/extra_space"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_size_12" />
+                    android:layout_height="@dimen/dp_size_12"
+                    android:visibility="gone" />
 
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-                <GridLayout
-                    android:id="@+id/user_communities"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_size_12"
-                    android:layout_marginLeft="@dimen/dp_size_12"
-                    android:layout_marginRight="@dimen/dp_size_12"
-                    android:layout_marginStart="@dimen/dp_size_12"
-                    android:columnCount="2"
-                    android:horizontalSpacing="4dp"
-                    android:minHeight="@dimen/dp_size_50"
-                    android:rowCount="@integer/int_value_for_line_2"
-                    android:verticalSpacing="4dp" />
 
-                <ProgressBar
-                    android:id="@+id/progress_bar_community"
-                    android:layout_width="@dimen/dp_size_50"
-                    android:layout_height="@dimen/dp_size_50"
-                    android:layout_gravity="center"/>
+                    <GridLayout
+                        android:id="@+id/user_communities"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/dp_size_12"
+                        android:layout_marginLeft="@dimen/dp_size_12"
+                        android:layout_marginRight="@dimen/dp_size_12"
+                        android:layout_marginStart="@dimen/dp_size_12"
+                        android:columnCount="2"
+                        android:horizontalSpacing="4dp"
+                        android:minHeight="@dimen/dp_size_50"
+                        android:rowCount="@integer/int_value_for_line_2"
+                        android:verticalSpacing="4dp" />
+
+                    <ProgressBar
+                        android:id="@+id/progress_bar_community"
+                        android:layout_width="@dimen/dp_size_50"
+                        android:layout_height="@dimen/dp_size_50"
+                        android:layout_gravity="center" />
 
                 </FrameLayout>
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/community_view_more"
+                    style="@style/TextView14spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/dp_size_16"
-                    android:drawableRight="@drawable/ic_keyboard_arrow_down_red_14dp"
                     android:drawableEnd="@drawable/ic_keyboard_arrow_down_red_14dp"
-                    android:fontFamily="sans-serif-medium"
+                    android:drawableRight="@drawable/ic_keyboard_arrow_down_red_14dp"
                     android:gravity="center_horizontal"
-                    android:text="@string/view_more"
+                    android:text="@string/ID_VIEW_MORE"
                     android:textColor="#dc4541"
-                    android:textSize="14sp"
                     android:textStyle="normal"
-                    tools:text="View  More" />
+                    tools:text="@string/ID_VIEW_MORE"
+                    vernacular:customTextFontFamily="@string/medium_font" />
 
             </LinearLayout>
 
@@ -162,35 +164,34 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/dp_size_4"
             android:layout_marginTop="@dimen/dp_size_8"
-            app:cardUseCompatPadding="false"
-            app:cardElevation="4dp"
             android:paddingTop="@dimen/dp_size_10"
-            app:cardCornerRadius="@dimen/dp_size_2">
+            app:cardCornerRadius="@dimen/dp_size_2"
+            app:cardElevation="4dp"
+            app:cardUseCompatPadding="false">
             <!-- add empty view -->
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/empty_mentor_view_container"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_size_191">
+                android:layout_height="@dimen/dp_size_191"
+                android:visibility="gone">
 
                 <FrameLayout
                     android:id="@+id/dotted_border_container"
-                    android:layout_margin="@dimen/dp_size_15"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/dp_size_15">
 
-                <TextView
-                    android:id="@+id/empty_mentor_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@color/white"
-                    android:drawableTop="@drawable/vector_mentor_empty_icon"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
-                    android:gravity="center"
-                    android:textSize="16sp"
-                    />
+                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                        android:id="@+id/empty_mentor_view"
+                        style="@style/TextView16spRegular"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@color/white"
+                        android:drawableTop="@drawable/vector_mentor_empty_icon"
+                        android:gravity="center"
+                        vernacular:customTextFontFamily="@string/regular_font" />
 
                 </FrameLayout>
             </LinearLayout>
@@ -203,23 +204,22 @@
                 android:minHeight="@dimen/dp_size_100"
                 android:orientation="vertical">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:layout_width="wrap_content"
+                    style="@style/TextView16spBold"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/dp_size_16"
-                    android:fontFamily="sans-serif-medium"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:text="@string/champions_followed"
                     android:textColor="#3c3c3c"
-                    android:textSize="16sp"
                     android:textStyle="normal"
-                    tools:text="Followed Mentors" />
+                    vernacular:customTextFontFamily="@string/medium_font"/>
 
                 <TextView
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_size_1"
-                    android:background="@color/on_board_work" />
+                    android:background="@color/on_board_work"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:id="@+id/container"
@@ -231,23 +231,23 @@
                     android:id="@+id/progress_bar_champion"
                     android:layout_width="@dimen/dp_size_50"
                     android:layout_height="@dimen/dp_size_50"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/followed_view_more"
+                    style="@style/TextView14spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="@dimen/dp_size_16"
                     android:drawableEnd="@drawable/ic_keyboard_arrow_down_red_14dp"
                     android:drawableRight="@drawable/ic_keyboard_arrow_down_red_14dp"
-                    android:fontFamily="sans-serif-medium"
                     android:gravity="center_horizontal"
-                    android:text="@string/view_more"
+                    android:text="@string/ID_VIEW_MORE"
                     android:textColor="#dc4541"
-                    android:textSize="14sp"
                     android:textStyle="normal"
-                    tools:text="View  More" />
+                    tools:text="@string/ID_VIEW_MORE"
+                    vernacular:customTextFontFamily="@string/medium_font"/>
             </LinearLayout>
 
         </android.support.v7.widget.CardView>

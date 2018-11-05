@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
@@ -13,8 +14,9 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/about_leaderboard"
+            style="@style/TextView14spBold"
             android:layout_width="match_parent"
             android:layout_height="@dimen/leaderboard_about_header_height"
             android:layout_marginLeft="@dimen/about_laederboard_spacing"
@@ -22,12 +24,11 @@
             android:drawableLeft="@drawable/vector_idea"
             android:drawablePadding="@dimen/about_laederboard_spacing"
             android:drawableStart="@drawable/vector_idea"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:gravity="center_vertical"
             android:text="@string/how_do_i_become_a_supersheroes"
             android:textColor="@color/about_leaderbaord_text"
-            android:textSize="@dimen/about_leaderboard_text"
-            android:textStyle="normal" />
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
         <TextView
             android:id="@+id/divider"
@@ -35,34 +36,35 @@
             android:layout_height="@dimen/about_leaderboard_divider_height"
             android:background="@color/lighter_gray" />
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/top_user_title"
+            style="@style/TextView14spBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/leaderboard_top_user_title_margin"
             android:layout_marginStart="@dimen/leaderboard_top_user_title_margin"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:paddingBottom="@dimen/leaderboard_top_user_padding_bottom"
             android:paddingTop="@dimen/leaderboard_top_user_padding_top"
             android:text="@string/leaderbaord_top_10_user"
             android:textAllCaps="true"
             android:textColor="@color/leader_board_badge_sub_text"
-            android:textSize="@dimen/leaderboard_top_user_title_text" />
+            vernacular:customTextFontFamily="@string/medium_font" />
     </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/leader_board_users_container"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:padding="@dimen/leaderboard_user_container_padding">
 
-        <TextView
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/follow_button"
+            style="@style/TextView12spBold"
             android:layout_width="@dimen/leaderboard_follow_button_width"
             android:layout_height="@dimen/leaderboard_follow_button_height"
-            android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:gravity="center"
             android:textAllCaps="true"
             android:layout_marginBottom="@dimen/leaderboard_follow_button_margin"
@@ -72,18 +74,17 @@
             android:layout_marginStart="@dimen/leaderboard_follow_button_margin_left"
             android:layout_marginTop="@dimen/leader_board_follow_button_margin_top"
             android:background="@drawable/border_new_feature"
-            android:fontFamily="@string/ID_ROBOTO_MEDIUM"
             android:foreground="?attr/selectableItemBackground"
             android:textColor="@color/leaderbaord_follow_button_text"
-            android:textSize="@dimen/leaderbaord_follow_text"
-            tools:text="Following" />
+            tools:text="@string/following"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
         <RelativeLayout
-            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@id/follow_button"
             android:layout_toStartOf="@id/follow_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:orientation="horizontal">
 
             <RelativeLayout
                 android:id="@+id/icon_container"
@@ -108,15 +109,15 @@
                     android:layout_height="@dimen/leaderboard_badge_icon"
                     android:visibility="gone" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/user_position"
+                    style="@style/TextView14spBold"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/logged_in_user_position_icon"
-                    android:fontFamily="@string/ID_ROBOTO_MEDIUM"
                     android:gravity="center_vertical"
                     android:maxLines="@integer/leader_board_selected_user_position_max_line"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/logged_in_user_position_text_size" />
+                    vernacular:customTextFontFamily="@string/medium_font" />
 
             </RelativeLayout>
 
@@ -131,26 +132,24 @@
                 android:layout_toRightOf="@id/icon_container"
                 android:orientation="vertical">
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/name"
+                    style="@style/TextView16spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
+                    android:ellipsize="end"
                     android:lineSpacingExtra="@dimen/laederboard_user_name_linespace"
                     android:maxLines="@integer/leaderboard_user_name_max_line"
-                    android:ellipsize="end"
                     android:textColor="@color/leaderboard_user"
-                    android:textSize="@dimen/leaderboard_user_name_text"
-                    tools:text="Champa Roy" />
+                    vernacular:customTextFontFamily="@string/regular_font" />
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/description"
+                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@string/ID_ROBOTO_REGULAR"
                     android:textColor="@color/leader_board_badge_sub_text"
-                    android:textSize="@dimen/leaderbaord_desc_text"
-                    tools:text="168 Likes · 140 Comments" />
+                    vernacular:customTextFontFamily="@string/regular_font" />
             </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>

@@ -164,7 +164,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 finish();
             }
         }
-        if (null != mUserPreference && mUserPreference.isSet()  && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();
 
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
@@ -228,7 +228,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        toolbarTitle.setText("Challenge");
+        toolbarTitle.setText(R.string.challenge);
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
@@ -247,7 +247,6 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    // Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     if (null != mContest) {
                         mContest.submissionCount++;
                         mContest.hasMyPost = true;
@@ -266,7 +265,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 case AppConstants.REQUEST_CODE_FOR_ADDRESS:
                     Snackbar.make(mBottomBarView, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
                     if (null != mContest) {
-                        mContest.mWinnerAddress = "not empty";
+                        mContest.mWinnerAddress = getString(R.string.not_empty);
                         mTabLayout.getTabAt(FRAGMENT_RESPONSES).select();
                         mContestInfoFragment.setContest(mContest);
                         mFeedFragment.refreshList();
@@ -303,9 +302,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
             if (mFeedFragment != null) {
                 mFeedFragment.refreshList();
             }
-        }else if(resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED)  {
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
             Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
-            if (parcelable != null && mFeedFragment!=null) {
+            if (parcelable != null && mFeedFragment != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
                 mFeedFragment.findPositionAndUpdateItem(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
             }
@@ -358,12 +357,12 @@ public class ContestActivity extends BaseActivity implements IContestView {
         mFeedFragment.setArguments(bundle);
         mContestInfoFragment = (ContestInfoFragment) ContestInfoFragment.instance();
         mContestInfoFragment.setArguments(bundle);
-        adapter.addFragment(mContestInfoFragment, "Overview");
-        adapter.addFragment(mFeedFragment, "Responses");
+        adapter.addFragment(mContestInfoFragment, getString(R.string.overview));
+        adapter.addFragment(mFeedFragment, getString(R.string.responses));
         if (mContest.hasWinner) {
             ContestWinnerFragment mContestWinnerFragment = new ContestWinnerFragment();
             mContestWinnerFragment.setArguments(bundle);
-            adapter.addFragment(mContestWinnerFragment, "Winner");
+            adapter.addFragment(mContestWinnerFragment, getString(R.string.winner));
         }
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
@@ -497,7 +496,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 mBottomBar.setVisibility(View.VISIBLE);
                 mBottomBarView.setVisibility(View.VISIBLE);
                 mBottomView.setVisibility(View.VISIBLE);
-                mBottomBar.setText("completed");
+                mBottomBar.setText(R.string.completed);
                 mBottomBar.setTextColor(getResources().getColor(R.color.light_green));
                 mBottomBar.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_contest_completed, 0, 0, 0);
                 mBottomBarView.setBackgroundResource(R.color.theme);
@@ -620,7 +619,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL,feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
     }
 
 

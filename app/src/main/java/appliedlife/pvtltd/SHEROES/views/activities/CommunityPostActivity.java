@@ -105,8 +105,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
@@ -153,7 +153,6 @@ import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.BOOLEAN;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.EMOJI;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.IMAGE;
 import static appliedlife.pvtltd.SHEROES.models.entities.poll.PollType.TEXT;
-import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FEED_POLL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createChallengePostRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityImagePostRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.createCommunityPostRequestBuilder;
@@ -185,7 +184,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     Preference<LoginResponse> mUserPreference;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     CreatePostPresenter mCreatePostPresenter;
@@ -452,7 +451,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mMentionSpanList = mCommunityPost.userMentionList;
                     editUserMentionWithFullDescriptionText(mMentionSpanList, mOldText);
                 } else {
-                    etView.setEditText(mOldText, mCommunityPost.body.length());
+                    if (StringUtil.isNotNullOrEmptyString(mOldText)) {
+                        etView.setEditText(mOldText, mOldText.length());
+                    }
                 }
                 invalidateUserDropDownView();
 
@@ -1011,7 +1012,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                             String dateMessage = timeFormatter.format(calendar.getTime());
                             scheduleConfirmation(formattedDateTime, dateMessage);
                         } else
-                            Toast.makeText(getApplicationContext(), "Invalid Time", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), R.string.invalid_time, Toast.LENGTH_LONG).show();
                     }
                 }, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE) + 1, false);
 
@@ -1515,8 +1516,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 communityPost.userMentionList = userPostObj.getUserMentionList();
             }
 
-            if(feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
-                communityPost.isPoll=true;
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                communityPost.isPoll = true;
             }
 
             Parcelable parcelable = Parcels.wrap(communityPost);
@@ -1580,10 +1581,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private void confirmationAlert() {
         AlertDialog.Builder builder =
                 new AlertDialog.Builder(CommunityPostActivity.this);
-        builder.setTitle("Discard Post?");
-        builder.setMessage("Are you sure you want to discard your changes?");
-        builder.setNegativeButton("NO", null);
-        builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        builder.setTitle(R.string.discard_post);
+        builder.setMessage(R.string.discard_changes);
+        builder.setNegativeButton(R.string.no, null);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -1675,7 +1676,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             mCommunityName.setVisibility(View.VISIBLE);
             if (mIsAnonymous) {
-                mUserName.setText("Anonymous");
+                mUserName.setText(R.string.ID_ANONYMOUS);
                 mShareToFacebook.setChecked(false);
             } else {
                 mUserName.setText(CommonUtil.capitalizeString(mUserSummary.getFirstName() + " " + mUserSummary.getLastName()));
@@ -1825,7 +1826,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
         if (mIsPollOptionClicked) {
             activityBuilder.setFixAspectRatio(true);
-        }else{
+        } else {
             activityBuilder.setFixAspectRatio(false);
         }
         activityBuilder.start(CommunityPostActivity.this);
@@ -1848,7 +1849,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
         if (mIsPollOptionClicked) {
             activityBuilder.setFixAspectRatio(true);
-        }else{
+        } else {
             activityBuilder.setFixAspectRatio(false);
         }
         activityBuilder.start(CommunityPostActivity.this);
@@ -1865,14 +1866,14 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 PollOptionType textPoll = new PollOptionType();
                 textPoll.pollType = TEXT;
                 textPoll.id = 1;
-                textPoll.title = "Text Poll";
+                textPoll.title = getString(R.string.text_poll);
                 textPoll.imgUrl = R.drawable.vector_text_poll;
                 pollOptionTypeList.add(textPoll);
 
                 PollOptionType imagePoll = new PollOptionType();
                 imagePoll.pollType = IMAGE;
                 imagePoll.id = 2;
-                imagePoll.title = "Image Poll";
+                imagePoll.title = getString(R.string.image_poll);
                 imagePoll.imgUrl = R.drawable.vector_image_poll_icon;
                 pollOptionTypeList.add(imagePoll);
                 AnalyticsManager.trackEvent(Event.POLL_CLICKED, getScreenName(), null);
@@ -2284,3 +2285,4 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mLiPollContainer.addView(liImagePollRow);
     }
 }
+

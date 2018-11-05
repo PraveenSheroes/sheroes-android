@@ -11,18 +11,13 @@ import com.trello.rxlifecycle2.android.FragmentEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-
-
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.subjects.BehaviorSubject;
-
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MASTER_DATA;
 
@@ -43,9 +38,8 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
     private BehaviorSubject<FragmentEvent> lifecycleFragmentSubject = null;
 
 
-
     public final <T> LifecycleTransformer<T> bindToLifecycle() {
-        return  lifecycleSubject != null ? RxLifecycleAndroid.<T>bindActivity(lifecycleSubject) : RxLifecycleAndroid.<T>bindFragment(lifecycleFragmentSubject) ;
+        return lifecycleSubject != null ? RxLifecycleAndroid.<T>bindActivity(lifecycleSubject) : RxLifecycleAndroid.<T>bindFragment(lifecycleFragmentSubject);
     }
 
     public final <T> LifecycleTransformer<T> bindUntilDestroy() {
@@ -69,7 +63,7 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
         if (lifecycleSubject != null) {
             lifecycleSubject.onNext(activityEvent);
         } else {
-            if(lifecycleFragmentSubject!=null){
+            if (lifecycleFragmentSubject != null) {
                 lifecycleFragmentSubject.onNext(fragmentEvent);
             }
         }
@@ -114,11 +108,11 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
     @Override
     public void attachView(T mvpView) {
         mMvpView = mvpView;
-        if(mMvpView instanceof Fragment){
+        if (mMvpView instanceof Fragment) {
             lifecycleFragmentSubject = BehaviorSubject.create();
             onCreate();
             onAttach();
-        } else{
+        } else {
             lifecycleSubject = BehaviorSubject.create();
             onCreate();
         }
@@ -126,10 +120,6 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
 
     @Override
     public void detachView() {
-       /* mMvpView = null;
-        if (compositeDisposables != null && !compositeDisposables.isDisposed()) {
-            compositeDisposables.dispose();
-        }*/
     }
 
     public boolean isViewAttached() {
@@ -152,28 +142,28 @@ public class BasePresenter<T extends BaseMvpView> implements SheroesPresenter<T>
         }
     }
 
-    public void getMasterDataToAllPresenter(SheroesApplication mSheroesApplication, MasterDataModel masterDataModel, final  Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    public void getMasterDataToAllPresenter(SheroesApplication mSheroesApplication, MasterDataModel masterDataModel, final Preference<MasterDataResponse> mUserPreferenceMasterData) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION,ERROR_MASTER_DATA);
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MASTER_DATA);
             return;
         }
         masterDataModel.getMasterDataFromModel()
                 .compose(this.<MasterDataResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MasterDataResponse>() {
-            @Override
-            public void onComplete() {
-            }
+                    @Override
+                    public void onComplete() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
 
-            @Override
-            public void onNext(MasterDataResponse masterDataResponse) {
-                mUserPreferenceMasterData.delete();
-                mUserPreferenceMasterData.set(masterDataResponse);
-            }
-        });
+                    @Override
+                    public void onNext(MasterDataResponse masterDataResponse) {
+                        mUserPreferenceMasterData.delete();
+                        mUserPreferenceMasterData.set(masterDataResponse);
+                    }
+                });
     }
 }

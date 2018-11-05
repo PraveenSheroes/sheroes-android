@@ -73,7 +73,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -85,9 +85,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
@@ -139,15 +138,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
     @Inject
     AppUtils mAppUtils;
 
     @Inject
     PostDetailViewImpl mPostDetailPresenter;
-
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -194,7 +190,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region presenter region
     private PostDetailAdapter mPostDetailListAdapter;
     private FeedDetail mFeedDetail;
-    private String mFeedDetailObjId,mCommunityPostDetailDeepLink;
+    private String mFeedDetailObjId, mCommunityPostDetailDeepLink;
     private boolean mIsAnonymous;
     private String mPrimaryColor = "#ffffff";
     private String mTitleTextColor = "#3c3c3c";
@@ -233,7 +229,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
         initAdapter();
 
-        mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId,mCommunityPostDetailDeepLink);
+        mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId, mCommunityPostDetailDeepLink);
         mPostDetailPresenter.fetchUserPost();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
             tvUserNameForPost.setText(mUserPreference.get().getUserSummary().getFirstName());
@@ -250,7 +246,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             etView.getEditText().setHint(mConfiguration.get().configData.mCommentHolderText);
             mUserTagCommentInfoText = mConfiguration.get().configData.mUserTagCommentInfoText;
         } else {
-            etView.getEditText().setHint("Type your comment here...");
+            etView.getEditText().setHint(getString(R.string.type_your_comment));
         }
         setupToolbarItemsColor();
         etView.onReceiveSuggestionsListView(mSuggestionList);
@@ -315,20 +311,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
         int heightDiff = rootView.getBottom() - r.bottom;
         return heightDiff > softKeyboardHeight * dm.density;
-    }
-
-    private boolean isWhatsAppShare() {
-        boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
-            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareText)) {
-                if (shareText.equalsIgnoreCase("true")) {
-                    isWhatsappShare = true;
-                }
-            }
-        }
-        return isWhatsappShare;
     }
 
     private void setIsLoggedInUser() {
@@ -426,16 +408,16 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             if (feedDetail instanceof UserPostSolrObj) {
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                 if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title,userPostSolrObj.getPostCommunityName()));
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
                 } else {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple,userPostSolrObj.getAuthorName()));
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
                 }
             } else if (feedDetail instanceof PollSolarObj) {
                 PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
                 if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title,pollSolarObj.getPollCommunityName()));
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
                 } else {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple,pollSolarObj.getAuthorName()));
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
                 }
             }
         }
@@ -533,7 +515,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         if (null == mFeedDetail) {
             FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
             if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-                mTitleToolbar.setText(feedDetail.getAuthorName() + "'s" + " post");
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, feedDetail.getAuthorName()));
             }
         }
     }
@@ -666,7 +648,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             menu.add(0, R.id.report_spam, 4, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
 
             //****   Hide/show options according to user
-            if(userPostObj.isBookmarked()) {
+            if (userPostObj.isBookmarked()) {
                 popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
             } else {
                 popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmark), getResources().getString(R.string.Bookmark))).setVisible(true);
@@ -850,7 +832,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onShareButtonClicked(UserPostSolrObj userPostObj, TextView shareView) {
-
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(userPostObj.getPostShortBranchUrls())) {
             deepLinkUrl = userPostObj.getPostShortBranchUrls();
@@ -859,16 +840,13 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        if (isWhatsAppShare()) {
-            if (CommonUtil.isAppInstalled(this, "com.whatsapp")) {
-                intent.setPackage(AppConstants.WHATS_APP);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(intent);
-            }
+        if (CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
+            intent.setPackage(AppConstants.WHATS_APP_URI);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(userPostObj, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
@@ -885,12 +863,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        if (isWhatsAppShare()) {
-            if (CommonUtil.isAppInstalled(this, "com.whatsapp")) {
-                intent.setPackage(AppConstants.WHATS_APP);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(intent);
-            }
+        if (CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
+            intent.setPackage(AppConstants.WHATS_APP_URI);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
@@ -902,7 +878,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
     @Override
     public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
-        mPostDetailPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj,pollOptionModel);
+        mPostDetailPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj, pollOptionModel);
     }
 
     @Override
@@ -1077,7 +1053,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
 
             if (PostDetailActivity.this == null || PostDetailActivity.this.isFinishing()) return;
 
-            if(spamResponse.isSpammed()) {
+            if (spamResponse.isSpammed()) {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
             } else if (!spamResponse.isSpamAlreadyReported()) {
                 CommonUtil.createDialog(PostDetailActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
@@ -1092,8 +1068,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     //region onclick methods
     @OnClick(R.id.sendButton)
     public void onSendButtonClicked() {
-        if (etView.getText().toString().trim().length()==0) {
-            Toast.makeText(this, "Empty Comment!", Toast.LENGTH_SHORT).show();
+        if (etView.getText().toString().trim().length() == 0) {
+            Toast.makeText(this, R.string.empty_comment, Toast.LENGTH_SHORT).show();
             return;
         } else {
             mMentionSpanList = etView.getMentionSpans();
@@ -1311,31 +1287,25 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) { //If reason "other" is selected
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) { //If reason "other" is selected
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mPostDetailPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj, comment); //submit
                                     spamReasonsDialog.dismiss();
-
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
-
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
-
                             } else {
                                 reason.setVisibility(View.VISIBLE);
                                 SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
@@ -1354,7 +1324,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 

@@ -70,6 +70,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
@@ -113,6 +114,8 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     public static final String STORIES_TAB = "write a story";
     public static final String USER_STORY = "USER_STORY";
     public static final String KEY_FOR_DEEPLINK_DETAIL = "post_detail_deep_link";
+    public static final String BRANCH_FIRST_SESSION = "is_branch_first_session";
+    public static final String DEEP_LINK_URL = "deep_link_url";
     public static final int BRANCH_REQUEST_CODE = 1290;
     public static final int ASK_QUESTION_POST = 3;
     private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
@@ -136,6 +139,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
     private boolean isWhatsAppShare;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LocaleManager.setLocale(base));
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -282,7 +290,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
      *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
      * @return
      */
-    public void showNetworkTimeoutDoalog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
+    public void showNetworkTimeoutDialog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
         showErrorDialogOnUserAction(finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
     }
 
@@ -734,13 +742,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
-        intent.putExtra(Intent.EXTRA_TEXT, AppConstants.SHARED_EXTRA_SUBJECT + deepLinkUrl);
+        intent.setPackage(AppConstants.WHATS_APP_URI);
+        intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.check_out_share_msg) + deepLinkUrl);
         startActivity(intent);
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
-
-
     }
 
     protected void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum) {
@@ -805,7 +811,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        intent.putExtra(AppConstants.SHARED_EXTRA_SUBJECT + Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
         moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
@@ -1043,23 +1049,21 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
                 case AppConstants.CHECK_NETWORK_CONNECTION:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION));
                     break;
                 case AppConstants.MARK_AS_SPAM:
-                    showNetworkTimeoutDoalog(true, false, errorReason);
+                    showNetworkTimeoutDialog(true, false, errorReason);
                     break;
                 case AppConstants.HTTP_401_UNAUTHORIZED_ERROR:
                 case AppConstants.HTTP_401_UNAUTHORIZED:
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.IDS_UN_AUTHORIZE));
                     break;
-
-
                 default: {
-                    showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+                    showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
                 }
             }
         } else {
-            showNetworkTimeoutDoalog(true, false, getString(R.string.ID_GENERIC_ERROR));
+            showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
     }

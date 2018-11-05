@@ -35,7 +35,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -61,7 +61,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     DateUtil mDateUtil;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    Preference<AppConfiguration> mConfiguration;
 
     private static final String LEFT_HTML_TAG = "<font color='#333333'>";
     private static final String RIGHT_HTML_TAG = "</font>";
@@ -97,23 +97,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
     Preference<LoginResponse> mUserPreference;
     private boolean isWhatappShareOption = false;
 
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     public ArticleCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareOption = "";
-            shareOption = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareOption)) {
-                if (shareOption.equalsIgnoreCase("true")) {
-                    isWhatappShareOption = true;
-                }
-            }
-        }
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -154,12 +143,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4, AppConstants.VIEW_MORE_TEXT, true);
+            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
         } else {
             tvArticleDescriptionText.setVisibility(View.GONE);
         }
         if (dataItem.isTrending()) {
-            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING));
+            tvArticleTrendingLabel.setText(mContext.getString(R.string.ID_TRENDING)+" ");
         } else {
             tvArticleTrendingLabel.setText(AppConstants.EMPTY_STRING);
         }
@@ -189,7 +178,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         if (StringUtil.isNotNullOrEmptyString(dataItem.getCreatedDate())) {
             long createdDate = mDateUtil.getTimeInMillis(dataItem.getCreatedDate(), AppConstants.DATE_FORMAT);
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate));
+            stringBuilder.append(mDateUtil.getRoundedDifferenceInHours(System.currentTimeMillis(), createdDate,mContext));
             if (dataItem.getCharCount() > 0) {
                 stringBuilder.append(AppConstants.DOT).append(dataItem.getCharCount()).append(AppConstants.SPACE).append(mContext.getString(R.string.ID_MIN_READ));
             }

@@ -25,7 +25,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +35,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -49,10 +52,15 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionCallback;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionHelper;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionPresenter;
+import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionSuperProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -61,7 +69,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.Configuration;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
@@ -81,8 +90,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
@@ -96,6 +105,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.EndlessRecyclerViewScrollListener;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -128,7 +138,9 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
  * Created by ujjwal on 27/12/17.
  */
 
-public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback {
+public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCallback, ImpressionCallback {
+
+    //region public static constants
     public static String SCREEN_LABEL = "Generic Feed Fragment";
     public static final String PRIMARY_COLOR = "Primary Color";
     public static final String TITLE_TEXT_COLOR = "Title Text Color";
@@ -136,7 +148,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
     private static final int HIDE_THRESHOLD = 20;
+    //endregion
 
+    //region private constants
     //Menu Item Id
     private static final int SHARE_MENU_ID = 1;
     private static final int EDIT_MENU_ID = 2;
@@ -144,7 +158,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private static final int REPORT_MENU_ID = 4;
     private static final int FEATURED_POST_MENU_ID = 5;
     private static final int BOOKMARK_MENU_ID = 6;
+    //endregion
 
+    //region injected variables
     @Inject
     AppUtils mAppUtils;
 
@@ -152,13 +168,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     FeedPresenter mFeedPresenter;
 
     @Inject
-    Preference<Configuration> mConfiguration;
+    ImpressionPresenter impressionPresenter;
+
+    @Inject
+    Preference<AppConfiguration> mConfiguration;
 
     @Inject
     Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
 
     // region View variables
     @Bind(R.id.swipeRefreshContainer)
@@ -189,58 +205,67 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     TextView tvGoToSetting;
     // endregion
 
+    //region private variables
     private long mLoggedInUser = -1;
+    private int mScrollDirection = -1;
+    private int mScrolledDistance = 0;
+
     private boolean isLoggedInUserMentor;
-    private FeedAdapter mAdapter;
-    EventDetailDialogFragment eventDetailDialogFragment;
-    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
-    private CommunityTab mCommunityTab;
+    private boolean isWhatsappShare = false;
+    private boolean mControlsVisible = true;
+    private boolean isActiveTabFragment;
     private boolean hasFeedEnded;
+    private boolean isHomeFeed;
+
     private String mPrimaryColor = "#6e2f95";
     private String mTitleTextColor = "#ffffff";
-    HashMap<String, Object> mScreenProperties;
-    HashMap<String, Object> mProperties;
-    private boolean isWhatsappShare = false;
-    private boolean isHomeFeed;
     private String mStreamName;
     private String mScreenLabel;
-    private boolean mControlsVisible = true;
-    private int mScrolledDistance = 0;
+    private String mSetOrderKey;
+
+    private HashMap<String, Object> mScreenProperties;
+    private HashMap<String, Object> mProperties;
+
     private LinearLayoutManager mLinearLayoutManager;
-    private boolean isActiveTabFragment;
+    private ImpressionHelper impressionHelper;
+    private FeedAdapter mAdapter;
+    private EventDetailDialogFragment eventDetailDialogFragment;
+    private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
+    private CommunityTab mCommunityTab;
+    private boolean isTrackingEnabled = true;
+    //endregion
 
-    @Override
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-    }
-
+    //region fragment lifecycle method
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
-        ButterKnife.bind(this, view);
-
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        ButterKnife.bind(this, view);
+        LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
+        impressionPresenter.attachView(this);
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
         setIsLoggedInUser();
         setupRecyclerScrollListener();
         showGifLoader();
-
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-
-        isWhatsappShare = isWhatsAppShare();
+        isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
         }
-
         String underLineData = getString(R.string.setting);
         SpannableString content = new SpannableString(underLineData);
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
+
+        ConfigData configData = new ConfigData();
+        isTrackingEnabled  = configData.isImpressionTrackEnabled;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {//impression tracking flag
+            isTrackingEnabled = mConfiguration.get().configData.isImpressionTrackEnabled;
+        }
 
         //fetch latest all communities and save it in sharePref
         if (isHomeFeed) {
@@ -255,6 +280,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (isVisibleToUser) {  //When UI is visible to user
 
             isActiveTabFragment = true;
+
+            if (isTrackingEnabled && impressionHelper != null) {
+                updateVisibleImpressionViews();
+            }
+
             if (getParentFragment() instanceof HomeFragment) {
                 String screenName = ((HomeFragment) getParentFragment()).getInactiveTabFragmentName();
                 if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
@@ -271,30 +301,33 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
+
+            if (isTrackingEnabled && impressionHelper != null) {
+                impressionHelper.stopImpression();
+            }
             isActiveTabFragment = false;
         }
     }
+    //endregion
 
-    @Override
-    public void showFeedList(List<FeedDetail> feedDetailList) {
-        if (CommonUtil.isEmpty(feedDetailList)) {
-            mFeedRecyclerView.setVisibility(View.GONE);
-            emptyView.setVisibility(View.VISIBLE);
-            loadEmptyView();
-        } else {
-            mFeedRecyclerView.setVisibility(View.VISIBLE);
-            emptyView.setVisibility(View.GONE);
+    //region private methods
+    //Initialize the impression Helper class
+    private void initializeImpression() {
+        if (impressionHelper == null && isTrackingEnabled) {
+            ImpressionSuperProperty impressionSuperProperty = new ImpressionSuperProperty();
+            impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
+            impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
+            impressionSuperProperty.setLoggedInUserId(mLoggedInUser);
+            impressionHelper = new ImpressionHelper(impressionSuperProperty, impressionPresenter, mConfiguration, mFeedRecyclerView, mAppUtils, this);
         }
+    }
 
-        if (showUpdateCard()) {
-            mAdapter.addHeader(HeaderRecyclerViewAdapter.header);
-        }
-        mAdapter.feedFinishedLoading();
-        mAdapter.setData(feedDetailList);
-        mAdapter.notifyDataSetChanged();
-        if (getActivity() != null && isAdded() && getActivity() instanceof HomeActivity) {
-            ((HomeActivity) getActivity()).showCaseDesign();
-        }
+    //update the visible views on screen , update to impression helper about visible views
+    private void updateVisibleImpressionViews() {
+        int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+        int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+        impressionHelper.setHeaderEnabled(isHomeFeed);
+        impressionHelper.getVisibleViews(startPos, endPos);
     }
 
     public boolean showUpdateCard() {
@@ -349,6 +382,54 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
+    private void openProfileScreen(Long userId, int position, boolean isMentor, String source) {
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, isMentor, position, source, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
+        userPostSolrObj.setIsEditOrDelete(AppConstants.COMMENT_DELETE);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
+    }
+
+    private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
+        userPostSolrObj.setIsEditOrDelete(AppConstants.COMMENT_EDIT);
+        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
+        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
+    }
+    //endregion
+
+    //region public methods
+    @Override
+    public void showFeedList(List<FeedDetail> feedDetailList) {
+        if (CommonUtil.isEmpty(feedDetailList)) {
+            mFeedRecyclerView.setVisibility(View.GONE);
+            emptyView.setVisibility(View.VISIBLE);
+            loadEmptyView();
+        } else {
+            mFeedRecyclerView.setVisibility(View.VISIBLE);
+            emptyView.setVisibility(View.GONE);
+        }
+
+        if (showUpdateCard()) {
+            mAdapter.addHeader(HeaderRecyclerViewAdapter.header);
+        }
+        mAdapter.feedFinishedLoading();
+        mAdapter.setData(feedDetailList);
+        mAdapter.notifyDataSetChanged();
+        if (getActivity() != null && isAdded() && getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).showCaseDesign();
+        }
+
+        initializeImpression();
+    }
+
     @Override
     public void setData(int position, FeedDetail feedDetail) {
         mAdapter.setData(position, feedDetail);
@@ -364,9 +445,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void pollVoteResponse(FeedDetail feedDetail,long polOptionId) {
+    public void pollVoteResponse(FeedDetail feedDetail, long polOptionId) {
         if (feedDetail instanceof PollSolarObj) {
-            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName(),polOptionId);
+            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, getScreenName(), polOptionId);
         }
     }
 
@@ -480,7 +561,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-
     @Override
     public List getListData() {
         return null;
@@ -510,6 +590,270 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void setListData(BaseResponse data, boolean flag) {
 
     }
+
+    @Override
+    public void startProgressBar() {
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                if (mSwipeRefresh != null) {
+                    mSwipeRefresh.setRefreshing(true);
+                    mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mEndlessRecyclerViewScrollListener.finishLoading();
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        mSwipeRefresh.setRefreshing(false);
+        mAdapter.feedFinishedLoading();
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser != -1) {
+            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
+        } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
+            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
+            if (StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
+                Comment comment = articleDetails.getLastComments().get(0);
+                if (!comment.isAnonymous()) {
+                    openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+                }
+            }
+        } else if (baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
+            Comment comment = (Comment) baseResponse;
+            if (!comment.isAnonymous()) {
+                openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
+            }
+        } else if (baseResponse instanceof UserPostSolrObj && mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            CommunityDetailActivity.navigateTo(getActivity(), postDetails.getCommunityId(), getScreenName(), null, 1);
+        } else if (baseResponse instanceof UserPostSolrObj) {
+            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
+            if (postDetails.getEntityOrParticipantTypeId() != 15) {
+                onChampionProfileClicked(postDetails, mValue);
+            }
+        } else if (baseResponse instanceof PollSolarObj) {
+            PollSolarObj pollSolarObj = (PollSolarObj) baseResponse;
+            onChampionProfileClicked(pollSolarObj, mValue);
+        }
+
+    }
+
+    public void updateItem(FeedDetail updatedFeedDetail) {
+        if (updatedFeedDetail == null) return;
+        findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
+    }
+
+    @Override
+    public void removeItem(FeedDetail feedDetail) {
+        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
+        if (position != RecyclerView.NO_POSITION) {
+            mAdapter.removeItem(position);
+        }
+    }
+
+    @Override
+    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (getActivity() != null && getActivity() instanceof CollectionActivity) {
+            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList());
+        }
+    }
+
+    @Override
+    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
+        if (getActivity() != null && getActivity() instanceof CollectionActivity) {
+            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList());
+        }
+    }
+
+    @Override
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj) {
+        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+            int adminId = 0;
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+                if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+                }
+            }
+
+            if (adminId == AppConstants.TWO_CONSTANT) {
+                if (userPostSolrObj != null) {
+                    if (spamResponse.getModelType().toLowerCase().contains(SpamContentType.COMMENT.name())) {
+                        onDeleteMenuClicked(userPostSolrObj);
+                    } else {
+                        AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
+                        mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
+                    }
+                }
+            }
+
+            if (getActivity() == null || getActivity().isFinishing()) return;
+
+            if (spamResponse.isSpammed()) {
+                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
+            } else if (!spamResponse.isSpamAlreadyReported()) {
+                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
+            } else {
+                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
+            }
+        }
+    }
+
+    @Override
+    public void showGifLoader() {
+        gifLoader.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideGifLoader() {
+        gifLoader.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
+        if (isHomeFeed) {
+            String setOrderKey = feedResponsePojo.getSetOrderKey();
+            String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (null != prefs) {
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
+                editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
+                editor.apply();
+            }
+            AnalyticsManager.initializeMixpanel(getActivity(), false);
+        }
+
+        if (feedResponsePojo != null && StringUtil.isNotNullOrEmptyString(feedResponsePojo.getSetOrderKey())) {
+            mSetOrderKey = feedResponsePojo.getSetOrderKey();
+        }
+    }
+
+    @Override
+    public FeedDetail getListItemAtPos(int index) {
+        if (mAdapter == null) {
+            return null;
+        }
+
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return null;
+        }
+
+        if (feedDetails.size() > index) {
+            return feedDetails.get(index);
+        }
+        return null;
+    }
+
+    @Override
+    public int findPositionById(long id) { //TODO - move to presenter
+        if (mAdapter == null) {
+            return -1;
+        }
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return -1;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void findPositionAndUpdateItem(FeedDetail updatedFeedDetail, long id) { //TODO - move to presenter
+        if (mAdapter == null) {
+            return;
+        }
+        List<FeedDetail> feedDetails = mAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                mAdapter.setData(i, updatedFeedDetail);
+            } else if (feedDetail instanceof CarouselDataObj) {
+                for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
+                    FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
+                    if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
+                        if (updatedFeedDetail instanceof UserSolrObj && innerFeedDetail instanceof UserSolrObj) { //Since community name not available in user solr object
+                            UserSolrObj updatedUserSolrObj = (UserSolrObj) updatedFeedDetail;
+                            if (!StringUtil.isNotNullOrEmptyString(updatedUserSolrObj.getmSolarIgnoreCommunityName())) {
+                                UserSolrObj userSolrObj = (UserSolrObj) innerFeedDetail;
+                                updatedUserSolrObj.setmSolarIgnoreCommunityName(userSolrObj.getmSolarIgnoreCommunityName());
+                                updatedFeedDetail = updatedUserSolrObj;
+                            }
+                        }
+                        ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
+                        mAdapter.setData(i, feedDetail);
+                    }
+                }
+            } else if (feedDetail != null && feedDetail instanceof LeaderBoardUserSolrObj) {
+                if (((LeaderBoardUserSolrObj) feedDetail).getUserSolrObj() != null) {
+                    mAdapter.setData(i, feedDetail);
+                }
+            } else if (feedDetail != null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
+                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
+                mAdapter.setData(i, userPostSolrObj);
+            }
+        }
+        return;
+    }
+
+    public void refreshList() {
+        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+        if (getActivity() != null && getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).fetchAllCommunity();
+        }
+    }
+
+    public void scrollToTopInList() {
+        if (mFeedRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
+            LinearLayoutManager mLayoutManager = (LinearLayoutManager) mFeedRecyclerView.getLayoutManager();
+            int lastVis = mLayoutManager.findLastVisibleItemPosition();
+            if (lastVis <= AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE)
+                mFeedRecyclerView.smoothScrollToPosition(0);
+            else {
+                mFeedRecyclerView.scrollToPosition(AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE);
+                mFeedRecyclerView.smoothScrollToPosition(0);
+            }
+        }
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            mFeedRecyclerView.setVisibility(View.GONE);
+            gifLoader.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
+        }
+    }
+    //endregion
 
     //region private methods
     private void initialSetup() {
@@ -554,25 +898,55 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    private boolean isWhatsAppShare() {
-        boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
-            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareText)) {
-                if (shareText.equalsIgnoreCase("true")) {
-                    isWhatsappShare = true;
+    private void setupRecyclerScrollListener() {
+
+        if (isTrackingEnabled) {
+            final ViewTreeObserver viewTreeObserver = mFeedRecyclerView.getViewTreeObserver();
+            ViewTreeObserver.OnGlobalLayoutListener onGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+
+                @Override
+                public void onGlobalLayout() {
+                    mFeedRecyclerView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    if (impressionHelper != null) {
+                        int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                        int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+                        impressionHelper.setHeaderEnabled(isHomeFeed);
+                        impressionHelper.getVisibleViews(startPos, endPos);
+                    }
+                }
+            };
+            viewTreeObserver.addOnGlobalLayoutListener(onGlobalLayoutListener);
+        }
+
+        mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE) {
+                    if (isTrackingEnabled && impressionHelper != null) {
+                        impressionHelper.scrollingIdle(System.currentTimeMillis());
+                    }
                 }
             }
-        }
-        return isWhatsappShare;
-    }
 
-    private void setupRecyclerScrollListener() {
-        mFeedRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
+
+                if (dy < 0) {
+                    mScrollDirection = ImpressionHelper.SCROLL_UP;
+                } else if (dy > 0) {
+                    mScrollDirection = ImpressionHelper.SCROLL_DOWN;
+                }
+
+                if (isTrackingEnabled && impressionHelper != null) {
+                    int startPos = mLinearLayoutManager.findFirstVisibleItemPosition();
+                    int endPos = mLinearLayoutManager.findLastVisibleItemPosition();
+                    impressionHelper.setHeaderEnabled(isHomeFeed);
+                    impressionHelper.onScrollChange(recyclerView, mScrollDirection, startPos, endPos);
+                }
+
                 if (getActivity() != null && getActivity() instanceof HomeActivity) {
                     int firstVisibleItem = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
                     if (firstVisibleItem == 0) {
@@ -755,11 +1129,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
         if (isWhatsappShare) {
-            if (CommonUtil.isAppInstalled(getActivity(), "com.whatsapp")) {
-                intent.setPackage(AppConstants.WHATS_APP);
-                intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-                startActivity(intent);
-            }
+            intent.setPackage(AppConstants.WHATS_APP_URI);
+            intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+            startActivity(intent);
         } else {
             intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
             startActivity(Intent.createChooser(intent, AppConstants.SHARE));
@@ -864,7 +1236,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
             //****   Hide/show options according to user
-            if(userPostObj.isBookmarked()) {
+            if (userPostObj.isBookmarked()) {
                 popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmarked), getResources().getString(R.string.Bookmarked))).setVisible(true);
             } else {
                 popup.getMenu().add(0, R.id.bookmark, BOOKMARK_MENU_ID, menuIconWithText(getResources().getDrawable(R.drawable.vector_menu_bookmark), getResources().getString(R.string.Bookmark))).setVisible(true);
@@ -1008,6 +1380,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onResume() {
         super.onResume();
+
+        if (!isActiveTabFragment && impressionHelper != null) { // resume from back-stack cases
+            updateVisibleImpressionViews();
+        }
+
         if (isActiveTabFragment) {
             AnalyticsManager.timeScreenView(mScreenLabel);
         }
@@ -1016,6 +1393,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onPause() {
         super.onPause();
+
+        if (impressionHelper != null) { //app exit cases and back-stack of activity
+            impressionHelper.stopImpression();
+        }
+
         if (isActiveTabFragment) {
             AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
         }
@@ -1119,7 +1501,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
-        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj,pollOptionModel.getPollOptionId());
+        mFeedPresenter.getPollVoteFromPresenter(mAppUtils.pollVoteRequestBuilder(pollSolarObj.getIdOfEntityOrParticipant(), pollOptionModel.getPollOptionId()), pollSolarObj, pollOptionModel.getPollOptionId());
     }
 
     @Override
@@ -1207,7 +1589,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             .communityCategory(carouselDataObj.getScreenTitle())
                             .build();
 
-            if(carouselDataObj.getStreamType()!=null && carouselDataObj.getStreamType().equalsIgnoreCase("LeaderboardCarouselStream")) {
+            if(carouselDataObj.getStreamType()!=null && carouselDataObj.getStreamType().equalsIgnoreCase(AppConstants.LEADERBOARD_CAROUSEL_STREAM)) {
                 UsersCollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             } else {
                 CollectionActivity.navigateTo(getActivity(), carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), mScreenLabel, getString(R.string.ID_COMMUNITIES_CATEGORY), properties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -1322,16 +1704,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (getActivity() == null || getActivity().isFinishing()) return;
         PopupMenu popup = new PopupMenu(getActivity(), view);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            if (articleObj.getCreatedBy() ==mUserPreference.get().getUserSummary().getUserId()) {
+            if (articleObj.getCreatedBy() == mUserPreference.get().getUserSummary().getUserId()) {
                 popup.getMenu().add(0, R.id.edit, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_create), getResources().getString(R.string.ID_EDIT)));
                 popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
-            }else if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                if(mUserPreference.get().getUserSummary().getUserBO().getUserTypeId()==AppConstants.ADMIN_TYPE_ID){
+            } else if (null != mUserPreference.get().getUserSummary().getUserBO()) {
+                if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.ADMIN_TYPE_ID) {
                     popup.getMenu().add(0, R.id.delete, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_delete), getResources().getString(R.string.ID_DELETE)));
                 }
             }
         }
-        if (!articleObj.getUserStoryStatus().equalsIgnoreCase("Draft")) {
+        if (!articleObj.getUserStoryStatus().equalsIgnoreCase(AppConstants.STORY_DRAFT)) {
             popup.getMenu().add(0, R.id.share, 3, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.ID_SHARE)));
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -1408,7 +1790,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
-        if (leaderBoardUserSolrObj != null && getActivity()!=null && !getActivity().isFinishing()) {
+        if (leaderBoardUserSolrObj != null && getActivity() != null && !getActivity().isFinishing()) {
             SuperSheroesCriteriaFragment.showDialog((AppCompatActivity) getActivity(), leaderBoardUserSolrObj, screenName);
         }
     }
@@ -1429,7 +1811,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .name(userPostSolrObj.getNameOrTitle())
                         .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                         .build();
-        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null) {
             properties.putAll(getExtraProperties());
         }
 
@@ -1629,30 +2011,24 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             @Override
             public void onClick(View view) {
                 if (spamOptions.getCheckedRadioButtonId() != -1) {
-
                     RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
                     Spam spam = (Spam) radioButton.getTag();
                     if (spam != null) {
                         finalSpamRequest.setSpamReason(spam.getReason());
                         finalSpamRequest.setScore(spam.getScore());
-
-                        if (spam.getLabel().equalsIgnoreCase("Others")) {
+                        if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) {
                             if (reason.getVisibility() == View.VISIBLE) {
-
                                 if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
                                     finalSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
                                     mFeedPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj); //submit
                                     spamReasonsDialog.dismiss();
-
-
                                     if (spamContentType == SpamContentType.POST) {
                                         AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                                     } else if (spamContentType == SpamContentType.COMMENT) {
                                         AnalyticsManager.trackCommentAction(Event.REPLY_REPORTED, userPostSolrObj, getScreenName());
                                     }
-
                                 } else {
-                                    reason.setError("Add the reason");
+                                    reason.setError(getString(R.string.add_reason));
                                 }
                             } else {
                                 reason.setVisibility(View.VISIBLE);
@@ -1661,7 +2037,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         } else {
                             mFeedPresenter.reportSpamPostOrComment(finalSpamRequest, userPostSolrObj);  //submit request
                             spamReasonsDialog.dismiss();
-
                             if (spamContentType == SpamContentType.POST) {
                                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, userPostSolrObj, getScreenName());
                             } else if (spamContentType == SpamContentType.COMMENT) {
@@ -1672,7 +2047,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 }
             }
         });
-
         spamReasonsDialog.show();
     }
 
@@ -1687,7 +2061,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .name(userSolrObj.getNameOrTitle())
                         .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                         .build();
-        if (getExtraProperties() != null && properties != null && mCommunityTab != null ) {
+        if (getExtraProperties() != null && properties != null && mCommunityTab != null) {
             properties.putAll(getExtraProperties());
         }
 
@@ -1772,267 +2146,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
     //endregion
 
-    @Override
-    public void startProgressBar() {
-        if (mSwipeRefresh == null) {
-            return;
-        }
-        mSwipeRefresh.post(new Runnable() {
-            @Override
-            public void run() {
-                if (mSwipeRefresh != null) {
-                    mSwipeRefresh.setRefreshing(true);
-                    mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
-                }
-            }
-        });
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mEndlessRecyclerViewScrollListener.finishLoading();
-        if (mSwipeRefresh == null) {
-            return;
-        }
-        mSwipeRefresh.setRefreshing(false);
-        mAdapter.feedFinishedLoading();
-    }
-
-    @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
-        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser != -1) {
-            openProfileScreen(mLoggedInUser, 1, isLoggedInUserMentor, AppConstants.FEED_SCREEN); //Logged in profile
-        } else if (baseResponse instanceof ArticleSolrObj && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE) {
-            ArticleSolrObj articleDetails = (ArticleSolrObj) baseResponse;
-            if (StringUtil.isNotEmptyCollection(articleDetails.getLastComments())) {
-                Comment comment = articleDetails.getLastComments().get(0);
-                if (!comment.isAnonymous()) {
-                    openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-                }
-            }
-        } else if (baseResponse instanceof Comment && mValue == AppConstants.REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL) { //working fine for last cmnt
-            Comment comment = (Comment) baseResponse;
-            if (!comment.isAnonymous()) {
-                openProfileScreen(comment.getParticipantUserId(), comment.getItemPosition(), comment.isVerifiedMentor(), AppConstants.COMMENT_REACTION_FRAGMENT);
-            }
-        } else if (baseResponse instanceof UserPostSolrObj && mValue == REQUEST_CODE_FOR_COMMUNITY_DETAIL) {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            CommunityDetailActivity.navigateTo(getActivity(), postDetails.getCommunityId(), getScreenName(), null, 1);
-        } else if (baseResponse instanceof UserPostSolrObj) {
-            UserPostSolrObj postDetails = (UserPostSolrObj) baseResponse;
-            if (postDetails.getEntityOrParticipantTypeId() != 15) {
-                onChampionProfileClicked(postDetails, mValue);
-            }
-        } else if (baseResponse instanceof PollSolarObj) {
-            PollSolarObj pollSolarObj = (PollSolarObj) baseResponse;
-            onChampionProfileClicked(pollSolarObj, mValue);
-        }
-
-    }
-
-    private void openProfileScreen(Long userId, int position, boolean isMentor, String source) {
-        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
-        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        communityFeedSolrObj.setItemPosition(position);
-        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, isMentor, position, source, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }
-
-    private void onDeleteMenuClicked(UserPostSolrObj userPostSolrObj) {
-        userPostSolrObj.setIsEditOrDelete(AppConstants.COMMENT_DELETE);
-        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
-        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
-    }
-
-    private void onEditMenuClicked(UserPostSolrObj userPostSolrObj) {
-        userPostSolrObj.setIsEditOrDelete(AppConstants.COMMENT_EDIT);
-        HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
-        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostSolrObj.getItemPosition()));
-        PostDetailActivity.navigateTo(getActivity(), getScreenName(), userPostSolrObj, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
-    }
-
-    public void updateItem(FeedDetail updatedFeedDetail) {
-        if (updatedFeedDetail == null) return;
-        findPositionAndUpdateItem(updatedFeedDetail, updatedFeedDetail.getIdOfEntityOrParticipant());
-    }
-
-    @Override
-    public void removeItem(FeedDetail feedDetail) {
-        int position = findPositionById(feedDetail.getIdOfEntityOrParticipant());
-        if (position != RecyclerView.NO_POSITION) {
-            mAdapter.removeItem(position);
-        }
-    }
-
-    @Override
-    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
-        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (getActivity() != null && getActivity() instanceof CollectionActivity) {
-            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList());
-        }
-    }
-
-    @Override
-    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
-        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
-        if (getActivity() != null && getActivity() instanceof CollectionActivity) {
-            ((CollectionActivity) getActivity()).setData(mAdapter.getDataList());
-        }
-    }
-
-    @Override
-    public void onSpamPostOrCommentReported(SpamResponse spamResponse, UserPostSolrObj userPostSolrObj) {
-        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            int adminId = 0;
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                if (null != mUserPreference.get().getUserSummary().getUserBO()) {
-                    adminId = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
-                }
-            }
-
-            if (adminId == AppConstants.TWO_CONSTANT) {
-                if (userPostSolrObj != null) {
-                    if (spamResponse.getModelType().toLowerCase().contains(SpamContentType.COMMENT.name())) {
-                        onDeleteMenuClicked(userPostSolrObj);
-                    } else {
-                        AnalyticsManager.trackPostAction(Event.POST_DELETED, userPostSolrObj, getScreenName());
-                        mFeedPresenter.getSpamPostApproveFromPresenter(mAppUtils.spamPostApprovedRequestBuilder(userPostSolrObj, true, true, false), userPostSolrObj);
-                    }
-                }
-            }
-
-            if (getActivity() == null || getActivity().isFinishing()) return;
-
-            if(spamResponse.isSpammed()) {
-                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
-            } else if (!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
-            } else {
-                CommonUtil.createDialog(getActivity(), getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
-            }
-        }
-    }
-
-    @Override
-    public void showGifLoader() {
-        gifLoader.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideGifLoader() {
-        gifLoader.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void updateFeedConfigDataToMixpanel(FeedResponsePojo feedResponsePojo) {
-        if (isHomeFeed) {
-            String setOrderKey = feedResponsePojo.getSetOrderKey();
-            String feedConfigVersion = feedResponsePojo.getServerFeedConfigVersion() != null ? Integer.toString(feedResponsePojo.getServerFeedConfigVersion()) : "";
-            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(AppConstants.FEED_CONFIG_VERSION, feedConfigVersion);
-            editor.putString(AppConstants.SET_ORDER_KEY, setOrderKey);
-            editor.apply();
-            AnalyticsManager.initializeMixpanel(getActivity(), false);
-        }
-    }
-
-    public int findPositionById(long id) { //TODO - move to presenter
-        if (mAdapter == null) {
-            return -1;
-        }
-        List<FeedDetail> feedDetails = mAdapter.getDataList();
-
-        if (CommonUtil.isEmpty(feedDetails)) {
-            return -1;
-        }
-
-        for (int i = 0; i < feedDetails.size(); ++i) {
-            FeedDetail feedDetail = feedDetails.get(i);
-            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    public void findPositionAndUpdateItem(FeedDetail updatedFeedDetail, long id) { //TODO - move to presenter
-        if (mAdapter == null) {
-            return;
-        }
-        List<FeedDetail> feedDetails = mAdapter.getDataList();
-
-        if (CommonUtil.isEmpty(feedDetails)) {
-            return;
-        }
-
-        for (int i = 0; i < feedDetails.size(); ++i) {
-            FeedDetail feedDetail = feedDetails.get(i);
-            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
-                mAdapter.setData(i, updatedFeedDetail);
-            } else if (feedDetail instanceof CarouselDataObj) {
-                for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
-                    FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
-                    if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
-                        if (updatedFeedDetail instanceof UserSolrObj && innerFeedDetail instanceof UserSolrObj) { //Since community name not available in user solr object
-                            UserSolrObj updatedUserSolrObj = (UserSolrObj) updatedFeedDetail;
-                            if (!StringUtil.isNotNullOrEmptyString(updatedUserSolrObj.getmSolarIgnoreCommunityName())) {
-                                UserSolrObj userSolrObj = (UserSolrObj) innerFeedDetail;
-                                updatedUserSolrObj.setmSolarIgnoreCommunityName(userSolrObj.getmSolarIgnoreCommunityName());
-                                updatedFeedDetail = updatedUserSolrObj;
-                            }
-                        }
-                        ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
-                        mAdapter.setData(i, feedDetail);
-                    }
-                }
-            } else if(feedDetail!=null && feedDetail instanceof LeaderBoardUserSolrObj ) {
-                if(((LeaderBoardUserSolrObj)feedDetail).getUserSolrObj() !=null) {
-                    mAdapter.setData(i, feedDetail);
-                }
-            } else if(feedDetail!=null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
-                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-                UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
-                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
-                mAdapter.setData(i, userPostSolrObj);
-            }
-        }
-        return;
-    }
-
-    public void refreshList() {
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-        if (getActivity() != null && getActivity() instanceof HomeActivity) {
-            ((HomeActivity) getActivity()).fetchAllCommunity();
-        }
-    }
-
-    public void scrollToTopInList() {
-        if (mFeedRecyclerView.getLayoutManager() instanceof LinearLayoutManager) {
-            LinearLayoutManager mLayoutManager = (LinearLayoutManager) mFeedRecyclerView.getLayoutManager();
-            int lastVis = mLayoutManager.findLastVisibleItemPosition();
-            if (lastVis <= AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE)
-                mFeedRecyclerView.smoothScrollToPosition(0);
-            else {
-                mFeedRecyclerView.scrollToPosition(AppConstants.RECYCLER_SMOOTH_SCROLL_COUNT_SIZE);
-                mFeedRecyclerView.smoothScrollToPosition(0);
-            }
-        }
-    }
-
-    @Override
-    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
-            noInternet.setVisibility(View.VISIBLE);
-            mFeedRecyclerView.setVisibility(View.GONE);
-            gifLoader.setVisibility(View.GONE);
-        } else {
-            super.showError(errorMsg, feedParticipationEnum);
-        }
-    }
-
+    //region onclick methods
     @OnClick({R.id.tv_retry_for_internet})
     public void onRetryClick() {
         noInternet.setVisibility(View.GONE);
@@ -2049,24 +2163,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
+    //endregion
 
-    enum ArticleStatusEnum {
-        PUBLIC("Public"),
-        DRAFT("Draft");
-
-
-        private final String string;
-
-        ArticleStatusEnum(final String string) {
-            this.string = string;
-        }
-
-        /* (non-Javadoc)
-         * @see java.lang.Enum#toString()
-         */
-        @Override
-        public String toString() {
-            return string;
-        }
-    }
 }

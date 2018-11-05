@@ -1,11 +1,11 @@
-package appliedlife.pvtltd.SHEROES.views.cutomeviews;
+package appliedlife.pvtltd.SHEROES.vernacular;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
 
-public class NoScrollEditText extends AppCompatEditText{
+public class NoScrollEditText extends FontEditText{
     public NoScrollEditText(Context context) {
         super(context);
     }

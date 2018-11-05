@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_challenge"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -31,20 +32,20 @@
                 android:layout_marginLeft="16dp"
                 android:layout_marginTop="8dp" />
 
-            <TextView
+            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/author_name"
+                style="@style/TextView16spBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_toRightOf="@id/author_image"
-                android:fontFamily="sans-serif-medium"
                 android:letterSpacing="0.07"
                 android:textAllCaps="true"
                 android:textColor="#ffffff"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+                android:textStyle="normal"
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <ImageView
                 android:id="@+id/share"
@@ -58,141 +59,141 @@
                 android:tint="@color/white" />
         </RelativeLayout>
 
-            <TextView
-                android:id="@+id/contest_tag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/feature_image"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center_horizontal"
-                android:letterSpacing="0.07"
-                android:textColor="#90949c"
-                android:textSize="14sp"
-                android:textStyle="normal" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/contest_tag"
+            style="@style/TextView14spBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/feature_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.07"
+            android:textColor="#90949c"
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/contest_tag"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center_horizontal"
-                android:letterSpacing="0.07"
-                android:maxLines="2"
-                android:textColor="#3c3c3c"
-                android:textSize="16sp"
-                android:textStyle="normal" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/title"
+            style="@style/TextView16spBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/contest_tag"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.07"
+            android:maxLines="2"
+            android:textColor="#3c3c3c"
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-            <TextView
-                android:id="@+id/contest_end_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/title"
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif"
-                android:letterSpacing="0.07"
-                android:textColor="#90949c"
-                android:textSize="12sp"
-                android:textStyle="normal" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/contest_end_text"
+            style="@style/TextView12spRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:letterSpacing="0.07"
+            android:textColor="#90949c"
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-            <TextView
-                android:id="@+id/contest_status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/title"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:letterSpacing="0.07"
-                android:text="live"
-                android:textAllCaps="true"
-                android:textColor="@color/red"
-                android:textSize="12sp"
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/contest_status"
+            style="@style/TextView12spBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/title"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:letterSpacing="0.07"
+            android:text="@string/contest.status.ongoing"
+            android:textAllCaps="true"
+            android:textColor="@color/red"
+            android:textStyle="normal"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-                android:textStyle="normal" />
+        <ImageView
+            android:id="@+id/live_dot"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_alignBottom="@id/contest_status"
+            android:layout_below="@+id/title"
+            android:layout_marginRight="7dp"
+            android:layout_marginTop="16dp"
+            android:layout_toLeftOf="@id/contest_status"
+            android:src="@drawable/vector_live_dot" />
 
-            <ImageView
-                android:id="@+id/live_dot"
-                android:layout_width="12dp"
-                android:layout_height="12dp"
-                android:layout_alignBottom="@id/contest_status"
-                android:layout_below="@+id/title"
-                android:layout_marginRight="7dp"
-                android:layout_marginTop="16dp"
-                android:layout_toLeftOf="@id/contest_status"
-                android:src="@drawable/vector_live_dot" />
+        <View
+            android:id="@+id/divider_top"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/contest_end_text"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/lighter_grey" />
 
-            <View
-                android:id="@+id/divider_top"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/contest_end_text"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/lighter_grey" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/join_challenge_text"
+            style="@style/TextView14spBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider_top"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:drawablePadding="6dp"
+            android:gravity="center_vertical"
+            android:textAllCaps="true"
+            android:textColor="#dc4541"
+            android:textStyle="normal"
+            tools:text="@string/join_challenge"
+            vernacular:customTextFontFamily="@string/medium_font" />
 
-            <TextView
-                android:id="@+id/join_challenge_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider_top"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="16dp"
-                android:drawablePadding="6dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center_vertical"
-                android:textAllCaps="true"
-                android:textColor="#dc4541"
-                android:textSize="14sp"
-                android:textStyle="normal"
-                tools:text="Join the Challenge" />
+        <View
+            android:id="@+id/divider_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/join_challenge_text"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@color/lighter_grey" />
 
-            <View
-                android:id="@+id/divider_bottom"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/join_challenge_text"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/lighter_grey" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/response_view_count"
+            style="@style/TextView14spRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/divider_bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#90949c"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-            <TextView
-                android:id="@+id/response_view_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/divider_bottom"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:textColor="#90949c"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_below="@id/divider_bottom"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="16dp"
-                android:fontFamily="sans-serif"
-                android:gravity="center_horizontal"
-                android:text="Not Interested"
-                android:textColor="#90949c"
-                android:textSize="12sp"
-                android:textStyle="normal"
-                android:visibility="gone" />
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView12spRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider_bottom"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="@string/not_interested"
+            android:textColor="#90949c"
+            android:textStyle="normal"
+            android:visibility="gone"
+            vernacular:customTextFontFamily="@string/regular_font" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

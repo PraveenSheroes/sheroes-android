@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/community_item"
     android:layout_width="@dimen/my_community_container_width"
     android:layout_height="@dimen/my_community_container_height"
     android:gravity="center"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/dp_size_10"
-    android:paddingRight="@dimen/dp_size_10"
-    android:orientation="vertical">
+    android:paddingRight="@dimen/dp_size_10">
 
     <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
         android:id="@+id/mutual_community_icon"
@@ -15,16 +15,16 @@
         android:layout_height="@dimen/my_community_icon_width"
         android:layout_margin="@dimen/dp_size_4" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/community_name"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
-        android:maxLines="@integer/int_value_for_line_1"
-        android:gravity="center"
         android:layout_margin="@dimen/dp_size_5"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="@integer/int_value_for_line_1"
         android:textColor="@color/recent_post_comment"
-        android:textSize="@dimen/sp_size_14" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear>

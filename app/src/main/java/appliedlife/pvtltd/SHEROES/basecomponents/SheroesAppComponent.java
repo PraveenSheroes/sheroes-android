@@ -1,6 +1,8 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import org.wordpress.android.editor.EditorFragmentAbstract;
+
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
@@ -28,6 +30,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorInsightActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
@@ -40,6 +43,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -74,9 +78,11 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificatio
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ArticleCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.BellNotificationHolder;
@@ -358,6 +364,12 @@ public interface SheroesAppComponent {
     void inject(UsersCollectionActivity usersCollectionActivity);
 
     void inject(UserGridFragment userGridFragment);
+
+    void inject(LanguageSelectionActivity languageSelectionActivity);
+
+    void inject(SelectLanguageDialog selectLanguageDialog);
+
+    void inject(MaleErrorDialog maleErrorDialog);
 }
 
 

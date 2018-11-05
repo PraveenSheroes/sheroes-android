@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/search_shortcut_icon_color">
@@ -12,8 +13,9 @@
         android:layout_marginTop="@dimen/dp_size_10"
         android:background="@drawable/vector_user_tag_header" />
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_header"
+        style="@style/TextView12spRegular"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -21,8 +23,7 @@
         android:layout_marginLeft="@dimen/dp_size_30"
         android:layout_marginRight="@dimen/dp_size_8"
         android:layout_marginTop="@dimen/dp_size_8"
-        android:fontFamily="@string/ID_ROBOTO_REGULAR"
         android:textColor="@color/comment_text"
-        android:textSize="@dimen/sp_size_12" />
+        vernacular:customTextFontFamily="@string/regular_font" />
 
 </LinearLayout>
