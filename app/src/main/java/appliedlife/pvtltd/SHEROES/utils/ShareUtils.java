@@ -8,12 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 
 public class ShareUtils {
-
+    //region memeber varioables
     private static ShareUtils sInstance;
+    //endregion
+
+    //region constant variables
     private static final String SHARE_WHATSAPP = "Whatsapp";
     private static final String SHARE_FACEBOOK = "Facebook";
     private static final String ANDROID_DEFAULT = "Android Default";
-
+    //endregion
 
     public static synchronized ShareUtils getInstance() {
         if (sInstance == null) {

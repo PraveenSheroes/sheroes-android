@@ -1210,9 +1210,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
-
-//            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
-
         }
     }
 
@@ -1223,7 +1220,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
         setAllValues(mFragmentOpen);
         feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
-//        super.feedCardsHandled(view, baseResponse);
     }
 
 

@@ -59,6 +59,8 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
 
 public class FeedUtils {
+
+    //region member variables
     private static FeedUtils sInstance;
     private FeedDetail mFeedDetail;
     private Fragment mFragment;
@@ -68,9 +70,12 @@ public class FeedUtils {
     private PopupWindow popupWindow;
     private static final int ASK_QUESTION_POST = 3;
     private boolean mIsDestroyed=false;
+    //endregion
 
+    //region injected variables
     @Inject
     Preference<LoginResponse> mUserPreference;
+    //endregion
 
     public static synchronized FeedUtils getInstance(){
         if (sInstance == null) {
@@ -322,7 +327,7 @@ public class FeedUtils {
         }
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP);
+        intent.setPackage(AppConstants.WHATS_APP_URI);
         intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
         context.startActivity(intent);
 //        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);

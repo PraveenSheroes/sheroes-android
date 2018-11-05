@@ -23,11 +23,16 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 
 public class LogOutUtils {
+    //region member variables
     private static LogOutUtils sInstance;
+    //endregion
+
+    //region injected variables
     @Inject
     Preference<AppInstallation> mAppInstallation;
     @Inject
     Preference<LoginResponse> mUserPreference;
+    //endregion
 
     public static synchronized LogOutUtils getInstance() {
         if (sInstance == null) {

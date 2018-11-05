@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -601,9 +602,12 @@ public class ContestActivity extends BaseActivity implements IContestView {
             // setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
-
-//            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         }
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -611,13 +615,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
         switch (id) {
             case R.id.tv_feed_community_post_user_comment:
                 feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
-
-//                super.feedCardsHandled(view, baseResponse);
                 break;
             default:
                 feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
-
-//                super.feedCardsHandled(view, baseResponse);
 
         }
     }
@@ -740,6 +740,11 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 championDetailActivity(postDetails.getCreatedBy(), 0, postDetails.isAuthorMentor(), SOURCE_SCREEN);
             }
         }
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
