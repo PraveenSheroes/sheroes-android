@@ -21,6 +21,10 @@ import com.clevertap.android.sdk.CleverTapAPI;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+import com.moengage.push.PushManager;
+import com.moengage.pushbase.push.MoEngageNotificationUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -55,6 +60,10 @@ public class PushNotificationService extends FirebaseMessagingService {
     Intent notificationIntent;
     int mCount = 0;
     String url = "";
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
+
 
     @Override
     public void onMessageReceived(RemoteMessage message) {
@@ -75,12 +84,20 @@ public class PushNotificationService extends FirebaseMessagingService {
             if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
                 handleCleverTapNotification(data);
             } else {
-                handleOtherNotification(from, data);
+                if (MoEngageNotificationUtils.isFromMoEngagePlatform(data)) {
+                    handleMoEngageNotification(data);
+                } else {
+                    handleOtherNotification(from, data);
+                }
             }
         }
     }
 
     private void handleOtherNotification(String from, Bundle data) {
+        mMoEHelper = MoEHelper.getInstance(this);
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+
         String message = "";
         String imageUrl = "";
         String notificationId = data.getString(AppConstants.NOTIFICATION_ID);
@@ -92,6 +109,7 @@ public class PushNotificationService extends FirebaseMessagingService {
                 if (mUserPreference != null) {
                     mUserPreference.delete();
                 }
+                MoEHelper.getInstance(getApplicationContext()).logoutUser();
                 MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
                 ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                 ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
@@ -124,8 +142,10 @@ public class PushNotificationService extends FirebaseMessagingService {
             String entityId = "";
             if (url.contains(AppConstants.ARTICLE_URL) || url.contains(AppConstants.ARTICLE_URL_COM)) {
                 entityId = data.getString(this.getString(R.string.ID_ARTICLE));
+                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_ARTICLE), from, from);
             } else if (url.contains(AppConstants.COMMUNITY_URL) || url.contains(AppConstants.COMMUNITY_URL_COM)) {
                 entityId = data.getString(this.getString(R.string.ID_COMMUNITIY));
+                moEngageUtills.entityMoEngagePushNotification(this, mMoEHelper, payloadBuilder, this.getString(R.string.ID_COMMUNITIY), from, from);
             } else if (url.contains(AppConstants.HELPLINE_URL) || url.contains(AppConstants.HELPLINE_URL_COM)) {
                 Intent intent = new Intent();
                 intent.setAction("BroadCastReceiver");
@@ -137,6 +157,7 @@ public class PushNotificationService extends FirebaseMessagingService {
                     .url(url)
                     .entityId(entityId)
                     .title(from)
+                    .isMonengage(false)
                     .pushProvider(AppConstants.PUSH_PROVIDER_SHEROES)
                     .body(message)
                     .build();
@@ -144,6 +165,26 @@ public class PushNotificationService extends FirebaseMessagingService {
         }
     }
 
+    private void handleMoEngageNotification(Bundle data) {
+        //If the message is not sent from MoEngage it will be rejected
+        final HashMap<String, Object> properties = new EventProperty.Builder()
+                .id(MoEngageNotificationUtils.getCampaignIdIfAny(data))
+                .url(MoEngageNotificationUtils.getDeeplinkURIStringIfAny(data))
+                .isMonengage(true)
+                .pushProvider(AppConstants.PUSH_PROVIDER_MOENGAGE)
+                .activityName(MoEngageNotificationUtils.getRedirectActivityNameIfAny(data))
+                .title(MoEngageNotificationUtils.getNotificationTitleIfAny(data))
+                .body(MoEngageNotificationUtils.getNotificationContentTextIfAny(data))
+                .build();
+        AnalyticsManager.trackEvent(Event.PUSH_NOTIFICATION_SHOWN, "", properties);
+        data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+        data.putBoolean(AppConstants.IS_MOENGAGE, true);
+        data.putString(AppConstants.TITLE, MoEngageNotificationUtils.getNotificationTitleIfAny(data));
+        data.putString(AppConstants.NOTIFICATION_ID, MoEngageNotificationUtils.getCampaignIdIfAny(data));
+        data.putString(BaseActivity.SOURCE_SCREEN, "From Push Notification");
+        data.putBoolean(AppConstants.IS_FROM_PUSH, true);
+        PushManager.getInstance().getPushHandler().handlePushPayload(getApplicationContext(), data);
+    }
 
     private void handleCleverTapNotification(Bundle data) {
         String cleverTypeTitle = data.getString(AppConstants.CLEVER_TAP_TITLE);
@@ -158,6 +199,7 @@ public class PushNotificationService extends FirebaseMessagingService {
         }
 
         data.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
+        data.putBoolean(AppConstants.IS_MOENGAGE, false);
         data.putString(AppConstants.TITLE, cleverTypeTitle);
         data.putString(BaseActivity.SOURCE_SCREEN, AppConstants.FROM_PUSH_NOTIFICATION);
         data.putBoolean(AppConstants.IS_FROM_PUSH, true);
@@ -167,6 +209,7 @@ public class PushNotificationService extends FirebaseMessagingService {
         final HashMap<String, Object> properties = new EventProperty.Builder()
                 .url(cleverTypeDeepLink)
                 .title(cleverTypeTitle)
+                .isMonengage(false)
                 .pushProvider(AppConstants.PUSH_PROVIDER_CLEVER_TAP)
                 .body(cleverTypeBody)
                 .build();
@@ -224,10 +267,12 @@ public class PushNotificationService extends FirebaseMessagingService {
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
             try {
+
                 Uri url = Uri.parse(urlText);
                 mCount++;
 
                 NotificationManager notificationManager = (NotificationManager) PushNotificationService.this.getSystemService(Activity.NOTIFICATION_SERVICE);
+
                 String relatedChannelId =AppConstants.CLEVER_TAP_CHANNEL_ID;
                 CharSequence channelName = AppConstants.CLEVER_TAP_CHANNEL_NAME;
                 int importance = NotificationManagerCompat.IMPORTANCE_HIGH;
@@ -244,6 +289,7 @@ public class PushNotificationService extends FirebaseMessagingService {
                 notificationIntent = new Intent(PushNotificationService.this, SheroesDeepLinkingActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                         Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 notificationIntent.setData(url);
+                notificationIntent.putExtra(AppConstants.IS_MOENGAGE, false);
                 notificationIntent.putExtra(BaseActivity.SOURCE_SCREEN, "From Push Notification");
                 notificationIntent.putExtra(AppConstants.TITLE, title);
                 notificationIntent.putExtra(AppConstants.BODY, body);

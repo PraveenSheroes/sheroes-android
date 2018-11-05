@@ -45,7 +45,8 @@ public enum EventProperty {
     SOURCE_SCREEN_ID("Source Screen Id"),
     SOURCE_TAB_KEY("Source Tab Key"),
     SOURCE_TAB_TITLE("Source Tab Title"),
-    PUSH_PROVIDER("Push Notification Provider"), // Sheroes, CleverTap
+    IS_MOENGAGE("Is Moengage"),
+    PUSH_PROVIDER("Push Notification Provider"), // Sheroes, MoEngage, CleverTap
     POSITION_IN_SEQUENCE("Position In Sequence"),
     IS_MENTOR("Is Mentor"),
     IS_OWN_PROFILE("Is Own Profile"),
@@ -242,6 +243,10 @@ public enum EventProperty {
             return this;
         }
 
+        public Builder isMonengage(boolean value) {
+            put(IS_MOENGAGE, value);
+            return this;
+        }
         public Builder pushProvider(String value) {
             put(PUSH_PROVIDER, value);
             return this;

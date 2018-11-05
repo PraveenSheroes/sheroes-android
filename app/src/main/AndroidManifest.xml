@@ -122,6 +122,15 @@
             android:value="1" />
 
         <activity
+            android:name="com.moe.pushlibrary.activities.MoEActivity"
+            android:parentActivityName=".views.activities.HomeActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity" />
+        </activity>
+        <activity
             android:name=".views.activities.OnBoardingActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"

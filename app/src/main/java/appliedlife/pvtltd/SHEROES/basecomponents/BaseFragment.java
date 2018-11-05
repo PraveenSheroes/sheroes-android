@@ -27,10 +27,14 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -57,6 +61,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -297,6 +302,10 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                     ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
                 }
                 commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
+                PayloadBuilder payloadBuilder = new PayloadBuilder();
+                MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
+                //moEngageUtills.entityMoEngageJoinedCommunity(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail.getNameOrTitle(), mFeedDetail.getIdOfEntityOrParticipant(), ((CommunityFeedSolrObj)mFeedDetail).isClosed(), MoEngageConstants.COMMUNITY_TAG, TAG, mFeedDetail.getItemPosition());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
                 break;
@@ -359,6 +368,10 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
+                    MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
+                    PayloadBuilder payloadBuilder = new PayloadBuilder();
+                    MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
+                    moEngageUtills.entityMoEngageBookMarkData(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail);
                     AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, mFeedDetail, getScreenName());
                     break;
                 case AppConstants.FAILED:
@@ -389,6 +402,10 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                         }
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
+                    MoEHelper mMoEHelper = MoEHelper.getInstance(getActivity());
+                    PayloadBuilder payloadBuilder = new PayloadBuilder();
+                    MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
+                    moEngageUtills.entityMoEngageReaction(getActivity(), mMoEHelper, payloadBuilder, mFeedDetail, mPressedEmoji, mPosition);
                     if (mFeedDetail instanceof OrganizationFeedObj) {
                         AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail, getScreenName());
                     } else {
