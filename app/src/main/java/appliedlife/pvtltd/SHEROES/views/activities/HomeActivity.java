@@ -456,7 +456,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
         mICSheroes.setVisibility(View.VISIBLE);
         mActivityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         pbCommunitiesDrawer.setVisibility(View.VISIBLE);
         mRecyclerViewDrawerCommunities.setVisibility(View.GONE);
         mPullRefreshList = new SwipPullRefreshList();
@@ -541,7 +542,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         } else if (baseResponse instanceof Comment) {
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             mFeedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
-//            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         } else if (baseResponse instanceof FAQS) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
             ((FAQSFragment) fragment).setDataChange((FAQS) baseResponse);
