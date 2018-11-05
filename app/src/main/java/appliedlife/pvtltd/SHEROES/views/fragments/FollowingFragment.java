@@ -277,7 +277,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
                 circleImageView.bindImage(authorThumborUrl);
             }
             TextView text = dialog.findViewById(R.id.title);
-            text.setText("Unfollow " + userSolrObj.getNameOrTitle());
+            text.setText(getString(R.string.unfollow_profile, userSolrObj.getNameOrTitle()));
             TextView dialogButton = dialog.findViewById(R.id.cancel);
             dialogButton.setOnClickListener(new View.OnClickListener() {
                 @Override

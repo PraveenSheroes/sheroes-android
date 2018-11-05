@@ -123,7 +123,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Bind(R.id.follow_following_btn)
         Button followFollowingBtn;
-        private UserSolrObj mMentor;
+        private UserSolrObj Mentor;
         private int position = -1;
         private long loggedInUserId = -1;
 
@@ -142,7 +142,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         public void bindData(final UserSolrObj mentor, final int position) {
 
             if (null != mentor) {
-                this.mMentor = mentor;
+                this.Mentor = mentor;
                 this.position = position;
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -228,7 +228,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onFollowFollowingClick() {
             String followFollowingBtnText = followFollowingBtn.getText().toString();
             if (position != -1 && followFollowingBtnText != null) {
-                ((FollowerFollowingCallback) baseHolderInterface).onFollowFollowingClick(mMentor, position, followFollowingBtnText);
+                ((FollowerFollowingCallback) baseHolderInterface).onFollowFollowingClick(Mentor, position, followFollowingBtnText);
             }
         }
     }
