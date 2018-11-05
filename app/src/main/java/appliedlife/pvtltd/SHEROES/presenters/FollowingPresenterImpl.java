@@ -96,6 +96,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                 });
     }
 
+    //for follow
     public void getFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj, final int position) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
@@ -131,6 +132,8 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                     }
                 });
     }
+
+    //for unfollow
     public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj, final int position) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
