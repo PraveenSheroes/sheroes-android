@@ -106,8 +106,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
@@ -181,7 +181,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     @Inject
     Preference<AppConfiguration> mConfiguration;
     @Inject
-    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
+    Preference<AppStatus> mInstallUpdatePreference;
 
     @Inject
     Preference<AppInstallation> mAppInstallation;
@@ -446,9 +446,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             this.mIsFirstTimeOpen = false;
             showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
             showcaseManager.showFirstMainActivityShowcase();
-            InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-            installUpdateForMoEngage.setAppInstallFirstTime(true);
-            mInstallUpdatePreference.set(installUpdateForMoEngage);
+            AppStatus appStatus = mInstallUpdatePreference.get();
+            appStatus.setAppInstallFirstTime(true);
+            mInstallUpdatePreference.set(appStatus);
         }
     }
 
@@ -1989,9 +1989,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                     LoginResponse loginResponse = mUserPreference.get();
                     loginResponse.setFcmId(mFcmId);
                     mUserPreference.set(loginResponse);
-                    InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                    installUpdateForMoEngage.setFirstOpen(false);
-                    mInstallUpdatePreference.set(installUpdateForMoEngage);
+                    AppStatus appStatus = mInstallUpdatePreference.get();
+                    appStatus.setFirstOpen(false);
+                    mInstallUpdatePreference.set(appStatus);
                 }
                 break;
             case AppConstants.FAILED:
@@ -2033,9 +2033,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                             LoginRequest loginRequest = loginRequestBuilder();
                             loginRequest.setFcmorapnsid(registrationId);
                             if (mInstallUpdatePreference.get().isWelcome()) {
-                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                installUpdateForMoEngage.setWelcome(false);
-                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                AppStatus appStatus = mInstallUpdatePreference.get();
+                                appStatus.setWelcome(false);
+                                mInstallUpdatePreference.set(appStatus);
                             }
                             mHomePresenter.getNewFCMidFromPresenter(loginRequest);
                         } else {
@@ -2050,9 +2050,9 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                                 }
                             }
                             if (mInstallUpdatePreference.get().isWelcome()) {
-                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                installUpdateForMoEngage.setWelcome(false);
-                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                AppStatus appStatus = mInstallUpdatePreference.get();
+                                appStatus.setWelcome(false);
+                                mInstallUpdatePreference.set(appStatus);
                             }
                         }
                     }

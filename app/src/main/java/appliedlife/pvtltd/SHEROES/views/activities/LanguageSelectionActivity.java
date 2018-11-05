@@ -15,7 +15,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -34,9 +33,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -68,7 +67,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
-    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
+    Preference<AppStatus> mInstallUpdatePreference;
     @Inject
     Preference<AppInstallation> mAppInstallation;
     @Inject
@@ -167,25 +166,25 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
         int versionCode = BuildConfig.VERSION_CODE;
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet()) {
             if (mInstallUpdatePreference.get().getAppVersion() < versionCode) {
-                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                installUpdateForMoEngage.setFirstOpen(true);
-                installUpdateForMoEngage.setAppVersion(versionCode);
-                installUpdateForMoEngage.setWelcome(true);
-                installUpdateForMoEngage.setAppInstallFirstTime(true);
-                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                AppStatus appStatus = mInstallUpdatePreference.get();
+                appStatus.setFirstOpen(true);
+                appStatus.setAppVersion(versionCode);
+                appStatus.setWelcome(true);
+                appStatus.setAppInstallFirstTime(true);
+                mInstallUpdatePreference.set(appStatus);
             }
             if (mInstallUpdatePreference.get().isAppInstallFirstTime()) {
-                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                installUpdateForMoEngage.setWalkThroughShown(true);
-                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                AppStatus appStatus = mInstallUpdatePreference.get();
+                appStatus.setWalkThroughShown(true);
+                mInstallUpdatePreference.set(appStatus);
             }
         } else {
-            InstallUpdateForMoEngage installUpdateForMoEngage = new InstallUpdateForMoEngage();
-            installUpdateForMoEngage.setAppVersion(versionCode);
-            installUpdateForMoEngage.setFirstOpen(true);
-            installUpdateForMoEngage.setAppInstallFirstTime(false);
-            installUpdateForMoEngage.setWalkThroughShown(false);
-            mInstallUpdatePreference.set(installUpdateForMoEngage);
+            AppStatus appStatus = new AppStatus();
+            appStatus.setAppVersion(versionCode);
+            appStatus.setFirstOpen(true);
+            appStatus.setAppInstallFirstTime(false);
+            appStatus.setWalkThroughShown(false);
+            mInstallUpdatePreference.set(appStatus);
             isFirstTimeUser = true;
         }
 
@@ -229,9 +228,9 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                                             deepLinkUrl = deepLink;
 
                                             if (mInstallUpdatePreference != null) {
-                                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                                installUpdateForMoEngage.setOnBoardingSkipped(true);
-                                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                                                AppStatus appStatus = mInstallUpdatePreference.get();
+                                                appStatus.setOnBoardingSkipped(true);
+                                                mInstallUpdatePreference.set(appStatus);
                                             }
                                         }
                                     }

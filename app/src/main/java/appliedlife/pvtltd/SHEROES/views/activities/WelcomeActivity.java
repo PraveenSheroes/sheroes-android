@@ -66,9 +66,9 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
@@ -110,7 +110,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
-    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
+    Preference<AppStatus> mInstallUpdatePreference;
     @Inject
     LoginPresenter mLoginPresenter;
     @Inject
