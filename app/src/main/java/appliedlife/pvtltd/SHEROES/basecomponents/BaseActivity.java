@@ -28,8 +28,6 @@ import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
@@ -61,8 +59,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -132,9 +128,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     Preference<LoginResponse> mUserPreference;
     @Inject
     Preference<AppInstallation> mAppInstallation;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
     private long mUserId;
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
@@ -148,20 +141,16 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0) == 1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
                 String deepLink = getIntent().getExtras().getString(AppConstants.DEEP_LINK_URL);
-                boolean isFromMoengage = getIntent().getExtras().getBoolean(AppConstants.IS_MOENGAGE, false);
                 String title = getIntent().getExtras().getString(AppConstants.TITLE);
                 boolean isFromPushNotification = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_PUSH, false);
                 if (isFromPushNotification) {
-                    HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).isMonengage(isFromMoengage).title(title).build();
+                    HashMap<String, Object> properties = new EventProperty.Builder().id(notificationId).url(deepLink).title(title).build();
                     trackEvent(Event.PUSH_NOTIFICATION_CLICKED, properties);
                 }
             }
@@ -244,9 +233,7 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
                 }
             }
         }));
-        if (null != mMoEHelper) {
-            mMoEHelper.onStart(this);
-        }
+
         if (getPresenter() != null) {
             getPresenter().onStart();
         }
@@ -342,13 +329,11 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mMoEHelper.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mMoEHelper.onResume(this);
         mSheroesApplication.setCurrentActivityName(this.getClass().getSimpleName());
         if (trackScreenTime()) {
             AnalyticsManager.timeScreenView(getScreenName());
@@ -380,7 +365,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         super.onStop();
         ReferrerBus.getInstance().unregister(this);
         if (mSheroesApplication != null) {
-            mMoEHelper.onStop(this);
             mSheroesApplication.notifyIfAppInBackground();
         }
         if (getPresenter() != null) {
@@ -745,7 +729,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         intent.setPackage(AppConstants.WHATS_APP_URI);
         intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.check_out_share_msg) + deepLinkUrl);
         startActivity(intent);
-        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, getScreenName());
     }
 
@@ -813,7 +796,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED, getScreenName(), properties);
     }
@@ -1037,7 +1019,6 @@ public abstract class BaseActivity extends AppCompatActivity implements EventInt
             });
         }
         mUserPreference.delete();
-        MoEHelper.getInstance(getApplicationContext()).logoutUser();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
         ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);

@@ -5,8 +5,8 @@ import org.parceler.Parcel;
 /**
  * Created by Praveen_Singh on 12-05-2017.
  */
-@Parcel(analyze = {InstallUpdateForMoEngage.class})
-public class InstallUpdateForMoEngage {
+@Parcel(analyze = {AppStatus.class})
+public class AppStatus {
     private int appVersion;
     private boolean isFirstOpen;
     private boolean isWelcome;
@@ -22,7 +22,7 @@ public class InstallUpdateForMoEngage {
         this.appVersion = appVersion;
     }
 
-    public InstallUpdateForMoEngage() {
+    public AppStatus() {
     }
 
     public boolean isFirstOpen() {

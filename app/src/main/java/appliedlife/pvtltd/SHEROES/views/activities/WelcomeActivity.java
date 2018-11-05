@@ -42,9 +42,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-import com.moengage.push.PushManager;
 
 import org.json.JSONObject;
 
@@ -69,15 +66,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -109,11 +104,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     public static final int LOGGING_IN_DIALOG = 1;
     public static final String GENDER = "female";
     public static final int TOKEN_LOGGING_PROGRESS_DIALOG = 2;
+    public static final String GOOGLE = "google";
+    public static final String FACEBOOK = "facebook";
     // region inject variables
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
-    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
+    Preference<AppStatus> mInstallUpdatePreference;
     @Inject
     LoginPresenter mLoginPresenter;
     @Inject
@@ -146,12 +143,9 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     //endregion
 
     // region member variables
-    private PayloadBuilder payloadBuilder;
     private int currentPage = 0;
     private Timer timer;
     private int NUM_PAGES = 4;
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
     private Handler mHandler;
     private Runnable mRunnable;
     private CallbackManager callbackManager;
@@ -163,7 +157,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     //google api client
     public static GoogleApiClient mGoogleApiClient;
     private String mToken = null;
-    private String loginViaSocial = MoEngageConstants.GOOGLE;
+    private String loginViaSocial = GOOGLE;
     private long currentTime;
     private String mFcmId;
     //Ads Navigation
@@ -179,9 +173,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         SheroesApplication.getAppComponent(this).inject(this);
         mLoginPresenter.attachView(this);
         mLoginPresenter.queryConfig();
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
         if (getIntent() != null && getIntent().getExtras() != null) {
             isBranchFirstSession = getIntent().getExtras().getBoolean(BaseActivity.BRANCH_FIRST_SESSION);
             deepLinkUrl = getIntent().getExtras().getString(BaseActivity.DEEP_LINK_URL);
@@ -222,7 +213,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                                             loginRequest.setDeviceUniqueId(appUtils.getDeviceId());
                                             loginRequest.setFcmorapnsid(mFcmId);
                                             loginRequest.setUserGender(GENDER);
-                                            loginViaSocial = MoEngageConstants.FACEBOOK;
+                                            loginViaSocial = FACEBOOK;
                                             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
                                         }
                                     }
@@ -588,7 +579,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mFcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
-                    PushManager.getInstance().refreshToken(WelcomeActivity.this, mFcmId);
                     //Refresh FCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if (cleverTapAPI != null) {
@@ -677,7 +667,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         } else {
             showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
-
     }
 
     private void loginAuthTokenResponse(LoginResponse loginResponse) {
@@ -687,26 +676,22 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mUserPreference.set(loginResponse);
         AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
 
-        moEngageUtills.entityMoEngageUserAttribute(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginResponse);
-
         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
             AnalyticsManager.initializeCleverTap(WelcomeActivity.this, currentTime < createdDate);
 
-            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK) ? "Facebook" : "Google").build();
+            final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider(loginViaSocial.equalsIgnoreCase(FACEBOOK) ? "Facebook" : "Google").build();
             AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
 
             if (createdDate < currentTime) {
-                moEngageUtills.entityMoEngageLoggedIn(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
-                if (loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK)) {
+                if (loginViaSocial.equalsIgnoreCase(FACEBOOK)) {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
                 } else {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
                 }
 
             } else {
-                moEngageUtills.entityMoEngageSignUp(WelcomeActivity.this, mMoEHelper, payloadBuilder, loginViaSocial);
-                if (loginViaSocial.equalsIgnoreCase(MoEngageConstants.FACEBOOK)) {
+                if (loginViaSocial.equalsIgnoreCase(FACEBOOK)) {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
                 } else {
                     ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
@@ -714,7 +699,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             }
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
         }
-        mMoEHelper.setUserAttribute(MoEngageConstants.ACQUISITION_CHANNEL, loginViaSocial);
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
         appInstallationHelper.setupAndSaveInstallation(true);
         openHomeScreen();
@@ -762,7 +746,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
             loginRequest.setFcmorapnsid(mFcmId);
             loginRequest.setCallForSignUp(AppConstants.GOOGLE_PLUS);
             loginRequest.setUserGender(GENDER);
-            loginViaSocial = MoEngageConstants.GOOGLE;
+            loginViaSocial = GOOGLE;
             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
         }
 
@@ -936,7 +920,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     HashMap<String, Object> properties = new EventProperty.Builder().build();
                     AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
                     mUserPreference.delete();
-                    MoEHelper.getInstance(getApplicationContext()).logoutUser();
                     MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
                     ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
@@ -945,7 +928,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     onShowErrorDialog(errorMsg, feedParticipationEnum);
             }
         }
-
     }
 
     public void showMaleError(String userName) {

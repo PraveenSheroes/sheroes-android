@@ -13,12 +13,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -34,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -55,9 +50,7 @@ public class OnBoardingActivity extends BaseActivity {
     Preference<LoginResponse> userPreference;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
+
     @Bind(R.id.card)
     CardView card;
     @Bind(R.id.tv_on_boarding_finish)
@@ -75,9 +68,7 @@ public class OnBoardingActivity extends BaseActivity {
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
+
         if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
