@@ -42,9 +42,6 @@
     <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notifications</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
-    <string name="ID_FOLLOWED_CHAMPION_LISTING">champion listing</string>
-    <string name="ID_FOLLOWERS_LISTING">Followers listing</string>
-    <string name="ID_FOLLOWING_LISTING">Following listing</string>
     <string name="follower_toolbar_title">People who follow me</string>
     <string name="following_toolbar_title">People I follow</string>
     <string name="follower_public_profile_toolbar_title">People who follow her</string>
