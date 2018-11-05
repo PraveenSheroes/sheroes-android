@@ -671,5 +671,10 @@
     <dimen name="new_tag_padding_right">4dp</dimen>
     <dimen name="new_tag_margin_left">6dp</dimen>
     <dimen name="new_tag_margin_top">-8dp</dimen>
+    <dimen name="follow_btn_textsize">14sp</dimen>
+    <dimen name="follow_btn_width">100dp</dimen>
+    <dimen name="follow_btn_height">30dp</dimen>
+    <dimen name="follow_btn_marginright">16dp</dimen>
+    <dimen name="imagesize_unfollow_dialog">87dp</dimen>
 </resources>
 
