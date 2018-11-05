@@ -335,6 +335,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     private FragmentOpen mFragmentOpen;
     private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
+    private long mChallengeId;
     private ProgressDialog mProgressDialog;
     private FragmentListRefreshData mFragmentListRefreshData;
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;

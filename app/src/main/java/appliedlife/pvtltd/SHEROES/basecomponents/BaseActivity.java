@@ -69,6 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     Preference<LoginResponse> mUserPreference;
     @Inject
     Preference<AppInstallation> mAppInstallation;
+    private long mUserId;
     @Inject
     ShareUtils mShareUtils;
     @Inject
@@ -141,6 +142,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
                 }
             }
         }));
+
         if (getPresenter() != null) {
             getPresenter().onStart();
         }
