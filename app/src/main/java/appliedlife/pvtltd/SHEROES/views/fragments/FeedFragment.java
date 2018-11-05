@@ -119,10 +119,12 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -147,6 +149,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String IS_HOME_FEED = "Is Home Feed";
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
+    private Dialog dialog = null;
     private static final int HIDE_THRESHOLD = 20;
     //endregion
 
@@ -203,6 +206,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Bind(R.id.tv_goto_setting)
     TextView tvGoToSetting;
+
+    @BindDimen(R.dimen.imagesize_unfollow_dialog)
+    int profileSizeSmall;
     // endregion
 
     //region private variables
@@ -2065,12 +2071,53 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             properties.putAll(getExtraProperties());
         }
 
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsUserFollowed()) {
+            unFollowConfirmation(publicProfileListRequest, userSolrObj);
         } else {
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        }
+    }
+
+    public void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
+        if (userSolrObj != null) {
+            if (dialog != null) {
+                dialog.dismiss();
+            }
+            dialog = new Dialog(getContext());
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setCancelable(false);
+            dialog.setContentView(R.layout.unfollow_confirmation_dialog);
+            CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
+            if (StringUtil.isNotNullOrEmptyString(userSolrObj.getImageUrl())) {
+                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getImageUrl(), profileSizeSmall, profileSizeSmall);
+                circleImageView.setCircularImage(true);
+                circleImageView.bindImage(authorThumborUrl);
+            }
+            TextView text = dialog.findViewById(R.id.title);
+            text.setText("Unfollow " + userSolrObj.getNameOrTitle());
+            TextView dialogButton = dialog.findViewById(R.id.cancel);
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            TextView unFollowButton = dialog.findViewById(R.id.unfollow);
+            unFollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                                    .name(userSolrObj.getNameOrTitle())
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
+                    mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     }
 

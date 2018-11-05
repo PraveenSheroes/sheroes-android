@@ -60,7 +60,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/follow_button"
-            style="@style/TextView12spBold"
+            style="@style/TextView10spBold"
             android:layout_width="@dimen/leaderboard_follow_button_width"
             android:layout_height="@dimen/leaderboard_follow_button_height"
             android:layout_alignParentEnd="true"
