@@ -4,6 +4,10 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
+import com.moe.pushlibrary.MoEHelper;
+
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -105,8 +109,12 @@ public class AnalyticsManager {
 
         MixpanelHelper.trackScreenOpen(sAppContext, screenName, properties);
 
-        // track screen CleverTap
+        // track all event to Moengage
         properties.put(MixpanelHelper.SCREEN_NAME, screenName);
+        JSONObject jsonObj = new JSONObject(properties);
+        MoEHelper.getInstance(sAppContext).trackEvent(MixpanelHelper.SCREEN_OPEN, jsonObj);
+
+        //CleverTap
         CleverTapHelper.trackScreen(sAppContext, properties);
     }
 
@@ -149,9 +157,9 @@ public class AnalyticsManager {
         }
 
         event.addProperties(properties);
-        String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
-        if (StringUtil.isNotNullOrEmptyString(languageName)) {
-            properties.put(SuperProperty.LANGUAGE.getString(), languageName);
+        String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+        if(StringUtil.isNotNullOrEmptyString(languageName)) {
+            properties.put(SuperProperty.LANGUAGE.getString(),languageName);
         }
 
         if (isNotNullOrEmptyString(screenName) && !properties.containsKey(screenName)) {
@@ -168,6 +176,10 @@ public class AnalyticsManager {
         if (event.trackEventToProvider(AnalyticsProvider.FACEBOOK)) {
             FBAnalyticsHelper.logEvent(event.type.name, event.name, null);
         }
+
+        // track all event to Moengage
+        JSONObject jsonObj = new JSONObject(properties);
+        MoEHelper.getInstance(sAppContext).trackEvent(event.getFullName(), jsonObj);
 
         //track all event to CleverTap
         CleverTapHelper.trackEvent(sAppContext, event, properties);

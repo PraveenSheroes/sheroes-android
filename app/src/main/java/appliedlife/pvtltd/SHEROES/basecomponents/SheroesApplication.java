@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.support.multidex.MultiDexApplication;
 
 import com.clevertap.android.sdk.ActivityLifecycleCallback;
@@ -14,6 +15,7 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
+import com.moe.pushlibrary.MoEHelper;
 
 import java.io.File;
 
@@ -61,6 +63,8 @@ public class SheroesApplication extends MultiDexApplication {
         mContext = this;
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
+        MoEHelper.getInstance(getApplicationContext()).autoIntegrate(this);
+        MoEHelper.getInstance(getApplicationContext()).optOutOfIMEICollection(this, true);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         AnalyticsTrackers.initialize(this);

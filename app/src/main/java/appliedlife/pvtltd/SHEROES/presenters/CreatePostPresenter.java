@@ -31,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -54,9 +55,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  */
 
 public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
-
-    public static final String CHALLENGE_POST = "challenge post";
-
     @Inject
     CommunityModel communityModel;
     private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
@@ -145,7 +143,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                                 .id(Long.toString(communityPostCreateResponse.getId()))
                                 .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
                                 .communityId("0")
-                                .type(CHALLENGE_POST)
+                                .type(MoEngageConstants.CHALLENGE_POST)
                                 .build();
                 AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
             }

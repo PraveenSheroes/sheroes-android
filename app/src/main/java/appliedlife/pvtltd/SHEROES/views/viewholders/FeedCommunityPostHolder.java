@@ -50,7 +50,7 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
+import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
@@ -234,7 +234,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private boolean isWhatappShareOption = false;
     private boolean isToolTipForUser;
     @Inject
-    Preference<AppStatus> mInstallUpdatePreference;
+    Preference<InstallUpdateForMoEngage> mInstallUpdatePreference;
     private LayoutInflater inflater = null;
     private View view = null;
 
@@ -263,9 +263,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (mInstallUpdatePreference.get().isWalkThroughShown()) {
             if (CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
                 isToolTipForUser = true;
-                AppStatus appStatus = mInstallUpdatePreference.get();
-                appStatus.setWalkThroughShown(false);
-                mInstallUpdatePreference.set(appStatus);
+                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                installUpdateForMoEngage.setWalkThroughShown(false);
+                mInstallUpdatePreference.set(installUpdateForMoEngage);
             }
         } else {
             isToolTipForUser = false;

@@ -165,6 +165,47 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.google.android.gms.gcm.**
 -dontwarn com.google.android.gms.iid.**
 
+#Moengage
+-dontwarn com.google.android.gms.location.**
+-dontwarn com.google.android.gms.gcm.**
+-dontwarn com.google.android.gms.iid.**
+
+-keep class com.google.android.gms.gcm.** { *; }
+-keep class com.google.android.gms.iid.** { *; }
+-keep class com.google.android.gms.location.** { *; }
+
+-keep class com.moe.pushlibrary.activities.** { *; }
+-keep class com.moe.pushlibrary.MoEHelper
+-keep class com.moengage.locationlibrary.GeofenceIntentService
+-keep class com.moe.pushlibrary.InstallReceiver
+-keep class com.moengage.push.MoEPushWorker
+-keep class com.moe.pushlibrary.providers.MoEProvider
+-keep class com.moengage.receiver.MoEInstanceIDListener
+-keep class com.moengage.worker.MoEGCMListenerService
+-keep class com.moe.pushlibrary.models.** { *;}
+-keep class com.moengage.core.GeoTask
+-keep class com.moengage.location.GeoManager
+-keep class com.moengage.inapp.InAppManager
+-keep class com.moengage.push.PushManager
+-keep class com.moengage.inapp.InAppController
+
+-keep class com.moengage.pushbase.activities.PushTracker
+-keep class com.moengage.pushbase.activities.SnoozeTracker
+-keep class com.moengage.pushbase.push.MoEPushWorker
+-keep class com.moe.pushlibrary.MoEWorker
+-keep class com.moe.pushlibrary.AppUpdateReceiver
+-keep class com.moengage.core.MoEAlarmReceiver
+
+
+-dontwarn com.moengage.location.GeoManager
+-dontwarn com.moengage.core.GeoTask
+-dontwarn com.moengage.receiver.*
+-dontwarn com.moengage.worker.*
+-dontwarn com.moengage.inapp.ViewEngine
+
+-keep class com.delight.**  { *; }
+#endregion
+
 -keep class java.awt.** { *; }
 -keep class com.google.firebase.iid.** { *; }
 -keep class com.google.firebase.messaging.FirebaseMessagingService { *; }
@@ -174,6 +215,7 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class java.nio.file.**
 -keep class java.lang.invoke.**
 
+-dontwarn com.moengage.firebase.**
 -dontwarn com.google.firebase.**
 
 -dontwarn com.flurry.**

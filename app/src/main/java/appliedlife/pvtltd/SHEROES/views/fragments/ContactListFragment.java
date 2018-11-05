@@ -24,6 +24,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListRe
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -105,6 +108,10 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     private boolean hasFeedEnded;
 
+    private MoEHelper mMoEHelper;
+    private PayloadBuilder payloadBuilder;
+    private MoEngageUtills moEngageUtills;
+
     //region Member variables
     private String mSmsShareLink;
     private String isWhatsAppNumber;
@@ -125,6 +132,10 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         View view = inflater.inflate(R.layout.contact_list_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         mInviteFriendViewPresenterImp.attachView(this);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
+        Bundle bundle = getArguments();
         initViews();
         return view;
     }
@@ -314,6 +325,7 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                         sendIntent.putExtra(Intent.EXTRA_TEXT, mSmsShareLink);
                         startActivityForResult(sendIntent, 1);
                         //startActivity(sendIntent);
+                        moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", "Invite Friend", Long.parseLong(PhoneNumberUtils.stripSeparators(isWhatsAppNumber)), contactDetail.getName(), getScreenName(), "", contactDetail.getName(), getScreenName(), contactDetail.getItemPosition());
                         HashMap<String, Object> properties = new EventProperty.Builder().id(isWhatsAppNumber).sharedTo("Whatsapp").build();
                         AnalyticsManager.trackEvent(Event.FRIEND_INVITED, getScreenName(), properties);
 

@@ -11,6 +11,10 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.moe.pushlibrary.MoEHelper;
+import com.moe.pushlibrary.PayloadBuilder;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.BellNotificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -58,6 +63,9 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
     ImageView ivBackNotification;
     private GenericRecyclerViewAdapter mAdapter;
     LinearLayoutManager mLinearLayoutmanager;
+    private MoEHelper mMoEHelper;
+    private MoEngageUtills moEngageUtills;
+    private PayloadBuilder payloadBuilder;
     private SwipPullRefreshList mPullRefreshList;
     private FragmentListRefreshData mFragmentListRefreshData;
     private int mPageNo;
@@ -69,8 +77,12 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         ButterKnife.bind(this, v);
         mHomePresenter.attachView(this);
+        mMoEHelper = MoEHelper.getInstance(getActivity());
+        payloadBuilder = new PayloadBuilder();
+        moEngageUtills = MoEngageUtills.getInstance();
         tvTitle.setText(getString(R.string.ID_NOTIFICATION));
         bellNotificationListPagination();
+        moEngageUtills.entityMoEngageNotification(getActivity(), mMoEHelper, payloadBuilder, 0);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return v;
     }
@@ -167,6 +179,7 @@ public class BellNotificationDialogFragment extends BaseDialogFragment implement
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
+        moEngageUtills.entityMoEngageNotification(getActivity(), mMoEHelper, payloadBuilder, 0);
     }
 
     @Override
