@@ -247,11 +247,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
@@ -326,10 +321,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         return postBottomSheetFragment;
     }
 
-    @Override
-    public void invalidateLikeUnlike(Comment comment) {
-
-    }
+//    @Override
+//    public void invalidateLikeUnlike(Comment comment) {
+//
+//    }
 
     @Override
     public void onConfigFetched() {

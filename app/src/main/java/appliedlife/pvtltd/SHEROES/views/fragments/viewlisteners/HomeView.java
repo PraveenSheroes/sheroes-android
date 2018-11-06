@@ -18,15 +18,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 public interface HomeView extends BaseMvpView {
     void getLogInResponse(LoginResponse loginResponse);
     void getFeedListSuccess(FeedResponsePojo feedResponsePojo);
-    void showHomeFeedList(List<FeedDetail> feedDetailList);
     void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum);
-
     void showNotificationList(BelNotificationListResponse bellNotificationResponse);
     void getNotificationReadCountSuccess(BaseResponse baseResponse,FeedParticipationEnum feedParticipationEnum);
-
-    void invalidateLikeUnlike(Comment comment);
-
     void onConfigFetched();
-
     void getUserSummaryResponse(BoardingDataResponse boardingDataResponse);
 }

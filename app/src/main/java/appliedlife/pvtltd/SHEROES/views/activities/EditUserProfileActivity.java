@@ -16,6 +16,7 @@ import android.provider.MediaStore;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -56,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -67,6 +69,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
@@ -94,7 +97,7 @@ import butterknife.OnClick;
  * User Profile Edit Screen
  */
 
-public class EditUserProfileActivity extends BaseActivity implements IEditProfileView {
+public class EditUserProfileActivity extends BaseActivity implements IEditProfileView,BaseHolderInterface, View.OnClickListener {
 
     //region private variable
     private static final String SCREEN_LABEL = "Edit Profile Screen";
@@ -506,6 +509,31 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (baseResponse instanceof GetAllDataDocument) {
             dataOnClickForCardItem(view, baseResponse);
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     private void dataOnClickForCardItem(View view, BaseResponse baseResponse) {

@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -82,7 +83,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
  * Created by ujjwal on 11/20/17.
  */
 
-public class ContestActivity extends BaseActivity implements IContestView {
+public class ContestActivity extends BaseActivity implements IContestView, BaseHolderInterface {
     private static final String SCREEN_LABEL = "Challenge Activity";
     public static final String IS_CHALLENGE = "Is Challenge";
     public static final String CHALLENGE_OBJ = "Challenge Obj";
@@ -603,6 +604,16 @@ public class ContestActivity extends BaseActivity implements IContestView {
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
     }
 
     @Override

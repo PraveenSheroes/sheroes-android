@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -54,6 +55,8 @@ public class BookmarksFragment extends BaseFragment {
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
+    @Inject
+    FeedUtils feedUtils;
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
     private  int mPageNo=AppConstants.ONE_CONSTANT;
@@ -91,8 +94,8 @@ public class BookmarksFragment extends BaseFragment {
             }
             @Override
             public void dismissReactions() {
-                if (null != ((HomeActivity) getActivity()).popupWindow) {
-                    ((HomeActivity) getActivity()).popupWindow.dismiss();
+                if (null != feedUtils.popupWindow) {
+                    feedUtils.dismissWindow();
                 }
             }
         });

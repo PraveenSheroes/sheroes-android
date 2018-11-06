@@ -267,10 +267,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     }
 
-    @Override
-    public List getListData() {
-        return null;
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {

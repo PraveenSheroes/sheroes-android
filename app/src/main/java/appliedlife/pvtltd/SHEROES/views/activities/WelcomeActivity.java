@@ -86,6 +86,7 @@ import appliedlife.pvtltd.SHEROES.social.SocialPerson;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -120,6 +121,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     Preference<AppInstallation> mAppInstallation;
     @Inject
     AppUtils appUtils;
+    @Inject
+    ErrorUtil errorUtil;
     //endregion
 
     // region view
@@ -664,7 +667,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     String deactivated = loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED);
                     if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
                         if (StringUtil.isNotNullOrEmptyString(deactivated) && deactivated.equalsIgnoreCase("true")) {
-                            showErrorDialogOnUserAction(true, false, errorMessage, "true");
+                            errorUtil.showErrorDialogOnUserAction(this,true, false, errorMessage, "true");
                         } else {
                             showMaleError("");
                         }

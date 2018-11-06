@@ -312,10 +312,6 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     }
 
 
-    @Override
-    public List getListData() {
-        return null;
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {

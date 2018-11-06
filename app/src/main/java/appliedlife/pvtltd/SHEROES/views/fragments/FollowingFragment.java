@@ -233,10 +233,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     }
 
-    @Override
-    public List getListData() {
-        return null;
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {

@@ -468,7 +468,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = false;
             comment.likeCount--;
-            getMvpView().invalidateLikeUnlike(comment);
             return;
         }
         getMvpView().startProgressBar();
@@ -487,7 +486,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                         comment.isLiked = false;
                         comment.likeCount--;
-                        getMvpView().invalidateLikeUnlike(comment);
 
                     }
 
@@ -498,7 +496,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                             comment.likeCount--;
                         }
                         getMvpView().stopProgressBar();
-                        getMvpView().invalidateLikeUnlike(comment);
                         // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
                     }
                 });
@@ -510,7 +507,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             comment.isLiked = true;
             comment.likeCount++;
-            getMvpView().invalidateLikeUnlike(comment);
             return;
         }
         getMvpView().startProgressBar();
@@ -529,7 +525,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                         comment.isLiked = true;
                         comment.likeCount++;
-                        getMvpView().invalidateLikeUnlike(comment);
                     }
 
                     @Override
@@ -539,7 +534,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                             comment.isLiked = true;
                             comment.likeCount++;
                         }
-                        getMvpView().invalidateLikeUnlike(comment);
                         // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
                     }
                 });

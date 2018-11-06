@@ -34,6 +34,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
+import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -43,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
@@ -66,10 +68,10 @@ public class FeedUtils {
     private Fragment mFragment;
     private boolean isWhatsAppShare;
     private long mUserId;
-    private View popupView;
-    private PopupWindow popupWindow;
+    public PopupWindow popupWindow;
     private static final int ASK_QUESTION_POST = 3;
     private boolean mIsDestroyed=false;
+    SheroesApplication mSheroesApplication;
     //endregion
 
     //region injected variables
@@ -84,7 +86,9 @@ public class FeedUtils {
         return sInstance;
     }
 
-    private FeedUtils() {
+    @Inject
+    public FeedUtils() {
+        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
     }
 
     public void feedCardsHandled(View view, BaseResponse baseResponse, Activity activity, String screenName) {
@@ -376,7 +380,7 @@ public class FeedUtils {
 
     public void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum, final Context context, final String screenName) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
+        View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
         popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(new BitmapDrawable());
         popupWindow.setOutsideTouchable(true);
@@ -394,6 +398,7 @@ public class FeedUtils {
 
         // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
         popupWindow.showAsDropDown(view, -150, -10);
+
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -498,7 +503,7 @@ public class FeedUtils {
                             ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                         }
                     }
-                    ((SheroesApplication) context).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
+                    ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
 
@@ -584,8 +589,41 @@ public class FeedUtils {
         }
     }
 
+    public void dataOperationOnClick(Context context, BaseResponse baseResponse) {
+        if (baseResponse instanceof FeedDetail) {
+            FeedDetail feedDetail = (FeedDetail) baseResponse;
+            openImageFullViewFragment(context, feedDetail);
+        }
+    }
+
+    public void openImageFullViewFragment(Context context, FeedDetail feedDetail) {
+        AlbumActivity.navigateTo((Activity)context, feedDetail, "BASE", null);
+    }
+
+
     public void onDestroy(){
         mIsDestroyed = true;
+    }
+
+    public void dismissWindow(){
+        popupWindow.dismiss();
+    }
+
+    public void onReferrerReceived(Context context, Boolean isReceived) {
+        if (isReceived != null && isReceived) {
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(context);
+            appInstallationHelper.setupAndSaveInstallation(false);
+        }
+    }
+
+    public void clearReferences() {
+        if (null != mSheroesApplication) {
+            String currActivityName = mSheroesApplication.getCurrentActivityName();
+            if (StringUtil.isNotNullOrEmptyString(currActivityName)) {
+                if (this.getClass().getSimpleName().equals(currActivityName))
+                    mSheroesApplication.setCurrentActivityName(null);
+            }
+        }
     }
 
 }

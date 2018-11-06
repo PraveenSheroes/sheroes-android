@@ -17,8 +17,6 @@ public interface BaseHolderInterface<T extends BaseResponse> {
 
     void setListData(T data, boolean flag);
 
-    List<T> getListData();
-
     void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position);
 
     void navigateToProfileView(BaseResponse baseResponse, int mValue);

@@ -223,11 +223,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
 
     }
 
-    @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
     public void challengeAddOnFeed(FeedDetail feedDetail) {
         if (null != feedDetail) {
             mAdapter.addDataOnPosition(feedDetail, 0);
@@ -487,11 +482,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
                 mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(comment.getEntityId(), reactionValue, comment.getCommentsId()), comment);
             }
         }
-
-    }
-
-    @Override
-    public void invalidateLikeUnlike(Comment comment) {
 
     }
 

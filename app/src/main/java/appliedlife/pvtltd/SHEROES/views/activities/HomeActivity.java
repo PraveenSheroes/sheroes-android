@@ -85,6 +85,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.animation.SnowFlakeView;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -115,6 +116,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -130,6 +132,7 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -174,7 +177,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
+public class HomeActivity extends BaseActivity implements BaseHolderInterface, MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
@@ -585,6 +588,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
         ContestActivity.navigateTo(this, mContest, SCREEN_LABEL, null, 0, 0, AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL);
     }
@@ -610,10 +618,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    @Override
-    public List getListData() {
-        return mArticleCategoryItemList;
-    }
 
     @Override
     public void onDrawerOpened() {
@@ -844,11 +848,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-        setAllValues(mFragmentOpen);
-        super.dataOperationOnClick(baseResponse);
-    }
+//    @Override
+//    public void dataOperationOnClick(BaseResponse baseResponse) {
+//        setAllValues(mFragmentOpen);
+//        super.dataOperationOnClick(baseResponse);
+//    }
 
     @Override
     public void setListData(BaseResponse data, boolean isCheked) {
@@ -873,6 +877,11 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
         mArticleCategoryItemList.clear();
         mArticleCategoryItemList.addAll(localList);
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
     }
 
 
@@ -988,11 +997,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
@@ -1019,10 +1023,20 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         }
     }
 
+//    @Override
+//    public void invalidateLikeUnlike(Comment comment) {
+//
+//    }
+
     @Override
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(this, false);
         AnalyticsManager.initializeCleverTap(this, false);
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 
     public void fetchAllCommunity() {
@@ -1768,9 +1782,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
                 }
                 setAllValues(mFragmentOpen);
                 feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
-
-//                super.feedCardsHandled(view, baseResponse);
-
         }
 
     }

@@ -60,6 +60,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
 import appliedlife.pvtltd.SHEROES.utils.ShareUtils;
@@ -240,6 +241,12 @@ public class SheroesAppModule {
     @Provides
     public FeedUtils provideFeedUtils() {
         return FeedUtils.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public ErrorUtil providesErrorUtil() {
+        return ErrorUtil.getInstance();
     }
 
     @Singleton

@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -27,6 +29,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsigh
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.MentorPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -45,7 +48,7 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumb
  * Created by Praveen on 11/12/17.
  */
 
-public class MentorInsightActivity extends BaseActivity implements MentorView {
+public class MentorInsightActivity extends BaseActivity implements MentorView, BaseHolderInterface {
     private static final String SCREEN_LABEL = "Mentor Insight Screen";
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -352,6 +355,31 @@ public class MentorInsightActivity extends BaseActivity implements MentorView {
                 default:
             }
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     @Override

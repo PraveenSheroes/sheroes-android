@@ -42,6 +42,7 @@ public class LogOutUtils {
     }
 
     private LogOutUtils() {
+        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
     }
 
 
@@ -67,7 +68,7 @@ public class LogOutUtils {
         mUserPreference.delete();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
         ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-        ((SheroesApplication) context).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+        ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
 
     }
 }
