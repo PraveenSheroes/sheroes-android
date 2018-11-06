@@ -62,14 +62,17 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_ME
 
 public class FeedUtils {
 
+    //region constant variables
+    private static final int ASK_QUESTION_POST = 3;
+    //endregion
+
     //region member variables
     private static FeedUtils sInstance;
     private FeedDetail mFeedDetail;
     private Fragment mFragment;
-    private boolean isWhatsAppShare;
+    private boolean mIsWhatsAppShare;
     private long mUserId;
     public PopupWindow popupWindow;
-    private static final int ASK_QUESTION_POST = 3;
     private boolean mIsDestroyed=false;
     SheroesApplication mSheroesApplication;
     //endregion
@@ -118,21 +121,21 @@ public class FeedUtils {
                 bookMarkTrending(activity);
                 break;
             case R.id.tv_feed_community_post_user_share:
-                if (isWhatsAppShare) {
+                if (mIsWhatsAppShare) {
                     shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
                 break;
             case R.id.tv_feed_review_post_user_share_ic:
-                if (isWhatsAppShare) {
+                if (mIsWhatsAppShare) {
                     shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
                 break;
             case R.id.tv_feed_article_user_share:
-                if (isWhatsAppShare) {
+                if (mIsWhatsAppShare) {
                     shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
@@ -140,7 +143,7 @@ public class FeedUtils {
                 break;
 
             case R.id.tv_article_share:
-                if (isWhatsAppShare) {
+                if (mIsWhatsAppShare) {
                     shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
@@ -356,8 +359,8 @@ public class FeedUtils {
         AnalyticsManager.trackEvent(Event.POST_SHARED, screenName, properties);
     }
 
-    public void setConfigurableShareOption(boolean isWhatsAppShare) {
-        this.isWhatsAppShare = isWhatsAppShare;
+    public void setConfigurableShareOption(boolean mIsWhatsAppShare) {
+        this.mIsWhatsAppShare = mIsWhatsAppShare;
     }
 
     //Open profile from last comment user profile or name click
