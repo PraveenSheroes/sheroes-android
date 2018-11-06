@@ -31,7 +31,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -55,6 +54,9 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  */
 
 public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
+
+    public static final String CHALLENGE_POST = "challenge post";
+
     @Inject
     CommunityModel communityModel;
     private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
@@ -80,34 +82,34 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
-            @Override
-            public void onComplete() {
+                    @Override
+                    public void onComplete() {
 
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onNext(CreateCommunityResponse communityPostCreateResponse) {
-                if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
-                    FeedDetail feedDetail = communityPostCreateResponse.getFeedDetail();
-                    if (feedDetail != null) {
-                        feedDetail.setSharedFromExternalApp(isSharedFromExternalApp);
-                        AnalyticsManager.trackPostAction(Event.POST_CREATED, feedDetail, CommunityPostActivity.SCREEN_LABEL);
                     }
-                } else {
-                    getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
-                    getMvpView().stopProgressBar();
-                }
-            }
 
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_CREATE_COMMUNITY);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(CreateCommunityResponse communityPostCreateResponse) {
+                        if (communityPostCreateResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onPostSend(communityPostCreateResponse.getFeedDetail());
+                            FeedDetail feedDetail = communityPostCreateResponse.getFeedDetail();
+                            if (feedDetail != null) {
+                                feedDetail.setSharedFromExternalApp(isSharedFromExternalApp);
+                                AnalyticsManager.trackPostAction(Event.POST_CREATED, feedDetail, CommunityPostActivity.SCREEN_LABEL);
+                            }
+                        } else {
+                            getMvpView().showError(communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_CREATE_COMMUNITY);
+                            getMvpView().stopProgressBar();
+                        }
+                    }
+
+                });
     }
 
     public void sendChallengePost(final ChallengePostCreateRequest challengePostCreateRequest) {
@@ -143,7 +145,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                                 .id(Long.toString(communityPostCreateResponse.getId()))
                                 .challengeId(Long.toString(challengePostCreateRequest.getmChallengeId()))
                                 .communityId("0")
-                                .type(MoEngageConstants.CHALLENGE_POST)
+                                .type(CHALLENGE_POST)
                                 .build();
                 AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
             }

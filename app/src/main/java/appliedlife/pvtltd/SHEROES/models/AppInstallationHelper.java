@@ -11,7 +11,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.moengage.push.PushManager;
 
 import java.io.IOException;
 import java.util.TimeZone;
@@ -90,7 +89,6 @@ public class AppInstallationHelper {
         pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
             @Override
             public void onSuccess(String registrationId, boolean isNewRegistration) {
-                PushManager.getInstance().refreshToken(mContext, registrationId);
                 //Refresh FCM token
                 CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if(cleverTapAPI!=null) {

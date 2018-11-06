@@ -51,7 +51,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.login.InstallUpdateForMoEngage;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.preferences.GsonConverter;
@@ -260,8 +260,8 @@ public class SheroesAppModule {
 
     @Singleton
     @Provides
-    public Preference<InstallUpdateForMoEngage> provideInstallUpdatePref(RxSharedPreferences rxSharedPreferences, Gson gson) {
-        return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new InstallUpdateForMoEngage(), new GsonConverter<>(gson, InstallUpdateForMoEngage.class));
+    public Preference<AppStatus> provideInstallUpdatePref(RxSharedPreferences rxSharedPreferences, Gson gson) {
+        return rxSharedPreferences.getObject(AppConstants.INSTALL_UPDATE, new AppStatus(), new GsonConverter<>(gson, AppStatus.class));
     }
 
     @Provides
