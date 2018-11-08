@@ -54,7 +54,11 @@ public class HelplineChatDoc extends BaseResponse {
     @Expose
     private String formatedDate;
     @SerializedName(value = "thumbnail_image_url")
+    @Expose
     private String thumbnailImageUrl;
+    @SerializedName("need_rating_b")
+    @Expose
+    private boolean needRating;
 
     public String getId() {
         return id;
@@ -183,6 +187,14 @@ public class HelplineChatDoc extends BaseResponse {
 
     public void setFormatedDate(String formatedDate) {
         this.formatedDate = formatedDate;
+    }
+
+    public boolean getNeedRating() {
+        return needRating;
+    }
+
+    public void setNeedRating(boolean needRating) {
+        this.needRating = needRating;
     }
 
     /*public String getThumbnailImageUrl() {
