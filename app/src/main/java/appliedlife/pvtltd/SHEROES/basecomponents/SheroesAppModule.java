@@ -58,6 +58,7 @@ import appliedlife.pvtltd.SHEROES.preferences.GsonConverter;
 import appliedlife.pvtltd.SHEROES.utils.AnnotationExclusionStrategy;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.BaseFragmentUtil;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
@@ -247,6 +248,12 @@ public class SheroesAppModule {
     @Provides
     public ErrorUtil providesErrorUtil() {
         return ErrorUtil.getInstance();
+    }
+
+    @Singleton
+    @Provides
+    public BaseFragmentUtil providesBaseFragmentUtil() {
+        return BaseFragmentUtil.getInstance();
     }
 
     @Singleton

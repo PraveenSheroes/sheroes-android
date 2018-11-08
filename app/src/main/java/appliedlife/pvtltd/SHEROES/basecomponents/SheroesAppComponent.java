@@ -12,9 +12,9 @@ import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.presenters.ContestPresenterImpl;
 import appliedlife.pvtltd.SHEROES.presenters.CreatePostPresenter;
 import appliedlife.pvtltd.SHEROES.service.PushNotificationService;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
-import appliedlife.pvtltd.SHEROES.utils.ShareUtils;
 import appliedlife.pvtltd.SHEROES.viewholder.ContestFlatViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.HeaderTaggedUserViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
@@ -375,6 +375,7 @@ public interface SheroesAppComponent {
 
     void inject(LogOutUtils logOutUtils);
 
+    void inject(ErrorUtil errorUtil);
 }
 
 

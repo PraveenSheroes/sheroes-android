@@ -199,12 +199,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
+
         try {
             mIsDestroyed = true;
             feedUtils.onDestroy();
             errorUtil.onDestroy();
             feedUtils.clearReferences();
-            super.onDestroy();
         } catch (Exception e) {
 
         }
@@ -254,6 +255,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         if (getPresenter() != null) {
             getPresenter().onStop();
         }
+        if(feedUtils != null)
         feedUtils.clearReferences();
     }
 
