@@ -312,6 +312,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Button12spRegular" parent="ButtonRegular">
+        <item name="android:textSize">12sp</item>
+    </style>
+
     <style name="Button14spBold" parent="ButtonBold">
         <item name="android:textSize">14sp</item>
     </style>
