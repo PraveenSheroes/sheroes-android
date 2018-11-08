@@ -496,7 +496,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                             comment.likeCount--;
                         }
                         getMvpView().stopProgressBar();
-                        // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
                     }
                 });
 
@@ -760,7 +759,4 @@ public class HomePresenter extends BasePresenter<HomeView> {
         detachView();
     }
 
-    public void fetchAllCommunity() {
-
-    }
 }

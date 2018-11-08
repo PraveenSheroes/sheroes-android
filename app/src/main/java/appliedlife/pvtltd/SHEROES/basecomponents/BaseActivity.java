@@ -207,7 +207,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
             errorUtil.onDestroy();
             feedUtils.clearReferences();
         } catch (Exception e) {
-
+            Crashlytics.getInstance().core.logException(e);
         }
 
         if (getPresenter() != null) {

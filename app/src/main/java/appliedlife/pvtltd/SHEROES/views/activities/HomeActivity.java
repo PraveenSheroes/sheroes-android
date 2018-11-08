@@ -848,12 +848,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         }
     }
 
-//    @Override
-//    public void dataOperationOnClick(BaseResponse baseResponse) {
-//        setAllValues(mFragmentOpen);
-//        super.dataOperationOnClick(baseResponse);
-//    }
-
     @Override
     public void setListData(BaseResponse data, boolean isCheked) {
         List<ArticleCategory> localList = new ArrayList<>();
