@@ -28,7 +28,7 @@
                     android:id="@+id/icon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextView14spBold"
+                    style="@style/TextView14spMediumBold"
                     android:layout_marginEnd="@dimen/dp_size_16"
                     android:layout_marginLeft="@dimen/dp_size_16"
                     android:layout_marginRight="@dimen/dp_size_16"

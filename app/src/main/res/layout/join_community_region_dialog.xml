@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/ID_JOIN_REGION_TXT"
-        android:textStyle="bold"
         vernacular:customTextFontFamily="@string/bold_font" />
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView

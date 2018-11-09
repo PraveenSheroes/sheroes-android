@@ -44,7 +44,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontButton
             android:id="@+id/btn_sync_contact"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
