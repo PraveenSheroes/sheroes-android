@@ -221,6 +221,10 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
     </style>
 
+    <style name="TextViewMediumBold" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/noto_sans_medium</item>
+    </style>
+
     <style name="TextViewForStandardSizeColor" parent="TextViewRegular">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/comment_text</item>
@@ -274,39 +278,59 @@
     </style>
 
     <!--Textview bold fonts-->
-    <style name="TextView9spBold" parent="TextViewBold">
-        <item name="android:textSize">9sp</item>
-    </style>
-
     <style name="TextView10spBold" parent="TextViewBold">
         <item name="android:textSize">10sp</item>
     </style>
-
-    <style name="TextView12spBold" parent="TextViewBold">
-        <item name="android:textSize">12sp</item>
-    </style>
-
     <style name="TextView14spBold" parent="TextViewBold">
         <item name="android:textSize">14sp</item>
     </style>
-
     <style name="TextView16spBold" parent="TextViewBold">
         <item name="android:textSize">16sp</item>
     </style>
-
     <style name="TextView18spBold" parent="TextViewBold">
         <item name="android:textSize">18sp</item>
     </style>
-
     <style name="TextView22spBold" parent="TextViewBold">
         <item name="android:textSize">22sp</item>
     </style>
+    <style name="TextView24spBold" parent="TextViewBold">
+        <item name="android:textSize">24sp</item>
+    </style>
 
-    <style name="TextView20spBold" parent="TextViewBold">
+    <!--Textview mediumbold fonts-->
+    <style name="TextView9spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">9sp</item>
+    </style>
+
+    <style name="TextView10spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">10sp</item>
+    </style>
+
+    <style name="TextView12spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextView14spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="TextView16spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextView18spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextView22spMediumBold" parent="TextViewMediumBold">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <style name="TextView20spMediumBold" parent="TextViewMediumBold">
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="TextView24spBold" parent="TextViewBold">
+    <style name="TextView24spMediumBold" parent="TextViewMediumBold">
         <item name="android:textSize">24sp</item>
     </style>
 

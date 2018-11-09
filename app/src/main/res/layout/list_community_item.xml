@@ -38,7 +38,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/community_name"
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

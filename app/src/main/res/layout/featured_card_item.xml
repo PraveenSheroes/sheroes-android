@@ -40,7 +40,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_featured_community_card_title"
-                    style="@style/TextView14spBold"
+                    style="@style/TextView14spMediumBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/feed_article_label"
