@@ -3,6 +3,8 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -18,6 +20,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.linkifyURLs;
 
@@ -41,11 +44,21 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
     @Bind(R.id.date_stamp)
     TextView dateStamp;
 
+    @Bind(R.id.rate_us_screen)
+    LinearLayout rateUsScreen;
+
+    @Bind(R.id.rate_us)
+    Button rateUs;
+
+    @Bind(R.id.not_now)
+    Button notNow;
+
     @BindDimen(R.dimen.counselor_image_size)
     int counselorImageSize;
 
     BaseHolderInterface viewInterface;
     private HelplineChatDoc dataItem;
+    private Context mContext;
 
     public HelplineAnswerCardHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
@@ -55,8 +68,10 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
     }
 
     @Override
-    public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position,HelplineChatDoc prevObj) {
+    public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position, HelplineChatDoc prevObj) {
         this.dataItem = helplineChatDoc;
+        this.mContext = context;
+        helplineChatDoc.setItemPosition(position);
         if (StringUtil.isNotNullOrEmptyString(dataItem.getSearchText())) {
             answer.setText(dataItem.getSearchText());
             linkifyURLs(answer);
@@ -71,6 +86,12 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
             counselorImage.bindImage(AttendantImageUrl);
         }
         setDate(prevObj, helplineChatDoc, position);
+
+        if (helplineChatDoc.getRating()) {
+            rateUsScreen.setVisibility(View.VISIBLE);
+        } else {
+            rateUsScreen.setVisibility(View.GONE);
+        }
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -84,6 +105,19 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
 
     @Override
     public void onClick(View v) {
+    }
+
+    @OnClick(R.id.rate_us)
+    public void RateUsClicked() {
+        CommonUtil.openPlayStore(mContext, SheroesApplication.mContext.getPackageName());
+        rateUsScreen.setVisibility(View.GONE);
+        viewInterface.handleOnClick(dataItem, rateUs);
+    }
+
+    @OnClick(R.id.not_now)
+    public void NotNowClicked() {
+        rateUsScreen.setVisibility(View.GONE);
+        viewInterface.handleOnClick(dataItem, notNow);
     }
 
     private void setDate(HelplineChatDoc prevObj, HelplineChatDoc helplineChatDoc, int position) {

@@ -104,7 +104,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.GetAllDataBoardingSearchHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineAnswerCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineRateUsHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineQuestionCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HomeSpinnerSelectorHolder;
@@ -202,8 +201,6 @@ public interface SheroesAppComponent {
     void inject(HelplineQuestionCardHolder helplineQuestionCardHolder);
 
     void inject(HelplineAnswerCardHolder helplineAnswerCardHolder);
-
-    void inject(HelplineRateUsHolder helplineRateUsHolder);
 
     void inject(ICCMemberViewHolder iccMemberViewHolder);
 
