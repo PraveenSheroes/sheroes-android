@@ -174,7 +174,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     public static final int MAX_IMAGE = 5;
     public static final int POLL_OPTION_DEFAULT_COUNT = 2;
     public static final int POLL_OPTION_MAX_COUNT = 8;
-    //region member variable
+    //region member variables
     private String mPrimaryColor = "#ffffff";
     private String mTitleTextColor = "#3c3c3c";
     private String mStatusBarColor = "#aaaaaa";
@@ -224,8 +224,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     private List<Mention> mMentionList;
     private List<MentionSpan> mMentionSpanList;
     CallbackManager mCallbackManager;
-    //endregion member variable
+    //endregion member variables
 
+    //region inject variables
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -237,6 +238,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Inject
     AppUtils mAppUtils;
+    //endregion inject variables
 
     //region View variables
     @Bind(R.id.toolbar)
@@ -352,9 +354,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Bind(R.id.rl_main_layout)
     RelativeLayout mRlMainLayout;
-    //endregion View variables
+    //endregion view variables
 
-    //dimensions region
+    //region bind dimension variables
     @BindDimen(R.dimen.authorPicSize)
     int mAuthorPicSize;
 
@@ -372,9 +374,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @BindDimen(R.dimen.add_icon_top_bottom)
     int mPhotoCameraPollImageTopBottom;
-    //endregion dimensions region
+    //endregion dimension variables
 
-    //region Activity methods
+    //region activity methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -515,7 +517,752 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         mCreatePostPresenter.getUserMentionSuggestion(mEtView, mCommunityPost);
     }
+    //endregion activity methods
 
+    //region override methods
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            onBackPress();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    @Override
+    public void showImage(final String imageUrl) {
+
+        if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
+            int width = CommonUtil.getWindowWidth(this);
+            int imageHeight = CommonUtil.getWindowHeight(this);
+            String finalImageUrl = CommonUtil.getThumborUriWithFit(imageUrl, width, imageHeight);
+            Glide.with(this)
+                    .asBitmap()
+                    .load(finalImageUrl)
+                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
+                    .into(new SimpleTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
+
+                            if (mIvImagePollLeft != null && mIvImagePollRight != null) {
+                                if ((Boolean) mIvImagePollLeft.getTag()) {
+                                    mImagePollLeftUrl = imageUrl;
+                                    mIvImagePollLeft.setImageBitmap(bitmap);
+                                } else if ((Boolean) mIvImagePollRight.getTag()) {
+                                    mIvImagePollRight.setImageBitmap(bitmap);
+                                    mImagePollRightUrl = imageUrl;
+                                }
+                                mIvImagePollRight.setEnabled(true);
+                                mIvImagePollLeft.setEnabled(true);
+                            }
+                        }
+                    });
+        } else {
+            mIvImagePollRight.setEnabled(true);
+            mIvImagePollLeft.setEnabled(true);
+        }
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public void startProgressBar() {
+        mIsProgressBarVisible = true;
+        mIsDisableClickOnPost = true;
+        CommonUtil.hideKeyboard(this);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mIsProgressBarVisible = false;
+        mIsDisableClickOnPost = false;
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackPress();
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+    }
+
+    @Override
+    public void onPostSend(FeedDetail feedDetail) {
+        if (feedDetail != null) {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            if (mIsEditPost) {
+                feedDetail.setItemPosition(mFeedPosition);
+                Parcelable parcelable = Parcels.wrap(feedDetail);
+                bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, parcelable);
+            }
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+            navigateToParentActivity();
+        }
+    }
+
+    @Override
+    public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
+        final String searchText = queryToken.getTokenString();
+        if (searchText.contains("@")) {
+            List<Mention> mentionList = new ArrayList<>();
+            mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+            mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            mSuggestionList.setLayoutManager(layoutManager);
+            mSuggestionList.setAdapter(mEtView.notifyAdapterOnData(mentionList));
+            mMentionList = mentionList;
+        }
+        return Collections.singletonList("user-history");
+    }
+
+    @Override
+    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
+        int id = view.getId();
+        switch (id) {
+            case R.id.li_social_user:
+                mMentionList.clear();
+                mEtView.displayHide();
+                Mention mention = (Mention) suggestible;
+                mEtView.setInsertion(mention);
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .postId(Integer.toString(mCommunityPost.remote_id))
+                                .taggedIn("POST")
+                                .taggedUserId(Integer.toString(mention.getUserId()))
+                                .build();
+                AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
+                break;
+            default:
+        }
+
+        return null;
+    }
+
+    @Override
+    public void textChangeListner(@NonNull Editable editText) {
+
+        if (editText.length() > 0) {
+            if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !mIsLinkRendered) {
+                String editTextDescription = editText.toString().trim();
+                if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
+                    int indexOfFirstHttp = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "https", 1);
+                    int urlLength = getUrlLength(editTextDescription, indexOfFirstHttp);
+                    if (urlLength <= editTextDescription.length()) {
+                        String httpString = editTextDescription.substring(indexOfFirstHttp, urlLength);
+                        if (mAppUtils.checkUrl(httpString)) {
+                            mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(httpString));
+                        }
+                    }
+                } else if (editTextDescription.contains("www") || editTextDescription.contains("WWW")) {
+                    int indexOfFirstWWW = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "www", 1);
+                    int urlLength = getUrlLength(editTextDescription, indexOfFirstWWW);
+                    if (urlLength <= editTextDescription.length()) {
+                        String wwwString = editTextDescription.substring(indexOfFirstWWW, urlLength);
+                        if (mAppUtils.checkWWWUrl(wwwString)) {
+                            mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(wwwString));
+                        }
+                    }
+                }
+                if (editTextDescription.contains("@")) {
+                    mAnonymousView.setVisibility(View.GONE);
+                    mImageUploadView.setVisibility(View.GONE);
+                } else {
+                    mAnonymousView.setVisibility(View.VISIBLE);
+                    setImageCount();
+                }
+            }
+            mAction.setAlpha(1f);
+        } else {
+            mAction.setAlpha(.9f);
+        }
+
+    }
+
+    @Override
+    public void onPollTypeClicked(PollType pollType) {
+        mPollOptionType = pollType;
+        mIsPollOptionClicked = true;
+        mImageList.clear();
+        mEtView.getEditText().setMaxLines(mMaxLength);
+        mTitleToolbar.setText(R.string.title_create_poll);
+        mEtView.getEditText().getText().clear();
+        mEtView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
+        mIsAnonymous = false;
+        setupUserView();
+        mLiMainPollView.setVisibility(View.VISIBLE);
+        mFbShareContainer.setVisibility(View.GONE);
+        mRlImageList.setVisibility(View.GONE);
+        mLiUploadImageContainer.setVisibility(View.GONE);
+        String[] pollTime = getResources().getStringArray(R.array.poll_time);
+        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        CommonUtil.showKeyboard(this);
+        switch (pollType) {
+            case TEXT:
+                for (int i = 0; i < POLL_OPTION_DEFAULT_COUNT; i++) {
+                    mPollOptionCount++;
+                    addTextPollOptionView();
+                }
+                mTvDaySelector.setText(pollTime[0]);
+                mTvDaySelector.setTag(pollDaysCount[0]);
+                break;
+            case IMAGE:
+                addImagePollView();
+                mTvDaySelector.setText(pollTime[0]);
+                mTvDaySelector.setTag(pollDaysCount[0]);
+                break;
+            case EMOJI:
+                break;
+            case BOOLEAN:
+                break;
+        }
+    }
+
+    @Override
+    public void showUserMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
+        if (StringUtil.isNotEmptyCollection(mMentionList)) {
+            if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
+                mMentionList = searchUserDataResponse.getParticipantList();
+                mMentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+                mEtView.notifyData(mMentionList);
+            } else {
+                List<Mention> mentionList = new ArrayList<>();
+                mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
+                mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
+                mEtView.notifyData(mentionList);
+            }
+        }
+    }
+
+
+    @Override
+    public void finishActivity() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        navigateToParentActivity();
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        return new EventProperty.Builder()
+                .isOpenedFromExternalApp(String.valueOf(mIsSharedFromOtherApp))
+                .build();
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        if (mPostNowOrLaterDialog != null) {
+            mPostNowOrLaterDialog.dismiss();
+        }
+
+        if (mScheduledConfirmationDialog != null) {
+            mScheduledConfirmationDialog.dismiss();
+        }
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mCreatePostPresenter;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (mCallbackManager != null) {
+            mCallbackManager.onActivityResult(requestCode, resultCode, intent);
+        }
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+            switch (requestCode) {
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                        try {
+                            Photo photo = new Photo();
+                            photo.isNew = true;
+                            File file = new File(result.getUri().getPath());
+                            photo.file = file;
+                            File compressedFile = compressFile(file);
+                            mFilePathList.add(compressedFile.getAbsolutePath());
+                            if (mIsEditPost) {
+                                File compressedFileEdit = compressFile(file);
+                                mEditFilePathList.add(compressedFileEdit.getAbsolutePath());
+                            }
+                            if (mIvImagePollLeft != null && mIvImagePollRight != null) {
+                                Bitmap bitmap = decodeFile(photo.file);
+                                startProgressBar();
+                                mIvImagePollRight.setEnabled(false);
+                                mIvImagePollLeft.setEnabled(false);
+                                mCreatePostPresenter.uploadFile(CompressImageUtil.setImageOnHolder(bitmap));
+                            } else {
+                                postPicsAndCountView(photo);
+                            }
+                        } catch (Exception e) {
+                            Crashlytics.getInstance().core.logException(e);
+                            e.printStackTrace();
+                        }
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
+
+                default:
+                    LogUtils.error(SCREEN_LABEL, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + SCREEN_LABEL + AppConstants.SPACE + requestCode);
+            }
+        }
+    }
+    //endregion override methods
+
+    //region onclick methods
+    @OnClick(R.id.add_image)
+    public void onAddImageClick() {
+        mRippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                selectImageFromGallery();
+            }
+        });
+
+    }
+
+    @OnClick(R.id.camera)
+    public void onCameraClick() {
+        mRippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                selectImageFromCamera();
+            }
+        });
+
+    }
+
+    @OnClick(R.id.poll_survey)
+    void onPollClick() {
+        mRippleViewLinearPollSurvey.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
+            @Override
+            public void onComplete(RippleViewLinear rippleView) {
+                mSuggestionList.setVisibility(View.GONE);
+                List<PollOptionType> pollOptionTypeList = new ArrayList<>();
+
+                PollOptionType textPoll = new PollOptionType();
+                textPoll.pollType = TEXT;
+                textPoll.id = 1;
+                textPoll.title = getString(R.string.text_poll);
+                textPoll.imgUrl = R.drawable.vector_text_poll;
+                pollOptionTypeList.add(textPoll);
+
+                PollOptionType imagePoll = new PollOptionType();
+                imagePoll.pollType = IMAGE;
+                imagePoll.id = 2;
+                imagePoll.title = getString(R.string.image_poll);
+                imagePoll.imgUrl = R.drawable.vector_image_poll_icon;
+                pollOptionTypeList.add(imagePoll);
+                AnalyticsManager.trackEvent(Event.POLL_CLICKED, getScreenName(), null);
+                PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollOptionTypeList);
+            }
+        });
+
+    }
+
+    @OnClick(R.id.user_drop_down)
+    public void onUserDropDownClicked() {
+        PopupMenu popup = new PopupMenu(CommunityPostActivity.this, mUserDropDownView);
+        popup.getMenuInflater().inflate(R.menu.menu_user_spinner, popup.getMenu());
+        popup.getMenu().findItem(R.id.user_menu).setTitle(mPostAsCommunitySelected ? getString(R.string.menu_post_as_user, mUserSummary.getFirstName() + " " + mUserSummary.getLastName()) : getString(R.string.menu_post_as_community));
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                if (!mPostAsCommunitySelected) {
+                    mAnonymousSelect.setChecked(false);
+                    mPostAsCommunitySelected = true;
+                } else {
+                    mPostAsCommunitySelected = false;
+                }
+                setupUserView();
+                return true;
+            }
+        });
+        popup.show();
+    }
+
+    @OnClick({R.id.iv_add_poll_img, R.id.tv_add_poll_text})
+    public void onAddMoreOptionClicked() {
+        if (mPollOptionCount < POLL_OPTION_MAX_COUNT) {
+            mPollOptionCount++;
+            addTextPollOptionView();
+        }
+        addOptionButtonView();
+    }
+
+    @OnClick(R.id.tv_day_selector)
+    public void onTvDaySelectorClicked() {
+        addPollSelectionDay();
+    }
+
+    @OnClick(R.id.action)
+    public void onPostClicked() {
+        if (!validateFields()) {
+            return;
+        }
+        if (mCommunityPost == null) {
+            finish();
+            return;
+        }
+        if (mIsProgressBarVisible) {
+            return;
+        }
+        if (mIsPollOptionClicked) {
+            createPoll();
+        } else {
+            if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
+                selectPostNowOrLater();
+            } else {
+                sendPost();
+            }
+        }
+    }
+
+    @OnTouch({R.id.tv_add_photo_lable, R.id.li_image_upload_view})
+    public boolean onAddPhotoClicked() {
+        bottomSheetExpanded();
+        CommonUtil.hideKeyboard(this);
+        return true;
+    }
+    //endregion onclick methods
+
+    //region public methods
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
+        if (feedDetail != null) {
+            CommunityPost communityPost = new CommunityPost();
+            communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
+            communityPost.community = new Community();
+            communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
+            communityPost.body = userPostObj.getListDescription();
+            communityPost.community.name = userPostObj.getPostCommunityName();
+            communityPost.community.isOwner = userPostObj.isCommunityOwner();
+            communityPost.isMyPost = userPostObj.isCommunityOwner();
+            communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
+            communityPost.isAnonymous = userPostObj.isAnonymous();
+            communityPost.isEdit = true;
+            communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+            communityPost.createPostRequestFrom = userPostObj.askQuestionFromMentor;
+            if (userPostObj.isHasMention()) {
+                communityPost.hasMention = userPostObj.isHasMention();
+                communityPost.userMentionList = userPostObj.getUserMentionList();
+            }
+            if (userPostObj.getCommunityId() != null && userPostObj.getCommunityId() == 0) {
+                communityPost.isChallengeType = true;
+            }
+            if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
+                for (String imageUrl : userPostObj.getImageUrls()) {
+                    Photo photo = new Photo();
+                    photo.url = imageUrl;
+                    communityPost.photos.add(photo);
+                }
+                int i = 0;
+                for (Long imageId : userPostObj.getImagesIds()) {
+                    communityPost.photos.get(i).remote_id = imageId.intValue();
+                    i++;
+                }
+            }
+            Parcelable parcelable = Parcels.wrap(communityPost);
+            intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+            intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
+
+    }
+
+    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
+        if (feedDetail != null) {
+            CommunityPost communityPost = new CommunityPost();
+            communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
+            communityPost.community = new Community();
+            communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
+            communityPost.body = userPostObj.getListDescription();
+            communityPost.community.name = userPostObj.getPostCommunityName();
+            communityPost.community.isOwner = userPostObj.isCommunityOwner();
+            communityPost.isMyPost = userPostObj.isCommunityOwner();
+            if (userPostObj.getCommunityId() != null && userPostObj.getCommunityId() == 0) {
+                communityPost.isChallengeType = true;
+            }
+            communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
+            communityPost.isAnonymous = userPostObj.isAnonymous();
+            communityPost.isEdit = true;
+            communityPost.isPostByCommunity = userPostObj.isCommunityPost();
+
+//            communityPost.isCompanyAdmin =  userPostObj.grt();
+            if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
+                for (String imageUrl : userPostObj.getImageUrls()) {
+                    Photo photo = new Photo();
+                    photo.url = imageUrl;
+                    communityPost.photos.add(photo);
+                }
+                int i = 0;
+                for (Long imageId : userPostObj.getImagesIds()) {
+                    communityPost.photos.get(i).remote_id = imageId.intValue();
+                    i++;
+                }
+            }
+            if (userPostObj.isHasMention()) {
+                communityPost.hasMention = userPostObj.isHasMention();
+                communityPost.userMentionList = userPostObj.getUserMentionList();
+            }
+
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
+                communityPost.isPoll = true;
+            }
+
+            Parcelable parcelable = Parcels.wrap(communityPost);
+            intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+            intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
+            intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+            intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+            if (!CommonUtil.isEmpty(properties)) {
+                intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+            }
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
+
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity, HashMap<String, Object> properties) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        Parcelable parcelable = Parcels.wrap(communityPost);
+        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+        intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity, String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        Parcelable parcelable = Parcels.wrap(communityPost);
+        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+        intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
+        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, HashMap<String, Object> properties, boolean isFromBranch) {
+        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
+        Parcelable parcelable = Parcels.wrap(communityPost);
+        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
+        intent.putExtra(IS_FROM_BRANCH, isFromBranch);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public void selectImageFromGallery() {
+        CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
+        if (mIsPollOptionClicked) {
+            activityBuilder.setFixAspectRatio(true);
+        } else {
+            activityBuilder.setFixAspectRatio(false);
+        }
+        activityBuilder.start(CommunityPostActivity.this);
+    }
+
+    public void selectImageFromCamera() {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
+        if (mIsPollOptionClicked) {
+            activityBuilder.setFixAspectRatio(true);
+        } else {
+            activityBuilder.setFixAspectRatio(false);
+        }
+        activityBuilder.start(CommunityPostActivity.this);
+    }
+
+    public void setMainCommunity(Community community, MyCommunities myCommunities) {
+        if (mCommunityPost != null) {
+            mCommunityPost.community = new Community();
+            mCommunityPost.community.id = community.id;
+            mCommunityPost.community.name = community.name;
+            mCommunityPost.community.isOwner = community.isOwner;
+            mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
+            mMyCommunities = myCommunities;
+            setCommunityName();
+            invalidateUserDropDownView();
+        } else {
+            if (mIsSharedContent) {
+                mCommunityPost = new CommunityPost();
+                mCommunityPost.community = community;
+                mCommunityPost.createPostRequestFrom = -1;
+                mCommunityPost.isChallengeType = false;
+                mCommunityPost.community.id = community.id;
+                mCommunityPost.community.name = community.name;
+                mCommunityPost.community.isOwner = community.isOwner;
+                mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
+                mMyCommunities = myCommunities;
+                setCommunityName();
+                invalidateUserDropDownView();
+            }
+        }
+    }
+
+    public void linkRenderResponse(LinkRenderResponse linkRenderResponse) {
+        if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getStatus())) {
+            switch (linkRenderResponse.getStatus()) {
+                case AppConstants.SUCCESS:
+                    mIsLinkRendered = true;
+                    mCardViewLinkRender.setVisibility(View.VISIBLE);
+                    mLinkRenderResponse = linkRenderResponse;
+                    if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgTitleS())) {
+                        mTvLinkTitle.setText(linkRenderResponse.getOgTitleS());
+                    }
+                    if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgDescriptionS())) {
+                        mTvLinkSubTitle.setText(linkRenderResponse.getOgDescriptionS());
+                    }
+
+                    RequestOptions requestOptions = new RequestOptions()
+                            .centerCrop()
+                            .placeholder(R.color.photo_placeholder)
+                            .error(R.color.photo_placeholder)
+                            .priority(Priority.HIGH)
+                            .skipMemoryCache(true);
+
+                    if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgImageUrlS())) {
+                        Glide.with(this)
+                                .asBitmap()
+                                .apply(requestOptions)
+                                .load(linkRenderResponse.getOgImageUrlS())
+                                .into(new SimpleTarget<Bitmap>() {
+                                    @Override
+                                    public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
+                                        mIvLinkThumbnail.setImageBitmap(profileImage);
+                                        mIvLinkThumbnail.setVisibility(View.VISIBLE);
+                                        mPbLink.setVisibility(View.GONE);
+                                    }
+                                });
+                    }
+                    break;
+                case AppConstants.FAILED:
+                    break;
+                default:
+            }
+        }
+    }
+
+    public void showMessage(int stringRes) {
+        if (mCommunityName != null) {
+            Snackbar snackbar = Snackbar.make(mCommunityName, stringRes, Snackbar.LENGTH_SHORT);
+            snackbar.show();
+        }
+    }
+
+    public void sendPost() {
+        if (mHasPermission) {
+            if (mCommunityPost != null) {
+                final HashMap<String, Object> properties =
+                        new EventProperty.Builder()
+                                .id(Integer.toString(mCommunityPost.remote_id))
+                                .title(mCommunityPost.title)
+                                .build();
+                AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
+            }
+        }
+
+        mMentionSpanList = mEtView.getMentionSpans();
+        CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
+        addMentionSpanDetail();
+        if (mIsChallengePost) {
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+        } else if (!mIsEditPost) {
+            String accessToken = "";
+            if (AccessToken.getCurrentAccessToken() != null) {
+                accessToken = AccessToken.getCurrentAccessToken().getToken();
+            }
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
+        } else {
+            if (mCommunityPost != null) {
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            }
+        }
+    }
+    //endregion public methods
+
+    //region protected methods
+    protected final void scheduleConfirmation(final String formattedDate, String formattedMessage) {
+
+        if (mScheduledConfirmationDialog != null) {
+            mScheduledConfirmationDialog.dismiss();
+        }
+
+        mScheduledConfirmationDialog = new Dialog(CommunityPostActivity.this);
+        mScheduledConfirmationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mScheduledConfirmationDialog.setCancelable(false);
+        mScheduledConfirmationDialog.setContentView(R.layout.dialog_schedule_post_confirmation);
+
+        TextView messageText = mScheduledConfirmationDialog.findViewById(R.id.message);
+        String scheduledMessage = getResources().getString(R.string.post_schedule_message, mCommunityPost.community.name, formattedMessage);
+        Spanned message = StringUtil.fromHtml(scheduledMessage);
+        messageText.setText(message);
+        TextView confirmedOk = mScheduledConfirmationDialog.findViewById(R.id.ok);
+        confirmedOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                postForAdmin(formattedDate);
+                mScheduledConfirmationDialog.dismiss();
+            }
+        });
+
+        TextView editPost = mScheduledConfirmationDialog.findViewById(R.id.edit);
+        editPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                datePicker();
+                mScheduledConfirmationDialog.dismiss();
+            }
+        });
+
+        mScheduledConfirmationDialog.show();
+    }
+    //endregion protected methods
+
+    //region private methods
     private void hidePollIcon() {
         mRippleViewLinearPollSurvey.setVisibility(View.GONE);
     }
@@ -703,18 +1450,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    @Override
-    public boolean shouldTrackScreen() {
-        return true;
-    }
-
-    @Override
-    protected Map<String, Object> getExtraPropertiesToTrack() {
-        return new EventProperty.Builder()
-                .isOpenedFromExternalApp(String.valueOf(mIsSharedFromOtherApp))
-                .build();
-    }
-
     private void setupToolBarItem() {
         if (mCommunityPost != null) {
             switch (mCommunityPost.createPostRequestFrom) {
@@ -737,13 +1472,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     }
 
-    @Override
-    protected boolean trackScreenTime() {
-        return true;
-    }
-
     // Handle multiple images being sent
-    void handleSendMultipleImages(Intent intent) {
+    private void handleSendMultipleImages(Intent intent) {
         ArrayList<Uri> imageUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
         if (imageUris != null) {
             int size = imageUris.size();
@@ -821,15 +1551,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            onBackPress();
-        }
-        return true;
-    }
-
     private void askFacebookPublishPermission() {
         mCallbackManager = CallbackManager.Factory.create();
         LoginManager.getInstance().logInWithPublishPermissions(CommunityPostActivity.this, Arrays.asList("publish_actions"));
@@ -853,70 +1574,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         if (accessToken != null && accessToken.getPermissions().contains("publish_actions")) {
             mHasPermission = true;
-        }
-    }
-
-    public void sendPost() {
-        if (mHasPermission) {
-            if (mCommunityPost != null) {
-                final HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .id(Integer.toString(mCommunityPost.remote_id))
-                                .title(mCommunityPost.title)
-                                .build();
-                AnalyticsManager.trackEvent(Event.FACEBOOK_PUBLISHED, getScreenName(), properties);
-            }
-        }
-
-        mMentionSpanList = mEtView.getMentionSpans();
-        CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
-        addMentionSpanDetail();
-        if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
-        } else if (!mIsEditPost) {
-            String accessToken = "";
-            if (AccessToken.getCurrentAccessToken() != null) {
-                accessToken = AccessToken.getCurrentAccessToken().getToken();
-            }
-            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
-        } else {
-            if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
-            }
-        }
-    }
-
-    @Override
-    public void showImage(final String imageUrl) {
-
-        if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
-            int width = CommonUtil.getWindowWidth(this);
-            int imageHeight = CommonUtil.getWindowHeight(this);
-            String finalImageUrl = CommonUtil.getThumborUriWithFit(imageUrl, width, imageHeight);
-            Glide.with(this)
-                    .asBitmap()
-                    .load(finalImageUrl)
-                    .apply(new RequestOptions().placeholder(R.color.photo_placeholder))
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(@NonNull Bitmap bitmap, Transition<? super Bitmap> transition) {
-
-                            if (mIvImagePollLeft != null && mIvImagePollRight != null) {
-                                if ((Boolean) mIvImagePollLeft.getTag()) {
-                                    mImagePollLeftUrl = imageUrl;
-                                    mIvImagePollLeft.setImageBitmap(bitmap);
-                                } else if ((Boolean) mIvImagePollRight.getTag()) {
-                                    mIvImagePollRight.setImageBitmap(bitmap);
-                                    mImagePollRightUrl = imageUrl;
-                                }
-                                mIvImagePollRight.setEnabled(true);
-                                mIvImagePollLeft.setEnabled(true);
-                            }
-                        }
-                    });
-        } else {
-            mIvImagePollRight.setEnabled(true);
-            mIvImagePollLeft.setEnabled(true);
         }
     }
 
@@ -970,7 +1627,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         mPostNowOrLaterDialog.show();
     }
-
 
     private void datePicker() {
         // Get Current Date
@@ -1036,55 +1692,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         return true;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (mCallbackManager != null) {
-            mCallbackManager.onActivityResult(requestCode, resultCode, intent);
-        }
-        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
-        if (null != intent) {
-            switch (requestCode) {
-                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            Photo photo = new Photo();
-                            photo.isNew = true;
-                            File file = new File(result.getUri().getPath());
-                            photo.file = file;
-                            File compressedFile = compressFile(file);
-                            mFilePathList.add(compressedFile.getAbsolutePath());
-                            if (mIsEditPost) {
-                                File compressedFileEdit = compressFile(file);
-                                mEditFilePathList.add(compressedFileEdit.getAbsolutePath());
-                            }
-                            if (mIvImagePollLeft != null && mIvImagePollRight != null) {
-                                Bitmap bitmap = decodeFile(photo.file);
-                                startProgressBar();
-                                mIvImagePollRight.setEnabled(false);
-                                mIvImagePollLeft.setEnabled(false);
-                                mCreatePostPresenter.uploadFile(CompressImageUtil.setImageOnHolder(bitmap));
-                            } else {
-                                postPicsAndCountView(photo);
-                            }
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
-                            e.printStackTrace();
-                        }
-                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                    }
-
-                    break;
-
-                default:
-                    LogUtils.error(SCREEN_LABEL, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + SCREEN_LABEL + AppConstants.SPACE + requestCode);
-            }
-        }
-
-    }
-
     private void postPicsAndCountView(Photo photo) {
         mImageList.add(photo);
         mLiMainPollView.setVisibility(View.GONE);
@@ -1094,118 +1701,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         stopProgressBar();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        if (mPostNowOrLaterDialog != null) {
-            mPostNowOrLaterDialog.dismiss();
-        }
-
-        if (mScheduledConfirmationDialog != null) {
-            mScheduledConfirmationDialog.dismiss();
-        }
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    public void startProgressBar() {
-        mIsProgressBarVisible = true;
-        mIsDisableClickOnPost = true;
-        CommonUtil.hideKeyboard(this);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mIsProgressBarVisible = false;
-        mIsDisableClickOnPost = false;
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        onBackPress();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return mCreatePostPresenter;
-    }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        super.onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    protected final void scheduleConfirmation(final String formattedDate, String formattedMessage) {
-
-        if (mScheduledConfirmationDialog != null) {
-            mScheduledConfirmationDialog.dismiss();
-        }
-
-        mScheduledConfirmationDialog = new Dialog(CommunityPostActivity.this);
-        mScheduledConfirmationDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mScheduledConfirmationDialog.setCancelable(false);
-        mScheduledConfirmationDialog.setContentView(R.layout.dialog_schedule_post_confirmation);
-
-        TextView messageText = mScheduledConfirmationDialog.findViewById(R.id.message);
-        String scheduledMessage = getResources().getString(R.string.post_schedule_message, mCommunityPost.community.name, formattedMessage);
-        Spanned message = StringUtil.fromHtml(scheduledMessage);
-        messageText.setText(message);
-        TextView confirmedOk = mScheduledConfirmationDialog.findViewById(R.id.ok);
-        confirmedOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                postForAdmin(formattedDate);
-                mScheduledConfirmationDialog.dismiss();
-            }
-        });
-
-        TextView editPost = mScheduledConfirmationDialog.findViewById(R.id.edit);
-        editPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                datePicker();
-                mScheduledConfirmationDialog.dismiss();
-            }
-        });
-
-        mScheduledConfirmationDialog.show();
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-    }
-
-    @Override
-    public void onPostSend(FeedDetail feedDetail) {
-        if (feedDetail != null) {
-            Intent intent = new Intent();
-            Bundle bundle = new Bundle();
-            if (mIsEditPost) {
-                feedDetail.setItemPosition(mFeedPosition);
-                Parcelable parcelable = Parcels.wrap(feedDetail);
-                bundle.putParcelable(AppConstants.COMMUNITY_POST_FRAGMENT, parcelable);
-            }
-            intent.putExtras(bundle);
-            setResult(RESULT_OK, intent);
-            navigateToParentActivity();
-        }
-    }
-
-    //endregion
-
-    //region private helper methods
     private String getCreatorType() {
         if (mPostAsCommunitySelected) {
             return CreatorType.COMMUNITY_OWNER.toString();
@@ -1235,7 +1730,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
         return imageList;
     }
-
 
     private void setupShareToFbListener() {
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -1421,141 +1915,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, HashMap<String, Object> properties) {
-        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
-        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
-        if (feedDetail != null) {
-            CommunityPost communityPost = new CommunityPost();
-            communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
-            communityPost.community = new Community();
-            communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
-            communityPost.body = userPostObj.getListDescription();
-            communityPost.community.name = userPostObj.getPostCommunityName();
-            communityPost.community.isOwner = userPostObj.isCommunityOwner();
-            communityPost.isMyPost = userPostObj.isCommunityOwner();
-            communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
-            communityPost.isAnonymous = userPostObj.isAnonymous();
-            communityPost.isEdit = true;
-            communityPost.isPostByCommunity = userPostObj.isCommunityPost();
-            communityPost.createPostRequestFrom = userPostObj.askQuestionFromMentor;
-            if (userPostObj.isHasMention()) {
-                communityPost.hasMention = userPostObj.isHasMention();
-                communityPost.userMentionList = userPostObj.getUserMentionList();
-            }
-            if (userPostObj.getCommunityId() != null && userPostObj.getCommunityId() == 0) {
-                communityPost.isChallengeType = true;
-            }
-            if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
-                for (String imageUrl : userPostObj.getImageUrls()) {
-                    Photo photo = new Photo();
-                    photo.url = imageUrl;
-                    communityPost.photos.add(photo);
-                }
-                int i = 0;
-                for (Long imageId : userPostObj.getImagesIds()) {
-                    communityPost.photos.get(i).remote_id = imageId.intValue();
-                    i++;
-                }
-            }
-            Parcelable parcelable = Parcels.wrap(communityPost);
-            intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
-            intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
-
-    }
-
-
-    public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
-        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
-        UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
-        if (feedDetail != null) {
-            CommunityPost communityPost = new CommunityPost();
-            communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
-            communityPost.community = new Community();
-            communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
-            communityPost.body = userPostObj.getListDescription();
-            communityPost.community.name = userPostObj.getPostCommunityName();
-            communityPost.community.isOwner = userPostObj.isCommunityOwner();
-            communityPost.isMyPost = userPostObj.isCommunityOwner();
-            if (userPostObj.getCommunityId() != null && userPostObj.getCommunityId() == 0) {
-                communityPost.isChallengeType = true;
-            }
-            communityPost.community.thumbImageUrl = userPostObj.getSolrIgnorePostCommunityLogo();
-            communityPost.isAnonymous = userPostObj.isAnonymous();
-            communityPost.isEdit = true;
-            communityPost.isPostByCommunity = userPostObj.isCommunityPost();
-
-//            communityPost.isCompanyAdmin =  userPostObj.grt();
-            if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
-                for (String imageUrl : userPostObj.getImageUrls()) {
-                    Photo photo = new Photo();
-                    photo.url = imageUrl;
-                    communityPost.photos.add(photo);
-                }
-                int i = 0;
-                for (Long imageId : userPostObj.getImagesIds()) {
-                    communityPost.photos.get(i).remote_id = imageId.intValue();
-                    i++;
-                }
-            }
-            if (userPostObj.isHasMention()) {
-                communityPost.hasMention = userPostObj.isHasMention();
-                communityPost.userMentionList = userPostObj.getUserMentionList();
-            }
-
-            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.FEED_POLL)) {
-                communityPost.isPoll = true;
-            }
-
-            Parcelable parcelable = Parcels.wrap(communityPost);
-            intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
-            intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
-            intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
-            intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
-            if (!CommonUtil.isEmpty(properties)) {
-                intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-            }
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
-
-    }
-
-    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity, HashMap<String, Object> properties) {
-        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
-        Parcelable parcelable = Parcels.wrap(communityPost);
-        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
-        intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity, String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
-        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
-        Parcelable parcelable = Parcels.wrap(communityPost);
-        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
-        intent.putExtra(IS_FROM_COMMUNITY, isFromCommunity);
-        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
-        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, HashMap<String, Object> properties, boolean isFromBranch) {
-        Intent intent = new Intent(fromActivity, CommunityPostActivity.class);
-        Parcelable parcelable = Parcels.wrap(communityPost);
-        intent.putExtra(CommunityPost.COMMUNITY_POST_OBJ, parcelable);
-        intent.putExtra(IS_FROM_BRANCH, isFromBranch);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
     private void onBackPress() {
         if (isDirty()) {
             confirmationAlert();
@@ -1564,7 +1923,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
         CommonUtil.hideSoftKeyboard(this);
     }
-
 
     private void confirmationAlert() {
         AlertDialog.Builder builder =
@@ -1692,229 +2050,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         }
     }
 
-    //endregion
-
-    //region public methods
-    public void setMainCommunity(Community community, MyCommunities myCommunities) {
-        if (mCommunityPost != null) {
-            mCommunityPost.community = new Community();
-            mCommunityPost.community.id = community.id;
-            mCommunityPost.community.name = community.name;
-            mCommunityPost.community.isOwner = community.isOwner;
-            mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
-            mMyCommunities = myCommunities;
-            setCommunityName();
-            invalidateUserDropDownView();
-        } else {
-            if (mIsSharedContent) {
-                mCommunityPost = new CommunityPost();
-                mCommunityPost.community = community;
-                mCommunityPost.createPostRequestFrom = -1;
-                mCommunityPost.isChallengeType = false;
-                mCommunityPost.community.id = community.id;
-                mCommunityPost.community.name = community.name;
-                mCommunityPost.community.isOwner = community.isOwner;
-                mCommunityPost.community.thumbImageUrl = community.thumbImageUrl;
-                mMyCommunities = myCommunities;
-                setCommunityName();
-                invalidateUserDropDownView();
-            }
-        }
-    }
-
-    public void linkRenderResponse(LinkRenderResponse linkRenderResponse) {
-        if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getStatus())) {
-            switch (linkRenderResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    mIsLinkRendered = true;
-                    mCardViewLinkRender.setVisibility(View.VISIBLE);
-                    mLinkRenderResponse = linkRenderResponse;
-                    if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgTitleS())) {
-                        mTvLinkTitle.setText(linkRenderResponse.getOgTitleS());
-                    }
-                    if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgDescriptionS())) {
-                        mTvLinkSubTitle.setText(linkRenderResponse.getOgDescriptionS());
-                    }
-
-                    RequestOptions requestOptions = new RequestOptions()
-                            .centerCrop()
-                            .placeholder(R.color.photo_placeholder)
-                            .error(R.color.photo_placeholder)
-                            .priority(Priority.HIGH)
-                            .skipMemoryCache(true);
-
-                    if (StringUtil.isNotNullOrEmptyString(linkRenderResponse.getOgImageUrlS())) {
-                        Glide.with(this)
-                                .asBitmap()
-                                .apply(requestOptions)
-                                .load(linkRenderResponse.getOgImageUrlS())
-                                .into(new SimpleTarget<Bitmap>() {
-                                    @Override
-                                    public void onResourceReady(Bitmap profileImage, Transition<? super Bitmap> transition) {
-                                        mIvLinkThumbnail.setImageBitmap(profileImage);
-                                        mIvLinkThumbnail.setVisibility(View.VISIBLE);
-                                        mPbLink.setVisibility(View.GONE);
-                                    }
-                                });
-                    }
-                    break;
-                case AppConstants.FAILED:
-                    break;
-                default:
-            }
-        }
-    }
-
-    @Override
-    public void showUserMentionSuggestionResponse(SearchUserDataResponse searchUserDataResponse, QueryToken queryToken) {
-        if (StringUtil.isNotEmptyCollection(mMentionList)) {
-            if (StringUtil.isNotEmptyCollection(searchUserDataResponse.getParticipantList())) {
-                mMentionList = searchUserDataResponse.getParticipantList();
-                mMentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-                mEtView.notifyData(mMentionList);
-            } else {
-                List<Mention> mentionList = new ArrayList<>();
-                mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-                mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, "", "", "", 0));
-                mEtView.notifyData(mentionList);
-            }
-        }
-    }
-
-
-    @Override
-    public void finishActivity() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        navigateToParentActivity();
-    }
-
-    public void showMessage(int stringRes) {
-        if (mCommunityName != null) {
-            Snackbar snackbar = Snackbar.make(mCommunityName, stringRes, Snackbar.LENGTH_SHORT);
-            snackbar.show();
-        }
-    }
-    //endregion
-
-    //region onclick methods
-
-    @OnClick(R.id.add_image)
-    public void onAddImageClick() {
-        mRippleViewLinearAddImage.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleViewLinear rippleView) {
-                selectImageFromGallery();
-            }
-        });
-
-    }
-
-    public void selectImageFromGallery() {
-        CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
-        if (mIsPollOptionClicked) {
-            activityBuilder.setFixAspectRatio(true);
-        } else {
-            activityBuilder.setFixAspectRatio(false);
-        }
-        activityBuilder.start(CommunityPostActivity.this);
-    }
-
-    @OnClick(R.id.camera)
-    public void onCameraClick() {
-        mRippleViewLinearCamera.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleViewLinear rippleView) {
-                selectImageFromCamera();
-            }
-        });
-
-    }
-
-    public void selectImageFromCamera() {
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        CropImage.ActivityBuilder activityBuilder = CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE).setRequestedSize(1200, 1200);
-        if (mIsPollOptionClicked) {
-            activityBuilder.setFixAspectRatio(true);
-        } else {
-            activityBuilder.setFixAspectRatio(false);
-        }
-        activityBuilder.start(CommunityPostActivity.this);
-    }
-
-    @OnClick(R.id.poll_survey)
-    void onPollClick() {
-        mRippleViewLinearPollSurvey.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
-            @Override
-            public void onComplete(RippleViewLinear rippleView) {
-                mSuggestionList.setVisibility(View.GONE);
-                List<PollOptionType> pollOptionTypeList = new ArrayList<>();
-
-                PollOptionType textPoll = new PollOptionType();
-                textPoll.pollType = TEXT;
-                textPoll.id = 1;
-                textPoll.title = getString(R.string.text_poll);
-                textPoll.imgUrl = R.drawable.vector_text_poll;
-                pollOptionTypeList.add(textPoll);
-
-                PollOptionType imagePoll = new PollOptionType();
-                imagePoll.pollType = IMAGE;
-                imagePoll.id = 2;
-                imagePoll.title = getString(R.string.image_poll);
-                imagePoll.imgUrl = R.drawable.vector_image_poll_icon;
-                pollOptionTypeList.add(imagePoll);
-                AnalyticsManager.trackEvent(Event.POLL_CLICKED, getScreenName(), null);
-                PostBottomSheetFragment.showDialog(CommunityPostActivity.this, SOURCE_SCREEN, pollOptionTypeList);
-            }
-        });
-
-    }
-
-    @OnClick(R.id.user_drop_down)
-    public void onUserDropDownClicked() {
-        PopupMenu popup = new PopupMenu(CommunityPostActivity.this, mUserDropDownView);
-        popup.getMenuInflater().inflate(R.menu.menu_user_spinner, popup.getMenu());
-        popup.getMenu().findItem(R.id.user_menu).setTitle(mPostAsCommunitySelected ? getString(R.string.menu_post_as_user, mUserSummary.getFirstName() + " " + mUserSummary.getLastName()) : getString(R.string.menu_post_as_community));
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                if (!mPostAsCommunitySelected) {
-                    mAnonymousSelect.setChecked(false);
-                    mPostAsCommunitySelected = true;
-                } else {
-                    mPostAsCommunitySelected = false;
-                }
-                setupUserView();
-                return true;
-            }
-        });
-        popup.show();
-    }
-
-    @OnTouch({R.id.tv_add_photo_lable, R.id.li_image_upload_view})
-    public boolean onAddPhotoClicked() {
-        bottomSheetExpanded();
-        CommonUtil.hideKeyboard(this);
-        return true;
-    }
-
-    @OnClick({R.id.iv_add_poll_img, R.id.tv_add_poll_text})
-    public void onAddMoreOptionClicked() {
-        if (mPollOptionCount < POLL_OPTION_MAX_COUNT) {
-            mPollOptionCount++;
-            addTextPollOptionView();
-        }
-        addOptionButtonView();
-    }
-
-    @OnClick(R.id.tv_day_selector)
-    public void onTvDaySelectorClicked() {
-        addPollSelectionDay();
-    }
-
-
-    //endregion
-
     private void setupToolbarItemsColor() {
         final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
         if (upArrow != null) {
@@ -1934,29 +2069,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
-    }
-
-    @OnClick(R.id.action)
-    public void onPostClicked() {
-        if (!validateFields()) {
-            return;
-        }
-        if (mCommunityPost == null) {
-            finish();
-            return;
-        }
-        if (mIsProgressBarVisible) {
-            return;
-        }
-        if (mIsPollOptionClicked) {
-            createPoll();
-        } else {
-            if ((!mIsEditPost && !mIsChallengePost) && (mIsCompanyAdmin || mCommunityPost.isMyPost)) {
-                selectPostNowOrLater();
-            } else {
-                sendPost();
-            }
-        }
     }
 
     private void createPoll() {
@@ -2047,124 +2159,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
         int heightDiff = rootView.getBottom() - r.bottom;
         return heightDiff > softKeyboardHeight * dm.density;
-    }
-
-    @Override
-    public List<String> onQueryReceived(@NonNull final QueryToken queryToken) {
-        final String searchText = queryToken.getTokenString();
-        if (searchText.contains("@")) {
-            List<Mention> mentionList = new ArrayList<>();
-            mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
-            mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-            mSuggestionList.setLayoutManager(layoutManager);
-            mSuggestionList.setAdapter(mEtView.notifyAdapterOnData(mentionList));
-            mMentionList = mentionList;
-        }
-        return Collections.singletonList("user-history");
-    }
-
-    @Override
-    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
-        int id = view.getId();
-        switch (id) {
-            case R.id.li_social_user:
-                mMentionList.clear();
-                mEtView.displayHide();
-                Mention mention = (Mention) suggestible;
-                mEtView.setInsertion(mention);
-                final HashMap<String, Object> properties =
-                        new EventProperty.Builder()
-                                .postId(Integer.toString(mCommunityPost.remote_id))
-                                .taggedIn("POST")
-                                .taggedUserId(Integer.toString(mention.getUserId()))
-                                .build();
-                AnalyticsManager.trackEvent(Event.USER_TAGGED, getScreenName(), properties);
-                break;
-            default:
-        }
-
-        return null;
-    }
-
-    @Override
-    public void textChangeListner(@NonNull Editable editText) {
-
-        if (editText.length() > 0) {
-            if (StringUtil.isNotNullOrEmptyString(editText.toString()) && !mIsLinkRendered) {
-                String editTextDescription = editText.toString().trim();
-                if (editTextDescription.contains("https") || editTextDescription.contains("Http")) {
-                    int indexOfFirstHttp = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "https", 1);
-                    int urlLength = getUrlLength(editTextDescription, indexOfFirstHttp);
-                    if (urlLength <= editTextDescription.length()) {
-                        String httpString = editTextDescription.substring(indexOfFirstHttp, urlLength);
-                        if (mAppUtils.checkUrl(httpString)) {
-                            mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(httpString));
-                        }
-                    }
-                } else if (editTextDescription.contains("www") || editTextDescription.contains("WWW")) {
-                    int indexOfFirstWWW = AppUtils.findNthIndexOf(editTextDescription.toLowerCase(), "www", 1);
-                    int urlLength = getUrlLength(editTextDescription, indexOfFirstWWW);
-                    if (urlLength <= editTextDescription.length()) {
-                        String wwwString = editTextDescription.substring(indexOfFirstWWW, urlLength);
-                        if (mAppUtils.checkWWWUrl(wwwString)) {
-                            mCreatePostPresenter.fetchLinkDetails(mAppUtils.linkRequestBuilder(wwwString));
-                        }
-                    }
-                }
-                if (editTextDescription.contains("@")) {
-                    mAnonymousView.setVisibility(View.GONE);
-                    mImageUploadView.setVisibility(View.GONE);
-                } else {
-                    mAnonymousView.setVisibility(View.VISIBLE);
-                    setImageCount();
-                }
-            }
-            mAction.setAlpha(1f);
-        } else {
-            mAction.setAlpha(.9f);
-        }
-
-    }
-
-
-    @Override
-    public void onPollTypeClicked(PollType pollType) {
-        mPollOptionType = pollType;
-        mIsPollOptionClicked = true;
-        mImageList.clear();
-        mEtView.getEditText().setMaxLines(mMaxLength);
-        mTitleToolbar.setText(R.string.title_create_poll);
-        mEtView.getEditText().getText().clear();
-        mEtView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
-        mIsAnonymous = false;
-        setupUserView();
-        mLiMainPollView.setVisibility(View.VISIBLE);
-        mFbShareContainer.setVisibility(View.GONE);
-        mRlImageList.setVisibility(View.GONE);
-        mLiUploadImageContainer.setVisibility(View.GONE);
-        String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
-        CommonUtil.showKeyboard(this);
-        switch (pollType) {
-            case TEXT:
-                for (int i = 0; i < POLL_OPTION_DEFAULT_COUNT; i++) {
-                    mPollOptionCount++;
-                    addTextPollOptionView();
-                }
-                mTvDaySelector.setText(pollTime[0]);
-                mTvDaySelector.setTag(pollDaysCount[0]);
-                break;
-            case IMAGE:
-                addImagePollView();
-                mTvDaySelector.setText(pollTime[0]);
-                mTvDaySelector.setTag(pollDaysCount[0]);
-                break;
-            case EMOJI:
-                break;
-            case BOOLEAN:
-                break;
-        }
     }
 
     private void addPollSelectionDay() {
@@ -2271,5 +2265,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         liImagePollRow.setLayoutParams(params);
         mLiPollContainer.addView(liImagePollRow);
     }
+    //endregion private methods
 }
 
