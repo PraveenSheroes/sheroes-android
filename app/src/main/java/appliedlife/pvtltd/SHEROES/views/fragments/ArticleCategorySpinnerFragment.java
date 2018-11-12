@@ -114,10 +114,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-        setArticleCategoryFilterValues();
-    }
+
 
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
@@ -139,37 +136,34 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+    
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
 
-    private void setArticleCategoryFilterValues() {
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get().getData()) {
-            HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
-            if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
-                {
-                    HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
-                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
-                    if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
-                        List<ArticleCategory> articleCategoryList = new ArrayList<>();
-                        ArticleCategory homeSpinnerFirst = new ArticleCategory();
-                        homeSpinnerFirst.setName(AppConstants.FOR_ALL);
-                        articleCategoryList.add(homeSpinnerFirst);
-                        for (LabelValue lookingFor : labelValueArrayList) {
-
-                            ArticleCategory articleCategory = new ArticleCategory();
-                            articleCategory.setId(lookingFor.getValue());
-                            articleCategory.setName(lookingFor.getLabel());
-                            articleCategoryList.add(articleCategory);
-                        }
-                        mArticleCategoryList = articleCategoryList;
-                    }
-                    mAdapter.setSheroesGenericListData(mArticleCategoryList);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-        }
     }
 
     @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 }
