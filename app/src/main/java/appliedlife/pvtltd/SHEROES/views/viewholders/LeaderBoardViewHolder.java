@@ -248,23 +248,17 @@ public class LeaderBoardViewHolder extends BaseViewHolder<LeaderBoardUserSolrObj
             } else {
                 badgeIcon.setBackgroundResource(R.drawable.circular_background_grey);
             }
-
             mProfilePic.setBackgroundResource(R.drawable.circular_leaderbaord_user_icon_background_grey);
         }
     }
 
     //Follow/Following button in leaderboard
     private void followButtonVisibility(Context context, boolean isFollowed) {
-
         if (isFollowed) {
-            mFollowButton.setEnabled(false);
-            mFollowButton.setAlpha(0.3f);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.white));
             mFollowButton.setText(context.getString(R.string.following_user));
-            mFollowButton.setBackgroundResource(R.drawable.rectangle_grey_winner_dialog);
+            mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         } else {
-            mFollowButton.setEnabled(true);
-            mFollowButton.setAlpha(1.0f);
             mFollowButton.setTextColor(ContextCompat.getColor(context, R.color.footer_icon_text));
             mFollowButton.setText(context.getString(R.string.follow_user));
             mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

@@ -474,7 +474,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
         mICSheroes.setVisibility(View.VISIBLE);
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
-        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
         pbCommunitiesDrawer.setVisibility(View.VISIBLE);
         mRecyclerViewDrawerCommunities.setVisibility(View.GONE);
         mPullRefreshList = new SwipPullRefreshList();

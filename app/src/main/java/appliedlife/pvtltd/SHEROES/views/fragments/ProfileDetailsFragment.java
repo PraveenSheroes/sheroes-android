@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
@@ -476,6 +477,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             TextView mentorName = findById(view, R.id.user_name);
             TextView expertAt = findById(view, R.id.expert_at);
             TextView follower = findById(view, R.id.follower);
+            Button followFollowingBtn = findById(view, R.id.follow_following_btn);
 
 
             if (StringUtil.isNotNullOrEmptyString(userSolrObj.getThumbnailImageUrl())) {
@@ -510,7 +512,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
                 String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getSolrIgnoreNoOfMentorFollowers());
                 follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
             }
-
+            followFollowingBtn.setVisibility(View.GONE);
             followedMentor.addView(view);
             counter++;
             if (counter == 3) break;
