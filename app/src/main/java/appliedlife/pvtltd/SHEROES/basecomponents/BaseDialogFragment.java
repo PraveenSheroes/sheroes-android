@@ -99,11 +99,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     }
 
     @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
@@ -116,11 +111,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
-    public void invalidateLikeUnlike(Comment comment) {
 
     }
 

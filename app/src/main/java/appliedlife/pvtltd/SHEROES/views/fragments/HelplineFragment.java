@@ -32,12 +32,18 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -49,6 +55,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -61,7 +68,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadReq
  * Created by Deepak on 19-05-2017.
  */
 
-public class HelplineFragment extends BaseFragment {
+public class HelplineFragment extends BaseFragment implements HelplineView {
     private static final String SCREEN_LABEL = "Helpline Screen";
     private String mSpeechAppPackageName = "com.google.android.googlequicksearchbox";
     private final String TAG = LogUtils.makeLogTag(HelplineFragment.class);
@@ -286,6 +293,12 @@ public class HelplineFragment extends BaseFragment {
         super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
     }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg,feedParticipationEnum);
@@ -293,8 +306,43 @@ public class HelplineFragment extends BaseFragment {
            }
 
     @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
+    }
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 }
 

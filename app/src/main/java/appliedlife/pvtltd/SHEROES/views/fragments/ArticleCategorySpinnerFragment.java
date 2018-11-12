@@ -24,7 +24,15 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
@@ -44,7 +52,7 @@ import butterknife.OnClick;
  * Created by Praveen_Singh on 05-01-2017.
  */
 
-public class ArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
+public class ArticleCategorySpinnerFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Article Category Spinner Screen";
     public static final int CATEGORY_SELECTED_DONE = 1;
     public static final int CATEGORY_SELECTED_CANCEL = 0;
@@ -107,6 +115,11 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
     }
 
     @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
         setArticleCategoryFilterValues();
     }
@@ -158,5 +171,35 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
                 }
             }
         }
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 }

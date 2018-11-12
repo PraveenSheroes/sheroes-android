@@ -38,12 +38,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.BaseFragmentUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
@@ -72,6 +76,8 @@ public class MentorQADetailFragment extends BaseFragment {
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
+    @Inject
+    BaseFragmentUtil baseFragmentUtil;
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
     private int mPageNo = AppConstants.ONE_CONSTANT;
@@ -190,6 +196,11 @@ public class MentorQADetailFragment extends BaseFragment {
     }
 
     @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(feedDetailList) && null != mFragmentListRefreshData) {
@@ -248,6 +259,26 @@ public class MentorQADetailFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
 
     @Override
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
@@ -295,7 +326,7 @@ public class MentorQADetailFragment extends BaseFragment {
 
 
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-        super.commentListRefresh(feedDetail, feedParticipationEnum);
+        baseFragmentUtil.commentListRefresh(mAdapter, mLayoutManager, feedDetail, feedParticipationEnum);
     }
 
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
@@ -317,6 +348,16 @@ public class MentorQADetailFragment extends BaseFragment {
         if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
             mProgressBar.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
 
 

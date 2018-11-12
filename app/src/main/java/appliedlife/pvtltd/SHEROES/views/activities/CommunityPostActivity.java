@@ -99,9 +99,11 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.PollTypeCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
@@ -118,6 +120,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Photo;
 import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
@@ -163,7 +166,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.schedulePost;
  * Created by ujjwal on 28/10/17.
  */
 
-public class CommunityPostActivity extends BaseActivity implements ICommunityPostView, QueryTokenReceiver, PollTypeCallBack {
+public class CommunityPostActivity extends BaseActivity implements ICommunityPostView, QueryTokenReceiver, PollTypeCallBack, BaseHolderInterface {
     public static final String SCREEN_LABEL = "Create Communities Post Screen";
     public static final String POSITION_ON_FEED = "POSITION_ON_FEED";
     public static final String IS_FROM_COMMUNITY = "Is from community";
@@ -2283,6 +2286,36 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liImagePollRow.setLayoutParams(params);
         mLiPollContainer.addView(liImagePollRow);
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 }
 

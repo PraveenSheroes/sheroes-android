@@ -1,18 +1,12 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,65 +17,38 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.BaseFragmentUtil;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
-
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_COMMENT_REACTION;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -92,18 +59,19 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, HomeView {
+    //region constant variables
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
+    //endregion
+
+    //region member variables
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
-    private int mPageNo;
     private SwipeRefreshLayout mSwipeView;
-    private LinearLayout mLiNoResult;
     private FeedDetail mFeedDetail;
-    private Comment mComment;
     private RecyclerView mRecyclerView;
     private int mPosition;
     private int mPressedEmoji;
@@ -114,9 +82,14 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     private ProgressBar mProgressBar;
     public FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     private FragmentOpen mFragmentOpen = new FragmentOpen();
+    //endregion
 
+    //region injected variables
     @Inject
-    Preference<LoginResponse> userPreference;
+    BaseFragmentUtil mBaseFragmentUtil;
+    @Inject
+    ErrorUtil mErrorUtil;
+    //endregion
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -138,9 +111,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mPullRefreshList = mPullRefreshList;
         this.mAdapter = mAdapter;
         this.mLayoutManager = mLayoutManager;
-        this.mPageNo = mPageNo;
+        int mPageNo1 = mPageNo;
         this.mSwipeView = swipeView;
-        this.mLiNoResult = liNoResult;
+        LinearLayout mLiNoResult = liNoResult;
         this.mFeedDetail = mFeedDetail;
         this.mRecyclerView = mRecyclerView;
         this.mPosition = mPosition;
@@ -151,18 +124,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
     }
-
-
-    public void setAllInitializationForFeeds(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, HomePresenter mHomePresenter, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mRecyclerView = mRecyclerView;
-        this.mHomePresenter = mHomePresenter;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
-
 
     public void setListLoadFlag(boolean mListLoad) {
         this.mListLoad = mListLoad;
@@ -183,10 +144,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         this.mRecyclerView = mRecyclerView;
         this.mAppUtils = mAppUtils;
         this.mProgressBar = mProgressBar;
-    }
-
-    @Override
-    public void onClick(View v) {
     }
 
     @Override
@@ -215,207 +172,31 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         }
     }
 
-    @Override
-    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
-    }
-
-    @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    public void challengeAddOnFeed(FeedDetail feedDetail) {
-        if (null != feedDetail) {
-            mAdapter.addDataOnPosition(feedDetail, 0);
-            mAdapter.notifyDataSetChanged();
-            mRecyclerView.smoothScrollBy(0, 0);
-        }
-    }
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case LIKE_UNLIKE:
-                likeSuccess(baseResponse);
+                mBaseFragmentUtil.likeSuccess(getActivity(), baseResponse, mFeedDetail, mAdapter, mSwipeView, getScreenName(), mPressedEmoji);
                 break;
             case COMMENT_REACTION:
-                recentCommentEditDelete(baseResponse);
+                mBaseFragmentUtil.recentCommentEditDelete(getActivity(), mSwipeView, getScreenName(), mFeedDetail, baseResponse, mAdapter);
                 break;
             case BOOKMARK_UNBOOKMARK:
-                bookMarkSuccess(baseResponse);
+                mBaseFragmentUtil.bookMarkSuccess(getActivity(), baseResponse, mFeedDetail, mAdapter, mSwipeView, getScreenName());
                 break;
             case JOIN_INVITE:
-                joinInviteResponse(baseResponse);
+                mBaseFragmentUtil.joinInviteResponse(getActivity(), mAdapter, mLayoutManager, mFeedDetail, getScreenName(), baseResponse);
                 break;
             case DELETE_COMMUNITY_POST:
-                deleteCommunityPostRespose(baseResponse);
+                mBaseFragmentUtil.deleteCommunityPostRespose(mAdapter, mLayoutManager, getActivity(), mFeedDetail, getScreenName(), baseResponse);
                 break;
             case MARK_AS_SPAM:
-                reportAsSpamPostRespose(baseResponse);
+                mBaseFragmentUtil.reportAsSpamPostRespose(getContext(), mFeedDetail, getScreenName(), baseResponse, mAdapter, mLayoutManager);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
-    }
-
-    public void reportAsSpamPostRespose(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                Toast.makeText(getContext(), AppConstants.MARK_AS_SPAM, Toast.LENGTH_SHORT).show();
-                mFeedDetail.setFromHome(true);
-                commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                AnalyticsManager.trackPostAction(Event.POST_REPORTED, mFeedDetail, getScreenName());
-                break;
-            case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), MARK_AS_SPAM);
-                break;
-            default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), MARK_AS_SPAM);
-        }
-    }
-
-    public void deleteCommunityPostRespose(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                commentListRefresh(mFeedDetail, DELETE_COMMUNITY_POST);
-                AnalyticsManager.trackPostAction(Event.POST_DELETED, mFeedDetail, getScreenName());
-                break;
-            case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
-                break;
-            default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
-        }
-    }
-
-    public void joinInviteResponse(BaseResponse baseResponse) {
-        switch (baseResponse.getStatus()) {
-            case AppConstants.SUCCESS:
-                if (((CommunityFeedSolrObj) mFeedDetail).isClosedCommunity()) {
-                    ((CommunityFeedSolrObj) mFeedDetail).setRequestPending(true);
-
-                } else {
-                    ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
-                }
-                commentListRefresh(mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
-                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
-                break;
-            case AppConstants.FAILED:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
-                break;
-            default:
-                mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
-        }
-    }
-
-
-    private void recentCommentEditDelete(BaseResponse baseResponse) {
-        if (null != mFeedDetail) {
-            switch (baseResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    List<Comment> lastCommentList = mFeedDetail.getLastComments();
-                    if (StringUtil.isNotEmptyCollection(lastCommentList) && null != lastCommentList.get(lastCommentList.size() - 1)) {
-                        Comment lastComment = lastCommentList.get(lastCommentList.size() - 1);
-                        lastCommentList.remove(lastComment);
-                        mFeedDetail.setLastComments(lastCommentList);
-                        AnalyticsManager.trackPostAction(Event.POST_EDITED, mFeedDetail, getScreenName());
-                    }
-                    mAdapter.notifyDataSetChanged();
-                    break;
-                case AppConstants.FAILED:
-                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_COMMENT_REACTION);
-                    break;
-                default:
-                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
-            }
-        }
-    }
-
-    /*1:- If pass one from home activity means its comments section changes
-    2:- If two Home activity means its Detail section changes of activity,and refresh particular card*/
-    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-        if (null != feedDetail) {
-            switch (feedParticipationEnum) {
-                case ACTIVITY_FOR_REFRESH_FRAGMENT_LIST:
-                    mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
-                    mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
-                    break;
-                case COMMENT_REACTION:
-                    mAdapter.setDataOnPosition(feedDetail, feedDetail.getItemPosition());
-                    mLayoutManager.scrollToPosition(feedDetail.getItemPosition());
-                    break;
-                case DELETE_COMMUNITY_POST:
-                    mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
-            }
-        }
-        mAdapter.notifyDataSetChanged();
-    }
-
-    protected void bookMarkSuccess(BaseResponse baseResponse) {
-        if (null != mFeedDetail) {
-            switch (baseResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, mFeedDetail, getScreenName());
-                    break;
-                case AppConstants.FAILED:
-                    if (!mFeedDetail.isBookmarked()) {
-                        mFeedDetail.setBookmarked(true);
-                    } else {
-                        mFeedDetail.setBookmarked(false);
-                    }
-                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
-                    break;
-                default:
-                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
-            }
-        }
-    }
-
-    protected void likeSuccess(BaseResponse baseResponse) {
-        if (null != mFeedDetail) {
-            switch (baseResponse.getStatus()) {
-                case AppConstants.SUCCESS:
-                    if (mFeedDetail.isLongPress()) {
-                        if (mFeedDetail.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
-                            mFeedDetail.setReactionValue(mPressedEmoji);
-                            mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                        } else {
-                            mFeedDetail.setReactionValue(mPressedEmoji);
-                        }
-                    }
-                    mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    if (mFeedDetail instanceof OrganizationFeedObj) {
-                        AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail, getScreenName());
-                    } else {
-                        AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail, getScreenName());
-                    }
-                    break;
-                case AppConstants.FAILED:
-                    if (!mFeedDetail.isLongPress()) {
-                        if (mFeedDetail.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-                            mFeedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
-                            mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
-                        } else {
-                            mFeedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
-                            mFeedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                        }
-                        mFeedDetail.setReactionValue(mFeedDetail.getLastReactionValue());
-                        mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    }
-                    showError(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
-                    break;
-                default:
-                    showError(getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
-            }
-        }
-
     }
 
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
@@ -443,14 +224,14 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             mFeedDetail = (FeedDetail) baseResponse;
             this.mPosition = position;
             this.mPressedEmoji = reactionValue;
-            if(mFeedDetail instanceof UserPostSolrObj){
-                if(((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID){
+            if (mFeedDetail instanceof UserPostSolrObj) {
+                if (((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
                     if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
                         mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
                     } else {
                         mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
                     }
-                }else {
+                } else {
                     if (null != mFeedDetail && mFeedDetail.isLongPress()) {
                         mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
                     } else {
@@ -476,32 +257,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
     @Override
-    public void invalidateLikeUnlike(Comment comment) {
-
-    }
-
-    @Override
-    public void onConfigFetched() {
-
-    }
-
-    @Override
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse){
-
-    }
-
-
-    @Override
-    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
-    }
-
-    @Override
-    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
     public void startProgressBar() {
         if (null != mProgressBar) {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -517,39 +272,12 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        if (feedParticipationEnum == ERROR_FEED_RESPONSE) {
-            if (null != mSwipeView) {
-                // mLiNoResult.setVisibility(View.VISIBLE);
-                mSwipeView.setRefreshing(false);
-            }
-        }
-        mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(errorMsg, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+        mBaseFragmentUtil.showError(mSwipeView, errorMsg, feedParticipationEnum);
+        mErrorUtil.onShowErrorDialog(getActivity(), errorMsg, feedParticipationEnum);
 
     }
 
-    @Override
-    public void getLogInResponse(LoginResponse loginResponse) {
-    }
-
-    @Override
-    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
-
-    }
-
-    @Override
-    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
-
-    }
 
     @Override
     public void onResume() {
@@ -621,6 +349,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         return false;
     }
 
+
     protected Map<String, Object> getExtraProperties() {
         return null;
     }
@@ -630,64 +359,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
 
-
-    /**
-     * this method will be use for fragment pop
-     */
-    protected void onBackPress() {
-        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
-    protected void getExternalStoragePermission() {
-        if (Build.VERSION.SDK_INT >= 23) {
-            if (getActivity().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                LogUtils.info("testing", "Permission is granted");
-
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-                LogUtils.info("testing", "Permission is revoked");
-
-
-            }
-            if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                LogUtils.info("testing", "Permission is granted");
-
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-                LogUtils.info("testing", "Permission is revoked");
-
-            }
-        } else { //permission is automatically granted on sdk<23 upon installation
-            LogUtils.info("testing", "Permission is already granted");
-
-        }
-
-    }
-
-    public void joinRequestForOpenCommunity(FeedDetail feedDetail) {
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-            List<Long> userIdList = new ArrayList();
-            userIdList.add(userPreference.get().getUserSummary().getUserId());
-            setFeedDetail(feedDetail);
-            mHomePresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
-        }
-    }
-
-
-    @Override
-    public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
-
-    }
-
-    @Override
-    public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
-
-    }
-
-    @Override
-    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
-
-    }
-
     protected abstract SheroesPresenter getPresenter();
+
 }

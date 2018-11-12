@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -17,10 +18,14 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
@@ -46,6 +51,8 @@ public class LoginActivity extends BaseActivity {
 
     @Inject
     Preference<LoginResponse> userPreference;
+    @Inject
+    ErrorUtil errorUtil;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,7 +94,7 @@ public class LoginActivity extends BaseActivity {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
         if (StringUtil.isNotNullOrEmptyString(isDeactivated) && isDeactivated.equalsIgnoreCase("true")) {
-            showErrorDialogOnUserAction(true, false, errorMessage, "true");
+            errorUtil.showErrorDialogOnUserAction(this, true, false, errorMessage, "true");
         } else {
             showNetworkTimeoutDialog(true, false, errorMessage);
         }
@@ -187,6 +194,7 @@ public class LoginActivity extends BaseActivity {
     public String getScreenName() {
         return null;
     }
+
 }
 
 

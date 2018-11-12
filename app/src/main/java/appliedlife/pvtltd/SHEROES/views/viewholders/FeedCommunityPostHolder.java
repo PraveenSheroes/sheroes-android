@@ -57,6 +57,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.VideoPlayActivity;
@@ -83,6 +84,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     Preference<LoginResponse> userPreference;
     @Inject
     Preference<AppConfiguration> mConfiguration;
+    @Inject
+    FeedUtils feedUtils;
     private static final String LEFT_HTML_TAG = "<font color='#3c3c3c'>";
     private static final String RIGHT_HTML_TAG = "</font>";
     private static final float FOLLOW_BUTTON_ORIGINAL = 1.0f;
@@ -1148,7 +1151,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onUserPostImageClicked(mUserPostObj);
         } else {
-            viewInterface.dataOperationOnClick(mUserPostObj);
+            feedUtils.dataOperationOnClick(mContext, mUserPostObj);
         }
     }
 
@@ -1220,7 +1223,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onUserPostImageClicked(mUserPostObj);
                 } else {
-                    viewInterface.dataOperationOnClick(mUserPostObj);
+                    feedUtils.dataOperationOnClick(mContext, mUserPostObj);
+
+//                    viewInterface.dataOperationOnClick(mUserPostObj);
                 }
                 break;
             }
@@ -1229,7 +1234,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onUserPostImageClicked(mUserPostObj);
                 } else {
-                    viewInterface.dataOperationOnClick(mUserPostObj);
+                    feedUtils.dataOperationOnClick(mContext, mUserPostObj);
+
+//                    viewInterface.dataOperationOnClick(mUserPostObj);
                 }
                 break;
             }
@@ -1238,7 +1245,8 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 if (viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onUserPostImageClicked(mUserPostObj);
                 } else {
-                    viewInterface.dataOperationOnClick(mUserPostObj);
+                    feedUtils.dataOperationOnClick(mContext, mUserPostObj);
+//                    viewInterface.dataOperationOnClick(mUserPostObj);
                 }
                 break;
             }
@@ -1254,7 +1262,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             followButtonVisibility(mContext, !mUserPostObj.isSolrIgnoreIsUserFollowed());
             ((FeedItemCallback) viewInterface).onPostAuthorFollowed(mUserPostObj);
         } else {
-            viewInterface.dataOperationOnClick(mUserPostObj);
+            feedUtils.dataOperationOnClick(mContext, mUserPostObj);
+
+//            viewInterface.dataOperationOnClick(mUserPostObj);
         }
     }
 

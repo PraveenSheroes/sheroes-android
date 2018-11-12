@@ -23,6 +23,7 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -35,12 +36,19 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -144,7 +152,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
                         appInstallationHelper.setupAndSaveInstallation(true);
                         mUserPreference.set(loginResponse);
-                        if (getActivity()!=null&&null != loginResponse.getUserSummary()) {
+                        if (getActivity() != null && null != loginResponse.getUserSummary()) {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
@@ -157,8 +165,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
-                        if(getActivity()!=null)
-                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
+                        if (getActivity() != null)
+                            ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                         break;
                 }
             } else {
@@ -171,7 +179,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setFcmId(mFcmId);
                     mUserPreference.set(loginResponse);
-                    if(getActivity()!=null) {
+                    if (getActivity() != null) {
                         ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     }
@@ -179,21 +187,56 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-                    if(getActivity()!=null && !getActivity().isFinishing()) {
+                    if (getActivity() != null && !getActivity().isFinishing()) {
                         ((LoginActivity) getActivity()).onLoginAuthToken();
                     }
 
                 } else {
                     LoginManager.getInstance().logOut();
-                    if(getActivity()!=null)
-                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
+                    if (getActivity() != null)
+                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                 }
             }
         }
     }
 
     @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
     public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+
+    }
+
+    @Override
+    public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
+
+    }
+
+    @Override
+    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
 
     }
 
@@ -301,17 +344,27 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         checkDialogDismiss();
         mEmailSign.setEnabled(true);
         super.showError(errorMsg, feedParticipationEnum);
     }
 
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
+    }
+
 
     private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        if(getActivity() ==null || !isAdded()){
+        if (getActivity() == null || !isAdded()) {
             return;
         }
         FCMClientManager pushClientManager = new FCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));

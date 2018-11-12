@@ -83,6 +83,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.ExpandableTextCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.ProgressbarView;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -117,6 +118,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
@@ -128,6 +130,8 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
+import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.SpamUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -166,7 +170,8 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileP
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener, ViewPager.OnPageChangeListener, ProgressbarView, ExpandableTextCallback {
+public class ProfileActivity extends BaseActivity implements BaseHolderInterface, HomeView, ProfileView, AppBarLayout.OnOffsetChangedListener,
+        ViewPager.OnPageChangeListener, ProgressbarView, ExpandableTextCallback {
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
@@ -227,6 +232,12 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+
+    @Inject
+    FeedUtils feedUtils;
+
+    @Inject
+    ErrorUtil errorUtil;
 
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
@@ -407,6 +418,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     private UserSolrObj followedUserSolrObj;
     String viewLessText, viewMoreText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -457,7 +469,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
 
-        setConfigurableShareOption(isWhatsAppShare());
+        feedUtils.setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
@@ -628,7 +640,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             if (isOwnProfile) {
                 userDescription.setText(description);
                 ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this,viewMoreText,viewLessText);
+                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
             } else {
                 userDescription.setText(description);
             }
@@ -1205,17 +1217,27 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+            feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
     }
 
     private void communityDetailHandled(View view, BaseResponse baseResponse) {
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
-        setFragment(mFragment);
+        feedUtils.setFragment(mFragment);
         mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
         setAllValues(mFragmentOpen);
-        super.feedCardsHandled(view, baseResponse);
+        feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
     }
 
 
@@ -1274,7 +1296,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        onShowErrorDialog(s, feedParticipationEnum);
+        errorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
         loaderGif.setVisibility(View.GONE);
     }
 
@@ -1437,11 +1459,6 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
@@ -1467,9 +1484,8 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
     }
 
     @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-        setAllValues(mFragmentOpen);
-        super.dataOperationOnClick(baseResponse);
+    public void onConfigFetched() {
+
     }
 
     public void championDetailActivity(Long userId, boolean isMentor) {
@@ -1615,6 +1631,11 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
                 championDetailActivity(feedDetail.getCreatedBy(), feedDetail.getItemPosition(), feedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN);
             }
         }
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     @Override
@@ -1828,7 +1849,7 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             userDescription.setText(description);
             userDescription.setTag(null);
             ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this,viewMoreText,viewLessText);
+            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
 
             mUserSolarObject.setDescription(description);
         }
@@ -2416,6 +2437,5 @@ public class ProfileActivity extends BaseActivity implements HomeView, ProfileVi
             profileStrengthViewContainer.setVisibility(View.GONE);
         }
     }
-
 
 }
