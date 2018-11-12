@@ -64,6 +64,7 @@
                 android:gravity="center_horizontal"
                 android:maxLines="@integer/user_compact_card_name_max_line"
                 android:textColor="@color/user_card_compact_name"
+                android:textStyle="bold"
                 vernacular:customTextFontFamily="@string/bold_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
@@ -83,7 +84,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/follow_button"
-            style="@style/TextView14spMediumBold"
+            style="@style/TextView14spBold"
             android:layout_width="@dimen/user_compact_follow_width"
             android:layout_height="@dimen/user_compact_follow_height"
             android:layout_alignParentBottom="true"

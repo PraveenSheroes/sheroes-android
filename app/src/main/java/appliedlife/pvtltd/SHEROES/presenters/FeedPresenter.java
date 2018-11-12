@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
@@ -402,12 +403,22 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
-                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            }
+                            getMvpView().invalidateItem(userSolrObj);
                         } else {
-                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            } else {
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            }
+                            getMvpView().invalidateItem(userSolrObj);
                         }
-                        getMvpView().invalidateItem(userSolrObj);
                     }
                 });
 
@@ -439,16 +450,24 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
+                                if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
+                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                                }
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            } else {
+                                if (userSolrObj.getUserFollowersCount() > 0) {
+                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
+                                }
                                 userSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
+                            getMvpView().invalidateItem(userSolrObj);
                         } else {
-                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         }
-                        getMvpView().invalidateItem(userSolrObj);
                     }
                 });
+
     }
 
     public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
@@ -876,7 +895,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+                        if (likeResponse.getStatus() == AppConstants.FAILED) {
                             comment.isLiked = true;
                             comment.likeCount++;
                         }

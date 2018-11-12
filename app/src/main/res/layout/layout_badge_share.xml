@@ -40,7 +40,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/badge_title"
-            style="@style/TextView20spMediumBold"
+            style="@style/TextView20spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/header_container"

@@ -59,7 +59,7 @@
                 android:layout_height="match_parent" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                style="@style/TextView14spMediumBold"
+                style="@style/TextView14spBold"
                 android:id="@+id/tv_location_result"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

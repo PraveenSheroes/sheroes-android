@@ -32,7 +32,7 @@
         android:visibility="gone">
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-            style="@style/TextView14spMediumBold"
+            style="@style/TextView14spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

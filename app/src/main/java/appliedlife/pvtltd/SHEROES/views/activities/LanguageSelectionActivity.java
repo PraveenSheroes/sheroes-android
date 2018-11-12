@@ -112,7 +112,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
         mMoEHelper = MoEHelper.getInstance(this);
         payloadBuilder = new PayloadBuilder();
         moEngageUtills = MoEngageUtills.getInstance();
-        mLoginPresenter.attachView(this);
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError("");
@@ -276,6 +275,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             finish();
         } else {
             setContentView(R.layout.select_language_dialog);
+            mLoginPresenter.attachView(this);
             ButterKnife.bind(LanguageSelectionActivity.this);
             if (isFirstTimeUser) {
                 AnalyticsManager.trackScreenView(getScreenName());

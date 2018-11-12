@@ -85,6 +85,7 @@ public class FCMClientManager {
                         fcm = FirebaseMessaging.getInstance();
                     }
                     regid = FirebaseInstanceId.getInstance().getToken();
+                    Log.i(TAG, regid);
                     // Persist the regID - no need to register again.
                     storeRegistrationId(getContext(), regid);
                 } catch (Exception ex) {

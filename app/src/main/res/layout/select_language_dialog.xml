@@ -20,7 +20,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_header"
-        style="@style/TextView20spMediumBold"
+        style="@style/TextView20spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/lang_header_top_margin"
@@ -91,7 +91,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_continue"
-        style="@style/TextView14spMediumBold"
+        style="@style/TextView14spBold"
         android:layout_width="150dp"
         android:layout_height="36dp"
         android:background="@drawable/rectangle_grey"

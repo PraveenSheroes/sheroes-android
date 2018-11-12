@@ -11,7 +11,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/post_now"
-        style="@style/TextView14spMediumBold"
+        style="@style/TextView14spBold"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_48"
         android:gravity="center"
@@ -23,7 +23,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/schedule_post"
-        style="@style/TextView14spMediumBold"
+        style="@style/TextView14spBold"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_48"
         android:background="@color/footer_icon_text"

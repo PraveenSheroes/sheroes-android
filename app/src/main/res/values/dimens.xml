@@ -691,10 +691,5 @@
     <dimen name="helpline_date_paddingLeftRight">12dp</dimen>
     <dimen name="helpline_date_paddingTopBottom">4dp</dimen>
     <dimen name="helpline_date_textsize">12sp</dimen>
-    <dimen name="follow_btn_textsize">14sp</dimen>
-    <dimen name="follow_btn_width">100dp</dimen>
-    <dimen name="follow_btn_height">30dp</dimen>
-    <dimen name="follow_btn_marginright">16dp</dimen>
-    <dimen name="imagesize_unfollow_dialog">87dp</dimen>
 </resources>
 

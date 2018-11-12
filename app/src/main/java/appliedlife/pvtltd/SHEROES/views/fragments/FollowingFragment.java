@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,52 +10,38 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import com.f2prateek.rx.preferences2.Preference;
-
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
-import appliedlife.pvtltd.SHEROES.analytics.Event;
-import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.FollowerFollowingCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FollowerFollowingAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowingView;
 import butterknife.Bind;
-import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
@@ -81,7 +66,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     private SwipPullRefreshList mPullRefreshList;
     private FollowingEnum mode;
     private FollowersFollowingRequest profileFollowedMentor;
-    private Dialog dialog = null;
 
     @Bind(R.id.communities)
     RecyclerView mRecyclerView;
@@ -92,14 +76,8 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
 
-    @BindDimen(R.dimen.imagesize_unfollow_dialog)
-    int profileSizeSmall;
-
     @Inject
     AppUtils mAppUtils;
-
-    @Inject
-    Preference<LoginResponse> mUserPreference;
 
     @Bind(R.id.progress_bar)
     ProgressBar mProgressBar;
@@ -153,7 +131,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     private void followedListPagination(FragmentListRefreshData mFragmentListRefreshData) {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new FollowerFollowingAdapter(getContext(), this, mUserPreference);
+        mAdapter = new FollowerFollowingAdapter(getContext(), this);
         mRecyclerView.setAdapter(mAdapter);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -242,64 +220,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
         ProfileActivity.navigateTo(getActivity(), id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
-    public void onFollowFollowingClick(UserSolrObj userSolrObj, int position, String followFollowingBtnText) {
-        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                        .name(userSolrObj.getNameOrTitle())
-                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
-                        .build();
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            unFollowConfirmation(publicProfileListRequest,userSolrObj,position);
-        } else {
-            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
-            followingPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj, position);
-        }
-    }
-    protected final void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj, final int position){
-        if (userSolrObj != null) {
-            if (dialog != null) {
-                dialog.dismiss();
-            }
-            dialog = new Dialog(getContext());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setCancelable(false);
-            dialog.setContentView(R.layout.unfollow_confirmation_dialog);
-            CircleImageView circleImageView = dialog.findViewById(R.id.user_img_icon);
-            if (StringUtil.isNotNullOrEmptyString(userSolrObj.getImageUrl())) {
-                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getImageUrl(), profileSizeSmall, profileSizeSmall);
-                circleImageView.setCircularImage(true);
-                circleImageView.bindImage(authorThumborUrl);
-            }
-            TextView text = dialog.findViewById(R.id.title);
-            text.setText(getString(R.string.unfollow_profile, userSolrObj.getNameOrTitle()));
-            TextView dialogButton = dialog.findViewById(R.id.cancel);
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-            TextView unFollowButton = dialog.findViewById(R.id.unfollow);
-            unFollowButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                                    .name(userSolrObj.getNameOrTitle())
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-                    followingPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj, position);
-                    dialog.dismiss();
-                }
-            });
-            dialog.show();
-        }
-    }
-
     @Override
     public void startActivityFromHolder(Intent intent) {
 
@@ -338,15 +258,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
 
-    }
-
-    @Override
-    public void refreshItem(FeedDetail feedDetail, int position) {
-        if (mAdapter != null && mAdapter.getItemCount() > position) {
-            if (feedDetail instanceof UserSolrObj) {
-                mAdapter.setData(position, (UserSolrObj) feedDetail);
-            }
-        }
     }
 
 }

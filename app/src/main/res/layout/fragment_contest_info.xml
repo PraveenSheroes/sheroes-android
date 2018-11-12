@@ -32,7 +32,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_status"
-            style="@style/TextView12spMediumBold"
+            style="@style/TextView12spBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -59,7 +59,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title"
-            style="@style/TextView16spMediumBold"
+            style="@style/TextView16spBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/contest_tag"

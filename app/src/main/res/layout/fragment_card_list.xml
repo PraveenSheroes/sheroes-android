@@ -78,7 +78,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_no_result_try_again"
-            style="@style/TextView14spMediumBold"
+            style="@style/TextView14spBold"
             android:layout_width="@dimen/dp_size_350"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

@@ -31,7 +31,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_user_name_male_error"
-        style="@style/TextView18spMediumBold"
+        style="@style/TextView18spBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -55,7 +55,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_share_sheroes_app"
-        style="@style/TextView14spMediumBold"
+        style="@style/TextView14spBold"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_40"
         android:layout_marginLeft="@dimen/dp_size_16"
