@@ -167,10 +167,10 @@
                 android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:textColor="@color/user_follow_post_text"
-                android:visibility="gone"
                 android:textAllCaps="true"
                 tools:text="@string/following_user"
-                vernacular:customTextFontFamily="@string/medium_font" />
+                vernacular:customTextFontFamily="@string/medium_font"
+                android:layout_marginLeft="@dimen/follow_btn_marginleft"/>
 
             <TextView
                 android:id="@+id/post_menu"
