@@ -374,10 +374,6 @@ public class ContestInfoFragment extends BaseFragment {
         return new ContestInfoFragment();
     }
 
-    @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
-
-    }
     //endregion
 
 }

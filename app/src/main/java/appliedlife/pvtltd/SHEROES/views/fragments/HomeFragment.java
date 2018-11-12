@@ -260,10 +260,6 @@ public class HomeFragment extends BaseFragment {
         mUnSelectedFragment = active;
     }
 
-    @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
-
-    }
     //endregion
 
     // region Static innerclass

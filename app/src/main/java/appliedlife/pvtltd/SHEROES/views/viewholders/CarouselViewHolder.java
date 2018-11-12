@@ -158,18 +158,18 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public void onIconClicked() {
         /*if (carouselDataObj != null && carouselDataObj.getUserSolrObj() != null && carouselDataObj.getUserSolrObj().get(0) != null) {
             if (carouselDataObj.getUserSolrObj().get(0) instanceof UserSolrObj) {
-                if (viewInterface instanceof AllCommunityItemCallback) {
-                    ((AllCommunityItemCallback) viewInterface).openChampionListingScreen(carouselDataObj);
+                if (mViewInterface instanceof AllCommunityItemCallback) {
+                    ((AllCommunityItemCallback) mViewInterface).openChampionListingScreen(carouselDataObj);
                 } else {
-                    viewInterface.handleOnClick(carouselDataObj, mIcon);
+                    mViewInterface.handleOnClick(carouselDataObj, mIcon);
                 }
             } else {
-                if (viewInterface instanceof AllCommunityItemCallback) {
-                    ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
-                }else if(viewInterface instanceof FeedItemCallback){
-                    ((FeedItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
+                if (mViewInterface instanceof AllCommunityItemCallback) {
+                    ((AllCommunityItemCallback) mViewInterface).onSeeMoreClicked(carouselDataObj);
+                }else if(mViewInterface instanceof FeedItemCallback){
+                    ((FeedItemCallback)mViewInterface).onSeeMoreClicked(carouselDataObj);
                 } else {
-                    viewInterface.handleOnClick(carouselDataObj, mIcon);
+                    mViewInterface.handleOnClick(carouselDataObj, mIcon);
                 }
             }
         }*/

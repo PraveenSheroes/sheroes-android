@@ -28,6 +28,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
@@ -197,8 +198,4 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         return SCREEN_LABEL;
     }
 
-    @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
-
-    }
 }

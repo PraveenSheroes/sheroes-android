@@ -10,6 +10,7 @@ import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -35,15 +36,19 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -57,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
+import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineRateUsHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -67,7 +73,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadReq
  * Created by Deepak on 19-05-2017.
  */
 
-public class HelplineFragment extends BaseFragment {
+public class HelplineFragment extends BaseFragment implements BaseHolderInterface {
     private static final String SCREEN_LABEL = "Helpline Screen";
     private String mSpeechAppPackageName = "com.google.android.googlequicksearchbox";
     private final String TAG = LogUtils.makeLogTag(HelplineFragment.class);
@@ -273,17 +279,17 @@ public class HelplineFragment extends BaseFragment {
     }
 
     @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
-        if(helplinePostRatingResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            HashMap<String, Object> screenProperties = null;
-            if (sourceScreen != null) {
-                screenProperties = new EventProperty.Builder()
-                        .sourceScreenId(sourceScreen)
-                        .build();
-            }
-            trackEvent(Event.HELPLINE_RATEUS_CARD_CLICKED, screenProperties);
-            //refreshChatMethod();
+    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse,HelplineChatDoc helplineChatDoc) {
+        if(helplinePostRatingResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+            mAdapter.notifyItemChanged(helplineChatDoc.getItemPosition());
         }
+        HashMap<String, Object> screenProperties = null;
+        if (sourceScreen != null) {
+            screenProperties = new EventProperty.Builder()
+                    .sourceScreenId(sourceScreen)
+                    .build();
+        }
+        trackEvent(Event.HELPLINE_RATEUS_CARD_CLICKED, screenProperties);
     }
 
     @Override
@@ -378,6 +384,49 @@ public class HelplineFragment extends BaseFragment {
                 }
             }
         };
+    }
+
+    @Override
+    public void startActivityFromHolder(Intent intent) {
+
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        if (baseResponse instanceof HelplineChatDoc) {
+            HelplineChatDoc helplineChatDoc=(HelplineChatDoc)baseResponse;
+            mHelplinePresenter.postHelplineRating(mAppUtils.helpLinePostRatingRequestBuilder(false),helplineChatDoc);
+        }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public List getListData() {
+        return null;
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 }
 

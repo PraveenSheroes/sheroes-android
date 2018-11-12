@@ -682,8 +682,4 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
 
-    @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
-
-    }
 }

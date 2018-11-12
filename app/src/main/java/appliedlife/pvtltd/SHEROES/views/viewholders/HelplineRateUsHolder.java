@@ -35,14 +35,14 @@ public class HelplineRateUsHolder extends BaseViewHolder<HelplineChatDoc> {
     @Bind(R.id.not_now)
     Button notNow;
 
-    BaseHolderInterface viewInterface;
+    BaseHolderInterface mViewInterface;
     private HelplineChatDoc dataItem;
     private Context mContext;
 
     public HelplineRateUsHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.viewInterface = baseHolderInterface;
+        this.mViewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
     }
 
@@ -51,8 +51,12 @@ public class HelplineRateUsHolder extends BaseViewHolder<HelplineChatDoc> {
     public void bindData(HelplineChatDoc helplineChatDoc, Context context, int position) {
         this.dataItem = helplineChatDoc;
         this.mContext = context;
-        //Visibility when call comes
-        //rateUsScreen.setVisibility(View.VISIBLE);
+        helplineChatDoc.setItemPosition(position);
+        if (helplineChatDoc.getRating()) {
+            rateUsScreen.setVisibility(View.VISIBLE);
+        } else {
+            rateUsScreen.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -67,12 +71,12 @@ public class HelplineRateUsHolder extends BaseViewHolder<HelplineChatDoc> {
     public void RateUsClicked() {
         CommonUtil.openPlayStore(mContext, SheroesApplication.mContext.getPackageName());
         rateUsScreen.setVisibility(View.GONE);
-        //dataItem.setNeedRating(false);
+        mViewInterface.handleOnClick(dataItem, rateUs);
     }
 
     @OnClick(R.id.not_now)
     public void NotNowClicked() {
         rateUsScreen.setVisibility(View.GONE);
-        //dataItem.setNeedRating(false);
+        mViewInterface.handleOnClick(dataItem, notNow);
     }
 }
