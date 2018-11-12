@@ -100,10 +100,11 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="match_parent"
+            android:layout_width="@dimen/helpline_rateusImage_width"
             android:layout_height="@dimen/helpline_rateusImage_height"
             android:paddingBottom="@dimen/helpline_rateusImage_paddingBottom"
             android:paddingTop="@dimen/helpline_rateusImage_paddingTop"
+            android:layout_gravity="center"
             android:src="@drawable/ic_rateus" />
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView

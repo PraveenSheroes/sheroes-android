@@ -679,6 +679,7 @@
     <dimen name="helpline_notnow_background_padding">8dp</dimen>
     <dimen name="helpline_notnow_background_radius">4dp</dimen>
     <dimen name="helpline_rateusImage_height">170dp</dimen>
+    <dimen name="helpline_rateusImage_width">198dp</dimen>
     <dimen name="helpline_rateusImage_paddingBottom">29dp</dimen>
     <dimen name="helpline_rateusImage_paddingTop">39dp</dimen>
     <dimen name="helpline_rateusTitle_paddingBottom">8dp</dimen>
