@@ -20,8 +20,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import org.parceler.Parcels;
 
@@ -55,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -73,7 +70,6 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.isFragmentUIActive;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /**
@@ -116,9 +112,6 @@ public class UserPostFragment extends BaseFragment {
     private int positionOfFeedDetail;
     private String mPressedButtonName;
     private long mCommunityPostId;
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -155,9 +148,6 @@ public class UserPostFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.fragment_communities_detail, container, false);
         ButterKnife.bind(this, view);
         LocaleManager.setLocale(getContext());
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
 
         if (null != mUserPreference && mUserPreference.isSet()&& null != mUserPreference.get().getUserSummary()) {
             mUserId = mUserPreference.get().getUserSummary().getUserId();

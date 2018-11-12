@@ -22,9 +22,6 @@ import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-import com.moengage.push.PushManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,8 +49,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -104,20 +99,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Bind(R.id.tv_email_description)
     TextView tvEmailDescription;
     private ProgressDialog mProgressDialog;
-    private MoEHelper mMoEHelper;
     private String mFcmId;
     private String email;
     private String password;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
     private boolean isEye;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
@@ -162,9 +151,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         loginResponse.setFcmId(mFcmId);
                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
                         appInstallationHelper.setupAndSaveInstallation(true);
-                        moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                         mUserPreference.set(loginResponse);
-                        moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                         if (getActivity()!=null&&null != loginResponse.getUserSummary()) {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
@@ -191,9 +178,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     loginResponse.setTokenTime(System.currentTimeMillis());
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setFcmId(mFcmId);
-                    moEngageUtills.entityMoEngageUserAttribute(getActivity(), mMoEHelper, payloadBuilder, loginResponse);
                     mUserPreference.set(loginResponse);
-                    moEngageUtills.entityMoEngageLoggedIn(getActivity(), mMoEHelper, payloadBuilder, MoEngageConstants.EMAIL);
                     if(getActivity()!=null) {
                         ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
@@ -388,7 +373,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mFcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
-                    PushManager.getInstance().refreshToken(SheroesApplication.mContext, mFcmId);
                     //Refresh FCM token
                     CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if (cleverTapAPI != null) {

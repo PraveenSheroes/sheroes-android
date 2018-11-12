@@ -29,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -42,6 +41,8 @@ public class MixpanelHelper {
 
     public static final String SCREEN_OPEN = "Screen open";
     public static final String SCREEN_NAME = "Screen name";
+    public static final String COMMUNITY_POST = "community post";
+    public static final String ARTICLE = "article";
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -461,11 +462,11 @@ public class MixpanelHelper {
         String type = null;
         switch (subType) {
             case AppConstants.FEED_ARTICLE:
-                type = MoEngageConstants.ARTICLE;
+                type = ARTICLE;
                 break;
 
             case AppConstants.FEED_COMMUNITY_POST:
-                type = MoEngageConstants.COMMUNITY_POST;
+                type = COMMUNITY_POST;
                 break;
 
         }

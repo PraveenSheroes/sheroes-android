@@ -16,9 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.SHEPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -71,11 +67,6 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     ScrollView svFaqs;
 
     GenericRecyclerViewAdapter mAdapter;
-
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
-    private long startedTime;
     private LinearLayoutManager mLayoutManager;
 
     @Override
@@ -86,11 +77,6 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         shePresenter.attachView(this);
         setProgressBar(pbFAQsProgreeBar);
         assignNavigationRecyclerListView();
-        payloadBuilder = new PayloadBuilder();
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        moEngageUtills = MoEngageUtills.getInstance();
-        startedTime = System.currentTimeMillis();
-        moEngageUtills.entityMoEngageViewFAQ(getActivity(),mMoEHelper,payloadBuilder,startedTime);
 
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
         CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
@@ -124,8 +110,6 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     public void onDestroyView() {
         super.onDestroyView();
         shePresenter.detachView();
-        long timeSpent=System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewFAQ(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
 
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
         CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
