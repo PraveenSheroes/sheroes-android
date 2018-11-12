@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +63,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.HelplineRateUsHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -283,6 +283,8 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         if(helplinePostRatingResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
             mAdapter.notifyItemChanged(helplineChatDoc.getItemPosition());
         }
+        mAdapter.removeDataOnPosition(helplineChatDoc.getItemPosition());
+        mAdapter.notifyDataSetChanged();
         HashMap<String, Object> screenProperties = null;
         if (sourceScreen != null) {
             screenProperties = new EventProperty.Builder()
@@ -395,7 +397,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof HelplineChatDoc) {
             HelplineChatDoc helplineChatDoc=(HelplineChatDoc)baseResponse;
-            mHelplinePresenter.postHelplineRating(mAppUtils.helpLinePostRatingRequestBuilder(false),helplineChatDoc);
+            mHelplinePresenter.postHelplineRating(mAppUtils.helpLinePostRatingRequestBuilder(false,helplineChatDoc.getQuestionOrAnswerId()),helplineChatDoc);
         }
     }
 

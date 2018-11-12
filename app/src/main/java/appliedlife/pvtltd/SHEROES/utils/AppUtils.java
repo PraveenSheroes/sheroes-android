@@ -2268,9 +2268,10 @@ public class AppUtils {
         uploadImageRequest.images.add(encodedImage);
         return uploadImageRequest;
     }
-    public HelplinePostRatingRequest helpLinePostRatingRequestBuilder(boolean isRating) {
+    public HelplinePostRatingRequest helpLinePostRatingRequestBuilder(boolean isRating, int answerId) {
         HelplinePostRatingRequest helplinePostRatingRequest = new HelplinePostRatingRequest();
         helplinePostRatingRequest.setRating(isRating);
+        helplinePostRatingRequest.setAnswerId(answerId);
         return helplinePostRatingRequest;
     }
 }

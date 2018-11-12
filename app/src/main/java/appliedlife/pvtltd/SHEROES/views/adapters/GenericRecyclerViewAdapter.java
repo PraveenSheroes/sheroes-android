@@ -67,6 +67,12 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         }
     }
 
+    public void removeDataOnPosition(int position) {
+        if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
+            this.filterListData.remove(position);
+        }
+    }
+
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }

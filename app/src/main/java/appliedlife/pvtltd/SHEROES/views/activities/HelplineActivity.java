@@ -3,16 +3,23 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HelplineActivity extends BaseActivity {
+public class HelplineActivity extends BaseActivity implements BaseHolderInterface {
+    private static final String TAG = HelplineActivity.class.getName();
+
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -28,7 +35,7 @@ public class HelplineActivity extends BaseActivity {
         setupToolbarItemsColor();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.helplineActivityFrameLayout, new HelplineFragment(), "fragmentTag")
+                .add(R.id.helplineActivityFrameLayout, new HelplineFragment(), TAG)
                 .commit();
     }
 
@@ -51,4 +58,12 @@ public class HelplineActivity extends BaseActivity {
         titleToolbar.setText(R.string.helpline_title);
     }
 
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        Toast.makeText(this,"handleonclick",Toast.LENGTH_SHORT).show();
+        HelplineFragment helplineFragment = (HelplineFragment)getSupportFragmentManager().findFragmentByTag(TAG);
+        if (helplineFragment != null && helplineFragment.isVisible()) {
+            helplineFragment.handleOnClick(baseResponse, view);
+        }
+    }
 }

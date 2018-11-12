@@ -7,9 +7,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 
 public class HelplinePostRatingRequest extends BaseRequest {
 
-    @SerializedName("need_rating_b")
+    @SerializedName("need_rating")
     @Expose
     private Boolean rating;
+
+    @SerializedName("answer_id")
+    @Expose
+    private Integer answerId;
 
     public Boolean getRating() {
         return rating;
@@ -19,4 +23,11 @@ public class HelplinePostRatingRequest extends BaseRequest {
         this.rating = rating;
     }
 
+    public Integer getAnswerId() {
+        return answerId;
+    }
+
+    public void setAnswerId(Integer answerId) {
+        this.answerId = answerId;
+    }
 }
