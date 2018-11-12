@@ -34,7 +34,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/author_name"
-                style="@style/TextView16spBold"
+                style="@style/TextView16spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -61,7 +61,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_tag"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/feature_image"
@@ -75,7 +75,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/title"
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/contest_tag"
@@ -105,7 +105,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/contest_status"
-            style="@style/TextView12spBold"
+            style="@style/TextView12spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -142,7 +142,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/join_challenge_text"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/divider_top"

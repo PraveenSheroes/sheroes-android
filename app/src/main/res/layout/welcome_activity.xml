@@ -114,7 +114,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_other_login_option"
-                style="@style/TextView14spBold"
+                style="@style/TextView14spMediumBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_size_16"

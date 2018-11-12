@@ -29,7 +29,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontButton
         android:id="@+id/btn_invite_friend"
-        style="@style/TextView14spBold"
+        style="@style/TextView14spMediumBold"
         android:layout_width="@dimen/invite_btn_width"
         android:layout_height="@dimen/invite_btn_height"
         android:layout_gravity="center"

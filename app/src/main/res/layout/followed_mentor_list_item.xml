@@ -113,7 +113,6 @@
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@drawable/selecter_contact_text_color"
-            tools:text="FOLLOW"
             vernacular:customButtonFontFamily="@string/bold_font" />
 
     </RelativeLayout>

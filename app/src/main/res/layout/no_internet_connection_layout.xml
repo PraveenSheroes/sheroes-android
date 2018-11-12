@@ -18,7 +18,7 @@
             android:background="@drawable/vector_no_internet" />
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -41,7 +41,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_retry_for_internet"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
