@@ -34,7 +34,6 @@
                 android:layout_marginTop="@dimen/dp_size_18"
                 android:text="@string/login_with_email"
                 android:textColor="@color/comment_text"
-                android:textStyle="bold"
                 vernacular:customTextFontFamily="@string/bold_font" />
 
             <FrameLayout
@@ -149,7 +148,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/forgot_password"
-                style="@style/TextView14spBold"
+                style="@style/TextView14spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|bottom"

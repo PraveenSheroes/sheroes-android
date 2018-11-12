@@ -108,7 +108,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_notification_read_count"
-            style="@style/TextView9spBold"
+            style="@style/TextView9spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

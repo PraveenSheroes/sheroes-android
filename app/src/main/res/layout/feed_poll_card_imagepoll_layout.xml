@@ -34,7 +34,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_imagepoll_percent_count_left"
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/feed_imagepoll_progress_text_margin"
@@ -87,7 +87,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_imagepoll_percent_count_right"
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/feed_imagepoll_progress_text_margin"
