@@ -5,9 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.Toast;
 
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +18,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
@@ -125,10 +121,6 @@ public class BaseFragmentUtil {
             switch (baseResponse.getStatus()) {
                 case AppConstants.SUCCESS:
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    MoEHelper mMoEHelper = MoEHelper.getInstance(context);
-                    PayloadBuilder payloadBuilder = new PayloadBuilder();
-                    MoEngageUtills moEngageUtills = MoEngageUtills.getInstance();
-                    moEngageUtills.entityMoEngageBookMarkData(context, mMoEHelper, payloadBuilder, mFeedDetail);
                     AnalyticsManager.trackPostAction(Event.POST_BOOKMARKED, mFeedDetail, screenName);
                     break;
                 case AppConstants.FAILED:
