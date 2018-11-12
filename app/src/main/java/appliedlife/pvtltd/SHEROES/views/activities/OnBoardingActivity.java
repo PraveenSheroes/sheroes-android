@@ -24,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -32,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -44,7 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class OnBoardingActivity extends BaseActivity {
+public class OnBoardingActivity extends BaseActivity implements BaseHolderInterface {
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
     private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
 
@@ -100,7 +102,7 @@ public class OnBoardingActivity extends BaseActivity {
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
     public void onBoardingFragment() {
-        tvNameUser.setText(getString(R.string.welcome,userPreference.get().getUserSummary().getFirstName()));
+        tvNameUser.setText(getString(R.string.welcome, userPreference.get().getUserSummary().getFirstName()));
         isJoinCount = 0;
         if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES), 0)); // for 24 api and more
@@ -135,6 +137,31 @@ public class OnBoardingActivity extends BaseActivity {
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
             }
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
 

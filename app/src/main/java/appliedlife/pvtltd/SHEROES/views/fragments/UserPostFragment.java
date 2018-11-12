@@ -46,13 +46,17 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.BaseFragmentUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
@@ -110,6 +114,9 @@ public class UserPostFragment extends BaseFragment {
     private long mCommunityPostId;
     @Inject
     Preference<LoginResponse> mUserPreference;
+    @Inject
+    BaseFragmentUtil baseFragmentUtil;
+
     private FeedDetail mApprovePostFeedDetail;
     private boolean mIsSpam;
     boolean isMentor = false;
@@ -319,6 +326,11 @@ public class UserPostFragment extends BaseFragment {
     }
 
     @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
         int totalPostCount = feedResponsePojo.getNumFound();
@@ -453,6 +465,11 @@ public class UserPostFragment extends BaseFragment {
     }
 
     @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         if (baseResponse instanceof Comment) {
             mComment = (Comment) baseResponse;
@@ -484,7 +501,7 @@ public class UserPostFragment extends BaseFragment {
 
 
     public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-        super.commentListRefresh(feedDetail, feedParticipationEnum);
+        baseFragmentUtil.commentListRefresh(mAdapter, mLayoutManager, feedDetail, feedParticipationEnum);
     }
 
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
@@ -509,6 +526,11 @@ public class UserPostFragment extends BaseFragment {
     }
 
     @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case SPAM_POST_APPROVE:
@@ -517,6 +539,16 @@ public class UserPostFragment extends BaseFragment {
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 
     private void approveSpamPostResponse(BaseResponse baseResponse) {
@@ -579,6 +611,11 @@ public class UserPostFragment extends BaseFragment {
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
 
     @OnClick({R.id.tv_retry_for_internet})

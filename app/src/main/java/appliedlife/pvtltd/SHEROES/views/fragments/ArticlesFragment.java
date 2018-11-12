@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,8 +28,12 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -157,6 +162,11 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         List<FeedDetail> feedDetailList;
         List<FeedDetail> newFeedDetailList = new ArrayList<>();
@@ -245,6 +255,26 @@ public class ArticlesFragment extends BaseFragment {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
     }
 
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }
@@ -258,5 +288,15 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
 }

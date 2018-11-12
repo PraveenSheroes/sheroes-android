@@ -28,6 +28,7 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -65,8 +66,10 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -82,11 +85,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityDetailPresenterImpl;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
@@ -107,10 +112,40 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  * Created by ujjwal on 27/12/17.
  */
 
-public class CommunityDetailActivity extends BaseActivity implements ICommunityDetailView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
+public class CommunityDetailActivity extends BaseActivity implements BaseHolderInterface, ICommunityDetailView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String TAB_KEY = "tab_key";
     private String streamType;
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
+    }
 
     public enum TabType {
         NAVTIVE("native"),
@@ -136,6 +171,9 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
 
     @Inject
     Preference<LoginResponse> userPreference;
+
+    @Inject
+    FeedUtils feedUtils;
 
     @Bind(R.id.pb_communities_drawer)
     ProgressBar pbCommunitiesDrawer;
@@ -193,12 +231,12 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
-    private int mWidthPixel=300;
-    private int mMarginLeft=20;
-    private int mMarginLeftToolTip=10;
-    private int mScreenWidthMdpi=600;
-    private int mScreenWidthHdpi=750;
-    private int mDelayToolTip=1000;
+    private int mWidthPixel = 300;
+    private int mMarginLeft = 20;
+    private int mMarginLeftToolTip = 10;
+    private int mScreenWidthMdpi = 600;
+    private int mScreenWidthHdpi = 750;
+    private int mDelayToolTip = 1000;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -962,10 +1000,10 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
         }
         if (mCommunityFeedSolrObj.isClosedCommunity()) {
             mCommunityFeedSolrObj.setFromHome(true);
-            showCommunityJoinReason(mCommunityFeedSolrObj);
+            feedUtils.showCommunityJoinReason(mCommunityFeedSolrObj, this);
             ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
         } else {
-            if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+            if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
                 List<Long> userIdList = new ArrayList();
                 userIdList.add(userPreference.get().getUserSummary().getUserId());
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();

@@ -88,7 +88,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
@@ -561,18 +564,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    @Override
-    public List getListData() {
-        return null;
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-    }
-
-    @Override
-    public void startActivityFromHolder(Intent intent) {
 
     }
 
@@ -615,6 +609,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         mSwipeRefresh.setRefreshing(false);
         mAdapter.feedFinishedLoading();
+    }
+
+    @Override
+    public void startNextScreen() {
+
     }
 
     @Override
@@ -852,6 +851,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+
     }
     //endregion
 
@@ -2162,6 +2166,36 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @OnClick({R.id.tv_goto_setting})
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
     //endregion
 

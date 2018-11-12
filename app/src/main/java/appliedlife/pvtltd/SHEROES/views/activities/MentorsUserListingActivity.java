@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -25,11 +26,13 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -37,9 +40,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -55,7 +60,7 @@ import butterknife.ButterKnife;
  * Created by Praveen on 05/12/17.
  */
 
-public class MentorsUserListingActivity extends BaseActivity implements HomeView {
+public class MentorsUserListingActivity extends BaseActivity implements BaseHolderInterface, HomeView {
     private static final String SCREEN_LABEL = "Mentors Listing Screen";
     public static final String CHAMPION_SUBTYPE = "C";
 
@@ -178,6 +183,31 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
                 default:
             }
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     @Override
@@ -332,11 +362,6 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     }
 
     @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
         switch (feedParticipationEnum) {
@@ -358,5 +383,16 @@ public class MentorsUserListingActivity extends BaseActivity implements HomeView
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
 }
 

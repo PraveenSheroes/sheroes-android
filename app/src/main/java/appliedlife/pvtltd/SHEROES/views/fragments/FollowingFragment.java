@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,11 +25,17 @@ import appliedlife.pvtltd.SHEROES.basecomponents.FollowerFollowingCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
@@ -219,11 +227,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     }
 
     @Override
-    public void startActivityFromHolder(Intent intent) {
-
-    }
-
-    @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
 
     }
@@ -238,10 +241,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     }
 
-    @Override
-    public List getListData() {
-        return null;
-    }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
@@ -255,6 +254,46 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
+    public void startNextScreen() {
+
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
 }

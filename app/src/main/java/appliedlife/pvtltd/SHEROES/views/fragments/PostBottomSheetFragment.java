@@ -247,11 +247,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
-    }
-
-    @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
 
     }
@@ -324,11 +319,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
-    }
-
-    @Override
-    public void invalidateLikeUnlike(Comment comment) {
-
     }
 
     @Override
