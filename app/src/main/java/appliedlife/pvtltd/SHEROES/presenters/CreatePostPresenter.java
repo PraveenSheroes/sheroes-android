@@ -54,14 +54,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  */
 
 public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
-
     public static final String CHALLENGE_POST = "challenge post";
 
     @Inject
-    CommunityModel communityModel;
-    private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
+    CommunityModel mCommunityModel;
+
     @Inject
     AppUtils mAppUtils;
+
     private SheroesAppServiceApi mSheroesAppServiceApi;
 
     @Inject
@@ -76,7 +76,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest)
+        mCommunityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
@@ -118,7 +118,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.createChallengePost(challengePostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        mCommunityModel.createChallengePost(challengePostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
@@ -160,7 +160,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.linkRenderFromModel(linkRequest).compose(this.<LinkRenderResponse>bindToLifecycle()).subscribe(new DisposableObserver<LinkRenderResponse>() {
+        mCommunityModel.linkRenderFromModel(linkRequest).compose(this.<LinkRenderResponse>bindToLifecycle()).subscribe(new DisposableObserver<LinkRenderResponse>() {
 
             @Override
             public void onComplete() {
@@ -190,7 +190,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.editPostCommunity(uploadImageFileMap, communityPostCreateRequest)
+        mCommunityModel.editPostCommunity(uploadImageFileMap, communityPostCreateRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
@@ -224,7 +224,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
     }
 
     //Debounce for usermention function
-
     public void getUserMentionSuggestion(final RichEditorView richEditorView, final CommunityPost communityPost) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
@@ -253,7 +252,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         if (searchUserDataRequest == null) {
                             return Observable.empty();
                         }
-                        return communityModel.getUserMentionSuggestionSearchResult(searchUserDataRequest);
+                        return mCommunityModel.getUserMentionSuggestionSearchResult(searchUserDataRequest);
                     }
                 })
                 .compose(this.<SearchUserDataResponse>bindToLifecycle())
