@@ -231,12 +231,12 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private SwipPullRefreshList mPullRefreshList;
-    private int mWidthPixel=300;
-    private int mMarginLeft=20;
-    private int mMarginLeftToolTip=10;
-    private int mScreenWidthMdpi=600;
-    private int mScreenWidthHdpi=750;
-    private int mDelayToolTip=1000;
+    private int mWidthPixel = 300;
+    private int mMarginLeft = 20;
+    private int mMarginLeftToolTip = 10;
+    private int mScreenWidthMdpi = 600;
+    private int mScreenWidthHdpi = 750;
+    private int mDelayToolTip = 1000;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

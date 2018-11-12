@@ -24,7 +24,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 
 public class LogOutUtils {
     //region member variables
-    private static LogOutUtils sInstance;
+    private static LogOutUtils mInstance;
     //endregion
 
     //region injected variables
@@ -35,10 +35,10 @@ public class LogOutUtils {
     //endregion
 
     public static synchronized LogOutUtils getInstance() {
-        if (sInstance == null) {
-            sInstance = new LogOutUtils();
+        if (mInstance == null) {
+            mInstance = new LogOutUtils();
         }
-        return sInstance;
+        return mInstance;
     }
 
     private LogOutUtils() {

@@ -59,7 +59,6 @@ import io.reactivex.functions.Consumer;
 public abstract class BaseActivity extends AppCompatActivity implements FragmentIntractionWithActivityListner, EventInterface, View.OnTouchListener {
 
     //region constant variables
-    private final String TAG = LogUtils.makeLogTag(BaseActivity.class);
     public static final String SOURCE_SCREEN = "SOURCE_SCREEN";
     public static final String SOURCE_PROPERTIES = "SOURCE_PROPERTIES";
     public static final String STORIES_TAB = "write a story";
@@ -75,13 +74,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     Preference<LoginResponse> mUserPreference;
     @Inject
     Preference<AppInstallation> mAppInstallation;
-    private long mUserId;
     @Inject
-    ShareUtils shareUtils;
+    ShareUtils mShareUtils;
     @Inject
-    FeedUtils feedUtils;
+    FeedUtils mFeedUtils;
     @Inject
-    ErrorUtil errorUtil;
+    ErrorUtil mErrorUtil;
     //endregion
 
     //region member variables
@@ -90,8 +88,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     private String mPreviousScreen;
     protected SheroesApplication mSheroesApplication;
     private FragmentOpen mFragmentOpen;
+    private long mUserId;
     //endregion
-
 
 
     @Override
@@ -120,7 +118,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
 
             boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
             if (isShareDeeplink) {
-                shareUtils.initShare(this, getIntent(), getScreenName());
+                mShareUtils.initShare(this, getIntent(), getScreenName());
             }
         }
 
@@ -153,7 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
             @Override
             public void accept(Object event) {
                 if (event instanceof Boolean) {
-                    feedUtils.onReferrerReceived(BaseActivity.this, (Boolean) event);
+                    mFeedUtils.onReferrerReceived(BaseActivity.this, (Boolean) event);
                 }
             }
         }));
@@ -181,9 +179,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
      * @return
      */
     public void showNetworkTimeoutDialog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
-        errorUtil.showErrorDialogOnUserAction(this, finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
+        mErrorUtil.showErrorDialogOnUserAction(this, finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
     }
-
 
 
     public void trackEvent(final Event event, final Map<String, Object> properties) {
@@ -204,9 +201,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
 
         try {
             mIsDestroyed = true;
-            feedUtils.onDestroy();
-            errorUtil.onDestroy();
-            feedUtils.clearReferences();
+            mFeedUtils.onDestroy();
+            mErrorUtil.onDestroy();
+            mFeedUtils.clearReferences();
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -256,10 +253,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         if (getPresenter() != null) {
             getPresenter().onStop();
         }
-        if(feedUtils != null)
-        feedUtils.clearReferences();
+        if (mFeedUtils != null)
+            mFeedUtils.clearReferences();
     }
-
 
 
     protected boolean trackScreenTime() {
@@ -273,7 +269,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
             if (intent != null && intent.getExtras() != null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)) {
                 boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
                 if (isShareDeeplink) {
-                    shareUtils.initShare(this, intent, getScreenName());
+                    mShareUtils.initShare(this, intent, getScreenName());
                 }
             }
         }
@@ -331,21 +327,20 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     }
 
     protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        feedUtils.openCommentReactionFragment(this, feedDetail, getScreenName());
+        mFeedUtils.openCommentReactionFragment(this, feedDetail, getScreenName());
     }
-
 
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
-        feedUtils.dismissWindow();
+        mFeedUtils.dismissWindow();
         return true;
     }
 
 
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        errorUtil.onShowErrorDialog(this, errorReason, feedParticipationEnum);
+        mErrorUtil.onShowErrorDialog(this, errorReason, feedParticipationEnum);
     }
 
 

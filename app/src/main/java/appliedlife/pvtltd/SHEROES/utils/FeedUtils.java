@@ -67,13 +67,13 @@ public class FeedUtils {
     //endregion
 
     //region member variables
-    private static FeedUtils sInstance;
+    private static FeedUtils mInstance;
     private FeedDetail mFeedDetail;
     private Fragment mFragment;
     private boolean mIsWhatsAppShare;
     private long mUserId;
     public PopupWindow popupWindow;
-    private boolean mIsDestroyed=false;
+    private boolean mIsDestroyed = false;
     SheroesApplication mSheroesApplication;
     //endregion
 
@@ -82,11 +82,11 @@ public class FeedUtils {
     Preference<LoginResponse> mUserPreference;
     //endregion
 
-    public static synchronized FeedUtils getInstance(){
-        if (sInstance == null) {
-            sInstance = new FeedUtils();
+    public static synchronized FeedUtils getInstance() {
+        if (mInstance == null) {
+            mInstance = new FeedUtils();
         }
-        return sInstance;
+        return mInstance;
     }
 
     @Inject
@@ -122,21 +122,21 @@ public class FeedUtils {
                 break;
             case R.id.tv_feed_community_post_user_share:
                 if (mIsWhatsAppShare) {
-                    shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
+                    shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
                 break;
             case R.id.tv_feed_review_post_user_share_ic:
                 if (mIsWhatsAppShare) {
-                    shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
+                    shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
                 break;
             case R.id.tv_feed_article_user_share:
                 if (mIsWhatsAppShare) {
-                    shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
+                    shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
@@ -144,7 +144,7 @@ public class FeedUtils {
 
             case R.id.tv_article_share:
                 if (mIsWhatsAppShare) {
-                    shareCardViaSocial(baseResponse, activity, screenName,mFeedDetail);
+                    shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
@@ -160,7 +160,7 @@ public class FeedUtils {
                 break;
 
             case R.id.tv_feed_community_post_user_menu:
-                clickMenuItem(view, baseResponse, FEED_CARD_MENU,activity, screenName);
+                clickMenuItem(view, baseResponse, FEED_CARD_MENU, activity, screenName);
                 break;
             case R.id.tv_spam_post_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU, activity, screenName);
@@ -170,7 +170,7 @@ public class FeedUtils {
                 break;
             /* All user comment menu option edit,delete */
             case R.id.tv_feed_community_post_user_comment_post_menu:
-                clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU,activity, screenName);
+                clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU, activity, screenName);
                 break;
             case R.id.tv_feed_article_user_comment_post_menu:
                 clickMenuItem(view, baseResponse, USER_REACTION_COMMENT_MENU, activity, screenName);
@@ -182,14 +182,14 @@ public class FeedUtils {
                 LikeListBottomSheetFragment.showDialog((AppCompatActivity) activity, "", mFeedDetail.getEntityOrParticipantId());
                 break;
             case R.id.tv_feed_community_post_total_reactions:
-                LikeListBottomSheetFragment.showDialog((AppCompatActivity)activity, "", mFeedDetail.getEntityOrParticipantId());
+                LikeListBottomSheetFragment.showDialog((AppCompatActivity) activity, "", mFeedDetail.getEntityOrParticipantId());
                 /*mFragmentOpen.setCommentList(false);
                 mFragmentOpen.setReactionList(true);
                 openCommentReactionFragment(mFeedDetail);*/
                 break;
             case R.id.tv_feed_article_user_comment:
                 // mFragmentOpen.setCommentList(true);
-                openCommentReactionFragment(activity,mFeedDetail, screenName);
+                openCommentReactionFragment(activity, mFeedDetail, screenName);
                 break;
             case R.id.tv_feed_community_post_user_comment:
                 //mFragmentOpen.setCommentList(true);
@@ -293,10 +293,10 @@ public class FeedUtils {
 
     public void openCommentReactionFragment(Context context, FeedDetail feedDetail, String screenName) {
         if (feedDetail instanceof UserPostSolrObj) {
-            PostDetailActivity.navigateTo((Activity)context, screenName, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+            PostDetailActivity.navigateTo((Activity) context, screenName, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
         } else if (feedDetail instanceof ArticleSolrObj) {
             ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
-            ArticleActivity.navigateTo((Activity)context, feedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
+            ArticleActivity.navigateTo((Activity) context, feedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
         }
     }
 
@@ -324,7 +324,7 @@ public class FeedUtils {
         return fragment;
     }
 
-    private void shareCardViaSocial(BaseResponse baseResponse, Context context, String screenName, FeedDetail mFeedDetail ) {
+    private void shareCardViaSocial(BaseResponse baseResponse, Context context, String screenName, FeedDetail mFeedDetail) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
         if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
@@ -375,7 +375,7 @@ public class FeedUtils {
     }
 
     private void bookMarkTrending(Activity context) {
-        Fragment articleFragment = ((FragmentActivity)context).getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
+        Fragment articleFragment = ((FragmentActivity) context).getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
         if (AppUtils.isFragmentUIActive(articleFragment)) {
             ((ArticlesFragment) articleFragment).bookMarkForCard(mFeedDetail);
         }
@@ -600,15 +600,15 @@ public class FeedUtils {
     }
 
     public void openImageFullViewFragment(Context context, FeedDetail feedDetail) {
-        AlbumActivity.navigateTo((Activity)context, feedDetail, "BASE", null);
+        AlbumActivity.navigateTo((Activity) context, feedDetail, "BASE", null);
     }
 
 
-    public void onDestroy(){
+    public void onDestroy() {
         mIsDestroyed = true;
     }
 
-    public void dismissWindow(){
+    public void dismissWindow() {
         popupWindow.dismiss();
     }
 

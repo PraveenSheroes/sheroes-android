@@ -152,7 +152,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(getActivity());
                         appInstallationHelper.setupAndSaveInstallation(true);
                         mUserPreference.set(loginResponse);
-                        if (getActivity()!=null&&null != loginResponse.getUserSummary()) {
+                        if (getActivity() != null && null != loginResponse.getUserSummary()) {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
@@ -165,8 +165,8 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
-                        if(getActivity()!=null)
-                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
+                        if (getActivity() != null)
+                            ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                         break;
                 }
             } else {
@@ -179,7 +179,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     loginResponse.setTokenType(AppConstants.SHEROES_AUTH_TOKEN);
                     loginResponse.setFcmId(mFcmId);
                     mUserPreference.set(loginResponse);
-                    if(getActivity()!=null) {
+                    if (getActivity() != null) {
                         ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     }
@@ -187,14 +187,14 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-                    if(getActivity()!=null && !getActivity().isFinishing()) {
+                    if (getActivity() != null && !getActivity().isFinishing()) {
                         ((LoginActivity) getActivity()).onLoginAuthToken();
                     }
 
                 } else {
                     LoginManager.getInstance().logOut();
-                    if(getActivity()!=null)
-                    ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA),loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
+                    if (getActivity() != null)
+                        ((LoginActivity) getActivity()).onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
                 }
             }
         }
@@ -364,7 +364,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
     private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        if(getActivity() ==null || !isAdded()){
+        if (getActivity() == null || !isAdded()) {
             return;
         }
         FCMClientManager pushClientManager = new FCMClientManager(getActivity(), getString(R.string.ID_PROJECT_ID));

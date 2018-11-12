@@ -86,11 +86,9 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
 
     //region injected variables
     @Inject
-    Preference<LoginResponse> userPreference;
+    BaseFragmentUtil mBaseFragmentUtil;
     @Inject
-    BaseFragmentUtil baseFragmentUtil;
-    @Inject
-    ErrorUtil errorUtil;
+    ErrorUtil mErrorUtil;
     //endregion
 
     @Override
@@ -179,22 +177,22 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case LIKE_UNLIKE:
-                baseFragmentUtil.likeSuccess(getActivity(), baseResponse, mFeedDetail, mAdapter, mSwipeView, getScreenName(), mPressedEmoji);
+                mBaseFragmentUtil.likeSuccess(getActivity(), baseResponse, mFeedDetail, mAdapter, mSwipeView, getScreenName(), mPressedEmoji);
                 break;
             case COMMENT_REACTION:
-                baseFragmentUtil.recentCommentEditDelete(getActivity(), mSwipeView, getScreenName(), mFeedDetail, baseResponse, mAdapter);
+                mBaseFragmentUtil.recentCommentEditDelete(getActivity(), mSwipeView, getScreenName(), mFeedDetail, baseResponse, mAdapter);
                 break;
             case BOOKMARK_UNBOOKMARK:
-                baseFragmentUtil.bookMarkSuccess(getActivity(), baseResponse,mFeedDetail, mAdapter,mSwipeView,getScreenName());
+                mBaseFragmentUtil.bookMarkSuccess(getActivity(), baseResponse, mFeedDetail, mAdapter, mSwipeView, getScreenName());
                 break;
             case JOIN_INVITE:
-                baseFragmentUtil.joinInviteResponse(getActivity(),mAdapter, mLayoutManager, mFeedDetail,getScreenName(), baseResponse);
+                mBaseFragmentUtil.joinInviteResponse(getActivity(), mAdapter, mLayoutManager, mFeedDetail, getScreenName(), baseResponse);
                 break;
             case DELETE_COMMUNITY_POST:
-                baseFragmentUtil.deleteCommunityPostRespose(mAdapter, mLayoutManager, getActivity(), mFeedDetail, getScreenName(), baseResponse);
+                mBaseFragmentUtil.deleteCommunityPostRespose(mAdapter, mLayoutManager, getActivity(), mFeedDetail, getScreenName(), baseResponse);
                 break;
             case MARK_AS_SPAM:
-                baseFragmentUtil.reportAsSpamPostRespose(getContext(),mFeedDetail, getScreenName(), baseResponse, mAdapter, mLayoutManager);
+                mBaseFragmentUtil.reportAsSpamPostRespose(getContext(), mFeedDetail, getScreenName(), baseResponse, mAdapter, mLayoutManager);
                 break;
             default:
                 LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
@@ -226,14 +224,14 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
             mFeedDetail = (FeedDetail) baseResponse;
             this.mPosition = position;
             this.mPressedEmoji = reactionValue;
-            if(mFeedDetail instanceof UserPostSolrObj){
-                if(((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID){
+            if (mFeedDetail instanceof UserPostSolrObj) {
+                if (((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
                     if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
                         mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
                     } else {
                         mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
                     }
-                }else {
+                } else {
                     if (null != mFeedDetail && mFeedDetail.isLongPress()) {
                         mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
                     } else {
@@ -275,8 +273,8 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        baseFragmentUtil.showError(getActivity(), mSwipeView, errorMsg, feedParticipationEnum);
-        errorUtil.onShowErrorDialog(getActivity(), errorMsg, feedParticipationEnum);
+        mBaseFragmentUtil.showError(mSwipeView, errorMsg, feedParticipationEnum);
+        mErrorUtil.onShowErrorDialog(getActivity(), errorMsg, feedParticipationEnum);
 
     }
 

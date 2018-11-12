@@ -14,16 +14,16 @@ import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithAc
 
 public class ErrorUtil {
     //region member variables
-    private static ErrorUtil sInstance;
+    private static ErrorUtil mInstance;
     private boolean mIsDestroyed=false;
     //endregion
 
 
     public static synchronized ErrorUtil getInstance(){
-        if(sInstance == null){
-            sInstance = new ErrorUtil();
+        if(mInstance == null){
+            mInstance = new ErrorUtil();
         }
-        return sInstance;
+        return mInstance;
     }
 
 

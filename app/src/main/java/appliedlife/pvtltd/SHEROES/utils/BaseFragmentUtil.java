@@ -33,15 +33,15 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
 
 public class BaseFragmentUtil {
     //region member variables
-    private static BaseFragmentUtil sInstance;
+    private static BaseFragmentUtil mInstance;
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     //endregion
 
-    public static synchronized BaseFragmentUtil getInstance(){
-        if(sInstance == null){
-            sInstance = new BaseFragmentUtil();
+    public static synchronized BaseFragmentUtil getInstance() {
+        if (mInstance == null) {
+            mInstance = new BaseFragmentUtil();
         }
-        return sInstance;
+        return mInstance;
     }
 
     public BaseFragmentUtil() {
@@ -56,33 +56,33 @@ public class BaseFragmentUtil {
                 AnalyticsManager.trackPostAction(Event.POST_REPORTED, mFeedDetail, screenName);
                 break;
             case AppConstants.FAILED:
-                if(context instanceof FragmentIntractionWithActivityListner) {
+                if (context instanceof FragmentIntractionWithActivityListner) {
                     mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) context;
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), MARK_AS_SPAM);
                 }
                 break;
             default:
-                if(context instanceof FragmentIntractionWithActivityListner) {
+                if (context instanceof FragmentIntractionWithActivityListner) {
                     mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) context;
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(context.getString(R.string.ID_GENERIC_ERROR), MARK_AS_SPAM);
                 }
         }
     }
 
-    public void deleteCommunityPostRespose(GenericRecyclerViewAdapter adapter, LinearLayoutManager layoutManager, Context context,FeedDetail mFeedDetail, String screenName, BaseResponse baseResponse) {
+    public void deleteCommunityPostRespose(GenericRecyclerViewAdapter adapter, LinearLayoutManager layoutManager, Context context, FeedDetail mFeedDetail, String screenName, BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
                 commentListRefresh(adapter, layoutManager, mFeedDetail, DELETE_COMMUNITY_POST);
                 AnalyticsManager.trackPostAction(Event.POST_DELETED, mFeedDetail, screenName);
                 break;
             case AppConstants.FAILED:
-                if(context instanceof FragmentIntractionWithActivityListner) {
+                if (context instanceof FragmentIntractionWithActivityListner) {
                     mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) context;
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 }
                 break;
             default:
-                if(context instanceof FragmentIntractionWithActivityListner) {
+                if (context instanceof FragmentIntractionWithActivityListner) {
                     mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) context;
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(context.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
                 }
@@ -98,18 +98,18 @@ public class BaseFragmentUtil {
                 } else {
                     ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
                 }
-                commentListRefresh(adapter, layoutManager,mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
+                commentListRefresh(adapter, layoutManager, mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, screenName, properties);
                 break;
             case AppConstants.FAILED:
-                if(context instanceof FragmentIntractionWithActivityListner) {
+                if (context instanceof FragmentIntractionWithActivityListner) {
                     mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) context;
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_JOIN_INVITE);
                 }
                 break;
             default:
-                if(context instanceof FragmentIntractionWithActivityListner) {
+                if (context instanceof FragmentIntractionWithActivityListner) {
                     mHomeSearchActivityFragmentIntractionWithActivityListner = (FragmentIntractionWithActivityListner) context;
                     mHomeSearchActivityFragmentIntractionWithActivityListner.onShowErrorDialog(context.getString(R.string.ID_GENERIC_ERROR), ERROR_JOIN_INVITE);
                 }
@@ -130,10 +130,10 @@ public class BaseFragmentUtil {
                         mFeedDetail.setBookmarked(false);
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    showError(context, mSwipeView, baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
+                    showError(mSwipeView, baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_BOOKMARK_UNBOOKMARK);
                     break;
                 default:
-                    showError(context, mSwipeView, context.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
+                    showError(mSwipeView, context.getString(R.string.ID_GENERIC_ERROR), ERROR_BOOKMARK_UNBOOKMARK);
             }
         }
     }
@@ -152,10 +152,10 @@ public class BaseFragmentUtil {
                     mAdapter.notifyDataSetChanged();
                     break;
                 case AppConstants.FAILED:
-                    showError(context, swipeView, baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_COMMENT_REACTION);
+                    showError(swipeView, baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_COMMENT_REACTION);
                     break;
                 default:
-                    showError(context, swipeView, context.getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
+                    showError(swipeView, context.getString(R.string.ID_GENERIC_ERROR), ERROR_COMMENT_REACTION);
             }
         }
     }
@@ -214,16 +214,16 @@ public class BaseFragmentUtil {
                         mFeedDetail.setReactionValue(mFeedDetail.getLastReactionValue());
                         mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
                     }
-                    showError(context,mSwipeView, baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
+                    showError(mSwipeView, baseResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), ERROR_LIKE_UNLIKE);
                     break;
                 default:
-                    showError(context, mSwipeView, context.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
+                    showError(mSwipeView, context.getString(R.string.ID_GENERIC_ERROR), ERROR_LIKE_UNLIKE);
             }
         }
 
     }
 
-    public void showError(Context context, SwipeRefreshLayout mSwipeView, String errorMsg, FeedParticipationEnum feedParticipationEnum){
+    public void showError(SwipeRefreshLayout mSwipeView, String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         if (feedParticipationEnum == ERROR_FEED_RESPONSE) {
             if (null != mSwipeView) {
                 // mLiNoResult.setVisibility(View.VISIBLE);

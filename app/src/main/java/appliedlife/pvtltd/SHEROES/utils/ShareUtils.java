@@ -9,7 +9,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 
 public class ShareUtils {
     //region memeber varioables
-    private static ShareUtils sInstance;
+    private static ShareUtils mInstance;
     //endregion
 
     //region constant variables
@@ -19,10 +19,10 @@ public class ShareUtils {
     //endregion
 
     public static synchronized ShareUtils getInstance() {
-        if (sInstance == null) {
-            sInstance = new ShareUtils();
+        if (mInstance == null) {
+            mInstance = new ShareUtils();
         }
-        return sInstance;
+        return mInstance;
     }
 
     private ShareUtils() {

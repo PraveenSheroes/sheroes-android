@@ -418,6 +418,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private UserSolrObj followedUserSolrObj;
     String viewLessText, viewMoreText;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -639,7 +640,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             if (isOwnProfile) {
                 userDescription.setText(description);
                 ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this,viewMoreText,viewLessText);
+                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
             } else {
                 userDescription.setText(description);
             }
@@ -1848,7 +1849,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             userDescription.setText(description);
             userDescription.setTag(null);
             ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this,viewMoreText,viewLessText);
+            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
 
             mUserSolarObject.setDescription(description);
         }

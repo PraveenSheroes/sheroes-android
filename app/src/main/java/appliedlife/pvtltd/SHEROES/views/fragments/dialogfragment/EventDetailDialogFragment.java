@@ -105,12 +105,12 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                 mHomePresenter.attachView(this);
                 mLayoutManager = new LinearLayoutManager(getActivity());
                 mRecyclerView.setLayoutManager(mLayoutManager);
-                if(getActivity() instanceof CommunityDetailActivity){
+                if (getActivity() instanceof CommunityDetailActivity) {
                     mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunityDetailActivity) getActivity());
-                }else if(getActivity() instanceof HomeActivity) {
+                } else if (getActivity() instanceof HomeActivity) {
                     mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
-                }else {
-                    if(getActivity() instanceof CollectionActivity){
+                } else {
+                    if (getActivity() instanceof CollectionActivity) {
                         mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CollectionActivity) getActivity());
                     }
                 }
@@ -150,15 +150,15 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                                 public void onGenerated(Palette palette) {
                                     if (getActivity() instanceof CommunityDetailActivity) {
                                         ((CommunityDetailActivity) getActivity()).supportStartPostponedEnterTransition();
-                                    } else if(getActivity() instanceof HomeActivity){
+                                    } else if (getActivity() instanceof HomeActivity) {
                                         ((HomeActivity) getActivity()).supportStartPostponedEnterTransition();
-                                    }else {
-                                        if(getActivity() instanceof CollectionActivity){
+                                    } else {
+                                        if (getActivity() instanceof CollectionActivity) {
                                             ((CollectionActivity) getActivity()).supportStartPostponedEnterTransition();
                                         }
                                     }
                                 }
-                                });
+                            });
                         }
                     });
         }
