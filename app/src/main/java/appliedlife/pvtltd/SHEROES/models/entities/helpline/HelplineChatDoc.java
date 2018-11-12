@@ -197,11 +197,4 @@ public class HelplineChatDoc extends BaseResponse {
         this.needRating = needRating;
     }
 
-    /*public String getThumbnailImageUrl() {
-        return thumbnailImageUrl;
-    }
-
-    public void setThumbnailImageUrl(String solrIgnoreParticipantAttendantImageUrl) {
-        this.solrIgnoreParticipantAttendantImageUrl = solrIgnoreParticipantAttendantImageUrl;
-    }*/
 }

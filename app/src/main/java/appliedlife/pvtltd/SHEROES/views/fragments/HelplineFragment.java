@@ -41,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
@@ -268,6 +269,20 @@ public class HelplineFragment extends BaseFragment {
             questionText.setText(AppConstants.EMPTY_STRING);
             AppUtils.hideKeyboard(getView(), TAG);
             refreshChatMethod();
+        }
+    }
+
+    @Override
+    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
+        if(helplinePostRatingResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+            HashMap<String, Object> screenProperties = null;
+            if (sourceScreen != null) {
+                screenProperties = new EventProperty.Builder()
+                        .sourceScreenId(sourceScreen)
+                        .build();
+            }
+            trackEvent(Event.HELPLINE_RATEUS_CARD_CLICKED, screenProperties);
+            //refreshChatMethod();
         }
     }
 

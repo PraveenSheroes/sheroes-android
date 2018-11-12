@@ -14,6 +14,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -109,6 +111,35 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
                 }
             }
         });
+    }
+
+    public void  postHelplineRating(HelplinePostRatingRequest helplinePostRatingRequest){
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+        getMvpView().startProgressBar();
+        helplineModel.postHelplineRating(helplinePostRatingRequest)
+                .compose(this.<HelplinePostRatingResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<HelplinePostRatingResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                    }
+
+                    @Override
+                    public void onNext(HelplinePostRatingResponse helplinePostRatingResponse) {
+                        if(null!=helplinePostRatingResponse) {
+                            getMvpView().getPostRatingSuccess(helplinePostRatingResponse);
+                        }
+                    }
+                });
     }
 
     public void onStop() {

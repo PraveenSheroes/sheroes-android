@@ -11,6 +11,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionR
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 
 
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -57,6 +59,19 @@ public class HelplineModel {
                     public HelplineGetChatThreadResponse apply(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
 
                         return helplineGetChatThreadResponse;
+                    }
+                })
+
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    public Observable<HelplinePostRatingResponse> postHelplineRating(HelplinePostRatingRequest helplinePostRatingRequest) {
+        return sheroesAppServiceApi.postHelplineRating(helplinePostRatingRequest)
+                .map(new Function<HelplinePostRatingResponse, HelplinePostRatingResponse>() {
+                    @Override
+                    public HelplinePostRatingResponse apply(HelplinePostRatingResponse helplinePostRatingResponse) throws Exception {
+                        return helplinePostRatingResponse;
                     }
                 })
 

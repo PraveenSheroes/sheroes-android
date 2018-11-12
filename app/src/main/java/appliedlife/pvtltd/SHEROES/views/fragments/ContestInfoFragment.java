@@ -45,6 +45,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -371,6 +372,11 @@ public class ContestInfoFragment extends BaseFragment {
     //region static variable
     public static Fragment instance() {
         return new ContestInfoFragment();
+    }
+
+    @Override
+    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse) {
+
     }
     //endregion
 

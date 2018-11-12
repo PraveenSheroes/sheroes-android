@@ -64,12 +64,15 @@ public class HelplineRateUsHolder extends BaseViewHolder<HelplineChatDoc> {
     }
 
     @OnClick(R.id.rate_us)
-    public void RateUsClicked(){
+    public void RateUsClicked() {
         CommonUtil.openPlayStore(mContext, SheroesApplication.mContext.getPackageName());
+        rateUsScreen.setVisibility(View.GONE);
+        //dataItem.setNeedRating(false);
     }
 
     @OnClick(R.id.not_now)
-    public void NotNowClicked(){
+    public void NotNowClicked() {
         rateUsScreen.setVisibility(View.GONE);
+        //dataItem.setNeedRating(false);
     }
 }
