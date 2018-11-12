@@ -102,6 +102,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mLoginPresenter.attachView(this);
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError("");
