@@ -109,10 +109,6 @@ public class EventDetailDialogFragment extends BaseDialogFragment implements Hom
                     mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CommunityDetailActivity) getActivity());
                 } else if (getActivity() instanceof HomeActivity) {
                     mAdapter = new GenericRecyclerViewAdapter(getActivity(), (HomeActivity) getActivity());
-                } else {
-                    if (getActivity() instanceof CollectionActivity) {
-                        mAdapter = new GenericRecyclerViewAdapter(getActivity(), (CollectionActivity) getActivity());
-                    }
                 }
                 mRecyclerView.setLayoutManager(mLayoutManager);
                 mRecyclerView.setAdapter(mAdapter);

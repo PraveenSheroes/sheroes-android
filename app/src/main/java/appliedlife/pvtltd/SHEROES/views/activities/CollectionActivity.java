@@ -41,7 +41,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COM
  * Created by ravi on 05/02/18.
  */
 
-public class CollectionActivity extends BaseActivity implements BaseHolderInterface {
+public class CollectionActivity extends BaseActivity {
 
     //region Private Variables
     private static String SCREEN_LABEL = "Collection Activity";
@@ -175,35 +175,6 @@ public class CollectionActivity extends BaseActivity implements BaseHolderInterf
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    @Override
-    public void handleOnClick(BaseResponse baseResponse, View view) {
-
-    }
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-    }
-
-    @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
-    }
-
-    @Override
-    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
-    }
     //endregion
 
 }

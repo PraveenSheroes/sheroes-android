@@ -1006,11 +1006,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         }
     }
 
-//    @Override
-//    public void invalidateLikeUnlike(Comment comment) {
-//
-//    }
-
     @Override
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(this, false);
