@@ -132,4 +132,7 @@ public class ConfigData {
     @SerializedName("impressionMaxTimeout")
     public int impressionMaxTimeout = 180000;
 
+    @SerializedName("shouldTrackImpressions")
+    public boolean isImpressionTrackEnabled = true;
+
 }

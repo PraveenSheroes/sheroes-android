@@ -1,5 +1,5 @@
 def versionMajor = 7
-def versionMinor = 0
+def versionMinor = 1
 def versionPatch = 0
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
@@ -168,7 +168,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.clevertap.android:clevertap-android-sdk:3.3.1'
+    implementation 'com.clevertap.android:clevertap-android-sdk:3.1.10'
     implementation 'com.android.support:mediarouter-v7:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -206,7 +206,6 @@ dependencies {
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
         transitive = true
     }
-    implementation 'com.moengage:moe-android-sdk:8.4.03'
     implementation 'com.appsflyer:af-android-sdk:4.7.4@aar'
     implementation 'org.apache.commons:commons-lang3:3.5'
     implementation files('libs/YouTubeAndroidPlayerApi.jar')
