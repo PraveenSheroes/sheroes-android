@@ -53,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
@@ -282,8 +281,6 @@ public class FeedUtils {
         if (AppUtils.isFragmentUIActive(mFragment)) {
             if (mFragment instanceof UserPostFragment) {
                 ((UserPostFragment) mFragment).bookMarkForCard(mFeedDetail);
-            } else {
-                ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
             }
         }
         if (activity instanceof ContestActivity) {
@@ -500,10 +497,6 @@ public class FeedUtils {
                     if (mFragment instanceof UserPostFragment) {
                         if (AppUtils.isFragmentUIActive(mFragment)) {
                             ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
-                        }
-                    } else {
-                        if (AppUtils.isFragmentUIActive(mFragment)) {
-                            ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                         }
                     }
                     ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);

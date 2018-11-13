@@ -60,6 +60,7 @@ import butterknife.ButterKnife;
  * Created by Praveen on 06/12/17.
  */
 
+@Deprecated
 public class MentorQADetailFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Mentor QA Detail Screen";
     private final String TAG = LogUtils.makeLogTag(MentorQADetailFragment.class);
@@ -105,7 +106,7 @@ public class MentorQADetailFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+       // SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.mentor_qa_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {

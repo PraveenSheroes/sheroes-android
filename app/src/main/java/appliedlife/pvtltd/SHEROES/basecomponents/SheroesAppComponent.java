@@ -64,7 +64,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
@@ -288,8 +287,6 @@ public interface SheroesAppComponent {
     void inject(ProfileActivity profileActivity);
 
     void inject(ProfileDetailsFragment profileDetailsFragment);
-
-    void inject(MentorQADetailFragment mentorQADetailFragment);
 
     void inject(MentorInsightActivity mentorInsightActivity);
 

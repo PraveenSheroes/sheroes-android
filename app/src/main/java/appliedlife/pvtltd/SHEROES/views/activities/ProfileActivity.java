@@ -141,7 +141,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.DashProgressBar;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
@@ -468,6 +467,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
         String feedSubType = isMentor ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
+        profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(mChampionId));
 
         feedUtils.setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
@@ -681,7 +681,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolarObject.getSolrIgnoreNoOfMentorFollowers())));
         }
 
-        if (isMentor) {
+        liAnswer.setVisibility(View.GONE);
+        followingTitle.setText(getResources().getString(R.string.following));
+        liFollowing.setVisibility(View.VISIBLE);
+
+     /*   if (isMentor) {
             liFollowing.setVisibility(View.GONE);
             pluralAnswer = getResources().getQuantityString(R.plurals.numberOfAnswers, mUserSolarObject.getSolrIgnoreNoOfMentorAnswers());
             tvMentorAnswerCount.setText(String.valueOf(changeNumberToNumericSuffix(mUserSolarObject.getSolrIgnoreNoOfMentorAnswers())));
@@ -691,7 +695,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             liAnswer.setVisibility(View.GONE);
             followingTitle.setText(getResources().getString(R.string.following));
             liFollowing.setVisibility(View.VISIBLE);
-        }
+        }*/
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
@@ -900,7 +904,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
             mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
-            mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
+            //mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
             mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
@@ -1136,9 +1140,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 createPost.setVisibility(View.GONE);
             }
             clStoryFooter.setVisibility(View.GONE);
-        } else if (fragment instanceof MentorQADetailFragment) {
-            createPost.setVisibility(View.GONE);
-            clStoryFooter.setVisibility(View.GONE);
         } else if (fragment instanceof FeedFragment) {
             if (isOwnProfile) {
                 clStoryFooter.setVisibility(View.VISIBLE);
@@ -1324,7 +1325,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mUserSolarObject.setCallFromName(screenName);
 
             if (isMentor) {
-                clHomeFooterList.setVisibility(View.VISIBLE);
+                clHomeFooterList.setVisibility(View.GONE);
             }
             if (isMentorQARefresh) {
                 profileActivitiesRefresh();
@@ -1343,7 +1344,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Override
     public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-
+        setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
     @Override
@@ -1554,7 +1555,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             followersCountNo.setText(userFollowerCount.getText());
             postCountNo.setText(userTotalPostCount.getText());
 
-            if (isMentor) {
+            answerCountContainer.setVisibility(View.GONE);
+            followingContainer.setVisibility(View.VISIBLE);
+            followingCountNo.setText(followingCount.getText());
+
+           /* if (isMentor) {
                 answerCountContainer.setVisibility(View.VISIBLE);
                 followingContainer.setVisibility(View.GONE);
                 answerCountNo.setText(tvMentorAnswerCount.getText());
@@ -1562,7 +1567,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 answerCountContainer.setVisibility(View.GONE);
                 followingContainer.setVisibility(View.VISIBLE);
                 followingCountNo.setText(followingCount.getText());
-            }
+            }*/
 
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
                 Spanned descriptionSpan = StringUtil.fromHtml(mUserSolarObject.getDescription());
@@ -1664,14 +1669,14 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                     }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    if (null != mViewPagerAdapter) {
+                    /*if (null != mViewPagerAdapter) {
                         Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
                         if (AppUtils.isFragmentUIActive(activeFragment)) {
                             if (activeFragment instanceof MentorQADetailFragment) {
                                 ((MentorQADetailFragment) activeFragment).swipeToRefreshList();
                             }
                         }
-                    }
+                    }*/
                     break;
                 case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
                     boolean isPostDeleted = false;
@@ -1687,18 +1692,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                             if (isPostDeleted) {
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                                } else if (mFragment instanceof MentorQADetailFragment) {
-                                    ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-
                                 }
                             } else {
                                 if (mFragment instanceof UserPostFragment) {
                                     ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
                                 } else {
-                                    if (mFragment instanceof MentorQADetailFragment) {
-                                        ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
-                                        isMentorQARefresh = true;
-                                    }
                                     mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(AppConstants.CAROUSEL_SUB_TYPE, AppConstants.ONE_CONSTANT, mChampionId));
                                 }
                             }
