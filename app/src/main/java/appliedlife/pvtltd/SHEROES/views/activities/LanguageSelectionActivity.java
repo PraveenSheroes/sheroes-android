@@ -221,55 +221,63 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                     branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
                             CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
                 }
-                branch.initSession(new Branch.BranchReferralInitListener() {
-                    @Override
-                    public void onInitFinished(JSONObject sessionParams, BranchError error) {
-                        isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
-                        if (isBranchFirstSession) {
-                            if (sessionParams.has(BRANCH_DEEP_LINK)) {
-                                String deepLink;
-                                String branchLink;
-                                try {
-                                    deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
-                                    branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
-                                    if (StringUtil.isNotNullOrEmptyString(deepLink)) {
-                                        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-                                        SharedPreferences.Editor editor = null;
-                                        if (prefs != null) {
-                                            editor = prefs.edit();
-                                            editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
-                                            editor.apply();
-                                        }
-                                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(LanguageSelectionActivity.this);
-                                        appInstallationHelper.setupAndSaveInstallation(false);
-                                        if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
-                                            deepLinkUrl = deepLink;
-
-                                            if (mInstallUpdatePreference != null) {
-                                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
-                                                installUpdateForMoEngage.setOnBoardingSkipped(true);
-                                                mInstallUpdatePreference.set(installUpdateForMoEngage);
-                                            }
-                                        }
-                                    }
-
-                                    if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
-                                        defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
-                                    }
-                                } catch (JSONException e) {
-                                    deepLinkUrl = null;
-                                    defaultTab = null;
-                                    isBranchFirstSession = false;
-                                }
-                            }
+                JSONObject sessionParams = branch.getLatestReferringParams();
+                if (sessionParams == null) {
+                    branch.initSession(new Branch.BranchReferralInitListener() {
+                        @Override
+                        public void onInitFinished(JSONObject sessionParams, BranchError error) {
+                            branchSessionData(sessionParams);
                         }
-                        setUpView();
-                    }
-                });
+                    });
+                } else {
+                    branchSessionData(sessionParams);
+                }
+                setUpView();
             }
         }
     }
 
+    private void branchSessionData(JSONObject sessionParams) {
+        isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
+        if (isBranchFirstSession) {
+            if (sessionParams.has(BRANCH_DEEP_LINK)) {
+                String deepLink;
+                String branchLink;
+                try {
+                    deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
+                    branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
+                    if (StringUtil.isNotNullOrEmptyString(deepLink)) {
+                        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+                        SharedPreferences.Editor editor = null;
+                        if (prefs != null) {
+                            editor = prefs.edit();
+                            editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
+                            editor.apply();
+                        }
+                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(LanguageSelectionActivity.this);
+                        appInstallationHelper.setupAndSaveInstallation(false);
+                        if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
+                            deepLinkUrl = deepLink;
+
+                            if (mInstallUpdatePreference != null) {
+                                InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
+                                installUpdateForMoEngage.setOnBoardingSkipped(true);
+                                mInstallUpdatePreference.set(installUpdateForMoEngage);
+                            }
+                        }
+                    }
+
+                    if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
+                        defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
+                    }
+                } catch (JSONException e) {
+                    deepLinkUrl = null;
+                    defaultTab = null;
+                    isBranchFirstSession = false;
+                }
+            }
+        }
+    }
     private void setUpView() {
         if (CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
             openWelcomeScreen();

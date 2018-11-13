@@ -42,6 +42,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -758,6 +760,30 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                 getMvpView().onConfigFetched();
                             }
                         }
+                    }
+                });
+    }
+    public void updateSelectedLanguage(final LanguageUpdateRequest languageUpdateRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        mSheroesAppServiceApi.updateSelectedLanguage()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<LanguageUpdateResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<LanguageUpdateResponse>() {
+                    @Override
+                    public void onComplete() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
+
+                    @Override
+                    public void onNext(LanguageUpdateResponse languageUpdateResponse) {
                     }
                 });
     }
