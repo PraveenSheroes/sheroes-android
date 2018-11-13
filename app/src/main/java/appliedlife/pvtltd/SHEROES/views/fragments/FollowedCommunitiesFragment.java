@@ -257,5 +257,4 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
     public void onItemClick(CommunityFeedSolrObj communityFeedSolrObj) {
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
-
 }

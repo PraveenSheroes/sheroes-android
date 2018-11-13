@@ -258,7 +258,6 @@ public class HomeFragment extends BaseFragment {
     private void setInactiveTabFragmentName(String active) {
         mUnSelectedFragment = active;
     }
-
     //endregion
 
     // region Static innerclass

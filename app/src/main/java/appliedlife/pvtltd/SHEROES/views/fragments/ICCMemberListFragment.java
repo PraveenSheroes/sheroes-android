@@ -129,5 +129,4 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

@@ -129,5 +129,4 @@ public class EmailVerificationFragment extends BaseFragment implements LoginView
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

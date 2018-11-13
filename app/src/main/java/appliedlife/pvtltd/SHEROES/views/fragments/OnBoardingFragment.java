@@ -276,5 +276,4 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

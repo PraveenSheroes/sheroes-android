@@ -367,7 +367,6 @@ public class ContestInfoFragment extends BaseFragment {
     public static Fragment instance() {
         return new ContestInfoFragment();
     }
-
     //endregion
 
 }

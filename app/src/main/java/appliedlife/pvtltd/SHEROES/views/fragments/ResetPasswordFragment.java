@@ -140,5 +140,4 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

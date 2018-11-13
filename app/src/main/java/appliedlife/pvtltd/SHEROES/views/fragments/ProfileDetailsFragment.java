@@ -555,7 +555,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @Override
     public void onUserDeactivation(BaseResponse baseResponse) {
     }
-
 }
 
 

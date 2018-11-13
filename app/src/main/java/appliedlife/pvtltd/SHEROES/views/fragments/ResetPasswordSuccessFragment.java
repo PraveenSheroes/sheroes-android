@@ -64,5 +64,4 @@ public class ResetPasswordSuccessFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

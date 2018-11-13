@@ -680,5 +680,4 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
-
 }

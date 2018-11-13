@@ -341,7 +341,6 @@ public class MentorQADetailFragment extends BaseFragment {
     protected SheroesPresenter getPresenter() {
         return mHomePresenter;
     }
-
 }
 
 

@@ -159,5 +159,4 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
             }
         }
     }
-
 }

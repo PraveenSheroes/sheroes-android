@@ -346,5 +346,4 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
             }
         }
     }
-
 }
