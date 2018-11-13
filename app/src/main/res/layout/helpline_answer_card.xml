@@ -30,20 +30,20 @@
         android:padding="@dimen/helpline_outer_layout_padding">
 
         <FrameLayout
-            android:layout_marginBottom="@dimen/dp_size_16"
+            android:layout_marginBottom="@dimen/attendant_image_marginBottom"
             android:id="@+id/fl_profile_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
                 android:id="@+id/iv_mentor_full_view_icon"
-                android:layout_width="44dp"
-                android:layout_height="44dp" />
+                android:layout_width="@dimen/attendant_image_height_width"
+                android:layout_height="@dimen/attendant_image_height_width" />
         </FrameLayout>
 
         <RelativeLayout
-            android:layout_marginLeft="@dimen/sp_size_8"
-            android:layout_marginRight="@dimen/dp_size_24"
+            android:layout_marginLeft="@dimen/helpline_que_marginLeft"
+            android:layout_marginRight="@dimen/helpline_que_marginRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
@@ -57,7 +57,7 @@
                 android:background="@drawable/incoming_shap"
                 android:orientation="vertical"
                 android:shadowColor="@color/green"
-                android:padding="@dimen/dp_size_16">
+                android:padding="@dimen/helpline_qa_padding">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/attendant"

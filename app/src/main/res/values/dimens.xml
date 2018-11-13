@@ -699,6 +699,10 @@
     <dimen name="helpline_rating_padding_top_bottom">12dp</dimen>
     <dimen name="helpline_rating_padding_right_left">24dp</dimen>
     <dimen name="chat_voice_icon_padding">8dp</dimen>
-
+    <dimen name="attendant_image_marginBottom">16dp</dimen>
+    <dimen name="attendant_image_height_width">44dp</dimen>
+    <dimen name="helpline_que_marginLeft">8sp</dimen>
+    <dimen name="helpline_que_marginRight">24dp</dimen>
+    <dimen name="helpline_qa_padding">16dp</dimen>
 </resources>
 

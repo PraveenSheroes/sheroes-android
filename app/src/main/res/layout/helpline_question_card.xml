@@ -41,11 +41,10 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="80dp"
                 android:background="@drawable/outgoing_shap"
                 android:orientation="vertical"
                 android:shadowColor="@color/green"
-                android:padding="@dimen/dp_size_16">
+                android:padding="@dimen/helpline_qa_padding">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/question"
