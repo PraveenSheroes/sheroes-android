@@ -396,8 +396,6 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
         if (!CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
             showSelectLanguageOption();
             CommonUtil.setPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF);
-        } else {
-            mHomePresenter.updateSelectedLanguage(mAppUtils.updateSelectedLanguageRequestBuilder(CommonUtil.getPrefStringValue(LANGUAGE_KEY), mUserId));
         }
     }
 

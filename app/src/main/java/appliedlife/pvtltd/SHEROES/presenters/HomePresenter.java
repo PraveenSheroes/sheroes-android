@@ -771,7 +771,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
         mSheroesAppServiceApi.updateSelectedLanguage(languageUpdateRequest)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<BaseResponse>() {
                     @Override
