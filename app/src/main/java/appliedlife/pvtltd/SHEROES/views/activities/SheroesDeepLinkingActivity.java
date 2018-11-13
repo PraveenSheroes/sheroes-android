@@ -61,9 +61,14 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         SheroesApplication.getAppComponent(this).inject(this);
     }
 
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
+    private void logout() {
+        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
+        Intent intent = new Intent(this, LanguageSelectionActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtras(bundle);
+        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -87,18 +92,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
-    }
-    // endregion
-
-    // region private methods
-    private void logout() {
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
-        finish();
     }
 
     private void callDeepLinkingData() throws URISyntaxException {
@@ -640,5 +633,9 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         startActivity(into);
         finish();
     }
-    // endregion
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
 }

@@ -263,7 +263,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             }
         }
     }
-
     private void setUpView() {
         if (CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
             openWelcomeScreen();
