@@ -11,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -26,7 +23,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
 import appliedlife.pvtltd.SHEROES.presenters.SHEPresenter;
@@ -104,8 +100,8 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
     }
 
     @Override
-    public void getAllICCMembers(ICCMemberListResponse iccMemberListResponse){
-        if(iccMemberListResponse != null && iccMemberListResponse.getListOfICCMembers()!=null){
+    public void getAllICCMembers(ICCMemberListResponse iccMemberListResponse) {
+        if (iccMemberListResponse != null && iccMemberListResponse.getListOfICCMembers() != null) {
             mAdapter.setSheroesGenericListData(iccMemberListResponse.getListOfICCMembers());
             mAdapter.notifyDataSetChanged();
         }

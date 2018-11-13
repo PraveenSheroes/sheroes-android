@@ -17,7 +17,6 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
@@ -77,9 +75,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private static final String SCREEN_LABEL = "Profile Details Screen";
     private final String TAG = LogUtils.makeLogTag(ProfileDetailsFragment.class);
 
-    public static final String USER_MENTOR_ID ="USERID";
-    public static final String USER_MENTOR_NAME ="USER_NAME";
-    public static final String SELF_PROFILE ="SELF_PROFILE";
+    public static final String USER_MENTOR_ID = "USERID";
+    public static final String USER_MENTOR_NAME = "USER_NAME";
+    public static final String SELF_PROFILE = "SELF_PROFILE";
     private long userId;
     private boolean isSelfProfile;
     private List<CommunityFeedSolrObj> profileCommunities;
@@ -223,7 +221,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
         profilePresenter.getFollowedMentors(mAppUtils.followerFollowingRequest(1, userId, FollowingEnum.FOLLOWED_CHAMPIONS.name()));
 
-        if(isSelfProfile) {
+        if (isSelfProfile) {
             profilePresenter.getPublicProfileCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
         } else {
             profilePresenter.getUsersCommunity(mAppUtils.userCommunitiesRequestBuilder(1, userId));
@@ -233,7 +231,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @OnClick(R.id.dotted_border_container_community)
     public void openCommunityList() {
-        if(isSelfProfile) {
+        if (isSelfProfile) {
             Intent intent = new Intent(getActivity(), HomeActivity.class);
             intent.putExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT, "Community List");
             startActivity(intent);
@@ -242,7 +240,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
-        if(isSelfProfile) {
+        if (isSelfProfile) {
             Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
             startActivity(intent);
         }
@@ -250,14 +248,14 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @OnClick(R.id.followed_view_more)
     public void navigateToFollowedMentors() {
-        if(StringUtil.isNotEmptyCollection(followedChampions)) {
-            FollowingActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(),  FollowingEnum.FOLLOWED_CHAMPIONS, null );
+        if (StringUtil.isNotEmptyCollection(followedChampions)) {
+            FollowingActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(), FollowingEnum.FOLLOWED_CHAMPIONS, null);
         }
     }
 
     @OnClick(R.id.community_view_more)
     public void navigateToCommunityListing() {
-        if(StringUtil.isNotEmptyCollection(profileCommunities)) {
+        if (StringUtil.isNotEmptyCollection(profileCommunities)) {
             ProfileCommunitiesActivity.navigateTo(getActivity(), userId, isSelfProfile, getScreenName(), null);
         }
     }
@@ -265,9 +263,9 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     private void populateMutualCommunities(List<CommunityFeedSolrObj> communities) {
 
         int mutualCommunitySize = communities.size();
-        if((getActivity()) == null || getActivity().isFinishing()) return;
+        if ((getActivity()) == null || getActivity().isFinishing()) return;
 
-        String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+        String name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
         String mutualCommunityText = getResources().getString(R.string.PLACEHOLDER_MUTUAL_COMMUNITY, name, String.valueOf(mutualCommunitySize));
         mutualCommunityLabel.setText(mutualCommunityText);
 
@@ -320,7 +318,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     private void populateUserCommunity(List<CommunityFeedSolrObj> communities) { //other communities
 
-        if((getActivity()) == null || getActivity().isFinishing()) return;
+        if ((getActivity()) == null || getActivity().isFinishing()) return;
 
         int screenWidth = CommonUtil.getWindowWidth(getActivity());
         int columnSize = screenWidth / 2 - mImageMargin;
@@ -362,24 +360,24 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
         if (getActivity() == null || getActivity().isFinishing()) {
             return;
         }
-        if(feedResponsePojo.getNumFound() ==0) {
+        if (feedResponsePojo.getNumFound() == 0) {
             //empty view
             emptyFollowedMentorContainer.setVisibility(View.VISIBLE);
             String name = "User";
-            if(getActivity()!=null && !getActivity().isFinishing()) {
-                name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            if (getActivity() != null && !getActivity().isFinishing()) {
+                name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
             }
             String message = getString(R.string.empty_followed_mentor, name);
             emptyViewFollowedMentor.setText(message);
-            emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.vector_public_business_woman,0,0);
+            emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vector_public_business_woman, 0, 0);
 
             followedMentorsListContainer.setVisibility(View.GONE);
 
-            if(isSelfProfile) {
+            if (isSelfProfile) {
                 emptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
                 emptyViewFollowedMentor.setText(R.string.champions_followed);
                 emptyViewDottedBorder.setVisibility(View.VISIBLE);
-            } else{
+            } else {
                 emptyViewDottedBorder.setBackgroundResource(0);
             }
 
@@ -399,7 +397,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-        if((getActivity()) == null || getActivity().isFinishing()) return;
+        if ((getActivity()) == null || getActivity().isFinishing()) return;
         ((ProfileActivity) getActivity()).setProfileTopSectionCount(profileTopSectionCountsResponse);
     }
 
@@ -434,43 +432,43 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             CommunityFeedSolrObj profileCommunity = otherCommunity.get(0);
             profileCommunity.setShowHeader(true);
 
-            if(isSelfProfile) {
+            if (isSelfProfile) {
                 profileCommunity.setMutualCommunityCount(0);
-            } else if(mutualCommunity!=null && mutualCommunity.size()>0) {
+            } else if (mutualCommunity != null && mutualCommunity.size() > 0) {
                 profileCommunity.setMutualCommunityCount(mutualCommunity.size());
             }
             profileCommunity.setOtherCommunityFirstItem(true);
             populateUserCommunity(otherCommunity); //for other community
 
-            if(mutualCommunity!=null && !isSelfProfile) { //other have both mutual and non mutual so making single lust here
+            if (mutualCommunity != null && !isSelfProfile) { //other have both mutual and non mutual so making single lust here
                 mutualCommunity.addAll(otherCommunity);
                 profileCommunities = mutualCommunity;
             } else {
                 profileCommunities = otherCommunity;
             }
-        } else{
+        } else {
             //current scenrio - other hv all so change if future other don't hv mutual - empty view
             emptyViewCommunitiesContainer.setVisibility(View.VISIBLE);
             communityListContainer.setVisibility(View.GONE);
             if (getActivity() == null) {
                 return;
             }
-            String name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
+            String name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
             String message = getString(R.string.empty_followed_community, name);
-            emptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.vector_community_member_public,0,0);
+            emptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vector_community_member_public, 0, 0);
             emptyViewCommunities.setText(message);
 
-            if(isSelfProfile) {
+            if (isSelfProfile) {
                 dottedCommunityEmptyView.setBackgroundResource(R.drawable.dotted_line_border);
                 emptyViewCommunities.setText(R.string.join_communities);
-            } else{
+            } else {
                 dottedCommunityEmptyView.setBackgroundResource(0);
             }
         }
     }
 
     private void populateFollowedMentors(List<UserSolrObj> followedMentors) {
-        if((getActivity()) == null || getActivity().isFinishing()) return;
+        if ((getActivity()) == null || getActivity().isFinishing()) return;
 
         int counter = 0;
         followedMentor.removeAllViewsInLayout();
@@ -493,7 +491,7 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ProfileActivity)getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    ((ProfileActivity) getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                 }
             });
 
@@ -524,8 +522,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     }
 
-    public void openCommunityDetails( CommunityFeedSolrObj communityFeedSolrObj) {
-        if((getActivity()) == null || getActivity().isFinishing()) return;
+    public void openCommunityDetails(CommunityFeedSolrObj communityFeedSolrObj) {
+        if ((getActivity()) == null || getActivity().isFinishing()) return;
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedSolrObj, getScreenName(), null, 1);
     }
 
@@ -536,13 +534,13 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
 
     @Override
     protected Map<String, Object> getExtraProperties() {
-            HashMap<String, Object> properties = new
-                    EventProperty.Builder()
-                    .id(Long.toString(userId))
-                    .isMentor(false)
-                    .isOwnProfile(isSelfProfile)
-                    .build();
-            return properties;
+        HashMap<String, Object> properties = new
+                EventProperty.Builder()
+                .id(Long.toString(userId))
+                .isMentor(false)
+                .isOwnProfile(isSelfProfile)
+                .build();
+        return properties;
     }
 
     @Override
@@ -556,7 +554,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {}
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
+    }
 
     @Override
     public void onUserDeactivation(BaseResponse baseResponse) {
