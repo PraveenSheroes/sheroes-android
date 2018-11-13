@@ -115,19 +115,10 @@ public class FeedUtils {
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall(activity);
                 break;
-            case R.id.tv_event_going_btn:
-                bookmarkCall(activity);
             case R.id.tv_article_bookmark:
                 bookMarkTrending(activity);
                 break;
             case R.id.tv_feed_community_post_user_share:
-                if (mIsWhatsAppShare) {
-                    shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
-                } else {
-                    shareWithMultipleOption(baseResponse, activity, screenName);
-                }
-                break;
-            case R.id.tv_feed_review_post_user_share_ic:
                 if (mIsWhatsAppShare) {
                     shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
                 } else {
@@ -148,9 +139,6 @@ public class FeedUtils {
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
-                break;
-            case R.id.tv_event_share_btn:
-                shareWithMultipleOption(baseResponse, activity, screenName);
                 break;
             /*Card menu option depend on Feed type like post,article etc */
 
@@ -232,45 +220,19 @@ public class FeedUtils {
                 break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(activity, (CommunityFeedSolrObj) mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                /*Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
-                Bundle bundleFeature = new Bundle();
-                Parcelable parcelabless = Parcels.wrap(mFeedDetail);
-                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelabless);
-                bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
-                intetFeature.putExtras(bundleFeature);
-                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                 break;
             case R.id.tv_feed_community_post_card_title:
-                if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                    if (null != mFeedDetail) {
-                        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                            mUserId = mUserPreference.get().getUserSummary().getUserId();
-                            openGenericCardInWebView(mFeedDetail, activity);
-                        }
-                    }
-                } else {
-                    if (mFeedDetail instanceof UserPostSolrObj) {
-                        if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
-                            ContestActivity.navigateTo(activity, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
-                        } else {
-                            CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                        }
+                if (mFeedDetail instanceof UserPostSolrObj) {
+                    if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
+                        ContestActivity.navigateTo(activity, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
                     } else {
                         CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-
                     }
-                }
-                break;
-            case R.id.tv_feed_review_card_title:
-                if (null != mFeedDetail) {
-                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                        mUserId = mUserPreference.get().getUserSummary().getUserId();
-                        openGenericCardInWebView(mFeedDetail, activity);
-                    }
+                } else {
+                    CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 }
                 break;
             default:
-//                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
 

@@ -70,7 +70,6 @@ public class AppConstants {
     public static final String USER_SUB_TYPE = "U";
     public static final String CAROUSEL_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "LB";
-    public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String IMAGE_SUBTYPE = "I";
     public static final String FEED_SCREEN = "feed";
@@ -82,7 +81,6 @@ public class AppConstants {
     public static final int ASKING_QUESTION_CALL = 101;
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_ARTICLE = "A";
-    public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
     public static final String FEATURED_COMMUNITY = "T";
     public static final String FEED_POLL = "PL";
@@ -278,8 +276,6 @@ public class AppConstants {
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String POLL_URL_COM = "https://sheroes.com/communities/poll";
-    public static final String EVENT_URL = "https://sheroes.in/event";
-    public static final String EVENT_URL_COM = "https://sheroes.com/event";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/";
     public static final String SELF_USER_PROFILE_URL = "https://sheroes.com/users/edit_profile";
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/";
@@ -313,7 +309,6 @@ public class AppConstants {
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
-    public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_CATEGORY_ID = "article_category_id";
@@ -360,7 +355,6 @@ public class AppConstants {
     public static final String PROFILE_PIC_SUB_TYPE = "USER_PROFILE_PHOTO_SERVICE";
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 79;
     public static final String PUBLIC_PROFILE = "public profile";
-    public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final long ASKED_QUESTION_TO_MENTOR = 3;
     public static final String orgUserType = "organisations_test_user";
     public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";

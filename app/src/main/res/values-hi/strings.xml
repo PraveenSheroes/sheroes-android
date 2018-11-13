@@ -39,8 +39,6 @@
 
     <!--Fragment classes-->
     <string name="ID_COMMUNITIES">समुदाय</string>
-    <string name="ID_PEOPLE_INTERESTED">people are interested</string>
-    <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">सूचनाएं</string>
     <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
     <string name="follower_toolbar_title">मेरे फॉलोवर्स</string>
@@ -63,8 +61,6 @@
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
     <string name="ID_JOIN">जुड़ें</string>
-    <string name="ID_INTERESTED">Interested</string>
-    <string name="ID_GOING">Going</string>
     <string name="ID_REQUESTED">अनुरोध किया</string>
     <string name="ID_JOINED">जुड़ गए</string>
     <string name="ID_VIEW">देखें</string>
@@ -94,7 +90,6 @@
     <string name="banned_user_device">यूज़र डिवाइस पर प्रतिबंध लगाओ</string>
     <string name="ID_NO_RESULT_FOUND">कोई परिणाम नहीं मिला, दोबारा क्लिक करें</string>
     <string name="ID_NO_POST">कोई पोस्ट नहीं है</string>
-    <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">गुमनाम</string>
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
@@ -194,9 +189,6 @@
         <item>विधवा</item>
         <item>अन्य</item>
     </string-array>
-    <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
-    <string name="ID_SPEAKER">Speaker</string>
-    <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">SHEROES फीड में आपका स्वागत है</string>
     <string name="ID_CIRCLE_SUPPORT">आपकी महिला साथियों का समूह</string>
     <string name="ID_ONCE_CARD_DETAIL1">प्रभावशाली महिलाओं के साथ जुड़ें , नेटवर्क बनाएं और हैंगऑउट करें</string>

@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
-import org.wordpress.android.editor.EditorFragmentAbstract;
-
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
@@ -46,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -80,7 +77,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDia
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
@@ -95,10 +91,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventSpeakerHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventSponsorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
@@ -120,7 +112,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PollTypesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserMentionCardHolder;
@@ -217,14 +208,6 @@ public interface SheroesAppComponent {
 
     void inject(OnceWelcomeCardHolder onceWelcomeCardHolder);
 
-    void inject(EventDetailDialogFragment eventDetailDialogFragment);
-
-    void inject(EventDetailHolder eventDetailHolder);
-
-    void inject(EventSpeakerHolder eventSpeakerHolder);
-
-    void inject(EventSponsorHolder eventSponsorHolder);
-
     void inject(EmailVerificationFragment emailVerificationFragment);
 
     void inject(ResetPasswordFragment resetPasswordFragment);
@@ -237,11 +220,7 @@ public interface SheroesAppComponent {
 
     void inject(FeedProgressBarHolder feedProgressBarHolder);
 
-    void inject(EventCardHolder eventCardHolder);
-
     void inject(SheroesDeepLinkingActivity sheroesDeepLinkingActivity);
-
-    void inject(OrgReviewCardHolder orgReviewCardHolder);
 
     void inject(AlbumActivity albumActivity);
 

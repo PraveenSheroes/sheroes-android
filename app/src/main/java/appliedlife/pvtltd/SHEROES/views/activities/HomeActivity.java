@@ -128,7 +128,6 @@ import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -149,7 +148,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -334,14 +332,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     private FeedDetail mFeedDetail;
     private long mChallengeId;
     private String mHelpLineChat;
-    private EventDetailDialogFragment eventDetailDialogFragment;
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
     private BellNotificationDialogFragment bellNotificationDialogFragment;
     private boolean isSheUser = false;
     private long mUserId = -1L;
     boolean isMentor;
-    private int mEventId;
     public boolean mIsFirstTimeOpen = false;
     private String mFcmId;
     private ShowcaseManager showcaseManager;
@@ -439,13 +435,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
-            mEventId = getIntent().getExtras().getInt(AppConstants.EVENT_ID);
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
             if (!isSheUser) {
                 initHomeViewPagerAndTabs();
-            }
-            if (mEventId > 0) {
-                eventDetailDialog(mEventId);
             }
         }
         feedUtils.setConfigurableShareOption(isWhatsAppShare());
@@ -591,22 +583,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mFloatActionBtn.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
-
-    public void eventDetailDialog(long eventID) {
-        eventDetailDialogFragment = (EventDetailDialogFragment) getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
-        if (eventDetailDialogFragment == null) {
-            eventDetailDialogFragment = new EventDetailDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putLong(AppConstants.EVENT_ID, eventID);
-            Parcelable parcelable = Parcels.wrap(mFeedDetail);
-            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
-            eventDetailDialogFragment.setArguments(bundle);
-        }
-        if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            eventDetailDialogFragment.show(getFragmentManager(), EventDetailDialogFragment.class.getName());
-        }
-    }
-
 
     @Override
     public void onDrawerOpened() {
@@ -1720,9 +1696,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
                 createCommunityPostOnClick(communityPost);
                 break;
-            case R.id.li_event_card_main_layout:
-                eventDetailDialog(0);
-                break;
             case R.id.li_mentor:
                 openMentorProfileDetail(baseResponse);
                 break;
@@ -1743,16 +1716,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                                 .build();
                 trackEvent(Event.CHALLENGE_SHARED_CLICKED, properties);
                 ShareBottomSheetFragment.showDialog(this, shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), ((FeedDetail) baseResponse).getDeepLinkUrl(), SOURCE_SCREEN, true, ((FeedDetail) baseResponse).getDeepLinkUrl(), true, Event.CHALLENGE_SHARED, properties);
-                break;
-            case R.id.tv_event_detail_interested_btn:
-                if (null != eventDetailDialogFragment) {
-                    eventDetailDialogFragment.eventInterestedListData(mFeedDetail);
-                }
-                break;
-            case R.id.tv_event_detail_going_btn:
-                if (null != eventDetailDialogFragment) {
-                    eventDetailDialogFragment.eventGoingListData(mFeedDetail);
-                }
                 break;
             default:
                 if (mFeedDetail instanceof UserPostSolrObj) {

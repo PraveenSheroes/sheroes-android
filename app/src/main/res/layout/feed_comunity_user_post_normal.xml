@@ -126,7 +126,6 @@
                 android:layout_width="@dimen/user_post_follow_width"
                 android:layout_height="@dimen/user_post_follow_height"
                 android:background="@drawable/border_new_feature"
-                android:foreground="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:textAllCaps="true"
                 android:textColor="@color/user_follow_post_text"
