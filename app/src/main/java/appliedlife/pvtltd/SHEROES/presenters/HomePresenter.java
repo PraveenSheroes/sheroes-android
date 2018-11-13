@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
@@ -43,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -65,8 +65,8 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBE
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FCM_ID;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
@@ -763,16 +763,17 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     }
                 });
     }
-    public void updateSelectedLanguage(final LanguageUpdateRequest languageUpdateRequest) {
+
+    public void updateSelectedLanguage(LanguageUpdateRequest languageUpdateRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        mSheroesAppServiceApi.updateSelectedLanguage()
+        mSheroesAppServiceApi.updateSelectedLanguage(languageUpdateRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<LanguageUpdateResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LanguageUpdateResponse>() {
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
                     @Override
                     public void onComplete() {
                     }
@@ -783,7 +784,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     }
 
                     @Override
-                    public void onNext(LanguageUpdateResponse languageUpdateResponse) {
+                    public void onNext(BaseResponse languageUpdateResponse) {
                     }
                 });
     }

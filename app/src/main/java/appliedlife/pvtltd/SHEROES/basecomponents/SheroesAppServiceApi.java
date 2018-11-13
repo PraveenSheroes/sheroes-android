@@ -106,7 +106,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
@@ -399,6 +399,6 @@ public interface SheroesAppServiceApi {
     @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
     Single<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
 
-    @GET("participant/user/update_user_preference")
-    Observable<LanguageUpdateResponse> updateSelectedLanguage();
+    @POST("participant/user/update_user_preference")
+    Observable<BaseResponse> updateSelectedLanguage(@Body LanguageUpdateRequest languageUpdateRequest);
 }
