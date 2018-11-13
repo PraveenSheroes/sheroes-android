@@ -85,6 +85,7 @@
                     android:textColor="@color/helpline_answer_text"
                     android:textSize="@dimen/helpline_time_text_size"
                     android:gravity="right"
+                    android:layout_gravity="right"
                     android:textAlignment="gravity"
                     android:maxLines="@integer/int_value_for_line_1"/>
 
