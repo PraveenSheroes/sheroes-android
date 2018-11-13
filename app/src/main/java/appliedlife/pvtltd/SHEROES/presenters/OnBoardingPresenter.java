@@ -28,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -55,13 +54,13 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     Preference<AppConfiguration> mConfiguration;
 
     @Inject
-    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData,Preference<AppConfiguration> mConfiguration,SheroesAppServiceApi sheroesAppServiceApi) {
+    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<AppConfiguration> mConfiguration, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mMasterDataModel = masterDataModel;
         this.onBoardingModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-        this.mConfiguration=mConfiguration;
-        this.mSheroesAppServiceApi= sheroesAppServiceApi;
+        this.mConfiguration = mConfiguration;
+        this.mSheroesAppServiceApi = sheroesAppServiceApi;
     }
 
     @Override
