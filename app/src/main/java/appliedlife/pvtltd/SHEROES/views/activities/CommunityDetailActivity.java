@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -20,8 +20,6 @@ import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -87,18 +85,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.CommunityDetailPresenterImpl;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.adapters.CommunityDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
 import butterknife.Bind;
@@ -112,10 +108,359 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
  * Created by ujjwal on 27/12/17.
  */
 
-public class CommunityDetailActivity extends BaseActivity implements BaseHolderInterface, ICommunityDetailView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
+public class CommunityDetailActivity extends BaseActivity implements BaseHolderInterface, ICommunityDetailView, CustomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener {
+
+    //region static constants
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String TAB_KEY = "tab_key";
-    private String streamType;
+    //endregion static constants
+
+    //region enum
+    public enum TabType {
+        NATIVE("native"),
+        WEB("web"),
+        HTML("html"),
+        WEB_CUSTOM_TAB("web_custom_tab"),
+        FRAGMENT("fragment");
+
+        private String tabType;
+
+        TabType(String tabType) {
+            this.tabType = tabType;
+        }
+
+        public String getName() {
+            return tabType;
+        }
+    }
+    //endregion enum
+
+    //region injected variables
+    @Inject
+    CommunityDetailPresenterImpl mCommunityDetailPresenter;
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    @Inject
+    FeedUtils mFeedUtils;
+    //endregion injected variables
+
+    //region bind view variables
+    @Bind(R.id.pb_communities_drawer)
+    ProgressBar mCommunitiesDrawerProgress;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
+    @Bind(R.id.title_toolbar)
+    TextView mTitleToolbar;
+    @Bind(R.id.progress_bar)
+    ProgressBar mProgressBar;
+    @Bind(R.id.viewpager)
+    ViewPager mViewPager;
+    @Bind(R.id.tabs)
+    TabLayout mTabLayout;
+    @Bind(R.id.fab)
+    FloatingActionButton mFabButton;
+    @Bind(R.id.bottom_bar)
+    FrameLayout mBottomBar;
+    @Bind(R.id.view_tool_tip_invite)
+    View mInviteToolTip;
+    @Bind(R.id.drawer_community_layout)
+    DrawerLayout mCommunityDrawerLayout;
+    @Bind(R.id.nav_view_right_drawer_community_detail)
+    NavigationView mRightDrawerNavigation;
+    @Bind(R.id.rv_right_drawer_community_detail)
+    RecyclerView mCommunitiesRecycler;
+    //endregion bind view variables
+
+    //region member variables
+    private String mStreamType;
+    private String mDefaultTabKey = "";
+    private String mCommunityPrimaryColor = "#ffffff";
+    private String mCommunitySecondaryColor = "#dc4541";
+    private String mCommunityTitleTextColor = "#3c3c3c";
+
+    private boolean mIsFromAds = false;
+
+    private final int mWidthPixel = 300;
+    private final int mMarginLeft = 20;
+    private final int mMarginLeftToolTip = 10;
+    private final int mScreenWidthMdpi = 600;
+    private final int mScreenWidthHdpi = 750;
+    private int mFromNotification;
+    //endregion member variables
+
+    //region view variables
+    private View mInviteFriendToolTip;
+    private PopupWindow mInviteFriendPopUp;
+    private CommunityFeedSolrObj mCommunityFeedSolrObj;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private SwipPullRefreshList<FeedDetail> mPullRefreshList;
+    private CommunityDetailAdapter mCommunityDetailAdapter;
+    private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
+    //endregion
+
+    //region lifecycle methods
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        SheroesApplication.getAppComponent(this).inject(this);
+        setContentView(R.layout.activity_community_detail);
+        ButterKnife.bind(this);
+        mCommunityDetailPresenter.attachView(this);
+
+        CustomActionBarToggle mCustomActionBarToggle = new CustomActionBarToggle(this, mCommunityDrawerLayout, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mCommunityDrawerLayout.addDrawerListener(mCustomActionBarToggle);
+
+        if (getIntent() != null && getIntent().getExtras() != null) {
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+            Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
+            if (parcelable != null) {
+                mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
+                mStreamType = mCommunityFeedSolrObj.getStreamType();
+            } else {
+                String communityId = getIntent().getExtras().getString(AppConstants.COMMUNITY_ID);
+                mDefaultTabKey = getIntent().getExtras().getString(TAB_KEY, "");
+                mIsFromAds = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
+                if (CommonUtil.isNotEmpty(communityId)) {
+                    mCommunityDetailPresenter.fetchCommunity(communityId);
+                } else {
+                    finish();
+                }
+            }
+        } else {
+            finish();
+        }
+
+        if (mCommunityFeedSolrObj != null) {
+            initializeLayout();
+        }
+        if (CommonUtil.forGivenCountOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, AppConstants.INVITE_FRIEND_SESSION) == AppConstants.INVITE_FRIEND_SESSION) {
+            if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
+                toolTipForInviteFriends();
+            }
+        }
+
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mCommunityDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+            mCommunityDrawerLayout.closeDrawer(GravityCompat.END);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mInviteFriendPopUp != null && mInviteFriendPopUp.isShowing()) {
+            mInviteFriendPopUp.dismiss();
+        }
+        super.onDestroy();
+    }
+    //endregion lifecycle methods
+
+    //region override methods
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        return false;
+    }
+
+    @Override
+    public void onDrawerOpened() {
+        if (mCommunityDrawerLayout.isDrawerOpen(GravityCompat.END)) {
+            AnalyticsManager.trackScreenView(AppConstants.RIGHT_SWIPE_NAVIGATION, getScreenName(), null);
+        }
+    }
+
+    @Override
+    public void onDrawerClosed() {
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (upIntent == null) return;
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        } else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+        }
+        finish();
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mCommunityDetailPresenter;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_community, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem menuItem = menu.findItem(R.id.share);
+        menuItem.getIcon().mutate();
+        menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        MenuItem item = menu.findItem(R.id.nav_communities);
+        item.getIcon().mutate();
+        item.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id) {
+            case R.id.leave_join:
+                boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
+                if (isOwnerOrMember) {
+                    onLeaveClicked();
+                } else {
+                    onJoinClicked();
+                }
+                break;
+            case R.id.share:
+                String deepLinkUrl;
+                if (mCommunityFeedSolrObj == null) {
+                    break;
+                }
+                if (StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls())) {
+                    deepLinkUrl = mCommunityFeedSolrObj.getPostShortBranchUrls();
+                } else {
+                    deepLinkUrl = mCommunityFeedSolrObj.getDeepLinkUrl();
+                }
+                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();
+                AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE_CLICKED, getScreenName(), properties);
+                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, Event.COMMUNITY_INVITE, properties);
+                break;
+            case android.R.id.home:
+                onBackPressed();
+                break;
+            case R.id.nav_communities:
+                mCommunityDrawerLayout.openDrawer(GravityCompat.END);
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public void startProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void stopProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void startNextScreen() {
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        onShowErrorDialog(s, feedParticipationEnum);
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+    }
+
+    @Override
+    public void onCommunityJoined() {
+        mCommunityFeedSolrObj.setMember(true);
+        invalidateBottomBar();
+    }
+
+    @Override
+    public void onCommunityLeft() {
+        mCommunityFeedSolrObj.setMember(false);
+        invalidateBottomBar();
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        final EventProperty.Builder builder = new EventProperty.Builder();
+        if (mCommunityFeedSolrObj != null) {
+            builder.title(mCommunityFeedSolrObj.getNameOrTitle())
+                    .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                    .streamType(mCommunityFeedSolrObj.getStreamType())
+                    .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()));
+        }
+        return builder.build();
+    }
+
+    @Override
+    public void setCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
+        if (CommonUtil.isNotEmpty(mStreamType)) {
+            communityFeedSolrObj.setStreamType(mStreamType);
+        }
+        mCommunityFeedSolrObj = communityFeedSolrObj;
+
+        //Auto join Community if its coming through ads for new users
+        boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
+        if (mIsFromAds && !isOwnerOrMember) {
+            onJoinClicked();
+        }
+        initializeLayout();
+    }
+
+    @Override
+    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
+        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
+        mCommunitiesDrawerProgress.setVisibility(View.GONE);
+        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
+            int mPageNo = mFragmentListRefreshData.getPageNo();
+            mFragmentListRefreshData.setPageNo(++mPageNo);
+            mPullRefreshList.allListData(feedDetailList);
+
+            FeedDetail feedProgressBar = new FeedDetail();
+            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            int position = data.size() - feedDetailList.size();
+            if (position > 0) {
+                data.remove(position - 1);
+            }
+            data.add(feedProgressBar);
+
+            mMyCommunitiesAdapter.setData(data);
+            mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
+
+        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
+            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
+            data.remove(data.size() - 1);
+            mMyCommunitiesAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
@@ -147,198 +492,128 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     }
 
-    public enum TabType {
-        NAVTIVE("native"),
-        WEB("web"),
-        HTML("html"),
-        WEB_CUSTOM_TAB("web_custom_tab"),
-        FRAGMENT("fragment");
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
+                    if (mCommunityFeedSolrObj == null) {
+                        return;
+                    }
+                    if (!mCommunityFeedSolrObj.isMember()) {
+                        onCommunityJoined();
+                    }
+                    refreshCurrentFragment();
+                    break;
 
-        public String tabType;
-        private String mCommS;
+                case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
+                    refreshCurrentFragment();
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
+                    this.finish();
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
+                    Parcelable parcelableArticlePost = data.getParcelableExtra(AppConstants.HOME_FRAGMENT);
+                    ArticleSolrObj articleSolrObj = null;
+                    if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
+                        articleSolrObj = Parcels.unwrap(parcelableArticlePost);
+                    }
+                    if (articleSolrObj != null) {
+                        invalidateItem(articleSolrObj, false);
+                    }
+                    break;
 
-        TabType(String tabType) {
-            this.tabType = tabType;
+                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
+                    boolean isPostDeleted = false;
+                    FeedDetail feedDetail = null;
+                    Parcelable parcelableFeedObj = data.getParcelableExtra(FeedDetail.FEED_COMMENTS);
+                    if (parcelableFeedObj != null) {
+                        feedDetail = Parcels.unwrap(parcelableFeedObj);
+                        isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
+                    }
+                    if (feedDetail == null) {
+                        break;
+                    }
+                    if (isPostDeleted) {
+                        invalidateItem(feedDetail, true);
+                    } else {
+                        invalidateItem(feedDetail, false);
+                    }
+            }
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
+            refreshCurrentFragment();
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+            Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+            if (parcelable != null) {
+                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                refreshAtPosition(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
+            }
         }
+    }
+    //endregion
 
-        public String getName() {
-            return tabType;
+    //region instance methods
+    public String getCommunityId() {
+        if (mCommunityFeedSolrObj == null) {
+            return "";
+        } else {
+            return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
         }
     }
 
-    @Inject
-    CommunityDetailPresenterImpl mCommunityDetailPresenter;
-
-    @Inject
-    Preference<LoginResponse> userPreference;
-
-    @Inject
-    FeedUtils feedUtils;
-
-    @Bind(R.id.pb_communities_drawer)
-    ProgressBar pbCommunitiesDrawer;
-
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-
-    @Bind(R.id.title_toolbar)
-    TextView mTitleToolbar;
-
-    @Bind(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
-    @Bind(R.id.viewpager)
-    ViewPager mViewPager;
-
-    @Bind(R.id.tabs)
-    TabLayout mTabLayout;
-
-    @Bind(R.id.fab)
-    FloatingActionButton mFabButton;
-
-    @Bind(R.id.bottom_bar)
-    FrameLayout mBottomBar;
-
-    @Bind(R.id.view_tool_tip_invite)
-    View viewToolTipInvite;
-
-    @Bind(R.id.drawer_community_layout)
-    DrawerLayout mDrawer;
-
-    @Bind(R.id.nav_view_right_drawer_community_detail)
-    NavigationView mNavigationViewRightDrawerWithCommunity_detail;
-
-    @Bind(R.id.rv_right_drawer_community_detail)
-    RecyclerView mRecyclerViewDrawerCommunities;
-
-
-    private CommunityFeedSolrObj mCommunityFeedSolrObj;
-    private List<Fragment> mTabFragments = new ArrayList<>();
-    private Adapter mAdapter;
-    private String mDefaultTabKey = "";
-    private boolean isFromAds = false;
-
-    private String mCommunityPrimaryColor = "#ffffff";
-    private String mCommunitySecondaryColor = "#dc4541";
-    private String mCommunityTitleTextColor = "#3c3c3c";
-
-    private int mFromNotification;
-    private View inviteFriendToolTip;
-    private PopupWindow popupWindowInviteFriendTooTip;
-    private CustiomActionBarToggle mCustiomActionBarToggle;
-
-    private FragmentListRefreshData mFragmentListRefreshData;
-    private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
-    private int mPageNo = AppConstants.ONE_CONSTANT;
-    private SwipPullRefreshList mPullRefreshList;
-    private int mWidthPixel = 300;
-    private int mMarginLeft = 20;
-    private int mMarginLeftToolTip = 10;
-    private int mScreenWidthMdpi = 600;
-    private int mScreenWidthHdpi = 750;
-    private int mDelayToolTip = 1000;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        SheroesApplication.getAppComponent(this).inject(this);
-        setContentView(R.layout.activity_community_detail);
-        ButterKnife.bind(this);
-        mCommunityDetailPresenter.attachView(this);
-        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mDrawer.addDrawerListener(mCustiomActionBarToggle);
-        if (getIntent() != null && getIntent().getExtras() != null) {
-            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
-            Parcelable parcelable = getIntent().getParcelableExtra(CommunityFeedSolrObj.COMMUNITY_OBJ);
-            if (parcelable != null) {
-                mCommunityFeedSolrObj = Parcels.unwrap(parcelable);
-                streamType = mCommunityFeedSolrObj.getStreamType();
-            } else {
-                String communityId = getIntent().getExtras().getString(AppConstants.COMMUNITY_ID);
-                mDefaultTabKey = getIntent().getExtras().getString(TAB_KEY, "");
-                isFromAds = getIntent().getExtras().getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
-                if (CommonUtil.isNotEmpty(communityId)) {
-                    mCommunityDetailPresenter.fetchCommunity(communityId);
-                } else {
-                    finish();
+    private void refreshAtPosition(FeedDetail feedDetail, long id) {
+        for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
+            Fragment fragment = mCommunityDetailAdapter.getItem(i);
+            if (fragment instanceof FeedFragment) {
+                if (fragment.isVisible()) {
+                    ((FeedFragment) fragment).findPositionAndUpdateItem(feedDetail, id);
                 }
             }
-        } else {
-            finish();
         }
-
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        if (mCommunityFeedSolrObj != null) {
-            initializeLayout();
-        }
-        if (CommonUtil.forGivenCountOnly(AppConstants.INVITE_FRIEND_SESSION_PREF, AppConstants.INVITE_FRIEND_SESSION) == AppConstants.INVITE_FRIEND_SESSION) {
-            if (CommonUtil.ensureFirstTime(AppConstants.INVITE_FRIEND_PREF)) {
-                toolTipForInviteFriends();
-            }
-        }
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        return false;
-    }
-
-    @Override
-    public void onDrawerOpened() {
-        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            AnalyticsManager.trackScreenView(AppConstants.RIGHT_SWIPE_NAVIGATION, getScreenName(), null);
-        }
-    }
-
-    @Override
-    public void onDrawerClosed() {
     }
 
     private void toolTipForInviteFriends() {
         final Handler handler = new Handler();
+        int mDelayToolTip = 1000;
         handler.postDelayed(new Runnable() {
+            @SuppressLint("InflateParams")
             @Override
             public void run() {
                 try {
                     int width = AppUtils.getWindowWidth(CommunityDetailActivity.this);
+                    mInviteFriendToolTip = LayoutInflater.from(CommunityDetailActivity.this).inflate(R.layout.tooltip_arrow_up_side, null);
+                    mInviteFriendPopUp = new PopupWindow(mInviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    mInviteFriendPopUp.setOutsideTouchable(false);
+
                     if (width < mScreenWidthMdpi) {
-                        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
-                        popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        popupWindowInviteFriendTooTip.setOutsideTouchable(false);
-                        popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
-                        final LinearLayout llToolTipBg = inviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
+                        mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -(width * 2), 0);
+                        final LinearLayout llToolTipBg = mInviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
                         RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mWidthPixel, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
                         llParams.setMargins(CommonUtil.convertDpToPixel(mMarginLeft, CommunityDetailActivity.this), 0, 0, 0);
                         llParams.addRule(RelativeLayout.BELOW, R.id.iv_arrow);
                         llToolTipBg.setLayoutParams(llParams);
                     } else {
-                        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        inviteFriendToolTip = layoutInflater.inflate(R.layout.tooltip_arrow_up_side, null);
-                        popupWindowInviteFriendTooTip = new PopupWindow(inviteFriendToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        popupWindowInviteFriendTooTip.setOutsideTouchable(false);
                         if (width < mScreenWidthHdpi) {
-                            popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -(width * 2), 0);
+                            mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -(width * 2), 0);
                         } else {
-                            popupWindowInviteFriendTooTip.showAsDropDown(viewToolTipInvite, -width, 0);
+                            mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -width, 0);
                         }
                     }
 
-                    final ImageView ivArrow = inviteFriendToolTip.findViewById(R.id.iv_arrow);
+                    final ImageView ivArrow = mInviteFriendToolTip.findViewById(R.id.iv_arrow);
                     RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
                     imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(mMarginLeftToolTip, CommunityDetailActivity.this), 0);
                     imageParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
                     ivArrow.setLayoutParams(imageParams);
-                    final TextView tvGotIt = inviteFriendToolTip.findViewById(R.id.got_it);
-                    final TextView tvTitle = inviteFriendToolTip.findViewById(R.id.title);
+                    final TextView tvGotIt = mInviteFriendToolTip.findViewById(R.id.got_it);
+                    final TextView tvTitle = mInviteFriendToolTip.findViewById(R.id.title);
                     tvTitle.setText(getString(R.string.tool_tip_invite_friend));
                     tvGotIt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupWindowInviteFriendTooTip.dismiss();
+                            mInviteFriendPopUp.dismiss();
                         }
                     });
                 } catch (WindowManager.BadTokenException e) {
@@ -346,30 +621,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                 }
             }
         }, mDelayToolTip);
-
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent upIntent = NavUtils.getParentActivityIntent(this);
-        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-            TaskStackBuilder.create(this)
-                    .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
-        } else {
-            if (mFromNotification > 0) {
-                TaskStackBuilder.create(this)
-                        .addNextIntentWithParentStack(upIntent)
-                        .startActivities();
-            }
-        }
-        finish();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return mCommunityDetailPresenter;
     }
 
     private void initializeLayout() {
@@ -387,18 +638,17 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private void setUpMyCommunitiesList() {
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
-        mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
-        mRecyclerViewDrawerCommunities.setAdapter(mMyCommunitiesAdapter);
+        mCommunitiesRecycler.setLayoutManager(gridLayoutManager);
+        mCommunitiesRecycler.setAdapter(mMyCommunitiesAdapter);
         //For right navigation drawer communities items
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DEATIL_DRAWER, AppConstants.NO_REACTION_CONSTANT);
-        pbCommunitiesDrawer.setVisibility(View.VISIBLE);
-        mPullRefreshList = new SwipPullRefreshList();
+        mCommunitiesDrawerProgress.setVisibility(View.VISIBLE);
+        mPullRefreshList = new SwipPullRefreshList<>();
         mPullRefreshList.setPullToRefresh(false);
         mCommunityDetailPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(mCommunityDetailPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
+        mCommunitiesRecycler.addOnScrollListener(new HidingScrollListener(mCommunityDetailPresenter, mCommunitiesRecycler, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-
             }
 
             @Override
@@ -409,7 +659,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
             public void dismissReactions() {
             }
         });
-        ((SimpleItemAnimator) mRecyclerViewDrawerCommunities.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) mCommunitiesRecycler.getItemAnimator()).setSupportsChangeAnimations(false);
     }
 
     private void setupToolBar() {
@@ -453,9 +703,10 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
         upArrow.mutate();
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
+
+        if(getSupportActionBar() == null) return;
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
     private void invalidateBottomBar() {
@@ -466,148 +717,13 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
-                    if (mCommunityFeedSolrObj == null) {
-                        return;
-                    }
-                    if (!mCommunityFeedSolrObj.isMember()) {
-                        onCommunityJoined();
-                    }
-                    refreshCurrentFragment();
-                    break;
-
-                case AppConstants.REQUEST_CODE_FOR_CHALLENGE_DETAIL:
-                    refreshCurrentFragment();
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL:
-                    this.finish();
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL:
-                    Parcelable parcelableArticlePost = data.getParcelableExtra(AppConstants.HOME_FRAGMENT);
-                    ArticleSolrObj articleSolrObj = null;
-                    if (parcelableArticlePost != null && Parcels.unwrap(parcelableArticlePost) instanceof ArticleSolrObj) {
-                        articleSolrObj = Parcels.unwrap(parcelableArticlePost);
-                    }
-                    if (articleSolrObj != null) {
-                        invalidateItem(articleSolrObj);
-                    }
-                    break;
-
-                case AppConstants.REQUEST_CODE_FOR_POST_DETAIL:
-                    boolean isPostDeleted = false;
-                    FeedDetail feedDetail = null;
-                    Parcelable parcelableFeedObj = data.getParcelableExtra(FeedDetail.FEED_COMMENTS);
-                    if (parcelableFeedObj != null) {
-                        feedDetail = Parcels.unwrap(parcelableFeedObj);
-                        isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
-                    }
-                    if (feedDetail == null) {
-                        break;
-                    }
-                    if (isPostDeleted) {
-                        notifyAllItemRemoved(feedDetail);
-                    } else {
-                        invalidateItem(feedDetail);
-                    }
-            }
-        } else if (resultCode == AppConstants.RESULT_CODE_FOR_DEACTIVATION) {
-            refreshCurrentFragment();
-        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
-            Parcelable parcelable = data.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
-            if (parcelable != null) {
-                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
-                refreshAtPosition(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
-            }
-        }
-    }
-
-    //refresh post at a specific position
-    public void refreshAtPosition(FeedDetail feedDetail, long id) {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            Fragment fragment = mAdapter.getItem(i);
-            if (fragment instanceof FeedFragment) {
-                if (fragment.isVisible()) {
-                    ((FeedFragment) fragment).findPositionAndUpdateItem(feedDetail, id);
-                }
-            }
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_community, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        MenuItem menuItem = menu.findItem(R.id.share);
-        menuItem.getIcon().mutate();
-        menuItem.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-        MenuItem item = menu.findItem(R.id.nav_communities);
-        item.getIcon().mutate();
-        item.getIcon().setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
-            mDrawer.closeDrawer(GravityCompat.END);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
-            case R.id.leave_join:
-                boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
-                if (isOwnerOrMember) {
-                    onLeaveClicked();
-                } else {
-                    onJoinClicked();
-                }
-                break;
-            case R.id.share:
-                String deepLinkUrl;
-                if (mCommunityFeedSolrObj == null) {
-                    break;
-                }
-                if (StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls())) {
-                    deepLinkUrl = mCommunityFeedSolrObj.getPostShortBranchUrls();
-                } else {
-                    deepLinkUrl = mCommunityFeedSolrObj.getDeepLinkUrl();
-                }
-                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_INVITE_CLICKED, getScreenName(), properties);
-                ShareBottomSheetFragment.showDialog(this, deepLinkUrl, null, deepLinkUrl, SCREEN_LABEL, false, deepLinkUrl, false, true, false, Event.COMMUNITY_INVITE, properties);
-                break;
-            case android.R.id.home:
-                onBackPressed();
-                break;
-            case R.id.nav_communities:
-                mDrawer.openDrawer(GravityCompat.END);
-                break;
-        }
-        return true;
-    }
-
     private void onLeaveClicked() {
-        LoginResponse loginResponse = userPreference.get();
+        LoginResponse loginResponse = mUserPreference.get();
         UserSummary userSummary = loginResponse.getUserSummary();
         RemoveMemberRequest removeMemberRequest = removeMemberRequestBuilder(mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), userSummary.getUserId());
         HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).streamType(mCommunityFeedSolrObj.getStreamType()).name(mCommunityFeedSolrObj.getNameOrTitle()).build();
         AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
-        mCommunityDetailPresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequest);
+        mCommunityDetailPresenter.communityLeft(removeMemberRequest);
     }
 
     private void setupTabLayout() {
@@ -641,7 +757,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                 }
                 position++;
             }
-
         } else {
             for (CommunityTab communityTab : mCommunityFeedSolrObj.communityTabs) {
                 if (mCommunityFeedSolrObj.isMember()) {
@@ -653,7 +768,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                     if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabKey)) {
                         return position;
                     }
-
                 }
                 position++;
             }
@@ -676,52 +790,9 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     private void setupViewPager(final ViewPager viewPager) {
-        mAdapter = new Adapter(getSupportFragmentManager());
-        if (!CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)) {
-            List<CommunityTab> communityTabs = new ArrayList<>();
-            communityTabs = mCommunityFeedSolrObj.communityTabs;
-
-            for (CommunityTab communityTab : communityTabs) {
-                if (communityTab.type.equalsIgnoreCase(TabType.NAVTIVE.getName())) {
-                    FeedFragment feedFragment = new FeedFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable(CommunityTab.COMMUNITY_TAB_OBJ, Parcels.wrap(communityTab));
-                    bundle.putString(FeedFragment.PRIMARY_COLOR, mCommunityFeedSolrObj.communityPrimaryColor);
-                    bundle.putString(FeedFragment.TITLE_TEXT_COLOR, mCommunityFeedSolrObj.titleTextColor);
-                    feedFragment.setArguments(bundle);
-                    mAdapter.addFragment(feedFragment, communityTab.title);
-                    mTabFragments.add(feedFragment);
-                }
-                if (communityTab.type.equalsIgnoreCase(TabType.HTML.getName())) {
-                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(null, communityTab.dataHtml, "", false);
-                    mAdapter.addFragment(webViewFragment, communityTab.title);
-                    mTabFragments.add(webViewFragment);
-                }
-
-                if (communityTab.type.equalsIgnoreCase(TabType.WEB.getName())) {
-                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "", false);
-                    mAdapter.addFragment(webViewFragment, communityTab.title);
-                    mTabFragments.add(webViewFragment);
-                }
-
-                if (communityTab.type.equalsIgnoreCase(TabType.WEB_CUSTOM_TAB.getName())) {
-                    NavigateToWebViewFragment webViewFragment = NavigateToWebViewFragment.newInstance(communityTab.dataUrl, null, "", false, true);
-                    mAdapter.addFragment(webViewFragment, communityTab.title);
-                    mTabFragments.add(webViewFragment);
-                }
-
-                if (communityTab.type.equalsIgnoreCase(TabType.FRAGMENT.getName())) {
-                    if (communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL) || communityTab.dataUrl.equalsIgnoreCase(AppConstants.HELPLINE_URL_COM)) {
-
-                        HelplineFragment helplineFragment = HelplineFragment.createInstance(mCommunityFeedSolrObj.getNameOrTitle());
-                        mAdapter.addFragment(helplineFragment, communityTab.title);
-                        mTabFragments.add(helplineFragment);
-                    }
-                }
-            }
-        }
-
-        viewPager.setAdapter(mAdapter);
+        mCommunityDetailAdapter = new CommunityDetailAdapter(getSupportFragmentManager());
+        mCommunityDetailAdapter.addCommunityTabs(mCommunityFeedSolrObj);
+        viewPager.setAdapter(mCommunityDetailAdapter);
         viewPager.setOffscreenPageLimit(1);
         viewPager.setCurrentItem(getDefaultTabPosition());
         final ViewPager.OnPageChangeListener pageChangeListener;
@@ -732,13 +803,12 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
             @Override
             public void onPageSelected(int position) {
-                if (mCommunityFeedSolrObj == null && mCommunityFeedSolrObj.communityTabs == null && CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)
-                        && mCommunityFeedSolrObj.communityTabs.size() <= position) {
+                if (mCommunityFeedSolrObj == null || mCommunityFeedSolrObj.communityTabs == null || CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)
+                        || mCommunityFeedSolrObj.communityTabs.size() <= position) {
                     return;
                 }
                 CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
-                HashMap<String, Object> properties =
-                        new EventProperty.Builder()
+                HashMap<String, Object> properties = new EventProperty.Builder()
                                 .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
                                 .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
                                 .title(mCommunityFeedSolrObj.getNameOrTitle())
@@ -761,7 +831,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -793,148 +862,24 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         });
     }
 
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    public void startProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void stopProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
-    @Override
-    public void onCommunityJoined() {
-        mCommunityFeedSolrObj.setMember(true);
-        invalidateBottomBar();
-    }
-
-    @Override
-    public void onCommunityLeft() {
-        mCommunityFeedSolrObj.setMember(false);
-        invalidateBottomBar();
-    }
-
-    @Override
-    public boolean shouldTrackScreen() {
-        return true;
-    }
-
-    @Override
-    protected boolean trackScreenTime() {
-        return true;
-    }
-
-    @Override
-    protected Map<String, Object> getExtraPropertiesToTrack() {
-        final EventProperty.Builder builder = new EventProperty.Builder();
-        if (mCommunityFeedSolrObj != null) {
-            builder.title(mCommunityFeedSolrObj.getNameOrTitle())
-                    .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                    .streamType(mCommunityFeedSolrObj.getStreamType())
-                    .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()));
-        }
-
-        HashMap<String, Object> properties = builder.build();
-        return properties;
-    }
-
-    @Override
-    public void setCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
-        if (CommonUtil.isNotEmpty(streamType)) {
-            communityFeedSolrObj.setStreamType(streamType);
-        }
-        mCommunityFeedSolrObj = communityFeedSolrObj;
-
-        //Auto join Community if its coming through ads for new users
-        boolean isOwnerOrMember = mCommunityFeedSolrObj.isMember() || mCommunityFeedSolrObj.isOwner();
-        if (isFromAds && !isOwnerOrMember) {
-            onJoinClicked();
-        }
-
-        initializeLayout();
-    }
-
-    @Override
-    public void showMyCommunities(FeedResponsePojo myCommunityResponse) {
-        List<FeedDetail> feedDetailList = myCommunityResponse.getFeedDetails();
-        pbCommunitiesDrawer.setVisibility(View.GONE);
-        if (StringUtil.isNotEmptyCollection(feedDetailList) && mMyCommunitiesAdapter != null) {
-            mPageNo = mFragmentListRefreshData.getPageNo();
-            mFragmentListRefreshData.setPageNo(++mPageNo);
-            mPullRefreshList.allListData(feedDetailList);
-
-            List<FeedDetail> data = null;
-            FeedDetail feedProgressBar = new FeedDetail();
-            feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-            data = mPullRefreshList.getFeedResponses();
-            int position = data.size() - feedDetailList.size();
-            if (position > 0) {
-                data.remove(position - 1);
-            }
-            data.add(feedProgressBar);
-
-            mMyCommunitiesAdapter.setData(data);
-            mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
-
-        } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
-            List<FeedDetail> data = mPullRefreshList.getFeedResponses();
-            data.remove(data.size() - 1);
-            mMyCommunitiesAdapter.notifyDataSetChanged();
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-        if (popupWindowInviteFriendTooTip != null && popupWindowInviteFriendTooTip.isShowing()) {
-            popupWindowInviteFriendTooTip.dismiss();
-        }
-        super.onDestroy();
-    }
-
-    public void invalidateItem(FeedDetail feedDetail) {
-        if (mAdapter != null) {
-            for (int i = 0; i < mAdapter.getCount(); i++) {
-                Fragment fragment = mAdapter.getItem(i);
+    public void invalidateItem(FeedDetail feedDetail, boolean isRemoved) {
+        if (mCommunityDetailAdapter != null) {
+            for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
+                Fragment fragment = mCommunityDetailAdapter.getItem(i);
                 if (fragment instanceof FeedFragment) {
-                    ((FeedFragment) fragment).updateItem(feedDetail);
+                    if(isRemoved) {
+                        ((FeedFragment) fragment).removeItem(feedDetail);
+                    } else {
+                        ((FeedFragment) fragment).updateItem(feedDetail);
+                    }
                 }
             }
         }
     }
 
-    public void notifyAllItemRemoved(FeedDetail feedDetail) {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            Fragment fragment = mAdapter.getItem(i);
-            if (fragment instanceof FeedFragment) {
-                ((FeedFragment) fragment).removeItem(feedDetail);
-            }
-        }
-    }
-
     private void refreshCurrentFragment() {
-        for (int i = 0; i < mAdapter.getCount(); i++) {
-            Fragment fragment = mAdapter.getItem(i);
+        for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
+            Fragment fragment = mCommunityDetailAdapter.getItem(i);
             if (fragment instanceof FeedFragment) {
                 if (fragment.isVisible()) {
                     ((FeedFragment) fragment).refreshList();
@@ -963,53 +908,21 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
+    //endregion instance method
 
-    static class Adapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragments = new ArrayList<>();
-        private final List<String> mFragmentTitles = new ArrayList<>();
-
-        public Adapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragments.add(fragment);
-            mFragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitles.get(position);
-        }
-    }
-
+    //region onclick methods
     @OnClick({R.id.bottom_bar, R.id.btn_bottom_bar})
     public void onJoinClicked() {
         if (mCommunityFeedSolrObj == null) {
             return;
         }
-        if (mCommunityFeedSolrObj.isClosedCommunity()) {
-            mCommunityFeedSolrObj.setFromHome(true);
-            feedUtils.showCommunityJoinReason(mCommunityFeedSolrObj, this);
-            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-        } else {
-            if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
-                List<Long> userIdList = new ArrayList();
-                userIdList.add(userPreference.get().getUserSummary().getUserId());
-                HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();
-                AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
-                mCommunityDetailPresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
-            }
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            List<Long> userIdList = new ArrayList<>();
+            userIdList.add(mUserPreference.get().getUserSummary().getUserId());
+            HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant())).name(mCommunityFeedSolrObj.getNameOrTitle()).streamType(mCommunityFeedSolrObj.getStreamType()).build();
+            AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
+            mCommunityDetailPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
     }
 
@@ -1041,12 +954,5 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
             }
         }
     }
-
-    public String getCommunityId() {
-        if (mCommunityFeedSolrObj == null) {
-            return "";
-        } else {
-            return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
-        }
-    }
+    //endregion
 }

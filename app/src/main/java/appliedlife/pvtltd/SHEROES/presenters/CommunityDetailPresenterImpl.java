@@ -3,11 +3,9 @@ package appliedlife.pvtltd.SHEROES.presenters;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.gson.Gson;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -15,144 +13,117 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import io.reactivex.observers.DisposableObserver;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityDetailView;
-import io.reactivex.Observable;
-import io.reactivex.functions.Function;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
+import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.getCommentRequestBuilder;
 
 /**
  * Created by ujjwal on 27/12/17.
  */
 
-public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetailView>{
+public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetailView> {
 
-    SheroesAppServiceApi sheroesAppServiceApi;
-    SheroesApplication mSheroesApplication;
+    //region member variables
+    private SheroesAppServiceApi sheroesAppServiceApi;
+    private SheroesApplication mSheroesApplication;
+    //endregion member variables
 
+    //region injected variables
     @Inject
     AppUtils mAppUtils;
+    //endregion injected variables
+
+    //region constructor
     @Inject
     public CommunityDetailPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
         this.mSheroesApplication = sheroesApplication;
     }
+    //endregion constructor
 
-    public void communityJoinFromPresenter(CommunityRequest communityRequest) {
+    //region public methods
+    public void joinCommunity(CommunityRequest communityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
             getMvpView().stopProgressBar();
             return;
         }
         getMvpView().startProgressBar();
-        communityJoinFromModel(communityRequest).subscribe(new DisposableObserver<CommunityResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
-
-            }
-
-            @Override
-            public void onNext(CommunityResponse communityResponse) {
-                getMvpView().stopProgressBar();
-                if(communityResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
-                    getMvpView().onCommunityJoined();
-                }
-            }
-        });
-
-    }
-
-    public Observable<CommunityResponse> communityJoinFromModel(CommunityRequest communityRequest) {
-        return sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Function<CommunityResponse, CommunityResponse>() {
-                    @Override
-                    public CommunityResponse apply(CommunityResponse communityResponse) {
-                        return communityResponse;
-                    }
-                })
+        sheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<CommunityResponse>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                    }
+
+                    @Override
+                    public void onNext(CommunityResponse communityResponse) {
+                        getMvpView().stopProgressBar();
+                        if (communityResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onCommunityJoined();
+                        }
+                    }
+                });
     }
 
-    public void leaveCommunityAndRemoveMemberToPresenter(RemoveMemberRequest removeMemberRequest) {
+    public void communityLeft(RemoveMemberRequest removeMemberRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
         getMvpView().startProgressBar();
-        removeMember(removeMemberRequest)
+        sheroesAppServiceApi.removeMember(removeMemberRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<MemberListResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<MemberListResponse>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().showError(e.getMessage(), ERROR_MEMBER);
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onNext(MemberListResponse memberListResponse) {
-                getMvpView().stopProgressBar();
-                if(memberListResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)){
-                    getMvpView().onCommunityLeft();
-                }
-            }
-        });
-
-    }
-
-    public Observable<MemberListResponse> removeMember(RemoveMemberRequest removeMemberRequest){
-        return sheroesAppServiceApi.removeMember(removeMemberRequest)
-                .map(new Function<MemberListResponse, MemberListResponse>() {
                     @Override
-                    public MemberListResponse apply(MemberListResponse memberListResponse) {
-                        return memberListResponse;
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
                     }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_MEMBER);
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onNext(MemberListResponse memberListResponse) {
+                        getMvpView().stopProgressBar();
+                        if (memberListResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onCommunityLeft();
+                        }
+                    }
+                });
+    }
 
     public void fetchCommunity(String communityId) {
-        if(!TextUtils.isDigitsOnly(communityId)) return;
-        FeedRequestPojo feedRequestPojo =mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, 1, Long.valueOf(communityId));
+        if (!TextUtils.isDigitsOnly(communityId)) return;
+        FeedRequestPojo feedRequestPojo = mAppUtils.userCommunityDetailRequestBuilder(AppConstants.FEED_COMMUNITY, 1, Long.valueOf(communityId));
         getFeedFromPresenter(feedRequestPojo);
     }
 
@@ -162,42 +133,29 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
-                getMvpView().stopProgressBar();
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
-
-            }
-
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                if (null != feedResponsePojo && feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                    getMvpView().setCommunity((CommunityFeedSolrObj)feedResponsePojo.getFeedDetails().get(0));
-                }
-            }
-        });
-
-    }
-
-
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
-                    }
-                })
+        sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        if (null != feedResponsePojo && feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().setCommunity((CommunityFeedSolrObj) feedResponsePojo.getFeedDetails().get(0));
+                        }
+                    }
+                });
     }
 
     public void fetchMyCommunities(MyCommunityRequest myCommunityRequest) {
@@ -208,29 +166,26 @@ public class CommunityDetailPresenterImpl extends BasePresenter<ICommunityDetail
         sheroesAppServiceApi.getMyCommunityFromApi(myCommunityRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
-                .observeOn(AndroidSchedulers.mainThread()).subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
 
-            }
+                    @Override
+                    public void onComplete() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
+                    }
 
-                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
-
-            }
-
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-
-                if (null != feedResponsePojo) {
-                    getMvpView().showMyCommunities(feedResponsePojo);
-                }
-            }
-        });
-
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        if (null != feedResponsePojo) {
+                            getMvpView().showMyCommunities(feedResponsePojo);
+                        }
+                    }
+                });
     }
-    //endregion
+    //endregion public methods
 }

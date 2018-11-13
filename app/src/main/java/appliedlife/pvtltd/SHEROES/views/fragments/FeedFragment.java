@@ -35,7 +35,6 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
@@ -52,7 +51,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -92,7 +90,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -441,7 +438,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void invalidateItem(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
-            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail);
+            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, false);
         } else {
             updateItem(feedDetail);
         }
@@ -539,7 +536,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
-            ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
+            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, true);
         } else {
             removeItem(feedDetail);
         }

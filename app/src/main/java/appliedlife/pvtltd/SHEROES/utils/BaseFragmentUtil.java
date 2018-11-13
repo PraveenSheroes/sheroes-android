@@ -92,12 +92,7 @@ public class BaseFragmentUtil {
     public void joinInviteResponse(Context context, GenericRecyclerViewAdapter adapter, LinearLayoutManager layoutManager, FeedDetail mFeedDetail, String screenName, BaseResponse baseResponse) {
         switch (baseResponse.getStatus()) {
             case AppConstants.SUCCESS:
-                if (((CommunityFeedSolrObj) mFeedDetail).isClosedCommunity()) {
-                    ((CommunityFeedSolrObj) mFeedDetail).setRequestPending(true);
-
-                } else {
-                    ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
-                }
+                ((CommunityFeedSolrObj) mFeedDetail).setMember(true);
                 commentListRefresh(adapter, layoutManager, mFeedDetail, ACTIVITY_FOR_REFRESH_FRAGMENT_LIST);
                 HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(mFeedDetail.getIdOfEntityOrParticipant())).name(mFeedDetail.getNameOrTitle()).build();
                 AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, screenName, properties);
