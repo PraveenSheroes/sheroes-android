@@ -57,7 +57,8 @@
                 android:background="@drawable/incoming_shap"
                 android:orientation="vertical"
                 android:shadowColor="@color/green"
-                android:padding="@dimen/helpline_qa_padding">
+                android:padding="@dimen/helpline_qa_padding"
+                android:layout_marginRight="@dimen/helpline_ans_margin">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/attendant"

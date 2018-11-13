@@ -540,7 +540,8 @@
     <dimen name="bottom_sheet_line_height">1dp</dimen>
     <dimen name="helpline_outer_layout_padding">12dp</dimen>
     <dimen name="helpline_card_corner_radius">2dp</dimen>
-    <dimen name="helpline_margin">16dp</dimen>
+    <dimen name="helpline_ans_margin">56dp</dimen>
+    <dimen name="helpline_margin">70dp</dimen>
     <dimen name="help_card_min_height">10dp</dimen>
     <dimen name="helpline_time_text_size">10sp</dimen>
     <dimen name="helpline_time_marginRight">16dp</dimen>
