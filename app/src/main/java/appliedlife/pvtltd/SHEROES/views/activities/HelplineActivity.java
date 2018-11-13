@@ -60,7 +60,6 @@ public class HelplineActivity extends BaseActivity implements BaseHolderInterfac
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        Toast.makeText(this,"handleonclick",Toast.LENGTH_SHORT).show();
         HelplineFragment helplineFragment = (HelplineFragment)getSupportFragmentManager().findFragmentByTag(TAG);
         if (helplineFragment != null && helplineFragment.isVisible()) {
             helplineFragment.handleOnClick(baseResponse, view);

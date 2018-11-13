@@ -538,7 +538,7 @@
     <dimen name="anonymous_select_text_size">14sp</dimen>
     <dimen name="suggestion_list_height">150dp</dimen>
     <dimen name="bottom_sheet_line_height">1dp</dimen>
-    <dimen name="helpline_outer_layout_padding">5dp</dimen>
+    <dimen name="helpline_outer_layout_padding">12dp</dimen>
     <dimen name="helpline_card_corner_radius">2dp</dimen>
     <dimen name="helpline_margin">16dp</dimen>
     <dimen name="help_card_min_height">10dp</dimen>
@@ -676,8 +676,7 @@
     <dimen name="counselor_image_size">44dp</dimen>
     <dimen name="helpline_rateus_title_textsize">18sp</dimen>
     <dimen name="helpline_rateus_body_textsize">14sp</dimen>
-    <dimen name="helpline_notnow_background_padding">8dp</dimen>
-    <dimen name="helpline_notnow_background_radius">4dp</dimen>
+    <dimen name="helpline_button_background_radius">4dp</dimen>
     <dimen name="helpline_rateusImage_height">170dp</dimen>
     <dimen name="helpline_rateusImage_width">198dp</dimen>
     <dimen name="helpline_rateusImage_paddingBottom">29dp</dimen>
@@ -697,5 +696,9 @@
     <dimen name="follow_btn_height">30dp</dimen>
     <dimen name="follow_btn_marginright">16dp</dimen>
     <dimen name="imagesize_unfollow_dialog">87dp</dimen>
+    <dimen name="helpline_rating_padding_top_bottom">12dp</dimen>
+    <dimen name="helpline_rating_padding_right_left">24dp</dimen>
+    <dimen name="chat_voice_icon_padding">8dp</dimen>
+
 </resources>
 

@@ -53,6 +53,9 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
     @Bind(R.id.not_now)
     Button notNow;
 
+    @Bind(R.id.attendant)
+    TextView attendant;
+
     @BindDimen(R.dimen.counselor_image_size)
     int counselorImageSize;
 
@@ -80,10 +83,13 @@ public class HelplineAnswerCardHolder extends HelplineViewHolder<HelplineChatDoc
             String time = dataItem.getFormatedDate().substring(AppConstants.HELPLINE_TIME_START);
             answerTime.setText(time);
         }
-        if (helplineChatDoc.getSolrIgnoreParticipantAttendantName() != null) {  //mentor image icon
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getSolrIgnoreParticipantAttendantImageUrl())) {  //mentor image icon
             counselorImage.setCircularImage(true);
-            String AttendantImageUrl = CommonUtil.getThumborUri(helplineChatDoc.getSolrIgnoreParticipantAttendantName(), counselorImageSize, counselorImageSize);
+            String AttendantImageUrl = CommonUtil.getThumborUri(helplineChatDoc.getSolrIgnoreParticipantAttendantImageUrl(), counselorImageSize, counselorImageSize);
             counselorImage.bindImage(AttendantImageUrl);
+        }
+        if (StringUtil.isNotNullOrEmptyString(dataItem.getSolrIgnoreParticipantAttendantName())) {
+            attendant.setText(helplineChatDoc.getSolrIgnoreParticipantAttendantName());
         }
         setDate(prevObj, helplineChatDoc, position);
 

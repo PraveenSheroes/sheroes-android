@@ -1,11 +1,9 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <solid android:color="@color/on_board_work" />
-    <padding
-        android:bottom="@dimen/helpline_rating_padding_top_bottom"
-        android:left="@dimen/helpline_rating_padding_right_left"
-        android:right="@dimen/helpline_rating_padding_right_left"
-        android:top="@dimen/helpline_rating_padding_top_bottom" />
+    <solid android:color="@color/background_color_link_card"/>
+    <stroke
+        android:width="@dimen/dp_size_1"
+        android:color="#dcdcdc"/>
     <corners
         android:bottomLeftRadius="@dimen/helpline_button_background_radius"
         android:bottomRightRadius="@dimen/helpline_button_background_radius"

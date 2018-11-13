@@ -16,13 +16,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -42,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
@@ -85,10 +83,10 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
     ProgressBar mProgressBar;
     @Bind(R.id.et_question_chat)
     EditText questionText;
-    @Bind(R.id.btn_chat_send)
-    Button sendChatButton;
-    @Bind(R.id.btn_chat_voice)
-    Button chatVoiceButton;
+    @Bind(R.id.iv_chat_send)
+    ImageView sendChat;
+    @Bind(R.id.iv_chat_voice)
+    ImageView chatVoice;
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -119,7 +117,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
-        sendChatButton.setVisibility(View.GONE);
+        sendChat.setVisibility(View.GONE);
 
         if(getArguments()!=null) {
            sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
@@ -142,15 +140,15 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
             public void onGlobalLayout() {
                 if (!keyboardShown(questionText.getRootView())) {
                     if(questionText.getText().toString().length()!=0){
-                        sendChatButton.setVisibility(View.VISIBLE);
-                        chatVoiceButton.setVisibility(View.GONE);
+                        sendChat.setVisibility(View.VISIBLE);
+                        chatVoice.setVisibility(View.GONE);
                     } else {
-                        sendChatButton.setVisibility(View.GONE);
-                        chatVoiceButton.setVisibility(View.VISIBLE);
+                        sendChat.setVisibility(View.GONE);
+                        chatVoice.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    sendChatButton.setVisibility(View.VISIBLE);
-                    chatVoiceButton.setVisibility(View.GONE);
+                    sendChat.setVisibility(View.VISIBLE);
+                    chatVoice.setVisibility(View.GONE);
                 }
             }
         });
@@ -158,12 +156,12 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         return view;
     }
 
-    @OnClick(R.id.btn_chat_send)
+    @OnClick(R.id.iv_chat_send)
     public void sendQuestionText() {
         String text = questionText.getText().toString();
         if (StringUtil.isNotNullOrEmptyString(text)) {
             text = text.trim();
-            sendChatButton.setEnabled(false);
+            sendChat.setEnabled(false);
             mHelplinePresenter.postQuestionHelpline(AppUtils.helplineQuestionBuilder(text));
         } else {
             Toast.makeText(getContext(), R.string.helpline_msg, Toast.LENGTH_SHORT).show();
@@ -171,7 +169,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_MESSAGE, GoogleAnalyticsEventActions.SENT_A_HELPLINE_MESSAGE, AppConstants.EMPTY_STRING);
     }
 
-    @OnClick(R.id.btn_chat_voice)
+    @OnClick(R.id.iv_chat_voice)
     public void speechToText() {
         promptSpeechInput();
     }
@@ -263,7 +261,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
 
     @Override
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
-        sendChatButton.setEnabled(true);
+        sendChat.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             HashMap<String, Object> screenProperties = null;
             if (sourceScreen != null) {
@@ -338,7 +336,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg,feedParticipationEnum);
-        sendChatButton.setEnabled(true);
+        sendChat.setEnabled(true);
            }
 
     @Override
@@ -373,15 +371,15 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > 0) {
                     if (!keyboardShown(questionText.getRootView())) {
                         if(questionText.getText().toString().length()!=0){
-                            sendChatButton.setVisibility(View.VISIBLE);
-                            chatVoiceButton.setVisibility(View.GONE);
+                            sendChat.setVisibility(View.VISIBLE);
+                            chatVoice.setVisibility(View.GONE);
                         } else {
-                            sendChatButton.setVisibility(View.GONE);
-                            chatVoiceButton.setVisibility(View.VISIBLE);
+                            sendChat.setVisibility(View.GONE);
+                            chatVoice.setVisibility(View.VISIBLE);
                         }
                     } else {
-                        sendChatButton.setVisibility(View.VISIBLE);
-                        chatVoiceButton.setVisibility(View.GONE);
+                        sendChat.setVisibility(View.VISIBLE);
+                        chatVoice.setVisibility(View.GONE);
                     }
                 }
             }

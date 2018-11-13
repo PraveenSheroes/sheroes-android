@@ -160,6 +160,7 @@
     <color name="background_color_link_card">#f5f5f5</color>
     <color name="community_tab_indicator_color">#3c3c3c</color>
     <color name="helpline_background">#f5f5f5</color>
-    <color name="helpline_answer_text">#deffffff</color>
+    <color name="helpline_question_text">#deffffff</color>
+    <color name="helpline_user_link">#deffffff</color>
 
 </resources>

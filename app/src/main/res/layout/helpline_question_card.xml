@@ -42,7 +42,6 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="80dp"
-                android:layout_marginRight="@dimen/dp_size_16"
                 android:background="@drawable/outgoing_shap"
                 android:orientation="vertical"
                 android:shadowColor="@color/green"
@@ -61,14 +60,10 @@
                     android:longClickable="true"
                     android:minHeight="@dimen/help_card_min_height"
                     android:textAllCaps="false"
-                    android:textColor="@color/comment_text"
-                    android:textColorLink="@color/view_more"
+                    android:textColor="@color/helpline_question_text"
+                    android:textColorLink="@color/helpline_question_text"
                     android:textIsSelectable="true"
-                    android:textSize="@dimen/dp_size_16" />
-                    android:textAllCaps="false"
-                    android:textColor="@color/comment_text"
-                    android:textColorLink="@color/view_more"
-                    android:textIsSelectable="true"
+                    android:textSize="@dimen/dp_size_16"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
@@ -80,7 +75,7 @@
                     android:gravity="right"
                     android:layout_gravity="right"
                     android:maxLines="@integer/int_value_for_line_1"
-                    android:textColor="@color/helpline_text_time_color"
+                    android:textColor="@color/helpline_question_text"
                     android:textSize="@dimen/helpline_time_text_size"
                     vernacular:customTextFontFamily="@string/regular_font"/>
 

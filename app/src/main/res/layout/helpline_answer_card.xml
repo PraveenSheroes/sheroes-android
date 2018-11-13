@@ -60,6 +60,16 @@
                 android:padding="@dimen/dp_size_16">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    android:id="@+id/attendant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|center_horizontal"
+                    android:textAllCaps="false"
+                    android:textColor="@color/gray_light"
+                    style="@style/TextView12spRegular"
+                    vernacular:customTextFontFamily="@string/regular_font" />
+
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/answer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,7 +80,7 @@
                     android:longClickable="true"
                     android:minHeight="@dimen/help_card_min_height"
                     android:textAllCaps="false"
-                    android:textColor="@color/helpline_answer_text"
+                    android:textColor="@color/comment_text"
                     android:textColorLink="@color/view_more"
                     android:textIsSelectable="true"
                     vernacular:customTextFontFamily="@string/regular_font" />
@@ -82,7 +92,7 @@
                     android:layout_below="@+id/LinearLayout2"
                     android:layout_marginTop="@dimen/helpline_time_marginTop"
                     android:textAllCaps="false"
-                    android:textColor="@color/helpline_answer_text"
+                    android:textColor="@color/helpline_text_time_color"
                     android:textSize="@dimen/helpline_time_text_size"
                     android:gravity="right"
                     android:layout_gravity="right"
@@ -90,7 +100,6 @@
                     android:maxLines="@integer/int_value_for_line_1"/>
 
             </LinearLayout>
-
         </RelativeLayout>
 
     </LinearLayout>
@@ -101,12 +110,15 @@
         android:orientation="vertical">
 
         <ImageView
-            android:layout_width="@dimen/helpline_rateusImage_width"
-            android:layout_height="@dimen/helpline_rateusImage_height"
-            android:paddingBottom="@dimen/helpline_rateusImage_paddingBottom"
-            android:paddingTop="@dimen/helpline_rateusImage_paddingTop"
+            android:minWidth="@dimen/helpline_rateusImage_width"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/helpline_rateusImage_height"
+            android:layout_marginBottom="@dimen/helpline_rateusImage_paddingBottom"
+            android:layout_marginTop="@dimen/helpline_rateusImage_paddingTop"
             android:layout_gravity="center"
-            android:src="@drawable/ic_rateus" />
+            android:src="@drawable/ic_rateus"
+            android:scaleType="fitCenter" />
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:layout_width="match_parent"
@@ -140,10 +152,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/helpline_rateusButton_marginRight"
-                android:background="@drawable/rectangle_text_poll_active"
+                android:background="@drawable/rectangle_helpline_rate_us"
                 android:text="@string/rate_us"
                 android:textAllCaps="true"
-                android:textColor="@color/helpline_answer_text" />
+                android:textColor="@color/helpline_question_text" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                 android:id="@+id/not_now"
