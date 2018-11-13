@@ -107,8 +107,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
@@ -172,17 +172,20 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
 public class HomeActivity extends BaseActivity implements BaseHolderInterface, MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
+    // region Constants
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
-    private static final int APP_BAR_ELEVATION = 10;
     private static final String MORE_TOP_ICON = "More Top Icon";
+    //endregion
 
     // region inject variables
+
     @Inject
     Preference<AppConfiguration> mConfiguration;
+
     @Inject
     Preference<AppStatus> mInstallUpdatePreference;
 
@@ -200,16 +203,16 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     boolean doubleBackToExitPressedOnce = false;
 
     @Inject
-    MainActivityPresenter activityDataPresenter;
+    MainActivityPresenter mActivityDataPresenter;
 
     @Inject
     AppUtils mAppUtils;
 
     @Inject
-    LogOutUtils logOutUtils;
+    LogOutUtils mLogOutUtils;
 
     @Inject
-    FeedUtils feedUtils;
+    FeedUtils mFeedUtils;
     //endregion
 
     // region View variables
@@ -324,13 +327,13 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     // endregion
 
     // region member variables
+
     private GenericRecyclerViewAdapter mAdapter;
     private List<ArticleCategory> mArticleCategoryItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustiomActionBarToggle mCustiomActionBarToggle;
     private FeedDetail mFeedDetail;
-    private long mChallengeId;
     private String mHelpLineChat;
     private ProgressDialog mProgressDialog;
     private boolean isInviteReferral;
@@ -354,7 +357,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        activityDataPresenter.attachView(this);
+        mActivityDataPresenter.attachView(this);
         mHomePresenter.attachView(this);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
             isSheUser = mUserPreference.get().isSheUser();
@@ -429,9 +432,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mFragmentOpen = new FragmentOpen();
         setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
-            if (getIntent().getExtras().get(AppConstants.CHALLENGE_ID) != null) {
-                mChallengeId = getIntent().getExtras().getLong(AppConstants.CHALLENGE_ID);
-            }
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
@@ -440,7 +440,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 initHomeViewPagerAndTabs();
             }
         }
-        feedUtils.setConfigurableShareOption(isWhatsAppShare());
+        mFeedUtils.setConfigurableShareOption(isWhatsAppShare());
     }
 
     public void showCaseDesign() {
@@ -465,19 +465,19 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mTvNewTag.setText(R.string.new_tag);
         mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
         mICSheroes.setVisibility(View.VISIBLE);
-        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+        mActivityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_DRAWER, AppConstants.NO_REACTION_CONSTANT);
         pbCommunitiesDrawer.setVisibility(View.VISIBLE);
         mRecyclerViewDrawerCommunities.setVisibility(View.GONE);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
-        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mActivityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        activityDataPresenter.detachView();
+        mActivityDataPresenter.detachView();
     }
 
     public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
@@ -538,7 +538,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     public void logOut() {
         AnalyticsManager.initializeMixpanel(HomeActivity.this);
-        logOutUtils.logOutUser(getScreenName(), this);
+        mLogOutUtils.logOutUser(getScreenName(), this);
     }
 
     @Override
@@ -551,7 +551,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         } else if (baseResponse instanceof Comment) {
             setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
+            mFeedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
 //            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
         } else if (baseResponse instanceof FAQS) {
             Fragment fragment = getSupportFragmentManager().findFragmentByTag(FAQSFragment.class.getName());
@@ -1149,7 +1149,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     @Override
     protected SheroesPresenter getPresenter() {
-        return activityDataPresenter;
+        return mActivityDataPresenter;
     }
 
     @Override
@@ -1381,7 +1381,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mRecyclerView.setAdapter(mAdapter);
 
         //For navigation drawer items
-        activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
+        mActivityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
 
 
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
@@ -1393,8 +1393,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         pbCommunitiesDrawer.setVisibility(View.VISIBLE);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
-        activityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(activityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
+        mActivityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mRecyclerViewDrawerCommunities.addOnScrollListener(new HidingScrollListener(mActivityDataPresenter, mRecyclerViewDrawerCommunities, gridLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
 
@@ -1596,7 +1596,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     String ChallengeId = challengeUrl;
                     byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
                     String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
-                    mChallengeId = Long.parseLong(newChallengeId);
                     homeOnClick();
                 }
             } catch (UnsupportedEncodingException e) {
@@ -1722,7 +1721,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
                 setAllValues(mFragmentOpen);
-                feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
+                mFeedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
         }
 
     }
