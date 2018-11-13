@@ -86,8 +86,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;

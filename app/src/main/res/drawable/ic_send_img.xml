@@ -1,12 +1,4 @@
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="21dp"
-    android:viewportWidth="21"
-    android:viewportHeight="18">
-  <path
-      android:pathData="M0.01,18L21,9 0.01,0 0,7l15,2 -15,2z"
-      android:strokeAlpha="0.31"
-      android:fillColor="#DC4541"
-      android:fillType="evenOdd"
-      android:fillAlpha="0.31"/>
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <item android:drawable="@drawable/ic_message_sent" />
+</selector>

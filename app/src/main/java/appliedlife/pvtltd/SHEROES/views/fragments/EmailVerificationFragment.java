@@ -21,8 +21,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.ResponseStatus;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;

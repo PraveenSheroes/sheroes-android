@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;

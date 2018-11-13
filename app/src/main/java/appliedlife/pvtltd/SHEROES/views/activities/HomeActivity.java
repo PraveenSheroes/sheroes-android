@@ -1877,7 +1877,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openHelplineFragment() {
-        Intent helplineIntent = new Intent(this,HelplineActivity.class);
+        Intent helplineIntent = new Intent(this, HelplineActivity.class);
         startActivity(helplineIntent);
     }
 

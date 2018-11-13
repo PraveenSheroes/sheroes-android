@@ -362,7 +362,11 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (questionText.getText().toString().length() != 0) {
+                    sendChat.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
+                } else {
+                    sendChat.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
+                }
             }
 
             @Override
