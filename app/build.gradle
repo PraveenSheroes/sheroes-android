@@ -105,7 +105,9 @@ android {
             signingConfig signingConfigs.debug
             ext.crashlyticsApiSecret = "c8e9927007c169ba7b17261a41984f3d63d39fe5cda3e9c42234990e04cec4ae"
             ext.crashlyticsApiKey = "6f53a2cf9e2249594beb5d245e04eb8094f6a56e"
-            manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61", cleverTapSenderId: "id:409228886131"]
+           // manifestPlaceholders = [branchTestMode: true, cleverTapAccountID: "TEST-Z67-588-8R5Z", CleverTapToken: "TEST-bb5-a61", cleverTapSenderId: "id:409228886131"]
+            manifestPlaceholders = [branchTestMode: false, cleverTapAccountID: "W67-588-8R5Z", CleverTapToken: "bb5-a60", cleverTapSenderId: "id:409228886131"]
+
             buildConfigField 'String', 'GIT_SHA', "\"${commitSha()}\""
             buildConfigField 'String', 'BUILD_TIME', "\"${commitTime()}\""
             buildConfigField 'String', 'IMPRESSION_URL', "\"http://testevents.sheroes.in:8080/\""
@@ -194,7 +196,7 @@ dependencies {
     implementation('com.jakewharton:butterknife:7.0.1')
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.support:customtabs:27.1.1'
-    implementation 'io.branch.sdk.android:library:2.16.0'
+    implementation 'io.branch.sdk.android:library:2.19.5'
     implementation 'com.android.support.constraint:constraint-layout:1.1.3'
     testImplementation 'junit:junit:4.12'
     // required if you want to use Mockito for unit tests

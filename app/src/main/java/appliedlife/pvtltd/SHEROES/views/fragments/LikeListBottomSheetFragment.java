@@ -115,24 +115,9 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
        // mCommunityPostActivity.showError(s, feedParticipationEnum);
     }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
-
-    //endregion
-
-    //region private methods
     //endregion
 
     //region Public Static methods

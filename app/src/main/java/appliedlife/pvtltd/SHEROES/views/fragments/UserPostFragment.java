@@ -526,11 +526,6 @@ public class UserPostFragment extends BaseFragment {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case SPAM_POST_APPROVE:
@@ -611,11 +606,6 @@ public class UserPostFragment extends BaseFragment {
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick({R.id.tv_retry_for_internet})

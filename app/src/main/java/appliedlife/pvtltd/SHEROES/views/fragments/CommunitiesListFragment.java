@@ -384,11 +384,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     } //todo - move to presenter
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
             noInternet.setVisibility(View.VISIBLE);
@@ -397,11 +392,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
 

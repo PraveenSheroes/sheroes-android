@@ -304,13 +304,4 @@ public class NavigateToWebViewFragment extends BaseFragment {
 
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
 }

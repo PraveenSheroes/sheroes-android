@@ -68,6 +68,7 @@ public class SheroesApplication extends MultiDexApplication {
         File cacheFile = new File(getCacheDir(), "responses");
         mSheroesAppComponent = DaggerSheroesAppComponent.builder().sheroesAppModule(new SheroesAppModule(cacheFile, this)).build();
         setAppComponent(mSheroesAppComponent);
+        Branch.enableLogging();
         Branch.getAutoInstance(this);
         AnalyticsManager.initializeMixpanel(mContext);
         AnalyticsManager.initializeFbAnalytics(mContext);

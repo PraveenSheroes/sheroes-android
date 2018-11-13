@@ -612,11 +612,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
         if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser != -1) {
@@ -853,10 +848,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
     //endregion
 
     //region private methods

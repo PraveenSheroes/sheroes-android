@@ -295,20 +295,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg,feedParticipationEnum);
         sendChatButton.setEnabled(true);
            }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
 
     @Override
     public String getScreenName() {
