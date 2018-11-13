@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingRight="@dimen/dp_size_8">
+    android:paddingRight="@dimen/follow_list_paddingRight">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -75,7 +75,7 @@
                 android:layout_marginTop="@dimen/dp_size_4"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4sp"
-                android:maxLines="@integer/int_value_for_line_1"
+                android:maxLines="@integer/expert_filed_maxlines"
                 android:textColor="#878787"
                 android:textStyle="normal"
                 tools:text="@string/ID_POPULAR"

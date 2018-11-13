@@ -677,5 +677,6 @@
     <dimen name="follow_btn_marginright">16dp</dimen>
     <dimen name="follow_btn_marginleft">12dp</dimen>
     <dimen name="imagesize_unfollow_dialog">87dp</dimen>
+    <dimen name="follow_list_paddingRight">8dp</dimen>
 </resources>
 
