@@ -327,9 +327,6 @@ public enum HolderMapping {
                         }
                     } else {
                         returnView = HELPLINE_CHAT_ANSWER_CARD.ordinal();
-                        /*if (((HelplineChatDoc) item).getRating()) {
-                            returnView = HELPLINE_RATE_US_CARD.ordinal();
-                        } */
                     }
                 } else if (item instanceof ICCMember) {
                     returnView = ICC_MEMBER_CARD.ordinal();
