@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingRight="@dimen/dp_size_8">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -113,7 +114,7 @@
             android:gravity="center"
             android:textAllCaps="true"
             android:textColor="@drawable/selecter_contact_text_color"
-            vernacular:customButtonFontFamily="@string/bold_font" />
+            vernacular:customButtonFontFamily="@string/regular_font" />
 
     </RelativeLayout>
 
