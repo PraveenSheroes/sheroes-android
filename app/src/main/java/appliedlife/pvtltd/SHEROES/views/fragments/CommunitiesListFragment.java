@@ -415,6 +415,5 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
     //endregion
-
 }
 

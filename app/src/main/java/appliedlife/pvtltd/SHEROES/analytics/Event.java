@@ -104,6 +104,12 @@ public enum Event {
             return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
+    HELPLINE_RATEUS_CARD_CLICKED(AnalyticsEventType.HELPLINE_RATEUS, "Clicked"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return getAnalyticsProviderStatus(analyticsProvider);
+        }
+    },
     //endregion
 
     //region Challenge related events

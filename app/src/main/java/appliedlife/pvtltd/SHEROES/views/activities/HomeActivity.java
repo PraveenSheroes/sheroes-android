@@ -1880,15 +1880,8 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
     }
 
     private void openHelplineFragment() {
-        mTitleText.setText("");
-        mICSheroes.setVisibility(View.VISIBLE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
-        HelplineFragment helplineFragment = HelplineFragment.createInstance(AppConstants.helpline_desk);
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        Intent helplineIntent = new Intent(this, HelplineActivity.class);
+        startActivity(helplineIntent);
     }
 
     private void removeItem(FeedDetail feedDetail) {

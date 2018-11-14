@@ -31,9 +31,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeedCommunityPostHolder(view, viewInterface);
         }
-    },
-
-    FEED_ARTICLE(R.layout.feed_article_card_normal) {
+    }, FEED_ARTICLE(R.layout.feed_article_card_normal) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FeedArticleHolder(view, viewInterface);
@@ -122,8 +120,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineQuestionCardHolder(view, viewInterface);
         }
-    },
-    HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
+    }, HELPLINE_CHAT_ANSWER_CARD(R.layout.helpline_answer_card) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HelplineAnswerCardHolder(view, viewInterface);

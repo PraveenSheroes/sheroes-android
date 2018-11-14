@@ -244,7 +244,7 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         }else {
             viewInterface.handleOnClick(userPostSolrObj, liEventCardMainLayout);
         }
-        //  viewInterface.dataOperationOnClick(userPostSolrObj);
+        //  mViewInterface.dataOperationOnClick(userPostSolrObj);
     }
 
     @OnClick(R.id.tv_event_interested_btn)

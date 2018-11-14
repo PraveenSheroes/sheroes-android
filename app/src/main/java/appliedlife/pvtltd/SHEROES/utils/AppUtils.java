@@ -96,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
@@ -2274,5 +2275,12 @@ public class AppUtils {
         languageUpdateRequest.language = language;
         languageUpdateRequest.userId = userId;
         return languageUpdateRequest;
+    }
+
+    public HelplinePostRatingRequest helpLinePostRatingRequestBuilder(boolean isRating, int answerId) {
+        HelplinePostRatingRequest helplinePostRatingRequest = new HelplinePostRatingRequest();
+        helplinePostRatingRequest.setRating(isRating);
+        helplinePostRatingRequest.setAnswerId(answerId);
+        return helplinePostRatingRequest;
     }
 }

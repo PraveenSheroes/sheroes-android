@@ -413,4 +413,5 @@ public class LoginFragment extends BaseFragment implements LoginView {
     public void onBack() {
         getActivity().onBackPressed();
     }
+
 }

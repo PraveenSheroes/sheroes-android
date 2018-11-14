@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="int_value_for_line_1">1</integer>
+  <integer name="int_value_for_line_1">1</integer>
   <integer name="poll_type_holder_max_line">1</integer>
   <integer name="int_value_for_line_2">2</integer>
   <integer name="int_value_for_line_3">3</integer>
@@ -11,17 +11,15 @@
   <integer name="poll_input_option_char_limit">22</integer>
   <integer name="text_poll_input_option_char_limit">25</integer>
   <integer name="image_poll_option_line">1</integer>
-    <!--Search View Integers -->
-    <integer name="int_value_for_line_140">140</integer>
-    <integer name="name_char_limit">99</integer>
+  <!--Search View Integers -->
+  <integer name="int_value_for_line_140">140</integer>
+  <integer name="name_char_limit">99</integer>
   <integer name="feed_text_poll_row_value">1</integer>
   <integer name="li_poll_user_name_header_weight">1</integer>
   <integer name="et_text_poll_weight">1</integer>
   <integer name="hashtag2">1000</integer>
   <integer name="hashtag3">500</integer>
-
   <integer name="badgeIconSize">108</integer>
-
   <integer name="leader_board_selected_user_side_margin">16</integer>
   <integer name="leader_board_selected_user_bottom_margin">2</integer>
   <integer name="leader_board_selected_user_position_max_line">1</integer>
@@ -39,6 +37,6 @@
   <integer name="user_flat_card_desc_max_line">2</integer>
   <integer name="leaderboard_user_name_max_line">1</integer>
   <integer name="community_name_lines">2</integer>
-  <integer name="expert_filed_maxlines">1</integer>
+  <integer name="expert_field_maxlines">1</integer>
 
 </resources>

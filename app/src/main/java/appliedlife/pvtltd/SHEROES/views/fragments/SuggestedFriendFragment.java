@@ -332,6 +332,4 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     protected SheroesPresenter getPresenter() {
         return mInviteFriendViewPresenterImp;
     }
-
-
 }

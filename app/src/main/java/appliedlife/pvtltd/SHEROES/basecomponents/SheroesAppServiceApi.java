@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -302,6 +303,9 @@ public interface SheroesAppServiceApi {
 
     @POST("participation/helpline/get_thread_details")
     Observable<HelplineGetChatThreadResponse> getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
+
+    @POST("/participation/helpline/rated")
+    Observable<BaseResponse> postHelplineRating(@Body HelplinePostRatingRequest helplinePostRatingRequest);
 
     @POST("participant/user/getUserSummarry")
     Observable<LoginResponse> googlePlusUserResponse();

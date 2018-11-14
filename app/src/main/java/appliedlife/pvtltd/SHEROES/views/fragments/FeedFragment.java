@@ -2208,5 +2208,4 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
     //endregion
-
 }

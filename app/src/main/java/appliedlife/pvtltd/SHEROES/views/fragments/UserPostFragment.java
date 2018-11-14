@@ -69,7 +69,6 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ACTIVITY_FOR_REFRESH_FRAGMENT_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.DELETE_COMMUNITY_POST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.SPAM_POST_APPROVE;
-import static appliedlife.pvtltd.SHEROES.utils.AppUtils.isFragmentUIActive;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /**

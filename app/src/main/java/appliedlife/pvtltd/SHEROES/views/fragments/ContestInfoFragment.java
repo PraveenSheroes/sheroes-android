@@ -4,13 +4,11 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.animation.FastOutSlowInInterpolator;
@@ -29,13 +27,11 @@ import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import org.parceler.Parcels;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +48,6 @@ import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
 import appliedlife.pvtltd.SHEROES.utils.VideoEnabledWebChromeClient;
 import appliedlife.pvtltd.SHEROES.utils.WebViewClickListener;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.VideoEnabledWebView;
 import butterknife.Bind;
 import butterknife.ButterKnife;

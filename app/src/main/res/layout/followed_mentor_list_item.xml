@@ -75,7 +75,7 @@
                 android:layout_marginTop="@dimen/dp_size_4"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4sp"
-                android:maxLines="@integer/expert_filed_maxlines"
+                android:maxLines="@integer/expert_field_maxlines"
                 android:textColor="#878787"
                 android:textStyle="normal"
                 tools:text="@string/ID_POPULAR"

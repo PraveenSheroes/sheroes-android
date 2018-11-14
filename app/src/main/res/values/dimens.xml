@@ -538,12 +538,14 @@
     <dimen name="anonymous_select_text_size">14sp</dimen>
     <dimen name="suggestion_list_height">150dp</dimen>
     <dimen name="bottom_sheet_line_height">1dp</dimen>
-    <dimen name="helpline_outer_layout_padding">5dp</dimen>
+    <dimen name="helpline_outer_layout_padding">12dp</dimen>
     <dimen name="helpline_card_corner_radius">2dp</dimen>
-    <dimen name="helpline_margin">16dp</dimen>
+    <dimen name="helpline_ans_margin">40dp</dimen>
+    <dimen name="helpline_margin">60dp</dimen>
     <dimen name="help_card_min_height">10dp</dimen>
-    <dimen name="helpline_time_text_size">12sp</dimen>
-    <dimen name="helpline_time_margin">5dp</dimen>
+    <dimen name="helpline_time_marginRight">16dp</dimen>
+    <dimen name="helpline_time_marginBottom">8dp</dimen>
+    <dimen name="helpline_time_marginTop">8dp</dimen>
     <dimen name="care_id_margin">10dp</dimen>
     <dimen name="user_name_margin">12dp</dimen>
     <dimen name="error_desc_margin">24dp</dimen>
@@ -671,6 +673,21 @@
     <dimen name="new_tag_padding_right">4dp</dimen>
     <dimen name="new_tag_margin_left">6dp</dimen>
     <dimen name="new_tag_margin_top">-8dp</dimen>
+    <dimen name="counselor_image_size">44dp</dimen>
+    <dimen name="helpline_button_background_radius">4dp</dimen>
+    <dimen name="helpline_rateusImage_height">170dp</dimen>
+    <dimen name="helpline_rateusImage_width">198dp</dimen>
+    <dimen name="helpline_rateusImage_paddingBottom">29dp</dimen>
+    <dimen name="helpline_rateusImage_paddingTop">39dp</dimen>
+    <dimen name="helpline_rateusTitle_paddingBottom">8dp</dimen>
+    <dimen name="helpline_rateus_body_lineSpacingExtra">4sp</dimen>
+    <dimen name="helpline_rateus_body_paddingBottom">16dp</dimen>
+    <dimen name="helpline_buttonsLayout_marginBottom">16dp</dimen>
+    <dimen name="helpline_rateusButton_marginRight">16dp</dimen>
+    <dimen name="helpline_date_marginBottom">4dp</dimen>
+    <dimen name="helpline_date_marginTop">4dp</dimen>
+    <dimen name="helpline_date_paddingLeftRight">12dp</dimen>
+    <dimen name="helpline_date_paddingTopBottom">4dp</dimen>
     <dimen name="follow_btn_textsize">14sp</dimen>
     <dimen name="follow_btn_width">100dp</dimen>
     <dimen name="follow_btn_height">30dp</dimen>
@@ -678,5 +695,13 @@
     <dimen name="follow_btn_marginleft">12dp</dimen>
     <dimen name="imagesize_unfollow_dialog">87dp</dimen>
     <dimen name="follow_list_paddingRight">8dp</dimen>
+    <dimen name="helpline_rating_padding_top_bottom">12dp</dimen>
+    <dimen name="helpline_rating_padding_right_left">24dp</dimen>
+    <dimen name="chat_voice_icon_padding">8dp</dimen>
+    <dimen name="attendant_image_marginBottom">16dp</dimen>
+    <dimen name="attendant_image_height_width">44dp</dimen>
+    <dimen name="helpline_que_marginLeft">8sp</dimen>
+    <dimen name="helpline_que_marginRight">24dp</dimen>
+    <dimen name="helpline_qa_padding">16dp</dimen>
 </resources>
 
