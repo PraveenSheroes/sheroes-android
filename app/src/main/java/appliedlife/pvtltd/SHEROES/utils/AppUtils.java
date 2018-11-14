@@ -119,6 +119,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import okhttp3.MediaType;
@@ -2268,6 +2269,14 @@ public class AppUtils {
         uploadImageRequest.images.add(encodedImage);
         return uploadImageRequest;
     }
+
+    public LanguageUpdateRequest updateSelectedLanguageRequestBuilder(String language, Long userId) {
+        LanguageUpdateRequest languageUpdateRequest = new LanguageUpdateRequest();
+        languageUpdateRequest.language = language;
+        languageUpdateRequest.userId = userId;
+        return languageUpdateRequest;
+    }
+
     public HelplinePostRatingRequest helpLinePostRatingRequestBuilder(boolean isRating, int answerId) {
         HelplinePostRatingRequest helplinePostRatingRequest = new HelplinePostRatingRequest();
         helplinePostRatingRequest.setRating(isRating);
