@@ -72,7 +72,7 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
+        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get().getData()) {
             mMasterDataResult = mUserPreferenceMasterData.get().getData();
         }
         setPagerAndLayouts();
@@ -81,7 +81,7 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
 
     public void setPagerAndLayouts() {
         supportPostponeEnterTransition();
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+        if (null != userPreference && userPreference.isSet() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
             if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.COMMUNITIES_ONBOARDING_SCREEN)) {
                 onBoardingFragment();
             } else {
@@ -110,10 +110,7 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
         }
         OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
-        Bundle bundleArticle = new Bundle();
-        onBoardingFragment.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingFragment, OnBoardingFragment.class.getName()).commitAllowingStateLoss();
-
+        addNewFragment(onBoardingFragment, R.id.fl_onboarding_fragment, OnBoardingFragment.class.getName(), null,false);
     }
 
     @Override
@@ -218,9 +215,6 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             OnBoardingMsgDialog fragment = (OnBoardingMsgDialog) getFragmentManager().findFragmentByTag(OnBoardingMsgDialog.class.getName());
             if (fragment == null) {
                 fragment = new OnBoardingMsgDialog();
-                Bundle b = new Bundle();
-                // b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
-                fragment.setArguments(b);
             }
             if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
                 fragment.show(getFragmentManager(), OnBoardingMsgDialog.class.getName());

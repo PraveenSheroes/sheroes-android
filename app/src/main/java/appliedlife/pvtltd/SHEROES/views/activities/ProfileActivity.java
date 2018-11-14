@@ -202,7 +202,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private long mCommunityPostId = 1;
     private long mLoggedInUserId = -1;
     private long mLoggedInUserIdTypeId = -1;
-    private FragmentOpen mFragmentOpen;
     private Fragment mFragment;
     private UserSolrObj mUserSolarObject;
     private int itemPosition;
@@ -525,10 +524,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     public void setProfileDetails(UserSolrObj userSolrObj) {
         rlMentorFullViewHeader.setVisibility(View.VISIBLE);
         mFeedDetail = userSolrObj;
-
-        mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);
-
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
                 isOwnProfile = true;
@@ -1215,7 +1210,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
-            setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
         }
@@ -1235,8 +1229,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         feedUtils.setFragment(mFragment);
-        mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
-        setAllValues(mFragmentOpen);
         feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
     }
 

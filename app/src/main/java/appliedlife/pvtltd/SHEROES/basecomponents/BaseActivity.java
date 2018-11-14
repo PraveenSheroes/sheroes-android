@@ -16,7 +16,6 @@ import android.view.View;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -29,15 +28,12 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 import appliedlife.pvtltd.SHEROES.utils.ShareUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -87,8 +83,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     private HashMap<String, Object> mPreviousScreenProperties;
     private String mPreviousScreen;
     protected SheroesApplication mSheroesApplication;
-    private FragmentOpen mFragmentOpen;
-    private long mUserId;
     //endregion
 
 
@@ -136,8 +130,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
 
     }
 
-    public void setSource(String source) {
-        String mSourceScreen = source;
+    public FragmentManager addNewFragment(Fragment fragmentName, int layoutName, String fragmentTag, String addBackStackTag,boolean isAddBackStack) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(layoutName, fragmentName, fragmentTag);
+        if(isAddBackStack)
+        {
+            fragmentTransaction.addToBackStack(addBackStackTag);
+        }
+        fragmentTransaction.commitAllowingStateLoss();
+        return fragmentManager;
     }
 
     public boolean shouldTrackScreen() {
@@ -157,19 +159,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         }));
         if (getPresenter() != null) {
             getPresenter().onStart();
-        }
-    }
-
-    public void setAllValues(FragmentOpen fragmentOpen) {
-        this.mFragmentOpen = fragmentOpen;
-    }
-
-    public void callFirstFragment(int layout, Fragment fragment) {
-        if (!mIsDestroyed) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(layout, fragment);
-            fragmentTransaction.commitAllowingStateLoss();
         }
     }
 
@@ -198,20 +187,17 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         try {
-            mIsDestroyed = true;
+            mIsDestroyed=true;
             mFeedUtils.onDestroy();
             mErrorUtil.onDestroy();
             mFeedUtils.clearReferences();
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
         }
-
         if (getPresenter() != null) {
             getPresenter().onDestroy();
         }
-
     }
 
     @Override
@@ -228,8 +214,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
 
     @Override
     protected void onPause() {
-        // "Remember to also call the unregister method when
-        // appropriate."
+        // "Remember to also call the unregister method when appropriate."
         if (trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
             if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
@@ -326,23 +311,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         return new HashMap<>();
     }
 
-    protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        mFeedUtils.openCommentReactionFragment(this, feedDetail, getScreenName());
-    }
-
-
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         mFeedUtils.dismissWindow();
         return true;
     }
 
-
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         mErrorUtil.onShowErrorDialog(this, errorReason, feedParticipationEnum);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -350,6 +328,5 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     }
 
     protected abstract SheroesPresenter getPresenter();
-
 
 }

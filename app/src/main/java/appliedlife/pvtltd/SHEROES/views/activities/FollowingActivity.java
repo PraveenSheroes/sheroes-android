@@ -5,20 +5,23 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences2.Preference;
+
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -33,11 +36,12 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWED_CHAMPION_LA
  */
 
 public class FollowingActivity extends BaseActivity {
-
+    // region Constants
     public static final String Followers_Screen = "Followers Screen";
     public static final String Following_Screen = "Following Screen";
-
     public static final String MEMBERS_TYPE = "TYPE";
+    //endregion
+
     private long userMentorId;
     private boolean isSelfProfile;
     private FollowingEnum mMembersType;
@@ -80,13 +84,8 @@ public class FollowingActivity extends BaseActivity {
                 titleName.setText(R.string.following_public_profile_toolbar_title);
             }
         }
-
-        Fragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, mMembersType.name());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, followingFragment);
-        fragmentTransaction.commit();
+        FollowingFragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, mMembersType.name());
+        addNewFragment(followingFragment, R.id.container, FollowingFragment.class.getName(), null,false);
     }
 
     private void setupToolbarItemsColor() {

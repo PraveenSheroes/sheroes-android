@@ -146,6 +146,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
+import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
@@ -430,7 +431,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
         mNavigationViewRightDrawerWithCommunities.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);
         if (null != getIntent() && null != getIntent().getExtras()) {
             if (getIntent().getExtras().get(AppConstants.HELPLINE_CHAT) != null) {
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
@@ -481,7 +481,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     public void openWebUrlFragment(String url, String menuItemName) { //To open the web-pages in app
-        setAllValues(mFragmentOpen);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -549,7 +548,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         } else if (baseResponse instanceof NavMenuItem) {
             drawerItemOptions(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
-            setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             mFeedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
 //            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
@@ -641,7 +639,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             Parcelable parcelable = Parcels.wrap(mArticleCategoryItemList);
             bundle.putParcelable(AppConstants.ARTICLE_CATEGORY_SPINNER_FRAGMENT, parcelable);
             mArticleCategorySpinnerFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, mArticleCategorySpinnerFragment, ArticleCategorySpinnerFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+            addNewFragment(mArticleCategorySpinnerFragment, R.id.fl_article_card_view, ArticleCategorySpinnerFragment.class.getName(), null,true);
         }
     }
 
@@ -1720,7 +1718,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     mFragmentOpen.setOwner(((UserPostSolrObj) mFeedDetail).isCommunityOwner());
                 }
-                setAllValues(mFragmentOpen);
                 mFeedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
         }
 
@@ -1754,30 +1751,25 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     private void renderFAQSView() {
         changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        FAQSFragment faqsFragment = new FAQSFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_article_card_view, faqsFragment, FAQSFragment.class.getName()).commitAllowingStateLoss();
+        FAQSFragment faqsFragment = new FAQSFragment();
+        addNewFragment(faqsFragment, R.id.fl_article_card_view, FAQSFragment.class.getName(), null,false);
 
     }
 
     private void renderICCMemberListView() {
         changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
         FragmentManager fm = getSupportFragmentManager();
         fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fl_article_card_view, iccMemberListFragment, ICCMemberListFragment.class.getName()).commitAllowingStateLoss();
-
+        ICCMemberListFragment iccMemberListFragment = new ICCMemberListFragment();
+        addNewFragment(iccMemberListFragment, R.id.fl_article_card_view, ICCMemberListFragment.class.getName(), null,false);
     }
 
     private void initHomeViewPagerAndTabs() {
@@ -1793,25 +1785,22 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             fm.popBackStack();
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
         HomeFragment homeFragment = new HomeFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
         homeFragment.setArguments(bundle);
         mFragmentOpen.setFeedFragment(true);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, homeFragment, HomeFragment.class.getName()).commitAllowingStateLoss();
+        addNewFragment(homeFragment, R.id.fl_article_card_view, HomeFragment.class.getName(), null,false);
     }
 
     private void initCommunityViewPagerAndTabs() {
-
-        FragmentManager fm = getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
-        }
-        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
         CommunitiesListFragment communitiesListFragment = new CommunitiesListFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_article_card_view, communitiesListFragment, CommunitiesListFragment.class.getName()).commitAllowingStateLoss();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        addNewFragment(communitiesListFragment, R.id.fl_article_card_view, CommunitiesListFragment.class.getName(), null,false);
     }
 
     private void resetHamburgerSelectedItems() { //Reset navigation drawer selected item
@@ -1825,7 +1814,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     private void openArticleFragment(List<Long> categoryIds, boolean fromDrawer) {
         changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
         ArticlesFragment articlesFragment = new ArticlesFragment();
         FragmentManager fm = getSupportFragmentManager();
         if (fromDrawer) {
@@ -1834,7 +1822,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         Bundle bundleArticle = new Bundle();
         bundleArticle.putSerializable(AppConstants.ARTICLE_FRAGMENT, (ArrayList) categoryIds);
         articlesFragment.setArguments(bundleArticle);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, articlesFragment, ArticlesFragment.class.getName()).addToBackStack(ArticlesFragment.class.getName()).commitAllowingStateLoss();
+        addNewFragment(articlesFragment, R.id.fl_article_card_view, ArticlesFragment.class.getName(), ArticlesFragment.class.getName(), true);
     }
 
     private void openHelplineFragment() {
@@ -1842,11 +1830,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mICSheroes.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         changeFragmentWithCommunities();
-        setAllValues(mFragmentOpen);
         HelplineFragment helplineFragment = HelplineFragment.createInstance(AppConstants.helpline_desk);
-        FragmentManager fm = getSupportFragmentManager();
-        fm.popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        fm.beginTransaction().replace(R.id.fl_article_card_view, helplineFragment, HelplineFragment.class.getName()).addToBackStack(null).commitAllowingStateLoss();
+        addNewFragment(helplineFragment, R.id.fl_article_card_view, OnBoardingFragment.class.getName(), null,true).popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     private void removeItem(FeedDetail feedDetail) {
