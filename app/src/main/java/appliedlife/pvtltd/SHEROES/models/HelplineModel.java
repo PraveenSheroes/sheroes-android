@@ -5,14 +5,12 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
-
-
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -66,12 +64,12 @@ public class HelplineModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<HelplinePostRatingResponse> postHelplineRating(HelplinePostRatingRequest helplinePostRatingRequest) {
+    public Observable<BaseResponse> postHelplineRating(HelplinePostRatingRequest helplinePostRatingRequest) {
         return sheroesAppServiceApi.postHelplineRating(helplinePostRatingRequest)
-                .map(new Function<HelplinePostRatingResponse, HelplinePostRatingResponse>() {
+                .map(new Function<BaseResponse, BaseResponse>() {
                     @Override
-                    public HelplinePostRatingResponse apply(HelplinePostRatingResponse helplinePostRatingResponse) throws Exception {
-                        return helplinePostRatingResponse;
+                    public BaseResponse apply(BaseResponse baseResponse) throws Exception {
+                        return baseResponse;
                     }
                 })
 

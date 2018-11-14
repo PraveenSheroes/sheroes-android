@@ -44,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -60,6 +59,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.HelplineActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HelplineView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -71,7 +71,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadReq
  * Created by Deepak on 19-05-2017.
  */
 
-public class HelplineFragment extends BaseFragment implements BaseHolderInterface {
+public class HelplineFragment extends BaseFragment implements BaseHolderInterface, HelplineView {
     private static final String SCREEN_LABEL = "Helpline Screen";
     private String mSpeechAppPackageName = "com.google.android.googlequicksearchbox";
     private final String TAG = LogUtils.makeLogTag(HelplineFragment.class);
@@ -277,8 +277,8 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
     }
 
     @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse,HelplineChatDoc helplineChatDoc) {
-        if(helplinePostRatingResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+    public void getPostRatingSuccess(BaseResponse baseResponse,HelplineChatDoc helplineChatDoc) {
+        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
             mAdapter.notifyItemChanged(helplineChatDoc.getItemPosition());
         }
         mAdapter.removeDataOnPosition(helplineChatDoc.getItemPosition());

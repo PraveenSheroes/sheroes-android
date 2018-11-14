@@ -49,10 +49,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
@@ -97,7 +93,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPA
  * Title: Base fragment for all child fragment.
  * all the common behaviour.
  */
-public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, HelplineView, LoginView {
+public abstract class BaseFragment extends Fragment implements EventInterface, View.OnClickListener, HomeView, LoginView {
     private final String TAG = LogUtils.makeLogTag(BaseFragment.class);
     public FragmentActivity mActivity;
     private FragmentListRefreshData mFragmentListRefreshData;
@@ -688,22 +684,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, V
             setFeedDetail(feedDetail);
             mHomePresenter.communityJoinFromPresenter(AppUtils.communityRequestBuilder(userIdList, feedDetail.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY));
         }
-    }
-
-
-    @Override
-    public void getHelpChatThreadSuccess(HelplineGetChatThreadResponse helplineGetChatThreadResponse) {
-
-    }
-
-    @Override
-    public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
-
-    }
-
-    @Override
-    public void getPostRatingSuccess(HelplinePostRatingResponse helplinePostRatingResponse, HelplineChatDoc helplineChatDoc) {
-
     }
 
     @Override

@@ -16,7 +16,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -123,8 +122,8 @@ public class HelplinePresenter extends BasePresenter<HelplineView> {
         }
         getMvpView().startProgressBar();
         helplineModel.postHelplineRating(helplinePostRatingRequest)
-                .compose(this.<HelplinePostRatingResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<HelplinePostRatingResponse>() {
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -138,9 +137,9 @@ public class HelplinePresenter extends BasePresenter<HelplineView> {
                     }
 
                     @Override
-                    public void onNext(HelplinePostRatingResponse helplinePostRatingResponse) {
-                        if (null != helplinePostRatingResponse) {
-                            getMvpView().getPostRatingSuccess(helplinePostRatingResponse, helplineChatDoc);
+                    public void onNext(BaseResponse baseResponse) {
+                        if (null != baseResponse) {
+                            getMvpView().getPostRatingSuccess(baseResponse, helplineChatDoc);
                         }
                     }
                 });
