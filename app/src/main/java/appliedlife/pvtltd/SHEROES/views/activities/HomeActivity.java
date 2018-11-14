@@ -460,6 +460,7 @@ public class HomeActivity extends BaseActivity implements MainActivityNavDrawerV
             InstallUpdateForMoEngage installUpdateForMoEngage = mInstallUpdatePreference.get();
             installUpdateForMoEngage.setAppInstallFirstTime(true);
             mInstallUpdatePreference.set(installUpdateForMoEngage);
+            mHomePresenter.updateSelectedLanguage(mAppUtils.updateSelectedLanguageRequestBuilder(CommonUtil.getPrefStringValue(LANGUAGE_KEY), mUserId));
         }
     }
 
