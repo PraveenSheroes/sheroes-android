@@ -71,7 +71,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadReq
  * Created by Deepak on 19-05-2017.
  */
 
-public class HelplineFragment extends BaseFragment implements BaseHolderInterface, HelplineView {
+public class HelplineFragment extends BaseFragment implements HelplineView {
     private static final String SCREEN_LABEL = "Helpline Screen";
     private String mSpeechAppPackageName = "com.google.android.googlequicksearchbox";
     private final String TAG = LogUtils.makeLogTag(HelplineFragment.class);
@@ -390,47 +390,10 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         };
     }
 
-    @Override
-    public void startActivityFromHolder(Intent intent) {
 
+    public void checkHelplineRating(HelplineChatDoc helplineChatDoc) {
+        mHelplinePresenter.postHelplineRating(mAppUtils.helpLinePostRatingRequestBuilder(false, helplineChatDoc.getQuestionOrAnswerId()), helplineChatDoc);
     }
 
-    @Override
-    public void handleOnClick(BaseResponse baseResponse, View view) {
-        if (baseResponse instanceof HelplineChatDoc) {
-            HelplineChatDoc helplineChatDoc=(HelplineChatDoc)baseResponse;
-            mHelplinePresenter.postHelplineRating(mAppUtils.helpLinePostRatingRequestBuilder(false,helplineChatDoc.getQuestionOrAnswerId()),helplineChatDoc);
-        }
-    }
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-
-    }
-
-    @Override
-    public List getListData() {
-        return null;
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
-    }
-
-    @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
-    }
-
-    @Override
-    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
-    }
 }
 

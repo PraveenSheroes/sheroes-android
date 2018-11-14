@@ -122,7 +122,7 @@
     <string name="ID_CLOSE">बंद हो गया</string>
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">सवाल पूछें</string>
+    <string name="ID_ASK_QUESTION">अपना सवाल लिखें</string>
     <string name="ID_SUBMIT">जमा करें</string>
     <string name="follow_user">फॉलो</string>
     <string name="following_user">फॉलोइंग</string>
@@ -155,7 +155,7 @@
     <string name="ID_WELCOME_FIRST"> <![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर, रिश्तों </b></span> और अधिक के बारे में चर्चा करें और सवाल पूछें&#8230;
+                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर </b></span> आदि के बारे में SHEROES हेल्पलाइन पर चर्चा करें और सवाल पूंछें&#8230;
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
@@ -672,4 +672,9 @@
     <string name="load_more_comments">अधिक कमेंट्स लोड करें</string>
     <string name="contact_not_on_whats">यह कॉन्टेक्ट व्हाट्सएप पर नहीं है</string>
     <string name="this_user">आप</string>
+    <string name="helpline_rateus_body">महिलाओं की सेवा करना हमारा उद्देश्य है। क्या आप हमें 5-स्टार रेटिंग देकर सभी महिलाओं का सहयोग करना चाहती हैं? \n एक मिनट से ज़्यादा समय नहीं लगेगा। \n सपोर्ट करने के लिए धन्यवाद!</string>
+    <string name="rate_us">सहयोग दें :)</string>
+    <string name="not_now">नहीं देना :(</string>
+    <string name="helpline_title">SHEROES हेल्पलाइन</string>
+    <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
 </resources>

@@ -7,7 +7,7 @@
     android:background="@color/helpline_background"
     android:orientation="vertical">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/date_stamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,7 +20,8 @@
         android:paddingRight="@dimen/helpline_date_paddingLeftRight"
         android:paddingTop="@dimen/helpline_date_paddingTopBottom"
         android:text="DATE"
-        android:textSize="@dimen/helpline_date_textsize" />
+        style="@style/TextView12spRegular"
+        vernacular:customTextFontFamily="@string/regular_font"/>
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -84,6 +85,8 @@
                     android:textColor="@color/comment_text"
                     android:textColorLink="@color/view_more"
                     android:textIsSelectable="true"
+                    android:textColorHighlight="@color/grey2"
+                    style="@style/TextView16spRegularHelpline"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
@@ -94,11 +97,12 @@
                     android:layout_marginTop="@dimen/helpline_time_marginTop"
                     android:textAllCaps="false"
                     android:textColor="@color/helpline_text_time_color"
-                    android:textSize="@dimen/helpline_time_text_size"
+                    style="@style/TextView10spRegular"
                     android:gravity="right"
                     android:layout_gravity="right"
                     android:textAlignment="gravity"
-                    android:maxLines="@integer/int_value_for_line_1"/>
+                    android:maxLines="@integer/int_value_for_line_1"
+                    vernacular:customTextFontFamily="@string/regular_font"/>
 
             </LinearLayout>
         </RelativeLayout>
@@ -129,7 +133,8 @@
             android:paddingBottom="@dimen/helpline_rateusTitle_paddingBottom"
             android:text="@string/helpline_rateus_title"
             android:textColor="@color/tab_text"
-            style="@style/TextView18spRegular"  />
+            style="@style/TextView18spRegular"
+            vernacular:customTextFontFamily="@string/regular_font"/>
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:layout_width="match_parent"
@@ -139,7 +144,8 @@
             android:lineSpacingExtra="@dimen/helpline_rateus_body_lineSpacingExtra"
             android:paddingBottom="@dimen/helpline_rateus_body_paddingBottom"
             android:text="@string/helpline_rateus_body"
-            style="@style/TextView14spRegular" />
+            style="@style/TextView14spRegular"
+            vernacular:customTextFontFamily="@string/regular_font"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -156,7 +162,9 @@
                 android:background="@drawable/rectangle_helpline_rate_us"
                 android:text="@string/rate_us"
                 android:textAllCaps="true"
-                android:textColor="@color/helpline_question_text" />
+                android:textColor="@color/helpline_question_text"
+                style="@style/Button14spRegular"
+                vernacular:customButtonFontFamily="@string/regular_font"/>
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                 android:id="@+id/not_now"
@@ -164,7 +172,9 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rectangle_helpline_not_now"
                 android:text="@string/not_now"
-                android:textAllCaps="true" />
+                android:textAllCaps="true"
+                style="@style/Button14spRegular"
+                vernacular:customButtonFontFamily="@string/regular_font" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

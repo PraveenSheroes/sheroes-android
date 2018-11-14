@@ -67,6 +67,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -75,6 +76,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -753,6 +755,15 @@ public class CommunityDetailActivity extends BaseActivity implements ICommunityD
                 }
             }
         });
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        Fragment helplineFragment = getSupportFragmentManager().findFragmentByTag(HelplineFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(helplineFragment)) {
+            HelplineChatDoc helplineChatDoc = (HelplineChatDoc) baseResponse;
+            ((HelplineFragment) helplineFragment).checkHelplineRating(helplineChatDoc);
+        }
     }
 
     @Override

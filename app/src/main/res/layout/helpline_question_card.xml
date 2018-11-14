@@ -8,7 +8,7 @@
     android:background="@color/helpline_background"
     android:orientation="vertical">
 
-    <TextView
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/date_stamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -21,7 +21,8 @@
         android:paddingRight="@dimen/helpline_date_paddingLeftRight"
         android:paddingTop="@dimen/helpline_date_paddingTopBottom"
         android:text="DATE"
-        android:textSize="@dimen/helpline_date_textsize" />
+        style="@style/TextView12spRegular"
+        vernacular:customTextFontFamily="@string/regular_font"/>
 
     <LinearLayout
         android:id="@+id/LinearLayout1"
@@ -49,7 +50,6 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/question"
-                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|right"
@@ -63,7 +63,8 @@
                     android:textColor="@color/helpline_question_text"
                     android:textColorLink="@color/helpline_question_text"
                     android:textIsSelectable="true"
-                    android:textSize="@dimen/dp_size_16"
+                    android:textColorHighlight="@color/grey2"
+                    style="@style/TextView16spRegularHelpline"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
@@ -76,7 +77,7 @@
                     android:layout_gravity="right"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:textColor="@color/helpline_question_text"
-                    android:textSize="@dimen/helpline_time_text_size"
+                    style="@style/TextView10spRegular"
                     vernacular:customTextFontFamily="@string/regular_font"/>
 
             </LinearLayout>
