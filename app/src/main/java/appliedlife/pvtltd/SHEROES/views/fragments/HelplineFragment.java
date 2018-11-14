@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
@@ -95,6 +96,8 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
     private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private String sourceScreen ;
+    private Handler mChatFetchHandler;
+    private Runnable mChatRunnable;
 
 
     public static HelplineFragment createInstance(String sourceScreen) {
@@ -118,7 +121,12 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
         sendChat.setVisibility(View.GONE);
-
+        mChatFetchHandler = new Handler();
+        mChatRunnable = new Runnable() {
+            public void run() {
+                mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+            }
+        };
         if(getArguments()!=null) {
            sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
         }
@@ -133,7 +141,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
             ((HomeActivity)getActivity()).helplineUi();
         }
 
-        setUpRecyclerView();
+        setUpRecyclerView(false);
         questionText.addTextChangedListener(editTextWatcher());
         questionText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -190,6 +198,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
             appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
             ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
         }
+        mChatFetchHandler.removeCallbacksAndMessages(mChatRunnable);
         mHelplinePresenter.detachView();
     }
 
@@ -234,7 +243,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         mPullRefreshList.setPullToRefresh(false);
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        setUpRecyclerView();
+        setUpRecyclerView(true);
 
     }
 
@@ -302,7 +311,7 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
         questionText.setSelection(questionText.getText().length());
     }
 
-    public void setUpRecyclerView(){
+    public void setUpRecyclerView(boolean isFromChatThread){
         mLayoutManager = new LinearLayoutManager(getContext());
         if(getActivity() instanceof HelplineActivity){
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (HelplineActivity) getActivity());
@@ -330,7 +339,11 @@ public class HelplineFragment extends BaseFragment implements BaseHolderInterfac
             }
         });
         super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
-        mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+        if (isFromChatThread) {
+            mChatFetchHandler.postDelayed(mChatRunnable, 1000);
+        } else {
+            mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+        }
     }
 
     @Override
