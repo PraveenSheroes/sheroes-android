@@ -183,9 +183,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         setContentView(R.layout.activity_community_detail);
         ButterKnife.bind(this);
         mCommunityDetailPresenter.attachView(this);
-
-        CustomActionBarToggle mCustomActionBarToggle = new CustomActionBarToggle(this, mCommunityDrawerLayout, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mCommunityDrawerLayout.addDrawerListener(mCustomActionBarToggle);
+        mCommunityDrawerLayout.addDrawerListener(new CustomActionBarToggle(this, mCommunityDrawerLayout, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this));
 
         if (getIntent() != null && getIntent().getExtras() != null) {
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
@@ -294,9 +292,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        switch (id) {
+        switch (item.getItemId()) {
             case R.id.share:
                 String deepLinkUrl;
                 if (mCommunityFeedSolrObj == null) {
@@ -388,7 +384,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     @Override
     public void showAllCommunity(ArrayList<FeedDetail> feedDetails) {
-
     }
 
     @Override
@@ -408,10 +403,8 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                 data.remove(position - 1);
             }
             data.add(feedProgressBar);
-
             mMyCommunitiesAdapter.setData(data);
             mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
-
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
             data.remove(data.size() - 1);
@@ -431,32 +424,26 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     @Override
@@ -466,9 +453,8 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
             switch (requestCode) {
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     Snackbar.make(mFabButton, R.string.snackbar_submission_submited, Snackbar.LENGTH_SHORT).show();
-                    if (mCommunityFeedSolrObj == null) {
-                        return;
-                    }
+                    if (mCommunityFeedSolrObj == null) return;
+
                     if (!mCommunityFeedSolrObj.isMember()) {
                         onCommunityJoined(mCommunityFeedSolrObj, null);
                     }
@@ -500,9 +486,8 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                         feedDetail = Parcels.unwrap(parcelableFeedObj);
                         isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                     }
-                    if (feedDetail == null) {
-                        break;
-                    }
+                    if (feedDetail == null)  break;
+
                     if (isPostDeleted) {
                         invalidateItem(feedDetail, true);
                     } else {
@@ -522,14 +507,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     //endregion
 
     //region instance methods
-    public String getCommunityId() {
-        if (mCommunityFeedSolrObj == null) {
-            return "";
-        } else {
-            return Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
-        }
-    }
-
     private void setupViewPager(final ViewPager viewPager) {
         mCommunityDetailAdapter = new CommunityDetailAdapter(getSupportFragmentManager());
         mCommunityDetailAdapter.addCommunityTabs(mCommunityFeedSolrObj);
@@ -595,15 +572,15 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     public void invalidateItem(FeedDetail feedDetail, boolean isRemoved) {
-        if (mCommunityDetailAdapter != null) {
-            for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
-                Fragment fragment = mCommunityDetailAdapter.getItem(i);
-                if (fragment instanceof FeedFragment) {
-                    if(isRemoved) {
-                        ((FeedFragment) fragment).removeItem(feedDetail);
-                    } else {
-                        ((FeedFragment) fragment).updateItem(feedDetail);
-                    }
+        if (mCommunityDetailAdapter == null) return;
+
+        for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
+            Fragment fragment = mCommunityDetailAdapter.getItem(i);
+            if (fragment instanceof FeedFragment) {
+                if (isRemoved) {
+                    ((FeedFragment) fragment).removeItem(feedDetail);
+                } else {
+                    ((FeedFragment) fragment).updateItem(feedDetail);
                 }
             }
         }
@@ -612,10 +589,8 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private void refreshAtPosition(FeedDetail feedDetail, long id) {
         for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
             Fragment fragment = mCommunityDetailAdapter.getItem(i);
-            if (fragment instanceof FeedFragment) {
-                if (fragment.isVisible()) {
-                    ((FeedFragment) fragment).findPositionAndUpdateItem(feedDetail, id);
-                }
+            if (fragment instanceof FeedFragment && fragment.isVisible()) {
+                ((FeedFragment) fragment).findPositionAndUpdateItem(feedDetail, id);
             }
         }
     }
@@ -682,11 +657,11 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     private void setUpMyCommunitiesList() {
+        //For right navigation drawer communities items
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         mCommunitiesRecycler.setLayoutManager(gridLayoutManager);
         mCommunitiesRecycler.setAdapter(mMyCommunitiesAdapter);
-        //For right navigation drawer communities items
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DEATIL_DRAWER, AppConstants.NO_REACTION_CONSTANT);
         mCommunitiesDrawerProgress.setVisibility(View.VISIBLE);
         mPullRefreshList = new SwipPullRefreshList<>();
@@ -777,7 +752,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-
             }
         });
     }
@@ -800,8 +774,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                     if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabJoinedKey)) {
                         return position;
                     }
-                }
-                if (!mCommunityFeedSolrObj.isMember()) {
+                } else {
                     if (communityTab.key.equalsIgnoreCase(mCommunityFeedSolrObj.defaultTabKey)) {
                         return position;
                     }
@@ -827,6 +800,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     private void UpdateFabVisibility(CommunityTab communityTab) {
+        mFabButton.setVisibility(View.GONE);
         if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
             mFabButton.setVisibility(View.VISIBLE);
             if (CommonUtil.isValidContextForGlide(mFabButton.getContext())) {
@@ -834,18 +808,14 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                         .load(communityTab.fabIconUrl)
                         .into(mFabButton);
             }
-        } else {
-            mFabButton.setVisibility(View.GONE);
         }
     }
 
     private void refreshCurrentFragment() {
         for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
             Fragment fragment = mCommunityDetailAdapter.getItem(i);
-            if (fragment instanceof FeedFragment) {
-                if (fragment.isVisible()) {
+            if (fragment.isVisible() && fragment instanceof FeedFragment) {
                     ((FeedFragment) fragment).refreshList();
-                }
             }
         }
     }
@@ -875,9 +845,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     //region onclick methods
     @OnClick({R.id.bottom_bar, R.id.btn_bottom_bar})
     public void onJoinClicked() {
-        if (mCommunityFeedSolrObj == null) {
-            return;
-        }
+        if (mCommunityFeedSolrObj == null) return;
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList<>();
@@ -896,16 +864,15 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(mTabLayout.getSelectedTabPosition());
         String url = communityTab.fabUrl;
         if (url.equalsIgnoreCase(AppConstants.COMMUNITY_POST_URL) || url.equalsIgnoreCase(AppConstants.COMMUNITY_POST_URL_COM)) {
-            if (mCommunityFeedSolrObj == null) {
-                return;
-            }
+            if (mCommunityFeedSolrObj == null) return;
+
             CommunityPost communityPost = new CommunityPost();
             communityPost.community = new Community();
             communityPost.community.id = mCommunityFeedSolrObj.getIdOfEntityOrParticipant();
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
             communityPost.isMyPost = mCommunityFeedSolrObj.isOwner();
             HashMap<String, Object> screenProperties = new EventProperty.Builder()
-                    .sourceScreenId(getCommunityId())
+                    .sourceScreenId(mCommunityFeedSolrObj == null ? "" : Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
                     .sourceTabKey(communityTab.key)
                     .sourceTabTitle(communityTab.title)
                     .build();
