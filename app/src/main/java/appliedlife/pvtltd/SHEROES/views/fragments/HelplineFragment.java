@@ -22,7 +22,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -54,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
