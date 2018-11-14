@@ -6,7 +6,9 @@ import com.f2prateek.rx.preferences2.Preference;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
@@ -21,12 +23,13 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
-import io.reactivex.observers.DisposableObserver;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
-
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
@@ -41,20 +44,23 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
     private final String TAG = LogUtils.makeLogTag(OnBoardingPresenter.class);
     OnBoardingModel onBoardingModel;
     SheroesApplication mSheroesApplication;
+    SheroesAppServiceApi mSheroesAppServiceApi;
+    MasterDataModel mMasterDataModel;
+
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    MasterDataModel mMasterDataModel;
 
     @Inject
     Preference<AppConfiguration> mConfiguration;
 
     @Inject
-    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData,Preference<AppConfiguration> mConfiguration) {
+    public OnBoardingPresenter(MasterDataModel masterDataModel, OnBoardingModel homeModel, SheroesApplication sheroesApplication, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<AppConfiguration> mConfiguration, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mMasterDataModel = masterDataModel;
         this.onBoardingModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-        this.mConfiguration=mConfiguration;
+        this.mConfiguration = mConfiguration;
+        this.mSheroesAppServiceApi = sheroesAppServiceApi;
     }
 
     @Override
@@ -222,5 +228,29 @@ public class OnBoardingPresenter extends BasePresenter<OnBoardingView> {
                 }
             }
         });
+    }
+
+    public void updateSelectedLanguage(LanguageUpdateRequest languageUpdateRequest) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        mSheroesAppServiceApi.updateSelectedLanguage(languageUpdateRequest)
+                .subscribeOn(Schedulers.io())
+                .compose(this.<BaseResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<BaseResponse>() {
+                    @Override
+                    public void onComplete() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                    }
+
+                    @Override
+                    public void onNext(BaseResponse languageUpdateResponse) {
+                    }
+                });
     }
 }

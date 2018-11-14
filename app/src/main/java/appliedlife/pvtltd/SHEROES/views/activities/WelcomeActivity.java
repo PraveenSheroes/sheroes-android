@@ -35,7 +35,9 @@ import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -162,6 +164,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private ProgressDialog mProgressDialog, mLoggingProgressDialog;
     //google api client
     public static GoogleApiClient mGoogleApiClient;
+    private GoogleSignInClient mGoogleSignInClient;
     private String mToken = null;
     private String loginViaSocial = MoEngageConstants.GOOGLE;
     private long currentTime;
@@ -491,13 +494,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                     .build();
         }
-
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mGoogleSignInClient.signOut();
     }
 
     private void signIn() {
         //Creating an intent
-        signOut();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         //Starting intent for result
         startActivityForResult(signInIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS);
     }
