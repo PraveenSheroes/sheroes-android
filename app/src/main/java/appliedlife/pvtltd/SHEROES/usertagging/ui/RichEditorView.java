@@ -54,7 +54,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestions
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizer;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizerConfig;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 
@@ -74,14 +74,14 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
  * @attr ref R.styleable#RichEditorView_selectedMentionTextColor
  * @attr ref R.styleable#RichEditorView_selectedMentionTextBackgroundColor
  */
-public class RichEditorView extends RelativeLayout implements TextWatcher, QueryTokenReceiver, SuggestionsResultListener, SuggestionsVisibilityManager, UserMentionSuggestionTagCallback {
+public class RichEditorView extends RelativeLayout implements TextWatcher, IQueryTokenReceiver, SuggestionsResultListener, SuggestionsVisibilityManager, UserMentionSuggestionTagCallback {
 
     private MentionsEditText mMentionsEditText;
     private int mOriginalInputType = InputType.TYPE_CLASS_TEXT; // Default to plain text
 
     private RecyclerView mSuggestionsList;
 
-    private QueryTokenReceiver mHostQueryTokenReceiver;
+    private IQueryTokenReceiver mHostQueryTokenReceiver;
     private UserTagSuggestionsAdapter mUserTagSuggestionsAdapter;
     private OnSuggestionsVisibilityChangeListener mActionListener;
 
@@ -673,7 +673,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      *
      * @param client the object that can receive {@link QueryToken} objects and generate suggestions from them
      */
-    public void setQueryTokenReceiver(final @Nullable QueryTokenReceiver client) {
+    public void setQueryTokenReceiver(final @Nullable IQueryTokenReceiver client) {
         mHostQueryTokenReceiver = client;
     }
 

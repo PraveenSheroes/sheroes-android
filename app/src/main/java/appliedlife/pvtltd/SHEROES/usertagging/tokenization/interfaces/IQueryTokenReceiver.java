@@ -20,8 +20,6 @@ import android.view.View;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 
@@ -29,7 +27,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
  * Interface used to query an object with a {@link QueryToken}. The client is responsible for calling an instance of
  * {@link SuggestionsResultListener} with the results of the query once the query is complete.
  */
-public interface QueryTokenReceiver {
+public interface IQueryTokenReceiver {
 
     /**
      * Called to the client, expecting the client to return a {@link SuggestionsResult} at a later time via the
@@ -40,7 +38,6 @@ public interface QueryTokenReceiver {
      * @return a List of String representing the buckets that will be used when calling {@link SuggestionsResultListener}
      */
     List<String> onQueryReceived(final @NonNull QueryToken queryToken);
-
 
     Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 

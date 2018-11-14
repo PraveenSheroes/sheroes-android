@@ -63,7 +63,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionsEditable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
 
@@ -88,7 +88,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     private static final String KEY_MENTION_SPAN_STARTS = "mention_span_starts";
 
     private Tokenizer mTokenizer;
-    private QueryTokenReceiver mQueryTokenReceiver;
+    private IQueryTokenReceiver mQueryTokenReceiver;
     private SuggestionsVisibilityManager mSuggestionsVisibilityManager;
 
     private List<MentionWatcher> mMentionWatchers = new ArrayList<>();
@@ -1316,9 +1316,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      * Sets the receiver of query tokens used by this class. The query token receiver will use the
      * tokens to generate suggestions, which can then be inserted back into this edit text.
      *
-     * @param queryTokenReceiver the {@link QueryTokenReceiver} to use
+     * @param queryTokenReceiver the {@link IQueryTokenReceiver} to use
      */
-    public void setQueryTokenReceiver(@Nullable final QueryTokenReceiver queryTokenReceiver) {
+    public void setQueryTokenReceiver(@Nullable final IQueryTokenReceiver queryTokenReceiver) {
         mQueryTokenReceiver = queryTokenReceiver;
     }
 
