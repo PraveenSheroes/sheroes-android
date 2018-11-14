@@ -1,11 +1,12 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import java.util.Map;
+
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionResponse;
-import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
-import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.UserEvents;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
@@ -106,17 +107,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequ
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
 import io.reactivex.Observable;
 import io.reactivex.Single;
+import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
-import retrofit2.http.Query;
-import retrofit2.http.Url;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
-import retrofit2.http.Multipart;
-import okhttp3.RequestBody;
-import java.util.Map;
+import retrofit2.http.Query;
+import retrofit2.http.Url;
 
 /**
  * Created by Praveen Singh on 29/12/2016.
@@ -338,7 +338,7 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 
     @POST("participant/feed/community_category_home")
-    Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
+    Observable<FeedResponsePojo> fetchAllCommunities();
 
     @GET("participant/remote_config/AppConfig")
     Observable<ConfigurationResponse> getConfig();

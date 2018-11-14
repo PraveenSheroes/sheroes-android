@@ -237,12 +237,16 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
 
     @Override
-    public void showCommunityJoinResponse(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
+    public void setCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
+    }
+
+    @Override
+    public void onCommunityJoined(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
         carouselViewHolder.mAdapter.setData(communityFeedSolrObj);
     }
 
     @Override
-    public void showCommunityUnJoinedResponse(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
+    public void onCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
         carouselViewHolder.mAdapter.setData(communityFeedSolrObj);
     }
 
@@ -316,7 +320,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             String position[] = getCommunityPositionInCarousel(communityFeedSolrObj);
             if (position != null)
                 AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, communityFeedSolrObj, getScreenName(), position[0], position[1]);
-            mCommunitiesListPresenter.leaveCommunity(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj, carouselViewHolder);
+            mCommunitiesListPresenter.communityLeft(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj, carouselViewHolder);
         }
     }
 
