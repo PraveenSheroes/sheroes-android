@@ -74,11 +74,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -488,7 +486,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                         feedDetail = Parcels.unwrap(parcelableFeedObj);
                         isPostDeleted = data.getBooleanExtra(PostDetailActivity.IS_POST_DELETED, false);
                     }
-                    if (feedDetail == null)  break;
+                    if (feedDetail == null) break;
 
                     if (isPostDeleted) {
                         invalidateItem(feedDetail, true);
@@ -731,7 +729,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         upArrow.setColorFilter(Color.parseColor(mCommunityTitleTextColor), PorterDuff.Mode.SRC_ATOP);
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
 
-        if(getSupportActionBar() == null) return;
+        if (getSupportActionBar() == null) return;
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
     }
 
@@ -821,7 +819,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         for (int i = 0; i < mCommunityDetailAdapter.getCount(); i++) {
             Fragment fragment = mCommunityDetailAdapter.getItem(i);
             if (fragment.isVisible() && fragment instanceof FeedFragment) {
-                    ((FeedFragment) fragment).refreshList();
+                ((FeedFragment) fragment).refreshList();
             }
         }
     }
