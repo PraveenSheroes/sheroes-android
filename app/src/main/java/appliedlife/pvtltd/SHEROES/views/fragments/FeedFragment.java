@@ -2068,7 +2068,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             properties.putAll(getExtraProperties());
         }
 
-        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsUserFollowed()) {
+        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             unFollowConfirmation(publicProfileListRequest, userSolrObj);
         } else {
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);

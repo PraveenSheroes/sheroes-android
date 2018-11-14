@@ -441,8 +441,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
                                 userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
-                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         } else {
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         }

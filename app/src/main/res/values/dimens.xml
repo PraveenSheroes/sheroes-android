@@ -240,7 +240,7 @@
 
     <dimen name="profile_badge_icon">40dp</dimen>
     <dimen name="profile_badge_margin_right">8dp</dimen>
-    <dimen name="profile_badge_counter_text">8sp</dimen>
+    <dimen name="profile_badge_counter_text">6sp</dimen>
 
     <dimen name="badge_closet_icon_margin">18dp</dimen>
     <dimen name="badge_closet_counter_text">12sp</dimen>
@@ -675,6 +675,8 @@
     <dimen name="follow_btn_width">100dp</dimen>
     <dimen name="follow_btn_height">30dp</dimen>
     <dimen name="follow_btn_marginright">16dp</dimen>
+    <dimen name="follow_btn_marginleft">12dp</dimen>
     <dimen name="imagesize_unfollow_dialog">87dp</dimen>
+    <dimen name="follow_list_paddingRight">8dp</dimen>
 </resources>
 
