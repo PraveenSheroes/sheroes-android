@@ -17,9 +17,12 @@ import com.facebook.login.LoginResult;
 import org.json.JSONObject;
 
 public class FBConnectHelper {
+    //region member variables
     private CallbackManager mCallbackManager;
     private OnFbSignInListener mFbSignInListener;
+    //endregion member variables
 
+    //region interface
     public interface OnFbSignInListener {
         void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken);
 
@@ -27,12 +30,15 @@ public class FBConnectHelper {
 
         void onFbCancel();
     }
+    //endregion interface
 
+    //region constructor
     public FBConnectHelper(OnFbSignInListener onFbSignInListener) {
         this.mFbSignInListener = onFbSignInListener;
     }
+    //endregion constructor
 
-
+    //region public methods
     public void connectFb() {
         mCallbackManager = CallbackManager.Factory.create();
 
@@ -56,6 +62,14 @@ public class FBConnectHelper {
 
     }
 
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mCallbackManager != null) {
+            mCallbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+    //endregion public methods
+
+    //region private methods
     private void callFbGraphApi(LoginResult loginResult) {
         final AccessToken accessToken = loginResult.getAccessToken();
 
@@ -77,10 +91,6 @@ public class FBConnectHelper {
             Crashlytics.getInstance().core.logException(e);
         }
     }
+    //endregion private methods
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mCallbackManager != null) {
-            mCallbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 }

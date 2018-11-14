@@ -90,9 +90,9 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
     public static final String GOOGLE = "google";
     public static final String FACEBOOK = "facebook";
     public static final int LOGGING_IN_DIALOG = 1;
-    //endregion
+    //endregion constant variables
 
-    // region member variables
+    //region member variables
     private int mCurrentPage = 0;
     private Timer mTimer;
     private Handler mHandler;
@@ -109,9 +109,9 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
     private ArrayList<Integer> mScreenNameList = new ArrayList<>();
     private FBConnectHelper mFbConnectHelper;
     private GoogleConnectHelper mGoogleConnectHelper;
-    //endregion
+    //endregion member variables
 
-    // region inject variables
+    //region inject variables
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -124,7 +124,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
     AppUtils mAppUtils;
     @Inject
     ErrorUtil mErrorUtil;
-    //endregion
+    //endregion inject variables
 
     // region view
     @Bind(R.id.welcome_view_pager)
@@ -147,9 +147,9 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
     TextView tvOtherLoginOption;
     @Bind(R.id.tv_user_msg)
     TextView tvUserMsg;
-    //endregion
+    //endregion view
 
-
+    //region lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,61 +164,28 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
         setUpView();
     }
 
-    private void setUpView() {
-        setContentView(R.layout.welcome_activity);
-        ButterKnife.bind(this);
-        initHomeViewPagerAndTabs();
-
-        mFbConnectHelper = new FBConnectHelper(this);
-        mGoogleConnectHelper = GoogleConnectHelper.getInstance();
-        getFcmId();
-
-        loginSetUp();
-        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(SCREEN_LABEL);
-    }
-
-    private void loginSetUp() {
-        mCurrentTime = System.currentTimeMillis();
-        mGoogleConnectHelper.initialize(this, this);
-        mFbConnectHelper.connectFb();
-
-        fbLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialogInWelcome(LOGGING_IN_DIALOG);
-                if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
-                    showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-                } else {
-                    if (!StringUtil.isNotNullOrEmptyString(mFcmId))
-                        getFcmId();
-                    LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
-                }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            if (mProgressDialog != null) {
+                mProgressDialog.dismiss();
             }
-        });
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+        if (mHandler != null && mRunnable != null) {
+            mHandler.postDelayed(mRunnable, 10000);
+        }
     }
 
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    private void initHomeViewPagerAndTabs() {
-        mScreenNameList.add(R.drawable.welcome_first);
-        mScreenNameList.add(R.drawable.welcome_second);
-        mScreenNameList.add(R.drawable.welcome_third);
-
-        SheroesWelcomeViewPagerAdapter viewPagerAdapter = new SheroesWelcomeViewPagerAdapter(mScreenNameList, this);
-        mViewPager.setAdapter(viewPagerAdapter);
-        mViewPager.addOnPageChangeListener(WelcomeActivity.this);
-        ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
-        ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
-        ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
-        mHandler = new Handler();
-        mRunnable = new Runnable() {
-            public void run() {
-                mViewPager.setCurrentItem(mCurrentPage++, true);
-                mHandler.postDelayed(mRunnable, 10000);
-            }
-        };
-        mHandler.postDelayed(mRunnable, 10000);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mHandler != null && mRunnable != null) {
+            mHandler.removeCallbacks(mRunnable);
+        }
     }
-
 
     @Override
     protected void onDestroy() {
@@ -235,22 +202,15 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
         super.onDestroy();
     }
 
-    @OnClick(R.id.tv_other_login_option)
-    public void otherLoginOption() {
-        openLoginActivity();
+    @Override
+    public void onStop() {
+        super.onStop();
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
     }
+    //endregion lifecycle methods
 
-    private void openLoginActivity() {
-        Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, mIsBranchFirstSession);
-        bundle.putString(AppConstants.ADS_DEEP_LINK_URL, mDeepLinkUrl);
-        loginIntent.putExtras(bundle);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(loginIntent);
-        finish();
-    }
-
+    //region inherited methods
     @Override
     public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
         super.onShowErrorDialog(s, feedParticipationEnum);
@@ -337,36 +297,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
 
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            if (mProgressDialog != null) {
-                mProgressDialog.dismiss();
-            }
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-        if (mHandler != null && mRunnable != null) {
-            mHandler.postDelayed(mRunnable, 10000);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        if (mHandler != null && mRunnable != null) {
-            mHandler.removeCallbacks(mRunnable);
-        }
-    }
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        setIntent(intent);
-    }
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -380,110 +310,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
     @Override
     protected boolean trackScreenTime() {
         return true;
-    }
-
-    /**
-     * Show dialog
-     *
-     * @param id id of dialog
-     */
-    void showDialogInWelcome(int id) {
-        try {
-            createCustomDialog(id);
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-    }
-
-    /**
-     * Creates and returns dialog
-     *
-     * @param id id of dialog
-     * @return dialog
-     */
-    private void createCustomDialog(int id) {
-        try {
-            switch (id) {
-                case LOGGING_IN_DIALOG: {
-
-                    if (isFinishing()) return;
-
-                    mProgressDialog = new ProgressDialog(WelcomeActivity.this);
-                    mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                    mProgressDialog.setCancelable(true);
-                    mProgressDialog.show();
-                    break;
-                }
-                case TOKEN_LOGGING_PROGRESS_DIALOG: {
-
-                    if (isFinishing()) return;
-
-                    mLoggingProgressDialog = new ProgressDialog(WelcomeActivity.this);
-                    mLoggingProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
-                    mLoggingProgressDialog.setCancelable(true);
-                    mLoggingProgressDialog.show();
-                    break;
-                }
-                default:
-                    break;
-            }
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-    }
-
-    @OnClick(R.id.btn_login_google)
-    public void googleLoginClick() {
-        showDialogInWelcome(LOGGING_IN_DIALOG);
-        if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
-            showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-            return;
-        } else {
-            if (!StringUtil.isNotNullOrEmptyString(mFcmId))
-                getFcmId();
-            launchGooglePlusLogin();
-        }
-    }
-
-    public void launchGooglePlusLogin() {
-        if (mAppUtils.isNetworkAvailable()) {
-            mGoogleConnectHelper.signIn(this);
-        } else {
-            Toast.makeText(WelcomeActivity.this, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION), Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void getFcmId() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-        FCMClientManager pushClientManager = new FCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
-        pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
-            @Override
-            public void onSuccess(String registrationId, boolean isNewRegistration) {
-                mFcmId = registrationId;
-                if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
-                    //Refresh FCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
-                    if (cleverTapAPI != null) {
-                        cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
-                    }
-                    fbLogin.setEnabled(true);
-                } else {
-                    fbLogin.setEnabled(false);
-                    if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
-                        showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-                        return;
-                    } else {
-                        getFcmId();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(String ex) {
-                mFcmId = ex;
-            }
-        });
     }
 
     @Override
@@ -530,6 +356,319 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
             showNetworkTimeoutDialog(true, false, getString(R.string.ID_GENERIC_ERROR));
         }
 
+    }
+
+    @Override
+    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
+        if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
+            LoginRequest loginRequest = loginRequestBuilder();
+            loginRequest.setAccessToken(mToken);
+            loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
+            loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
+            loginRequest.setFcmorapnsid(mFcmId);
+            loginRequest.setCallForSignUp(AppConstants.GOOGLE_PLUS);
+            loginRequest.setUserGender(GENDER);
+            mLoginViaSocial = GOOGLE;
+            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        mFbConnectHelper.onActivityResult(requestCode, resultCode, data);
+        mGoogleConnectHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onGoogleSuccess(String name, String email) {
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        showGenderInputDialog(name, email);
+    }
+
+    @Override
+    public void dismissProgress() {
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+    }
+
+    @Override
+    public void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken) {
+        if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
+            LoginRequest loginRequest = loginRequestBuilder();
+            loginRequest.setAccessToken(accessToken.getToken());
+            loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
+            loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
+            loginRequest.setFcmorapnsid(mFcmId);
+            loginRequest.setUserGender(GENDER);
+            mLoginViaSocial = FACEBOOK;
+            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+        }
+    }
+
+    @Override
+    public void OnFbError(String errorMessage) {
+        mUserPreference.delete();
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
+        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, errorMessage);
+    }
+
+    @Override
+    public void onFbCancel() {
+        mUserPreference.delete();
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
+        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
+        if (null != fbLogin) {
+            fbLogin.setEnabled(true);
+            mUserPreference.delete();
+        }
+        if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
+            switch (errorMsg) {
+                case AppConstants.LOGOUT_USER:
+                    AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
+                    HashMap<String, Object> properties = new EventProperty.Builder().build();
+                    AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
+                    mUserPreference.delete();
+                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+                    break;
+                default:
+                    onShowErrorDialog(errorMsg, feedParticipationEnum);
+            }
+        }
+
+    }
+    //endregion inherited methods
+
+    //region public methods
+    @OnClick(R.id.tv_other_login_option)
+    public void otherLoginOption() {
+        openLoginActivity();
+    }
+
+    @OnClick(R.id.btn_login_google)
+    public void googleLoginClick() {
+        showDialogInWelcome(LOGGING_IN_DIALOG);
+        if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
+            showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+            return;
+        } else {
+            if (!StringUtil.isNotNullOrEmptyString(mFcmId))
+                getFcmId();
+            launchGooglePlusLogin();
+        }
+    }
+
+    public void launchGooglePlusLogin() {
+        if (mAppUtils.isNetworkAvailable()) {
+            mGoogleConnectHelper.signIn(this);
+        } else {
+            Toast.makeText(WelcomeActivity.this, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void dismissProgressDialog(int id) {
+        try {
+            switch (id) {
+                case LOGGING_IN_DIALOG: {
+                    if (mProgressDialog != null && mProgressDialog.isShowing()) {
+                        mProgressDialog.dismiss();
+                    }
+                    break;
+                }
+                case TOKEN_LOGGING_PROGRESS_DIALOG: {
+                    if (mLoggingProgressDialog != null && mLoggingProgressDialog.isShowing()) {
+                        mLoggingProgressDialog.dismiss();
+                    }
+                    break;
+                }
+                default:
+                    break;
+            }
+
+        } catch (IllegalArgumentException e) {
+            Crashlytics.getInstance().core.logException(e);
+            LogUtils.error(this.getClass().getName(), e.toString(), e);
+        }
+    }
+
+    public void getTokenFromGoogleAuth(String personEmail) {
+        new RetrieveTokenTask().execute(personEmail);
+    }
+
+    public void showGenderInputDialog(String userName, String personEmail) {
+        GenderInputFormDialogFragment fragment = (GenderInputFormDialogFragment) getFragmentManager().findFragmentByTag(AppConstants.GENDER_INPUT_DIALOG);
+        if (fragment == null) {
+            fragment = new GenderInputFormDialogFragment();
+            Bundle b = new Bundle();
+            b.putString(BaseDialogFragment.USER_NAME, userName);
+            b.putString(BaseDialogFragment.EMAIL_ID, personEmail);
+            fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), AppConstants.GENDER_INPUT_DIALOG);
+        }
+    }
+
+    public void showMaleError(String userName) {
+        MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
+        if (fragment == null) {
+            fragment = new MaleErrorDialog();
+            Bundle b = new Bundle();
+            b.putString(BaseDialogFragment.USER_NAME, userName);
+            b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
+            fragment.setArguments(b);
+        }
+        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            fragment.show(getFragmentManager(), MaleErrorDialog.class.getName());
+        }
+    }
+    //endregion public methods
+
+    //region private methods
+    private void setUpView() {
+        setContentView(R.layout.welcome_activity);
+        ButterKnife.bind(this);
+        initHomeViewPagerAndTabs();
+
+        mFbConnectHelper = new FBConnectHelper(this);
+        mGoogleConnectHelper = GoogleConnectHelper.getInstance();
+        getFcmId();
+
+        loginSetUp();
+        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(SCREEN_LABEL);
+    }
+
+    private void loginSetUp() {
+        mCurrentTime = System.currentTimeMillis();
+        mGoogleConnectHelper.initialize(this, this);
+        mFbConnectHelper.connectFb();
+
+        fbLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogInWelcome(LOGGING_IN_DIALOG);
+                if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
+                    showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                } else {
+                    if (!StringUtil.isNotNullOrEmptyString(mFcmId))
+                        getFcmId();
+                    LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
+                }
+            }
+        });
+    }
+
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    private void initHomeViewPagerAndTabs() {
+        mScreenNameList.add(R.drawable.welcome_first);
+        mScreenNameList.add(R.drawable.welcome_second);
+        mScreenNameList.add(R.drawable.welcome_third);
+
+        SheroesWelcomeViewPagerAdapter viewPagerAdapter = new SheroesWelcomeViewPagerAdapter(mScreenNameList, this);
+        mViewPager.setAdapter(viewPagerAdapter);
+        mViewPager.addOnPageChangeListener(WelcomeActivity.this);
+        ivWelcomeFirst.setImageResource(R.drawable.vector_circle_red);
+        ivWelcomeSecond.setImageResource(R.drawable.vector_circle_w);
+        ivWelcomeThird.setImageResource(R.drawable.vector_circle_w);
+        mHandler = new Handler();
+        mRunnable = new Runnable() {
+            public void run() {
+                mViewPager.setCurrentItem(mCurrentPage++, true);
+                mHandler.postDelayed(mRunnable, 10000);
+            }
+        };
+        mHandler.postDelayed(mRunnable, 10000);
+    }
+
+    private void openLoginActivity() {
+        Intent loginIntent = new Intent(WelcomeActivity.this, LoginActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, mIsBranchFirstSession);
+        bundle.putString(AppConstants.ADS_DEEP_LINK_URL, mDeepLinkUrl);
+        loginIntent.putExtras(bundle);
+        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(loginIntent);
+        finish();
+    }
+
+    /**
+     * Creates and returns dialog
+     *
+     * @param id id of dialog
+     * @return dialog
+     */
+    private void createCustomDialog(int id) {
+        try {
+            switch (id) {
+                case LOGGING_IN_DIALOG: {
+
+                    if (isFinishing()) return;
+
+                    mProgressDialog = new ProgressDialog(WelcomeActivity.this);
+                    mProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                    mProgressDialog.setCancelable(true);
+                    mProgressDialog.show();
+                    break;
+                }
+                case TOKEN_LOGGING_PROGRESS_DIALOG: {
+
+                    if (isFinishing()) return;
+
+                    mLoggingProgressDialog = new ProgressDialog(WelcomeActivity.this);
+                    mLoggingProgressDialog.setMessage(getString(R.string.ID_PLAY_STORE_DATA));
+                    mLoggingProgressDialog.setCancelable(true);
+                    mLoggingProgressDialog.show();
+                    break;
+                }
+                default:
+                    break;
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+        }
+    }
+
+    private void getFcmId() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        FCMClientManager pushClientManager = new FCMClientManager(WelcomeActivity.this, getString(R.string.ID_PROJECT_ID));
+        pushClientManager.registerIfNeeded(new FCMClientManager.RegistrationCompletedHandler() {
+            @Override
+            public void onSuccess(String registrationId, boolean isNewRegistration) {
+                mFcmId = registrationId;
+                if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
+                    //Refresh FCM token
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                    if (cleverTapAPI != null) {
+                        cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
+                    }
+                    fbLogin.setEnabled(true);
+                } else {
+                    fbLogin.setEnabled(false);
+                    if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
+                        showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
+                        return;
+                    } else {
+                        getFcmId();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(String ex) {
+                mFcmId = ex;
+            }
+        });
     }
 
     private void loginAuthTokenResponse(LoginResponse loginResponse) {
@@ -597,114 +736,17 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
         }
         finishAffinity();
     }
+    //endregion private methods
 
+    //region protected methods
     @Override
-    public void getGoogleExpireInResponse(ExpireInResponse expireInResponse) {
-        if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
-            LoginRequest loginRequest = loginRequestBuilder();
-            loginRequest.setAccessToken(mToken);
-            loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
-            loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
-            loginRequest.setFcmorapnsid(mFcmId);
-            loginRequest.setCallForSignUp(AppConstants.GOOGLE_PLUS);
-            loginRequest.setUserGender(GENDER);
-            mLoginViaSocial = GOOGLE;
-            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
-        }
-
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
     }
+    //endregion protected methods
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        mFbConnectHelper.onActivityResult(requestCode, resultCode, data);
-        mGoogleConnectHelper.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onGoogleSuccess(String name, String email) {
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-        showGenderInputDialog(name, email);
-    }
-
-    @Override
-    public void dismissProgress() {
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-    }
-
-    public void dismissProgressDialog(int id) {
-        try {
-            switch (id) {
-                case LOGGING_IN_DIALOG: {
-                    if (mProgressDialog != null && mProgressDialog.isShowing()) {
-                        mProgressDialog.dismiss();
-                    }
-                    break;
-                }
-                case TOKEN_LOGGING_PROGRESS_DIALOG: {
-                    if (mLoggingProgressDialog != null && mLoggingProgressDialog.isShowing()) {
-                        mLoggingProgressDialog.dismiss();
-                    }
-                    break;
-                }
-                default:
-                    break;
-            }
-
-        } catch (IllegalArgumentException e) {
-            Crashlytics.getInstance().core.logException(e);
-            LogUtils.error(this.getClass().getName(), e.toString(), e);
-        }
-    }
-
-    public void getTokenFromGoogleAuth(String personEmail) {
-        new RetrieveTokenTask().execute(personEmail);
-    }
-
-    public void showGenderInputDialog(String userName, String personEmail) {
-        GenderInputFormDialogFragment fragment = (GenderInputFormDialogFragment) getFragmentManager().findFragmentByTag(AppConstants.GENDER_INPUT_DIALOG);
-        if (fragment == null) {
-            fragment = new GenderInputFormDialogFragment();
-            Bundle b = new Bundle();
-            b.putString(BaseDialogFragment.USER_NAME, userName);
-            b.putString(BaseDialogFragment.EMAIL_ID, personEmail);
-            fragment.setArguments(b);
-        }
-        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), AppConstants.GENDER_INPUT_DIALOG);
-        }
-    }
-
-    @Override
-    public void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken) {
-        if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-            LoginRequest loginRequest = loginRequestBuilder();
-            loginRequest.setAccessToken(accessToken.getToken());
-            loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
-            loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
-            loginRequest.setFcmorapnsid(mFcmId);
-            loginRequest.setUserGender(GENDER);
-            mLoginViaSocial = FACEBOOK;
-            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
-        }
-    }
-
-    @Override
-    public void OnFbError(String errorMessage) {
-        mUserPreference.delete();
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, errorMessage);
-    }
-
-    @Override
-    public void onFbCancel() {
-        mUserPreference.delete();
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
-    }
-
+    //region inner class
     private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -732,52 +774,20 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnF
             mLoginPresenter.googleTokenExpireInFromPresenter(URL_ACCESS_TOKEN);
         }
     }
+    //endregion inner class
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-    }
-
-    @Override
-    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-        if (null != fbLogin) {
-            fbLogin.setEnabled(true);
-            mUserPreference.delete();
-        }
-        if (StringUtil.isNotNullOrEmptyString(errorMsg)) {
-            switch (errorMsg) {
-                case AppConstants.LOGOUT_USER:
-                    AnalyticsManager.initializeMixpanel(WelcomeActivity.this);
-                    HashMap<String, Object> properties = new EventProperty.Builder().build();
-                    AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
-                    mUserPreference.delete();
-                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
-                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
-                    break;
-                default:
-                    onShowErrorDialog(errorMsg, feedParticipationEnum);
-            }
-        }
-
-    }
-
-    public void showMaleError(String userName) {
-        MaleErrorDialog fragment = (MaleErrorDialog) getFragmentManager().findFragmentByTag(MaleErrorDialog.class.getName());
-        if (fragment == null) {
-            fragment = new MaleErrorDialog();
-            Bundle b = new Bundle();
-            b.putString(BaseDialogFragment.USER_NAME, userName);
-            b.putInt(AppConstants.FACEBOOK_VERIFICATION, AppConstants.ONE_CONSTANT);
-            fragment.setArguments(b);
-        }
-        if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            fragment.show(getFragmentManager(), MaleErrorDialog.class.getName());
+    /**
+     * Show dialog
+     *
+     * @param id id of dialog
+     */
+    void showDialogInWelcome(int id) {
+        try {
+            createCustomDialog(id);
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
         }
     }
+
 }
 

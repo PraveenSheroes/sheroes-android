@@ -25,12 +25,15 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
     private OnGoogleConnectListener mOnGoogleConnectListener;
     //endregion member variables
 
-    public interface OnGoogleConnectListener{
+    //region interface
+    public interface OnGoogleConnectListener {
         void onGoogleSuccess(String name, String email);
 
         void dismissProgress();
     }
+    //endregion interface
 
+    //region constructor
     public static GoogleConnectHelper getInstance() {
         if (mInstance == null) {
             mInstance = new GoogleConnectHelper();
@@ -38,7 +41,7 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
         return mInstance;
     }
 
-    private GoogleConnectHelper(){
+    private GoogleConnectHelper() {
         mGso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
@@ -47,12 +50,13 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .build();
     }
+    //endregion constructor
 
-
+    //region public methods
     public void initialize(Context context, OnGoogleConnectListener onGoogleConnectListener) {
         mOnGoogleConnectListener = onGoogleConnectListener;
         mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .enableAutoManage((FragmentActivity)context, this)
+                .enableAutoManage((FragmentActivity) context, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, mGso)
                 .build();
     }
@@ -86,6 +90,13 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
         }
     }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+    //endregion public methods
+
+    //region private methods
     private void handleSignInResult(GoogleSignInResult result) {
         if (result.isSuccess()) {
             GoogleSignInAccount acct = result.getSignInAccount();
@@ -95,10 +106,5 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
             mOnGoogleConnectListener.onGoogleSuccess(personName, personEmail);
         }
     }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
+    //endregion private methods
 }
