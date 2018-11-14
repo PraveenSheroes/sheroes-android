@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -11,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
-import android.support.annotation.NonNull;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
@@ -24,26 +22,11 @@ import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.GoogleAuthException;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.auth.UserRecoverableAuthException;
-import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.Scopes;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Scope;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,18 +49,17 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
+import appliedlife.pvtltd.SHEROES.social.FBConnectHelper;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
-import appliedlife.pvtltd.SHEROES.social.SocialListener;
-import appliedlife.pvtltd.SHEROES.social.SocialPerson;
+import appliedlife.pvtltd.SHEROES.social.GoogleConnectHelper;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -100,16 +82,14 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  * Created by sheroes on 06/03/17.
  */
 
-public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageChangeListener, LoginView, GoogleApiClient.OnConnectionFailedListener {
+public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnFbSignInListener, GoogleConnectHelper.OnGoogleConnectListener, ViewPager.OnPageChangeListener, LoginView {
     //region constant variables
     public static final String SCREEN_LABEL = "Intro Screen";
-    public static final int LOGGING_IN_DIALOG = 1;
     public static final String GENDER = "female";
     public static final int TOKEN_LOGGING_PROGRESS_DIALOG = 2;
     public static final String GOOGLE = "google";
     public static final String FACEBOOK = "facebook";
-    public static final int GOOGLE_CALL = 101;
-    public static final int FACEBOOK_CALL = 201;
+    public static final int LOGGING_IN_DIALOG = 1;
     //endregion
 
     // region member variables
@@ -117,12 +97,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private Timer mTimer;
     private Handler mHandler;
     private Runnable mRunnable;
-    private CallbackManager mCallbackManager;
-    private int mFcmForGoogleAndFacebook;
-    private GoogleSignInOptions mGso;
     private ProgressDialog mProgressDialog, mLoggingProgressDialog;
-    //google api client
-    public static GoogleApiClient mGoogleApiClient;
     private String mToken = null;
     private String mLoginViaSocial = GOOGLE;
     private long mCurrentTime;
@@ -132,6 +107,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     private String mDeepLinkUrl = null;
     private String mDefaultTab = null;
     private ArrayList<Integer> mScreenNameList = new ArrayList<>();
+    private FBConnectHelper mFbConnectHelper;
+    private GoogleConnectHelper mGoogleConnectHelper;
     //endregion
 
     // region inject variables
@@ -191,83 +168,33 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         setContentView(R.layout.welcome_activity);
         ButterKnife.bind(this);
         initHomeViewPagerAndTabs();
+
+        mFbConnectHelper = new FBConnectHelper(this);
+        mGoogleConnectHelper = GoogleConnectHelper.getInstance();
+        getFcmId();
+
         loginSetUp();
         ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     private void loginSetUp() {
         mCurrentTime = System.currentTimeMillis();
-        googlePlusLogin();
-        mCallbackManager = CallbackManager.Factory.create();
-
-        LoginManager.getInstance().registerCallback(mCallbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        final AccessToken accessToken = loginResult.getAccessToken();
-
-                        // Facebook Email address
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                accessToken,
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
-                                            LoginRequest loginRequest = loginRequestBuilder();
-                                            loginRequest.setAccessToken(accessToken.getToken());
-//                                            AppUtils appUtils = AppUtils.getInstance();
-                                            loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
-                                            loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
-                                            loginRequest.setFcmorapnsid(mFcmId);
-                                            loginRequest.setUserGender(GENDER);
-                                            mLoginViaSocial = FACEBOOK;
-                                            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
-                                        }
-                                    }
-                                });
-                        try {
-                            Bundle parameters = new Bundle();
-                            parameters.putString("fields", "id,name,email,gender,last_name,first_name");
-                            request.setParameters(parameters);
-                            request.executeAsync();
-                        } catch (Exception e) {
-                            Crashlytics.getInstance().core.logException(e);
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancel() {
-                        mUserPreference.delete();
-                        dismissProgressDialog(LOGGING_IN_DIALOG);
-                        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-                        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
-                    }
-
-                    @Override
-                    public void onError(FacebookException exception) {
-                        mUserPreference.delete();
-                        dismissProgressDialog(LOGGING_IN_DIALOG);
-                        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-                        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, exception.getMessage());
-                    }
-                });
+        mGoogleConnectHelper.initialize(this, this);
+        mFbConnectHelper.connectFb();
 
         fbLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mFcmForGoogleAndFacebook = FACEBOOK_CALL;
                 showDialogInWelcome(LOGGING_IN_DIALOG);
                 if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
                     showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
-                    return;
                 } else {
-                    getFcmId();
+                    if (!StringUtil.isNotNullOrEmptyString(mFcmId))
+                        getFcmId();
+                    LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
                 }
             }
         });
-
-
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
@@ -275,10 +202,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         mScreenNameList.add(R.drawable.welcome_first);
         mScreenNameList.add(R.drawable.welcome_second);
         mScreenNameList.add(R.drawable.welcome_third);
-        ArrayList<String> screenText = new ArrayList<>();
-        screenText.add(getString(R.string.ID_WELCOME_FIRST));
-        screenText.add(getString(R.string.ID_WELCOME_SECOND));
-        screenText.add(getString(R.string.ID_WELCOME_THIRD));
 
         SheroesWelcomeViewPagerAdapter viewPagerAdapter = new SheroesWelcomeViewPagerAdapter(mScreenNameList, this);
         mViewPager.setAdapter(viewPagerAdapter);
@@ -299,10 +222,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     protected void onDestroy() {
-        if (null != mGoogleApiClient) {
-            mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
-            mGoogleApiClient.disconnect();
-        }
         if (mTimer != null) {
             mTimer.cancel();
             mTimer = null;
@@ -463,38 +382,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         return true;
     }
 
-    private void googlePlusLogin() {
-        mGso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestProfile()
-                .requestScopes(new Scope(Scopes.PLUS_ME))
-                .requestScopes(new Scope(Scopes.PROFILE))
-                .requestScopes(new Scope(Scopes.PLUS_LOGIN))
-                .build();
-        if (null == mGoogleApiClient) {
-            mGoogleApiClient = new GoogleApiClient.Builder(WelcomeActivity.this)
-                    .enableAutoManage(WelcomeActivity.this, this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, mGso)
-                    .build();
-        }
-
-    }
-
-    private void signIn() {
-        //Creating an intent
-        signOut();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        //Starting intent for result
-        startActivityForResult(signInIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS);
-    }
-
-    public void signOut() {
-        //Check is required otherwise illegal state exception might be thrown
-        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-        }
-    }
-
     /**
      * Show dialog
      *
@@ -547,19 +434,20 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @OnClick(R.id.btn_login_google)
     public void googleLoginClick() {
-        mFcmForGoogleAndFacebook = GOOGLE_CALL;
         showDialogInWelcome(LOGGING_IN_DIALOG);
         if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
             showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_TAG);
             return;
         } else {
-            getFcmId();
+            if (!StringUtil.isNotNullOrEmptyString(mFcmId))
+                getFcmId();
+            launchGooglePlusLogin();
         }
     }
 
     public void launchGooglePlusLogin() {
         if (mAppUtils.isNetworkAvailable()) {
-            signIn();
+            mGoogleConnectHelper.signIn(this);
         } else {
             Toast.makeText(WelcomeActivity.this, getString(R.string.IDS_STR_NETWORK_TIME_OUT_DESCRIPTION), Toast.LENGTH_SHORT).show();
         }
@@ -580,7 +468,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }
                     fbLogin.setEnabled(true);
-                    checkSignUpCall(mFcmForGoogleAndFacebook);
                 } else {
                     fbLogin.setEnabled(false);
                     if (!NetworkUtil.isConnected(WelcomeActivity.this)) {
@@ -599,26 +486,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         });
     }
 
-
-    private void checkSignUpCall(int checkCall) {
-        switch (checkCall) {
-            case FACEBOOK_CALL:
-                if (!NetworkUtil.isConnected(getApplicationContext())) {
-                    (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
-                    return;
-                } else {
-                    LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("public_profile", "email", "user_friends"));
-                }
-                break;
-            case GOOGLE_CALL:
-                launchGooglePlusLogin();
-                break;
-
-            default:
-        }
-    }
-
-
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
         if (fbLogin != null) {
@@ -634,7 +501,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     } else {
                         mUserPreference.delete();
                         LoginManager.getInstance().logOut();
-                        signOut();
+                        mGoogleConnectHelper.signOut();
                         showMaleError("");
                     }
                     break;
@@ -643,13 +510,13 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
                     break;
                 case AppConstants.FAILED:
                     mUserPreference.delete();
-                    signOut();
+                    mGoogleConnectHelper.signOut();
                     LoginManager.getInstance().logOut();
                     String errorMessage = loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA);
                     String deactivated = loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED);
                     if (StringUtil.isNotNullOrEmptyString(errorMessage)) {
                         if (StringUtil.isNotNullOrEmptyString(deactivated) && deactivated.equalsIgnoreCase("true")) {
-                            mErrorUtil.showErrorDialogOnUserAction(this,true, false, errorMessage, "true");
+                            mErrorUtil.showErrorDialogOnUserAction(this, true, false, errorMessage, "true");
                         } else {
                             showMaleError("");
                         }
@@ -736,7 +603,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (expireInResponse.getExpiresIn() > 0 && StringUtil.isNotNullOrEmptyString(mToken)) {
             LoginRequest loginRequest = loginRequestBuilder();
             loginRequest.setAccessToken(mToken);
-//            AppUtils appUtils = AppUtils.getInstance();
             loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
             loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
             loginRequest.setFcmorapnsid(mFcmId);
@@ -750,24 +616,20 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mCallbackManager != null) {
-            mCallbackManager.onActivityResult(requestCode, resultCode, data);
-        }
-        switch (requestCode) {
-            case AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS:
-                if (resultCode == Activity.RESULT_OK) {
-                    GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                    if (!isFinishing()) {
-                        //    showDialogInWelcome(TOKEN_LOGGING_PROGRESS_DIALOG);
-                    }
-                    handleSignInResult(result);
-                } else {
-                    dismissProgressDialog(LOGGING_IN_DIALOG);
-                }
-                break;
-            default:
-                break;
-        }
+        super.onActivityResult(requestCode, resultCode, data);
+        mFbConnectHelper.onActivityResult(requestCode, resultCode, data);
+        mGoogleConnectHelper.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onGoogleSuccess(String name, String email) {
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        showGenderInputDialog(name, email);
+    }
+
+    @Override
+    public void dismissProgress() {
+        dismissProgressDialog(LOGGING_IN_DIALOG);
     }
 
     public void dismissProgressDialog(int id) {
@@ -795,29 +657,6 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         }
     }
 
-    private void handleSignInResult(GoogleSignInResult result) {
-        if (result.isSuccess()) {
-            GoogleSignInAccount acct = result.getSignInAccount();
-            String personName = acct.getDisplayName();
-            String firstName = "";
-            String lastName = "";
-            if (personName != null) {
-                String[] names = personName.split(" ");
-                firstName = names[0];
-                lastName = names[names.length - 1];
-            }
-            String personEmail = acct.getEmail();
-            String imageURL = "";
-            if (acct.getPhotoUrl() != null) {
-                imageURL = acct.getPhotoUrl().toString();
-            }
-            String idToken = acct.getIdToken();
-            String socialId = acct.getId();
-            dismissProgressDialog(LOGGING_IN_DIALOG);
-            showGenderInputDialog(personName, personEmail);
-        }
-    }
-
     public void getTokenFromGoogleAuth(String personEmail) {
         new RetrieveTokenTask().execute(personEmail);
     }
@@ -834,6 +673,36 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
             fragment.show(getFragmentManager(), AppConstants.GENDER_INPUT_DIALOG);
         }
+    }
+
+    @Override
+    public void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken) {
+        if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
+            LoginRequest loginRequest = loginRequestBuilder();
+            loginRequest.setAccessToken(accessToken.getToken());
+            loginRequest.setCloudMessagingId(mAppUtils.getCloudMessaging());
+            loginRequest.setDeviceUniqueId(mAppUtils.getDeviceId());
+            loginRequest.setFcmorapnsid(mFcmId);
+            loginRequest.setUserGender(GENDER);
+            mLoginViaSocial = FACEBOOK;
+            mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
+        }
+    }
+
+    @Override
+    public void OnFbError(String errorMessage) {
+        mUserPreference.delete();
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
+        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, errorMessage);
+    }
+
+    @Override
+    public void onFbCancel() {
+        mUserPreference.delete();
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
+        (WelcomeActivity.this).showNetworkTimeoutDialog(true, false, AppConstants.CHECK_NETWORK_CONNECTION);
     }
 
     private class RetrieveTokenTask extends AsyncTask<String, Void, String> {
@@ -867,38 +736,8 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
     @Override
     public void onStop() {
         super.onStop();
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.stopAutoManage(WelcomeActivity.this);
-            mGoogleApiClient.disconnect();
-        }
         dismissProgressDialog(LOGGING_IN_DIALOG);
         dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
-    }
-
-//    @Override
-//    public void userLoggedIn(SocialPerson person) {
-//        if (person == null) {
-//            WelcomeActivity.this.runOnUiThread(new Runnable() {
-//                public void run() {
-//                    Toast.makeText(mAppUtils.getApplicationContext(), getString(R.string.ID_GENERIC_ERROR), Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            return;
-//        }
-//        if (StringUtil.isNotNullOrEmptyString(person.getEmail())) {
-//            if (person.getLoginType().equalsIgnoreCase(SocialPerson.LOGIN_TYPE_GOOGLE)) {
-//                this.runOnUiThread(new Runnable() {
-//                    public void run() {
-//                        Toast.makeText(mAppUtils.getApplicationContext(), getString(R.string.ID_GENERIC_ERROR), Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        }
-//    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(WelcomeActivity.this, "Connection failed", Toast.LENGTH_SHORT).show();
     }
 
     @Override
