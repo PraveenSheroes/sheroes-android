@@ -580,6 +580,10 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         });
     }
 
+    public String getCommunityId() {
+        return mCommunityFeedSolrObj == null ? "" : Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant());
+    }
+
     public void invalidateItem(FeedDetail feedDetail, boolean isRemoved) {
         if (mCommunityDetailAdapter == null) return;
 
@@ -881,7 +885,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
             communityPost.isMyPost = mCommunityFeedSolrObj.isOwner();
             HashMap<String, Object> screenProperties = new EventProperty.Builder()
-                    .sourceScreenId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                    .sourceScreenId(getCommunityId())
                     .sourceTabKey(communityTab.key)
                     .sourceTabTitle(communityTab.title)
                     .build();

@@ -13,6 +13,7 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
@@ -70,7 +71,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         }
         getMvpView().startProgressBar();
 
-        mSheroesAppServiceApi.fetchAllCommunities()
+        mSheroesAppServiceApi.fetchAllCommunities(new BaseRequest())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())

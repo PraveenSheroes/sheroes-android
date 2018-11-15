@@ -6,6 +6,7 @@ import java.util.Map;
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.ImpressionResponse;
 import appliedlife.pvtltd.SHEROES.analytics.Impression.UserEvents;
+import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
@@ -338,7 +339,7 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getCommunityFeed(@Url String url, @Body CommunityFeedRequestPojo communityFeedRequestPojo);
 
     @POST("participant/feed/community_category_home")
-    Observable<FeedResponsePojo> fetchAllCommunities();
+    Observable<FeedResponsePojo> fetchAllCommunities(@Body BaseRequest baseRequest);
 
     @GET("participant/remote_config/AppConfig")
     Observable<ConfigurationResponse> getConfig();
