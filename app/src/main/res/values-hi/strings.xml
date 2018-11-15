@@ -122,6 +122,7 @@
     <string name="ID_CLOSE">बंद हो गया</string>
 
     <!-- String related to setting_feedback page-->
+    <string name="HELPLINE_ASK_QUESTION_HINT">अपना सवाल लिखें…</string>
     <string name="ID_ASK_QUESTION">अपना सवाल लिखें</string>
     <string name="ID_SUBMIT">जमा करें</string>
     <string name="follow_user">फॉलो</string>
