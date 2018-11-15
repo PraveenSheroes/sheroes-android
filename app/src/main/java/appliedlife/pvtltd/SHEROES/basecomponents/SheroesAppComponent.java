@@ -50,7 +50,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EmailVerificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
@@ -60,14 +60,13 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ResetPasswordDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ResetPasswordSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
@@ -135,8 +134,6 @@ public interface SheroesAppComponent {
     void inject(HomeActivity homeActivity);
 
     void inject(LoginActivity loginActivity);
-
-    void inject(LoginFragment loginFragment);
 
     void inject(ArticleCategorySpinnerFragment articleCategorySpinnerFragment);
 
@@ -208,11 +205,11 @@ public interface SheroesAppComponent {
 
     void inject(OnceWelcomeCardHolder onceWelcomeCardHolder);
 
-    void inject(EmailVerificationFragment emailVerificationFragment);
+    void inject(EmailVerificationDialogFragment emailVerificationDialogFragment);
 
-    void inject(ResetPasswordFragment resetPasswordFragment);
+    void inject(ResetPasswordDialogFragment resetPasswordDialogFragment);
 
-    void inject(ResetPasswordSuccessFragment resetPasswordSuccessFragment);
+    void inject(ResetPasswordSuccessDialogFragment resetPasswordSuccessDialogFragment);
 
     void inject(ProfileImageDialogFragment profileImageDialogFragment);
 

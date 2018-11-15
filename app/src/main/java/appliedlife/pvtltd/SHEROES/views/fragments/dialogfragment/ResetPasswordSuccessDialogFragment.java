@@ -1,5 +1,6 @@
-package appliedlife.pvtltd.SHEROES.views.fragments;
+package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
@@ -27,32 +28,53 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class ResetPasswordSuccessFragment extends BaseFragment {
+public class ResetPasswordSuccessDialogFragment extends BaseDialogFragment {
+    // region Constants
     private static final String SCREEN_LABEL = "Reset Password Success Screen";
+    //endregion
+
+    // region View variables
     @Bind(R.id.reset_pwd_success_text)
     TextView tvResetPwd;
+    //endregion
 
+    // region lifecycle override methods
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_reset_password_success, container, false);
         ButterKnife.bind(this, view);
         Bundle bundle = getArguments();
-        if(bundle!=null && bundle.getString(AppConstants.EMAIL)!=null){
+        if (bundle != null && bundle.getString(AppConstants.EMAIL) != null) {
             int index = bundle.getString(AppConstants.EMAIL).indexOf(AppConstants.AT_THE_RATE_OF);
-            if(index < bundle.getString(AppConstants.EMAIL).length()){
+            if (index < bundle.getString(AppConstants.EMAIL).length()) {
                 String domain = bundle.getString(AppConstants.EMAIL).substring(index);
                 tvResetPwd.setText(getString(R.string.ID_RESET_PASSWORD_SUCCESS_TEXT_PART_1, domain) + getString(R.string.ID_RESET_PASSWORD_SUCCESS_TEXT_PART_2));
             }
         }
+        AnalyticsManager.timeScreenView(SCREEN_LABEL);
 
         return view;
     }
 
     @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
+    public void onStart() {
+        super.onStart();
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+        // set the animations to use on showing and hiding the dialog
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                backOnClick();
+            }
+        };
     }
 
     @Override
@@ -61,19 +83,16 @@ public class ResetPasswordSuccessFragment extends BaseFragment {
     }
 
     @OnClick(R.id.back_login)
-    public void onLoginLinkClick(){
-        ((LoginActivity)getActivity()).renderLoginFragmentView();
+    public void onLoginLinkClick() {
+        backOnClick();
+        ((LoginActivity) getActivity()).closeResetPasswordFragment();
     }
 
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
-        ((LoginActivity)getActivity()).renderLoginFragmentView();
+        dismiss();
     }
 
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
@@ -114,4 +133,5 @@ public class ResetPasswordSuccessFragment extends BaseFragment {
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
+    //endregion
 }

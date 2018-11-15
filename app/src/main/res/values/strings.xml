@@ -390,7 +390,12 @@
     <string name="ID_ANSWER_QUESTION">Answer questions</string>
     <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
     <string name="private_information">Private Information (Only Visible to You)</string>
-    <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
+    <string name="ID_LOGIN_MSG"><![CDATA[ <html><body> <div style="text-align: center;margin: 0px 0px 5px 0px;">Email login is
+                                                    <span style="color:#3C3C3C;"><b>only for existing users.</b> </span>
+                                                    New users should login via Facebook or Google only.
+                                                    </div>
+                                                    </body>
+                                                    </html>  ]]></string>
     <string name="ID_GOT"> Got it!</string>
     <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Need help with a problem?</string>
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>

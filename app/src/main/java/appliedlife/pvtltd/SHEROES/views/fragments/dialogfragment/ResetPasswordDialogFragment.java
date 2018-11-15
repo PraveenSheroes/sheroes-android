@@ -1,5 +1,6 @@
-package appliedlife.pvtltd.SHEROES.views.fragments;
+package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +15,9 @@ import java.util.HashMap;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.ResponseStatus;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -30,7 +31,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInRespo
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
-import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
@@ -40,7 +40,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 
-public class ResetPasswordFragment extends BaseFragment implements LoginView {
+public class ResetPasswordDialogFragment extends BaseDialogFragment implements LoginView {
     private static final String SCREEN_LABEL = "Forgot Password Screen";
     @Inject
     LoginPresenter mLogInPresenter;
@@ -59,15 +59,33 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     AppUtils mAppUtils;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.fragment_reset_password, container, false);
         ButterKnife.bind(this, view);
-        setProgressBar(pbResetPwd);
         mLogInPresenter.attachView(this);
-
+        AnalyticsManager.timeScreenView(SCREEN_LABEL);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // safety check
+        if (getDialog() == null) {
+            return;
+        }
+        // set the animations to use on showing and hiding the dialog
+    }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), R.style.Theme_Material_Light_Dialog_NoMinWidth) {
+            @Override
+            public void onBackPressed() {
+                backOnClick();
+            }
+        };
     }
 
     @Override
@@ -96,22 +114,9 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
     public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
         if (forgotPasswordResponse != null) {
             if (forgotPasswordResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())) {
-
-                ResetPasswordSuccessFragment resetPasswordSuccessFragment = new ResetPasswordSuccessFragment();
-
                 if (eTInputEmail != null && StringUtil.isNotNullOrEmptyString(eTInputEmail.getText().toString())) {
-                    Bundle bundle = new Bundle();
-                    bundle.putString(AppConstants.EMAIL, eTInputEmail.getText().toString());
-                    resetPasswordSuccessFragment.setArguments(bundle);
+                    ((LoginActivity) getActivity()).showResetPasswordSuccessFragment(eTInputEmail.getText().toString());
                 }
-
-                if (getFragmentManager() != null) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_login, resetPasswordSuccessFragment, ResetPasswordSuccessFragment.class.getName())
-                            .addToBackStack(null)
-                            .commitAllowingStateLoss();
-                }
-
             } else {
                 if (null != getActivity() && isAdded()) {
                     tvPwdStatus.setText(getString(R.string.ID_RESET_PASSWORD_FAILURE_TEXT));
@@ -125,20 +130,9 @@ public class ResetPasswordFragment extends BaseFragment implements LoginView {
 
     }
 
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return mLogInPresenter;
-    }
-
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
-        if (getActivity() == null || getActivity().isFinishing()) return;
-        ((LoginActivity) getActivity()).renderLoginFragmentView();
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
+       dismiss();
     }
 
     @Override

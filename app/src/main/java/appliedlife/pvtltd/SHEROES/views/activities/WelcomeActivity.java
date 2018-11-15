@@ -325,9 +325,7 @@ public class WelcomeActivity extends BaseActivity implements ViewPager.OnPageCha
         bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
         bundle.putString(AppConstants.ADS_DEEP_LINK_URL, deepLinkUrl);
         loginIntent.putExtras(bundle);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginIntent);
-        finish();
     }
 
     @Override
