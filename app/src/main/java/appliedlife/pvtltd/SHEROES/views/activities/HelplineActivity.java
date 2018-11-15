@@ -61,7 +61,7 @@ public class HelplineActivity extends BaseActivity implements BaseHolderInterfac
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-        Fragment helplineFragment = getSupportFragmentManager().findFragmentByTag(HelplineFragment.class.getName());
+        Fragment helplineFragment = getSupportFragmentManager().findFragmentById(R.id.helplineActivityFrameLayout);
         if (AppUtils.isFragmentUIActive(helplineFragment)) {
             HelplineChatDoc helplineChatDoc = (HelplineChatDoc) baseResponse;
             ((HelplineFragment) helplineFragment).checkHelplineRating(helplineChatDoc);
