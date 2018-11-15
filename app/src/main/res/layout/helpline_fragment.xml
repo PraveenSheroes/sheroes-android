@@ -36,7 +36,7 @@
             android:background="@drawable/rectangle_helpline_edittext"
             android:ellipsize="end"
             android:gravity="center_vertical"
-            android:hint="@string/ID_ASK_QUESTION"
+            android:hint="@string/HELPLINE_ASK_QUESTION_HINT"
             android:minHeight="48dp"
             android:paddingBottom="12dp"
             android:paddingLeft="@dimen/dp_size_16"

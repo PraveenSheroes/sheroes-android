@@ -122,7 +122,8 @@
     <string name="ID_CLOSE"> CLOSE </string>
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">Type your question…</string>
+    <string name="ID_ASK_QUESTION">Ask a Question</string>
+    <string name="HELPLINE_ASK_QUESTION_HINT">Type your question…</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">Follow</string>
     <string name="following_user">Following</string>
