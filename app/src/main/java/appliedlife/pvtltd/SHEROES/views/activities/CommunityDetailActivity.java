@@ -110,6 +110,12 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     //region static constants
     public static final String SCREEN_LABEL = "Community Screen Activity";
     public static final String TAB_KEY = "tab_key";
+
+    private static final String COMMUNITY_PRIMARY_COLOR = "#ffffff";
+    private static final String COMMUNITY_SECONDARY_COLOR = "#dc4541";
+    private static final String COMMUNITY_TITLE_TEXT_COLOR = "#3c3c3c";
+    private static final int MY_COMMUNITY_SPAN_SIZE = 2;
+    private static final int INVITE_FRIEND_TOOLTIP_WIDTH_MULTIPLIER = 2;
     //endregion static constants
 
     //region injected variables
@@ -149,19 +155,21 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     //endregion bind view variables
 
     //region member variables
-    private String mStreamType;
-    private String mDefaultTabKey = "";
-    private String mCommunityPrimaryColor = "#ffffff";
-    private String mCommunitySecondaryColor = "#dc4541";
-    private String mCommunityTitleTextColor = "#3c3c3c";
-
-    private boolean mIsFromAds = false;
-
     private final int mWidthPixel = 300;
     private final int mMarginLeft = 20;
     private final int mMarginLeftToolTip = 10;
     private final int mScreenWidthMdpi = 600;
     private final int mScreenWidthHdpi = 750;
+    private final int mToolTipDelay = 1000;
+
+    private String mStreamType;
+    private String mDefaultTabKey = "";
+    private String mCommunityPrimaryColor = COMMUNITY_PRIMARY_COLOR;
+    private String mCommunitySecondaryColor = COMMUNITY_SECONDARY_COLOR;
+    private String mCommunityTitleTextColor = COMMUNITY_TITLE_TEXT_COLOR;
+
+    private boolean mIsFromAds = false;
+
     private int mFromNotification;
     //endregion member variables
 
@@ -173,6 +181,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private SwipPullRefreshList<FeedDetail> mPullRefreshList;
     private CommunityDetailAdapter mCommunityDetailAdapter;
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
+    private Handler mHandler = new Handler();
     //endregion
 
     //region lifecycle methods
@@ -234,6 +243,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
         if (mInviteFriendPopUp != null && mInviteFriendPopUp.isShowing()) {
             mInviteFriendPopUp.dismiss();
         }
+        mHandler.removeCallbacksAndMessages(null);
         super.onDestroy();
     }
     //endregion lifecycle methods
@@ -294,10 +304,9 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share:
+                if (mCommunityFeedSolrObj == null) return true;
+
                 String deepLinkUrl;
-                if (mCommunityFeedSolrObj == null) {
-                    break;
-                }
                 if (StringUtil.isNotNullOrEmptyString(mCommunityFeedSolrObj.getPostShortBranchUrls())) {
                     deepLinkUrl = mCommunityFeedSolrObj.getPostShortBranchUrls();
                 } else {
@@ -596,9 +605,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     private void toolTipForInviteFriends() {
-        final Handler handler = new Handler();
-        int mDelayToolTip = 1000;
-        handler.postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @SuppressLint("InflateParams")
             @Override
             public void run() {
@@ -609,7 +616,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                     mInviteFriendPopUp.setOutsideTouchable(false);
 
                     if (width < mScreenWidthMdpi) {
-                        mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -(width * 2), 0);
+                        mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -(width * INVITE_FRIEND_TOOLTIP_WIDTH_MULTIPLIER), 0);
                         final LinearLayout llToolTipBg = mInviteFriendToolTip.findViewById(R.id.ll_tool_tip_bg);
                         RelativeLayout.LayoutParams llParams = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mWidthPixel, CommunityDetailActivity.this), LinearLayout.LayoutParams.WRAP_CONTENT);
                         llParams.setMargins(CommonUtil.convertDpToPixel(mMarginLeft, CommunityDetailActivity.this), 0, 0, 0);
@@ -617,7 +624,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                         llToolTipBg.setLayoutParams(llParams);
                     } else {
                         if (width < mScreenWidthHdpi) {
-                            mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -(width * 2), 0);
+                            mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -(width * INVITE_FRIEND_TOOLTIP_WIDTH_MULTIPLIER), 0);
                         } else {
                             mInviteFriendPopUp.showAsDropDown(mInviteToolTip, -width, 0);
                         }
@@ -638,10 +645,11 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
                         }
                     });
                 } catch (WindowManager.BadTokenException e) {
+                    mHandler.removeCallbacks(this);
                     Crashlytics.getInstance().core.logException(e);
                 }
             }
-        }, mDelayToolTip);
+        }, mToolTipDelay);
     }
 
     private void initializeLayout() {
@@ -659,7 +667,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private void setUpMyCommunitiesList() {
         //For right navigation drawer communities items
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, MY_COMMUNITY_SPAN_SIZE);
         mCommunitiesRecycler.setLayoutManager(gridLayoutManager);
         mCommunitiesRecycler.setAdapter(mMyCommunitiesAdapter);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.COMMUNITY_DEATIL_DRAWER, AppConstants.NO_REACTION_CONSTANT);
@@ -690,27 +698,27 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     private void setAllColor() {
         if (mCommunityFeedSolrObj == null) {
-            mCommunityPrimaryColor = "#ffffff";
-            mCommunitySecondaryColor = "#dc4541";
-            mCommunityTitleTextColor = "#3c3c3c";
+            mCommunityPrimaryColor = COMMUNITY_PRIMARY_COLOR;
+            mCommunitySecondaryColor = COMMUNITY_SECONDARY_COLOR;
+            mCommunityTitleTextColor = COMMUNITY_TITLE_TEXT_COLOR;
             return;
         }
         if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communityPrimaryColor)) {
             mCommunityPrimaryColor = mCommunityFeedSolrObj.communityPrimaryColor;
         } else {
-            mCommunityPrimaryColor = "#ffffff";
+            mCommunityPrimaryColor = COMMUNITY_PRIMARY_COLOR;
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.communitySecondaryColor)) {
             mCommunitySecondaryColor = mCommunityFeedSolrObj.communitySecondaryColor;
         } else {
-            mCommunitySecondaryColor = "#dc4541";
+            mCommunitySecondaryColor = COMMUNITY_SECONDARY_COLOR;
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedSolrObj.titleTextColor)) {
             mCommunityTitleTextColor = mCommunityFeedSolrObj.titleTextColor;
         } else {
-            mCommunityTitleTextColor = "#3c3c3c";
+            mCommunityTitleTextColor = COMMUNITY_TITLE_TEXT_COLOR;
         }
     }
 
@@ -800,6 +808,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     private void UpdateFabVisibility(CommunityTab communityTab) {
+        if (communityTab == null) return;
         mFabButton.setVisibility(View.GONE);
         if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
             mFabButton.setVisibility(View.VISIBLE);
@@ -872,7 +881,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
             communityPost.community.name = mCommunityFeedSolrObj.getNameOrTitle();
             communityPost.isMyPost = mCommunityFeedSolrObj.isOwner();
             HashMap<String, Object> screenProperties = new EventProperty.Builder()
-                    .sourceScreenId(mCommunityFeedSolrObj == null ? "" : Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                    .sourceScreenId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
                     .sourceTabKey(communityTab.key)
                     .sourceTabTitle(communityTab.title)
                     .build();
