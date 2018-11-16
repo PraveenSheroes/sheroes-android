@@ -9,7 +9,6 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.facebook.stetho.Stetho;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.StandardExceptionParser;
@@ -19,6 +18,7 @@ import java.io.File;
 
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.social.AnalyticsTrackers;
+import appliedlife.pvtltd.SHEROES.util.StethoUtil;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
@@ -73,7 +73,7 @@ public class SheroesApplication extends MultiDexApplication {
         AnalyticsManager.initializeFbAnalytics(mContext);
         //cleverTap
         AnalyticsManager.initializeCleverTap(this, false);
-        Stetho.initializeWithDefaults(this);
+        StethoUtil.initStetho(this);
     }
 
     public String getCurrentActivityName() {
