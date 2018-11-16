@@ -74,7 +74,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         mCommunityFeedObj.setItemPosition(position);
         Context mContext = context;
 
-        if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
+        if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner()) {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

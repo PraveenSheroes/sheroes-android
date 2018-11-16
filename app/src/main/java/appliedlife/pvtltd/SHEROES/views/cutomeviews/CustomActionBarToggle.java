@@ -7,7 +7,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
-public class CustiomActionBarToggle extends ActionBarDrawerToggle {
+public class CustomActionBarToggle extends ActionBarDrawerToggle {
 
     public interface DrawerStateListener {
         void onDrawerOpened();
@@ -17,17 +17,17 @@ public class CustiomActionBarToggle extends ActionBarDrawerToggle {
 
     private DrawerStateListener stateListener;
 
-    public CustiomActionBarToggle(Activity activity,
-                                  DrawerLayout drawerLayout,
-                                  @StringRes int openDrawerContentDescRes,
-                                  @StringRes int closeDrawerContentDescRes, DrawerStateListener stateListener) {
+    public CustomActionBarToggle(Activity activity,
+                                 DrawerLayout drawerLayout,
+                                 @StringRes int openDrawerContentDescRes,
+                                 @StringRes int closeDrawerContentDescRes, DrawerStateListener stateListener) {
         super(activity, drawerLayout, openDrawerContentDescRes, closeDrawerContentDescRes);
         this.stateListener = stateListener;
     }
 
-    public CustiomActionBarToggle(Activity activity, DrawerLayout drawerLayout,
-                                  Toolbar toolbar, @StringRes int openDrawerContentDescRes,
-                                  @StringRes int closeDrawerContentDescRes, DrawerStateListener stateListener) {
+    public CustomActionBarToggle(Activity activity, DrawerLayout drawerLayout,
+                                 Toolbar toolbar, @StringRes int openDrawerContentDescRes,
+                                 @StringRes int closeDrawerContentDescRes, DrawerStateListener stateListener) {
         super(activity, drawerLayout, toolbar, openDrawerContentDescRes, closeDrawerContentDescRes);
         this.stateListener = stateListener;
     }

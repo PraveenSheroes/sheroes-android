@@ -290,7 +290,7 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
-            ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
+            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, true);
         } else {
             removeItem(feedDetail);
         }
