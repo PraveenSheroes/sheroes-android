@@ -1455,9 +1455,7 @@ public class CommonUtil {
         }
         if (context instanceof Activity) {
             final Activity activity = (Activity) context;
-            if (activity.isFinishing()) {
-                return false;
-            }
+            return !activity.isFinishing();
         }
         return true;
     }
