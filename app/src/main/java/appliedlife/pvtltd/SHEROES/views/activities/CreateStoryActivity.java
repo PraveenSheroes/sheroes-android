@@ -332,9 +332,17 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         if (article.getIdOfEntityOrParticipant() > 0) {
             mIdOfEntityOrParticipantArticle = article.getIdOfEntityOrParticipant();
         }
-        getSupportActionBar().setTitle(R.string.edit_story);
-        mEditorFragment.setContent(article.getDescription());
-        mEditorFragment.setTitle(article.getNameOrTitle());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(R.string.edit_story);
+        }
+        if (mEditorFragment != null) {
+            if (StringUtil.isNotNullOrEmptyString(article.getDescription())) {
+                mEditorFragment.setContent(article.getDescription());
+            }
+            if (StringUtil.isNotNullOrEmptyString(article.getNameOrTitle())) {
+                mEditorFragment.setTitle(article.getNameOrTitle());
+            }
+        }
         if (StringUtil.isNotEmptyCollection(mArticleSolrObj.getTag_ids())) {
             for (int i = 0; i < mArticleSolrObj.getTag_ids().size(); i++) {
                 ArticleTagName articleTagName = new ArticleTagName();

@@ -54,7 +54,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginRight="@dimen/chat_voice_icon_padding"
             android:layout_marginLeft="@dimen/chat_voice_icon_padding"
-            android:src="@drawable/ic_mic_img" />
+            android:src="@drawable/vector_mic_img" />
 
         <ImageView
             android:id="@+id/iv_chat_send"
@@ -63,7 +63,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/chat_voice_icon_padding"
             android:layout_marginRight="@dimen/chat_voice_icon_padding"
-            android:src="@drawable/ic_send_img" />
+            android:src="@drawable/vector_send" />
     </LinearLayout>
 
 
