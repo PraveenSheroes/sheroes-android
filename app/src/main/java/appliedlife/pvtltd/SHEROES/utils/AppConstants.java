@@ -374,7 +374,6 @@ public class AppConstants {
     public static final String NAV_FAQ = "FAQ";
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
-    public static final String STORY_STREAM = "story_stream";
     public static final String PROFILE_FOLLOWED_CHAMPION = "Profile Followed Champion";
     public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
     public static final String APP_SNOW = "SNOW";
@@ -441,4 +440,15 @@ public class AppConstants {
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";
     public static final String WHATS_APP_URI = "com.whatsapp";
+
+    // Stream name
+    public static final String STORY_STREAM = "story_stream";
+    public static final String POST_STREAM = "profile_post_stream";
+    /* Stream URL's for posts,articles,stories etc */
+    public static final String MY_FEED_POST_STREAM = "participant/feed/stream";
+    public static final String TRENDING_POST_STREAM = "participant/feed/stream?setOrderKey=TrendingPosts";
+    public static final String OTHER_USER_STORIES_STREAM = "participant/feed/stream?setOrderKey=UserStoryStream&userId=";
+    public static final String USER_MY_STORIES_STREAM = "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true";
+    public static final String OTHER_USER_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream&userId=";
+    public static final String USER_MY_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream";
 }

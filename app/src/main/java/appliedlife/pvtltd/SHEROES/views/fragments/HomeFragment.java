@@ -165,7 +165,7 @@ public class HomeFragment extends BaseFragment {
             if (name.equalsIgnoreCase(getString(R.string.my_feed))) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
+                bundle.putString(AppConstants.END_POINT_URL, AppConstants.MY_FEED_POST_STREAM);
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
                 bundle.putString(AppConstants.SCREEN_NAME, FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
@@ -176,7 +176,7 @@ public class HomeFragment extends BaseFragment {
             if (name.equalsIgnoreCase(getString(R.string.ID_TRENDING))) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
+                bundle.putString(AppConstants.END_POINT_URL, AppConstants.TRENDING_POST_STREAM);
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
                 bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);

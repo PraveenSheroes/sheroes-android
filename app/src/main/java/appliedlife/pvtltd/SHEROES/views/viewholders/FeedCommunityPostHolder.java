@@ -617,7 +617,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), 0, userName.length(), 0);
             StyleSpan boldNameSpan = new StyleSpan(Typeface.BOLD);
             spanString.setSpan(boldNameSpan, 0, userName.length(), 0);
-            if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
+            if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)&&StringUtil.isNotNullOrEmptyString(communityName)) {
                 int firstIndex = userNameAndCommunity.indexOf(communityName);
                 spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
                 spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
