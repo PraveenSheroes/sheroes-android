@@ -88,9 +88,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     private String mPreviousScreen;
     protected SheroesApplication mSheroesApplication;
     private FragmentOpen mFragmentOpen;
-    private long mUserId;
     //endregion
-
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -326,23 +324,16 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         return new HashMap<>();
     }
 
-    protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        mFeedUtils.openCommentReactionFragment(this, feedDetail, getScreenName());
-    }
-
-
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         mFeedUtils.dismissWindow();
         return true;
     }
 
-
     @Override
     public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
         mErrorUtil.onShowErrorDialog(this, errorReason, feedParticipationEnum);
     }
-
 
     @Override
     public void onBackPressed() {
@@ -350,6 +341,5 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     }
 
     protected abstract SheroesPresenter getPresenter();
-
 
 }
