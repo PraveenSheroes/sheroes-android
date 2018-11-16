@@ -290,7 +290,7 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
-            ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
+            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, true);
         } else {
             removeItem(feedDetail);
         }
@@ -562,11 +562,6 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
     }
 
@@ -663,11 +658,6 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick({R.id.tv_retry_for_internet})

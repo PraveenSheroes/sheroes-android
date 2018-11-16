@@ -16,10 +16,12 @@
 
         <View
             android:id="@+id/view_tool_tip_invite"
-            android:layout_width="@dimen/dp_size_10"
+            android:layout_width="@dimen/activity_community_detail_tooltip_width"
             android:layout_height="0dp"
-            android:layout_gravity="left"
-            android:layout_marginLeft="@dimen/dp_size_40"/>
+            android:layout_gravity="start"
+            android:layout_marginStart="@dimen/activity_community_detail_tooltip_margin"
+            android:layout_marginLeft="@dimen/activity_community_detail_tooltip_margin" />
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
             style="@style/NavigationTabTextAppeareance"
@@ -27,7 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             app:tabIndicatorColor="@color/community_tab_indicator_color"
-            app:tabMode="scrollable"/>
+            app:tabMode="scrollable" />
 
     </android.support.design.widget.AppBarLayout>
 
@@ -56,9 +58,9 @@
                 style="?android:buttonBarStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_gravity="bottom"
-                android:clickable="true">
+                android:clickable="true"
+                android:focusable="true">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontButton
                     android:id="@+id/btn_bottom_bar"
@@ -67,12 +69,13 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|center_horizontal"
                     android:clickable="true"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="@dimen/activity_community_detail_button_join_padding"
+                    android:focusable="true"
                     android:gravity="center"
                     android:text="@string/ID_JOIN"
                     android:textColor="@color/white"
                     android:visibility="visible"
-                    vernacular:customButtonFontFamily="@string/regular_font"/>
+                    vernacular:customButtonFontFamily="@string/regular_font" />
             </FrameLayout>
         </LinearLayout>
 

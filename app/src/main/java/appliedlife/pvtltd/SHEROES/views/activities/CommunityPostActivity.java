@@ -592,11 +592,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onBackPressed() {
         onBackPress();
     }
@@ -604,10 +599,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         super.onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
     }
 
     @Override

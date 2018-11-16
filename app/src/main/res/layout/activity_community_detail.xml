@@ -31,7 +31,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/activity_community_detail_communities_title"
                 android:gravity="center"
                 android:text="@string/ID_MY_COMMUNITIES"
                 android:textColor="@color/comment_text"
@@ -43,8 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/tv_communities_text"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="16dp">
+                android:layout_marginBottom="@dimen/activity_community_detail_nav_margin"
+                android:layout_marginTop="@dimen/activity_community_detail_nav_margin">
 
                 <ProgressBar
                     android:id="@+id/pb_communities_drawer"

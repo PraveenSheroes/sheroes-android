@@ -469,7 +469,6 @@ public class UserPostFragment extends BaseFragment {
 
     }
 
-    @Override
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         if (baseResponse instanceof Comment) {
             mComment = (Comment) baseResponse;
@@ -523,11 +522,6 @@ public class UserPostFragment extends BaseFragment {
         if (mFragmentListRefreshData.getPageNo() != AppConstants.ONE_CONSTANT) {
             mProgressBar.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void startNextScreen() {
-
     }
 
     @Override
@@ -611,11 +605,6 @@ public class UserPostFragment extends BaseFragment {
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick({R.id.tv_retry_for_internet})
