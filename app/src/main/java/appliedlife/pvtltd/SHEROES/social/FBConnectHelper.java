@@ -23,9 +23,9 @@ public class FBConnectHelper {
 
     //region interface
     public interface IOnFbSignInListener {
-        void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken);
+        void onFbSuccess(GraphResponse graphResponse, AccessToken accessToken);
 
-        void OnFbError(String errorMessage);
+        void onFbError(String errorMessage);
 
         void onFbCancel();
     }
@@ -55,7 +55,7 @@ public class FBConnectHelper {
 
                     @Override
                     public void onError(FacebookException exception) {
-                        mFbSignInListener.OnFbError(exception.getMessage());
+                        mFbSignInListener.onFbError(exception.getMessage());
                     }
                 });
 
@@ -78,7 +78,7 @@ public class FBConnectHelper {
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        mFbSignInListener.OnFbSuccess(response, accessToken);
+                        mFbSignInListener.onFbSuccess(response, accessToken);
                     }
                 });
         try {
