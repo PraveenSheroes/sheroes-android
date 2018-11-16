@@ -115,31 +115,26 @@
         android:orientation="vertical">
 
         <ImageView
-            android:minWidth="@dimen/helpline_rateusImage_width"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="@dimen/helpline_rateusImage_height"
             android:layout_marginBottom="@dimen/helpline_rateusImage_paddingBottom"
             android:layout_marginTop="@dimen/helpline_rateusImage_paddingTop"
             android:layout_gravity="center"
-            android:src="@drawable/ic_rateus"
-            android:scaleType="fitCenter" />
+            android:src="@drawable/ic_rateus" />
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/bold_font"
             android:gravity="center"
             android:paddingBottom="@dimen/helpline_rateusTitle_paddingBottom"
             android:text="@string/helpline_rateus_title"
             android:textColor="@color/tab_text"
-            style="@style/TextView18spRegular"
-            vernacular:customTextFontFamily="@string/regular_font"/>
+            style="@style/TextView16spBold"
+            vernacular:customTextFontFamily="@string/bold_font"/>
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@string/bold_font"
             android:gravity="center"
             android:lineSpacingExtra="@dimen/helpline_rateus_body_lineSpacingExtra"
             android:paddingBottom="@dimen/helpline_rateus_body_paddingBottom"
