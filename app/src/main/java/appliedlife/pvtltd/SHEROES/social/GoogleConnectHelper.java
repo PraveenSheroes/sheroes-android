@@ -21,12 +21,12 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
     //region member variables
     private static GoogleConnectHelper mInstance;
     private GoogleApiClient mGoogleApiClient;
-    private GoogleSignInOptions mGso;
-    private OnGoogleConnectListener mOnGoogleConnectListener;
+    private GoogleSignInOptions mGSignOptions;
+    private IOnGoogleConnectListener mOnGoogleConnectListener;
     //endregion member variables
 
     //region interface
-    public interface OnGoogleConnectListener {
+    public interface IOnGoogleConnectListener {
         void onGoogleSuccess(String name, String email);
 
         void dismissProgress();
@@ -42,7 +42,7 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
     }
 
     private GoogleConnectHelper() {
-        mGso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        mGSignOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .requestProfile()
                 .requestScopes(new Scope(Scopes.PLUS_ME))
@@ -53,11 +53,11 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
     //endregion constructor
 
     //region public methods
-    public void initialize(Context context, OnGoogleConnectListener onGoogleConnectListener) {
+    public void initialize(Context context, IOnGoogleConnectListener onGoogleConnectListener) {
         mOnGoogleConnectListener = onGoogleConnectListener;
         mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .enableAutoManage((FragmentActivity) context, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, mGso)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, mGSignOptions)
                 .build();
     }
 

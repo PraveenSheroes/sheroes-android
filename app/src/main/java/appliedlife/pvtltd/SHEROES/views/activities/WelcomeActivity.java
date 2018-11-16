@@ -82,7 +82,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
  * Created by sheroes on 06/03/17.
  */
 
-public class WelcomeActivity extends BaseActivity implements FBConnectHelper.OnFbSignInListener, GoogleConnectHelper.OnGoogleConnectListener, ViewPager.OnPageChangeListener, LoginView {
+public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOnFbSignInListener, GoogleConnectHelper.IOnGoogleConnectListener, ViewPager.OnPageChangeListener, LoginView {
     //region constant variables
     public static final String SCREEN_LABEL = "Intro Screen";
     public static final String GENDER = "female";

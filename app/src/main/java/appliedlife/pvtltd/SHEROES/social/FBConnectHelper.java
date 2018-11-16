@@ -18,11 +18,11 @@ import org.json.JSONObject;
 public class FBConnectHelper {
     //region member variables
     private CallbackManager mCallbackManager;
-    private OnFbSignInListener mFbSignInListener;
+    private IOnFbSignInListener mFbSignInListener;
     //endregion member variables
 
     //region interface
-    public interface OnFbSignInListener {
+    public interface IOnFbSignInListener {
         void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken);
 
         void OnFbError(String errorMessage);
@@ -32,7 +32,7 @@ public class FBConnectHelper {
     //endregion interface
 
     //region constructor
-    public FBConnectHelper(OnFbSignInListener onFbSignInListener) {
+    public FBConnectHelper(IOnFbSignInListener onFbSignInListener) {
         this.mFbSignInListener = onFbSignInListener;
     }
     //endregion constructor
