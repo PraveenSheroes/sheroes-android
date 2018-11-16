@@ -71,7 +71,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserGridFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
@@ -168,8 +167,6 @@ public interface SheroesAppComponent {
     void inject(FeedArticleHolder feedArticleHolder);
 
     void inject(NoCommunityHolder noCommunityHolder);
-
-    void inject(UserPostFragment communitiesDetailFragment);
 
     void inject(OnBoardingActivity onBoardingActivity);
 

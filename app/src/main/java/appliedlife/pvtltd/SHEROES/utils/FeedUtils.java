@@ -54,7 +54,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
@@ -242,32 +241,19 @@ public class FeedUtils {
 
     private void bookmarkCall(Activity activity) {
         if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof UserPostFragment) {
-                ((UserPostFragment) mFragment).bookMarkForCard(mFeedDetail);
-            } else {
-                ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
-            }
+            ((MentorQADetailFragment) mFragment).bookMarkForCard(mFeedDetail);
         }
         if (activity instanceof ContestActivity) {
             ((ContestActivity) activity).bookmarkPost(mFeedDetail);
         }
     }
 
-    public void openCommentReactionFragment(Context context, FeedDetail feedDetail, String screenName) {
+    private void openCommentReactionFragment(Context context, FeedDetail feedDetail, String screenName) {
         if (feedDetail instanceof UserPostSolrObj) {
             PostDetailActivity.navigateTo((Activity) context, screenName, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
         } else if (feedDetail instanceof ArticleSolrObj) {
             ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
             ArticleActivity.navigateTo((Activity) context, feedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
-        }
-    }
-
-    private void openGenericCardInWebView(FeedDetail feedDetail, Context context) {
-        if (StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl())) {
-            Uri url = Uri.parse(feedDetail.getDeepLinkUrl());
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(url);
-            context.startActivity(intent);
         }
     }
 
@@ -443,7 +429,6 @@ public class FeedUtils {
                 if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
                     comment.setActive(false);
                     comment.setEdit(false);
-                    //  ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
                 }
                 break;
             case USER_REACTION_COMMENT_MENU:
@@ -459,14 +444,8 @@ public class FeedUtils {
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    if (mFragment instanceof UserPostFragment) {
-                        if (AppUtils.isFragmentUIActive(mFragment)) {
-                            ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
-                        }
-                    } else {
-                        if (AppUtils.isFragmentUIActive(mFragment)) {
-                            ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
-                        }
+                    if (AppUtils.isFragmentUIActive(mFragment)) {
+                        ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                     }
                     ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
