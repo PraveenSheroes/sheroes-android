@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
-import org.wordpress.android.editor.EditorFragmentAbstract;
-
 import javax.inject.Singleton;
 
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
@@ -46,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.ExpandableTextView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -100,7 +97,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventSpeakerHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.EventSponsorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
@@ -172,8 +168,6 @@ public interface SheroesAppComponent {
     void inject(MyCommunitiesViewHolder myCommunitiesViewHolder);
 
     void inject(CollectionActivity collectionActivity);
-
-    void inject(FeatureCardHolder featureCardHolder);
 
     void inject(FeedCommunityPostHolder feedCommunityPostHolder);
 
