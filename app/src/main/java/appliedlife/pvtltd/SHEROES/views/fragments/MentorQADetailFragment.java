@@ -279,34 +279,6 @@ public class MentorQADetailFragment extends BaseFragment {
 
     }
 
-
-    @Override
-    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (baseResponse instanceof Comment) {
-            mComment = (Comment) baseResponse;
-            Comment comment = (Comment) baseResponse;
-            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                if (mComment.getId() != -1) {
-                    mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mComment.getEntityId(), mComment.getCommentsId()), comment);
-                }
-            } else {
-                if (mComment.getId() != -1) {
-                    mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mComment.getEntityId(), reactionValue, mComment.getCommentsId()), comment);
-                }
-            }
-        }
-        if (baseResponse instanceof FeedDetail) {
-            FeedDetail feedDetail = (FeedDetail) baseResponse;
-            setFeedDetail(feedDetail);
-            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(feedDetail.getEntityOrParticipantId()));
-            } else {
-                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(feedDetail.getEntityOrParticipantId(), reactionValue));
-            }
-        }
-    }
-
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -349,17 +321,6 @@ public class MentorQADetailFragment extends BaseFragment {
             mProgressBar.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
 
     @Override
     public String getScreenName() {

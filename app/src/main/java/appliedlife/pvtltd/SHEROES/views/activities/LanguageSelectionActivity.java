@@ -390,17 +390,8 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
 
     }
 
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
 }

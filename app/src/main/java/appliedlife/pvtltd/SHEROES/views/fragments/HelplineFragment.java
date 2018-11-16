@@ -290,13 +290,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
             }
         });
-        super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
-    }
-
-    @Override
-    public void startNextScreen() {
-
     }
 
     @Override
@@ -304,11 +298,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         super.showError(errorMsg,feedParticipationEnum);
         sendChatButton.setEnabled(true);
            }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
 
     @Override
     public String getScreenName() {

@@ -47,14 +47,23 @@ import butterknife.OnClick;
 
 
 public class OnBoardingActivity extends BaseActivity implements BaseHolderInterface {
+    //region static variables
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
-    private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
+    //endregion static variables
 
+    //region member variables
+    private boolean doubleBackToExitPressedOnce = false;
+    public static int isJoinCount = 0;
+    //endregion member variables
+
+    //region inject variables
     @Inject
     Preference<LoginResponse> userPreference;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
+    //endregion inject variables
 
+    //region view
     @Bind(R.id.card)
     CardView card;
     @Bind(R.id.tv_on_boarding_finish)
@@ -63,59 +72,37 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
     public TextView tvNameUser;
     @Bind(R.id.tv_on_boarding_description)
     public TextView tvDescription;
-    private boolean doubleBackToExitPressedOnce = false;
-    public static int isJoinCount = 0;
+    //endregion view
 
+    //region lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
-            mMasterDataResult = mUserPreferenceMasterData.get().getData();
-        }
         setPagerAndLayouts();
         DrawerViewHolder.selectedOptionName = null;
     }
 
-    public void setPagerAndLayouts() {
-        supportPostponeEnterTransition();
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
-            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.COMMUNITIES_ONBOARDING_SCREEN)) {
-                onBoardingFragment();
-            } else {
-                Intent homeIntent = new Intent(this, HomeActivity.class);
-                Bundle bundle = new Bundle();
-                homeIntent.putExtras(bundle);
-                startActivity(homeIntent);
-                finish();
-            }
-        } else {
-            Intent homeIntent = new Intent(this, HomeActivity.class);
-            Bundle bundle = new Bundle();
-            homeIntent.putExtras(bundle);
-            startActivity(homeIntent);
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
             finish();
+            return;
         }
-    }
-
-    @TargetApi(AppConstants.ANDROID_SDK_24)
-    public void onBoardingFragment() {
-        tvNameUser.setText(getString(R.string.welcome, userPreference.get().getUserSummary().getFirstName()));
-        isJoinCount = 0;
-        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-            tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES), 0)); // for 24 api and more
-        } else {
-            tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
-        }
-        OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
-        Bundle bundleArticle = new Bundle();
-        onBoardingFragment.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingFragment, OnBoardingFragment.class.getName()).commitAllowingStateLoss();
+        doubleBackToExitPressedOnce = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
 
     }
+    //endregion lifecycle methods
 
+    //region inherited methods
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         int id = view.getId();
@@ -164,23 +151,6 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
 
     }
 
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            finish();
-            return;
-        }
-        doubleBackToExitPressedOnce = true;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-
-    }
-
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
@@ -202,6 +172,55 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
         super.onShowErrorDialog(s, feedParticipationEnum);
     }
 
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    public String getScreenName() {
+        return null;
+    }
+    //endregion inherited methods
+
+    //region public methods
+    public void setPagerAndLayouts() {
+        supportPostponeEnterTransition();
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
+            if (userPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.COMMUNITIES_ONBOARDING_SCREEN)) {
+                onBoardingFragment();
+            } else {
+                Intent homeIntent = new Intent(this, HomeActivity.class);
+                Bundle bundle = new Bundle();
+                homeIntent.putExtras(bundle);
+                startActivity(homeIntent);
+                finish();
+            }
+        } else {
+            Intent homeIntent = new Intent(this, HomeActivity.class);
+            Bundle bundle = new Bundle();
+            homeIntent.putExtras(bundle);
+            startActivity(homeIntent);
+            finish();
+        }
+    }
+
+    @TargetApi(AppConstants.ANDROID_SDK_24)
+    public void onBoardingFragment() {
+        tvNameUser.setText(getString(R.string.welcome, userPreference.get().getUserSummary().getFirstName()));
+        isJoinCount = 0;
+        if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
+            tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES), 0)); // for 24 api and more
+        } else {
+            tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
+        }
+        OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
+        Bundle bundleArticle = new Bundle();
+        onBoardingFragment.setArguments(bundleArticle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingFragment, OnBoardingFragment.class.getName()).commitAllowingStateLoss();
+
+    }
+
     @OnClick(R.id.tv_on_boarding_finish)
     public void onFinishButtonClick() {
         if (isJoinCount > 0) {
@@ -218,24 +237,11 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             OnBoardingMsgDialog fragment = (OnBoardingMsgDialog) getFragmentManager().findFragmentByTag(OnBoardingMsgDialog.class.getName());
             if (fragment == null) {
                 fragment = new OnBoardingMsgDialog();
-                Bundle b = new Bundle();
-                // b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
-                fragment.setArguments(b);
             }
             if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
                 fragment.show(getFragmentManager(), OnBoardingMsgDialog.class.getName());
             }
         }
     }
-
-    @Override
-    public boolean shouldTrackScreen() {
-        return false;
-    }
-
-    @Override
-    public String getScreenName() {
-        return null;
-    }
-
+    //endregion public methods
 }

@@ -204,16 +204,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
-    @Override
     public void onSuggestedContactClicked(UserSolrObj userSolrObj, View view) {
         int id = view.getId();
         switch (id) {

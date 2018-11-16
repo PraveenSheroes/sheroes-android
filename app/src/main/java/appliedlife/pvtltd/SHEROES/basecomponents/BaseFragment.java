@@ -98,10 +98,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
-    public void setFragmentData(FragmentOpen fragmentOpen) {
-        this.mFragmentOpen = fragmentOpen;
-    }
-
     public void setProgressBar(ProgressBar mProgressBar) {
         this.mProgressBar = mProgressBar;
     }
@@ -137,15 +133,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
         this.mPullRefreshList = mPullRefreshList;
     }
 
-    public void setInitializationForHelpline(FragmentListRefreshData mFragmentListRefreshData, GenericRecyclerViewAdapter mAdapter, LinearLayoutManager mLayoutManager, RecyclerView mRecyclerView, AppUtils mAppUtils, ProgressBar mProgressBar) {
-        this.mFragmentListRefreshData = mFragmentListRefreshData;
-        this.mAdapter = mAdapter;
-        this.mLayoutManager = mLayoutManager;
-        this.mRecyclerView = mRecyclerView;
-        this.mAppUtils = mAppUtils;
-        this.mProgressBar = mProgressBar;
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,7 +158,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
             getPresenter().onAttach();
         }
     }
-
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
@@ -217,45 +203,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
         mHomePresenter.addBookMarkFromPresenter(mAppUtils.bookMarkRequestBuilder(feedDetail.getEntityOrParticipantId()), feedDetail.isBookmarked());
     }
 
-
-    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-        if (baseResponse instanceof FeedDetail) {
-            mListLoad = false;
-            mFeedDetail = (FeedDetail) baseResponse;
-            this.mPosition = position;
-            this.mPressedEmoji = reactionValue;
-            if (mFeedDetail instanceof UserPostSolrObj) {
-                if (((UserPostSolrObj) mFeedDetail).getCommunityId() == AppConstants.EVENT_COMMUNITY_ID) {
-                    if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT));
-                    } else {
-                        mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
-                    }
-                } else {
-                    if (null != mFeedDetail && mFeedDetail.isLongPress()) {
-                        mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-                    } else {
-                        if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                            mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(mFeedDetail.getEntityOrParticipantId()));
-                        } else {
-                            mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(mFeedDetail.getEntityOrParticipantId(), reactionValue));
-                        }
-                    }
-                }
-            }
-        }
-
-        if (baseResponse instanceof Comment) {
-            Comment comment = (Comment) baseResponse;
-            if (reactionValue == AppConstants.NO_REACTION_CONSTANT) {
-                mHomePresenter.getUnLikesFromPresenter(mAppUtils.unLikeRequestBuilder(comment.getEntityId(), comment.getCommentsId()), comment);
-            } else {
-                mHomePresenter.getLikesFromPresenter(mAppUtils.likeRequestBuilder(comment.getEntityId(), reactionValue, comment.getCommentsId()), comment);
-            }
-        }
-
-    }
-
     @Override
     public void startProgressBar() {
         if (null != mProgressBar) {
@@ -277,7 +224,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
         mErrorUtil.onShowErrorDialog(getActivity(), errorMsg, feedParticipationEnum);
 
     }
-
 
     @Override
     public void onResume() {

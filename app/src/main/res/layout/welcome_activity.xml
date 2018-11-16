@@ -52,9 +52,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:elevation="@dimen/dp_size_5"
         android:gravity="center"
-        app:cardElevation="@dimen/dp_size_5">
+        app:cardElevation="@dimen/welcome_card_elevation">
 
         <LinearLayout
             android:layout_width="match_parent"

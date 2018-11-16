@@ -156,11 +156,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
-
-    }
-
-    @Override
     protected SheroesPresenter getPresenter() {
         return mOnBoardingPresenter;
     }
@@ -172,11 +167,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     @Override
     public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
-
-    }
-
-    @Override
-    public void startNextScreen() {
 
     }
 

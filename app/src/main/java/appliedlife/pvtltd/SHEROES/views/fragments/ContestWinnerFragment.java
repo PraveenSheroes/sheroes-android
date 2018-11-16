@@ -232,16 +232,6 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
-    @Override
     protected SheroesPresenter getPresenter() {
         return mContestWinnerPresenter;
     }

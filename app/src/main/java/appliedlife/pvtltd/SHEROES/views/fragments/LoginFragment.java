@@ -344,22 +344,11 @@ public class LoginFragment extends BaseFragment implements LoginView {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         checkDialogDismiss();
         mEmailSign.setEnabled(true);
         super.showError(errorMsg, feedParticipationEnum);
     }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
 
     private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
