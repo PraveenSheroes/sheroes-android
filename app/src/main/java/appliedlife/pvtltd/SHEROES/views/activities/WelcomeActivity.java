@@ -393,7 +393,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
     }
 
     @Override
-    public void OnFbSuccess(GraphResponse graphResponse, AccessToken accessToken) {
+    public void onFbSuccess(GraphResponse graphResponse, AccessToken accessToken) {
         if (null != accessToken && StringUtil.isNotNullOrEmptyString(accessToken.getToken())) {
             LoginRequest loginRequest = loginRequestBuilder();
             loginRequest.setAccessToken(accessToken.getToken());
@@ -407,7 +407,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
     }
 
     @Override
-    public void OnFbError(String errorMessage) {
+    public void onFbError(String errorMessage) {
         mUserPreference.delete();
         dismissProgressDialog(LOGGING_IN_DIALOG);
         dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
