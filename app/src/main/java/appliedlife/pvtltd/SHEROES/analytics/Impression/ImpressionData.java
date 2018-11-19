@@ -70,6 +70,9 @@ public class ImpressionData {
     @SerializedName("setOrderKey")
     private String setOrderKey;
 
+    @SerializedName("language")
+    private String language;
+
     public String getAppVersion() {
         return appVersion;
     }
@@ -191,5 +194,9 @@ public class ImpressionData {
 
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 }
