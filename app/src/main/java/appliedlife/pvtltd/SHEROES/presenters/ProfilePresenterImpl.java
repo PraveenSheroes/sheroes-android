@@ -18,8 +18,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.DeactivateUserRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -27,7 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IProfileView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -40,7 +38,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
  * Created by ravi on 01/01/18.
  */
 
-public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
+public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
 
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
 
@@ -94,42 +92,6 @@ public class ProfilePresenterImpl extends BasePresenter<ProfileView> {
                 if (null != profileFeedResponsePojo) {
                     Log.i(TAG, profileFeedResponsePojo.getStatus());
                     getMvpView().getFollowedMentors(profileFeedResponsePojo);
-                }
-            }
-        });
-    }
-
-    //get profile Top section Count
-    public void getProfileTopSectionCount(final ProfileTopCountRequest profileTopCountRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);
-            return;
-        }
-        getMvpView().startProgressBar();
-
-        profileModel.getProfileTopSectionCount(profileTopCountRequest)
-                .compose(this.<ProfileTopSectionCountsResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<ProfileTopSectionCountsResponse>() {
-            @Override
-            public void onComplete() {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
-            }
-
-            @Override
-            public void onNext(ProfileTopSectionCountsResponse userFollowerOrFollowingCount) {
-                LogUtils.info(TAG, "********response***********");
-                getMvpView().stopProgressBar();
-                if (null != userFollowerOrFollowingCount) {
-                    Log.i(TAG, userFollowerOrFollowingCount.getStatus());
-                    getMvpView().getTopSectionCount(userFollowerOrFollowingCount);
-
                 }
             }
         });

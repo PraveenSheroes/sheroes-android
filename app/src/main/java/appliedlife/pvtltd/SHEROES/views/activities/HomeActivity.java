@@ -116,7 +116,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationIt
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -149,7 +148,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
@@ -863,9 +862,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
-
 
     @Override
     public String getScreenName() {
@@ -1135,17 +1132,17 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     // region Protected methods
     @OnClick({R.id.beginner})
     protected void openBeginnerDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+        openProfileActivity(ProfileStrengthDialog.ProfileLevelType.BEGINNER);
     }
 
     @OnClick(R.id.intermediate)
     protected void openIntermediateProgressDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+        openProfileActivity(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE);
     }
 
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+        openProfileActivity(ProfileStrengthDialog.ProfileLevelType.ALLSTAR);
     }
 
     @Override
@@ -1690,7 +1687,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 }
                 break;
 
-            case R.id.tv_mentor_ask_question:
+           /* case R.id.tv_mentor_ask_question:
                 CommunityPost mentorPost = new CommunityPost();
                 mFeedDetail = (FeedDetail) baseResponse;
                 if (mFeedDetail instanceof UserSolrObj) {
@@ -1701,7 +1698,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
                     createCommunityPostOnClick(mentorPost);
                 }
-                break;
+                break;*/
 
             case R.id.iv_header_circle_icon:
                 mFeedDetail = (FeedDetail) baseResponse;
@@ -1722,9 +1719,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             case R.id.li_event_card_main_layout:
                 eventDetailDialog(0);
                 break;
-            case R.id.li_mentor:
-                openMentorProfileDetail(baseResponse);
-                break;
+           // case R.id.li_mentor:
+           //     openMentorProfileDetail(baseResponse);
+           //     break;
             case R.id.share:
                 if (StringUtil.isNotNullOrEmptyString(((FeedDetail) baseResponse).getPostShortBranchUrls())) {
                     ((FeedDetail) baseResponse).setDeepLinkUrl(((FeedDetail) baseResponse).getPostShortBranchUrls());
@@ -1774,14 +1771,14 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         }
     }
 
-    private void openMentorProfileDetail(BaseResponse baseResponse) {
+   /* private void openMentorProfileDetail(BaseResponse baseResponse) {
         UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
         userSolrObj.setSuggested(false);
         mFeedDetail = userSolrObj;
         ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }
+    }*/
 
-    private void openProfileActivity(ProfileProgressDialog.ProfileLevelType profileLevelType) {
+    private void openProfileActivity(ProfileStrengthDialog.ProfileLevelType profileLevelType) {
         ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 

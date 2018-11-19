@@ -62,7 +62,6 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -76,7 +75,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequest
  * Created by Praveen_Singh on 01-02-2017.
  */
 
-
+@Deprecated
 public class UserPostFragment extends BaseFragment {
     private static String SCREEN_LABEL = "User Post Screen";
     private final String TAG = LogUtils.makeLogTag(UserPostFragment.class);
@@ -229,45 +228,7 @@ public class UserPostFragment extends BaseFragment {
             }
             mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
-            mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
-                @Override
-                public void onHide() {
-                    try {
 
-                        if (getActivity() instanceof ProfileActivity) {
-                            if ((getActivity()) == null || getActivity().isFinishing()) return;
-                            if (isMentor) {
-                                ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.GONE);
-                            }
-                        }
-
-                    } catch (ClassCastException ex) {
-                        LogUtils.error(TAG, ex.getMessage());
-                    }
-
-                }
-
-                @Override
-                public void onShow() {
-                    try {
-
-                        if (getActivity() instanceof ProfileActivity) {
-                            if ((getActivity()) == null || getActivity().isFinishing()) return;
-                            if (isMentor) {
-                                ((ProfileActivity) getActivity()).clHomeFooterList.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                    } catch (ClassCastException ex) {
-                        LogUtils.error(TAG, ex.getMessage());
-                    }
-                }
-
-                @Override
-                public void dismissReactions() {
-
-                }
-            });
             ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
             super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, mCommunityFeedObj, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
 

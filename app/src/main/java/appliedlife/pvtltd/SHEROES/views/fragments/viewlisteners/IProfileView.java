@@ -12,13 +12,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
  * Created by ravi on 01/01/18.
  */
 
-public interface ProfileView extends BaseMvpView {
+public interface IProfileView extends BaseMvpView {
 
     void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo);
 
     void getFeedListSuccess(FeedResponsePojo feedResponsePojo);
-
-    void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse);
 
     void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities);
 

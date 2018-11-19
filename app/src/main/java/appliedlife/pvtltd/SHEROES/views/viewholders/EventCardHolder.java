@@ -210,18 +210,12 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         tvEventInterestedBtn.setEnabled(false);
         userPostSolrObj.setTrending(true);
         userPostSolrObj.setLongPress(false);
-        if (userPostSolrObj.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
-            if (viewInterface instanceof FeedItemCallback) {
-                ((FeedItemCallback)viewInterface).onEventInterestedClicked(userPostSolrObj);
-            } else {
-                viewInterface.userCommentLikeRequest(userPostSolrObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            }
 
-        } else {
-            if (viewInterface instanceof FeedItemCallback) {
-                ((FeedItemCallback)viewInterface).onEventNotInterestedClicked(userPostSolrObj);
+        if (viewInterface instanceof FeedItemCallback) {
+            if (userPostSolrObj.getReactionValue() == AppConstants.NO_REACTION_CONSTANT) {
+                ((FeedItemCallback) viewInterface).onEventInterestedClicked(userPostSolrObj);
             } else {
-                viewInterface.userCommentLikeRequest(userPostSolrObj, AppConstants.EVENT_CONSTANT, getAdapterPosition());
+                ((FeedItemCallback) viewInterface).onEventNotInterestedClicked(userPostSolrObj);
             }
         }
         if (userPostSolrObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
@@ -244,7 +238,6 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
         }else {
             viewInterface.handleOnClick(userPostSolrObj, liEventCardMainLayout);
         }
-        //  viewInterface.dataOperationOnClick(userPostSolrObj);
     }
 
     @OnClick(R.id.tv_event_interested_btn)
@@ -279,12 +272,9 @@ public class EventCardHolder extends BaseViewHolder<FeedDetail> {
     }
     @Override
     public void viewRecycled() {
-
     }
+
     @Override
     public void onClick(View view) {
-
     }
-
-
 }

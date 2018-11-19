@@ -19,6 +19,4 @@ public interface AllCommunityItemCallback extends BaseHolderInterface {
     void unJoinCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
 
     void onSeeMoreClicked(CarouselDataObj carouselDataObj);
-
-    void openChampionListingScreen(CarouselDataObj carouselDataObj);
 }

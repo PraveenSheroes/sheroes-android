@@ -236,15 +236,10 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                            } else {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
-                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
-                            }
+                            userSolrObj.setFollowerCount(userSolrObj.getFollowingCount() + 1);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                            if (mentorFollowUnfollowResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -289,15 +284,10 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID && userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                            } else {
-                                if (userSolrObj.getUserFollowersCount() > 0) {
-                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
-                                }
-                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            if (userSolrObj.getFollowerCount() > 0) {
+                                userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                         }

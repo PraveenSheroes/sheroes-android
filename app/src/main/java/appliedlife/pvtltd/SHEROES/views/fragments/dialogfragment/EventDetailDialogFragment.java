@@ -60,6 +60,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_
  * Created by Praveen_Singh on 16-06-2017.
  */
 
+@Deprecated
 public class EventDetailDialogFragment extends BaseDialogFragment implements HomeView {
     private final String TAG = LogUtils.makeLogTag(EventDetailDialogFragment.class);
     @Inject

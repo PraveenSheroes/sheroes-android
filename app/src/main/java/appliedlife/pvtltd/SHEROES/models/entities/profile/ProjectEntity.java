@@ -10,6 +10,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 /**
  * Created by sheroes on 29/03/17.
  */
+@Deprecated
 @Parcel(analyze = {ProjectEntity.class, BaseResponse.class})
 public class ProjectEntity extends BaseResponse {
     @SerializedName("id")

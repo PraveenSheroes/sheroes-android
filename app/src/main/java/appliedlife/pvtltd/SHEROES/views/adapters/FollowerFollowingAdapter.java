@@ -166,8 +166,8 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                 }
 
                 if (follower != null) {
-                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
-                    follower.setText(String.valueOf(changeNumberToNumericSuffix(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getFollowerCount());
+                    follower.setText(String.valueOf(changeNumberToNumericSuffix(mentor.getFollowerCount()) + AppConstants.SPACE + pluralComments));
                 }
             }
         }

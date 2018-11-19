@@ -11,6 +11,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
  * Created by ravi on 01/01/18.
  */
 
+@Deprecated
 @Parcel(analyze = {ProfileTopSectionCountsResponse.class,BaseResponse.class})
 public class ProfileTopSectionCountsResponse extends BaseResponse {
 

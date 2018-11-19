@@ -44,7 +44,7 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
  * Dialog to display the different profile completion level
  */
 
-public class ProfileProgressDialog extends BaseDialogFragment implements ProgressbarView {
+public class ProfileStrengthDialog extends BaseDialogFragment implements ProgressbarView {
 
     //region private member variable
     public static final String SCREEN_NAME = "Profile Progress Dialog";
@@ -179,7 +179,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     protected void openBeginnerDialog() {
         if (mProfileLevelType != ProfileLevelType.BEGINNER) {
             mProfileLevelType = ProfileLevelType.BEGINNER;
-            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.BEGINNER, false);
+            invalidateUserDetails(ProfileStrengthDialog.ProfileLevelType.BEGINNER, false);
         }
     }
 
@@ -187,7 +187,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     protected void openIntermediateProgressDialog() {
         if (mProfileLevelType != ProfileLevelType.INTERMEDIATE) {
             mProfileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE, false);
+            invalidateUserDetails(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE, false);
         }
     }
 
@@ -195,7 +195,7 @@ public class ProfileProgressDialog extends BaseDialogFragment implements Progres
     protected void openAllStarProgressDialog() {
         if (mProfileLevelType != ProfileLevelType.ALLSTAR) {
             mProfileLevelType = ProfileLevelType.ALLSTAR;
-            invalidateUserDetails(ProfileProgressDialog.ProfileLevelType.ALLSTAR, false);
+            invalidateUserDetails(ProfileStrengthDialog.ProfileLevelType.ALLSTAR, false);
         }
     }
 

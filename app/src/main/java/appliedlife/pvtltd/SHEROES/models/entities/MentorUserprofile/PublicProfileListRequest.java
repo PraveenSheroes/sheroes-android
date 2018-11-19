@@ -14,11 +14,6 @@ public class PublicProfileListRequest extends BaseRequest {
     @Expose
     protected Long idOfEntityParticipant;
 
-
-    public Long getIdOfEntityParticipant() {
-        return idOfEntityParticipant;
-    }
-
     public void setIdOfEntityParticipant(Long idOfEntityParticipant) {
         this.idOfEntityParticipant = idOfEntityParticipant;
     }

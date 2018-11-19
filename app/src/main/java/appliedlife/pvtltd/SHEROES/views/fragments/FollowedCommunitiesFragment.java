@@ -35,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -45,19 +44,19 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RecyclerRowDivider;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
-import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
+import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.USER_MENTOR_ID;
 
 /**
  * Created by ravi on 11/01/18.
  * User's Joined Communities listing from profile
  */
 
-public class FollowedCommunitiesFragment extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
+public class FollowedCommunitiesFragment extends BaseFragment implements IProfileView, ProfileCommunityAdapter.OnItemClicked {
 
     public static final String SCREEN_LABEL = "Followed Communities Screen";
 
@@ -182,11 +181,6 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
     @Override
     public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
     }
-
-    @Override
-    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-    }
-
 
     @Override
     public void onDetach() {

@@ -8,8 +8,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 /**
  * Created by ravi on 04/01/18.
  */
-
-public class ProfileTopCountRequest extends BaseRequest {
+@Deprecated
+class ProfileTopCountRequest1 extends BaseRequest {
 
     @SerializedName("mentor_id")
     @Expose

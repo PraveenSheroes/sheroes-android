@@ -324,17 +324,14 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     //region private methods

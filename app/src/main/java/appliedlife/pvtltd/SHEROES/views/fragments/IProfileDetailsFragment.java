@@ -41,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -52,13 +51,13 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IProfileView;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
@@ -72,9 +71,9 @@ import static butterknife.ButterKnife.findById;
  * Profile Details - Contain Followed Champions and Communities
  */
 
-public class ProfileDetailsFragment extends BaseFragment implements ProfileView {
+public class IProfileDetailsFragment extends BaseFragment implements IProfileView {
     private static final String SCREEN_LABEL = "Profile Details Screen";
-    private final String TAG = LogUtils.makeLogTag(ProfileDetailsFragment.class);
+    private final String TAG = LogUtils.makeLogTag(IProfileDetailsFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
     public static final String USER_MENTOR_NAME ="USER_NAME";
@@ -157,8 +156,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static ProfileDetailsFragment createInstance(long userId, String name) {
-        ProfileDetailsFragment profileDetailsFragment = new ProfileDetailsFragment();
+    public static IProfileDetailsFragment createInstance(long userId, String name) {
+        IProfileDetailsFragment profileDetailsFragment = new IProfileDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putString(USER_MENTOR_NAME, name);
@@ -218,8 +217,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     private void populateUserProfileDetails() {
-        profilePresenter.getProfileTopSectionCount(mAppUtils.profileTopSectionCount(userId));
-
         profilePresenter.getFollowedMentors(mAppUtils.followerFollowingRequest(1, userId, FollowingEnum.FOLLOWED_CHAMPIONS.name()));
 
         if(isSelfProfile) {
@@ -397,11 +394,6 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
     }
 
     @Override
-    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-
-    }
-
-    @Override
     public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
         List<CommunityFeedSolrObj> mutualCommunity = userCommunities.getMutualCommunities();
         List<CommunityFeedSolrObj> otherCommunity = userCommunities.getOtherCommunities();
@@ -510,8 +502,8 @@ public class ProfileDetailsFragment extends BaseFragment implements ProfileView 
             }
 
             if (follower != null) {
-                String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getSolrIgnoreNoOfMentorFollowers());
-                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+                String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getFollowerCount());
+                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
             }
 
             followedMentor.addView(view);

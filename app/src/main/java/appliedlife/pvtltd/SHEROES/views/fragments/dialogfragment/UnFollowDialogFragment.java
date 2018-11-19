@@ -20,38 +20,44 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
 import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class UnFollowDialogFragment extends BaseDialogFragment {
 
-    private UserSolrObj mUserSolrObj;
-    private String mSourceScreenName;
+/**
+ * @author ravi
+ * This class handle the unfollow confirmation dilaog , if user press unfollow button will send api call to unfollow
+ * particular user.
+ */
+public class UnFollowDialogFragment extends BaseDialogFragment implements HomeView {
 
     @Bind(R.id.user_img_icon)
     CircleImageView circleImageView;
-
     @Bind(R.id.title)
     TextView title;
-
-    @Inject
-    AppUtils mAppUtils;
-
     @Inject
     HomePresenter mHomePresenter;
-
     @BindDimen(R.dimen.dp_size_87)
-    int profileSizeSmall;
+    int mProfilePicSize;
+
+    private UserSolrObj mUserSolrObj;
+    private PublicProfileListRequest mUnFollowRequest;
+    private String mSourceScreenName;
+    private boolean mIsChampion;
+    private boolean mIsSelfProfile;
 
     @Nullable
     @Override
@@ -62,17 +68,25 @@ public class UnFollowDialogFragment extends BaseDialogFragment {
 
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.unfollow_confirmation_dialog, container, false);
+        ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
         Parcelable parcelable = getArguments().getParcelable(AppConstants.USER);
+        Parcelable unFollowRequestParcelable = getArguments().getParcelable(AppConstants.USER);
         mSourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
 
-        ButterKnife.bind(this, view);
+        mIsChampion = getArguments().getBoolean(AppConstants.IS_CHAMPION_ID);
+        mIsSelfProfile = getArguments().getBoolean(AppConstants.IS_SELF_PROFILE);
+
         if (null != parcelable) {
             mUserSolrObj = Parcels.unwrap(parcelable);
         }
 
+        if (null != unFollowRequestParcelable) {
+            mUnFollowRequest = Parcels.unwrap(unFollowRequestParcelable);
+        }
+
         if (StringUtil.isNotNullOrEmptyString(mUserSolrObj.getImageUrl())) {
-            String imageUrl = CommonUtil.getThumborUri(mUserSolrObj.getImageUrl(), profileSizeSmall, profileSizeSmall);
+            String imageUrl = CommonUtil.getThumborUri(mUserSolrObj.getImageUrl(), mProfilePicSize, mProfilePicSize);
             circleImageView.setCircularImage(true);
             circleImageView.bindImage(imageUrl);
         }
@@ -88,19 +102,32 @@ public class UnFollowDialogFragment extends BaseDialogFragment {
     }
 
     @OnClick(R.id.unfollow)
-    public void  unFollowClick() {
+    public void unFollowClick() {
+        if (null == mUnFollowRequest) return;
+
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolrObj.getIdOfEntityOrParticipant()))
                         .name(mUserSolrObj.getNameOrTitle())
-                        //  .isMentor(isChampion)
-              git          //  .isOwnProfile(isOwnProfile)
+                        .isMentor(mIsChampion)
+                        .isOwnProfile(mIsSelfProfile)
                         .build();
         AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, mSourceScreenName, properties);
-        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-        publicProfileListRequest.setIdOfEntityParticipant(mUserSolrObj.getIdOfEntityOrParticipant());
 
-        mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest, mUserSolrObj);
+        mHomePresenter.getUnFollowFromPresenter(mUnFollowRequest, mUserSolrObj);
         dismiss();
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case FOLLOW_UNFOLLOW:
+                if (getActivity() != null && getActivity() instanceof IFollowCallback) {
+                    UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                    ((IFollowCallback) getActivity()).onProfileUnFollowed(userSolrObj);
+                }
+                break;
+            default:
+        }
     }
 }

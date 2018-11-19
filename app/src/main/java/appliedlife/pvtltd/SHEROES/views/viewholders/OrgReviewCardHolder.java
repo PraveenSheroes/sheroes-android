@@ -234,7 +234,9 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
 
     @OnClick(R.id.tv_feed_review_post_user_share_ic)
     public void reviewShareClick() {
-        viewInterface.handleOnClick(userPostObj, reviewPostShareIc);
+        if(viewInterface instanceof FeedItemCallback) {
+            viewInterface.handleOnClick(userPostObj, reviewPostShareIc);
+        }
         ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_REVIEW_POST, userPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
     }
 
@@ -244,14 +246,17 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         upvoteReacted.setEnabled(false);
         userPostObj.setLongPress(false);
         userPostObj.setTrending(true);
-        if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            viewInterface.userCommentLikeRequest(userPostObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
-        } else {
-            viewInterface.userCommentLikeRequest(userPostObj, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
 
+        if(viewInterface instanceof FeedItemCallback) {
+            if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
+                viewInterface.userCommentLikeRequest(userPostObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
+                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
+            } else {
+                viewInterface.userCommentLikeRequest(userPostObj, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
+                ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
+            }
         }
+
         if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             userPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
             userPostObj.setNoOfLikes(userPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);

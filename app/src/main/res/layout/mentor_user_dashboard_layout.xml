@@ -145,11 +145,6 @@
         android:visibility="invisible" />
 
     <include
-        layout="@layout/mentor_dashboard_footer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom" />
-    <include
         layout="@layout/write_a_story_footer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

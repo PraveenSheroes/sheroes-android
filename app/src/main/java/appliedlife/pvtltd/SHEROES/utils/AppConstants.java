@@ -216,8 +216,6 @@ public class AppConstants {
     public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
     public static final String PROFILE_SHARE_PREF = "PROFILE_SHARE";
     public static final String CREATE_POST_SHARE_PREF = "CREATE_POST_ANONYMOUS";
-    public static final String ASK_QUESTION_SHARE_PREF = "ASK_QUESTION_ANONYMOUS";
-    public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
     public static final String MALE_ERROR_SHARE_PREF = "MALE_USER_ERROR";
@@ -318,7 +316,8 @@ public class AppConstants {
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_CATEGORY_ID = "article_category_id";
     public static final String CHAMPION_ID = "champion_id";
-    public static final String IS_MENTOR_ID = "is_mentor";
+    public static final String IS_CHAMPION_ID = "is_mentor";
+    public static final String IS_SELF_PROFILE = "is_self_profile";
     public static final String COMMUNITY_ID = "community_id";
     public static final String COMMUNITY_POST_ID = "community_post_id";
     public static final String FROM_DEEPLINK = "from_deep_link";
@@ -447,4 +446,6 @@ public class AppConstants {
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";
     public static final String WHATS_APP_URI = "com.whatsapp";
+    public static final String UNFOLLOW = "UNFOLLOW";
+    public static final String LOGGED_IN_USER = "LoggedInUser";
 }

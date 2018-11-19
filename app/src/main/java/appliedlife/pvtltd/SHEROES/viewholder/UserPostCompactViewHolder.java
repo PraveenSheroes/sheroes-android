@@ -700,14 +700,7 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                 } else {
                     ((FeedItemCallback) viewInterface).userCommentLikeRequest(mUserPostObj, false, getAdapterPosition());
                 }
-            } else {
-                if (!lastComment.isLiked) {
-                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-                } else {
-                    viewInterface.userCommentLikeRequest(lastComment, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
-                }
             }
-
         }
     }
 
