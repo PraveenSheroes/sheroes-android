@@ -23,53 +23,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserBO;
 
 public class UserProfileResponse extends BaseResponse {
 
-
     @SerializedName("user_details")
-
     @Expose
     private UserDetails userDetails;
 
-    @SerializedName("education")
-    @Expose
-    private List<EducationEntity> education;
-
-    @SerializedName("experience")
-    @Expose
-    private List<ExprienceEntity> experience;
-
-    @SerializedName("project")
-    @Expose
-    private List<ProjectEntity> project;
-
     public UserDetails getUserDetails() {
         return userDetails;
-    }
-
-    public void setUserDetails(UserDetails userDetails) {
-        this.userDetails = userDetails;
-    }
-
-    public List<EducationEntity> getEducation() {
-        return education;
-    }
-
-    public void setEducation(List<EducationEntity> education) {
-        this.education = education;
-    }
-
-    public List<ExprienceEntity> getExperience() {
-        return experience;
-    }
-
-    public void setExperience(List<ExprienceEntity> experience) {
-        this.experience = experience;
-    }
-
-    public List<ProjectEntity> getProject() {
-        return project;
-    }
-
-    public void setProject(List<ProjectEntity> project) {
-        this.project = project;
     }
 }

@@ -5,7 +5,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 
 /**
