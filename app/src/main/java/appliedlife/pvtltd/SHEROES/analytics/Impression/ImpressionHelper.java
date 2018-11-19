@@ -286,6 +286,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             impressionData.setGtid(UUID.randomUUID().toString());
             impressionData.setUserId(mImpressionProperty.getLoggedInUserId() == -1 ? "" : String.valueOf(mImpressionProperty.getLoggedInUserId()));
             impressionData.setPostId(feedDetail.getIdOfEntityOrParticipant() != -1 ? String.valueOf(feedDetail.getIdOfEntityOrParticipant()) : "");
+            impressionData.setLanguage(mImpressionProperty.getLanguage());
             return impressionData;
         }
         return null;
