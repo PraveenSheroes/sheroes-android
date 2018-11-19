@@ -376,6 +376,8 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isAdded())
+                    return;
                 if (questionText.getText().toString().length() != 0) {
                     sendChat.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
                 } else {
