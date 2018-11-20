@@ -53,7 +53,6 @@ import io.reactivex.functions.Consumer;
  * Title: Base activity for all activities.
  */
 public abstract class BaseActivity extends AppCompatActivity implements FragmentIntractionWithActivityListner, EventInterface, View.OnTouchListener {
-
     //region constant variables
     public static final String SOURCE_SCREEN = "SOURCE_SCREEN";
     public static final String SOURCE_PROPERTIES = "SOURCE_PROPERTIES";
@@ -85,6 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     protected SheroesApplication mSheroesApplication;
     //endregion
 
+    //region lifecycle override methods
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleManager.setLocale(base));
@@ -94,7 +94,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mSheroesApplication = (SheroesApplication) this.getApplicationContext();
-
         if (getIntent() != null && getIntent().getExtras() != null) {
             if (getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION, 0) == 1) {
                 String notificationId = getIntent().getExtras().getString(AppConstants.NOTIFICATION_ID, "");
@@ -108,13 +107,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
             }
             mPreviousScreen = getIntent().getStringExtra(SOURCE_SCREEN);
             mPreviousScreenProperties = (HashMap<String, Object>) getIntent().getSerializableExtra(SOURCE_PROPERTIES);
-
             boolean isShareDeeplink = getIntent().getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
             if (isShareDeeplink) {
                 mShareUtils.initShare(this, getIntent(), getScreenName());
             }
         }
-
         if (!trackScreenTime() && shouldTrackScreen()) {
             Map<String, Object> properties = getExtraPropertiesToTrack();
             if (!CommonUtil.isEmpty(mPreviousScreenProperties)) {
@@ -122,26 +119,14 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
             }
             AnalyticsManager.trackScreenView(getScreenName(), getPreviousScreenName(), properties);
         }
-
         if (getPresenter() != null) {
             getPresenter().onCreate();
         }
-
     }
 
-    public FragmentManager addNewFragment(Fragment fragmentName, int layoutName, String fragmentTag, String addBackStackTag,boolean isAddBackStack) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(layoutName, fragmentName, fragmentTag);
-        if(isAddBackStack)
-        {
-            fragmentTransaction.addToBackStack(addBackStackTag);
-        }
-        fragmentTransaction.commitAllowingStateLoss();
-        return fragmentManager;
-    }
-
-    public boolean shouldTrackScreen() {
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        mFeedUtils.dismissWindow();
         return true;
     }
 
@@ -161,33 +146,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         }
     }
 
-    /**
-     * @param finishParentOnBackOrTryagain pass true:- if desired result is to finish the page on press of tryagain or press of back key else
-     *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
-     * @return
-     */
-    public void showNetworkTimeoutDialog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
-        mErrorUtil.showErrorDialogOnUserAction(this, finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
-    }
-
-
-    public void trackEvent(final Event event, final Map<String, Object> properties) {
-        AnalyticsManager.trackEvent(event, getScreenName(), properties);
-    }
-
-    // endregion
-    public String getPreviousScreenName() {
-        if (StringUtil.isNotNullOrEmptyString(mPreviousScreen)) {
-            return mPreviousScreen;
-        }
-        return null;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         try {
-            mIsDestroyed=true;
+            mIsDestroyed = true;
             mFeedUtils.onDestroy();
             mErrorUtil.onDestroy();
             mFeedUtils.clearReferences();
@@ -240,23 +203,52 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         if (mFeedUtils != null)
             mFeedUtils.clearReferences();
     }
+    //endregion
 
+    //region public methods
+    public FragmentManager addNewFragment(Fragment fragmentName, int layoutName, String fragmentTag, String addBackStackTag, boolean isAddBackStack) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(layoutName, fragmentName, fragmentTag);
+        if (isAddBackStack) {
+            fragmentTransaction.addToBackStack(addBackStackTag);
+        }
+        fragmentTransaction.commitAllowingStateLoss();
+        return fragmentManager;
+    }
 
-    protected boolean trackScreenTime() {
-        return false;
+    public boolean shouldTrackScreen() {
+        return true;
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (requestCode == BRANCH_REQUEST_CODE) {
-            if (intent != null && intent.getExtras() != null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)) {
-                boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
-                if (isShareDeeplink) {
-                    mShareUtils.initShare(this, intent, getScreenName());
-                }
-            }
+    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        mErrorUtil.onShowErrorDialog(this, errorReason, feedParticipationEnum);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    /**
+     * @param finishParentOnBackOrTryagain pass true:- if desired result is to finish the page on press of tryagain or press of back key else
+     *                                     pass false:- to just dismiss the dialog on try again and or press of back key in case you want to handle it your self say a retry
+     * @return
+     */
+    public void showNetworkTimeoutDialog(boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage) {
+        mErrorUtil.showErrorDialogOnUserAction(this, finishParentOnBackOrTryagain, isCancellable, errorMessage, "");
+    }
+
+    public void trackEvent(final Event event, final Map<String, Object> properties) {
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
+    }
+
+    public String getPreviousScreenName() {
+        if (StringUtil.isNotNullOrEmptyString(mPreviousScreen)) {
+            return mPreviousScreen;
         }
+        return null;
     }
 
     @Override
@@ -305,27 +297,31 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
 
         }
     }
+    //endregion
+
+    //region public methods
+    protected boolean trackScreenTime() {
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == BRANCH_REQUEST_CODE) {
+            if (intent != null && intent.getExtras() != null && intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK)) {
+                boolean isShareDeeplink = intent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK);
+                if (isShareDeeplink) {
+                    mShareUtils.initShare(this, intent, getScreenName());
+                }
+            }
+        }
+    }
 
     protected Map<String, Object> getExtraPropertiesToTrack() {
         return new HashMap<>();
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent event) {
-        mFeedUtils.dismissWindow();
-        return true;
-    }
-
-    @Override
-    public void onShowErrorDialog(String errorReason, FeedParticipationEnum feedParticipationEnum) {
-        mErrorUtil.onShowErrorDialog(this, errorReason, feedParticipationEnum);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
     protected abstract SheroesPresenter getPresenter();
+    //endregion
 
 }

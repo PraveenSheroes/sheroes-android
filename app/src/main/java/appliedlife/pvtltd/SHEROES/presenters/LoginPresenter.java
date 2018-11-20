@@ -144,7 +144,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 });
     }
 
-
     public void googleTokenExpireInFromPresenter(String tokenExpireUrl) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_AUTH_TOKEN);

@@ -7,9 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
@@ -20,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import butterknife.Bind;
@@ -60,11 +56,9 @@ public class ResetPasswordSuccessDialogFragment extends BaseDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        // safety check
         if (getDialog() == null) {
             return;
         }
-        // set the animations to use on showing and hiding the dialog
     }
 
     @Override

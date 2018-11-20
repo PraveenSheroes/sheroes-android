@@ -13,9 +13,6 @@ import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -33,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -93,11 +89,9 @@ public class EmailVerificationDialogFragment extends BaseDialogFragment implemen
     @Override
     public void onStart() {
         super.onStart();
-        // safety check
         if (getDialog() == null) {
             return;
         }
-        // set the animations to use on showing and hiding the dialog
     }
 
     @Override

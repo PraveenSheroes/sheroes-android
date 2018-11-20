@@ -19,7 +19,6 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -40,7 +39,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -164,6 +162,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     //endregion
 
     // region public methods
+
     /**
      * Stor token into share prefrances
      *
@@ -291,8 +290,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         checkDialogDismiss();
         mEmailSign.setEnabled(true);
-        onShowErrorDialog( errorMsg, feedParticipationEnum);
+        onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
+
     @OnClick(R.id.email_sign_in_button)
     public void onLogInBtnClick() {
         sheroesLogIn();
