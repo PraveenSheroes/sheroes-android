@@ -290,7 +290,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
             }
         });
-        super.setInitializationForHelpline(mFragmentListRefreshData, mAdapter, mLayoutManager, mRecyclerView, mAppUtils, mProgressBar);
         mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
     }
 

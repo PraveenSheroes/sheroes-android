@@ -469,7 +469,6 @@ public class UserPostFragment extends BaseFragment {
 
     }
 
-    @Override
     public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         if (baseResponse instanceof Comment) {
             mComment = (Comment) baseResponse;
