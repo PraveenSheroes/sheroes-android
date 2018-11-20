@@ -727,9 +727,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 mTvDaySelector.setText(pollTime[0]);
                 mTvDaySelector.setTag(pollDaysCount[0]);
                 break;
-            case EMOJI:
-                break;
-            case BOOLEAN:
+            default:
                 break;
         }
     }
@@ -760,32 +758,26 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     @Override
@@ -1025,7 +1017,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             intent.putExtra(POSITION_ON_FEED, feedDetail.getItemPosition());
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
-
     }
 
     public static void navigateTo(Activity fromActivity, FeedDetail feedDetail, int requestCodeForCommunityPost, String primaryColor, String titleTextColor, HashMap<String, Object> properties) {
@@ -1048,7 +1039,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
 
-//            communityPost.isCompanyAdmin =  userPostObj.grt();
             if (!CommonUtil.isEmpty(userPostObj.getImageUrls()) && !CommonUtil.isEmpty(userPostObj.getImagesIds())) {
                 for (String imageUrl : userPostObj.getImageUrls()) {
                     Photo photo = new Photo();
@@ -1080,7 +1070,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCodeForCommunityPost, null);
-
     }
 
     public static void navigateTo(Activity fromActivity, CommunityPost communityPost, int requestCode, boolean isFromCommunity, HashMap<String, Object> properties) {
@@ -1345,14 +1334,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 if (mentionSpan.getDisplayMode() == Mentionable.MentionDisplayMode.PARTIAL) {
                     editDescText = editDescText.replaceFirst(mentionSpan.getMention().getName(), " ");
-
                 } else {
                     editDescText = editDescText.replace(mentionSpan.getDisplayString(), " ");
                 }
             }
-
             mEtView.getEditText().setText(editDescText);
-
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 Mention userMention = mentionSpan.getMention();
@@ -2224,7 +2210,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     mLiPollContainer.removeView(pollLayout);
                     mEtTextPollList.clear();
                     for (int i = 0; i < mLiPollContainer.getChildCount(); i++) {
-                        // mEtTextPollList.get(i).setHint(mEtTextPollList.get(i).getHint());
                         View pollLayout = mLiPollContainer.getChildAt(i);
                         EditText editText = pollLayout.findViewById(R.id.et_text_poll);
                         int count = i + 1;

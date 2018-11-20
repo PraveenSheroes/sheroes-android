@@ -84,6 +84,7 @@ import static appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable.Mentio
  */
 public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
+    //region member variables
     private static final String KEY_MENTION_SPANS = "mention_spans";
     private static final String KEY_MENTION_SPAN_STARTS = "mention_span_starts";
 
@@ -104,6 +105,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     private boolean isLongPressed;
     private CheckLongClickRunnable longClickRunnable;
     RichEditorView richEditView;
+    //endregion member variables
+
+    //region constructor
     public MentionsEditText(@NonNull Context context) {
         super(context);
         init(null, 0);
@@ -118,7 +122,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
+    //endregion constructor
 
+    //region methods
     /**
      * Initialization method called by all constructors.
      */
@@ -1427,6 +1433,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             }
         };
     }
+    //region methods
 
     // --------------------------------------------------
     // MentionWatcher Interface & Simple Implementation
