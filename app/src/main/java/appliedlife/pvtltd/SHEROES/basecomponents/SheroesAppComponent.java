@@ -44,6 +44,8 @@ import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
+import appliedlife.pvtltd.SHEROES.views.errorview.NetworkAndApiErrorDialog;
+import appliedlife.pvtltd.SHEROES.views.errorview.OnBoardingMsgDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
@@ -349,6 +351,10 @@ public interface SheroesAppComponent {
     void inject(LogOutUtils logOutUtils);
 
     void inject(ErrorUtil errorUtil);
+
+    void inject(NetworkAndApiErrorDialog networkAndApiErrorDialog);
+
+    void inject(OnBoardingMsgDialog onBoardingMsgDialog);
 }
 
 

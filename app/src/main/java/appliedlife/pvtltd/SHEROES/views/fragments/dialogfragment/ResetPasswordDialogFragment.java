@@ -41,10 +41,18 @@ import butterknife.OnClick;
 
 
 public class ResetPasswordDialogFragment extends BaseDialogFragment implements LoginView {
+    // region Constants
     private static final String SCREEN_LABEL = "Forgot Password Screen";
+    // endregion
+
+    // region Inject
     @Inject
     LoginPresenter mLogInPresenter;
+    @Inject
+    AppUtils mAppUtils;
+    // endregion
 
+    // region view
     @Bind(R.id.input_email_id)
     EditText eTInputEmail;
 
@@ -53,11 +61,9 @@ public class ResetPasswordDialogFragment extends BaseDialogFragment implements L
 
     @Bind(R.id.pb_reset_pwd)
     ProgressBar pbResetPwd;
+    // endregion
 
-
-    @Inject
-    AppUtils mAppUtils;
-
+    // region lifecycle override methods
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
@@ -93,7 +99,9 @@ public class ResetPasswordDialogFragment extends BaseDialogFragment implements L
         super.onDestroyView();
         mLogInPresenter.detachView();
     }
+    // endregion
 
+    // region onClick methods
     @OnClick(R.id.tv_forgot_password_submit)
     public void sendForgotPassword() {
         if (eTInputEmail.getText() == null || !StringUtil.isNotNullOrEmptyString(eTInputEmail.getText().toString())) {
@@ -110,6 +118,13 @@ public class ResetPasswordDialogFragment extends BaseDialogFragment implements L
 
     }
 
+    @OnClick(R.id.iv_login_back)
+    public void backOnClick() {
+        dismiss();
+    }
+    // endregion
+
+    // region public methods
     @Override
     public void sendForgotPasswordEmail(ForgotPasswordResponse forgotPasswordResponse) {
         if (forgotPasswordResponse != null) {
@@ -130,10 +145,6 @@ public class ResetPasswordDialogFragment extends BaseDialogFragment implements L
 
     }
 
-    @OnClick(R.id.iv_login_back)
-    public void backOnClick() {
-       dismiss();
-    }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
@@ -179,4 +190,5 @@ public class ResetPasswordDialogFragment extends BaseDialogFragment implements L
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
 
     }
+    // endregion
 }

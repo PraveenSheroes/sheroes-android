@@ -71,10 +71,13 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  * Title: A login screen that offers login via email/password.
  */
 public class LoginActivity extends BaseActivity implements LoginView {
+    // region Constants
     private static final String SCREEN_LABEL = "Email Login Screen";
     private final String TAG = LogUtils.makeLogTag(LoginActivity.class);
     public static final int LOGGING_IN_DIALOG = 1;
+    //endregion
 
+    // region Inject
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -87,7 +90,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     AppUtils mAppUtils;
     @Inject
     ErrorUtil mErrorUtil;
+    //endregion
 
+    // region views
     @Bind(R.id.email)
     EditText mEmailView;
     @Bind(R.id.password)
@@ -96,8 +101,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     Button mEmailSign;
     @Bind(R.id.tv_email_description)
     TextView tvEmailDescription;
+    //endregion
 
-    //For ads Navigation
+    // region member variables
     private boolean isBranchFirstSession = false;
     private String deepLinkUrl = null;
     private String defaultTab = null;
@@ -108,7 +114,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private boolean isEye;
     private long currentTime;
     private ResetPasswordDialogFragment mResetPasswordDialogFragment;
+    //endregion
 
+    // region lifecycle override methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,7 +133,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                 startActivity(boardingIntent);
             }
         } else {
-            renderLoginFragmentView();
+            renderLoginView();
         }
     }
 
@@ -148,6 +156,14 @@ public class LoginActivity extends BaseActivity implements LoginView {
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        mUserPreference.delete();
+        super.onBackPressed();
+    }
+    //endregion
+
+    // region public methods
     /**
      * Stor token into share prefrances
      *
@@ -246,11 +262,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     }
 
-    @Override
-    public void onBackPressed() {
-        mUserPreference.delete();
-        super.onBackPressed();
-    }
+
 
     @Override
     protected SheroesPresenter getPresenter() {
@@ -286,7 +298,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         checkDialogDismiss();
         mEmailSign.setEnabled(true);
-        mErrorUtil.onShowErrorDialog(this, errorMsg, feedParticipationEnum);
+        onShowErrorDialog( errorMsg, feedParticipationEnum);
     }
 
     @Override
@@ -406,7 +418,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)
-    public void renderLoginFragmentView() {
+    public void renderLoginView() {
         setContentView(R.layout.activity_login);
         SheroesApplication.getAppComponent(this).inject(this);
         ButterKnife.bind(this);
@@ -427,7 +439,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
             }
         }
     }
+    //endregion
 
+    // region private methods
     private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -567,6 +581,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             LogUtils.error(this.getClass().getName(), e.toString(), e);
         }
     }
+    //endregion
 }
 
 

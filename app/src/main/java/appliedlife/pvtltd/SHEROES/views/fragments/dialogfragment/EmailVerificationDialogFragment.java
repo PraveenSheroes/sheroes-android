@@ -90,22 +90,6 @@ public class EmailVerificationDialogFragment extends BaseDialogFragment implemen
         return view;
     }
 
-    @OnClick(R.id.tv_email_verify_link)
-    public void sendEmailVerifyLink() {
-        mLoginPresenter.getEmailVerificationResponseInPresenter(new EmailVerificationRequest());
-    }
-
-    @Override
-    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
-        if (emailVerificationResponse != null) {
-            if (emailVerificationResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())) {
-                Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_SUCCESS_TEXT), Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_FAILURE_TEXT), Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -131,10 +115,30 @@ public class EmailVerificationDialogFragment extends BaseDialogFragment implemen
         super.onDestroyView();
         mLoginPresenter.detachView();
     }
+    //endregion
+
+    // region onClick methods
+    @OnClick(R.id.tv_email_verify_link)
+    public void sendEmailVerifyLink() {
+        mLoginPresenter.getEmailVerificationResponseInPresenter(new EmailVerificationRequest());
+    }
 
     @OnClick(R.id.iv_login_back)
     public void backOnClick() {
         dismiss();
+    }
+    // endregion
+
+    // region public methods
+    @Override
+    public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
+        if (emailVerificationResponse != null) {
+            if (emailVerificationResponse.getStatus().equalsIgnoreCase(ResponseStatus.SUCCESS.toString())) {
+                Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_SUCCESS_TEXT), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), getString(R.string.ID_EMAIL_VERIFICATION_FAILURE_TEXT), Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
