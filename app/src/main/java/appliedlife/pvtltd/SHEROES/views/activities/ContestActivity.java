@@ -624,15 +624,15 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
         }
     }
 
-    @Override
-    protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        clickCommentReactionFragment(feedDetail);
+//    @Override
+//    protected void openCommentReactionFragment(FeedDetail feedDetail) {
+//        clickCommentReactionFragment(feedDetail);
+//
+//    }
 
-    }
-
-    private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
-    }
+//    private void clickCommentReactionFragment(FeedDetail feedDetail) {
+//        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+//    }
 
 
     //endregion
