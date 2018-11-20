@@ -33,7 +33,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private static final int TYPE_COMMUNITY = 0;
     private static final int TYPE_SHOW_MORE = 1;
-    private List<UserSolrObj> communities;
+    private List<UserSolrObj> userSolrObjList;
     private final Context mContext;
     private BaseHolderInterface baseHolderInterface;
 
@@ -49,7 +49,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         if (viewType == TYPE_COMMUNITY) {
-            return new FollowerFollowingAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.followed_mentor_list_item, parent, false));
+            return new FollowerFollowingAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.adapter_champion_list_item, parent, false));
         } else {
             View view = mInflater.inflate(R.layout.feed_progress_bar_holder, parent, false);
             return new FeedProgressBarHolder(view, baseHolderInterface);
@@ -59,31 +59,37 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (CommonUtil.isEmpty(communities)) return;
+        if (CommonUtil.isEmpty(userSolrObjList)) return;
 
         if (holder.getItemViewType() == TYPE_COMMUNITY) {
             FollowerFollowingAdapter.FollowedUserListItemViewHolder commentListItemViewHolder = (FollowerFollowingAdapter.FollowedUserListItemViewHolder) holder;
-            UserSolrObj mentorDetails = communities.get(position);
+            UserSolrObj mentorDetails = userSolrObjList.get(position);
             commentListItemViewHolder.bindData(mentorDetails, position);
         } else {
             FeedProgressBarHolder loaderViewHolder = ((FeedProgressBarHolder) holder);
-            loaderViewHolder.bindData(communities.get(position), mContext, position);
+            loaderViewHolder.bindData(userSolrObjList.get(position), mContext, position);
         }
     }
 
     @Override
     public int getItemViewType(int position) {
-        return !CommonUtil.isEmpty(communities) && communities.get(position).getSubType() != null && communities.get(position).getSubType().equals(AppConstants.FEED_PROGRESS_BAR) ? TYPE_SHOW_MORE : TYPE_COMMUNITY;
+        return !CommonUtil.isEmpty(userSolrObjList) && userSolrObjList.get(position).getSubType() != null && userSolrObjList.get(position).getSubType().equals(AppConstants.FEED_PROGRESS_BAR) ? TYPE_SHOW_MORE : TYPE_COMMUNITY;
     }
 
     @Override
     public int getItemCount() {
-        return CommonUtil.isEmpty(communities) ? 0 : communities.size();
+        return CommonUtil.isEmpty(userSolrObjList) ? 0 : userSolrObjList.size();
     }
 
-    public void setData(List<UserSolrObj> communities) {
-        this.communities = communities;
+    public void setData(List<UserSolrObj> userSolrObjs) {
+        this.userSolrObjList = userSolrObjs;
         notifyDataSetChanged();
+    }
+
+    public void updateData(UserSolrObj userSolrObj, int position) {
+        if(userSolrObjList.size()> position) {
+            userSolrObjList.set(position, userSolrObj);
+        }
     }
 
     // region Followers or Following List Item ViewHolder

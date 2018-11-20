@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -22,12 +24,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
@@ -58,6 +61,7 @@ public class UnFollowDialogFragment extends BaseDialogFragment implements HomeVi
     private String mSourceScreenName;
     private boolean mIsChampion;
     private boolean mIsSelfProfile;
+    private Activity mContext;
 
     @Nullable
     @Override
@@ -66,12 +70,13 @@ public class UnFollowDialogFragment extends BaseDialogFragment implements HomeVi
 
         if (getActivity() == null) return null;
 
+        mContext = getActivity();
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.unfollow_confirmation_dialog, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
         Parcelable parcelable = getArguments().getParcelable(AppConstants.USER);
-        Parcelable unFollowRequestParcelable = getArguments().getParcelable(AppConstants.USER);
+        Parcelable unFollowRequestParcelable = getArguments().getParcelable(AppConstants.UNFOLLOW);
         mSourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
 
         mIsChampion = getArguments().getBoolean(AppConstants.IS_CHAMPION_ID);
@@ -122,9 +127,9 @@ public class UnFollowDialogFragment extends BaseDialogFragment implements HomeVi
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
-                if (getActivity() != null && getActivity() instanceof IFollowCallback) {
+                if (mContext!=null && mContext instanceof ProfileActivity) {
                     UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-                    ((IFollowCallback) getActivity()).onProfileUnFollowed(userSolrObj);
+                    ((ProfileActivity)mContext).onProfileFollowed(userSolrObj);
                 }
                 break;
             default:

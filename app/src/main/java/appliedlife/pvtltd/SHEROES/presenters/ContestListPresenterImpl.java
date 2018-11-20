@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -22,11 +21,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestListView;
-import io.reactivex.Observable;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -37,26 +32,37 @@ import io.reactivex.schedulers.Schedulers;
  */
 
 public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
-    private IContestListView mContestListView;
-    SheroesAppServiceApi sheroesAppServiceApi;
 
+    //region member variable
+    private SheroesAppServiceApi sheroesAppServiceApi;
+    //endregion member variable
+
+    //region constructor
     @Inject
     public ContestListPresenterImpl(SheroesAppServiceApi sheroesAppServiceApi) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
     }
+    //endregion constructor
 
     //region Presenter methods
-
     public void fetchContests(FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
-        getFeedFromModel(feedRequestPojo).subscribe(new DisposableObserver<FeedResponsePojo>() {
+        sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
+                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
+                    @Override
+                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
+                        return feedResponsePojo;
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
             public void onComplete() {
-                //getMvpView().stopProgressBar();
             }
 
             @Override
@@ -110,19 +116,6 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                 getMvpView().showContests(contests);
             }
         });
-
-    }
-
-    public Observable<FeedResponsePojo> getFeedFromModel(FeedRequestPojo feedRequestPojo) {
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
     //endregion
 }

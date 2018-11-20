@@ -43,17 +43,20 @@ import butterknife.ButterKnife;
  */
 
 public class AddressActivity extends BaseActivity implements IAddressView {
+
+    //region constants
     private static final String SCREEN_LABEL = "Address Activity";
     private static final String IS_ADDRESS_UPDATED = "Is Address Updated";
+    //endregion contstants
 
-
+    //region injected variables
     @Inject
     AddressPresenterImpl mAddressPresenter;
+    //endregion injected variables
 
     //region View variables
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
 
     @Bind(R.id.name_container)
     TextInputLayout mNameViewContainer;
@@ -102,7 +105,9 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     //endregion
 
     private Address originalAddress;
-    private boolean wasAddressUpdated;
+    //region member variable
+    private Address mOriginalAddress;
+    //endregion member variable
 
     //region activity lifecycle methods
     @Override
@@ -112,20 +117,25 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         setContentView(R.layout.activity_address);
         ButterKnife.bind(this);
         mAddressPresenter.attachView(this);
-        wasAddressUpdated = getIntent().getBooleanExtra(IS_ADDRESS_UPDATED, false);
+        boolean wasAddressUpdated = getIntent().getBooleanExtra(IS_ADDRESS_UPDATED, false);
         Parcelable parcelable = getIntent().getParcelableExtra(Address.ADDRESS_OBJ);
         if (parcelable != null) {
-            originalAddress = Parcels.unwrap(parcelable);
-            if (originalAddress != null && wasAddressUpdated) {
+            mOriginalAddress = Parcels.unwrap(parcelable);
+            if (mOriginalAddress != null && wasAddressUpdated) {
                 prePopulateFields();
             }
         }
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbar.setNavigationIcon(R.drawable.vector_clear);
-        getSupportActionBar().setTitle(R.string.title_send_address);
-    }
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle(R.string.title_send_address);
+        }
+    }
+    //endregion activity lifecycle methods
+
+    //region override method
     @Override
     protected SheroesPresenter getPresenter() {
         return mAddressPresenter;
@@ -150,7 +160,7 @@ public class AddressActivity extends BaseActivity implements IAddressView {
             if (validateFields()) {
                 Address address = new Address();
                 getAddressFromField(address);
-                address.challengeId = originalAddress.challengeId;
+                address.challengeId = mOriginalAddress.challengeId;
                 mAddressPresenter.postAddress(address);
             }
             return true;
@@ -163,16 +173,15 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
-    //endregion
+    //endregion override method
 
     //region private methods
     private void prePopulateFields() {
-        mNameView.setText(originalAddress.fullName);
-        mPhoneNumberView.setText(originalAddress.mobileNumber);
-        mAddressView.setText(originalAddress.fullAddress);
-        mEmailView.setText(originalAddress.emailAddress);
-        mPinCodeView.setText(originalAddress.pinCode);
+        mNameView.setText(mOriginalAddress.fullName);
+        mPhoneNumberView.setText(mOriginalAddress.mobileNumber);
+        mAddressView.setText(mOriginalAddress.fullAddress);
+        mEmailView.setText(mOriginalAddress.emailAddress);
+        mPinCodeView.setText(mOriginalAddress.pinCode);
         mNameView.setSelection(mNameView.length());
     }
 
@@ -268,14 +277,14 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     }
 
     private boolean isDirty() {
-        if (originalAddress != null) {
+        if (mOriginalAddress != null) {
             Address address = new Address();
             getAddressFromField(address);
-            return !address.fullName.equals(originalAddress.fullName)
-                    || !address.fullAddress.equals(originalAddress.fullAddress)
-                    || !address.pinCode.equals(originalAddress.pinCode)
-                    || !address.emailAddress.equals(originalAddress.emailAddress)
-                    || !address.mobileNumber.equals(originalAddress.mobileNumber);
+            return !address.fullName.equals(mOriginalAddress.fullName)
+                    || !address.fullAddress.equals(mOriginalAddress.fullAddress)
+                    || !address.pinCode.equals(mOriginalAddress.pinCode)
+                    || !address.emailAddress.equals(mOriginalAddress.emailAddress)
+                    || !address.mobileNumber.equals(mOriginalAddress.mobileNumber);
         }
         return CommonUtil.isNotEmpty(mNameView.getText().toString())
                 || CommonUtil.isNotEmpty(mPhoneNumberView.getText().toString())
@@ -305,7 +314,6 @@ public class AddressActivity extends BaseActivity implements IAddressView {
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 

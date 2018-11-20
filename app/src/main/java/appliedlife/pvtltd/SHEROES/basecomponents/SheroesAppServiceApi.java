@@ -10,8 +10,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagResponse;
@@ -38,8 +38,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
@@ -122,7 +122,7 @@ public interface SheroesAppServiceApi {
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
     @POST("participant/feed/followed_mentor_list")
-    Observable<UserFollowedMentorsResponse> getFollowerOrFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
+    Observable<FollowedUsersResponse> getFollowerOrFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
 
     @POST("participant/feed/mutual_communities")
     Observable<ProfileCommunitiesResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
@@ -134,10 +134,10 @@ public interface SheroesAppServiceApi {
     Observable<UserProfileResponse> getUserDetails();
 
     @POST("participation/reaction/follow")
-    Observable<MentorFollowUnfollowResponse> getMentorFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    Observable<ChampionFollowedResponse> getMentorFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
 
     @POST("/participation/reaction/unfollow")
-    Observable<MentorFollowUnfollowResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    Observable<ChampionFollowedResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
 
     @POST("participant/feed/my_communities")
     Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);

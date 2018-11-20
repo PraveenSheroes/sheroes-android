@@ -147,7 +147,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new EventSponsorHolder(view, viewInterface);
         }
-    }, MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
+    }, MENTOR_SUGGESTED_CARD_HOLDER(R.layout.champion_suggested_card_holder) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new CarouselViewHolder(view, viewInterface);

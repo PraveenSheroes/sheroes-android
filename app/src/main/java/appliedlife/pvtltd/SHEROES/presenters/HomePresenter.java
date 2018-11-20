@@ -16,8 +16,8 @@ import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -80,9 +80,12 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATIO
  */
 public class HomePresenter extends BasePresenter<HomeView> {
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
-    HomeModel mHomeModel;
-    SheroesApplication mSheroesApplication;
-    SheroesAppServiceApi mSheroesAppServiceApi;
+
+    private HomeModel mHomeModel;
+    private MasterDataModel mMasterDataModel;
+    private SheroesApplication mSheroesApplication;
+    private SheroesAppServiceApi mSheroesAppServiceApi;
+
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
@@ -94,7 +97,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
     @Inject
     Preference<AppConfiguration> mConfiguration;
 
-    MasterDataModel mMasterDataModel;
     @Inject
     ProfileModel profileModel;
 
@@ -180,43 +182,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         }
                     }
                 });
-
-    }
-
-
-    //followed profile
-    public void getFeedForProfileFromPresenter(final FeedRequestPojo feedRequestPojo) { //todo - profile - public profile
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        profileModel.getFeedFromModelForTestProfile(feedRequestPojo)
-                .compose(this.<FeedResponsePojo>bindToLifecycle())
-                .subscribe(new DisposableObserver<FeedResponsePojo>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_FEED_RESPONSE);
-
-                    }
-
-                    @Override
-                    public void onNext(FeedResponsePojo feedResponsePojo) {
-                        LogUtils.info(TAG, "********response***********");
-                        getMvpView().stopProgressBar();
-                        if (null != feedResponsePojo) {
-                            getMvpView().getFeedListSuccess(feedResponsePojo);
-                        }
-                    }
-                });
-
     }
 
     public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {
@@ -249,7 +214,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         }
                     }
                 });
-
     }
 
     public void getBookMarkFromPresenter(FeedRequestPojo feedRequestPojo) {
@@ -271,7 +235,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), ERROR_BOOK_MARK_LIST);
-
                     }
 
                     @Override
@@ -292,8 +255,8 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
         getMvpView().startProgressBar();
         mHomeModel.getFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -308,14 +271,14 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                            if(championFollowedResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsUserFollowed(true);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {
@@ -336,8 +299,8 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
         getMvpView().startProgressBar();
         mHomeModel.getUnFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -351,9 +314,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userSolrObj.getFollowerCount() > 0) {
                                 userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
@@ -366,7 +329,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
                     }
                 });
-
     }
 
     public void getUserSummaryDetails(UserSummaryRequest userSummaryRequest) {

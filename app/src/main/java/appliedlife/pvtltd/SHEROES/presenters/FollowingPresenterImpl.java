@@ -7,11 +7,10 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
@@ -61,8 +60,8 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
         getMvpView().startProgressBar();
 
         profileModel.getFollowerFollowing(profileFollowedMentor)
-                .compose(this.<UserFollowedMentorsResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<UserFollowedMentorsResponse>() {
+                .compose(this.<FollowedUsersResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<FollowedUsersResponse>() {
                     @Override
                     public void onComplete() {
 
@@ -76,7 +75,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                     }
 
                     @Override
-                    public void onNext(UserFollowedMentorsResponse profileFeedResponsePojo) {
+                    public void onNext(FollowedUsersResponse profileFeedResponsePojo) {
                         LogUtils.info(TAG, "********response***********");
                         getMvpView().stopProgressBar();
                         if (null != profileFeedResponsePojo) {

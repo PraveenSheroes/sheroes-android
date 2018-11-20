@@ -27,7 +27,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -50,7 +50,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
 import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
@@ -62,7 +61,6 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
 public class FollowingFragment extends BaseFragment implements IFollowerFollowingView, FollowerFollowingCallback {
 
     private static final String SCREEN_LABEL = "Followed Champions Screen";
-    private static final int MENTOR_TYPE_ID = 7;
 
     private long userMentorId;
     private boolean isSelfProfile;
@@ -182,7 +180,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     }
 
     @Override
-    public void getFollowersOrFollowing(UserFollowedMentorsResponse profileFeedResponsePojo) {
+    public void getFollowersOrFollowing(FollowedUsersResponse profileFeedResponsePojo) {
         List<UserSolrObj> feedDetailList = profileFeedResponsePojo.getFeedDetails();
         mProgressBar.setVisibility(View.GONE);
 
@@ -220,7 +218,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     @Override
     public void onItemClick(UserSolrObj userSolrObj) {
-        boolean isChampion = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+        boolean isChampion = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
         long id = userSolrObj.getIdOfEntityOrParticipant();
         ProfileActivity.navigateTo(getActivity(), id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }

@@ -20,8 +20,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
@@ -288,16 +288,16 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -312,7 +312,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
@@ -337,16 +337,16 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -361,9 +361,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userPostSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             } else {
@@ -384,8 +384,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mHomeModel.getFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -400,14 +400,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             getMvpView().invalidateItem(userSolrObj);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                            if(championFollowedResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             } else {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -426,8 +426,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mHomeModel.getUnFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -442,9 +442,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userSolrObj.getFollowerCount() > 0) {
                                 userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }

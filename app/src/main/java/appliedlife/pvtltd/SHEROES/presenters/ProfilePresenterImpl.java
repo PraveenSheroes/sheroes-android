@@ -13,7 +13,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
@@ -71,8 +71,8 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
         getMvpView().startProgressBar();
 
         profileModel.getFollowerFollowing(profileFollowedMentor)
-                .compose(this.<UserFollowedMentorsResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<UserFollowedMentorsResponse>() {
+                .compose(this.<FollowedUsersResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<FollowedUsersResponse>() {
             @Override
             public void onComplete() {
 
@@ -86,7 +86,7 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
             }
 
             @Override
-            public void onNext(UserFollowedMentorsResponse profileFeedResponsePojo) {
+            public void onNext(FollowedUsersResponse profileFeedResponsePojo) {
                 LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != profileFeedResponsePojo) {

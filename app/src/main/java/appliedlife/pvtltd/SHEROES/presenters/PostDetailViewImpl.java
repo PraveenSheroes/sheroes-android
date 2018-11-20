@@ -22,8 +22,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -1146,16 +1146,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -1170,7 +1170,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
@@ -1195,16 +1195,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -1219,7 +1219,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userPostSolrObj.getEntityOrParticipantTypeId() == 7) {

@@ -30,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
@@ -176,7 +176,7 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
     }
 
     @Override
-    public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
+    public void getFollowedMentors(FollowedUsersResponse profileFeedResponsePojo) {
     }
 
     @Override

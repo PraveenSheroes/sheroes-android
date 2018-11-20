@@ -107,8 +107,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
+import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
@@ -144,13 +144,13 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -177,7 +177,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
     private static final int ANIMATION_DELAY_TIME = 2000;
     private static final int ANIMATION_DURATION_TIME = 5000;
-    private static final int APP_BAR_ELEVATION = 10;
     private static final String MORE_TOP_ICON = "More Top Icon";
 
     // region inject variables
@@ -326,7 +325,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     // region member variables
     private GenericRecyclerViewAdapter mAdapter;
     private List<ArticleCategory> mArticleCategoryItemList = new ArrayList<>();
-    private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
@@ -658,7 +656,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getArticleCategoryList())) {
                 mArticleCategoryItemList = mFragmentOpen.getArticleCategoryList();
             }
-            mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
+            ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mArticleCategoryItemList);
             bundle.putParcelable(AppConstants.ARTICLE_CATEGORY_SPINNER_FRAGMENT, parcelable);
@@ -671,7 +669,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick({R.id.tv_home, R.id.ic_sheroes})
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
         flFeedFullView.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         homeButtonUi();
@@ -1276,36 +1273,17 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
                     writeAStory();
-                }
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
                     showSelectLanguageOption();
-                }
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
                     openArticleFragment(intent);
-                }
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
                     communityOnClick();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
                     mentorListActivity();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
                     renderFAQSView();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
                 }
             } else if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
@@ -1669,14 +1647,14 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private void mentorListActivity() {
-        Intent intent = new Intent(this, MentorsUserListingActivity.class);
+        Intent intent = new Intent(this, ChampionListingActivity.class);
         startActivityForResult(intent, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
-            case R.id.icon:  //TODO - Fix hardcoding
+            case R.id.icon:
                 if (baseResponse instanceof CarouselDataObj) {
                     CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
                     if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
@@ -1686,19 +1664,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     }
                 }
                 break;
-
-           /* case R.id.tv_mentor_ask_question:
-                CommunityPost mentorPost = new CommunityPost();
-                mFeedDetail = (FeedDetail) baseResponse;
-                if (mFeedDetail instanceof UserSolrObj) {
-                    UserSolrObj userSolrObj = (UserSolrObj) mFeedDetail;
-                    mentorPost.community = new Community();
-                    mentorPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
-                    mentorPost.community.name = userSolrObj.getNameOrTitle();
-                    mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
-                    createCommunityPostOnClick(mentorPost);
-                }
-                break;*/
 
             case R.id.iv_header_circle_icon:
                 mFeedDetail = (FeedDetail) baseResponse;
@@ -1719,9 +1684,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             case R.id.li_event_card_main_layout:
                 eventDetailDialog(0);
                 break;
-           // case R.id.li_mentor:
-           //     openMentorProfileDetail(baseResponse);
-           //     break;
             case R.id.share:
                 if (StringUtil.isNotNullOrEmptyString(((FeedDetail) baseResponse).getPostShortBranchUrls())) {
                     ((FeedDetail) baseResponse).setDeepLinkUrl(((FeedDetail) baseResponse).getPostShortBranchUrls());
@@ -1757,7 +1719,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                 setAllValues(mFragmentOpen);
                 feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
         }
-
     }
 
     private void navigateToCollectionScreen(CarouselDataObj carouselDataObj) {
@@ -1770,13 +1731,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             CollectionActivity.navigateTo(this, carouselDataObj.getEndPointUrl(), carouselDataObj.getScreenTitle(), MORE_TOP_ICON, COMMUNITY_CATEGORY_SCREEN, properties, REQUEST_CODE_FOR_COMMUNITY_LISTING);
         }
     }
-
-   /* private void openMentorProfileDetail(BaseResponse baseResponse) {
-        UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-        userSolrObj.setSuggested(false);
-        mFeedDetail = userSolrObj;
-        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }*/
 
     private void openProfileActivity(ProfileStrengthDialog.ProfileLevelType profileLevelType) {
         ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);

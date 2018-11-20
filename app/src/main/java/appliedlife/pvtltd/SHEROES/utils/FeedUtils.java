@@ -53,8 +53,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.FEED_CARD_MENU;
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_REACTION_COMMENT_MENU;
@@ -267,11 +265,6 @@ public class FeedUtils {
     }
 
     private void bookmarkCall(Activity activity) {
-        if (AppUtils.isFragmentUIActive(mFragment)) {
-            if (mFragment instanceof UserPostFragment) {
-                ((UserPostFragment) mFragment).bookMarkForCard(mFeedDetail);
-            }
-        }
         if (activity instanceof ContestActivity) {
             ((ContestActivity) activity).bookmarkPost(mFeedDetail);
         }
@@ -295,21 +288,6 @@ public class FeedUtils {
         }
     }
 
-    public DialogFragment showCommunityJoinReason(FeedDetail feedDetail, Activity context) {
-        CommunityOptionJoinDialog fragment = (CommunityOptionJoinDialog) context.getFragmentManager().findFragmentByTag(CommunityOptionJoinDialog.class.getName());
-        if (fragment == null) {
-            fragment = new CommunityOptionJoinDialog();
-            Bundle b = new Bundle();
-            Parcelable parcelable = Parcels.wrap(feedDetail);
-            b.putParcelable(BaseDialogFragment.DISMISS_PARENT_ON_OK_OR_BACK, parcelable);
-            fragment.setArguments(b);
-        }
-        if (!fragment.isVisible() && !fragment.isAdded() && !context.isFinishing() && !mIsDestroyed) {
-            fragment.show(context.getFragmentManager(), CommunityOptionJoinDialog.class.getName());
-        }
-        return fragment;
-    }
-
     private void shareCardViaSocial(BaseResponse baseResponse, Context context, String screenName, FeedDetail mFeedDetail) {
         FeedDetail feedDetail = (FeedDetail) baseResponse;
         String deepLinkUrl;
@@ -323,7 +301,6 @@ public class FeedUtils {
         intent.setPackage(AppConstants.WHATS_APP_URI);
         intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
         context.startActivity(intent);
-//        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, screenName);
     }
 
@@ -340,7 +317,6 @@ public class FeedUtils {
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-//        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, screenName);
         AnalyticsManager.trackEvent(Event.POST_SHARED, screenName, properties);
     }
@@ -483,11 +459,6 @@ public class FeedUtils {
                 break;
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
-                    if (mFragment instanceof UserPostFragment) {
-                        if (AppUtils.isFragmentUIActive(mFragment)) {
-                            ((UserPostFragment) mFragment).deleteCommunityPost(mFeedDetail);
-                        }
-                    }
                     ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;

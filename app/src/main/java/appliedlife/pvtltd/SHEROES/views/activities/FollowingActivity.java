@@ -91,11 +91,12 @@ public class FollowingActivity extends BaseActivity {
 
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        titleName.setText(R.string.ID_EDIT_PROFILE);
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("");
+            final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
     }
 
     @Override

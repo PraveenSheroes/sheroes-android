@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.BadgeClosetActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ChampionListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
@@ -34,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
@@ -70,11 +70,9 @@ import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.UserGridFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.CommunityOptionJoinDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
@@ -149,7 +147,7 @@ public interface SheroesAppComponent {
 
     void inject(CommunitiesListFragment myCommunitiesFragment);
 
-    void inject(FollowedCommunitiesFragment userMentorCommunity);
+    void inject(FollowedCommunitiesFragment communitiesFragment);
 
     void inject(FollowingFragment followingFragment);
 
@@ -175,8 +173,6 @@ public interface SheroesAppComponent {
 
     void inject(NoCommunityHolder noCommunityHolder);
 
-    void inject(UserPostFragment communitiesDetailFragment);
-
     void inject(OnBoardingActivity onBoardingActivity);
 
     void inject(FollowingActivity followingActivity);
@@ -184,8 +180,6 @@ public interface SheroesAppComponent {
     void inject(EditUserProfileActivity editUserProfileActivity);
 
     void inject(WelcomeActivity welcomeActivity);
-
-    void inject(CommunityOptionJoinDialog communityOptionJoinDialog);
 
     void inject(SearchProfileLocationDialogFragment searchProfileLocation);
 
@@ -275,7 +269,7 @@ public interface SheroesAppComponent {
 
     void inject(CarouselViewHolder mentorSuggestedCardHorizontalView);
 
-    void inject(MentorsUserListingActivity mentorsUserListingActivity);
+    void inject(ChampionListingActivity championListingActivity);
 
     void inject(ProfileActivity profileActivity);
 

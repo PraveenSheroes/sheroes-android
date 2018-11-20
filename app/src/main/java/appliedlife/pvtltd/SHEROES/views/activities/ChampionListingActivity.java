@@ -31,7 +31,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -59,9 +59,8 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION
  * Created by Praveen on 05/12/17.
  */
 
-public class MentorsUserListingActivity extends BaseActivity implements BaseHolderInterface, HomeView , FollowerFollowingCallback {
+public class ChampionListingActivity extends BaseActivity implements BaseHolderInterface, HomeView , FollowerFollowingCallback {
     private static final String SCREEN_LABEL = "Mentors Listing Screen";
-    public static final String CHAMPION_SUBTYPE = "C";
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -70,35 +69,35 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
     @Bind(R.id.swipe_mentor_list)
     SwipeRefreshLayout mSwipeView;
 
-    @Bind(R.id.progress_bar)
-    ProgressBar mProgressBar;
-
     @Bind(R.id.title_toolbar)
     TextView titleToolbar;
 
+    @Bind(R.id.empty_view)
+    View emptyView;
+
+    @Bind(R.id.rv_mentor_list)
+    EmptyRecyclerView mRecyclerView;
+    //endregion binding view variables
+
+    //region injected variable
     @Inject
     AppUtils mAppUtils;
 
     @Inject
     HomePresenter mHomePresenter;
+    //endregion injected variable
 
-    @Bind(R.id.rv_mentor_list)
-    EmptyRecyclerView mRecyclerView;
-
-    private LinearLayoutManager mLayoutManager;
+    //region member variable
     private SwipPullRefreshList mPullRefreshList;
     private FragmentListRefreshData mFragmentListRefreshData;
-    FollowerFollowingAdapter mAdapter;
-    private UserSolrObj mUserSolrObj;
-    @Bind(R.id.empty_view)
-    View emptyView;
+    private FollowerFollowingAdapter mAdapter;
+    //endregion member variable
 
-    //endregion
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
-        setContentView(R.layout.mentor_listing_layout);
+        setContentView(R.layout.champion_listing_layout);
         mHomePresenter.attachView(this);
         ButterKnife.bind(this);
         setupToolbarItemsColor();
@@ -109,15 +108,17 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
 
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.ID_MENTOR);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("");
+            final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
     }
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
-        mLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new FollowerFollowingAdapter(this, this);
         mRecyclerView.setAdapter(mAdapter);
@@ -204,14 +205,13 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
                     if (null != intent.getExtras()) {
                         UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
                         if (null != userSolrObj) {
-                          //  mAdapter.setMentoreDataOnPosition(userSolrObj, userSolrObj.currentItemPosition);
-                           // mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                            mAdapter.updateData(userSolrObj, userSolrObj.currentItemPosition);
+                            mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
                         }
                     }
                     break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     setResult(RESULT_OK, intent);
-                    // finish();
                     break;
                 default:
             }
@@ -236,17 +236,10 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
 
     @Override
     public void startProgressBar() {
-        if (null != mProgressBar) {
-            mProgressBar.setVisibility(View.VISIBLE);
-            mProgressBar.bringToFront();
-        }
     }
 
     @Override
     public void stopProgressBar() {
-        if (null != mProgressBar) {
-            mProgressBar.setVisibility(View.GONE);
-        }
     }
 
     @Override
@@ -273,7 +266,6 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
 
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        mProgressBar.setVisibility(View.GONE);
 
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             int mPageNo = mFragmentListRefreshData.getPageNo();
@@ -319,7 +311,7 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -330,18 +322,17 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
         switch (feedParticipationEnum) {
             case FOLLOW_UNFOLLOW:
-                mUserSolrObj = (UserSolrObj) baseResponse;
-                mAdapter.notifyItemChanged(mUserSolrObj.getItemPosition(), mUserSolrObj);
+                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                mAdapter.notifyItemChanged(userSolrObj.getItemPosition(), userSolrObj);
                 break;
             default:
         }
@@ -368,7 +359,7 @@ public class MentorsUserListingActivity extends BaseActivity implements BaseHold
 
     @Override
     public void onItemClick(UserSolrObj userSolrObj) {
-        boolean isChampion = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+        boolean isChampion = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
         long id = userSolrObj.getIdOfEntityOrParticipant();
         ProfileActivity.navigateTo(this, id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }

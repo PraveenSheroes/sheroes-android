@@ -448,4 +448,5 @@ public class AppConstants {
     public static final String WHATS_APP_URI = "com.whatsapp";
     public static final String UNFOLLOW = "UNFOLLOW";
     public static final String LOGGED_IN_USER = "LoggedInUser";
+    public static final String CHAMPION_SUBTYPE = "C";
 }

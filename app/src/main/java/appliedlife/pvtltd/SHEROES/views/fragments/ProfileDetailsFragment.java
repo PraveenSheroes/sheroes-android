@@ -34,7 +34,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -48,11 +48,11 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ChampionListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
@@ -112,7 +112,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     LinearLayout followedMentorsListContainer;
 
     @Bind(R.id.empty_mentor_view)
-    TextView emptyViewFollowedMentor;
+    TextView emptyViewFollowedChampion;
 
     @Bind(R.id.empty_mentor_view_container)
     LinearLayout emptyFollowedMentorContainer;
@@ -239,7 +239,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     @OnClick(R.id.dotted_border_container)
     public void openChampionList() {
         if(isSelfProfile) {
-            Intent intent = new Intent(getActivity(), MentorsUserListingActivity.class);
+            Intent intent = new Intent(getActivity(), ChampionListingActivity.class);
             startActivity(intent);
         }
     }
@@ -354,7 +354,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     }
 
     @Override
-    public void getFollowedMentors(UserFollowedMentorsResponse feedResponsePojo) {
+    public void getFollowedMentors(FollowedUsersResponse feedResponsePojo) {
         if (getActivity() == null || getActivity().isFinishing()) {
             return;
         }
@@ -366,14 +366,14 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
                 name = ((ProfileActivity)getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity)getActivity()).getUserNameTitle();
             }
             String message = getString(R.string.empty_followed_mentor, name);
-            emptyViewFollowedMentor.setText(message);
-            emptyViewFollowedMentor.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.vector_public_business_woman,0,0);
+            emptyViewFollowedChampion.setText(message);
+            emptyViewFollowedChampion.setCompoundDrawablesWithIntrinsicBounds(0,R.drawable.vector_public_business_woman,0,0);
 
             followedMentorsListContainer.setVisibility(View.GONE);
 
             if(isSelfProfile) {
                 emptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
-                emptyViewFollowedMentor.setText(R.string.champions_followed);
+                emptyViewFollowedChampion.setText(R.string.champions_followed);
                 emptyViewDottedBorder.setVisibility(View.VISIBLE);
             } else{
                 emptyViewDottedBorder.setBackgroundResource(0);
@@ -466,7 +466,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
         followedMentor.removeAllViewsInLayout();
 
         for (final UserSolrObj userSolrObj : followedMentors) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.followed_mentor_list_item, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.adapter_champion_list_item, null);
             CircleImageView mutualCommunityImage = findById(view, R.id.iv_mentor_full_view_icon);
             TextView mentorName = findById(view, R.id.user_name);
             TextView expertAt = findById(view, R.id.expert_at);

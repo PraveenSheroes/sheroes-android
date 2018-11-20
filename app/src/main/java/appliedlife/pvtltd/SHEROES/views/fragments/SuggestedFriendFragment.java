@@ -30,7 +30,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -52,8 +52,6 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IInviteFriendView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 
 /**
  * Created by Praveen on 13/02/18.
@@ -268,7 +266,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }
@@ -279,7 +277,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
                 new EventProperty.Builder()
                         .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
                         .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
+                        .isMentor((mUserSolarObject.getUserSubType()!=null && mUserSolarObject.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || mUserSolarObject.isAuthorMentor())
                         .build();
         AnalyticsManager.trackEvent(event, getScreenName(), properties);
     }

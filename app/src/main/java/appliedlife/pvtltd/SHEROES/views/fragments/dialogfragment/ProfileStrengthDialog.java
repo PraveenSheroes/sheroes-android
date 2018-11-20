@@ -37,8 +37,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
-
 /**
  * Created by ravi on 02/05/18.
  * Dialog to display the different profile completion level
@@ -207,7 +205,7 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
         String strengthLevel = userLevel(mUserSolrObj).name();
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .profileStrength(strengthLevel)
                         .build();
         EditUserProfileActivity.navigateTo(getActivity(), SCREEN_NAME, mUserSolrObj.getImageUrl(), properties, 1);
@@ -271,7 +269,7 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
         String strengthLevel = userLevel(mUserSolrObj).name();
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
+                        .isMentor((mUserSolrObj.getUserSubType()!=null && mUserSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || mUserSolrObj.isAuthorMentor())
                         .profileStrength(strengthLevel)
                         .build();
         if (hasSource && getArguments() != null && getArguments().getString(AppConstants.SOURCE_NAME) != null) {

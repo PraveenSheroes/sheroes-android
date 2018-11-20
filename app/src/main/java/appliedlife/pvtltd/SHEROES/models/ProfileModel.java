@@ -8,7 +8,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
@@ -40,12 +40,12 @@ public class ProfileModel {
         this.gson = gson;
       }
 
-    public Observable<UserFollowedMentorsResponse> getFollowerFollowing(FollowersFollowingRequest followersFollowingRequest) {
+    public Observable<FollowedUsersResponse> getFollowerFollowing(FollowersFollowingRequest followersFollowingRequest) {
         return sheroesAppServiceApi.getFollowerOrFollowing(followersFollowingRequest)
 
-                .map(new Function<UserFollowedMentorsResponse, UserFollowedMentorsResponse>() {
+                .map(new Function<FollowedUsersResponse, FollowedUsersResponse>() {
                     @Override
-                    public UserFollowedMentorsResponse apply(UserFollowedMentorsResponse feedResponsePojo) {
+                    public FollowedUsersResponse apply(FollowedUsersResponse feedResponsePojo) {
                         return feedResponsePojo;
                     }
                 })
