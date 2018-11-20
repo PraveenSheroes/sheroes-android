@@ -71,9 +71,9 @@ import static butterknife.ButterKnife.findById;
  * Profile Details - Contain Followed Champions and Communities
  */
 
-public class IProfileDetailsFragment extends BaseFragment implements IProfileView {
+public class ProfileDetailsFragment extends BaseFragment implements IProfileView {
     private static final String SCREEN_LABEL = "Profile Details Screen";
-    private final String TAG = LogUtils.makeLogTag(IProfileDetailsFragment.class);
+    private final String TAG = LogUtils.makeLogTag(ProfileDetailsFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
     public static final String USER_MENTOR_NAME ="USER_NAME";
@@ -156,8 +156,8 @@ public class IProfileDetailsFragment extends BaseFragment implements IProfileVie
     @Inject
     ProfilePresenterImpl profilePresenter;
 
-    public static IProfileDetailsFragment createInstance(long userId, String name) {
-        IProfileDetailsFragment profileDetailsFragment = new IProfileDetailsFragment();
+    public static ProfileDetailsFragment createInstance(long userId, String name) {
+        ProfileDetailsFragment profileDetailsFragment = new ProfileDetailsFragment();
         Bundle bundle = new Bundle();
         bundle.putLong(USER_MENTOR_ID, userId);
         bundle.putString(USER_MENTOR_NAME, name);
@@ -588,7 +588,6 @@ public class IProfileDetailsFragment extends BaseFragment implements IProfileVie
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 }
 

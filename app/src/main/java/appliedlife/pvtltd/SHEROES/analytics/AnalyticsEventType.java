@@ -17,7 +17,6 @@ public enum AnalyticsEventType {
     PROFILE("Profile"),
     BADGE("Badge"),
     REPLY("Reply"),
-    JOB("Job"),
     HELPLINE_MESSAGE("Helpline Message "),
     CHALLENGE("Challenge"),
     COMMUNITY("Community"),
@@ -41,7 +40,6 @@ public enum AnalyticsEventType {
     FRIEND("Friend"),
     IMAGE_CARD("Image Card"),
     STORY("Story");
-
     // endregion
 
     public final String name;

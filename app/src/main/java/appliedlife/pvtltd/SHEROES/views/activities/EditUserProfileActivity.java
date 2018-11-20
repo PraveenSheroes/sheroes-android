@@ -432,7 +432,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 }
 
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
-                    userSummary.getUserBO().setEmailid(userDetails.getEmailid());
+                    userSummary.getUserBO().setEmailId(userDetails.getEmailid());
                 }
 
                 String relationshipStatus = userDetails.getMaritalStatus();
@@ -453,7 +453,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
 
                 //Save image
-                userSummary.getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
                 userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
                 userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
 
@@ -953,7 +952,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
 
                         //Save image
-                        userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.set(userDetailsResponse);

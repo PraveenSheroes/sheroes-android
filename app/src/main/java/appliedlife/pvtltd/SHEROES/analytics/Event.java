@@ -86,17 +86,6 @@ public enum Event {
     REPLY_UNLIKED(AnalyticsEventType.REPLY, "Unliked"),
     //endregion
 
-    //region job related events
-    JOBS_CREATED(AnalyticsEventType.JOB, "Created"),
-    JOBS_SEARCH(AnalyticsEventType.JOB, "Search Performed"),
-    JOBS_SEARCH_RESULT_CLICKED(AnalyticsEventType.JOB, "Search Result Click"),
-    JOBS_APPLIED(AnalyticsEventType.JOB, "Applied"),
-    JOBS_BOOKMARKED(AnalyticsEventType.JOB, "Bookmarked"),
-    JOBS_EDITED(AnalyticsEventType.JOB, "Edited"),
-    JOBS_DELETED(AnalyticsEventType.JOB, "Deleted"),
-    JOBS_SHARED(AnalyticsEventType.JOB, "Shared"),
-    JOBS_RECOMMENDED(AnalyticsEventType.JOB, "Recommended"),
-
     //region Helpline message events
     HELPLINE_MESSAGE_CREATED(AnalyticsEventType.HELPLINE_MESSAGE, "Created") {
         @Override

@@ -357,7 +357,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
 

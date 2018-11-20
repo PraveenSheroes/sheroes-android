@@ -8,7 +8,6 @@ import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 
 /**
  * Created by Praveen_Singh on 14-02-2017.

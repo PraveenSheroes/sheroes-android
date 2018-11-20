@@ -21,7 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -56,8 +56,8 @@ public class FollowingActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         if (getIntent().getExtras() != null) {
-            userMentorId = getIntent().getExtras().getLong(IProfileDetailsFragment.USER_MENTOR_ID);
-            isSelfProfile = getIntent().getExtras().getBoolean(IProfileDetailsFragment.SELF_PROFILE);
+            userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
+            isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
             mMembersType = (FollowingEnum) getIntent().getSerializableExtra(MEMBERS_TYPE);
         }
 
@@ -147,8 +147,8 @@ public class FollowingActivity extends BaseActivity {
     //region static methods
     public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, FollowingEnum followingEnum, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, FollowingActivity.class);
-        intent.putExtra(IProfileDetailsFragment.USER_MENTOR_ID, mentorID);
-        intent.putExtra(IProfileDetailsFragment.SELF_PROFILE, isOwnProfile);
+        intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
+        intent.putExtra(ProfileDetailsFragment.SELF_PROFILE, isOwnProfile);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);

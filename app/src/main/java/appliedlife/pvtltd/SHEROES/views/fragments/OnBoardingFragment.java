@@ -38,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
@@ -171,11 +170,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
-    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
-
-    }
-
-    @Override
     public void startNextScreen() {
 
     }
@@ -183,11 +177,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg, feedParticipationEnum);
-    }
-
-    @Override
-    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override

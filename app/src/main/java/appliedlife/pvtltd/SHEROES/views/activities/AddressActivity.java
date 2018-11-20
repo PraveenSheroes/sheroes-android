@@ -339,7 +339,6 @@ public class AddressActivity extends BaseActivity implements IAddressView {
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
     //endregion
 }

@@ -23,11 +23,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
 
 /**
  * Created by ravi on 03/01/18.
@@ -58,8 +58,8 @@ public class ProfileCommunitiesActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         if (getIntent().getExtras() != null) {
-            userMentorId = getIntent().getExtras().getLong(IProfileDetailsFragment.USER_MENTOR_ID);
-            isSelfProfile = getIntent().getExtras().getBoolean(IProfileDetailsFragment.SELF_PROFILE);
+            userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
+            isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
         }
 
         setupToolbarItemsColor();
@@ -104,7 +104,7 @@ public class ProfileCommunitiesActivity extends BaseActivity {
     //region static methods
     public static void navigateTo(Activity fromActivity, long mentorID, boolean isSelfProfile, String sourceScreen, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, ProfileCommunitiesActivity.class);
-        intent.putExtra(IProfileDetailsFragment.USER_MENTOR_ID, mentorID);
+        intent.putExtra(ProfileDetailsFragment.USER_MENTOR_ID, mentorID);
         intent.putExtra(SELF_PROFILE, isSelfProfile);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
         if (!CommonUtil.isEmpty(properties)) {

@@ -130,7 +130,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 FeedCommunityPostHolder feedCommunityPostHolder = (FeedCommunityPostHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetailList.get(position);
                 feedCommunityPostHolder.bindData(userPostSolrObj, mContext, position);
-
                 break;
             case TYPE_POLL:
                 FeedPollCardHolder feedPollHolder = (FeedPollCardHolder) holder;

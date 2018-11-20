@@ -51,8 +51,8 @@ import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
-import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.SELF_PROFILE;
-import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.USER_MENTOR_ID;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
 /**
  * Created by ravi on 10/01/18.

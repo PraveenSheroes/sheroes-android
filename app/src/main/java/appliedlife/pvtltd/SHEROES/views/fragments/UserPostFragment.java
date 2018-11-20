@@ -576,7 +576,6 @@ public class UserPostFragment extends BaseFragment {
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick({R.id.tv_retry_for_internet})

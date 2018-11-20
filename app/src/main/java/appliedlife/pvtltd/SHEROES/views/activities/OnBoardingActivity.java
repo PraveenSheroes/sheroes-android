@@ -48,13 +48,9 @@ import butterknife.OnClick;
 
 public class OnBoardingActivity extends BaseActivity implements BaseHolderInterface {
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
-    private HashMap<String, HashMap<String, ArrayList<LabelValue>>> mMasterDataResult;
 
     @Inject
     Preference<LoginResponse> userPreference;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     @Bind(R.id.card)
     CardView card;
     @Bind(R.id.tv_on_boarding_finish)
@@ -72,9 +68,6 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_onboarding);
         ButterKnife.bind(this);
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get() && null != mUserPreferenceMasterData.get().getData()) {
-            mMasterDataResult = mUserPreferenceMasterData.get().getData();
-        }
         setPagerAndLayouts();
         DrawerViewHolder.selectedOptionName = null;
     }

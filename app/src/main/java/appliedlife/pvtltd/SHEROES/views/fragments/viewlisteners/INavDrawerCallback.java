@@ -1,4 +1,4 @@
-package appliedlife.pvtltd.SHEROES.views.fragments;
+package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavMenuItem;
  * Callbacks for navigation drawer items
  */
 
-public interface MainActivityNavDrawerView extends BaseMvpView {
+public interface INavDrawerCallback extends BaseMvpView {
     void getNavigationDrawerItemsSuccess(List<NavMenuItem> navigationItems);
     void getNavigationDrawerItemsFailed();
     void showMyCommunities(FeedResponsePojo feedResponse);

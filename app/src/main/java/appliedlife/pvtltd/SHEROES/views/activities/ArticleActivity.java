@@ -1267,7 +1267,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick(R.id.like_count)

@@ -58,7 +58,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
@@ -279,7 +279,7 @@ public interface SheroesAppComponent {
 
     void inject(ProfileActivity profileActivity);
 
-    void inject(IProfileDetailsFragment profileDetailsFragment);
+    void inject(ProfileDetailsFragment profileDetailsFragment);
 
     void inject(CommunityDetailActivity communityDetailActivity);
 

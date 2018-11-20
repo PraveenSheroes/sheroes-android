@@ -48,8 +48,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.SELF_PROFILE;
-import static appliedlife.pvtltd.SHEROES.views.fragments.IProfileDetailsFragment.USER_MENTOR_ID;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.SELF_PROFILE;
+import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.USER_MENTOR_ID;
 
 /**
  * Created by ravi on 11/01/18.

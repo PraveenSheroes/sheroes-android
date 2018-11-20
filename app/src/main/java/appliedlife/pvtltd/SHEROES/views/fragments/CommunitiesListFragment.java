@@ -394,7 +394,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick({R.id.tv_retry_for_internet})

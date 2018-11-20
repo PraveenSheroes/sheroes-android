@@ -144,7 +144,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
@@ -171,7 +171,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements BaseHolderInterface, MainActivityNavDrawerView, CustomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
+public class HomeActivity extends BaseActivity implements BaseHolderInterface, INavDrawerCallback, CustomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
