@@ -262,8 +262,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     }
 
-
-
     @Override
     protected SheroesPresenter getPresenter() {
         return mLoginPresenter;
@@ -290,22 +288,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         checkDialogDismiss();
         mEmailSign.setEnabled(true);
         onShowErrorDialog( errorMsg, feedParticipationEnum);
     }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
     @OnClick(R.id.email_sign_in_button)
     public void onLogInBtnClick() {
         sheroesLogIn();

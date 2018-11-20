@@ -98,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -122,7 +122,7 @@ import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActi
  * Created by ujjwal on 07/12/17.
  */
 
-public class PostDetailActivity extends BaseActivity implements BaseHolderInterface, IPostDetailView, PostDetailCallBack, CommentCallBack, QueryTokenReceiver {
+public class PostDetailActivity extends BaseActivity implements BaseHolderInterface, IPostDetailView, PostDetailCallBack, CommentCallBack, IQueryTokenReceiver {
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
@@ -604,18 +604,8 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     // user post detail callbacks

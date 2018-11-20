@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -14,11 +13,14 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
  */
 
 public interface ICommunitiesListView extends BaseMvpView {
+
     void showAllCommunity(ArrayList<FeedDetail> feedDetails);
 
     void showMyCommunities(FeedResponsePojo feedResponse);
 
-    void showCommunityJoinResponse(final CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
+    void setCommunity(CommunityFeedSolrObj communityFeedSolrObj);
 
-    void showCommunityUnJoinedResponse(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
+    void onCommunityJoined(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
+
+    void onCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
 }

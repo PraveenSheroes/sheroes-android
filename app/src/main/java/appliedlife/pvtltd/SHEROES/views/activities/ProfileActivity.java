@@ -1288,19 +1288,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         errorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
         loaderGif.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override

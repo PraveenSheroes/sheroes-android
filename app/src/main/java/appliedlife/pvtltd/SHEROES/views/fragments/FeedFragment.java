@@ -436,7 +436,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void invalidateItem(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
-            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail);
+            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, false);
         } else {
             updateItem(feedDetail);
         }
@@ -534,7 +534,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void notifyAllItemRemoved(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
-            ((CommunityDetailActivity) getActivity()).notifyAllItemRemoved(feedDetail);
+            ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, true);
         } else {
             removeItem(feedDetail);
         }
@@ -604,11 +604,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
         mSwipeRefresh.setRefreshing(false);
         mAdapter.feedFinishedLoading();
-    }
-
-    @Override
-    public void startNextScreen() {
-
     }
 
     @Override
@@ -848,10 +843,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
     //endregion
 
     //region private methods

@@ -92,7 +92,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.FeatureCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
@@ -161,8 +160,6 @@ public interface SheroesAppComponent {
     void inject(MyCommunitiesViewHolder myCommunitiesViewHolder);
 
     void inject(CollectionActivity collectionActivity);
-
-    void inject(FeatureCardHolder featureCardHolder);
 
     void inject(FeedCommunityPostHolder feedCommunityPostHolder);
 

@@ -671,5 +671,11 @@
     <dimen name="new_tag_padding_right">4dp</dimen>
     <dimen name="new_tag_margin_left">6dp</dimen>
     <dimen name="new_tag_margin_top">-8dp</dimen>
+    <dimen name="activity_community_detail_nav_margin">16dp</dimen>
+    <dimen name="activity_community_detail_communities_title">24dp</dimen>
+    <dimen name="activity_community_detail_button_join_padding">8dp</dimen>
+    <dimen name="activity_community_detail_tooltip_width">10dp</dimen>
+    <dimen name="activity_community_detail_tooltip_margin">40dp</dimen>
+    <dimen name="welcome_card_elevation">5dp</dimen>
 </resources>
 

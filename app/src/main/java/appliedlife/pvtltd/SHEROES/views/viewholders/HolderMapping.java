@@ -9,7 +9,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
@@ -50,11 +49,6 @@ public enum HolderMapping {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new OnBoardingCommunitiesHolder(view, viewInterface);
-        }
-    }, FEATURE_CARD(R.layout.featured_card_item) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new FeatureCardHolder(view, viewInterface);
         }
     }, ARTICLE_CARD_HOLDER(R.layout.article_card_list_item) {
         @Override
@@ -225,13 +219,6 @@ public enum HolderMapping {
                         switch (feedType) {
                             case AppConstants.FEED_ARTICLE:
                                 returnView = ARTICLE_CARD_HOLDER.ordinal();
-                                break;
-                            case AppConstants.FEED_COMMUNITY:
-                                CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) feedDetail;
-                                boolean isFeatured = feedDetail.isFeatured();
-                                if (isFeatured && !communityFeedSolrObj.isOwner() && !communityFeedSolrObj.isMember()) {
-                                    returnView = FEATURE_CARD.ordinal();
-                                }
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
                                 UserPostSolrObj userPostSolrObj = new UserPostSolrObj();

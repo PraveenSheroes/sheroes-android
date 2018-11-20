@@ -469,16 +469,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         mInviteFriendAdapter.contactsFinishedLoading();
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
     //endregion
     @Override
     protected SheroesPresenter getPresenter() {

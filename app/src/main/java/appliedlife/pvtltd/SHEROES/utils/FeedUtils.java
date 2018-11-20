@@ -98,19 +98,8 @@ public class FeedUtils {
         int id = view.getId();
         switch (id) {
             case R.id.tv_featured_community_join:
-                if (((CommunityFeedSolrObj) mFeedDetail).isClosedCommunity()) {
-                    mFeedDetail.setFromHome(true);
-                    showCommunityJoinReason(mFeedDetail, activity);
-                    ((SheroesApplication) activity.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-                } else {
-                    if (((CommunityFeedSolrObj) mFeedDetail).isRequestPending()) {
-                        ((SheroesApplication) activity.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.UNDO_REQUEST_JOIN_CLOSE_COMMUNITY, AppConstants.EMPTY_STRING);
-                    } else {
-                        ((SheroesApplication) activity.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
-                    }
-                }
+                ((SheroesApplication) activity.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
                 break;
-
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall(activity);
                 break;

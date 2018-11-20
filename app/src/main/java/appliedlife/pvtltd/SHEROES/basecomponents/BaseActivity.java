@@ -85,7 +85,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     protected SheroesApplication mSheroesApplication;
     //endregion
 
-
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(LocaleManager.setLocale(base));

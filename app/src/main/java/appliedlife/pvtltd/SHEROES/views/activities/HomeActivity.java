@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomActionBarToggle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
@@ -135,7 +136,7 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustiomActionBarToggle;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomActionBarToggle;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.ShowcaseManager;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
@@ -172,7 +173,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements BaseHolderInterface, MainActivityNavDrawerView, CustiomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
+public class HomeActivity extends BaseActivity implements BaseHolderInterface, MainActivityNavDrawerView, CustomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
     // region Constants
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
@@ -333,7 +334,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     private List<ArticleCategory> mArticleCategoryItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
-    private CustiomActionBarToggle mCustiomActionBarToggle;
+    private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
     private String mHelpLineChat;
     private ProgressDialog mProgressDialog;
@@ -426,8 +427,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             mSnowFlakView.setVisibility(View.GONE);
         }
         pbNavDrawer.setVisibility(View.VISIBLE);
-        mCustiomActionBarToggle = new CustiomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
-        mDrawer.addDrawerListener(mCustiomActionBarToggle);
+        mCustomActionBarToggle = new CustomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
+        mDrawer.addDrawerListener(mCustomActionBarToggle);
         mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
         mNavigationViewRightDrawerWithCommunities.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
@@ -929,18 +930,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
@@ -1580,7 +1571,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
             @Override
             public void run() {
-                //  mDrawer.openDrawer(Gravity.START);
+                //  mCommunityDrawerLayout.openDrawer(Gravity.START);
             }
         };
     }

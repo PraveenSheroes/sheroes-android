@@ -180,15 +180,5 @@ public class ResetPasswordDialogFragment extends BaseDialogFragment implements L
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
-
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
     // endregion
 }

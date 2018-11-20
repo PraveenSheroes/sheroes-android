@@ -1233,11 +1233,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse, Comment comment, int position) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
 
@@ -1260,11 +1255,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick(R.id.like_count)

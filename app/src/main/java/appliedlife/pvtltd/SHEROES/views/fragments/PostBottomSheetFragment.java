@@ -205,11 +205,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         if (getActivity() instanceof CommunityPostActivity) {
             mCommunityPostActivity.showError(s, feedParticipationEnum);
@@ -218,11 +213,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 mCreateStoryActivity.showError(s, feedParticipationEnum);
             }
         }
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
