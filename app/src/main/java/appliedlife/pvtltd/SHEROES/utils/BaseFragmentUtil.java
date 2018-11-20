@@ -5,8 +5,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +36,7 @@ public class BaseFragmentUtil {
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     //endregion
 
+    //region public methods
     public static synchronized BaseFragmentUtil getInstance() {
         if (mInstance == null) {
             mInstance = new BaseFragmentUtil();
@@ -173,7 +172,6 @@ public class BaseFragmentUtil {
                     mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());
                     break;
                 default:
-
             }
         }
         mAdapter.notifyDataSetChanged();
@@ -222,4 +220,5 @@ public class BaseFragmentUtil {
             }
         }
     }
+    //endregion
 }
