@@ -467,7 +467,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
 
         for (final UserSolrObj userSolrObj : followedMentors) {
             View view = LayoutInflater.from(getActivity()).inflate(R.layout.adapter_champion_list_item, null);
-            CircleImageView mutualCommunityImage = findById(view, R.id.iv_mentor_full_view_icon);
+            CircleImageView mutualCommunityImage = findById(view, R.id.iv_profile_full_view_icon);
             TextView mentorName = findById(view, R.id.user_name);
             TextView expertAt = findById(view, R.id.expert_at);
             TextView follower = findById(view, R.id.follower);
@@ -525,13 +525,11 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
 
     @Override
     protected Map<String, Object> getExtraProperties() {
-            HashMap<String, Object> properties = new
-                    EventProperty.Builder()
-                    .id(Long.toString(userId))
-                    .isMentor(false)
-                    .isOwnProfile(isSelfProfile)
-                    .build();
-            return properties;
+        return new EventProperty.Builder()
+                .id(Long.toString(userId))
+                .isMentor(false)
+                .isOwnProfile(isSelfProfile)
+                .build();
     }
 
     @Override
@@ -548,42 +546,35 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     public void onSpamPostOrCommentReported(SpamResponse spamResponse) {}
 
     @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
+    public void onUserDeactivation(BaseResponse baseResponse, boolean isDeactivated) {
     }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override
     public void startNextScreen() {
-
     }
 
     @Override

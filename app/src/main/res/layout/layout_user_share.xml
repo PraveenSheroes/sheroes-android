@@ -145,7 +145,7 @@
                 android:layout_marginTop="@dimen/dp_size_12">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    android:id="@+id/tv_mentor_dashboard_follow"
+                    android:id="@+id/tv_dashboard_follow"
                     style="@style/TextView14spBold"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

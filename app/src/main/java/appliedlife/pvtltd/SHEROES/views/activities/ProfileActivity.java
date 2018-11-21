@@ -96,7 +96,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -155,7 +154,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     //region constants
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
-
+    private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
     private static final float ORIGINAL_SIZE = 1.0f;
     private static final float EXPANDED_SIZE = 1.02f;
     private static final int ANIMATION_REPEAT_DURATION = 700;
@@ -163,199 +162,141 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private static final int ADMIN_TYPE_ID = 2;
     private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
     private static final int MAX_BADGE_COUNT = 4;
-    private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
+    private static final int BASIC_COMPLETE_PROFILE_PERCENT = 85;
     //endregion constants
 
     //region injected variable
     @Inject
     Preference<LoginResponse> mUserPreference;
-
     @Inject
-    ProfilePresenterImpl profilePresenter;
-
+    ProfilePresenterImpl mProfilePresenter;
     @Inject
     AppUtils mAppUtils;
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
-
     @Inject
     HomePresenter mHomePresenter;
-
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     @Inject
-    FeedUtils feedUtils;
-
+    FeedUtils mFeedUtils;
     @Inject
-    ErrorUtil errorUtil;
+    ErrorUtil mErrorUtil;
     //endregion injected variable
 
     //region bind variables
     @Bind(R.id.root_layout)
-    CoordinatorLayout rootLayout;
-    @Bind(R.id.iv_mentor_full_view_icon)
+    CoordinatorLayout mRootLayout;
+    @Bind(R.id.iv_profile_full_view_icon)
     CircleImageView mProfileIcon;
     @Bind(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
-
     @Bind(R.id.view_pager_mentor)
     ViewPager mViewPager;
-
     @Bind(R.id.toolbar_mentor)
     Toolbar mToolbar;
-
     @Bind(R.id.loader_gif)
-    CardView loaderGif;
-
+    CardView mLoaderGif;
     @Bind(R.id.collapsing_toolbar_mentor)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
-
     @Bind(R.id.tab_mentor)
     TabLayout mTabLayout;
-
-    @Bind(R.id.tv_mentor_name)
-    TextView userName;
-
+    @Bind(R.id.tv_profile_name)
+    TextView mUserName;
     @Bind(R.id.iv_public_profile_image)
-    ImageView ivPublicProfileImage;
-
+    ImageView mPublicProfileImage;
     @Bind(R.id.tv_profession)
-    TextView tvProfession;
-
+    TextView mTvProfession;
     @Bind(R.id.profession_container)
-    RelativeLayout skillContainer;
-
+    RelativeLayout mSkillContainer;
     @Bind(R.id.li_loc_profession)
-    LinearLayout locationViewContainer;
-
+    LinearLayout mLocationViewContainer;
     @Bind(R.id.tv_loc)
-    TextView tvLoc;
-
+    TextView mTvLocation;
     @Bind(R.id.description_container)
-    RelativeLayout descriptionContainer;
-
-    @Bind(R.id.tv_mentor_description)
-    TextView userDescription;
-
+    RelativeLayout mDescriptionContainer;
+    @Bind(R.id.tv_description)
+    TextView mUserDescription;
     @Bind(R.id.ll_profile)
-    LinearLayout llProfile;
-
+    LinearLayout mLinearProfile;
     @Bind(R.id.li_post)
-    LinearLayout liPost;
-
-    @Bind(R.id.tv_mentor_post_count)
-    TextView userTotalPostCount;
-
-    @Bind(R.id.tv_mentor_post)
-    TextView tvMentorPost;
-
+    LinearLayout mLinearPost;
+    @Bind(R.id.tv_post_count)
+    TextView mUserTotalPostCount;
+    @Bind(R.id.tv_post)
+    TextView mTvPost;
     @Bind(R.id.li_follower)
-    LinearLayout liFollower;
-
+    LinearLayout mFollower;
     @Bind(R.id.li_following)
-    LinearLayout liFollowing;
-
-    @Bind(R.id.tv_mentor_following_title)
-    TextView followingTitle;
-
-    @Bind(R.id.tv_mentor_following_count)
-    TextView followingCount;
-
-    @Bind(R.id.tv_mentor_follower_count)
-    TextView userFollowerCount;
-
-    @Bind(R.id.tv_mentor_follower)
-    TextView userFollower;
-
+    LinearLayout mFollowing;
+    @Bind(R.id.tv_following_title)
+    TextView mFollowingTitle;
+    @Bind(R.id.tv_following_count)
+    TextView mFollowingCount;
+    @Bind(R.id.tv_follower_count)
+    TextView mFollowerCount;
+    @Bind(R.id.tv_follower)
+    TextView mUserFollower;
     @Bind(R.id.tv_mentor_toolbar_name)
-    TextView tvMentorToolbarName;
-
+    TextView mToolbarName;
     @Bind(R.id.tv_profile_menu)
-    TextView profileToolbarMenu;
-
-    @Bind(R.id.tv_mentor_dashboard_follow)
-    TextView tvMentorDashBoardFollow;
-
+    TextView mToolbarMenu;
+    @Bind(R.id.tv_dashboard_follow)
+    TextView mDashBoardFollow;
     @Bind(R.id.edit_icon)
-    ImageView editIcon;
-
+    ImageView mEditIcon;
     @Bind(R.id.user_badge)
-    ImageView userBadgeIcon;
-
+    ImageView mUserBadgeIcon;
     @Bind(R.id.badges_container)
-    LinearLayout badgeContainer;
-
+    LinearLayout mBadgeContainer;
     @Bind(R.id.share_profile)
-    TextView shareProfile;
-
-    @Bind(R.id.iv_mentor_verified)
+    TextView mShareProfile;
+    @Bind(R.id.iv_champion_verified)
     ImageView verifiedIcon;
-
     @Bind(R.id.profile_level)
-    TextView profileLevel;
-
+    TextView mProfileLevel;
     @Bind(R.id.progress_bar_holder)
-    ViewGroup progressbarContainer;
-
+    ViewGroup mProgressbarContainer;
     @Bind(R.id.profile_level_container)
-    LinearLayout profileStrengthViewContainer;
-
+    LinearLayout mProfileStrengthContainer;
     @Bind(R.id.new_feature)
-    TextView newFeature;
-
+    TextView mNewFeature;
     @Bind(R.id.beginner)
-    ImageView beginnerTick;
-
+    ImageView mBeginnerTick;
     @Bind(R.id.intermediate)
-    ImageView intermediateTick;
-
+    ImageView mIntermediateTick;
     @Bind(R.id.all_star)
-    ImageView allStarTick;
-
+    ImageView mAllStarTick;
     @Bind(R.id.fab_post)
-    FloatingActionButton createPost;
-
+    FloatingActionButton mCreatePost;
     @Bind(R.id.cl_story_footer)
-    CardView clStoryFooter;
-
+    CardView mStoryFooter;
     @BindDimen(R.dimen.profile_badge_icon)
-    int badgeIconSize;
-
+    int mBadgeIconSize;
     @BindDimen(R.dimen.profile_badge_margin_right)
-    int badgeIconMargin;
-
+    int mBadgeIconMargin;
     @BindDimen(R.dimen.profile_badge_counter_text)
-    int badgeCounterTextSize;
-
+    int mBadgeCounterSize;
     @BindDimen(R.dimen.dp_size_90)
-    int profileSize;
-
-    @Bind(R.id.rl_mentor_full_view_header)
-    RelativeLayout rlMentorFullViewHeader;
-
+    int mProfileSize;
+    @Bind(R.id.rl_champion_full_view_header)
+    RelativeLayout mFullViewHeader;
     @Bind(R.id.view_profile)
-    View toolTipProfile;
-
+    View mToolTipProfile;
     @Bind(R.id.view_tool_follow)
-    View viewToolTipFollow;
-
+    View mToolTipFollow;
     @Bind(R.id.dashed_progressbar)
-    DashProgressBar dashProgressBar;
+    DashProgressBar mDashProgressBar;
     //endregion bind variables
 
     //region member variable
-    private String mSourceName;
     private String userNameTitle;
     private String viewLessText, viewMoreText;
-
     private boolean isUserDeactivated;
     private boolean isProfileClicked = false;
     private boolean isOwnProfile = false;
     private boolean isChampion;
     private boolean isWriteAStory;
-
     private Long mChampionId;
     private long mLoggedInUserIdTypeId = -1;
     private int mFromNotification;
@@ -369,15 +310,14 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
     private ProfileStrengthDialog mProfileStrengthDialog = null;
-    private UnFollowDialogFragment unFollowDialogFragment;
+    private UnFollowDialogFragment mUnFollowDialogFragment;
     private DeactivateProfileDialogFragment mDeactivateProfileDialogFragment;
     private ReportUserProfileDialogFragment mReportUserProfileDialogFragment;
-    private FragmentOpen mFragmentOpen;
     private UserSolrObj mUserSolarObject;
-    private File localImageSaveForChallenge;
-    private PopupWindow popupWindowFollowTooTip;
-    private UserSolrObj followedUserSolrObj;
-    private ProfileStrengthDialog.ProfileLevelType profileLevelType;
+    private File mLocalImageSaveForChallenge;
+    private PopupWindow mPopupWindowFollowTooTip;
+    private UserSolrObj mFollowedUserSolrObj;
+    private ProfileStrengthDialog.ProfileStrengthType mProfileStrengthType;
     //endregion view variable
 
     //region activity lifecycle methods
@@ -387,15 +327,15 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_profile_layout);
         mHomePresenter.attachView(this);
-        profilePresenter.attachView(this);
+        mProfilePresenter.attachView(this);
         ButterKnife.bind(this);
         viewMoreText = getString(R.string.ID_VIEW_MORE_MENTOR);
         viewLessText = getString(R.string.ID_LESS);
         setupToolbarItemsColor();
         invalidateOptionsMenu();
 
-        loaderGif.setVisibility(View.VISIBLE);
-        loaderGif.bringToFront();
+        mLoaderGif.setVisibility(View.VISIBLE);
+        mLoaderGif.bringToFront();
 
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
         if (null != getIntent() && null != getIntent().getExtras()) {
@@ -405,8 +345,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isChampion = getIntent().getExtras().getBoolean(AppConstants.IS_CHAMPION_ID);
             isWriteAStory = getIntent().getExtras().getBoolean(STORIES_TAB);
-            mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
-            profileLevelType = (ProfileStrengthDialog.ProfileLevelType) getIntent().getSerializableExtra(ProfileStrengthDialog.PROFILE_LEVEL);
+            mProfileStrengthType = (ProfileStrengthDialog.ProfileStrengthType) getIntent().getSerializableExtra(ProfileStrengthDialog.PROFILE_LEVEL);
         }
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
@@ -428,7 +367,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         String feedSubType = isChampion ? AppConstants.CAROUSEL_SUB_TYPE : AppConstants.USER_SUB_TYPE;
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
 
-        feedUtils.setConfigurableShareOption(isWhatsAppShare());
+        mFeedUtils.setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
@@ -439,12 +378,12 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mProfileStrengthDialog.dismiss();
         }
 
-        if (popupWindowFollowTooTip != null && popupWindowFollowTooTip.isShowing()) {
-            popupWindowFollowTooTip.dismiss();
+        if (mPopupWindowFollowTooTip != null && mPopupWindowFollowTooTip.isShowing()) {
+            mPopupWindowFollowTooTip.dismiss();
         }
 
-        if (unFollowDialogFragment != null && unFollowDialogFragment.isVisible()) {
-            unFollowDialogFragment.dismiss();
+        if (mUnFollowDialogFragment != null && mUnFollowDialogFragment.isVisible()) {
+            mUnFollowDialogFragment.dismiss();
         }
 
         if (mReportUserProfileDialogFragment != null && mReportUserProfileDialogFragment.isVisible()) {
@@ -459,7 +398,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Override
     public void onDestroy() {
-        profilePresenter.detachView();
+        mProfilePresenter.detachView();
         mHomePresenter.detachView();
         super.onDestroy();
     }
@@ -495,14 +434,14 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof FeedFragment) {
             if (isOwnProfile) {
-                clStoryFooter.setVisibility(View.VISIBLE);
+                mStoryFooter.setVisibility(View.VISIBLE);
             } else {
-                clStoryFooter.setVisibility(View.GONE);
+                mStoryFooter.setVisibility(View.GONE);
             }
-            createPost.setVisibility(View.GONE);
+            mCreatePost.setVisibility(View.GONE);
         } else {
-            clStoryFooter.setVisibility(View.GONE);
-            createPost.setVisibility(View.GONE);
+            mStoryFooter.setVisibility(View.GONE);
+            mCreatePost.setVisibility(View.GONE);
         }
     }
 
@@ -545,8 +484,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        errorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
-        loaderGif.setVisibility(View.GONE);
+        mErrorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
+        mLoaderGif.setVisibility(View.GONE);
     }
 
     @Override
@@ -570,10 +509,10 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mUserSolarObject.setCallFromName(screenName);
 
             setProfileDetails(mUserSolarObject);
-            loaderGif.setVisibility(View.GONE);
+            mLoaderGif.setVisibility(View.GONE);
 
-            if (profileLevelType != null)
-                profileStrengthDialog(profileLevelType);
+            if (mProfileStrengthType != null)
+                profileStrengthDialog(mProfileStrengthType);
         }
     }
 
@@ -584,7 +523,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-
             if (ProfileActivity.this.isFinishing()) return;
 
             if (spamResponse.isSpammed()) {
@@ -598,9 +536,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
-        isUserDeactivated = true;
-        onBackClick();
+    public void onUserDeactivation(BaseResponse baseResponse, boolean isUserDeactivated) {
+        this.isUserDeactivated = isUserDeactivated;
+        if (isUserDeactivated) {
+            onBackClick();
+        }
     }
 
     @Override
@@ -632,7 +572,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             championDetailActivity(mLoggedInUserId, 1, isChampion, AppConstants.FEED_SCREEN); //self profile
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            ProfileActivity.navigateTo(this, feedDetail.getAuthorParticipantId(), isChampion, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(this, feedDetail.getAuthorParticipantId(), isChampion,
+                    PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
         }
     }
 
@@ -657,7 +598,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                             mUserSolarObject.setFilledProfileFields(boardingDataResponse.getUserSolrObj().getFilledProfileFields());
                             mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getUserSolrObj().getUnfilledProfileFields());
                             mUserSolarObject.setProfileCompletionWeight(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight());
-                            dashProgressBar.setProgress(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight(), false);
+                            mDashProgressBar.setProgress(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight(), false);
                             setProfileStrength();
                         }
 
@@ -676,7 +617,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Override
     public void onViewRendered(float dashWidth) {
-
         ConfigData configData = new ConfigData();
         int beginnerTickIndex = configData.beginnerStartIndex;
         int intermediateTickIndex = configData.intermediateStartIndex;
@@ -687,11 +627,10 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
         RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
-        beginnerTick.setLayoutParams(buttonLayoutParams);
-
+        mBeginnerTick.setLayoutParams(buttonLayoutParams);
         RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
-        intermediateTick.setLayoutParams(intermediateLayoutParams);
+        mIntermediateTick.setLayoutParams(intermediateLayoutParams);
 
         animationOnProgressBar();
     }
@@ -699,18 +638,18 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     @Override
     public void onTextResize(boolean isCollapsed) {
         if (!isCollapsed) {
-            progressbarContainer.setVisibility(View.VISIBLE);
-            profileStrengthViewContainer.setVisibility(View.VISIBLE);
+            mProgressbarContainer.setVisibility(View.VISIBLE);
+            mProfileStrengthContainer.setVisibility(View.VISIBLE);
         } else {
-            progressbarContainer.setVisibility(View.GONE);
-            profileStrengthViewContainer.setVisibility(View.GONE);
+            mProgressbarContainer.setVisibility(View.GONE);
+            mProfileStrengthContainer.setVisibility(View.GONE);
         }
     }
 
     @Override
     public void onProfileFollowed(UserSolrObj userSolrObj) {
-        followedUserSolrObj = userSolrObj;
-        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount())));
+        mFollowedUserSolrObj = userSolrObj;
+        mFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount())));
         updateFollowedButton();
     }
 
@@ -747,7 +686,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
-                    invalidateUserInformation(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
+                    updateProfileDetails(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
                             bundle.getString(EditUserProfileActivity.FILLED_FIELDS), bundle.getString(EditUserProfileActivity.UNFILLED_FIELDS), bundle.getFloat(EditUserProfileActivity.PROFILE_COMPLETION_WEIGHT));
                 }
             }
@@ -768,9 +707,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                     CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                     if (resultCode == RESULT_OK) {
                         try {
-                            File file = new File(result.getUri().getPath());
-                            Bitmap photo = CompressImageUtil.decodeFile(file);
-                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+                            if (result != null && result.getUri() != null && result.getUri().getPath() != null) {
+                                File file = new File(result.getUri().getPath());
+                                Bitmap photo = CompressImageUtil.decodeFile(file);
+                                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -790,32 +731,32 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     //region onclick methods
     @OnClick({R.id.beginner})
     protected void openBeginnerDialog() {
-        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.BEGINNER);
+        profileStrengthDialog(ProfileStrengthDialog.ProfileStrengthType.BEGINNER);
     }
 
     @OnClick(R.id.intermediate)
     protected void openIntermediateProgressDialog() {
-        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE);
+        profileStrengthDialog(ProfileStrengthDialog.ProfileStrengthType.INTERMEDIATE);
     }
 
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
-        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.ALLSTAR);
+        profileStrengthDialog(ProfileStrengthDialog.ProfileStrengthType.ALLSTAR);
     }
 
     @OnClick(R.id.new_feature)
     protected void openUserProfileLevelDialog() {
         if (mUserSolarObject != null) {
             CommonUtil.setPrefValue(AppConstants.PROFILE_OFFER_PREF);
-            ProfileStrengthDialog.ProfileLevelType profileLevelType = userLevel(mUserSolarObject);
-            profileStrengthDialog(profileLevelType);
-            newFeature.setVisibility(View.GONE);
+            ProfileStrengthDialog.ProfileStrengthType profileStrengthType = userLevel(mUserSolarObject);
+            profileStrengthDialog(profileStrengthType);
+            mNewFeature.setVisibility(View.GONE);
         }
     }
 
     @OnClick(R.id.tv_profile_menu)
     public void onMenuClick() {
-        onProfileMenuClick(mUserSolarObject, profileToolbarMenu);
+        onProfileMenuClick(mUserSolarObject, mToolbarMenu);
     }
 
     @OnClick(R.id.fab_post)
@@ -833,14 +774,14 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @OnClick(R.id.li_follower)
     public void followerClick() {
-        if (StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
+        if (StringUtil.isNotNullOrEmptyString(mFollowerCount.getText().toString()) && !mFollowerCount.getText().toString().equalsIgnoreCase("0")) {
             FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWERS, null);
         }
     }
 
     @OnClick(R.id.li_following)
     public void followingClick() {
-        if (StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
+        if (StringUtil.isNotNullOrEmptyString(mFollowingCount.getText().toString()) && !mFollowingCount.getText().toString().equalsIgnoreCase("0")) {
             FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING, null);
         }
     }
@@ -860,16 +801,16 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         shareCardViaSocial();
     }
 
-    @OnClick({R.id.tv_mentor_name, R.id.tv_loc})
+    @OnClick({R.id.tv_profile_name, R.id.tv_loc})
     public void navigateToProfileEditing() {
         if (isOwnProfile) {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
                 EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
             }
         }
     }
 
-    @OnClick(R.id.iv_mentor_full_view_icon)
+    @OnClick(R.id.iv_profile_full_view_icon)
     public void onImageEditClicked() {
         if (isOwnProfile) {
             addAnalyticsEvents(Event.PROFILE_PIC_EDIT_CLICKED);
@@ -877,7 +818,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    @OnClick(R.id.tv_mentor_dashboard_follow)
+    @OnClick(R.id.tv_dashboard_follow)
     public void mentorFollowClick() {
         if (isOwnProfile) {
             navigateToProfileEditing();
@@ -899,7 +840,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private boolean isWhatsAppShare() {
         boolean isWhatsAppShare = false;
         if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
+            String shareText;
             shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
             if (CommonUtil.isNotEmpty(shareText)) {
                 if (shareText.equalsIgnoreCase("true")) {
@@ -921,87 +862,82 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     private void updateProfileInfo() {
-
-        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) {
-            tvLoc.setText(mUserSolarObject.getCityName());
-            tvLoc.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) { //Location
+            mTvLocation.setText(mUserSolarObject.getCityName());
+            mTvLocation.setVisibility(View.VISIBLE);
         } else {
             if (isOwnProfile) {
-                tvLoc.setVisibility(View.VISIBLE);
-                tvLoc.setText(R.string.add_location);
+                mTvLocation.setVisibility(View.VISIBLE);
+                mTvLocation.setText(R.string.add_location);
             } else {
-                tvLoc.setVisibility(View.GONE);
-                //For public profile if location is unfilled hide the container
+                mTvLocation.setVisibility(View.GONE);
                 if (!isChampion) {
-                    locationViewContainer.setVisibility(View.GONE);
+                    mLocationViewContainer.setVisibility(View.GONE);
                 } else {
-                    locationViewContainer.setVisibility(View.VISIBLE);
+                    mLocationViewContainer.setVisibility(View.VISIBLE);
                 }
             }
         }
-        if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) {
-            tvProfession.setText(mUserSolarObject.getCanHelpIns().get(0)); //skills
-            skillContainer.setVisibility(View.VISIBLE);
+        if (StringUtil.isNotEmptyCollection(mUserSolarObject.getCanHelpIns())) { //skills or Expert At
+            mTvProfession.setText(mUserSolarObject.getCanHelpIns().get(0));
+            mSkillContainer.setVisibility(View.VISIBLE);
         } else {
             if (isOwnProfile && isChampion) {
-                tvProfession.setText(R.string.add_skills);
-                skillContainer.setVisibility(View.VISIBLE);
+                mTvProfession.setText(R.string.add_skills);
+                mSkillContainer.setVisibility(View.VISIBLE);
             } else {
-                skillContainer.setVisibility(View.GONE);
+                mSkillContainer.setVisibility(View.GONE);
             }
         }
-        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
-            //For public profile if description is unfilled hide the container
+        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) { //Bio or Description
             String description = mUserSolarObject.getDescription();
             description = StringUtil.fromHtml(description).toString();
             if (description.length() > BIO_MAX_LIMIT) {
                 description = description.substring(0, BIO_MAX_LIMIT);
             }
-
             if (isOwnProfile) {
-                userDescription.setText(description);
+                mUserDescription.setText(description);
                 ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-                expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
+                expandableTextView.makeTextViewResizable(mUserDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
             } else {
-                userDescription.setText(description);
+                mUserDescription.setText(description);
             }
         } else {
             if (isOwnProfile) {
-                userDescription.setText(R.string.add_desc);
+                mUserDescription.setText(R.string.add_desc);
             } else {
-                descriptionContainer.setVisibility(View.GONE);
+                mDescriptionContainer.setVisibility(View.GONE);
             }
         }
 
-        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) {
+        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) { //profile pic
             if (!isFinishing()) {
-                String profilePic = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), profileSize, profileSize);
+                String profilePic = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), mProfileSize, mProfileSize);
                 mProfileIcon.setCircularImage(true);
                 mProfileIcon.bindImage(profilePic);
             }
         }
 
-        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) {
+        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) { //Name
             String userNameTitle = CommonUtil.camelCaseString(mUserSolarObject.getNameOrTitle());
-            userName.setText(userNameTitle);
-            tvMentorToolbarName.setText(userNameTitle);
+            mUserName.setText(userNameTitle);
+            mToolbarName.setText(userNameTitle);
             setUserNameTitle(userNameTitle);
         }
-
-        setUsersPostCount(mUserSolarObject.getPostCount());
-        setUsersFollowerCount(mUserSolarObject.getFollowerCount());
-        setUsersFollowingCount(mUserSolarObject.getFollowingCount());
+        setPostCount(mUserSolarObject.getPostCount());
+        setFollowerCount(mUserSolarObject.getFollowerCount());
+        setFollowingCount(mUserSolarObject.getFollowingCount());
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
     private void toolTipForFollowUser() {
         try {
-            viewToolTipFollow.setVisibility(View.INVISIBLE);
+            mToolTipFollow.setVisibility(View.INVISIBLE);
             final View popupFollowToolTip = LayoutInflater.from(this).inflate(R.layout.tooltip_arrow_up_side, null);
-            popupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            popupWindowFollowTooTip.setOutsideTouchable(true);
-            popupWindowFollowTooTip.showAsDropDown(viewToolTipFollow, -50, 0);
+            mPopupWindowFollowTooTip = new PopupWindow(popupFollowToolTip, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mPopupWindowFollowTooTip.setOutsideTouchable(true);
+            mPopupWindowFollowTooTip.showAsDropDown(mToolTipFollow, -50, 0);
             final ImageView ivArrow = popupFollowToolTip.findViewById(R.id.iv_arrow);
             RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             imageParams.setMargins(0, 0, CommonUtil.convertDpToPixel(20, ProfileActivity.this), 0);
@@ -1018,8 +954,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             tvGotIt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    popupWindowFollowTooTip.dismiss();
-                    viewToolTipFollow.setVisibility(View.GONE);
+                    mPopupWindowFollowTooTip.dismiss();
+                    mToolTipFollow.setVisibility(View.GONE);
                 }
             });
         } catch (WindowManager.BadTokenException e) {
@@ -1029,50 +965,44 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private void setProfileStrength() {
         if (mUserSolarObject.getProfileCompletionWeight() > BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() < INTERMEDIATE_END_LIMIT) {
-            profileLevel.setText(R.string.progress_status_beginner);
-
+            mProfileLevel.setText(R.string.progress_status_beginner);
             if (mUserSolarObject.getProfileCompletionWeight() >= ProfileStrengthDialog.BEGINNER_END_LIMIT) {
-                beginnerTick.setImageResource(R.drawable.vector_level_complete);
+                mBeginnerTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                beginnerTick.setImageResource(R.drawable.vector_level_incomplete);
+                mBeginnerTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
-            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
-
+            mIntermediateTick.setImageResource(R.drawable.vector_level_incomplete);
+            mAllStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
         } else if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
-            profileLevel.setText(R.string.progress_status_all_star);
-
+            mProfileLevel.setText(R.string.progress_status_all_star);
             if (mUserSolarObject.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolarObject.getUnfilledProfileFields())) {
-                allStarTick.setImageResource(R.drawable.vector_all_level_complete);
+                mAllStarTick.setImageResource(R.drawable.vector_all_level_complete);
             } else {
-                allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+                mAllStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
             }
-            beginnerTick.setImageResource(R.drawable.vector_level_complete);
-            intermediateTick.setImageResource(R.drawable.vector_level_complete);
-
+            mBeginnerTick.setImageResource(R.drawable.vector_level_complete);
+            mIntermediateTick.setImageResource(R.drawable.vector_level_complete);
         } else {
-            profileLevel.setText(R.string.progress_level_status_intermediate);
-
+            mProfileLevel.setText(R.string.progress_level_status_intermediate);
             if (mUserSolarObject.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setImageResource(R.drawable.vector_level_complete);
+                mIntermediateTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
+                mIntermediateTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
-            beginnerTick.setImageResource(R.drawable.vector_level_complete);
-
+            mAllStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+            mBeginnerTick.setImageResource(R.drawable.vector_level_complete);
         }
     }
 
     private void updateFollowedButton() {
         if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
-            tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
-            tvMentorDashBoardFollow.setText(this.getString(R.string.following_user));
-            tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+            mDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
+            mDashBoardFollow.setText(this.getString(R.string.following_user));
+            mDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         } else {
-            tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
-            tvMentorDashBoardFollow.setText(this.getString(R.string.follow_user));
-            tvMentorDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+            mDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.footer_icon_text));
+            mDashBoardFollow.setText(this.getString(R.string.follow_user));
+            mDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
 
         if (CommonUtil.ensureFirstTime(AppConstants.FOLLOWER_SHARE_PREF)) {
@@ -1107,13 +1037,13 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         mViewPager.setAdapter(mViewPagerAdapter);
 
         if (isWriteAStory) {
-            clStoryFooter.setVisibility(View.VISIBLE);
+            mStoryFooter.setVisibility(View.VISIBLE);
             mViewPager.setCurrentItem(mViewPagerAdapter.getCount() - 1);
         } else {
             if (isOwnProfile) {
-                createPost.setVisibility(View.VISIBLE);
+                mCreatePost.setVisibility(View.VISIBLE);
             } else {
-                createPost.setVisibility(View.GONE);
+                mCreatePost.setVisibility(View.GONE);
             }
             if (!isChampion) { //for user make post as default tab
                 mViewPager.setCurrentItem(1);
@@ -1145,9 +1075,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     private void onActivityResultOfParentRefresh() {
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
         if (mUserSolarObject != null) {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
             mUserSolarObject.currentItemPosition = itemPosition;
             Parcelable parcelableMentorDetail = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentorDetail);
@@ -1170,33 +1100,28 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     private void setupProfileBadges(final UserSolrObj userSolrObj) {
+        if (userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList())) return;
 
-        if (userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList()))
-            return;
-
-        badgeContainer.setVisibility(View.VISIBLE);
-
+        mBadgeContainer.setVisibility(View.VISIBLE);
         int length = userSolrObj.getUserBadgesList().size();
         int counter = 0;
         for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
             final ImageView badge = new ImageView(this);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
-            layoutParams.setMargins(0, 0, badgeIconMargin, 0);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mBadgeIconSize, mBadgeIconSize);
+            layoutParams.setMargins(0, 0, mBadgeIconMargin, 0);
             badge.setLayoutParams(layoutParams);
             if (StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
                 Glide.with(badge.getContext())
                         .load(badgeDetails.getImageUrl())
-                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
+                        .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mUserBadgeIcon.getContext())))
                         .into(badge);
             }
-
             if (badgeDetails.isActive()) {
                 badge.setBackgroundResource(R.drawable.circular_background_yellow);
             } else {
                 badge.setBackgroundResource(R.drawable.circular_background_grey);
             }
-            badgeContainer.addView(badge);
-
+            mBadgeContainer.addView(badge);
             badge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1204,22 +1129,20 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 }
             });
             counter++;
-
             if (counter == MAX_BADGE_COUNT) break;
         }
 
         if (length > MAX_BADGE_COUNT) {
             TextView badgeCount = new TextView(this);
             badgeCount.setTypeface(Typeface.create(BADGE_COUNTER_FONT_FAMILY, Typeface.NORMAL));
-            badgeCount.setTextSize(badgeCounterTextSize);
+            badgeCount.setTextSize(mBadgeCounterSize);
             badgeCount.setTextColor(ColorStateList.valueOf(getResources().getColor(R.color.badge_counter)));
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mBadgeIconSize, mBadgeIconSize);
             badgeCount.setLayoutParams(layoutParams);
             badgeCount.setText(getString(R.string.BadgeCounter, (length - MAX_BADGE_COUNT)));
             badgeCount.setBackground(getResources().getDrawable(R.drawable.circular_background_red));
             badgeCount.setGravity(Gravity.CENTER);
-            badgeContainer.addView(badgeCount);
-
+            mBadgeContainer.addView(badgeCount);
             badgeCount.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -1231,20 +1154,19 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private void setupSheBadge(UserSolrObj userSolrObj) {
         if (!TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
-            userBadgeIcon.setVisibility(View.VISIBLE);
-            Glide.with(userBadgeIcon.getContext())
+            mUserBadgeIcon.setVisibility(View.VISIBLE);
+            Glide.with(mUserBadgeIcon.getContext())
                     .load(userSolrObj.getProfileBadgeUrl())
-                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(userBadgeIcon.getContext())))
-                    .into(userBadgeIcon);
+                    .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mUserBadgeIcon.getContext())))
+                    .into(mUserBadgeIcon);
         } else {
-            userBadgeIcon.setVisibility(View.GONE);
+            mUserBadgeIcon.setVisibility(View.GONE);
         }
     }
 
     private void createShareImage(final String branchPostDeepLink) {
         if (mUserSolarObject != null) {
-            View view;
-            view = LayoutInflater.from(this).inflate(R.layout.layout_user_share, null, false);
+            View view = LayoutInflater.from(this).inflate(R.layout.layout_user_share, null, false);
 
             final LinearLayout userDetailContainer = ButterKnife.findById(view, R.id.user_share_container);
             LinearLayout followingContainer = ButterKnife.findById(view, R.id.followings_count_view);
@@ -1268,11 +1190,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 name.setText(mUserSolarObject.getNameOrTitle());
             }
 
-            followersCountNo.setText(userFollowerCount.getText());
-            postCountNo.setText(userTotalPostCount.getText());
+            followersCountNo.setText(mFollowerCount.getText());
+            postCountNo.setText(mUserTotalPostCount.getText());
 
             followingContainer.setVisibility(View.VISIBLE);
-            followingCountNo.setText(followingCount.getText());
+            followingCountNo.setText(mFollowingCount.getText());
 
             if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getDescription())) {
                 Spanned descriptionSpan = StringUtil.fromHtml(mUserSolarObject.getDescription());
@@ -1318,10 +1240,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private void croppingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
-        intent.setType("image/*");
+        intent.setDataAndType(mImageCaptureUri, "image/*");
         List list = getPackageManager().queryIntentActivities(intent, 0);
-        intent.setData(mImageCaptureUri);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mLocalImageSaveForChallenge));
         intent.putExtra("aspectX", 1);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", true);
@@ -1336,58 +1257,57 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private void invalidateProfileButton() {
         int mButtonSize = 31;
         if (isOwnProfile) {
-            shareProfile.setVisibility(View.VISIBLE);
-            if (mUserSolarObject.getProfileCompletionWeight() >= 85) {
+            mShareProfile.setVisibility(View.VISIBLE);
+            if (mUserSolarObject.getProfileCompletionWeight() >= BASIC_COMPLETE_PROFILE_PERCENT) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         CommonUtil.convertDpToPixel(mButtonSize, this));
-                params.addRule(RelativeLayout.LEFT_OF, R.id.tv_mentor_dashboard_follow);
-                shareProfile.setLayoutParams(params);
-                shareProfile.setPadding(0, 0, 0, 2);
-                shareProfile.setText(getString(R.string.SHARE_PROFILE));
-                shareProfile.setBackgroundResource(R.drawable.selecter_invite_friend);
+                params.addRule(RelativeLayout.LEFT_OF, R.id.tv_dashboard_follow);
+                mShareProfile.setLayoutParams(params);
+                mShareProfile.setPadding(0, 0, 0, 2);
+                mShareProfile.setText(getString(R.string.SHARE_PROFILE));
+                mShareProfile.setBackgroundResource(R.drawable.selecter_invite_friend);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                tvMentorDashBoardFollow.setText("");
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.vector_profile_edit_icon);
-                tvMentorDashBoardFollow.setLayoutParams(params1);
+                mDashBoardFollow.setText("");
+                mDashBoardFollow.setBackgroundResource(R.drawable.vector_profile_edit_icon);
+                mDashBoardFollow.setLayoutParams(params1);
             } else {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params.addRule(RelativeLayout.LEFT_OF, R.id.share_profile);
                 params.addRule(RelativeLayout.CENTER_VERTICAL);
-                tvMentorDashBoardFollow.setLayoutParams(params);
-                tvMentorDashBoardFollow.setPadding(0, 0, 0, 2);
-                tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
-                tvMentorDashBoardFollow.setBackgroundResource(0);
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
+                mDashBoardFollow.setLayoutParams(params);
+                mDashBoardFollow.setPadding(0, 0, 0, 2);
+                mDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
+                mDashBoardFollow.setBackgroundResource(0);
+                mDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
 
                 RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(CommonUtil.convertDpToPixel(mButtonSize, this),
                         CommonUtil.convertDpToPixel(mButtonSize, this));
                 params1.setMargins(CommonUtil.convertDpToPixel(8, this), 0, CommonUtil.convertDpToPixel(13, this), 0);
                 params1.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                shareProfile.setText("");
-                shareProfile.setBackgroundResource(R.drawable.vector_share_profile);
-                shareProfile.setLayoutParams(params1);
+                mShareProfile.setText("");
+                mShareProfile.setBackgroundResource(R.drawable.vector_share_profile);
+                mShareProfile.setLayoutParams(params1);
             }
         } else {
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, CommonUtil.convertDpToPixel(mButtonSize, this));
             params.setMargins(0, 0, 20, 0);
             params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            tvMentorDashBoardFollow.setLayoutParams(params);
-            shareProfile.setVisibility(View.GONE);
+            mDashBoardFollow.setLayoutParams(params);
+            mShareProfile.setVisibility(View.GONE);
         }
     }
 
-    private void profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType profileLevelType) {
+    private void profileStrengthDialog(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
         if (mUserSolarObject == null) return;
 
         if (mProfileStrengthDialog != null && mProfileStrengthDialog.isVisible()) {
             mProfileStrengthDialog.dismiss();
         }
-
         mProfileStrengthDialog = new ProfileStrengthDialog();
         mProfileStrengthDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
@@ -1395,7 +1315,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
-            bundle.putSerializable(ProfileStrengthDialog.PROFILE_LEVEL, profileLevelType);
+            bundle.putSerializable(ProfileStrengthDialog.PROFILE_LEVEL, profileStrengthType);
             bundle.putString(AppConstants.SOURCE_NAME, SCREEN_LABEL);
             mProfileStrengthDialog.setArguments(bundle);
             mProfileStrengthDialog.show(getFragmentManager(), ProfileStrengthDialog.class.getName());
@@ -1405,14 +1325,13 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private void unFollowDialog(final PublicProfileListRequest unFollowRequest) {
         if (mUserSolarObject == null) return;
 
-        if (unFollowDialogFragment != null && unFollowDialogFragment.isVisible()) {
-            unFollowDialogFragment.dismiss();
+        if (mUnFollowDialogFragment != null && mUnFollowDialogFragment.isVisible()) {
+            mUnFollowDialogFragment.dismiss();
         }
+        mUnFollowDialogFragment = new UnFollowDialogFragment();
+        mUnFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        unFollowDialogFragment = new UnFollowDialogFragment();
-        unFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
-
-        if (!unFollowDialogFragment.isVisible() && !mIsDestroyed) {
+        if (!mUnFollowDialogFragment.isVisible() && !mIsDestroyed) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1423,19 +1342,17 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             bundle.putString(AppConstants.SOURCE_NAME, SCREEN_LABEL);
             bundle.putBoolean(AppConstants.IS_CHAMPION_ID, isChampion);
             bundle.putBoolean(AppConstants.IS_SELF_PROFILE, isOwnProfile);
-            unFollowDialogFragment.setArguments(bundle);
-            unFollowDialogFragment.show(getFragmentManager(), UnFollowDialogFragment.class.getName());
+            mUnFollowDialogFragment.setArguments(bundle);
+            mUnFollowDialogFragment.show(getFragmentManager(), UnFollowDialogFragment.class.getName());
         }
     }
 
     private void deactivateUserDialog(final UserSolrObj userSolrObj) {
-
         if (mUserSolarObject == null || ProfileActivity.this.isFinishing()) return;
 
         if (mDeactivateProfileDialogFragment != null && mDeactivateProfileDialogFragment.isVisible()) {
             mDeactivateProfileDialogFragment.dismiss();
         }
-
         mDeactivateProfileDialogFragment = new DeactivateProfileDialogFragment();
         mDeactivateProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
@@ -1475,15 +1392,15 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    private ProfileStrengthDialog.ProfileLevelType userLevel(UserSolrObj userSolrObj) {
-        ProfileStrengthDialog.ProfileLevelType profileType;
+    private ProfileStrengthDialog.ProfileStrengthType userLevel(UserSolrObj userSolrObj) {
+        ProfileStrengthDialog.ProfileStrengthType profileType;
 
         if (userSolrObj.getProfileCompletionWeight() > BEGINNER_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= INTERMEDIATE_END_LIMIT) {
-            profileType = ProfileStrengthDialog.ProfileLevelType.BEGINNER;
+            profileType = ProfileStrengthDialog.ProfileStrengthType.BEGINNER;
         } else if (userSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT) {
-            profileType = ProfileStrengthDialog.ProfileLevelType.ALLSTAR;
+            profileType = ProfileStrengthDialog.ProfileStrengthType.ALLSTAR;
         } else {
-            profileType = ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE;
+            profileType = ProfileStrengthDialog.ProfileStrengthType.INTERMEDIATE;
         }
 
         return profileType;
@@ -1491,59 +1408,59 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private void animationOnProgressBar() {
         if (!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
-            final ScaleAnimation scaleAnimation = new ScaleAnimation(ORIGINAL_SIZE, EXPANDED_SIZE, ORIGINAL_SIZE, EXPANDED_SIZE, beginnerTick.getWidth() / 2, beginnerTick.getHeight() / 2);
+            final ScaleAnimation scaleAnimation = new ScaleAnimation(ORIGINAL_SIZE, EXPANDED_SIZE, ORIGINAL_SIZE, EXPANDED_SIZE, mBeginnerTick.getWidth() / 2, mBeginnerTick.getHeight() / 2);
             scaleAnimation.setDuration(ANIMATION_REPEAT_DURATION); // scale to 1.04 times as big in 700 milli-seconds
             scaleAnimation.setRepeatCount(Animation.INFINITE);
             scaleAnimation.setRepeatMode(Animation.INFINITE);
             scaleAnimation.setInterpolator(this, android.R.interpolator.accelerate_decelerate);
 
-            beginnerTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
-            intermediateTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
-            allStarTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+            mBeginnerTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+            mIntermediateTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
+            mAllStarTick.setBackground(ContextCompat.getDrawable(ProfileActivity.this, R.drawable.circle));
 
-            beginnerTick.startAnimation(scaleAnimation);
-            intermediateTick.startAnimation(scaleAnimation);
-            allStarTick.startAnimation(scaleAnimation);
+            mBeginnerTick.startAnimation(scaleAnimation);
+            mIntermediateTick.startAnimation(scaleAnimation);
+            mAllStarTick.startAnimation(scaleAnimation);
 
-            beginnerTick.postDelayed(new Runnable() {
+            mBeginnerTick.postDelayed(new Runnable() {
                 public void run() {
                     scaleAnimation.cancel();
                     scaleAnimation.setAnimationListener(null);
 
-                    beginnerTick.setBackground(null);
-                    beginnerTick.clearAnimation();
+                    mBeginnerTick.setBackground(null);
+                    mBeginnerTick.clearAnimation();
 
-                    intermediateTick.setBackground(null);
-                    intermediateTick.clearAnimation();
+                    mIntermediateTick.setBackground(null);
+                    mIntermediateTick.clearAnimation();
 
-                    allStarTick.setBackground(null);
-                    allStarTick.clearAnimation();
+                    mAllStarTick.setBackground(null);
+                    mAllStarTick.clearAnimation();
                 }
             }, ANIMATION_MAX_DURATION);
         }
     }
 
-    private void setUsersFollowingCount(int numFound) {
-        followingTitle.setText(getResources().getString(R.string.following));
+    private void setFollowingCount(int numFound) { //Following count
+        mFollowingTitle.setText(getResources().getString(R.string.following));
         mUserSolarObject.setUserFollowing(numFound);
-        followingCount.setText(String.valueOf(numFound));
-        liFollowing.setVisibility(View.VISIBLE);
+        mFollowingCount.setText(String.valueOf(numFound));
+        mFollowing.setVisibility(View.VISIBLE);
     }
 
-    private void setUsersFollowerCount(int numFound) {
+    private void setFollowerCount(int numFound) { //Follower count
         String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
         mUserSolarObject.setFollowerCount(numFound);
-        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(numFound)));
-        userFollower.setText(pluralFollower);
-        liFollower.setVisibility(View.VISIBLE);
+        mFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(numFound)));
+        mUserFollower.setText(pluralFollower);
+        mFollower.setVisibility(View.VISIBLE);
     }
 
-    private void setUsersPostCount(int postCount) {
+    private void setPostCount(int postCount) { //Post count
         String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, postCount);
         mUserSolarObject.setPostCount(postCount);
-        userTotalPostCount.setText(String.valueOf(changeNumberToNumericSuffix(postCount)));
-        tvMentorPost.setText(pluralAnswer);
-        liPost.setVisibility(View.VISIBLE);
+        mUserTotalPostCount.setText(String.valueOf(changeNumberToNumericSuffix(postCount)));
+        mTvPost.setText(pluralAnswer);
+        mLinearPost.setVisibility(View.VISIBLE);
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
@@ -1555,35 +1472,33 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-    private void invalidateUserInformation(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
-        if (StringUtil.isNotNullOrEmptyString(name)) {
+    private void updateProfileDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
+        if (StringUtil.isNotNullOrEmptyString(name)) { //Name
             name = CommonUtil.camelCaseString(name);
-            userName.setText(name);
-            tvMentorToolbarName.setText(name);
+            mUserName.setText(name);
+            mToolbarName.setText(name);
         }
 
-        if (StringUtil.isNotNullOrEmptyString(location)) {
-            tvLoc.setText(location);
+        if (StringUtil.isNotNullOrEmptyString(location)) { //Location
+            mTvLocation.setText(location);
         }
 
-        if (StringUtil.isNotNullOrEmptyString(userBio)) {
+        if (StringUtil.isNotNullOrEmptyString(userBio)) { //Description
             String description = userBio;
             description = StringUtil.fromHtml(description).toString();
             if (description.length() > BIO_MAX_LIMIT) {
                 description = description.substring(0, BIO_MAX_LIMIT);
             }
-            userDescription.setText(description);
-            userDescription.setTag(null);
+            mUserDescription.setText(description);
+            mUserDescription.setTag(null);
             ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
-
+            expandableTextView.makeTextViewResizable(mUserDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
             mUserSolarObject.setDescription(description);
         }
 
-        if (progressPercentage != -1) {
+        if (progressPercentage != -1) { //profile strength
             mUserSolarObject.setProfileCompletionWeight(progressPercentage);
-            dashProgressBar.setProgress(progressPercentage, false);
-
+            mDashProgressBar.setProgress(progressPercentage, false);
             mUserSolarObject.setFilledProfileFields(filledFields);
             mUserSolarObject.setUnfilledProfileFields(unfilledFields);
             setProfileStrength();
@@ -1596,8 +1511,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private void imageCropping(Intent intent) {
         try {
-            if (localImageSaveForChallenge.exists()) {
-                Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
+            if (mLocalImageSaveForChallenge.exists()) {
+                Bitmap photo = CompressImageUtil.decodeFile(mLocalImageSaveForChallenge);
                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
             } else {
                 Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
@@ -1629,46 +1544,39 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     public void setProfileDetails(UserSolrObj userSolrObj) {
-        rlMentorFullViewHeader.setVisibility(View.VISIBLE);
+        mFullViewHeader.setVisibility(View.VISIBLE);
         mFeedDetail = userSolrObj;
-
-        mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);
 
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
                 isOwnProfile = true;
-                tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
+                mDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
+                mDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
 
-                progressbarContainer.setVisibility(View.VISIBLE);
+                mProgressbarContainer.setVisibility(View.VISIBLE);
                 setProfileStrength();
-                profileLevel.setVisibility(View.VISIBLE);
-                newFeature.setVisibility(View.VISIBLE);
+                mProfileLevel.setVisibility(View.VISIBLE);
+                mNewFeature.setVisibility(View.VISIBLE);
+                mDashProgressBar.setListener(this);
 
-                dashProgressBar.setListener(this);
                 if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                    dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
+                    mDashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
                 } else {
-                    dashProgressBar.setTotalDash(new ConfigData().maxDash);
+                    mDashProgressBar.setTotalDash(new ConfigData().maxDash);
                 }
+                mDashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
+                mToolbarMenu.setVisibility(View.GONE);
 
-                dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
-                //hide menu dots
-                profileToolbarMenu.setVisibility(View.GONE);
-
-                //Hide the offer icon
-                if (!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
-                    newFeature.setVisibility(View.VISIBLE);
+                if (!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) { //Hide the offer icon
+                    mNewFeature.setVisibility(View.VISIBLE);
                 } else {
-                    newFeature.setVisibility(View.GONE);
+                    mNewFeature.setVisibility(View.GONE);
                 }
             } else {
-                newFeature.setVisibility(View.GONE);
-                progressbarContainer.setVisibility(View.GONE);
-                profileLevel.setVisibility(View.GONE);
-                profileToolbarMenu.setVisibility(View.VISIBLE);
-
+                mNewFeature.setVisibility(View.GONE);
+                mProgressbarContainer.setVisibility(View.GONE);
+                mProfileLevel.setVisibility(View.GONE);
+                mToolbarMenu.setVisibility(View.VISIBLE);
                 updateFollowedButton();
             }
         } else {
@@ -1687,18 +1595,15 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
         if (isOwnProfile) {
             verifiedIcon.setVisibility(View.GONE);
-            editIcon.setVisibility(View.VISIBLE);
+            mEditIcon.setVisibility(View.VISIBLE);
         } else {
-            editIcon.setVisibility(View.GONE);
+            mEditIcon.setVisibility(View.GONE);
         }
 
         invalidateProfileButton();
-
         updateProfileInfo();
-
         setupSheBadge(userSolrObj); //setup She badge
         setupProfileBadges(userSolrObj); //horizontal badge list on profile
-
         setPagerAndLayouts();
 
         ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
@@ -1706,7 +1611,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
         PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
-
         //admin and community moderator have feature to share profile and deactivate user
         if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (mLoggedInUserIdTypeId == ADMIN_TYPE_ID || mLoggedInUserIdTypeId == COMMUNITY_MODERATOR_TYPE_ID)) {
             popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.SHARE_PROFILE)));
@@ -1714,7 +1618,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         } else if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
             popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
         }
-
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
@@ -1762,8 +1665,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                     isUserDeactivated = false;
                     setResult(AppConstants.RESULT_CODE_FOR_DEACTIVATION);
                     finish();
-                } else if (followedUserSolrObj != null) {
-                    onFollowedActivityResultOfParentRefresh(followedUserSolrObj);
+                } else if (mFollowedUserSolrObj != null) {
+                    onFollowedActivityResultOfParentRefresh(mFollowedUserSolrObj);
                 } else if (!isProfileClicked) {
                     onActivityResultOfParentRefresh();
                 }
@@ -1780,10 +1683,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     public void setProfileNameData(String imageUrl) {
-        /*if (null != imageUrl) {
-            userImage.setCircularImage(true);
-            userImage.bindImage(imageUrl);
-        }*/
         File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         setLocalImageSaveForChallenge(localImageSaveForChallenge);
     }
@@ -1792,18 +1691,17 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         this.userNameTitle = userNameTitle;
     }
 
-    public void setLocalImageSaveForChallenge(File localImageSaveForChallenge) {
-        this.localImageSaveForChallenge = localImageSaveForChallenge;
+    public void setLocalImageSaveForChallenge(File mLocalImageSaveForChallenge) {
+        this.mLocalImageSaveForChallenge = mLocalImageSaveForChallenge;
     }
 
     public void refreshImageView(String imageUrl) {
         if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
             mProfileIcon.setCircularImage(true);
-            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, profileSize, profileSize);
-            mProfileIcon.bindImage(authorThumborUrl);
+            String profileUrl = CommonUtil.getThumborUri(imageUrl, mProfileSize, mProfileSize);
+            mProfileIcon.bindImage(profileUrl);
             mUserSolarObject.setImageUrl(imageUrl);
         }
-
         invalidateProfileButton();
     }
 
@@ -1843,47 +1741,21 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
 
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if(isWriteAStory) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
         if (notificationId != -1) {
             intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
         }
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
         if (!CommonUtil.isEmpty(properties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
         }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
         intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (notificationId != -1) {
-            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
-        }
         intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, ProfileStrengthDialog.ProfileLevelType profileLevelType, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (profileLevelType != null) {
-            intent.putExtra(ProfileStrengthDialog.PROFILE_LEVEL, profileLevelType);
-        }
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
     //endregion public methods

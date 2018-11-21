@@ -190,19 +190,12 @@ public class FeedUtils {
                     ArticleActivity.navigateTo(activity, mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
                 }
                 break;
-
-            /**
-             * //Todo - article hv id issue, as no profile for article
-             * case R.id.tv_article_card_title :
-             case R.id.iv_article_circle_icon:
-             // ProfileActivity.navigateTo(this, mFeedDetail.getEntityOrParticipantId(), mFeedDetail.isAuthorMentor(), AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-             break;**/
-
             case R.id.iv_feed_community_post_login_user_pic:
             case R.id.fl_login_user:
             case R.id.tv_feed_community_post_login_user_name:
             case R.id.feed_img:
-                ProfileActivity.navigateTo(activity, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(activity, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(),
+                        AppConstants.PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
                 break;
 
             case R.id.li_feed_article_images:

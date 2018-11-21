@@ -21,5 +21,5 @@ public interface IProfileView extends BaseMvpView {
 
     void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj);
 
-    void onUserDeactivation(BaseResponse baseResponse);
+    void onUserDeactivation(BaseResponse baseResponse, boolean isDeactivation);
 }

@@ -59,54 +59,56 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
     private String mIntermediateFields[] = {"Location", "Mobile Number", "Bio"};
     private String mCompletedFields[] = {"Profile Pic", "DOB", "Relationship Status"};
     private UserSolrObj mUserSolrObj;
-    private ProfileLevelType mProfileLevelType;
+    private ProfileStrengthType mProfileStrengthType;
     //endregion
 
     //region enum
-    public enum ProfileLevelType {
+    public enum ProfileStrengthType {
         BEGINNER, INTERMEDIATE, ALLSTAR
     }
     //endregion
 
+    //region inject variable
     @Inject
     Preference<AppConfiguration> mConfiguration;
+    //endregion inject variable
 
     //region Bind view variables
     @Bind(R.id.dashed_progressbar)
-    DashProgressBar dashProgressBar;
+    DashProgressBar mDashProgressBar;
 
     @Bind(R.id.profile_status_level)
-    TextView profileStatusLevel;
+    TextView mProfileStatusLevel;
 
     @Bind(R.id.crown)
-    ImageView crownIcon;
+    ImageView mCrownIcon;
 
     @Bind(R.id.user_image)
-    ImageView userImage;
+    ImageView mUserImage;
 
     @Bind(R.id.level_achieved)
-    TextView levelAchieved;
+    TextView mLevelAchieved;
 
     @Bind(R.id.filled_left)
-    TextView filledLeft;
+    TextView mFieldsLeft;
 
     @Bind(R.id.tick)
-    ImageView addIcon;
+    ImageView mAddIcon;
 
     @Bind(R.id.message)
-    TextView message;
+    TextView mMessage;
 
     @Bind(R.id.buttonPanel)
-    Button nextLevel;
+    Button mNextLevel;
 
     @Bind(R.id.beginner)
-    ImageView beginnerTick;
+    ImageView mBeginnerTick;
 
     @Bind(R.id.intermediate)
-    ImageView intermediateTick;
+    ImageView mIntermediateTick;
 
     @Bind(R.id.all_star)
-    ImageView allStarTick;
+    ImageView mAllStarTick;
     //endregion
 
     //region Fragment methods
@@ -126,26 +128,26 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
         }
 
         if (getArguments() != null && getArguments().getSerializable(PROFILE_LEVEL) != null) {
-            mProfileLevelType = (ProfileLevelType) getArguments().getSerializable(PROFILE_LEVEL);
+            mProfileStrengthType = (ProfileStrengthType) getArguments().getSerializable(PROFILE_LEVEL);
         } else {
             if (mUserSolrObj != null) {
-                mProfileLevelType = userLevel(mUserSolrObj);
+                mProfileStrengthType = userLevel(mUserSolrObj);
             }
         }
 
         if (mUserSolrObj != null) {
-            dashProgressBar.setListener(this);
-            dashProgressBar.setProgress(mUserSolrObj.getProfileCompletionWeight(), false);
+            mDashProgressBar.setListener(this);
+            mDashProgressBar.setProgress(mUserSolrObj.getProfileCompletionWeight(), false);
 
             if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
+                mDashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
             } else {
-                dashProgressBar.setTotalDash(new ConfigData().maxDash);
+                mDashProgressBar.setTotalDash(new ConfigData().maxDash);
             }
 
             invalidateProfileProgressBar(mUserSolrObj.getProfileCompletionWeight());
 
-            invalidateUserDetails(mProfileLevelType, true);
+            invalidateUserDetails(mProfileStrengthType, true);
 
         }
 
@@ -162,12 +164,12 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
     @OnClick(R.id.buttonPanel)
     public void nextClick() {
 
-        if (mProfileLevelType == ProfileLevelType.BEGINNER) {
-            mProfileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(mProfileLevelType, false);
-        } else if (mProfileLevelType == ProfileLevelType.INTERMEDIATE) {
-            mProfileLevelType = ProfileLevelType.ALLSTAR;
-            invalidateUserDetails(mProfileLevelType, false);
+        if (mProfileStrengthType == ProfileStrengthType.BEGINNER) {
+            mProfileStrengthType = ProfileStrengthType.INTERMEDIATE;
+            invalidateUserDetails(mProfileStrengthType, false);
+        } else if (mProfileStrengthType == ProfileStrengthType.INTERMEDIATE) {
+            mProfileStrengthType = ProfileStrengthType.ALLSTAR;
+            invalidateUserDetails(mProfileStrengthType, false);
         } else {
             dismiss();
         }
@@ -175,25 +177,25 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
 
     @OnClick({R.id.beginner})
     protected void openBeginnerDialog() {
-        if (mProfileLevelType != ProfileLevelType.BEGINNER) {
-            mProfileLevelType = ProfileLevelType.BEGINNER;
-            invalidateUserDetails(ProfileStrengthDialog.ProfileLevelType.BEGINNER, false);
+        if (mProfileStrengthType != ProfileStrengthType.BEGINNER) {
+            mProfileStrengthType = ProfileStrengthType.BEGINNER;
+            invalidateUserDetails(ProfileStrengthType.BEGINNER, false);
         }
     }
 
     @OnClick(R.id.intermediate)
     protected void openIntermediateProgressDialog() {
-        if (mProfileLevelType != ProfileLevelType.INTERMEDIATE) {
-            mProfileLevelType = ProfileLevelType.INTERMEDIATE;
-            invalidateUserDetails(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE, false);
+        if (mProfileStrengthType != ProfileStrengthType.INTERMEDIATE) {
+            mProfileStrengthType = ProfileStrengthType.INTERMEDIATE;
+            invalidateUserDetails(ProfileStrengthType.INTERMEDIATE, false);
         }
     }
 
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
-        if (mProfileLevelType != ProfileLevelType.ALLSTAR) {
-            mProfileLevelType = ProfileLevelType.ALLSTAR;
-            invalidateUserDetails(ProfileStrengthDialog.ProfileLevelType.ALLSTAR, false);
+        if (mProfileStrengthType != ProfileStrengthType.ALLSTAR) {
+            mProfileStrengthType = ProfileStrengthType.ALLSTAR;
+            invalidateUserDetails(ProfileStrengthType.ALLSTAR, false);
         }
     }
 
@@ -212,57 +214,57 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
     }
     //endregion
 
-    //region Private methods
+    //region private methods
     private void invalidateProfileProgressBar(float progressPercentage) {
         if (progressPercentage > BEGINNER_START_LIMIT && progressPercentage <= BEGINNER_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= BEGINNER_END_LIMIT) {
-                beginnerTick.setImageResource(R.drawable.vector_level_complete);
+                mBeginnerTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                beginnerTick.setImageResource(R.drawable.vector_level_incomplete);
+                mBeginnerTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
-            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+            mIntermediateTick.setImageResource(R.drawable.vector_level_incomplete);
+            mAllStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
 
         } else if (progressPercentage > ALL_STAR_START_LIMIT && progressPercentage <= ALL_STAR_END_LIMIT) {
             if (mUserSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT || !CommonUtil.isNotEmpty(mUserSolrObj.getUnfilledProfileFields())) {
-                allStarTick.setImageResource(R.drawable.vector_all_level_complete);
+                mAllStarTick.setImageResource(R.drawable.vector_all_level_complete);
             } else {
-                allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+                mAllStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
             }
-            beginnerTick.setImageResource(R.drawable.vector_level_complete);
-            intermediateTick.setImageResource(R.drawable.vector_level_complete);
+            mBeginnerTick.setImageResource(R.drawable.vector_level_complete);
+            mIntermediateTick.setImageResource(R.drawable.vector_level_complete);
 
         } else {
             if (mUserSolrObj.getProfileCompletionWeight() >= INTERMEDIATE_END_LIMIT) {
-                intermediateTick.setImageResource(R.drawable.vector_level_complete);
+                mIntermediateTick.setImageResource(R.drawable.vector_level_complete);
             } else {
-                intermediateTick.setImageResource(R.drawable.vector_level_incomplete);
+                mIntermediateTick.setImageResource(R.drawable.vector_level_incomplete);
             }
-            allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
-            beginnerTick.setImageResource(R.drawable.vector_level_complete);
+            mAllStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
+            mBeginnerTick.setImageResource(R.drawable.vector_level_complete);
         }
     }
 
-    private void invalidateUserDetails(ProfileLevelType profileLevelType, boolean hasSource) {
-        String fields = unfilledFields(profileLevelType);
+    private void invalidateUserDetails(ProfileStrengthType profileStrengthType, boolean hasSource) {
+        String fields = unfilledFields(profileStrengthType);
 
         boolean isAllFieldsDone;
 
         if (StringUtil.isNotNullOrEmptyString(fields)) {
-            filledLeft.setText(fields);
-            addIcon.setImageResource(R.drawable.vector_add);
-            addIcon.setEnabled(true);
-            addIcon.setClickable(true);
+            mFieldsLeft.setText(fields);
+            mAddIcon.setImageResource(R.drawable.vector_add);
+            mAddIcon.setEnabled(true);
+            mAddIcon.setClickable(true);
             isAllFieldsDone = false;
-            levelAchieved.setVisibility(View.INVISIBLE);
+            mLevelAchieved.setVisibility(View.INVISIBLE);
         } else {
-            addIcon.setImageResource(R.drawable.vector_green_tick);
-            String names = filledFieldsMessage(profileLevelType);
-            filledLeft.setText(names);
-            addIcon.setEnabled(false);
-            addIcon.setClickable(false);
+            mAddIcon.setImageResource(R.drawable.vector_green_tick);
+            String names = filledFieldsMessage(profileStrengthType);
+            mFieldsLeft.setText(names);
+            mAddIcon.setEnabled(false);
+            mAddIcon.setClickable(false);
             isAllFieldsDone = true;
-            levelAchieved.setVisibility(View.VISIBLE);
+            mLevelAchieved.setVisibility(View.VISIBLE);
         }
 
         //Add analytics screen open Event
@@ -279,61 +281,61 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
             AnalyticsManager.trackScreenView(SCREEN_NAME, SCREEN_NAME, properties); //Moving next stage on same screen
         }
 
-        updateDetails(profileLevelType, isAllFieldsDone);
+        updateDetails(profileStrengthType, isAllFieldsDone);
     }
 
-    private void updateDetails(ProfileLevelType profileLevelType, boolean isRequiredFieldsFilled) {
+    private void updateDetails(ProfileStrengthType profileStrengthType, boolean isRequiredFieldsFilled) {
 
-        switch (profileLevelType) {
+        switch (profileStrengthType) {
             case BEGINNER:
-                crownIcon.setVisibility(View.VISIBLE);
-                userImage.setImageResource(R.drawable.vector_profile_beginner_user);
-                profileStatusLevel.setText(R.string.beginner);
-                nextLevel.setText(R.string.next_level);
+                mCrownIcon.setVisibility(View.VISIBLE);
+                mUserImage.setImageResource(R.drawable.vector_profile_beginner_user);
+                mProfileStatusLevel.setText(R.string.beginner);
+                mNextLevel.setText(R.string.next_level);
                 String beginnerMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.beginner_message));
-                message.setText(beginnerMessage);
+                mMessage.setText(beginnerMessage);
                 break;
 
             case INTERMEDIATE:
-                crownIcon.setVisibility(View.VISIBLE);
-                userImage.setImageResource(R.drawable.vector_profile_intermediate_user);
-                profileStatusLevel.setText(R.string.intermediate);
-                nextLevel.setText(R.string.next_level);
+                mCrownIcon.setVisibility(View.VISIBLE);
+                mUserImage.setImageResource(R.drawable.vector_profile_intermediate_user);
+                mProfileStatusLevel.setText(R.string.intermediate);
+                mNextLevel.setText(R.string.next_level);
 
                 if (isRequiredFieldsFilled) {
                     String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.intermediate_filled));
-                    message.setText(intermediateMessage);
+                    mMessage.setText(intermediateMessage);
                 } else {
                     String intermediateMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.intermediate_unfilled));
-                    message.setText(intermediateMessage);
+                    mMessage.setText(intermediateMessage);
                 }
                 break;
 
             case ALLSTAR:
-                userImage.setImageResource(R.drawable.vector_profile_allstar_user);
-                profileStatusLevel.setText(R.string.all_star);
-                nextLevel.setText(R.string.got_it);
-                crownIcon.setVisibility(View.GONE);
+                mUserImage.setImageResource(R.drawable.vector_profile_allstar_user);
+                mProfileStatusLevel.setText(R.string.all_star);
+                mNextLevel.setText(R.string.got_it);
+                mCrownIcon.setVisibility(View.GONE);
 
                 if (isRequiredFieldsFilled) {
                     String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.all_star_filled));
-                    message.setText(allStarMessage);
+                    mMessage.setText(allStarMessage);
                 } else {
                     String allStarMessage = getResources().getString(R.string.profile_progress_message, mUserSolrObj.getNameOrTitle(), getString(R.string.all_star_unfilled));
-                    message.setText(allStarMessage);
+                    mMessage.setText(allStarMessage);
                 }
                 break;
         }
     }
 
-    private String filledFieldsMessage(ProfileLevelType profileLevelType) {
+    private String filledFieldsMessage(ProfileStrengthType profileStrengthType) {
 
         StringBuilder message = new StringBuilder();
         String options[];
 
-        if (profileLevelType == ProfileLevelType.BEGINNER) {
+        if (profileStrengthType == ProfileStrengthType.BEGINNER) {
             options = mBeginnerFields;
-        } else if (profileLevelType == ProfileLevelType.INTERMEDIATE) {
+        } else if (profileStrengthType == ProfileStrengthType.INTERMEDIATE) {
             options = mIntermediateFields;
         } else {
             options = mCompletedFields;
@@ -353,14 +355,14 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
         return message.toString();
     }
 
-    private String unfilledFields(ProfileLevelType profileLevelType) {
+    private String unfilledFields(ProfileStrengthType profileStrengthType) {
 
         StringBuilder message = new StringBuilder();
         String options[];
 
-        if (profileLevelType == ProfileLevelType.BEGINNER) {
+        if (profileStrengthType == ProfileStrengthType.BEGINNER) {
             options = mBeginnerFields;
-        } else if (profileLevelType == ProfileLevelType.INTERMEDIATE) {
+        } else if (profileStrengthType == ProfileStrengthType.INTERMEDIATE) {
             options = mIntermediateFields;
         } else {
             options = mCompletedFields;
@@ -396,22 +398,22 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
         return message.toString();
     }
 
-    private ProfileLevelType userLevel(UserSolrObj userSolrObj) {
-        ProfileLevelType profileType;
+    private ProfileStrengthType userLevel(UserSolrObj userSolrObj) {
+        ProfileStrengthType profileType;
 
         if (userSolrObj.getProfileCompletionWeight() > BEGINNER_START_LIMIT && userSolrObj.getProfileCompletionWeight() <= INTERMEDIATE_END_LIMIT) {
-            profileType = ProfileLevelType.BEGINNER;
+            profileType = ProfileStrengthType.BEGINNER;
         } else if (userSolrObj.getProfileCompletionWeight() >= ALL_STAR_END_LIMIT) {
-            profileType = ProfileLevelType.ALLSTAR;
+            profileType = ProfileStrengthType.ALLSTAR;
         } else {
-            profileType = ProfileLevelType.INTERMEDIATE;
+            profileType = ProfileStrengthType.INTERMEDIATE;
         }
 
         return profileType;
     }
     //endregion
 
-
+    //region public methods
     @Override
     public void onViewRendered(float dashWidth) {
         ConfigData configData = new ConfigData();
@@ -424,10 +426,11 @@ public class ProfileStrengthDialog extends BaseDialogFragment implements Progres
         }
         RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
-        beginnerTick.setLayoutParams(buttonLayoutParams);
+        mBeginnerTick.setLayoutParams(buttonLayoutParams);
 
         RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
-        intermediateTick.setLayoutParams(intermediateLayoutParams);
+        mIntermediateTick.setLayoutParams(intermediateLayoutParams);
     }
+    //endregion public methods
 }

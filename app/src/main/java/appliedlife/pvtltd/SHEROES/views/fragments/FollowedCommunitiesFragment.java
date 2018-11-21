@@ -211,7 +211,7 @@ public class FollowedCommunitiesFragment extends BaseFragment implements IProfil
     }
 
     @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
+    public void onUserDeactivation(BaseResponse baseResponse, boolean isDeactivated) {
     }
 
     public List<CommunityFeedSolrObj> getUsersCommunity(ProfileCommunitiesResponsePojo userCommunities, int mPageNo) {

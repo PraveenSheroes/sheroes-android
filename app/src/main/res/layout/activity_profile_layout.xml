@@ -38,7 +38,7 @@
                 app:layout_collapseMode="parallax">
 
                 <include
-                    android:id="@+id/rl_mentor_full_view_header"
+                    android:id="@+id/rl_champion_full_view_header"
                     layout="@layout/profile_dashboard_header_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

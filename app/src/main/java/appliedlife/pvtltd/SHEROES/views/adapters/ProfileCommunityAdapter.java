@@ -76,7 +76,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class FollowedUserListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
-        @Bind(R.id.iv_mentor_full_view_icon)
+        @Bind(R.id.iv_profile_full_view_icon)
         CircleImageView mentorIcon;
 
         @Bind(R.id.community_name)

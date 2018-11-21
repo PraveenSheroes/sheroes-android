@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -54,16 +55,16 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
 
     //region bind variable
     @Bind(R.id.reason_title)
-    TextView reasonTitle;
+    TextView mReasonTitle;
 
     @Bind(R.id.reason_sub_title)
-    TextView reasonSubTitle;
+    TextView mReasonSubTitle;
 
     @Bind(R.id.options_container)
-    RadioGroup spamOptions;
+    RadioGroup mSpamOptions;
 
     @Bind(R.id.edit_text_reason)
-    EditText reason;
+    EditText mReason;
     //endregion bind variable
 
     //region injected variable
@@ -78,7 +79,7 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
     private UserSolrObj mUserSolrObj;
     private SpamPostRequest mSpamRequest;
     private String mSourceScreenName;
-    private long mLoggedInUserId;
+    private Activity mContext;
     //endregion private variable
 
     //region fragment lifecycle method
@@ -89,6 +90,7 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
 
         if (getActivity() == null) return null;
 
+        mContext = getActivity();
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.dialog_spam_options, container, false);
         ButterKnife.bind(this, view);
@@ -105,26 +107,26 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
         if (spamReasons == null) return null;
 
         mSourceScreenName = getArguments().getString(AppConstants.SOURCE_NAME);
-        mLoggedInUserId = getArguments().getLong(AppConstants.LOGGED_IN_USER);
+        long loggedInUserId = getArguments().getLong(AppConstants.LOGGED_IN_USER);
         Parcelable parcelable = getArguments().getParcelable(AppConstants.USER);
         if (null != parcelable) {
             mUserSolrObj = Parcels.unwrap(parcelable);
         }
 
-        if(mUserSolrObj ==null || mLoggedInUserId == -1) return null;
+        if(mUserSolrObj ==null || loggedInUserId == -1) return null;
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, getActivity()), CommonUtil.convertDpToPixel(10, getActivity()), 0, 0);
 
-        reasonTitle.setLayoutParams(layoutParams);
-        reasonSubTitle.setLayoutParams(layoutParams);
+        mReasonTitle.setLayoutParams(layoutParams);
+        mReasonSubTitle.setLayoutParams(layoutParams);
 
         List<Spam> spamList = spamReasons.getUserTypeSpams();
-        mSpamRequest = SpamUtil.createProfileSpamByUser(mUserSolrObj, mLoggedInUserId);
+        mSpamRequest = SpamUtil.createProfileSpamByUser(mUserSolrObj, loggedInUserId);
 
         if (mSpamRequest == null || spamList == null) return null;
-        SpamUtil.addRadioToView(getActivity(), spamList, spamOptions);
+        SpamUtil.addRadioToView(getActivity(), spamList, mSpamOptions);
 
         return view;
     }
@@ -133,29 +135,29 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
     //region onclick method
     @OnClick(R.id.submit)
     public void onSubmitClick() {
-        if (spamOptions.getCheckedRadioButtonId() != -1) {
-            RadioButton radioButton = spamOptions.findViewById(spamOptions.getCheckedRadioButtonId());
+        if (mSpamOptions.getCheckedRadioButtonId() != -1) {
+            RadioButton radioButton = mSpamOptions.findViewById(mSpamOptions.getCheckedRadioButtonId());
             Spam spam = (Spam) radioButton.getTag();
             if (spam != null) {
                 mSpamRequest.setSpamReason(spam.getReason());
                 mSpamRequest.setScore(spam.getScore());
                 if (spam.getLabel().equalsIgnoreCase(getString(R.string.others))) {
-                    if (reason.getVisibility() == View.VISIBLE) {
-                        if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
-                            mSpamRequest.setSpamReason(spam.getReason().concat(":" + reason.getText().toString()));
-                            mProfilePresenter.reportSpamPostOrComment(mSpamRequest); //submit
+                    if (mReason.getVisibility() == View.VISIBLE) {
+                        if (mReason.getText().length() > 0 && mReason.getText().toString().trim().length() > 0) {
+                            mSpamRequest.setSpamReason(spam.getReason().concat(":" + mReason.getText().toString()));
+                            mProfilePresenter.reportSpamPostOrComment(mSpamRequest); //mSubmit
                             dismiss();
                             onProfileReported(mUserSolrObj);   //report the profile
 
                         } else {
-                            reason.setError(getString(R.string.add_reason));
+                            mReason.setError(getString(R.string.add_reason));
                         }
                     } else {
-                        reason.setVisibility(View.VISIBLE);
-                        SpamUtil.hideSpamReason(spamOptions, spamOptions.getCheckedRadioButtonId());
+                        mReason.setVisibility(View.VISIBLE);
+                        SpamUtil.hideSpamReason(mSpamOptions, mSpamOptions.getCheckedRadioButtonId());
                     }
                 } else {
-                    mProfilePresenter.reportSpamPostOrComment(mSpamRequest);  //submit request
+                    mProfilePresenter.reportSpamPostOrComment(mSpamRequest);  //mSubmit request
                     dismiss();
                     onProfileReported(mUserSolrObj);   //report the profile
                 }
@@ -185,10 +187,14 @@ public class ReportUserProfileDialogFragment extends BaseDialogFragment implemen
 
     @Override
     public void onSpamPostOrCommentReported(SpamResponse communityFeedSolrObj) {
+        if (mContext instanceof IProfileView) {
+            ((IProfileView) mContext).onSpamPostOrCommentReported(communityFeedSolrObj);
+            mContext = null;
+        }
     }
 
     @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
+    public void onUserDeactivation(BaseResponse baseResponse, boolean isDeactivated) {
     }
     //endregion override methods
 }

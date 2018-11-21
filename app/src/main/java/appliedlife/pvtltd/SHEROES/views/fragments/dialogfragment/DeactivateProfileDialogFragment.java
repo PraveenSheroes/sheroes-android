@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -59,25 +60,25 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
 
     //region bind variable
     @Bind(R.id.reason_title)
-    TextView reasonTitle;
+    TextView mReasonTitle;
 
     @Bind(R.id.reason_sub_title)
-    TextView reasonSubTitle;
+    TextView mReasonSubTitle;
 
     @Bind(R.id.delete_user_activity)
-    CheckBox deleteUserActivityCheck;
+    CheckBox mDeleteUserActivityCheck;
 
     @Bind(R.id.options_container)
-    RadioGroup deactivationOptions;
+    RadioGroup mDeactivationOptions;
 
     @Bind(R.id.scroll_container)
-    ScrollView scrollView;
+    ScrollView mScrollView;
 
     @Bind(R.id.submit)
-    Button submit;
+    Button mSubmit;
 
     @Bind(R.id.edit_text_reason)
-    EditText reason;
+    EditText mReasonEdit;
     //endregion bind variable
 
     //region injected variable
@@ -91,6 +92,7 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
     //region private variable
     private UserSolrObj mUserSolrObj;
     private String mSourceScreenName;
+    private Activity mContext;
     //endregion private variable
 
     //region fragment lifecycle method
@@ -101,6 +103,7 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
 
         if (getActivity() == null) return null;
 
+        mContext = getActivity();
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.dialog_deactivate_user, container, false);
         ButterKnife.bind(this, view);
@@ -129,12 +132,12 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.setMargins(CommonUtil.convertDpToPixel(16, getActivity()), CommonUtil.convertDpToPixel(10, getActivity()), 0, 0);
 
-        reasonTitle.setLayoutParams(layoutParams);
-        reasonSubTitle.setLayoutParams(layoutParams);
+        mReasonTitle.setLayoutParams(layoutParams);
+        mReasonSubTitle.setLayoutParams(layoutParams);
 
-        SpamUtil.addDeactivationReasonsToRadioGroup(getActivity(), deactivationReasons, deactivationOptions);
+        SpamUtil.addDeactivationReasonsToRadioGroup(getActivity(), deactivationReasons, mDeactivationOptions);
         LinearLayout.LayoutParams scrollviewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, CommonUtil.convertDpToPixel(250, getActivity()));
-        scrollView.setLayoutParams(scrollviewParams);
+        mScrollView.setLayoutParams(scrollviewParams);
 
         return view;
     }
@@ -143,14 +146,14 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
     //region onclick method
     @OnClick(R.id.submit)
     public void onSubmitClick() {
-        if (deactivationOptions.getCheckedRadioButtonId() != -1) {
+        if (mDeactivationOptions.getCheckedRadioButtonId() != -1) {
 
             DeactivateUserRequest deactivateUserRequest = new DeactivateUserRequest();
             deactivateUserRequest.setUserId(mUserSolrObj.getIdOfEntityOrParticipant());
             deactivateUserRequest.setReactivateUser(false);
             deactivateUserRequest.setReasonForDeactivationDetails("");
 
-            if (deleteUserActivityCheck.isChecked()) {
+            if (mDeleteUserActivityCheck.isChecked()) {
                 deactivateUserRequest.setRemoveCommentByUser(true);
                 deactivateUserRequest.setRemovePostByUser(true);
             } else {
@@ -158,33 +161,33 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
                 deactivateUserRequest.setRemovePostByUser(false);
             }
 
-            RadioButton radioButton = deactivationOptions.findViewById(deactivationOptions.getCheckedRadioButtonId());
+            RadioButton radioButton = mDeactivationOptions.findViewById(mDeactivationOptions.getCheckedRadioButtonId());
             DeactivationReason deactivationReason = (DeactivationReason) radioButton.getTag();
             if (deactivationReason != null) {
                 deactivateUserRequest.setDeactivationReason(deactivationReason.getDeactivationReasonId());
                 if (deactivationReason.getDeactivationReason().equalsIgnoreCase(getString(R.string.other))) {
 
-                    if (reason.getVisibility() == View.VISIBLE) {
-                        if (reason.getText().length() > 0 && reason.getText().toString().trim().length() > 0) {
-                            deactivateUserRequest.setReasonForDeactivationDetails(reason.getText().toString());
-                            mProfilePresenter.deactivateUser(deactivateUserRequest); //submit
+                    if (mReasonEdit.getVisibility() == View.VISIBLE) {
+                        if (mReasonEdit.getText().length() > 0 && mReasonEdit.getText().toString().trim().length() > 0) {
+                            deactivateUserRequest.setReasonForDeactivationDetails(mReasonEdit.getText().toString());
+                            mProfilePresenter.deactivateUser(deactivateUserRequest); //mSubmit
                             dismiss();
 
-                            onProfileReported(mUserSolrObj); //add profile deactivation analytics
+                            analyticsOnDeactivation(mUserSolrObj); //add profile deactivation analytics
                         } else {
-                            reason.setVisibility(View.VISIBLE);
-                            reason.setError(getResources().getString(R.string.add_reason));
+                            mReasonEdit.setVisibility(View.VISIBLE);
+                            mReasonEdit.setError(getResources().getString(R.string.add_reason));
                         }
                     } else {
-                        reason.setVisibility(View.VISIBLE);
-                        SpamUtil.hideSpamReason(deactivationOptions, deactivationOptions.getCheckedRadioButtonId());
+                        mReasonEdit.setVisibility(View.VISIBLE);
+                        SpamUtil.hideSpamReason(mDeactivationOptions, mDeactivationOptions.getCheckedRadioButtonId());
                         LinearLayout.LayoutParams scrollviewParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, CommonUtil.convertDpToPixel(50, getActivity()));
-                        scrollView.setLayoutParams(scrollviewParams);
+                        mScrollView.setLayoutParams(scrollviewParams);
                     }
                 } else {
                     mProfilePresenter.deactivateUser(deactivateUserRequest);
                     dismiss();
-                    onProfileReported(mUserSolrObj); //add profile deactivation analytics
+                    analyticsOnDeactivation(mUserSolrObj); //add profile deactivation analytics
                 }
             }
         }
@@ -192,7 +195,7 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
     //endregion onclick method
 
     //region override methods
-    private void onProfileReported(UserSolrObj userSolrObj) {
+    private void analyticsOnDeactivation(UserSolrObj userSolrObj) {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
@@ -215,7 +218,12 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
     }
 
     @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
+    public void onUserDeactivation(BaseResponse baseResponse, boolean isUserDeactivated) {
+        if (mContext instanceof IProfileView) {
+            UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+            ((IProfileView) mContext).onUserDeactivation(userSolrObj, isUserDeactivated);
+            mContext = null;
+        }
     }
     //endregion override methods
 }

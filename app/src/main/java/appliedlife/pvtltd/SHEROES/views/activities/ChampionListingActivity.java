@@ -361,7 +361,8 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
     public void onItemClick(UserSolrObj userSolrObj) {
         boolean isChampion = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
         long id = userSolrObj.getIdOfEntityOrParticipant();
-        ProfileActivity.navigateTo(this, id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION,
+                null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 }
 

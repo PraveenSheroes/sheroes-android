@@ -22,12 +22,12 @@
             android:layout_marginTop="@dimen/dp_size_8">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_mentor_full_view_icon"
+                android:id="@+id/iv_profile_full_view_icon"
                 android:layout_width="@dimen/dp_size_65"
                 android:layout_height="@dimen/dp_size_65" />
 
             <ImageView
-                android:id="@+id/iv_mentor_verified"
+                android:id="@+id/iv_champion_verified"
                 android:layout_width="@dimen/dp_size_20"
                 android:layout_height="@dimen/dp_size_20"
                 android:layout_gravity="end|bottom"

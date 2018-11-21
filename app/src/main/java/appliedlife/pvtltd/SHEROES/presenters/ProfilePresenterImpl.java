@@ -226,7 +226,11 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
                     @Override
                     public void onNext(BaseResponse spamPostOrCommentResponse) {
                         getMvpView().stopProgressBar();
-                        getMvpView().onUserDeactivation(spamPostOrCommentResponse);
+                        if(spamPostOrCommentResponse!=null && spamPostOrCommentResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            getMvpView().onUserDeactivation(spamPostOrCommentResponse, true);
+                        } else {
+                            getMvpView().onUserDeactivation(spamPostOrCommentResponse, false);
+                        }
                     }
                 });
     }

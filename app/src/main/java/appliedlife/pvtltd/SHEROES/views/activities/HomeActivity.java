@@ -1129,17 +1129,17 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     // region Protected methods
     @OnClick({R.id.beginner})
     protected void openBeginnerDialog() {
-        openProfileActivity(ProfileStrengthDialog.ProfileLevelType.BEGINNER);
+        openProfileActivity(ProfileStrengthDialog.ProfileStrengthType.BEGINNER);
     }
 
     @OnClick(R.id.intermediate)
     protected void openIntermediateProgressDialog() {
-        openProfileActivity(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE);
+        openProfileActivity(ProfileStrengthDialog.ProfileStrengthType.INTERMEDIATE);
     }
 
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
-        openProfileActivity(ProfileStrengthDialog.ProfileLevelType.ALLSTAR);
+        openProfileActivity(ProfileStrengthDialog.ProfileStrengthType.ALLSTAR);
     }
 
     @Override
@@ -1732,8 +1732,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
     }
 
-    private void openProfileActivity(ProfileStrengthDialog.ProfileLevelType profileLevelType) {
-        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+    private void openProfileActivity(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
+        //TODO - Its was added to show profile strength on Nav menu, required api changes, future task
+        ProfileActivity.navigateTo(this, mUserId, isMentor, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
@@ -1914,7 +1915,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, PROFILE_NOTIFICATION_ID,
+                AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
     }
 
     private void unReadNotificationCount(BaseResponse baseResponse) {

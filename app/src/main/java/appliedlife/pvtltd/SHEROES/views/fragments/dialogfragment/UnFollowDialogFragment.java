@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -30,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
@@ -39,7 +37,6 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
  * @author ravi
  * This class handle the unfollow confirmation dilaog , if user press unfollow button will send api call to unfollow
@@ -47,22 +44,33 @@ import butterknife.OnClick;
  */
 public class UnFollowDialogFragment extends BaseDialogFragment implements HomeView {
 
-    @Bind(R.id.user_img_icon)
-    CircleImageView circleImageView;
-    @Bind(R.id.title)
-    TextView title;
+    //region injected variable
     @Inject
     HomePresenter mHomePresenter;
+    //endregion injected variable
+
+    //region bind variable
+    @Bind(R.id.user_img_icon)
+    CircleImageView mCircleImageView;
+    @Bind(R.id.title)
+    TextView mTitle;
     @BindDimen(R.dimen.dp_size_87)
     int mProfilePicSize;
+    //endregion bind variable
 
+    //region view variable
     private UserSolrObj mUserSolrObj;
     private PublicProfileListRequest mUnFollowRequest;
+    private Activity mContext;
+    //endregion view variable
+
+    //region member variable
     private String mSourceScreenName;
     private boolean mIsChampion;
     private boolean mIsSelfProfile;
-    private Activity mContext;
+    //endregion member variable
 
+    //region override methods
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
@@ -92,15 +100,31 @@ public class UnFollowDialogFragment extends BaseDialogFragment implements HomeVi
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolrObj.getImageUrl())) {
             String imageUrl = CommonUtil.getThumborUri(mUserSolrObj.getImageUrl(), mProfilePicSize, mProfilePicSize);
-            circleImageView.setCircularImage(true);
-            circleImageView.bindImage(imageUrl);
+            mCircleImageView.setCircularImage(true);
+            mCircleImageView.bindImage(imageUrl);
         }
 
-        title.setText(getString(R.string.unfollow_profile, mUserSolrObj.getNameOrTitle()));
+        mTitle.setText(getString(R.string.unfollow_profile, mUserSolrObj.getNameOrTitle()));
 
         return view;
     }
 
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case FOLLOW_UNFOLLOW:
+                if (mContext instanceof IFollowCallback) {
+                    UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                    ((IFollowCallback) mContext).onProfileFollowed(userSolrObj);
+                    mContext = null;
+                }
+                break;
+            default:
+        }
+    }
+    //endregion override methods
+
+    //region onclick methods
     @OnClick(R.id.cancel)
     public void onCancelClick() {
         dismiss();
@@ -122,17 +146,5 @@ public class UnFollowDialogFragment extends BaseDialogFragment implements HomeVi
         mHomePresenter.getUnFollowFromPresenter(mUnFollowRequest, mUserSolrObj);
         dismiss();
     }
-
-    @Override
-    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case FOLLOW_UNFOLLOW:
-                if (mContext!=null && mContext instanceof ProfileActivity) {
-                    UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-                    ((ProfileActivity)mContext).onProfileFollowed(userSolrObj);
-                }
-                break;
-            default:
-        }
-    }
+    //endregion onclick methods
 }

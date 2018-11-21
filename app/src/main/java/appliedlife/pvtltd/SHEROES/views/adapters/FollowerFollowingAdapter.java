@@ -96,7 +96,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     public class FollowedUserListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
-        @Bind(R.id.iv_mentor_full_view_icon)
+        @Bind(R.id.iv_profile_full_view_icon)
         CircleImageView mentorIcon;
 
         @Bind(R.id.user_name)
@@ -105,7 +105,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         @Bind(R.id.expert_at)
         TextView expertAt;
 
-        @Bind(R.id.iv_mentor_verified)
+        @Bind(R.id.iv_champion_verified)
         ImageView verifiedChampionsIcon;
 
         @Bind(R.id.follower)
