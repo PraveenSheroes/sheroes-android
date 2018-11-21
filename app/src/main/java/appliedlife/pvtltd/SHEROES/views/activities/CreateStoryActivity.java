@@ -72,7 +72,6 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagName;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.ArticleSubmissionPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -93,22 +92,21 @@ import butterknife.OnClick;
 
 
 public class CreateStoryActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
+    //region constants
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
-    private static int flagActivity = 0;
-    private Toast myToast;
+    //endregion
 
+    //region inject
     @Inject
     AppUtils mAppUtils;
-
     @Inject
     ArticleSubmissionPresenterImpl mArticleSubmissionPresenter;
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
-
     @Inject
     Preference<LoginResponse> mUserPreference;
+    //endregion
 
     //region view variables
     @Bind(R.id.title_toolbar)
@@ -169,6 +167,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     private Long mIdOfEntityOrParticipantArticle;
     private List<ArticleTagName> mArticleTagNameList = new ArrayList<>();
     private String mSourceScreen, mStoryTagText, mHerStoryBodyMsg, mHerStoryTitle;
+    private Toast myToast;
     //endregion
 
     //region activity methods
@@ -288,7 +287,6 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public boolean shouldTrackScreen() {
         return false;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -589,7 +587,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     }
     //endregion
 
-
+    //region public methods
     public void selectImageFrmCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -603,7 +601,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                 .setAllowRotation(true)
                 .start(this);
     }
+    //endregion
 
+    //region private methods
     private void setupShareToFbListener() {
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -731,18 +731,15 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+    //endregion
 
     //region static methods
     public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
-
         Intent intent = new Intent(fromActivity, CreateStoryActivity.class);
-        CreateStoryActivity.flagActivity = flagActivity;
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-
         if (!CommonUtil.isEmpty(screenProperties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, screenProperties);
         }
-
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
@@ -774,7 +771,6 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         }
     }
 
-
     private void invalidateToolBar() {
         if (!isNextPage) {
             mToolbar.setNavigationIcon(R.drawable.vector_clear);
@@ -782,7 +778,6 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             mToolbar.setNavigationIcon(R.drawable.vector_back_arrow);
         }
     }
-
 
     private void cropingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");

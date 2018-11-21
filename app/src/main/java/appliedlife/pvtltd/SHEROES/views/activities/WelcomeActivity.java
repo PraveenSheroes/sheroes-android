@@ -186,6 +186,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
             mHandler.removeCallbacks(mRunnable);
         }
     }
+
     @Override
     public void onStop() {
         super.onStop();
