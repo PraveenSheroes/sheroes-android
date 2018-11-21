@@ -123,7 +123,7 @@ public class EmailVerificationDialogFragment extends BaseDialogFragment implemen
     }
     // endregion
 
-    // region public methods
+    // region public override methods
     @Override
     public void sendVerificationEmailSuccess(EmailVerificationResponse emailVerificationResponse) {
         if (emailVerificationResponse != null) {

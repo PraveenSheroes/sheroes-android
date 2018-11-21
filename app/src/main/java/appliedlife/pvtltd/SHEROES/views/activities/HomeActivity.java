@@ -186,32 +186,22 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     @Inject
     Preference<AppConfiguration> mConfiguration;
-
     @Inject
     Preference<AppStatus> mInstallUpdatePreference;
-
     @Inject
     Preference<AppInstallation> mAppInstallation;
-
     @Inject
     Preference<LoginResponse> mUserPreference;
-
     @Inject
     HomePresenter mHomePresenter;
-
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-    boolean doubleBackToExitPressedOnce = false;
-
     @Inject
     MainActivityPresenter mActivityDataPresenter;
-
     @Inject
     AppUtils mAppUtils;
-
     @Inject
     LogOutUtils mLogOutUtils;
-
     @Inject
     FeedUtils mFeedUtils;
     //endregion
@@ -329,16 +319,16 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     // region member variables
 
-    private boolean isSheUser = false;
-    private boolean isInviteReferral;
+    private boolean mIsSheUser = false;
+    private boolean mIsInviteReferral;
     public boolean mIsFirstTimeOpen = false;
-    boolean isMentor;
+    boolean mDoubleBackToExitPressedOnce = false;
+    boolean mIsMentor;
     private long mUserId = -1L;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private String mFcmId;
     private String mHelpLineChat;
     private String mUserName;
-    private ShowcaseManager showcaseManager;
     private GenericRecyclerViewAdapter mAdapter;
     private List<ArticleCategory> mArticleCategoryItemList = new ArrayList<>();
     private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
@@ -346,7 +336,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
     private ProgressDialog mProgressDialog;
-    private BellNotificationDialogFragment bellNotificationDialogFragment;
     private FragmentListRefreshData mFragmentListRefreshData;
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
     private SwipPullRefreshList mPullRefreshList;
@@ -361,11 +350,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mActivityDataPresenter.attachView(this);
         mHomePresenter.attachView(this);
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
-            isSheUser = mUserPreference.get().isSheUser();
+            mIsSheUser = mUserPreference.get().isSheUser();
             mUserId = mUserPreference.get().getUserSummary().getUserId();
             mUserName = mUserPreference.get().getUserSummary().getFirstName();
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                isMentor = true;
+                mIsMentor = true;
             }
         }
         renderHomeFragmentView();
@@ -436,7 +425,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 mHelpLineChat = getIntent().getExtras().getString(AppConstants.HELPLINE_CHAT);
             }
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-            if (!isSheUser) {
+            if (!mIsSheUser) {
                 initHomeViewPagerAndTabs();
             }
         }
@@ -446,7 +435,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
+            ShowcaseManager showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
             showcaseManager.showFirstMainActivityShowcase();
             AppStatus appStatus = mInstallUpdatePreference.get();
             appStatus.setAppInstallFirstTime(true);
@@ -745,7 +734,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     @Override
     public void onBackPressed() {
-        if (isSheUser) {
+        if (mIsSheUser) {
             super.onBackPressed();
             getFragmentManager().executePendingTransactions();
             int count = getFragmentManager().getBackStackEntryCount();
@@ -761,12 +750,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     homeOnClick();
                 }
             } else if (fragment != null && fragment instanceof HomeFragment) {
-                if (doubleBackToExitPressedOnce) {
+                if (mDoubleBackToExitPressedOnce) {
                     getSupportFragmentManager().popBackStackImmediate();
                     finish();
                     return;
                 }
-                doubleBackToExitPressedOnce = true;
+                mDoubleBackToExitPressedOnce = true;
                 if (flFeedFullView.getVisibility() == View.VISIBLE) {
                     Snackbar.make(mCLMainLayout, getString(R.string.ID_BACK_PRESS), Snackbar.LENGTH_SHORT).show();
                 } else {
@@ -775,7 +764,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        doubleBackToExitPressedOnce = false;
+                        mDoubleBackToExitPressedOnce = false;
                     }
                 }, 2000);
 
@@ -798,7 +787,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     public void bellNotificationDialog() {
-        bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
+        BellNotificationDialogFragment bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
         if (bellNotificationDialogFragment == null) {
             bellNotificationDialogFragment = new BellNotificationDialogFragment();
             Bundle bundle = new Bundle();
@@ -866,7 +855,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         }
 
         String stringContent = "";
-        if (isSheUser) {
+        if (mIsSheUser) {
             stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_SHE_FILE_NAME); //read from local file
         } else {
             stringContent = AppUtils.getStringContent(AppConstants.NAV_DRAWER_FILE_NAME); //read from local file
@@ -1063,11 +1052,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         if (mValue == REQUEST_CODE_FOR_USER_PROFILE_DETAIL) {
             ArticleSolrObj articleSolrObj = (ArticleSolrObj) baseResponse;
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                isMentor = true;
+                mIsMentor = true;
             }
-            championDetailActivity(articleSolrObj.getCreatedBy(), 1, isMentor, ArticlesFragment.SCREEN_LABEL); //self profile
+            championDetailActivity(articleSolrObj.getCreatedBy(), 1, mIsMentor, ArticlesFragment.SCREEN_LABEL); //self profile
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
-            championDetailActivity(mUserId, 1, isMentor, AppConstants.FEED_SCREEN); //self profile
+            championDetailActivity(mUserId, 1, mIsMentor, AppConstants.FEED_SCREEN); //self profile
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
@@ -1114,11 +1103,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     @Override
     protected void onResume() {
         super.onResume();
-        if (isInviteReferral) {
+        if (mIsInviteReferral) {
             if (!this.isFinishing() && null != mProgressDialog) {
                 mProgressDialog.dismiss();
             }
-            isInviteReferral = false;
+            mIsInviteReferral = false;
         } else {
             setProfileImage();
         }
@@ -1316,7 +1305,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     private void sheUserInit() {
-        if (isSheUser && startedFirstTime()) {
+        if (mIsSheUser && startedFirstTime()) {
             openHelplineFragment();
         }
 
@@ -1730,7 +1719,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     private void openProfileActivity(ProfileProgressDialog.ProfileLevelType profileLevelType) {
-        ProfileActivity.navigateTo(this, mUserId, isMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, mUserId, mIsMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
@@ -1898,7 +1887,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), mIsMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void unReadNotificationCount(BaseResponse baseResponse) {

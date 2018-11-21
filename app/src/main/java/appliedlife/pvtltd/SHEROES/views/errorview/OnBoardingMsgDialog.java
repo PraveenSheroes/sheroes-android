@@ -1,17 +1,13 @@
 package appliedlife.pvtltd.SHEROES.views.errorview;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.TextView;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -20,13 +16,12 @@ import butterknife.OnClick;
  */
 
 public class OnBoardingMsgDialog extends BaseDialogFragment {
-
+    // region public and lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.on_boarding_msg_layout, container, false);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         ButterKnife.bind(this, view);
-       // getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         setCancelable(true);
         return view;
     }
@@ -36,6 +31,5 @@ public class OnBoardingMsgDialog extends BaseDialogFragment {
         dismissAllowingStateLoss();
         dismiss();
     }
-
-
+    //endregion
 }

@@ -75,7 +75,9 @@ public class ResetPasswordSuccessDialogFragment extends BaseDialogFragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
+    //endregion
 
+    // region onClick methods
     @OnClick(R.id.back_login)
     public void onLoginLinkClick() {
         backOnClick();
@@ -86,8 +88,9 @@ public class ResetPasswordSuccessDialogFragment extends BaseDialogFragment {
     public void backOnClick() {
         dismiss();
     }
+    //endregion
 
-
+    // region public override methods
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 

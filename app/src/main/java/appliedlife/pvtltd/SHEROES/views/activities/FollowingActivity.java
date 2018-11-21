@@ -9,19 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.f2prateek.rx.preferences2.Preference;
-
 import java.util.HashMap;
-
-import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
-import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
-import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -42,70 +36,50 @@ public class FollowingActivity extends BaseActivity {
     public static final String MEMBERS_TYPE = "TYPE";
     //endregion
 
-    private long userMentorId;
-    private boolean isSelfProfile;
-    private FollowingEnum mMembersType;
-
+    // region views
     @Bind(R.id.title_toolbar)
-    TextView titleName;
-
+    TextView mTitleName;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    //endregion
 
+    // region member variables
+    private long mUserMentorId;
+    private boolean mIsSelfProfile;
+    private FollowingEnum mMembersType;
+    //endregion
+
+    // region lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_communities_list);
         ButterKnife.bind(this);
-
         if (getIntent().getExtras() != null) {
-            userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
-            isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
+            mUserMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
+            mIsSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
             mMembersType = (FollowingEnum) getIntent().getSerializableExtra(MEMBERS_TYPE);
         }
-
         setupToolbarItemsColor();
-
         if (mMembersType == null) return;
-
         if (mMembersType == FollowingEnum.FOLLOWED_CHAMPIONS) {
-            titleName.setText(R.string.champions_followed);
+            mTitleName.setText(R.string.champions_followed);
         } else if (mMembersType == FollowingEnum.FOLLOWERS) {
-            if (isSelfProfile) {
-                titleName.setText(R.string.follower_toolbar_title);
+            if (mIsSelfProfile) {
+                mTitleName.setText(R.string.follower_toolbar_title);
             } else {
-                titleName.setText(R.string.follower_public_profile_toolbar_title);
+                mTitleName.setText(R.string.follower_public_profile_toolbar_title);
             }
         } else if (mMembersType == FollowingEnum.FOLLOWING) {
-            if (isSelfProfile) {
-                titleName.setText(R.string.following_toolbar_title);
+            if (mIsSelfProfile) {
+                mTitleName.setText(R.string.following_toolbar_title);
             } else {
-                titleName.setText(R.string.following_public_profile_toolbar_title);
+                mTitleName.setText(R.string.following_public_profile_toolbar_title);
             }
         }
-        FollowingFragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, mMembersType.name());
-        addNewFragment(followingFragment, R.id.container, FollowingFragment.class.getName(), null,false);
-    }
-
-    private void setupToolbarItemsColor() {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        titleName.setText(R.string.ID_EDIT_PROFILE);
-    }
-
-    @Override
-    public void onBackPressed() {
-        setResult();
-        super.onBackPressed();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
+        FollowingFragment followingFragment = FollowingFragment.createInstance(mUserMentorId, mIsSelfProfile, mMembersType.name());
+        addNewFragment(followingFragment, R.id.container, FollowingFragment.class.getName(), null, false);
     }
 
     @Override
@@ -117,17 +91,9 @@ public class FollowingActivity extends BaseActivity {
         }
         return true;
     }
+    //endregion
 
-    private void setResult() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-    }
-
-    @Override
-    protected boolean trackScreenTime() {
-        return true;
-    }
-
+    // region public methods
     @Override
     public String getScreenName() {
         String screenLabel = "";
@@ -143,6 +109,13 @@ public class FollowingActivity extends BaseActivity {
         return screenLabel;
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult();
+        super.onBackPressed();
+    }
+    //endregion
+
     //region static methods
     public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, FollowingEnum followingEnum, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, FollowingActivity.class);
@@ -156,5 +129,35 @@ public class FollowingActivity extends BaseActivity {
         intent.putExtra(MEMBERS_TYPE, followingEnum);
         ActivityCompat.startActivityForResult(fromActivity, intent, 1, null);
     }
+    //endregion
+
+    // region protected methods
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+    //endregion
+
+    // region private methods
+    private void setResult() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("");
+        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mTitleName.setText(R.string.ID_EDIT_PROFILE);
+    }
+    //endregion
+
 
 }

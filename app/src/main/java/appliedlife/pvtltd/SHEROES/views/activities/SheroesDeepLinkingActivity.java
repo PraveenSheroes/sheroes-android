@@ -35,35 +35,39 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INV
  */
 
 public class SheroesDeepLinkingActivity extends BaseActivity {
+    // region constants
     private static final String SCREEN_LABEL = "DeepLink Screen";
     public static final String OPEN_FRAGMENT = "Open Fragment";
     public static final int COMMUNITY_DEEP_LINK_URL_BACK_SLASH = 4;
+    // endregion
+
+    // region Inject
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    // endregion
+
+    // region member variables
     private Uri mData;
     private int mIndexOfBackSlaceInPostDeeplink;
     private int mFromNotification;
     private String mSource;
     private Intent mIntent;
-    @Inject
-    Preference<LoginResponse> mUserPreference;
+    // endregion
 
+    // region public and lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
     }
 
-    private void logout() {
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-        startActivity(intent);
-        finish();
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         try {
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -77,10 +81,24 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
 
     }
+    // endregion
 
+    // region protected methods
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
+    }
+    // endregion
+
+    // region private methods
+    private void logout() {
+        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtras(bundle);
+        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
     }
 
     private void callDeepLinkingData() throws URISyntaxException {
@@ -622,9 +640,5 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         startActivity(into);
         finish();
     }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
+    // endregion
 }

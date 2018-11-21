@@ -66,7 +66,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  * @author Praveen Singh
  * @version 5.0
  * @since 04/01/2017.
- * Title: A login screen that offers login via email/password.
+ * Title: A login screen that offers login via mEmail/mPassword.
  */
 public class LoginActivity extends BaseActivity implements LoginView {
     // region Constants
@@ -78,8 +78,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
     // region Inject
     @Inject
     Preference<LoginResponse> mUserPreference;
-    @Inject
-    ErrorUtil errorUtil;
     @Inject
     Preference<AppInstallation> mAppInstallation;
     @Inject
@@ -98,19 +96,19 @@ public class LoginActivity extends BaseActivity implements LoginView {
     @Bind(R.id.email_sign_in_button)
     Button mEmailSign;
     @Bind(R.id.tv_email_description)
-    TextView tvEmailDescription;
+    TextView mTvEmailDescription;
     //endregion
 
     // region member variables
-    private boolean isBranchFirstSession = false;
-    private String deepLinkUrl = null;
-    private String defaultTab = null;
+    private boolean mIsBranchFirstSession = false;
+    private String mDeepLinkUrl = null;
+    private String mDefaultTab = null;
     private ProgressDialog mProgressDialog;
     private String mFcmId;
-    private String email;
-    private String password;
-    private boolean isEye;
-    private long currentTime;
+    private String mEmail;
+    private String mPassword;
+    private boolean mIsPasswordVisible;
+    private long mCurrentTime;
     private ResetPasswordDialogFragment mResetPasswordDialogFragment;
     //endregion
 
@@ -192,8 +190,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(this);
 
-                        AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
-                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
+                        AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, mCurrentTime < createdDate);
+                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         onLoginAuthToken();
                         break;
@@ -215,8 +213,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     AnalyticsManager.initializeMixpanel(this);
-                    AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
-                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
+                    AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, mCurrentTime < createdDate);
+                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     if (!this.isFinishing()) {
                         onLoginAuthToken();
@@ -305,12 +303,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @OnClick(R.id.iv_password_eye)
     public void passwordEyeOnClick() {
-        if (isEye) {
-            isEye = false;
+        if (mIsPasswordVisible) {
+            mIsPasswordVisible = false;
             mPasswordView.setTransformationMethod(new PasswordTransformationMethod());
             mPasswordView.setSelection(mPasswordView.length());
         } else {
-            isEye = true;
+            mIsPasswordVisible = true;
             mPasswordView.setTransformationMethod(null);
             mPasswordView.setSelection(mPasswordView.length());
         }
@@ -365,7 +363,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
             errorMessage = getString(R.string.ID_GENERIC_ERROR);
         }
         if (StringUtil.isNotNullOrEmptyString(isDeactivated) && isDeactivated.equalsIgnoreCase("true")) {
-            errorUtil.showErrorDialogOnUserAction(this, true, false, errorMessage, "true");
+            mErrorUtil.showErrorDialogOnUserAction(this, true, false, errorMessage, "true");
         } else {
             showNetworkTimeoutDialog(true, false, errorMessage);
         }
@@ -375,18 +373,18 @@ public class LoginActivity extends BaseActivity implements LoginView {
         if (mUserPreference.get().isSheUser() && mUserPreference.get().getNextScreen() != null && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
             showEmailVerificationFragment();
         } else {
-            if (isBranchFirstSession && StringUtil.isNotNullOrEmptyString(deepLinkUrl)) { //ads for community
+            if (mIsBranchFirstSession && StringUtil.isNotNullOrEmptyString(mDeepLinkUrl)) { //ads for community
                 //Event for on-boarding skipping for new user came through branch link
-                final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(deepLinkUrl).build();
+                final HashMap<String, Object> properties = new EventProperty.Builder().branchLink(mDeepLinkUrl).build();
                 AnalyticsManager.trackEvent(Event.ONBOARDING_SKIPPED, getScreenName(), properties);
 
-                Uri url = Uri.parse(deepLinkUrl);
+                Uri url = Uri.parse(mDeepLinkUrl);
                 Intent intent = new Intent(LoginActivity.this, SheroesDeepLinkingActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, 1);
-                bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, isBranchFirstSession);
-                if (StringUtil.isNotNullOrEmptyString(defaultTab)) {
-                    bundle.putString(CommunityDetailActivity.TAB_KEY, defaultTab);
+                bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, mIsBranchFirstSession);
+                if (StringUtil.isNotNullOrEmptyString(mDefaultTab)) {
+                    bundle.putString(CommunityDetailActivity.TAB_KEY, mDefaultTab);
                 }
                 intent.putExtras(bundle);
                 intent.setData(url);
@@ -412,16 +410,16 @@ public class LoginActivity extends BaseActivity implements LoginView {
         mLoginPresenter.getMasterDataToPresenter();
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            isBranchFirstSession = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
-            deepLinkUrl = bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
-            defaultTab = bundle.getString(CommunityDetailActivity.TAB_KEY);
+            mIsBranchFirstSession = bundle.getBoolean(AppConstants.IS_FROM_ADVERTISEMENT);
+            mDeepLinkUrl = bundle.getString(AppConstants.ADS_DEEP_LINK_URL);
+            mDefaultTab = bundle.getString(CommunityDetailActivity.TAB_KEY);
         }
         String description = getString(R.string.ID_LOGIN_MSG);
         if (StringUtil.isNotNullOrEmptyString(description)) {
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
-                tvEmailDescription.setText(Html.fromHtml(description, 0)); // for 24 api and more
+                mTvEmailDescription.setText(Html.fromHtml(description, 0)); // for 24 api and more
             } else {
-                tvEmailDescription.setText(Html.fromHtml(description));// or for older api
+                mTvEmailDescription.setText(Html.fromHtml(description));// or for older api
             }
         }
     }
@@ -443,8 +441,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }
                     LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                    loginRequest.setUsername(email);
-                    loginRequest.setPassword(password);
+                    loginRequest.setUsername(mEmail);
+                    loginRequest.setPassword(mPassword);
                     loginRequest.setFcmorapnsid(mFcmId);
                     mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
                 } else {
@@ -488,7 +486,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid mEmail, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private void sheroesLogIn() {
@@ -497,25 +495,25 @@ public class LoginActivity extends BaseActivity implements LoginView {
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        email = mEmailView.getText().toString();
-        password = mPasswordView.getText().toString();
+        mEmail = mEmailView.getText().toString();
+        mPassword = mPasswordView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
-        // Check for a valid password, if the user entered one.
-        if (!StringUtil.isNotNullOrEmptyString(password)) {
+        // Check for a valid mPassword, if the user entered one.
+        if (!StringUtil.isNotNullOrEmptyString(mPassword)) {
             mPasswordView.setError(getString(R.string.ID_ERROR_INVALID_PASSWORD));
             focusView = mPasswordView;
             cancel = true;
         }
-        // Check for a valid email address.
-        if (!StringUtil.isNotNullOrEmptyString(email)) {
+        // Check for a valid mEmail address.
+        if (!StringUtil.isNotNullOrEmptyString(mEmail)) {
             mEmailView.setError(getString(R.string.ID_ERROR_EMAIL));
             focusView = mEmailView;
             cancel = true;
             return;
         }
-        if (!mAppUtils.checkEmail(email)) {
+        if (!mAppUtils.checkEmail(mEmail)) {
             mEmailView.setError(getString(R.string.ID_ERROR_INVALID_EMAIL));
             focusView = mEmailView;
             cancel = true;
@@ -530,10 +528,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
             showProgressDialog(LOGGING_IN_DIALOG);
             if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                 LoginRequest loginRequest = AppUtils.loginRequestBuilder();
-                loginRequest.setUsername(email);
-                loginRequest.setPassword(password);
+                loginRequest.setUsername(mEmail);
+                loginRequest.setPassword(mPassword);
                 loginRequest.setFcmorapnsid(mFcmId);
-                currentTime = System.currentTimeMillis();
+                mCurrentTime = System.currentTimeMillis();
                 mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, false);
             } else {
                 if (!NetworkUtil.isConnected(this)) {
