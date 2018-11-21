@@ -371,7 +371,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
         }
     }
 
-
     public void onLoginAuthToken() {
         if (mUserPreference.get().isSheUser() && mUserPreference.get().getNextScreen() != null && mUserPreference.get().getNextScreen().equalsIgnoreCase(AppConstants.EMAIL_VERIFICATION)) {
             showEmailVerificationFragment();
