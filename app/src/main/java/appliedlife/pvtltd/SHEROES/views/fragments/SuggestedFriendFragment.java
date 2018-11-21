@@ -245,7 +245,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
 
     private void openMentorProfileDetail(UserSolrObj userSolrObj) {
-        ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), 0, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), userSolrObj.isAuthorMentor(), SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
     }
 
     public void followUnFollowRequest(UserSolrObj userSolrObj) {

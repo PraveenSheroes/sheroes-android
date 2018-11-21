@@ -78,8 +78,6 @@ public class AppConstants {
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
     public static final String USER = "USER";
-    public static final String ASKING_QUESTION = "asking_question";
-    public static final int ASKING_QUESTION_CALL = 101;
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_ARTICLE = "A";
     public static final String FEED_EVENT = "E";

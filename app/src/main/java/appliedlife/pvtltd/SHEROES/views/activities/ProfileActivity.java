@@ -152,6 +152,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileS
 public class ProfileActivity extends BaseActivity implements BaseHolderInterface, HomeView, IProfileView,
         ViewPager.OnPageChangeListener, ProgressbarView, ExpandableTextCallback, IFollowCallback {
 
+    //region constants
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
 
@@ -163,35 +164,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private static final int COMMUNITY_MODERATOR_TYPE_ID = 13;
     private static final int MAX_BADGE_COUNT = 4;
     private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
+    //endregion constants
 
-    private Long mChampionId;
-    private boolean isChampion;
-    private boolean isWriteAStory;
-    private int mFromNotification;
-    private FeedDetail mFeedDetail;
-    private int askingQuestionCode;
-    boolean isOwnProfile = false;
-    ViewPagerAdapter mViewPagerAdapter;
-    private String mEncodeImageUrl;
-    private Uri mImageCaptureUri;
-
-    //private Dialog dialog = null;
-    private ProfileStrengthDialog mProfileStrengthDialog = null;
-    private UnFollowDialogFragment unFollowDialogFragment;
-    private DeactivateProfileDialogFragment mDeactivateProfileDialogFragment;
-    private ReportUserProfileDialogFragment mReportUserProfileDialogFragment;
-    private long mLoggedInUserId = -1;
-    private long mLoggedInUserIdTypeId = -1;
-    private FragmentOpen mFragmentOpen;
-    private UserSolrObj mUserSolarObject;
-    private int itemPosition;
-    private String mSourceName;
-    private String userNameTitle;
-    private boolean isProfileClicked = false;
-    private File localImageSaveForChallenge;
-    private PopupWindow popupWindowFollowTooTip;
-    private ProfileStrengthDialog.ProfileLevelType profileLevelType;
-
+    //region injected variable
     @Inject
     Preference<LoginResponse> mUserPreference;
 
@@ -215,13 +190,13 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Inject
     ErrorUtil errorUtil;
+    //endregion injected variable
 
+    //region bind variables
     @Bind(R.id.root_layout)
     CoordinatorLayout rootLayout;
-
     @Bind(R.id.iv_mentor_full_view_icon)
     CircleImageView mProfileIcon;
-
     @Bind(R.id.app_bar_layout)
     AppBarLayout mAppBarLayout;
 
@@ -238,7 +213,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     @Bind(R.id.tab_mentor)
-    public TabLayout mTabLayout;
+    TabLayout mTabLayout;
 
     @Bind(R.id.tv_mentor_name)
     TextView userName;
@@ -266,6 +241,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Bind(R.id.ll_profile)
     LinearLayout llProfile;
+
     @Bind(R.id.li_post)
     LinearLayout liPost;
 
@@ -348,7 +324,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     int badgeIconSize;
 
     @BindDimen(R.dimen.profile_badge_margin_right)
-    int bageIconMargin;
+    int badgeIconMargin;
 
     @BindDimen(R.dimen.profile_badge_counter_text)
     int badgeCounterTextSize;
@@ -367,11 +343,44 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Bind(R.id.dashed_progressbar)
     DashProgressBar dashProgressBar;
+    //endregion bind variables
+
+    //region member variable
+    private String mSourceName;
+    private String userNameTitle;
+    private String viewLessText, viewMoreText;
+
     private boolean isUserDeactivated;
+    private boolean isProfileClicked = false;
+    private boolean isOwnProfile = false;
+    private boolean isChampion;
+    private boolean isWriteAStory;
 
+    private Long mChampionId;
+    private long mLoggedInUserIdTypeId = -1;
+    private int mFromNotification;
+    private int itemPosition;
+    private long mLoggedInUserId = -1;
+    //endregion member variable
+
+    //region view variable
+    private FeedDetail mFeedDetail;
+    private ViewPagerAdapter mViewPagerAdapter;
+    private String mEncodeImageUrl;
+    private Uri mImageCaptureUri;
+    private ProfileStrengthDialog mProfileStrengthDialog = null;
+    private UnFollowDialogFragment unFollowDialogFragment;
+    private DeactivateProfileDialogFragment mDeactivateProfileDialogFragment;
+    private ReportUserProfileDialogFragment mReportUserProfileDialogFragment;
+    private FragmentOpen mFragmentOpen;
+    private UserSolrObj mUserSolarObject;
+    private File localImageSaveForChallenge;
+    private PopupWindow popupWindowFollowTooTip;
     private UserSolrObj followedUserSolrObj;
-    String viewLessText, viewMoreText;
+    private ProfileStrengthDialog.ProfileLevelType profileLevelType;
+    //endregion view variable
 
+    //region activity lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -393,12 +402,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mUserSolarObject = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.GROWTH_PUBLIC_PROFILE));
             mFeedDetail = Parcels.unwrap(getIntent().getParcelableExtra(AppConstants.MENTOR_DETAIL));
             mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
-            askingQuestionCode = getIntent().getExtras().getInt(AppConstants.ASKING_QUESTION);
             mChampionId = getIntent().getExtras().getLong(AppConstants.CHAMPION_ID);
             isChampion = getIntent().getExtras().getBoolean(AppConstants.IS_CHAMPION_ID);
             isWriteAStory = getIntent().getExtras().getBoolean(STORIES_TAB);
             mSourceName = getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
-            profileLevelType = (ProfileStrengthDialog.ProfileLevelType) getIntent().getSerializableExtra("PROFILE_LEVEL");
+            profileLevelType = (ProfileStrengthDialog.ProfileLevelType) getIntent().getSerializableExtra(ProfileStrengthDialog.PROFILE_LEVEL);
         }
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
@@ -422,34 +430,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
         feedUtils.setConfigurableShareOption(isWhatsAppShare());
         ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
-    }
-
-    public void onResume() {
-        super.onResume();
-    }
-
-    private boolean isWhatsAppShare() {
-        boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
-            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareText)) {
-                if (shareText.equalsIgnoreCase("true")) {
-                    isWhatsappShare = true;
-                }
-            }
-        }
-        return isWhatsappShare;
-    }
-
-    private void setupToolbarItemsColor() {
-        setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("");
-            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }
     }
 
     @Override
@@ -478,84 +458,466 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     @Override
+    public void onDestroy() {
+        profilePresenter.detachView();
+        mHomePresenter.detachView();
+        super.onDestroy();
+    }
+    //endregion activity lifecycle methods
+
+    //region override methods
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
     }
 
-    public void setProfileDetails(UserSolrObj userSolrObj) {
-        rlMentorFullViewHeader.setVisibility(View.VISIBLE);
-        mFeedDetail = userSolrObj;
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
 
-        mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);
+    @Override
+    public boolean shouldTrackScreen() {
+        return true;
+    }
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-            if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
-                isOwnProfile = true;
-                tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
-                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
 
-                progressbarContainer.setVisibility(View.VISIBLE);
-                setProfileStrength();
-                profileLevel.setVisibility(View.VISIBLE);
-                newFeature.setVisibility(View.VISIBLE);
-
-                dashProgressBar.setListener(this);
-                if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-                    dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
-                } else {
-                    dashProgressBar.setTotalDash(new ConfigData().maxDash);
-                }
-
-                dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
-                //hide menu dots
-                profileToolbarMenu.setVisibility(View.GONE);
-
-                //Hide the offer icon
-                if (!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
-                    newFeature.setVisibility(View.VISIBLE);
-                } else {
-                    newFeature.setVisibility(View.GONE);
-                }
+    @Override
+    public void onPageSelected(int position) {
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
+        if (fragment instanceof FeedFragment) {
+            if (isOwnProfile) {
+                clStoryFooter.setVisibility(View.VISIBLE);
             } else {
-                newFeature.setVisibility(View.GONE);
-                progressbarContainer.setVisibility(View.GONE);
-                profileLevel.setVisibility(View.GONE);
-                profileToolbarMenu.setVisibility(View.VISIBLE);
-
-                onFollowedClick();
+                clStoryFooter.setVisibility(View.GONE);
             }
+            createPost.setVisibility(View.GONE);
         } else {
-            onFollowedClick();
+            clStoryFooter.setVisibility(View.GONE);
+            createPost.setVisibility(View.GONE);
         }
+    }
 
-        if ((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor()) {
-            isChampion = true;
+    @Override
+    public void onPageScrollStateChanged(int state) {
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackClick();
+    }
+
+    @Override
+    public void startProgressBar() {
+    }
+
+    @Override
+    public void stopProgressBar() {
+    }
+
+    @Override
+    public void startNextScreen() {
+    }
+
+    @Override
+    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        errorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
+        loaderGif.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+    }
+
+    @Override
+    public void getFollowedMentors(FollowedUsersResponse profileFeedResponse) {
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
+        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
+            mUserSolarObject = (UserSolrObj) feedDetailList.get(0);
+            String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
+            mUserSolarObject.setCallFromName(screenName);
+
+            setProfileDetails(mUserSolarObject);
+            loaderGif.setVisibility(View.GONE);
+
+            if (profileLevelType != null)
+                profileStrengthDialog(profileLevelType);
         }
+    }
 
+    @Override
+    public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
+    }
+
+    @Override
+    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
+        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+
+            if (ProfileActivity.this.isFinishing()) return;
+
+            if (spamResponse.isSpammed()) {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
+            } else if (!spamResponse.isSpamAlreadyReported()) {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
+            } else {
+                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
+            }
+        }
+    }
+
+    @Override
+    public void onUserDeactivation(BaseResponse baseResponse) {
+        isUserDeactivated = true;
+        onBackClick();
+    }
+
+    @Override
+    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+        switch (feedParticipationEnum) {
+            case FOLLOW_UNFOLLOW:
+                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                onProfileFollowed(userSolrObj);
+                break;
+            default:
+        }
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+    }
+
+    @Override
+    public void onConfigFetched() {
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUserId != -1) {
+            championDetailActivity(mLoggedInUserId, 1, isChampion, AppConstants.FEED_SCREEN); //self profile
+        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
+            UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
+            ProfileActivity.navigateTo(this, feedDetail.getAuthorParticipantId(), isChampion, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+        if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
+            LoginResponse userDetailsResponse = null;
+            if (mUserPreference != null && mUserPreference.isSet()) {
+                userDetailsResponse = mUserPreference.get();
+            }
+            if (userDetailsResponse != null) {
+                try {
+                    if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
+                        setProfileNameData(boardingDataResponse.getResponse());
+
+                        //update progress bar
+                        if (mUserSolarObject != null) {
+                            mUserSolarObject.setFilledProfileFields(boardingDataResponse.getUserSolrObj().getFilledProfileFields());
+                            mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getUserSolrObj().getUnfilledProfileFields());
+                            mUserSolarObject.setProfileCompletionWeight(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight());
+                            dashProgressBar.setProgress(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight(), false);
+                            setProfileStrength();
+                        }
+
+                        //Save image
+                        userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
+                        mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
+                        mUserPreference.set(userDetailsResponse);
+                        refreshImageView(boardingDataResponse.getResponse());
+                    }
+                } catch (Exception e) {
+                    LogUtils.info(TAG, e.getMessage());
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onViewRendered(float dashWidth) {
+
+        ConfigData configData = new ConfigData();
+        int beginnerTickIndex = configData.beginnerStartIndex;
+        int intermediateTickIndex = configData.intermediateStartIndex;
+
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
+            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
+        }
+        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
+        beginnerTick.setLayoutParams(buttonLayoutParams);
+
+        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
+        intermediateTick.setLayoutParams(intermediateLayoutParams);
+
+        animationOnProgressBar();
+    }
+
+    @Override
+    public void onTextResize(boolean isCollapsed) {
+        if (!isCollapsed) {
+            progressbarContainer.setVisibility(View.VISIBLE);
+            profileStrengthViewContainer.setVisibility(View.VISIBLE);
+        } else {
+            progressbarContainer.setVisibility(View.GONE);
+            profileStrengthViewContainer.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onProfileFollowed(UserSolrObj userSolrObj) {
+        followedUserSolrObj = userSolrObj;
+        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount())));
+        updateFollowedButton();
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mHomePresenter;
+    }
+
+    @Override
+    protected Map<String, Object> getExtraPropertiesToTrack() {
+        return new EventProperty.Builder()
+                .id(String.valueOf(mChampionId))
+                .isMentor(isChampion)
+                .isOwnProfile(isOwnProfile)
+                .build();
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
+        if (null != intent) {
+
+            if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
+                Bundle bundle = intent.getExtras();
+                if (bundle != null) {
+                    invalidateUserInformation(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
+                            bundle.getString(EditUserProfileActivity.FILLED_FIELDS), bundle.getString(EditUserProfileActivity.UNFILLED_FIELDS), bundle.getFloat(EditUserProfileActivity.PROFILE_COMPLETION_WEIGHT));
+                }
+            }
+
+            switch (requestCode) {
+                case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                case AppConstants.REQUEST_CODE_FOR_GALLERY:
+                    mImageCaptureUri = intent.getData();
+                    if (resultCode == Activity.RESULT_OK) {
+                        croppingIMG();
+                    }
+                    break;
+                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
+                    imageCropping(intent);
+                    break;
+
+                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                    if (resultCode == RESULT_OK) {
+                        try {
+                            File file = new File(result.getUri().getPath());
+                            Bitmap photo = CompressImageUtil.decodeFile(file);
+                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
+                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                    }
+
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+            }
+        }
+    }
+    //endregion override methods
+
+    //region onclick methods
+    @OnClick({R.id.beginner})
+    protected void openBeginnerDialog() {
+        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.BEGINNER);
+    }
+
+    @OnClick(R.id.intermediate)
+    protected void openIntermediateProgressDialog() {
+        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE);
+    }
+
+    @OnClick(R.id.all_star)
+    protected void openAllStarProgressDialog() {
+        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.ALLSTAR);
+    }
+
+    @OnClick(R.id.new_feature)
+    protected void openUserProfileLevelDialog() {
+        if (mUserSolarObject != null) {
+            CommonUtil.setPrefValue(AppConstants.PROFILE_OFFER_PREF);
+            ProfileStrengthDialog.ProfileLevelType profileLevelType = userLevel(mUserSolarObject);
+            profileStrengthDialog(profileLevelType);
+            newFeature.setVisibility(View.GONE);
+        }
+    }
+
+    @OnClick(R.id.tv_profile_menu)
+    public void onMenuClick() {
+        onProfileMenuClick(mUserSolarObject, profileToolbarMenu);
+    }
+
+    @OnClick(R.id.fab_post)
+    public void createNewPost() {
+        CommunityPost communityPost = new CommunityPost();
+        communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
+        communityPost.isEdit = false;
+        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
+    }
+
+    @OnClick(R.id.cl_story_footer)
+    public void writeAStory() {
+        CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
+    }
+
+    @OnClick(R.id.li_follower)
+    public void followerClick() {
+        if (StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
+            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWERS, null);
+        }
+    }
+
+    @OnClick(R.id.li_following)
+    public void followingClick() {
+        if (StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
+            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING, null);
+        }
+    }
+
+    @OnClick(R.id.li_post)
+    public void selectScrollPstTab() {
         if (isChampion) {
-            verifiedIcon.setVisibility(View.VISIBLE);
+            mViewPager.setCurrentItem(0);
         } else {
-            verifiedIcon.setVisibility(View.INVISIBLE);
+            mViewPager.setCurrentItem(1);
         }
+        mAppBarLayout.setExpanded(false);
+    }
 
+    @OnClick(R.id.share_profile)
+    public void shareProfile() {
+        shareCardViaSocial();
+    }
+
+    @OnClick({R.id.tv_mentor_name, R.id.tv_loc})
+    public void navigateToProfileEditing() {
         if (isOwnProfile) {
-            verifiedIcon.setVisibility(View.GONE);
-            editIcon.setVisibility(View.VISIBLE);
-        } else {
-            editIcon.setVisibility(View.GONE);
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+                EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
+            }
         }
+    }
 
-        invalidateProfileButton();
+    @OnClick(R.id.iv_mentor_full_view_icon)
+    public void onImageEditClicked() {
+        if (isOwnProfile) {
+            addAnalyticsEvents(Event.PROFILE_PIC_EDIT_CLICKED);
+            CameraBottomSheetFragment.showDialog(this, SCREEN_LABEL);
+        }
+    }
 
-        updateProfileInfo();
+    @OnClick(R.id.tv_mentor_dashboard_follow)
+    public void mentorFollowClick() {
+        if (isOwnProfile) {
+            navigateToProfileEditing();
+        } else {
+            PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+            publicProfileListRequest.setIdOfEntityParticipant(mUserSolarObject.getIdOfEntityOrParticipant());
 
-        setupSheBadge(userSolrObj); //setup She badge
-        setupProfileBadges(userSolrObj); //horizontal badge list on profile
+            if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
+                unFollowDialog(publicProfileListRequest);
+            } else {
+                mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
+                addAnalyticsEvents(Event.PROFILE_FOLLOWED);
+            }
+        }
+    }
+    //endregion onclick methods
 
-        setPagerAndLayouts();
+    //region private methods
+    private boolean isWhatsAppShare() {
+        boolean isWhatsAppShare = false;
+        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
+            String shareText = "";
+            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
+            if (CommonUtil.isNotEmpty(shareText)) {
+                if (shareText.equalsIgnoreCase("true")) {
+                    isWhatsAppShare = true;
+                }
+            }
+        }
+        return isWhatsAppShare;
+    }
 
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("");
+            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
     }
 
     private void updateProfileInfo() {
@@ -665,21 +1027,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    public void selectImageFrmCamera() {
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        selectImageFrmGallery();
-    }
-
-    public void selectImageFrmGallery() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
-                .setAspectRatio(1, 1)
-                .setAllowRotation(true)
-                .start(this);
-    }
-
-
     private void setProfileStrength() {
         if (mUserSolarObject.getProfileCompletionWeight() > BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() < INTERMEDIATE_END_LIMIT) {
             profileLevel.setText(R.string.progress_status_beginner);
@@ -717,32 +1064,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    @OnClick({R.id.beginner})
-    protected void openBeginnerDialog() {
-        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.BEGINNER);
-    }
-
-    @OnClick(R.id.intermediate)
-    protected void openIntermediateProgressDialog() {
-        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.INTERMEDIATE);
-    }
-
-    @OnClick(R.id.all_star)
-    protected void openAllStarProgressDialog() {
-        profileStrengthDialog(ProfileStrengthDialog.ProfileLevelType.ALLSTAR);
-    }
-
-    @OnClick(R.id.new_feature)
-    protected void openUserProfileLevelDialog() {
-        if (mUserSolarObject != null) {
-            CommonUtil.setPrefValue(AppConstants.PROFILE_OFFER_PREF);
-            ProfileStrengthDialog.ProfileLevelType profileLevelType = userLevel(mUserSolarObject);
-            profileStrengthDialog(profileLevelType);
-            newFeature.setVisibility(View.GONE);
-        }
-    }
-
-    private void onFollowedClick() {
+    private void updateFollowedButton() {
         if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
             tvMentorDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
             tvMentorDashBoardFollow.setText(this.getString(R.string.following_user));
@@ -800,15 +1122,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         mTabLayout.setupWithViewPager(mViewPager);
         mViewPager.setOffscreenPageLimit(1);
         mViewPager.addOnPageChangeListener(this);
-        if (askingQuestionCode == AppConstants.ASKING_QUESTION_CALL) {
-            mViewPager.setCurrentItem(AppConstants.ONE_CONSTANT);
-            mAppBarLayout.setExpanded(false);
-        }
-    }
-
-    @OnClick(R.id.tv_profile_menu)
-    public void onMenuClick() {
-        onProfileMenuClick(mUserSolarObject, profileToolbarMenu);
     }
 
     private CharSequence menuIconWithText(Drawable r, String title) {
@@ -817,175 +1130,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         ImageSpan imageSpan = new ImageSpan(r, ImageSpan.ALIGN_BOTTOM);
         sb.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return sb;
-    }
-
-    public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
-        PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
-
-        //admin and community moderator have feature to share profile and deactivate user
-        if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (mLoggedInUserIdTypeId == ADMIN_TYPE_ID || mLoggedInUserIdTypeId == COMMUNITY_MODERATOR_TYPE_ID)) {
-            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.SHARE_PROFILE)));
-            popup.getMenu().add(0, R.id.deactivate_user, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_deactivate_user), getResources().getString(R.string.deactivate_user)));
-        } else if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
-            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
-        }
-
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.deactivate_user:
-                        deactivateUserDialog(userPostObj);
-                        return true;
-                    case R.id.share:
-                        shareProfile();
-                        return true;
-                    case R.id.report_spam:
-                        reportSpamDialog(userPostObj);
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-        });
-        popup.show();
-    }
-
-    @OnClick(R.id.fab_post)
-    public void createNewPost() {
-        CommunityPost communityPost = new CommunityPost();
-        communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
-        communityPost.isEdit = false;
-        CommunityPostActivity.navigateTo(this, communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
-    }
-
-    @OnClick(R.id.cl_story_footer)
-    public void writeAStory() {
-        CreateStoryActivity.navigateTo(this, 1, getScreenName(), null);
-    }
-
-    @OnClick(R.id.li_follower)
-    public void followerClick() {
-        if (StringUtil.isNotNullOrEmptyString(userFollowerCount.getText().toString()) && !userFollowerCount.getText().toString().equalsIgnoreCase("0")) {
-            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWERS, null);
-        }
-    }
-
-    @OnClick(R.id.li_following)
-    public void followingClick() {
-        if (StringUtil.isNotNullOrEmptyString(followingCount.getText().toString()) && !followingCount.getText().toString().equalsIgnoreCase("0")) {
-            FollowingActivity.navigateTo(this, mChampionId, isOwnProfile, getScreenName(), FollowingEnum.FOLLOWING, null);
-        }
-    }
-
-    public void addAnalyticsEvents(Event event) {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
-                        .name(mUserSolarObject.getNameOrTitle())
-                        .isMentor(isChampion)
-                        .isOwnProfile(isOwnProfile)
-                        .build();
-        AnalyticsManager.trackEvent(event, getScreenName(), properties);
-    }
-
-    @OnClick(R.id.li_post)
-    public void selectScrollPstTab() {
-        if (isChampion) {
-            mViewPager.setCurrentItem(0);
-        } else {
-            mViewPager.setCurrentItem(1);
-        }
-        mAppBarLayout.setExpanded(false);
-    }
-
-    @OnClick(R.id.share_profile)
-    public void shareProfile() {
-        shareCardViaSocial();
-    }
-
-    @OnClick({R.id.tv_mentor_name, R.id.tv_loc})
-    public void navigateToProfileEditing() {
-        if (isOwnProfile) {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
-            }
-        }
-    }
-
-    @OnClick(R.id.iv_mentor_full_view_icon)
-    public void onImageEditClicked() {
-        if (isOwnProfile) {
-            addAnalyticsEvents(Event.PROFILE_PIC_EDIT_CLICKED);
-            CameraBottomSheetFragment.showDialog(this, SCREEN_LABEL);
-        }
-    }
-
-    @OnClick(R.id.tv_mentor_dashboard_follow)
-    public void mentorFollowClick() {
-        if (isOwnProfile) {
-            navigateToProfileEditing();
-        } else {
-            PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
-            publicProfileListRequest.setIdOfEntityParticipant(mUserSolarObject.getIdOfEntityOrParticipant());
-
-            if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
-                unFollowDialog(publicProfileListRequest);
-            } else {
-                mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
-                addAnalyticsEvents(Event.PROFILE_FOLLOWED);
-            }
-        }
-    }
-
-    @Override
-    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-    }
-
-
-    @Override
-    public void onPageSelected(int position) {
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
-        if (fragment instanceof FeedFragment) {
-            if (isOwnProfile) {
-                clStoryFooter.setVisibility(View.VISIBLE);
-            } else {
-                clStoryFooter.setVisibility(View.GONE);
-            }
-            createPost.setVisibility(View.GONE);
-        } else {
-            clStoryFooter.setVisibility(View.GONE);
-            createPost.setVisibility(View.GONE);
-        }
-    }
-
-    @Override
-    public void onPageScrollStateChanged(int state) {
-    }
-
-    public void onBackClick() {
-        Intent upIntent = NavUtils.getParentActivityIntent(this);
-        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-            TaskStackBuilder.create(this)
-                    .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
-        } else {
-            if (mFromNotification > 0) {
-                TaskStackBuilder.create(this)
-                        .addNextIntentWithParentStack(upIntent)
-                        .startActivities();
-            } else {
-                if (isUserDeactivated) {
-                    isUserDeactivated = false;
-                    setResult(AppConstants.RESULT_CODE_FOR_DEACTIVATION);
-                    finish();
-                } else if (followedUserSolrObj != null) {
-                    onFollowedActivityResultOfParentRefresh(followedUserSolrObj);
-                } else if (!isProfileClicked) {
-                    onActivityResultOfParentRefresh();
-                }
-            }
-        }
-        super.onBackPressed();
     }
 
     private void onFollowedActivityResultOfParentRefresh(UserSolrObj userSolrObj) {
@@ -1014,120 +1158,15 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    @Override
-    public void handleOnClick(BaseResponse baseResponse, View view) {
-    }
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
+    private void shareCardViaSocial() {
+        String branchPostDeepLink;
+        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getPostShortBranchUrls())) {
+            branchPostDeepLink = mUserSolarObject.getPostShortBranchUrls();
+        } else {
+            branchPostDeepLink = isChampion ? mUserSolarObject.getChampionDeepLinkUrl() : mUserSolarObject.getDeepLinkUrl();
         }
-        return true;
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-    }
-
-    @Override
-    public void onBackPressed() {
-        onBackClick();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return mHomePresenter;
-    }
-
-
-    @Override
-    public void onDestroy() {
-        profilePresenter.detachView();
-        mHomePresenter.detachView();
-        super.onDestroy();
-    }
-
-    @Override
-    public void startProgressBar() {
-    }
-
-    @Override
-    public void stopProgressBar() {
-    }
-
-    @Override
-    public void startNextScreen() {
-    }
-
-    @Override
-    public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-        errorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
-        loaderGif.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-    }
-
-    @Override
-    public void getLogInResponse(LoginResponse loginResponse) {
-    }
-
-    @Override
-    public void getFollowedMentors(FollowedUsersResponse profileFeedResponsePojo) {
-    }
-
-    @Override
-    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-        if (StringUtil.isNotEmptyCollection(feedDetailList)) {
-            mUserSolarObject = (UserSolrObj) feedDetailList.get(0);
-            String screenName = AppConstants.GROWTH_PUBLIC_PROFILE;
-            mUserSolarObject.setCallFromName(screenName);
-
-            setProfileDetails(mUserSolarObject);
-            loaderGif.setVisibility(View.GONE);
-
-            if (profileLevelType != null)
-                profileStrengthDialog(profileLevelType);
-        }
-    }
-
-    @Override
-    public void getUsersCommunities(ProfileCommunitiesResponsePojo userCommunities) {
-    }
-
-    @Override
-    public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
-        if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-
-            if (ProfileActivity.this.isFinishing()) return;
-
-            if (spamResponse.isSpammed()) {
-                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
-            } else if (!spamResponse.isSpamAlreadyReported()) {
-                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.spam_confirmation_dialog_message));
-            } else {
-                CommonUtil.createDialog(ProfileActivity.this, getResources().getString(R.string.reported_spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_confirmation_dialog_message, spamResponse.getModelType().toLowerCase()));
-            }
-        }
-    }
-
-    @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
-        isUserDeactivated = true;
-        onBackClick();
+        addAnalyticsEvents(Event.PROFILE_SHARED);
+        createShareImage(branchPostDeepLink);
     }
 
     private void setupProfileBadges(final UserSolrObj userSolrObj) {
@@ -1142,7 +1181,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
             final ImageView badge = new ImageView(this);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(badgeIconSize, badgeIconSize);
-            layoutParams.setMargins(0, 0, bageIconMargin, 0);
+            layoutParams.setMargins(0, 0, badgeIconMargin, 0);
             badge.setLayoutParams(layoutParams);
             if (StringUtil.isNotNullOrEmptyString(badgeDetails.getImageUrl())) {
                 Glide.with(badge.getContext())
@@ -1201,48 +1240,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             userBadgeIcon.setVisibility(View.GONE);
         }
     }
-
-    @Override
-    public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-        switch (feedParticipationEnum) {
-            case FOLLOW_UNFOLLOW:
-                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-                onProfileFollowed(userSolrObj);
-                break;
-            default:
-        }
-    }
-
-    @Override
-    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-    }
-
-    @Override
-    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-    }
-
-    @Override
-    public void onConfigFetched() {
-    }
-
-    public void championDetailActivity(Long userId, boolean isMentor) {
-        mUserSolarObject = new UserSolrObj();
-        mUserSolarObject.setIdOfEntityOrParticipant(userId);
-        mUserSolarObject.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        ProfileActivity.navigateTo(this, mUserSolarObject, userId, isMentor, -1, AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
-    }
-
-    private void shareCardViaSocial() {
-        String branchPostDeepLink;
-        if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getPostShortBranchUrls())) {
-            branchPostDeepLink = mUserSolarObject.getPostShortBranchUrls();
-        } else {
-            branchPostDeepLink = isChampion ? mUserSolarObject.getChampionDeepLinkUrl() : mUserSolarObject.getDeepLinkUrl();
-        }
-        addAnalyticsEvents(Event.PROFILE_SHARED);
-        createShareImage(branchPostDeepLink);
-    }
-
 
     private void createShareImage(final String branchPostDeepLink) {
         if (mUserSolarObject != null) {
@@ -1319,131 +1316,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-        if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUserId != -1) {
-                championDetailActivity(mLoggedInUserId, 1, isChampion, AppConstants.FEED_SCREEN); //self profile
-        } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
-            UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            ProfileActivity.navigateTo(this, feedDetail.getAuthorParticipantId(), isChampion, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
-    }
-
-    @Override
-    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
-        if (null != intent) {
-
-            if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
-                Bundle bundle = intent.getExtras();
-                if (bundle != null) {
-                    invalidateUserInformation(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
-                            bundle.getString(EditUserProfileActivity.FILLED_FIELDS), bundle.getString(EditUserProfileActivity.UNFILLED_FIELDS), bundle.getFloat(EditUserProfileActivity.PROFILE_COMPLETION_WEIGHT));
-                }
-            }
-
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_CAMERA:
-                case AppConstants.REQUEST_CODE_FOR_GALLERY:
-                    mImageCaptureUri = intent.getData();
-                    if (resultCode == Activity.RESULT_OK) {
-                        cropingIMG();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
-                    imageCropping(intent);
-                    break;
-
-                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            File file = new File(result.getUri().getPath());
-                            Bitmap photo = CompressImageUtil.decodeFile(file);
-                            mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
-                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                    }
-
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
-            }
-        }
-    }
-
-    @Override
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-        if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
-            LoginResponse userDetailsResponse = null;
-            if (mUserPreference != null && mUserPreference.isSet()) {
-                userDetailsResponse = mUserPreference.get();
-            }
-            if (userDetailsResponse != null) {
-                try {
-                    if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
-                        setProfileNameData(boardingDataResponse.getResponse());
-
-                        //update progress bar
-                        if (mUserSolarObject != null) {
-                            mUserSolarObject.setFilledProfileFields(boardingDataResponse.getUserSolrObj().getFilledProfileFields());
-                            mUserSolarObject.setUnfilledProfileFields(boardingDataResponse.getUserSolrObj().getUnfilledProfileFields());
-                            mUserSolarObject.setProfileCompletionWeight(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight());
-                            dashProgressBar.setProgress(boardingDataResponse.getUserSolrObj().getProfileCompletionWeight(), false);
-                            setProfileStrength();
-                        }
-
-                        //Save image
-                        userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
-                        mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
-                        mUserPreference.set(userDetailsResponse);
-                        refreshImageView(boardingDataResponse.getResponse());
-                    }
-                } catch (Exception e) {
-                    LogUtils.info(TAG, e.getMessage());
-                }
-            }
-        }
-    }
-
-
-    private void imageCropping(Intent intent) {
-        try {
-            if (localImageSaveForChallenge.exists()) {
-                Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
-                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-            } else {
-                Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-            e.printStackTrace();
-        }
-    }
-
-    public void setProfileNameData(String imageUrl) {
-        /*if (null != imageUrl) {
-            userImage.setCircularImage(true);
-            userImage.bindImage(imageUrl);
-        }*/
-        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
-        setLocalImageSaveForChallenge(localImageSaveForChallenge);
-    }
-
-    public void setLocalImageSaveForChallenge(File localImageSaveForChallenge) {
-        this.localImageSaveForChallenge = localImageSaveForChallenge;
-    }
-
-    private void cropingIMG() {
+    private void croppingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
         List list = getPackageManager().queryIntentActivities(intent, 0);
@@ -1457,211 +1330,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             ResolveInfo res = (ResolveInfo) list.get(0);
             i.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
             startActivityForResult(i, AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING);
-        }
-    }
-
-    private void invalidateUserInformation(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
-        if (StringUtil.isNotNullOrEmptyString(name)) {
-            name = CommonUtil.camelCaseString(name);
-            userName.setText(name);
-            tvMentorToolbarName.setText(name);
-        }
-
-        if (StringUtil.isNotNullOrEmptyString(location)) {
-            tvLoc.setText(location);
-        }
-
-        if (StringUtil.isNotNullOrEmptyString(userBio)) {
-            String description = userBio;
-            description = StringUtil.fromHtml(description).toString();
-            if (description.length() > BIO_MAX_LIMIT) {
-                description = description.substring(0, BIO_MAX_LIMIT);
-            }
-            userDescription.setText(description);
-            userDescription.setTag(null);
-            ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
-            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
-
-            mUserSolarObject.setDescription(description);
-        }
-
-        if (progressPercentage != -1) {
-            mUserSolarObject.setProfileCompletionWeight(progressPercentage);
-            dashProgressBar.setProgress(progressPercentage, false);
-
-            mUserSolarObject.setFilledProfileFields(filledFields);
-            mUserSolarObject.setUnfilledProfileFields(unfilledFields);
-            setProfileStrength();
-        }
-
-        if (imageUrl != null) {
-            refreshImageView(imageUrl);
-        }
-    }
-
-    public void refreshImageView(String imageUrl) {
-        if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
-            mProfileIcon.setCircularImage(true);
-            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, profileSize, profileSize);
-            mProfileIcon.bindImage(authorThumborUrl);
-            mUserSolarObject.setImageUrl(imageUrl);
-        }
-
-        invalidateProfileButton();
-    }
-
-    @Override
-    protected Map<String, Object> getExtraPropertiesToTrack() {
-        return new EventProperty.Builder()
-                .id(String.valueOf(mChampionId))
-                .isMentor(isChampion)
-                .isOwnProfile(isOwnProfile)
-                .build();
-    }
-
-    @Override
-    public boolean shouldTrackScreen() {
-        return true;
-    }
-
-    @Override
-    protected boolean trackScreenTime() {
-        return true;
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    private void setUsersFollowingCount(int numFound) {
-        followingTitle.setText(getResources().getString(R.string.following));
-        mUserSolarObject.setUserFollowing(numFound);
-        followingCount.setText(String.valueOf(numFound));
-        liFollowing.setVisibility(View.VISIBLE);
-    }
-
-    private void setUsersFollowerCount(int numFound) {
-        String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
-        mUserSolarObject.setFollowerCount(numFound);
-        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(numFound)));
-        userFollower.setText(pluralFollower);
-        liFollower.setVisibility(View.VISIBLE);
-    }
-
-    private void setUsersPostCount(int postCount) {
-        String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, postCount);
-        mUserSolarObject.setPostCount(postCount);
-        userTotalPostCount.setText(String.valueOf(changeNumberToNumericSuffix(postCount)));
-        tvMentorPost.setText(pluralAnswer);
-        liPost.setVisibility(View.VISIBLE);
-    }
-
-    private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
-        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
-        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        communityFeedSolrObj.setItemPosition(position);
-        mFeedDetail = communityFeedSolrObj;
-        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }
-
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, int askinQuestion, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        intent.putExtra(AppConstants.CHAMPION_ID, userId);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        if (askinQuestion != -1) {
-            intent.putExtra(AppConstants.ASKING_QUESTION, askinQuestion);
-        }
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        Bundle bundle = new Bundle();
-        dataItem.setIdOfEntityOrParticipant(mChampionId);
-        dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        dataItem.setItemPosition(position);
-        Parcelable parcelable = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (notificationId != -1) {
-            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
-        }
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (notificationId != -1) {
-            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
-        }
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, ProfileStrengthDialog.ProfileLevelType profileLevelType, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (profileLevelType != null) {
-            intent.putExtra(ProfileStrengthDialog.PROFILE_LEVEL, profileLevelType);
-        }
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public String getUserNameTitle() {
-        return userNameTitle;
-    }
-
-    public void setUserNameTitle(String userNameTitle) {
-        this.userNameTitle = userNameTitle;
-    }
-
-    public void refreshPostCount(boolean isPostDeleted) {
-        if (isPostDeleted) {
-            int postNumbers = mUserSolarObject.getPostCount();
-            postNumbers = postNumbers > 0 ? postNumbers - 1 : 0;
-            setUsersPostCount(postNumbers);
         }
     }
 
@@ -1855,43 +1523,368 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    @Override
-    public void onViewRendered(float dashWidth) {
-
-        ConfigData configData = new ConfigData();
-        int beginnerTickIndex = configData.beginnerStartIndex;
-        int intermediateTickIndex = configData.intermediateStartIndex;
-
-        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
-            beginnerTickIndex = mConfiguration.get().configData.beginnerStartIndex;
-            intermediateTickIndex = mConfiguration.get().configData.intermediateStartIndex;
-        }
-        RelativeLayout.LayoutParams buttonLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        buttonLayoutParams.setMargins((int) (dashWidth * beginnerTickIndex), 0, 0, 0);
-        beginnerTick.setLayoutParams(buttonLayoutParams);
-
-        RelativeLayout.LayoutParams intermediateLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        intermediateLayoutParams.setMargins((int) (dashWidth * intermediateTickIndex), 0, 0, 0);
-        intermediateTick.setLayoutParams(intermediateLayoutParams);
-
-        animationOnProgressBar();
+    private void setUsersFollowingCount(int numFound) {
+        followingTitle.setText(getResources().getString(R.string.following));
+        mUserSolarObject.setUserFollowing(numFound);
+        followingCount.setText(String.valueOf(numFound));
+        liFollowing.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onTextResize(boolean isCollapsed) {
-        if (!isCollapsed) {
-            progressbarContainer.setVisibility(View.VISIBLE);
-            profileStrengthViewContainer.setVisibility(View.VISIBLE);
+    private void setUsersFollowerCount(int numFound) {
+        String pluralFollower = getResources().getQuantityString(R.plurals.numberOfFollowers, numFound);
+        mUserSolarObject.setFollowerCount(numFound);
+        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(numFound)));
+        userFollower.setText(pluralFollower);
+        liFollower.setVisibility(View.VISIBLE);
+    }
+
+    private void setUsersPostCount(int postCount) {
+        String pluralAnswer = getResources().getQuantityString(R.plurals.numberOfPosts, postCount);
+        mUserSolarObject.setPostCount(postCount);
+        userTotalPostCount.setText(String.valueOf(changeNumberToNumericSuffix(postCount)));
+        tvMentorPost.setText(pluralAnswer);
+        liPost.setVisibility(View.VISIBLE);
+    }
+
+    private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {
+        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+        communityFeedSolrObj.setIdOfEntityOrParticipant(userId);
+        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        communityFeedSolrObj.setItemPosition(position);
+        mFeedDetail = communityFeedSolrObj;
+        ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+    }
+
+    private void invalidateUserInformation(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
+        if (StringUtil.isNotNullOrEmptyString(name)) {
+            name = CommonUtil.camelCaseString(name);
+            userName.setText(name);
+            tvMentorToolbarName.setText(name);
+        }
+
+        if (StringUtil.isNotNullOrEmptyString(location)) {
+            tvLoc.setText(location);
+        }
+
+        if (StringUtil.isNotNullOrEmptyString(userBio)) {
+            String description = userBio;
+            description = StringUtil.fromHtml(description).toString();
+            if (description.length() > BIO_MAX_LIMIT) {
+                description = description.substring(0, BIO_MAX_LIMIT);
+            }
+            userDescription.setText(description);
+            userDescription.setTag(null);
+            ExpandableTextView expandableTextView = ExpandableTextView.getInstance();
+            expandableTextView.makeTextViewResizable(userDescription, 1, getString(R.string.ID_VIEW_MORE_MENTOR), true, this, viewMoreText, viewLessText);
+
+            mUserSolarObject.setDescription(description);
+        }
+
+        if (progressPercentage != -1) {
+            mUserSolarObject.setProfileCompletionWeight(progressPercentage);
+            dashProgressBar.setProgress(progressPercentage, false);
+
+            mUserSolarObject.setFilledProfileFields(filledFields);
+            mUserSolarObject.setUnfilledProfileFields(unfilledFields);
+            setProfileStrength();
+        }
+
+        if (imageUrl != null) {
+            refreshImageView(imageUrl);
+        }
+    }
+
+    private void imageCropping(Intent intent) {
+        try {
+            if (localImageSaveForChallenge.exists()) {
+                Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
+                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+            } else {
+                Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+            e.printStackTrace();
+        }
+    }
+    //endregion private methods
+
+    //region public methods
+    public String getUserNameTitle() {
+        return userNameTitle;
+    }
+
+    public void selectImageFrmCamera() {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        selectImageFrmGallery();
+    }
+
+    public void selectImageFrmGallery() {
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
+                .start(this);
+    }
+
+    public void setProfileDetails(UserSolrObj userSolrObj) {
+        rlMentorFullViewHeader.setVisibility(View.VISIBLE);
+        mFeedDetail = userSolrObj;
+
+        mFragmentOpen = new FragmentOpen();
+        setAllValues(mFragmentOpen);
+
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
+            if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
+                isOwnProfile = true;
+                tvMentorDashBoardFollow.setText(getString(R.string.ID_EDIT_PROFILE));
+                tvMentorDashBoardFollow.setBackgroundResource(R.drawable.selecter_invite_friend);
+
+                progressbarContainer.setVisibility(View.VISIBLE);
+                setProfileStrength();
+                profileLevel.setVisibility(View.VISIBLE);
+                newFeature.setVisibility(View.VISIBLE);
+
+                dashProgressBar.setListener(this);
+                if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                    dashProgressBar.setTotalDash(mConfiguration.get().configData.maxDash);
+                } else {
+                    dashProgressBar.setTotalDash(new ConfigData().maxDash);
+                }
+
+                dashProgressBar.setProgress(userSolrObj.getProfileCompletionWeight(), false);
+                //hide menu dots
+                profileToolbarMenu.setVisibility(View.GONE);
+
+                //Hide the offer icon
+                if (!CommonUtil.getPrefValue(AppConstants.PROFILE_OFFER_PREF)) {
+                    newFeature.setVisibility(View.VISIBLE);
+                } else {
+                    newFeature.setVisibility(View.GONE);
+                }
+            } else {
+                newFeature.setVisibility(View.GONE);
+                progressbarContainer.setVisibility(View.GONE);
+                profileLevel.setVisibility(View.GONE);
+                profileToolbarMenu.setVisibility(View.VISIBLE);
+
+                updateFollowedButton();
+            }
         } else {
-            progressbarContainer.setVisibility(View.GONE);
-            profileStrengthViewContainer.setVisibility(View.GONE);
+            updateFollowedButton();
         }
+
+        if ((mUserSolarObject.getUserSubType() != null && mUserSolarObject.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor()) {
+            isChampion = true;
+        }
+
+        if (isChampion) {
+            verifiedIcon.setVisibility(View.VISIBLE);
+        } else {
+            verifiedIcon.setVisibility(View.INVISIBLE);
+        }
+
+        if (isOwnProfile) {
+            verifiedIcon.setVisibility(View.GONE);
+            editIcon.setVisibility(View.VISIBLE);
+        } else {
+            editIcon.setVisibility(View.GONE);
+        }
+
+        invalidateProfileButton();
+
+        updateProfileInfo();
+
+        setupSheBadge(userSolrObj); //setup She badge
+        setupProfileBadges(userSolrObj); //horizontal badge list on profile
+
+        setPagerAndLayouts();
+
+        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
-    @Override
-    public void onProfileFollowed(UserSolrObj userSolrObj) {
-        followedUserSolrObj = userSolrObj;
-        userFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount())));
-        onFollowedClick();
+    public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {
+        PopupMenu popup = new PopupMenu(this, tvFeedCommunityPostUserCommentPostMenu);
+
+        //admin and community moderator have feature to share profile and deactivate user
+        if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant() && (mLoggedInUserIdTypeId == ADMIN_TYPE_ID || mLoggedInUserIdTypeId == COMMUNITY_MODERATOR_TYPE_ID)) {
+            popup.getMenu().add(0, R.id.share, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_share_black), getResources().getString(R.string.SHARE_PROFILE)));
+            popup.getMenu().add(0, R.id.deactivate_user, 2, menuIconWithText(getResources().getDrawable(R.drawable.vector_deactivate_user), getResources().getString(R.string.deactivate_user)));
+        } else if (mLoggedInUserId != userPostObj.getIdOfEntityOrParticipant()) {
+            popup.getMenu().add(0, R.id.report_spam, 1, menuIconWithText(getResources().getDrawable(R.drawable.vector_report_spam), getResources().getString(R.string.REPORT_SPAM)));
+        }
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.deactivate_user:
+                        deactivateUserDialog(userPostObj);
+                        return true;
+                    case R.id.share:
+                        shareProfile();
+                        return true;
+                    case R.id.report_spam:
+                        reportSpamDialog(userPostObj);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        popup.show();
     }
+
+    public void addAnalyticsEvents(Event event) {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(mUserSolarObject.getIdOfEntityOrParticipant()))
+                        .name(mUserSolarObject.getNameOrTitle())
+                        .isMentor(isChampion)
+                        .isOwnProfile(isOwnProfile)
+                        .build();
+        AnalyticsManager.trackEvent(event, getScreenName(), properties);
+    }
+
+    public void onBackClick() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        } else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            } else {
+                if (isUserDeactivated) {
+                    isUserDeactivated = false;
+                    setResult(AppConstants.RESULT_CODE_FOR_DEACTIVATION);
+                    finish();
+                } else if (followedUserSolrObj != null) {
+                    onFollowedActivityResultOfParentRefresh(followedUserSolrObj);
+                } else if (!isProfileClicked) {
+                    onActivityResultOfParentRefresh();
+                }
+            }
+        }
+        super.onBackPressed();
+    }
+
+    public void championDetailActivity(Long userId, boolean isMentor) {
+        mUserSolarObject = new UserSolrObj();
+        mUserSolarObject.setIdOfEntityOrParticipant(userId);
+        mUserSolarObject.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        ProfileActivity.navigateTo(this, mUserSolarObject, userId, isMentor, AppConstants.PROFILE_CHAMPION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+    }
+
+    public void setProfileNameData(String imageUrl) {
+        /*if (null != imageUrl) {
+            userImage.setCircularImage(true);
+            userImage.bindImage(imageUrl);
+        }*/
+        File localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        setLocalImageSaveForChallenge(localImageSaveForChallenge);
+    }
+
+    public void setUserNameTitle(String userNameTitle) {
+        this.userNameTitle = userNameTitle;
+    }
+
+    public void setLocalImageSaveForChallenge(File localImageSaveForChallenge) {
+        this.localImageSaveForChallenge = localImageSaveForChallenge;
+    }
+
+    public void refreshImageView(String imageUrl) {
+        if (StringUtil.isNotNullOrEmptyString(imageUrl)) {
+            mProfileIcon.setCircularImage(true);
+            String authorThumborUrl = CommonUtil.getThumborUri(imageUrl, profileSize, profileSize);
+            mProfileIcon.bindImage(authorThumborUrl);
+            mUserSolarObject.setImageUrl(imageUrl);
+        }
+
+        invalidateProfileButton();
+    }
+
+    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        Bundle bundle = new Bundle();
+        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
+        Parcelable parcelableMentor = Parcels.wrap(dataItem);
+        intent.putExtra(AppConstants.CHAMPION_ID, userId);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
+        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        Bundle bundle = new Bundle();
+        dataItem.setIdOfEntityOrParticipant(mChampionId);
+        dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+        dataItem.setItemPosition(position);
+        Parcelable parcelable = Parcels.wrap(dataItem);
+        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
+        intent.putExtras(bundle);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (notificationId != -1) {
+            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
+        }
+        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
+        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (notificationId != -1) {
+            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
+        }
+        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, ProfileStrengthDialog.ProfileLevelType profileLevelType, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
+        Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        if (profileLevelType != null) {
+            intent.putExtra(ProfileStrengthDialog.PROFILE_LEVEL, profileLevelType);
+        }
+        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+    //endregion public methods
 }

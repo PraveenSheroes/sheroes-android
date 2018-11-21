@@ -104,7 +104,6 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     String mInvalidPinCodeString;
     //endregion
 
-    private Address originalAddress;
     //region member variable
     private Address mOriginalAddress;
     //endregion member variable
