@@ -215,10 +215,7 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
         }
         OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
-        Bundle bundleArticle = new Bundle();
-        onBoardingFragment.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingFragment, OnBoardingFragment.class.getName()).commitAllowingStateLoss();
-
+        addNewFragment(onBoardingFragment, R.id.fl_onboarding_fragment, OnBoardingFragment.class.getName(), null,false);
     }
 
     @OnClick(R.id.tv_on_boarding_finish)

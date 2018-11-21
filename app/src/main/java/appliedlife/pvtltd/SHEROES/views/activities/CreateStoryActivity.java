@@ -72,7 +72,6 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagName;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.ArticleSubmissionPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -93,22 +92,21 @@ import butterknife.OnClick;
 
 
 public class CreateStoryActivity extends BaseActivity implements IArticleSubmissionView, EditorFragmentAbstract.EditorFragmentListener, EditorFragmentAbstract.EditorDragAndDropListener, TokenCompleteTextView.TokenListener<ArticleTagName> {
+    //region constants
     public static final String SCREEN_LABEL = "Create Story Screen";
     public static final String SCREEN_LABEL_SUBMIT_STORY = "Submit Story Screen";
-    private static int flagActivity = 0;
-    private Toast myToast;
+    //endregion
 
+    //region inject
     @Inject
     AppUtils mAppUtils;
-
     @Inject
     ArticleSubmissionPresenterImpl mArticleSubmissionPresenter;
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
-
     @Inject
     Preference<LoginResponse> mUserPreference;
+    //endregion
 
     //region view variables
     @Bind(R.id.title_toolbar)
@@ -155,13 +153,13 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     //region member variables
     private EditorFragmentAbstract mEditorFragment;
-    private boolean isGuidelineVisible;
-    private File localImageSaveForChallenge;
+    private boolean mIsGuidelineVisible;
+    private File mLocalImageSaveForChallenge;
     private Uri mImageCaptureUri;
     private String mEncodeImageUrl;
-    private boolean isNextPage;
-    private ContactsCompletionView completionView;
-    private ArrayAdapter<ArticleTagName> adapter;
+    private boolean mIsNextPage;
+    private ContactsCompletionView mCompletionView;
+    private ArrayAdapter<ArticleTagName> mAdapter;
     private boolean mIsCoverPhoto;
     private String mCoverImageUrl;
     private List<Long> mDeletedTagsList = new ArrayList<>();
@@ -169,6 +167,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     private Long mIdOfEntityOrParticipantArticle;
     private List<ArticleTagName> mArticleTagNameList = new ArrayList<>();
     private String mSourceScreen, mStoryTagText, mHerStoryBodyMsg, mHerStoryTitle;
+    private Toast mMyToast;
     //endregion
 
     //region activity methods
@@ -205,7 +204,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         getSupportActionBar().setTitle("");
         toolbarTitle.setText(R.string.write_a_story);
         invalidateToolBar();
-        this.localImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
+        this.mLocalImageSaveForChallenge = new File(Environment.getExternalStorageDirectory(), AppConstants.IMAGE + AppConstants.JPG_FORMATE);
         mBody.setText(Html.fromHtml(articleGuideline));
         if (CommonUtil.ensureFirstTime(AppConstants.GUIDELINE_SHARE_PREF)) {
             showGuideLineView();
@@ -217,7 +216,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         mEditorContainer.setVisibility(View.VISIBLE);
         setupShareToFbListener();
         mArticleSubmissionPresenter.getArticleTags();
-        myToast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
+        mMyToast = Toast.makeText(getApplicationContext(), null, Toast.LENGTH_SHORT);
         AnalyticsManager.trackScreenView(SCREEN_LABEL, mSourceScreen, null);
     }
 
@@ -242,15 +241,15 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     @Override
     public void getArticleTagList(List<ArticleTagName> articleTagNameList, boolean isEdit) {
         mArticleTagNameList = articleTagNameList;
-        completionView = findViewById(R.id.tag_search_view);
-        completionView.setHint(mStoryTagText);
+        mCompletionView = findViewById(R.id.tag_search_view);
+        mCompletionView.setHint(mStoryTagText);
         if (StringUtil.isNotEmptyCollection(articleTagNameList)) {
             if (isEdit) {
                 for (ArticleTagName articleTagName : articleTagNameList) {
-                    completionView.addObject(articleTagName);
+                    mCompletionView.addObject(articleTagName);
                 }
             } else {
-                adapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, articleTagNameList) {
+                mAdapter = new FilteredArrayAdapter<ArticleTagName>(this, R.layout.article_tag_layout, articleTagNameList) {
                     @Override
                     public View getView(int position, View convertView, ViewGroup parent) {
                         if (convertView == null) {
@@ -271,12 +270,12 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                     }
                 };
             }
-            completionView.setAdapter(adapter);
+            mCompletionView.setAdapter(mAdapter);
         }
-        completionView.setTokenListener(this);
-        completionView.allowDuplicates(false);
-        completionView.setTokenLimit(5);
-        completionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
+        mCompletionView.setTokenListener(this);
+        mCompletionView.allowDuplicates(false);
+        mCompletionView.setTokenLimit(5);
+        mCompletionView.setTokenClickStyle(TokenCompleteTextView.TokenClickStyle.Delete);
     }
 
     @Override
@@ -288,7 +287,6 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     public boolean shouldTrackScreen() {
         return false;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -305,7 +303,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     private void setUpOptionMenuStates(Menu menu) {
         MenuItem itemNext = menu.findItem(R.id.next_article_submit);
         MenuItem itemPost = menu.findItem(R.id.post_article_submit);
-        if (isNextPage) {
+        if (mIsNextPage) {
             itemNext.setVisible(false);
             itemPost.setVisible(true);
         } else {
@@ -316,7 +314,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onBackPressed() {
-        if (isGuidelineVisible) {
+        if (mIsGuidelineVisible) {
             mGuidelineClose.performClick();
         } else {
             onBackPress();
@@ -352,8 +350,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
-        myToast.setText(stringID);
-        myToast.show();
+        mMyToast.setText(stringID);
+        mMyToast.show();
         if (!isFinishing()) {
             Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
         }
@@ -461,7 +459,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     }
 
     private void showNextPage() {
-        isNextPage = true;
+        mIsNextPage = true;
         mArticleNextPageContainer.setVisibility(View.VISIBLE);
         mEditorContainer.setVisibility(View.GONE);
         invalidateToolBar();
@@ -469,7 +467,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     }
 
     private void hideNextPage() {
-        isNextPage = false;
+        mIsNextPage = false;
         mArticleNextPageContainer.setVisibility(View.GONE);
         mEditorContainer.setVisibility(View.VISIBLE);
         invalidateToolBar();
@@ -589,7 +587,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     }
     //endregion
 
-
+    //region public methods
     public void selectImageFrmCamera() {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -603,7 +601,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
                 .setAllowRotation(true)
                 .start(this);
     }
+    //endregion
 
+    //region private methods
     private void setupShareToFbListener() {
         mShareToFacebook.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -631,8 +631,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             Crashlytics.getInstance().core.logException(e);
         }
         List<Long> tagList = new ArrayList<>();
-        if (null != completionView) {
-            for (ArticleTagName articleTagName : completionView.getObjects()) {
+        if (null != mCompletionView) {
+            for (ArticleTagName articleTagName : mCompletionView.getObjects()) {
                 tagList.add(articleTagName.getId());
             }
         }
@@ -644,7 +644,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     }
 
     private void onBackPress() {
-        if (isNextPage) {
+        if (mIsNextPage) {
             hideNextPage();
             return;
         }
@@ -703,7 +703,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             }
             return false;
         }
-        if (!isDraft && completionView != null && !StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+        if (!isDraft && mCompletionView != null && !StringUtil.isNotEmptyCollection(mCompletionView.getObjects())) {
             if (showError) {
                 showMessage(R.string.error_tag_min);
                 tvTagLable.setVisibility(View.VISIBLE);
@@ -718,7 +718,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     }
 
     private void showGuideLineView() {
-        isGuidelineVisible = true;
+        mIsGuidelineVisible = true;
         mGuidelineContainer.setVisibility(View.VISIBLE);
         mGuidelineContainer.requestFocusFromTouch();
         hideKeyboard(mToolbar);
@@ -731,18 +731,15 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
+    //endregion
 
     //region static methods
     public static void navigateTo(Activity fromActivity, int flagActivity, String sourceScreen, HashMap<String, Object> screenProperties) {
-
         Intent intent = new Intent(fromActivity, CreateStoryActivity.class);
-        CreateStoryActivity.flagActivity = flagActivity;
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-
         if (!CommonUtil.isEmpty(screenProperties)) {
             intent.putExtra(BaseActivity.SOURCE_PROPERTIES, screenProperties);
         }
-
         ActivityCompat.startActivity(fromActivity, intent, null);
     }
 
@@ -762,8 +759,8 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     private void imageCropping(Intent intent) {
         try {
-            if (localImageSaveForChallenge.exists()) {
-                Bitmap photo = CompressImageUtil.decodeFile(localImageSaveForChallenge);
+            if (mLocalImageSaveForChallenge.exists()) {
+                Bitmap photo = CompressImageUtil.decodeFile(mLocalImageSaveForChallenge);
                 mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
             } else {
                 Toast.makeText(this, R.string.error_while_save, Toast.LENGTH_SHORT).show();
@@ -774,22 +771,20 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         }
     }
 
-
     private void invalidateToolBar() {
-        if (!isNextPage) {
+        if (!mIsNextPage) {
             mToolbar.setNavigationIcon(R.drawable.vector_clear);
         } else {
             mToolbar.setNavigationIcon(R.drawable.vector_back_arrow);
         }
     }
 
-
     private void cropingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setType("image/*");
         List list = getPackageManager().queryIntentActivities(intent, 0);
         intent.setData(mImageCaptureUri);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(localImageSaveForChallenge));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mLocalImageSaveForChallenge));
         intent.putExtra("aspectX", 2);
         intent.putExtra("aspectY", 1);
         intent.putExtra("scale", false);
@@ -807,7 +802,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
     @OnClick(R.id.guideline_close)
     public void onGuidelineCancel() {
         mGuidelineContainer.setVisibility(View.GONE);
-        isGuidelineVisible = false;
+        mIsGuidelineVisible = false;
     }
 
     @Override
@@ -837,7 +832,7 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void onTokenAdded(ArticleTagName token) {
-        if (StringUtil.isNotEmptyCollection(completionView.getObjects())) {
+        if (StringUtil.isNotEmptyCollection(mCompletionView.getObjects())) {
             tvTagLable.setVisibility(View.GONE);
         }
     }

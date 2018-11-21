@@ -26,7 +26,6 @@ public enum AnalyticsEventType {
     FACEBOOK_PUBLISH("Facebook Publish"),
     ALLOWED_CONTACT_SYNC("Allowed Contact Sync"),
     DENIED_CONTACT_SYNC("Denied Contact Sync"),
-    ORGANIZATION("Organization"),
     ARTICLE("Article"),
     CHAT("Chat"),
     NOTIFICATION_LIST("Notification List"),

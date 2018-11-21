@@ -188,6 +188,13 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        dismissProgressDialog(LOGGING_IN_DIALOG);
+        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
+    }
+
+    @Override
     protected void onDestroy() {
         if (mTimer != null) {
             mTimer.cancel();
@@ -200,13 +207,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
         dismissProgressDialog(LOGGING_IN_DIALOG);
         dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
         super.onDestroy();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        dismissProgressDialog(LOGGING_IN_DIALOG);
-        dismissProgressDialog(TOKEN_LOGGING_PROGRESS_DIALOG);
     }
     //endregion lifecycle methods
 
@@ -596,9 +596,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
         bundle.putBoolean(AppConstants.IS_FROM_ADVERTISEMENT, mIsBranchFirstSession);
         bundle.putString(AppConstants.ADS_DEEP_LINK_URL, mDeepLinkUrl);
         loginIntent.putExtras(bundle);
-        loginIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(loginIntent);
-        finish();
     }
 
     /**

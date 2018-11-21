@@ -70,7 +70,6 @@ public class AppConstants {
     public static final String USER_SUB_TYPE = "U";
     public static final String CAROUSEL_SUB_TYPE = "W";
     public static final String LEADER_SUB_TYPE = "LB";
-    public static final String ORGANIZATION_SUB_TYPE = "O";
     public static final String CHALLENGE_SUB_TYPE_NEW = "H";
     public static final String IMAGE_SUBTYPE = "I";
     public static final String FEED_SCREEN = "feed";
@@ -82,7 +81,6 @@ public class AppConstants {
     public static final int ASKING_QUESTION_CALL = 101;
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_ARTICLE = "A";
-    public static final String FEED_EVENT = "E";
     public static final String FEED_COMMUNITY_POST = "P";
     public static final String FEATURED_COMMUNITY = "T";
     public static final String FEED_POLL = "PL";
@@ -278,8 +276,6 @@ public class AppConstants {
     public static final String COMMUNITY_URL = "https://sheroes.in/communities";
     public static final String COMMUNITY_URL_COM = "https://sheroes.com/communities";
     public static final String POLL_URL_COM = "https://sheroes.com/communities/poll";
-    public static final String EVENT_URL = "https://sheroes.in/event";
-    public static final String EVENT_URL_COM = "https://sheroes.com/event";
     public static final String USER_PROFILE_URL = "https://sheroes.in/users/";
     public static final String SELF_USER_PROFILE_URL = "https://sheroes.com/users/edit_profile";
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/";
@@ -313,7 +309,6 @@ public class AppConstants {
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";
     public static final String ICC_MEMBERS_URL_COM = "https://sheroes.com/icc-members";
-    public static final String EVENT_ID = "event_id";
     public static final String IS_FROM_COMMUNITY_SCREEN = "Is From Community Screen";
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_CATEGORY_ID = "article_category_id";
@@ -360,7 +355,6 @@ public class AppConstants {
     public static final String PROFILE_PIC_SUB_TYPE = "USER_PROFILE_PHOTO_SERVICE";
     public static final int PERMISSIONS_REQUEST_READ_CONTACTS = 79;
     public static final String PUBLIC_PROFILE = "public profile";
-    public static final long ORGANISATION_COMMUNITY_TYPE_ID = 10L;
     public static final long ASKED_QUESTION_TO_MENTOR = 3;
     public static final String orgUserType = "organisations_test_user";
     public static final String EXTERNAL_STORAGE_FOLDER_NAME = "Sheroes Care";
@@ -380,7 +374,6 @@ public class AppConstants {
     public static final String NAV_FAQ = "FAQ";
     public static final String SELECTED_MENU_NAME = "SELECTED_MENU_NAME";
     public static final String DEFFERED_DEEP_LINK = "deffered_deep_link";
-    public static final String STORY_STREAM = "story_stream";
     public static final String PROFILE_FOLLOWED_CHAMPION = "Profile Followed Champion";
     public static final String APP_CONFIGURATION = "APP_CONFIGURATION";
     public static final String APP_SNOW = "SNOW";
@@ -439,12 +432,21 @@ public class AppConstants {
     public static final String STORY_DRAFT = "Draft";
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
     public static final int TRENDING_TAB = 1;
-    public static final String COMMUNITY_JOIN_DIALOG_OPEN = "Open";
-    public static final String COMMUNITY_JOIN_DIALOG_CLOSE = "Close";
     public static final String ARTICLE_LISTING = "article listing";
     public static final String ARTICLE_SELECT_CATEGORY = "article select category";
     public static final String CLEVER_TAP_CHANNEL_ID = "sheroesRelatedChannelID";
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";
     public static final String WHATS_APP_URI = "com.whatsapp";
+
+    // Stream name
+    public static final String STORY_STREAM = "story_stream";
+    public static final String POST_STREAM = "profile_post_stream";
+    /* Stream URL's for posts,articles,stories etc */
+    public static final String MY_FEED_POST_STREAM = "participant/feed/stream";
+    public static final String TRENDING_POST_STREAM = "participant/feed/stream?setOrderKey=TrendingPosts";
+    public static final String OTHER_USER_STORIES_STREAM = "participant/feed/stream?setOrderKey=UserStoryStream&userId=";
+    public static final String USER_MY_STORIES_STREAM = "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true";
+    public static final String OTHER_USER_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream&userId=";
+    public static final String USER_MY_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream";
 }

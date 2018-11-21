@@ -470,68 +470,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    public void getEventInterestedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getLikesFromModel(likeRequestPojo)
-                .compose(this.<LikeResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LikeResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-
-                    }
-
-                    @Override
-                    public void onNext(LikeResponse likeResponse) {
-                        getMvpView().stopProgressBar();
-                        getMvpView().invalidateItem(userPostSolrObj);
-                    }
-                });
-
-    }
-
-    public void getEventNotInteresetedFromPresenter(LikeRequestPojo likeRequestPojo, final UserPostSolrObj userPostSolrObj) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getUnLikesFromModel(likeRequestPojo)
-                .compose(this.<LikeResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LikeResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-
-                    }
-
-                    @Override
-                    public void onNext(LikeResponse likeResponse) {
-                        getMvpView().stopProgressBar();
-                        getMvpView().invalidateItem(userPostSolrObj);
-                    }
-                });
-
-    }
-
     public void postBookmarked(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_BOOKMARK_UNBOOKMARK);

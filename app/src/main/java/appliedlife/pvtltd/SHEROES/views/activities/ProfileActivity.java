@@ -111,7 +111,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsRespon
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
@@ -143,7 +142,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.CameraBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.MentorQADetailFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.UserPostFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
@@ -175,6 +173,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
+    private static final String PROFILE_POST_SCREEN_LABEL = "Profile Post Screen";
+    private static final String PROFILE_STORY_SCREEN_LABEL = "Profile Stories Screen";
+
 
     private static final float ORIGINAL_SIZE = 1.0f;
     private static final float EXPANDED_SIZE = 1.02f;
@@ -202,7 +203,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private long mCommunityPostId = 1;
     private long mLoggedInUserId = -1;
     private long mLoggedInUserIdTypeId = -1;
-    private FragmentOpen mFragmentOpen;
     private Fragment mFragment;
     private UserSolrObj mUserSolarObject;
     private int itemPosition;
@@ -525,10 +525,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     public void setProfileDetails(UserSolrObj userSolrObj) {
         rlMentorFullViewHeader.setVisibility(View.VISIBLE);
         mFeedDetail = userSolrObj;
-
-        mFragmentOpen = new FragmentOpen();
-        setAllValues(mFragmentOpen);
-
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
             if (mUserPreference.get().getUserSummary().getUserBO().getParticipantId() == mUserSolarObject.getEntityOrParticipantId()) {
                 isOwnProfile = true;
@@ -899,23 +895,37 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         setSupportActionBar(mToolbar);
         mViewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         if (isMentor) {
-            mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
             mViewPagerAdapter.addFragment(MentorQADetailFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId), getString(R.string.ID_MENTOR_Q_A));
         } else {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
-            mViewPagerAdapter.addFragment(UserPostFragment.createInstance(mFeedDetail, communityEnum, mCommunityPostId, getString(R.string.ID_PROFILE_POST)), getString(R.string.ID_MENTOR_POST));
         }
+
+        FeedFragment profilePostScreen = new FeedFragment();
+        Bundle bundlePostScreen = new Bundle();
+        String postScreenName = getString(R.string.ID_MENTOR_POST);
+        if (mLoggedInUserId != mUserSolarObject.getIdOfEntityOrParticipant()) {
+            bundlePostScreen.putString(AppConstants.END_POINT_URL, AppConstants.OTHER_USER_POST_STREAM + mUserSolarObject.getIdOfEntityOrParticipant());
+        } else {
+            bundlePostScreen.putString(AppConstants.END_POINT_URL, AppConstants.USER_MY_POST_STREAM);
+        }
+        bundlePostScreen.putString(AppConstants.SCREEN_NAME, PROFILE_POST_SCREEN_LABEL);
+        bundlePostScreen.putBoolean(FeedFragment.IS_HOME_FEED, false);
+        bundlePostScreen.putString(FeedFragment.STREAM_NAME, AppConstants.POST_STREAM);
+        profilePostScreen.setArguments(bundlePostScreen);
+        mViewPagerAdapter.addFragment(profilePostScreen, postScreenName);
+
+
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         String screenName;
         if (mLoggedInUserId != mUserSolarObject.getIdOfEntityOrParticipant()) {
             screenName = getString(R.string.stories);
-            bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&userId=" + mUserSolarObject.getIdOfEntityOrParticipant());
+            bundle.putString(AppConstants.END_POINT_URL, AppConstants.OTHER_USER_STORIES_STREAM + mUserSolarObject.getIdOfEntityOrParticipant());
         } else {
             screenName = getString(R.string.my_stories);
-            bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true");
+            bundle.putString(AppConstants.END_POINT_URL, AppConstants.USER_MY_STORIES_STREAM);
         }
-        bundle.putString(AppConstants.SCREEN_NAME, "Profile Stories Screen");
+        bundle.putString(AppConstants.SCREEN_NAME, PROFILE_STORY_SCREEN_LABEL);
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
         bundle.putString(FeedFragment.STREAM_NAME, AppConstants.STORY_STREAM);
         feedFragment.setArguments(bundle);
@@ -990,16 +1000,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @OnClick(R.id.fab_post)
     public void createNewPost() {
-        /*if (mFeedDetail instanceof UserSolrObj) {
-            UserSolrObj userSolrObj = (UserSolrObj) mFeedDetail;
-            CommunityPost mentorPost = new CommunityPost();
-            mentorPost.community = new Community();
-            mentorPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
-            mentorPost.community.name =userSolrObj.getNameOrTitle();
-            mentorPost.isEdit = false;
-            mentorPost.isCompanyAdmin =  userSolrObj.getCompanyAdmin();
-            CommunityPostActivity.navigateTo(this, mentorPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, null);
-        }*/
         CommunityPost communityPost = new CommunityPost();
         communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
         communityPost.isEdit = false;
@@ -1129,23 +1129,27 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     @Override
     public void onPageSelected(int position) {
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
-        if (fragment instanceof UserPostFragment) {
-            if (isOwnProfile) {
-                createPost.setVisibility(View.VISIBLE);
-            } else {
-                createPost.setVisibility(View.GONE);
-            }
-            clStoryFooter.setVisibility(View.GONE);
-        } else if (fragment instanceof MentorQADetailFragment) {
+        if (fragment instanceof MentorQADetailFragment) {
             createPost.setVisibility(View.GONE);
             clStoryFooter.setVisibility(View.GONE);
         } else if (fragment instanceof FeedFragment) {
-            if (isOwnProfile) {
-                clStoryFooter.setVisibility(View.VISIBLE);
-            } else {
+            String title = (String) mViewPagerAdapter.getPageTitle(position);
+            if (StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) {
+                if (isOwnProfile) {
+                    createPost.setVisibility(View.VISIBLE);
+                } else {
+                    createPost.setVisibility(View.GONE);
+                }
                 clStoryFooter.setVisibility(View.GONE);
+            } else {
+                if (isOwnProfile) {
+                    clStoryFooter.setVisibility(View.VISIBLE);
+                } else {
+                    clStoryFooter.setVisibility(View.GONE);
+                }
+                createPost.setVisibility(View.GONE);
             }
-            createPost.setVisibility(View.GONE);
+
         } else {
             clStoryFooter.setVisibility(View.GONE);
             createPost.setVisibility(View.GONE);
@@ -1215,7 +1219,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         if (baseResponse instanceof FeedDetail) {
             communityDetailHandled(view, baseResponse);
         } else if (baseResponse instanceof Comment) {
-            setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
             feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
         }
@@ -1235,8 +1238,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         UserPostSolrObj userPostSolrObj = (UserPostSolrObj) baseResponse;
         mFragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
         feedUtils.setFragment(mFragment);
-        mFragmentOpen.setOwner(userPostSolrObj.isCommunityOwner());
-        setAllValues(mFragmentOpen);
         feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
     }
 
@@ -1244,9 +1245,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
         int fragmentPosition = isMentor ? AppConstants.NO_REACTION_CONSTANT : AppConstants.ONE_CONSTANT;
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, fragmentPosition);
-        if (fragment instanceof UserPostFragment)
-            ((UserPostFragment) fragment).likeAndUnlikeRequest(baseResponse, reactionValue, position);
     }
 
     @Override
@@ -1643,16 +1641,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             }
 
             switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_CREATE_COMMUNITY_POST:
-                    if (null != mViewPagerAdapter) {
-                        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.NO_REACTION_CONSTANT);
-                        if (AppUtils.isFragmentUIActive(fragment)) {
-                            if (fragment instanceof UserPostFragment) {
-                                ((UserPostFragment) fragment).swipeToRefreshList();
-                            }
-                        }
-                    }
-                    break;
                 case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
                     if (null != mViewPagerAdapter) {
                         Fragment activeFragment = mViewPagerAdapter.getActiveFragment(mViewPager, AppConstants.ONE_CONSTANT);
@@ -1675,16 +1663,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                         }
                         if (null != feedDetailObj) {
                             if (isPostDeleted) {
-                                if (mFragment instanceof UserPostFragment) {
-                                    ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-                                } else if (mFragment instanceof MentorQADetailFragment) {
+                                if (mFragment instanceof MentorQADetailFragment) {
                                     ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.DELETE_COMMUNITY_POST);
-
                                 }
                             } else {
-                                if (mFragment instanceof UserPostFragment) {
-                                    ((UserPostFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
-                                } else {
+                                {
                                     if (mFragment instanceof MentorQADetailFragment) {
                                         ((MentorQADetailFragment) mFragment).commentListRefresh(feedDetailObj, FeedParticipationEnum.COMMENT_REACTION);
                                         isMentorQARefresh = true;

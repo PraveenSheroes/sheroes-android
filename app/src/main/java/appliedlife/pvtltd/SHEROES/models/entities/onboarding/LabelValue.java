@@ -9,8 +9,6 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 
 /**
  * @author amleshsinha

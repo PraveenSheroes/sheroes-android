@@ -316,9 +316,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String notificationId = getIntent().getExtras().getString("notificationId");
                 Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
-                if (!TextUtils.isEmpty(notificationId)) {
-                    setSource(NOTIFICATION_SCREEN);
-                }
                 mImageWidth = getIntent().getExtras().getInt(IMAGE_WIDTH);
                 mImageHeight = getIntent().getExtras().getInt(IMAGE_HEIGHT);
 
