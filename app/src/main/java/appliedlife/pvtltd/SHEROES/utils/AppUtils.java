@@ -1038,16 +1038,6 @@ public class AppUtils {
         return approveSpamPostRequest;
     }
 
-    public SelectCommunityRequest selectCommunityRequestBuilder() {
-        AppUtils appUtils = AppUtils.getInstance();
-        SelectCommunityRequest selectCommunityRequest = new SelectCommunityRequest();
-        selectCommunityRequest.setAppVersion(appUtils.getAppVersionName());
-        selectCommunityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        selectCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        selectCommunityRequest.setMasterDataType(AppConstants.JOB_AT_GET_ALL_DATA_KEY);
-        return selectCommunityRequest;
-    }
-
     public BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();
