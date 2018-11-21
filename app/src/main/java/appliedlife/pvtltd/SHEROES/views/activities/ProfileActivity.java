@@ -154,6 +154,10 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     //region constants
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
     private static final String SCREEN_LABEL = "Profile Screen";
+    private static final String PROFILE_POST_SCREEN_LABEL = "Profile Post Screen";
+    private static final String PROFILE_STORY_SCREEN_LABEL = "Profile Stories Screen";
+
+
     private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
     private static final float ORIGINAL_SIZE = 1.0f;
     private static final float EXPANDED_SIZE = 1.02f;
@@ -479,17 +483,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     }
 
     @Override
-    public void startNextScreen() {
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         mErrorUtil.onShowErrorDialog(this, s, feedParticipationEnum);
         mLoaderGif.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
     }
 
     @Override
@@ -1019,17 +1015,31 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         if (!isChampion) {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
         }
+        FeedFragment profilePostScreen = new FeedFragment();
+        Bundle bundlePostScreen = new Bundle();
+        String postScreenName = getString(R.string.ID_MENTOR_POST);
+        if (mLoggedInUserId != mUserSolarObject.getIdOfEntityOrParticipant()) {
+            bundlePostScreen.putString(AppConstants.END_POINT_URL, AppConstants.OTHER_USER_POST_STREAM + mUserSolarObject.getIdOfEntityOrParticipant());
+        } else {
+            bundlePostScreen.putString(AppConstants.END_POINT_URL, AppConstants.USER_MY_POST_STREAM);
+        }
+        bundlePostScreen.putString(AppConstants.SCREEN_NAME, PROFILE_POST_SCREEN_LABEL);
+        bundlePostScreen.putBoolean(FeedFragment.IS_HOME_FEED, false);
+        bundlePostScreen.putString(FeedFragment.STREAM_NAME, AppConstants.POST_STREAM);
+        profilePostScreen.setArguments(bundlePostScreen);
+        mViewPagerAdapter.addFragment(profilePostScreen, postScreenName);
+
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
         String screenName;
         if (mLoggedInUserId != mUserSolarObject.getIdOfEntityOrParticipant()) {
             screenName = getString(R.string.stories);
-            bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&userId=" + mUserSolarObject.getIdOfEntityOrParticipant());
+            bundle.putString(AppConstants.END_POINT_URL, AppConstants.OTHER_USER_STORIES_STREAM + mUserSolarObject.getIdOfEntityOrParticipant());
         } else {
             screenName = getString(R.string.my_stories);
-            bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true");
+            bundle.putString(AppConstants.END_POINT_URL, AppConstants.USER_MY_STORIES_STREAM);
         }
-        bundle.putString(AppConstants.SCREEN_NAME, "Profile Stories Screen");
+        bundle.putString(AppConstants.SCREEN_NAME, PROFILE_STORY_SCREEN_LABEL);
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
         bundle.putString(FeedFragment.STREAM_NAME, AppConstants.STORY_STREAM);
         feedFragment.setArguments(bundle);

@@ -22,11 +22,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -38,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityFlatViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
@@ -46,7 +43,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -81,7 +77,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     @Override
     public RecyclerView.ViewHolder customOnCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-
         switch (viewType) {
             case TYPE_ARTICLE:
                 return new FeedArticleHolder(mInflater.inflate(R.layout.feed_article_card_normal, parent, false), mBaseHolderInterface);
@@ -93,10 +88,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
             case TYPE_CHALLENGE:
                 return new ChallengeFeedHolder(mInflater.inflate(R.layout.challenge_feed_item, parent, false), mBaseHolderInterface);
-            case TYPE_EVENT:
-                return new EventCardHolder(mInflater.inflate(R.layout.event_card_holder, parent, false), mBaseHolderInterface);
-            case TYPE_ORGANIZATION:
-                return new OrgReviewCardHolder(mInflater.inflate(R.layout.review_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_CAROUSEL:
@@ -144,16 +135,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 ChallengeFeedHolder challengeFeedHolder = (ChallengeFeedHolder) holder;
                 ChallengeSolrObj challengeSolrObj = (ChallengeSolrObj) mFeedDetailList.get(position);
                 challengeFeedHolder.bindData(challengeSolrObj, mContext, position);
-                break;
-            case TYPE_EVENT:
-                EventCardHolder eventCardHolder = (EventCardHolder) holder;
-                UserPostSolrObj userPostSolrObj1 = (UserPostSolrObj) mFeedDetailList.get(position);
-                eventCardHolder.bindData(userPostSolrObj1, mContext, position);
-                break;
-            case TYPE_ORGANIZATION:
-                OrgReviewCardHolder orgReviewCardHolder = (OrgReviewCardHolder) holder;
-                UserPostSolrObj userPostSolrObj2 = (UserPostSolrObj) mFeedDetailList.get(position);
-                orgReviewCardHolder.bindData(userPostSolrObj2, mContext, position);
                 break;
             case TYPE_INRO:
                 AppIntroCardHolder appIntroCardHolder = (AppIntroCardHolder) holder;
@@ -205,8 +186,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_ARTICLE = 1;
     private static final int TYPE_USER_POST = 2;
     private static final int TYPE_CHALLENGE = 5;
-    private static final int TYPE_EVENT = 6;
-    private static final int TYPE_ORGANIZATION = 7;
     private static final int TYPE_INRO = 8;
     private static final int TYPE_CAROUSEL = 9;
     private static final int TYPE_USER_COMPACT = 10;
@@ -231,15 +210,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             }
 
             if (feedDetail instanceof UserPostSolrObj) {
-                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-                if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                    return TYPE_EVENT;
-
-                } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
-                    return TYPE_ORGANIZATION;
-                } else {
-                    return TYPE_USER_POST;
-                }
+                return TYPE_USER_POST;
             }
             if (feedDetail instanceof PollSolarObj) {
                 return TYPE_POLL;
@@ -247,15 +218,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail instanceof ChallengeSolrObj) {
                 return TYPE_CHALLENGE;
             }
-            if (feedDetail instanceof EventSolrObj) {
-                return TYPE_EVENT;
-            }
-            if (feedDetail instanceof OrganizationFeedObj) {
-                return TYPE_ORGANIZATION;
-            }
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.APP_INTRO_SUB_TYPE)) {
                 return TYPE_INRO;
             }
+
             if (feedDetail instanceof CarouselDataObj) {
                 return TYPE_CAROUSEL;
             }

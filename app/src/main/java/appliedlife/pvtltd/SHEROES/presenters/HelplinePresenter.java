@@ -115,9 +115,6 @@ public class HelplinePresenter extends BasePresenter<HelplineView>{
 
     }
 
-
-
-
     public void onStop() {
         detachView();
     }

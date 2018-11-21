@@ -1,13 +1,9 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -20,8 +16,6 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import org.parceler.Parcels;
-
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -30,7 +24,6 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.MenuEnum;
@@ -77,18 +70,19 @@ public class FeedUtils {
     //region injected variables
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    public FeedUtils() {
+        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
+    }
     //endregion
 
+    //region public methods
     public static synchronized FeedUtils getInstance() {
         if (mInstance == null) {
             mInstance = new FeedUtils();
         }
         return mInstance;
-    }
-
-    @Inject
-    public FeedUtils() {
-        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
     }
 
     public void feedCardsHandled(View view, BaseResponse baseResponse, Activity activity, String screenName) {
@@ -101,19 +95,10 @@ public class FeedUtils {
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall(activity);
                 break;
-            case R.id.tv_event_going_btn:
-                bookmarkCall(activity);
             case R.id.tv_article_bookmark:
                 bookMarkTrending(activity);
                 break;
             case R.id.tv_feed_community_post_user_share:
-                if (mIsWhatsAppShare) {
-                    shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
-                } else {
-                    shareWithMultipleOption(baseResponse, activity, screenName);
-                }
-                break;
-            case R.id.tv_feed_review_post_user_share_ic:
                 if (mIsWhatsAppShare) {
                     shareCardViaSocial(baseResponse, activity, screenName, mFeedDetail);
                 } else {
@@ -134,9 +119,6 @@ public class FeedUtils {
                 } else {
                     shareWithMultipleOption(baseResponse, activity, screenName);
                 }
-                break;
-            case R.id.tv_event_share_btn:
-                shareWithMultipleOption(baseResponse, activity, screenName);
                 break;
             /*Card menu option depend on Feed type like post,article etc */
 
@@ -211,45 +193,19 @@ public class FeedUtils {
                 break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(activity, (CommunityFeedSolrObj) mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                /*Intent intetFeature = new Intent(this, CommunitiesDetailActivity.class);
-                Bundle bundleFeature = new Bundle();
-                Parcelable parcelabless = Parcels.wrap(mFeedDetail);
-                bundleFeature.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelabless);
-                bundleFeature.putSerializable(AppConstants.MY_COMMUNITIES_FRAGMENT, CommunityEnum.FEATURE_COMMUNITY);
-                intetFeature.putExtras(bundleFeature);
-                startActivityForResult(intetFeature, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);*/
                 break;
             case R.id.tv_feed_community_post_card_title:
-                if (((UserPostSolrObj) mFeedDetail).getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                    if (null != mFeedDetail) {
-                        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                            mUserId = mUserPreference.get().getUserSummary().getUserId();
-                            openGenericCardInWebView(mFeedDetail, activity);
-                        }
-                    }
-                } else {
-                    if (mFeedDetail instanceof UserPostSolrObj) {
-                        if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
-                            ContestActivity.navigateTo(activity, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
-                        } else {
-                            CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                        }
+                if (mFeedDetail instanceof UserPostSolrObj) {
+                    if (((UserPostSolrObj) mFeedDetail).getCommunityId() == 0) {
+                        ContestActivity.navigateTo(activity, Long.toString(((UserPostSolrObj) mFeedDetail).getUserPostSourceEntityId()), mFeedDetail.getScreenName(), null);
                     } else {
                         CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-
                     }
-                }
-                break;
-            case R.id.tv_feed_review_card_title:
-                if (null != mFeedDetail) {
-                    if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                        mUserId = mUserPreference.get().getUserSummary().getUserId();
-                        openGenericCardInWebView(mFeedDetail, activity);
-                    }
+                } else {
+                    CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
                 }
                 break;
             default:
-//                LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
         }
     }
 
@@ -257,83 +213,8 @@ public class FeedUtils {
         mFragment = fragment;
     }
 
-    private void bookmarkCall(Activity activity) {
-        if (activity instanceof ContestActivity) {
-            ((ContestActivity) activity).bookmarkPost(mFeedDetail);
-        }
-    }
-
-    public void openCommentReactionFragment(Context context, FeedDetail feedDetail, String screenName) {
-        if (feedDetail instanceof UserPostSolrObj) {
-            PostDetailActivity.navigateTo((Activity) context, screenName, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
-        } else if (feedDetail instanceof ArticleSolrObj) {
-            ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
-            ArticleActivity.navigateTo((Activity) context, feedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
-        }
-    }
-
-    private void openGenericCardInWebView(FeedDetail feedDetail, Context context) {
-        if (StringUtil.isNotNullOrEmptyString(feedDetail.getDeepLinkUrl())) {
-            Uri url = Uri.parse(feedDetail.getDeepLinkUrl());
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(url);
-            context.startActivity(intent);
-        }
-    }
-
-    private void shareCardViaSocial(BaseResponse baseResponse, Context context, String screenName, FeedDetail mFeedDetail) {
-        FeedDetail feedDetail = (FeedDetail) baseResponse;
-        String deepLinkUrl;
-        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
-            deepLinkUrl = feedDetail.getPostShortBranchUrls();
-        } else {
-            deepLinkUrl = feedDetail.getDeepLinkUrl();
-        }
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.setPackage(AppConstants.WHATS_APP_URI);
-        intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
-        context.startActivity(intent);
-        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, screenName);
-    }
-
-    private void shareWithMultipleOption(BaseResponse baseResponse, Context context, String screenName) {
-        FeedDetail feedDetail = (FeedDetail) baseResponse;
-        String deepLinkUrl;
-        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
-            deepLinkUrl = feedDetail.getPostShortBranchUrls();
-        } else {
-            deepLinkUrl = feedDetail.getDeepLinkUrl();
-        }
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType(AppConstants.SHARE_MENU_TYPE);
-        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
-        intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
-        context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, screenName);
-        AnalyticsManager.trackEvent(Event.POST_SHARED, screenName, properties);
-    }
-
     public void setConfigurableShareOption(boolean mIsWhatsAppShare) {
         this.mIsWhatsAppShare = mIsWhatsAppShare;
-    }
-
-    //Open profile from last comment user profile or name click
-    public void openUserProfileLastComment(View view, BaseResponse baseResponse, Context context) {
-        Comment comment = (Comment) baseResponse;
-        if (!comment.isAnonymous() && comment.getParticipantUserId() != null) {
-            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
-            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            ProfileActivity.navigateTo((Activity) context, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-        }
-    }
-
-    private void bookMarkTrending(Activity context) {
-        Fragment articleFragment = ((FragmentActivity) context).getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
-        if (AppUtils.isFragmentUIActive(articleFragment)) {
-            ((ArticlesFragment) articleFragment).bookMarkForCard(mFeedDetail);
-        }
     }
 
     public void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum, final Context context, final String screenName) {
@@ -388,6 +269,98 @@ public class FeedUtils {
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu, context);
     }
 
+    public void onDestroy() {
+        mIsDestroyed = true;
+    }
+
+    public void dismissWindow() {
+        popupWindow.dismiss();
+    }
+
+    public void onReferrerReceived(Context context, Boolean isReceived) {
+        if (isReceived != null && isReceived) {
+            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(context);
+            appInstallationHelper.setupAndSaveInstallation(false);
+        }
+    }
+
+    public void clearReferences() {
+        if (null != mSheroesApplication) {
+            String currActivityName = mSheroesApplication.getCurrentActivityName();
+            if (StringUtil.isNotNullOrEmptyString(currActivityName)) {
+                if (this.getClass().getSimpleName().equals(currActivityName))
+                    mSheroesApplication.setCurrentActivityName(null);
+            }
+        }
+    }
+    //endregion
+
+    //region private methods
+    //Open profile from last comment user profile or name click
+    private void openUserProfileLastComment(View view, BaseResponse baseResponse, Context context) {
+        Comment comment = (Comment) baseResponse;
+        if (!comment.isAnonymous() && comment.getParticipantUserId() != null) {
+            CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+            communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
+            communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+            ProfileActivity.navigateTo((Activity) context, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        }
+    }
+
+    private void shareCardViaSocial(BaseResponse baseResponse, Context context, String screenName, FeedDetail mFeedDetail) {
+        FeedDetail feedDetail = (FeedDetail) baseResponse;
+        String deepLinkUrl;
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
+            deepLinkUrl = feedDetail.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = feedDetail.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.setPackage(AppConstants.WHATS_APP_URI);
+        intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
+        context.startActivity(intent);
+        AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, screenName);
+    }
+
+    private void shareWithMultipleOption(BaseResponse baseResponse, Context context, String screenName) {
+        FeedDetail feedDetail = (FeedDetail) baseResponse;
+        String deepLinkUrl;
+        if (StringUtil.isNotNullOrEmptyString(feedDetail.getPostShortBranchUrls())) {
+            deepLinkUrl = feedDetail.getPostShortBranchUrls();
+        } else {
+            deepLinkUrl = feedDetail.getDeepLinkUrl();
+        }
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType(AppConstants.SHARE_MENU_TYPE);
+        intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
+        intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
+        context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+        HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, screenName);
+        AnalyticsManager.trackEvent(Event.POST_SHARED, screenName, properties);
+    }
+
+    private void bookmarkCall(Activity activity) {
+        if (activity instanceof ContestActivity) {
+            ((ContestActivity) activity).bookmarkPost(mFeedDetail);
+        }
+    }
+
+    private void openCommentReactionFragment(Context context, FeedDetail feedDetail, String screenName) {
+        if (feedDetail instanceof UserPostSolrObj) {
+            PostDetailActivity.navigateTo((Activity) context, screenName, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
+        } else if (feedDetail instanceof ArticleSolrObj) {
+            ArticleSolrObj articleSolrObj = (ArticleSolrObj) feedDetail;
+            ArticleActivity.navigateTo((Activity) context, feedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
+        }
+    }
+
+    private void bookMarkTrending(Activity context) {
+        Fragment articleFragment = ((FragmentActivity) context).getSupportFragmentManager().findFragmentByTag(ArticlesFragment.class.getName());
+        if (AppUtils.isFragmentUIActive(articleFragment)) {
+            ((ArticlesFragment) articleFragment).bookMarkForCard(mFeedDetail);
+        }
+    }
 
     private void editOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction, Context context, String screenName) {
         switch (menuEnum) {
@@ -428,15 +401,13 @@ public class FeedUtils {
         }
     }
 
-
-    public void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction, String screenName, Context context) {
+    private void deleteOperationOnMenu(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction, String screenName, Context context) {
         switch (menuEnum) {
             case USER_COMMENT_ON_CARD_MENU:
                 Comment comment = (Comment) baseResponse;
                 if (AppUtils.isFragmentUIActive(fragmentCommentReaction)) {
                     comment.setActive(false);
                     comment.setEdit(false);
-                    //  ((CommentReactionFragment) fragmentCommentReaction).deleteCommentFromList(comment);
                 }
                 break;
             case USER_REACTION_COMMENT_MENU:
@@ -448,11 +419,6 @@ public class FeedUtils {
                         ((PollSolarObj) mFeedDetail).setIsEditOrDelete(AppConstants.COMMENT_DELETE);
                     }
                     openCommentReactionFragment(context, mFeedDetail, screenName);
-                }
-                break;
-            case FEED_CARD_MENU:
-                if (null != mFeedDetail) {
-                    ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
 
@@ -545,34 +511,8 @@ public class FeedUtils {
         }
     }
 
-    public void openImageFullViewFragment(Context context, FeedDetail feedDetail) {
+    private void openImageFullViewFragment(Context context, FeedDetail feedDetail) {
         AlbumActivity.navigateTo((Activity) context, feedDetail, "BASE", null);
     }
-
-
-    public void onDestroy() {
-        mIsDestroyed = true;
-    }
-
-    public void dismissWindow() {
-        popupWindow.dismiss();
-    }
-
-    public void onReferrerReceived(Context context, Boolean isReceived) {
-        if (isReceived != null && isReceived) {
-            AppInstallationHelper appInstallationHelper = new AppInstallationHelper(context);
-            appInstallationHelper.setupAndSaveInstallation(false);
-        }
-    }
-
-    public void clearReferences() {
-        if (null != mSheroesApplication) {
-            String currActivityName = mSheroesApplication.getCurrentActivityName();
-            if (StringUtil.isNotNullOrEmptyString(currActivityName)) {
-                if (this.getClass().getSimpleName().equals(currActivityName))
-                    mSheroesApplication.setCurrentActivityName(null);
-            }
-        }
-    }
-
+    //endregion
 }

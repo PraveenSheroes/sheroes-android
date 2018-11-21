@@ -5,9 +5,6 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -34,59 +31,56 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWED_CHAMPION_LA
 
 public class FollowingActivity extends BaseActivity {
 
+    // region Constants
     public static final String Followers_Screen = "Followers Screen";
     public static final String Following_Screen = "Following Screen";
-
     public static final String MEMBERS_TYPE = "TYPE";
-    private long userMentorId;
-    private boolean isSelfProfile;
-    private FollowingEnum mMembersType;
+    //endregion
 
+    // region views
     @Bind(R.id.title_toolbar)
-    TextView titleName;
-
+    TextView mTitleName;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    //endregion
 
+    // region member variables
+    private long mUserMentorId;
+    private boolean mIsSelfProfile;
+    private FollowingEnum mMembersType;
+    //endregion
+
+    // region lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         setContentView(R.layout.activity_communities_list);
         ButterKnife.bind(this);
-
         if (getIntent().getExtras() != null) {
-            userMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
-            isSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
+            mUserMentorId = getIntent().getExtras().getLong(ProfileDetailsFragment.USER_MENTOR_ID);
+            mIsSelfProfile = getIntent().getExtras().getBoolean(ProfileDetailsFragment.SELF_PROFILE);
             mMembersType = (FollowingEnum) getIntent().getSerializableExtra(MEMBERS_TYPE);
         }
-
         setupToolbarItemsColor();
-
         if (mMembersType == null) return;
-
         if (mMembersType == FollowingEnum.FOLLOWED_CHAMPIONS) {
-            titleName.setText(R.string.champions_followed);
+            mTitleName.setText(R.string.champions_followed);
         } else if (mMembersType == FollowingEnum.FOLLOWERS) {
-            if (isSelfProfile) {
-                titleName.setText(R.string.follower_toolbar_title);
+            if (mIsSelfProfile) {
+                mTitleName.setText(R.string.follower_toolbar_title);
             } else {
-                titleName.setText(R.string.follower_public_profile_toolbar_title);
+                mTitleName.setText(R.string.follower_public_profile_toolbar_title);
             }
         } else if (mMembersType == FollowingEnum.FOLLOWING) {
-            if (isSelfProfile) {
-                titleName.setText(R.string.following_toolbar_title);
+            if (mIsSelfProfile) {
+                mTitleName.setText(R.string.following_toolbar_title);
             } else {
-                titleName.setText(R.string.following_public_profile_toolbar_title);
+                mTitleName.setText(R.string.following_public_profile_toolbar_title);
             }
         }
-
-        Fragment followingFragment = FollowingFragment.createInstance(userMentorId, isSelfProfile, mMembersType.name());
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction =
-                fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, followingFragment);
-        fragmentTransaction.commit();
+        FollowingFragment followingFragment = FollowingFragment.createInstance(mUserMentorId, mIsSelfProfile, mMembersType.name());
+        addNewFragment(followingFragment, R.id.container, FollowingFragment.class.getName(), null, false);
     }
 
     private void setupToolbarItemsColor() {
@@ -100,17 +94,6 @@ public class FollowingActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        setResult();
-        super.onBackPressed();
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -119,17 +102,9 @@ public class FollowingActivity extends BaseActivity {
         }
         return true;
     }
+    //endregion
 
-    private void setResult() {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-    }
-
-    @Override
-    protected boolean trackScreenTime() {
-        return true;
-    }
-
+    // region public methods
     @Override
     public String getScreenName() {
         String screenLabel = "";
@@ -145,6 +120,13 @@ public class FollowingActivity extends BaseActivity {
         return screenLabel;
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult();
+        super.onBackPressed();
+    }
+    //endregion
+
     //region static methods
     public static void navigateTo(Activity fromActivity, long mentorID, boolean isOwnProfile, String sourceScreen, FollowingEnum followingEnum, HashMap<String, Object> properties) {
         Intent intent = new Intent(fromActivity, FollowingActivity.class);
@@ -158,5 +140,24 @@ public class FollowingActivity extends BaseActivity {
         intent.putExtra(MEMBERS_TYPE, followingEnum);
         ActivityCompat.startActivityForResult(fromActivity, intent, 1, null);
     }
+    //endregion
 
+    // region protected methods
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    protected boolean trackScreenTime() {
+        return true;
+    }
+    //endregion
+
+    // region private methods
+    private void setResult() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+    }
+    //endregion
 }

@@ -4,7 +4,6 @@ import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +24,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UpLoadImageResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -54,29 +52,35 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
  */
 
 public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
-
+    //region member variables
     public static final String CHALLENGE_POST = "challenge post";
+    private SheroesAppServiceApi mSheroesAppServiceApi;
+    //endregion member variables
 
+    //region inject variables
     @Inject
-    CommunityModel communityModel;
-    private static final int MIN_QUESTION_SEARCH_LENGTH = 2;
+    CommunityModel mCommunityModel;
+
     @Inject
     AppUtils mAppUtils;
-    private SheroesAppServiceApi mSheroesAppServiceApi;
+    //endregion inject variables
 
+    //region consturctor
     @Inject
     public CreatePostPresenter(AppUtils appUtils, SheroesAppServiceApi sheroesAppServiceApi) {
         mAppUtils = appUtils;
         mSheroesAppServiceApi = sheroesAppServiceApi;
     }
+    //endregion consturctor
 
+    //region public methods
     public void sendPost(Map uploadImageFileMap, CommunityPostCreateRequest communityPostCreateRequest, final boolean isSharedFromExternalApp) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest)
+        mCommunityModel.addPostCommunity(uploadImageFileMap, communityPostCreateRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
@@ -84,7 +88,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -108,7 +111,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                             getMvpView().stopProgressBar();
                         }
                     }
-
                 });
     }
 
@@ -118,11 +120,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.createChallengePost(challengePostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
+        mCommunityModel.createChallengePost(challengePostCreateRequest).compose(this.<CreateCommunityResponse>bindToLifecycle()).subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
             @Override
             public void onComplete() {
-
             }
 
             @Override
@@ -149,9 +150,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                                 .build();
                 AnalyticsManager.trackEvent(Event.POST_CREATED, CommunityPostActivity.SCREEN_LABEL, properties);
             }
-
         });
-
     }
 
     public void fetchLinkDetails(LinkRequest linkRequest) {
@@ -160,7 +159,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.linkRenderFromModel(linkRequest).compose(this.<LinkRenderResponse>bindToLifecycle()).subscribe(new DisposableObserver<LinkRenderResponse>() {
+        mCommunityModel.linkRenderFromModel(linkRequest).compose(this.<LinkRenderResponse>bindToLifecycle()).subscribe(new DisposableObserver<LinkRenderResponse>() {
 
             @Override
             public void onComplete() {
@@ -179,9 +178,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                 getMvpView().stopProgressBar();
                 getMvpView().linkRenderResponse(linkRenderResponse);
             }
-
         });
-
     }
 
     public void editPost(Map uploadImageFileMap, final CommunityPostCreateRequest communityPostCreateRequest) {
@@ -190,7 +187,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
             return;
         }
         getMvpView().startProgressBar();
-        communityModel.editPostCommunity(uploadImageFileMap, communityPostCreateRequest)
+        mCommunityModel.editPostCommunity(uploadImageFileMap, communityPostCreateRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
@@ -218,13 +215,10 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                             Toast.makeText(SheroesApplication.mContext, communityPostCreateResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), Toast.LENGTH_SHORT).show();
                         }
                     }
-
                 });
-
     }
 
     //Debounce for usermention function
-
     public void getUserMentionSuggestion(final RichEditorView richEditorView, final CommunityPost communityPost) {
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMUNITY_OWNER);
@@ -253,7 +247,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         if (searchUserDataRequest == null) {
                             return Observable.empty();
                         }
-                        return communityModel.getUserMentionSuggestionSearchResult(searchUserDataRequest);
+                        return mCommunityModel.getUserMentionSuggestionSearchResult(searchUserDataRequest);
                     }
                 })
                 .compose(this.<SearchUserDataResponse>bindToLifecycle())
@@ -263,7 +257,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -282,9 +275,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                             }
                         }
                     }
-
                 });
-
     }
 
     public void createPoll(CreatePollRequest createPollRequest) {
@@ -301,7 +292,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -321,7 +311,6 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                             getMvpView().stopProgressBar();
                         }
                     }
-
                 });
     }
 
@@ -349,8 +338,7 @@ public class CreatePostPresenter extends BasePresenter<ICommunityPostView> {
                         getMvpView().showImage(finalImageUrl);
                         getMvpView().stopProgressBar();
                     }
-
                 });
     }
-
+    //endregion public methods
 }

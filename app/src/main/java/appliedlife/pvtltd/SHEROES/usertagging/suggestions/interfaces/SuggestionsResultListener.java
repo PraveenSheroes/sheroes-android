@@ -20,7 +20,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsResu
 
 
 /**
- * Interface used to listen for the results of a mention suggestion query via a {@link QueryTokenReceiver}.
+ * Interface used to listen for the results of a mention suggestion query via a {@link IQueryTokenReceiver}.
  */
 public interface SuggestionsResultListener {
 
@@ -28,9 +28,9 @@ public interface SuggestionsResultListener {
      * Callback to return a {@link UserTagSuggestionsResult} so that the suggestions it contains can be added to a
      * {@link SuggestionsAdapter} and rendered accordingly.
      * <p>
-     * Note that for any given {@link QueryToken} that the {@link QueryTokenReceiver} handles, onReceiveSuggestionsResult
+     * Note that for any given {@link QueryToken} that the {@link IQueryTokenReceiver} handles, onReceiveSuggestionsResult
      * may be called multiple times. For example, if you can suggest both people and companies, the
-     * {@link QueryTokenReceiver} will receive a single {@link QueryToken}, but it should call onReceiveSuggestionsResult
+     * {@link IQueryTokenReceiver} will receive a single {@link QueryToken}, but it should call onReceiveSuggestionsResult
      * twice (once with people suggestions and once with company suggestions), using a different bucket each time.
      *
      * @param result a {@link UserTagSuggestionsResult} representing the result of the query

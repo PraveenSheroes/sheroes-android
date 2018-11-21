@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -31,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -47,10 +45,23 @@ import butterknife.OnClick;
 
 
 public class OnBoardingActivity extends BaseActivity implements BaseHolderInterface {
+    //region static variables
     private final String TAG = LogUtils.makeLogTag(OnBoardingActivity.class);
+    //endregion static variables
 
+    //region member variables
+    private boolean doubleBackToExitPressedOnce = false;
+    public static int isJoinCount = 0;
+    //endregion member variables
+
+    //region inject variables
     @Inject
     Preference<LoginResponse> userPreference;
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    //endregion inject variables
+
+    //region view
     @Bind(R.id.card)
     CardView card;
     @Bind(R.id.tv_on_boarding_finish)
@@ -59,9 +70,9 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
     public TextView tvNameUser;
     @Bind(R.id.tv_on_boarding_description)
     public TextView tvDescription;
-    private boolean doubleBackToExitPressedOnce = false;
-    public static int isJoinCount = 0;
+    //endregion view
 
+    //region lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +83,99 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
         DrawerViewHolder.selectedOptionName = null;
     }
 
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            finish();
+            return;
+        }
+        doubleBackToExitPressedOnce = true;
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
+
+    }
+    //endregion lifecycle methods
+
+    //region inherited methods
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+        int id = view.getId();
+        if (baseResponse instanceof CommunityFeedSolrObj) {
+            CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) baseResponse;
+            switch (id) {
+                case R.id.tv_boarding_communities_join:
+                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingFragment.class.getName());
+                    if (AppUtils.isFragmentUIActive(fragment)) {
+                        if (communityFeedSolrObj.isMember()) {
+                            ((OnBoardingFragment) fragment).unJoinCommunity(communityFeedSolrObj);
+                        } else {
+                            ((OnBoardingFragment) fragment).joinRequestForOpenCommunity(communityFeedSolrObj);
+                        }
+                    }
+                    break;
+                default:
+                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
+            }
+        }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
+        super.onShowErrorDialog(s, feedParticipationEnum);
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    public String getScreenName() {
+        return null;
+    }
+    //endregion inherited methods
+
+    //region public methods
     public void setPagerAndLayouts() {
         supportPostponeEnterTransition();
         if (null != userPreference && userPreference.isSet() && null != userPreference.get() && StringUtil.isNotNullOrEmptyString(userPreference.get().getNextScreen())) {
@@ -103,90 +207,7 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
         }
         OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
-        Bundle bundleArticle = new Bundle();
-        onBoardingFragment.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingFragment, OnBoardingFragment.class.getName()).commitAllowingStateLoss();
-
-    }
-
-    @Override
-    public void handleOnClick(BaseResponse baseResponse, View view) {
-        int id = view.getId();
-        if (baseResponse instanceof CommunityFeedSolrObj) {
-            CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) baseResponse;
-            switch (id) {
-                case R.id.tv_boarding_communities_join:
-                    Fragment fragment = getSupportFragmentManager().findFragmentByTag(OnBoardingFragment.class.getName());
-                    if (AppUtils.isFragmentUIActive(fragment)) {
-                        if (communityFeedSolrObj.isMember()) {
-                            ((OnBoardingFragment) fragment).unJoinCommunity(communityFeedSolrObj);
-                        } else {
-                            ((OnBoardingFragment) fragment).joinRequestForOpenCommunity(communityFeedSolrObj);
-                        }
-
-                    }
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + id);
-            }
-        }
-    }
-
-    @Override
-    public void dataOperationOnClick(BaseResponse baseResponse) {
-    }
-
-    @Override
-    public void setListData(BaseResponse data, boolean flag) {
-    }
-
-    @Override
-    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-    }
-
-    @Override
-    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (doubleBackToExitPressedOnce) {
-            finish();
-            return;
-        }
-        doubleBackToExitPressedOnce = true;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                doubleBackToExitPressedOnce = false;
-            }
-        }, 2000);
-
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
-        return true;
-    }
-
-
-    @Override
-    public void onShowErrorDialog(String s, FeedParticipationEnum feedParticipationEnum) {
-        super.onShowErrorDialog(s, feedParticipationEnum);
+        addNewFragment(onBoardingFragment, R.id.fl_onboarding_fragment, OnBoardingFragment.class.getName(), null,false);
     }
 
     @OnClick(R.id.tv_on_boarding_finish)
@@ -205,24 +226,11 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             OnBoardingMsgDialog fragment = (OnBoardingMsgDialog) getFragmentManager().findFragmentByTag(OnBoardingMsgDialog.class.getName());
             if (fragment == null) {
                 fragment = new OnBoardingMsgDialog();
-                Bundle b = new Bundle();
-                // b.putString(AppConstants.SHEROES_AUTH_TOKEN, message);
-                fragment.setArguments(b);
             }
             if (!fragment.isVisible() && !fragment.isAdded() && !isFinishing() && !mIsDestroyed) {
                 fragment.show(getFragmentManager(), OnBoardingMsgDialog.class.getName());
             }
         }
     }
-
-    @Override
-    public boolean shouldTrackScreen() {
-        return false;
-    }
-
-    @Override
-    public String getScreenName() {
-        return null;
-    }
-
+    //endregion public methods
 }

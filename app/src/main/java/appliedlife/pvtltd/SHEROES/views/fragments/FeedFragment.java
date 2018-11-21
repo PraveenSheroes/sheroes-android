@@ -120,7 +120,6 @@ import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -228,7 +227,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private LinearLayoutManager mLinearLayoutManager;
     private ImpressionHelper impressionHelper;
     private FeedAdapter mAdapter;
-    private EventDetailDialogFragment eventDetailDialogFragment;
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
     private boolean isTrackingEnabled = true;
@@ -604,11 +602,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
 
         if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL && mLoggedInUser != -1) {
@@ -845,10 +838,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
     //endregion
 
     //region private methods
@@ -1840,25 +1829,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onCommunityTitleClicked(FeedDetail feedDetail) {
         if (feedDetail instanceof UserPostSolrObj) {
             UserPostSolrObj userPostObj = (UserPostSolrObj) feedDetail;
-            if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                    if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
-                        Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(url);
-                        startActivity(intent);
-                    }
+            if (userPostObj.getCommunityId() == 0) {
+                ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), mScreenProperties);
 
-                }
             } else {
-                if (userPostObj.getCommunityId() == 0) {
-                    ContestActivity.navigateTo(getActivity(), Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), mScreenProperties);
-
-                } else {
-                    HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
-                    screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostObj.getItemPosition()));
-                    CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                }
+                HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+                screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(userPostObj.getItemPosition()));
+                CommunityDetailActivity.navigateTo(getActivity(), userPostObj.getCommunityId(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         } else if (feedDetail instanceof PollSolarObj) {
             PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
@@ -1907,51 +1884,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .build();
         AnalyticsManager.trackEvent(Event.CHALLENGE_SHARED, getScreenName(), properties);
         ShareBottomSheetFragment.showDialog((AppCompatActivity) getActivity(), shareText, ((FeedDetail) baseResponse).getThumbnailImageUrl(), postShareUrl, getScreenName(), true, postShareUrl, true, Event.CHALLENGE_SHARED, properties);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
-    @Override
-    public void onEventPostClicked(UserPostSolrObj userPostSolrObj) {
-        eventDetailDialogFragment = (EventDetailDialogFragment) getActivity().getFragmentManager().findFragmentByTag(EventDetailDialogFragment.class.getName());
-        if (eventDetailDialogFragment == null) {
-            eventDetailDialogFragment = new EventDetailDialogFragment();
-            Bundle bundle = new Bundle();
-            bundle.putLong(AppConstants.EVENT_ID, 0);
-            bundle.putBoolean(AppConstants.IS_FROM_COMMUNITY_SCREEN, true);
-            Parcelable parcelable = Parcels.wrap(userPostSolrObj);
-            bundle.putParcelable(AppConstants.EVENT_DETAIL, parcelable);
-            eventDetailDialogFragment.setArguments(bundle);
-        }
-        if (!eventDetailDialogFragment.isVisible() && !eventDetailDialogFragment.isAdded() && !getActivity().isFinishing() && !getActivity().isDestroyed()) {
-            eventDetailDialogFragment.show(getActivity().getFragmentManager(), EventDetailDialogFragment.class.getName());
-        }
-    }
-
-    @Override
-    public void onEventInterestedClicked(UserPostSolrObj userPostSolrObj) {
-        mFeedPresenter.getEventInterestedFromPresenter(mAppUtils.likeRequestBuilder(userPostSolrObj.getEntityOrParticipantId(), AppConstants.EVENT_CONSTANT), userPostSolrObj);
-    }
-
-    @Override
-    public void onEventNotInterestedClicked(UserPostSolrObj userPostSolrObj) {
-        mFeedPresenter.getEventNotInteresetedFromPresenter(mAppUtils.unLikeRequestBuilder(userPostSolrObj.getEntityOrParticipantId()), userPostSolrObj);
-    }
-
-    @Override
-    public void onEventGoingClicked(UserPostSolrObj userPostSolrObj) {
-        mFeedPresenter.postBookmarked(mAppUtils.bookMarkRequestBuilder(userPostSolrObj.getEntityOrParticipantId()), userPostSolrObj.isBookmarked());
-    }
-
-    @Override
-    public void onOrgTitleClicked(UserPostSolrObj userPostObj) {
-        if (null != userPostObj) {
-            if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
-                Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(url);
-                startActivity(intent);
-            }
-        }
     }
 
     private void reportSpamDialog(final SpamContentType spamContentType, final UserPostSolrObj userPostSolrObj) {

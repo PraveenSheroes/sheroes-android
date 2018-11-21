@@ -43,11 +43,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -159,8 +157,6 @@ public class SheroesAppModule {
                 .registerSubtype(UserSolrObj.class, AppConstants.USER_SUB_TYPE)
                 .registerSubtype(CommunityFeedSolrObj.class, AppConstants.FEED_COMMUNITY)
                 .registerSubtype(UserPostSolrObj.class, AppConstants.FEED_COMMUNITY_POST)
-                .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)
-                .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
                 .registerSubtype(LeaderBoardUserSolrObj.class, AppConstants.LEADER_SUB_TYPE)

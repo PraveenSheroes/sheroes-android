@@ -164,20 +164,13 @@ public class BookmarksFragment extends BaseFragment {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
+
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
         super.markAsSpamCommunityPost(feedDetail);
     }
+
     public void deleteCommunityPost(FeedDetail feedDetail) {
         super.deleteCommunityPost(feedDetail);
-    }
-    public void bookMarkForCard(FeedDetail feedDetail, FragmentOpen fragmentOpen) {
-        setFragmentData(fragmentOpen);
-       super.bookMarkForCard(feedDetail);
-    }
-
-
-    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-       super.likeAndUnlikeRequest(baseResponse,reactionValue,position);
     }
 
     @Override
@@ -185,23 +178,9 @@ public class BookmarksFragment extends BaseFragment {
         return mHomePresenter;
     }
 
-
-//    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-//     super.commentListRefresh(feedDetail,feedParticipationEnum);
-//    }
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
 }

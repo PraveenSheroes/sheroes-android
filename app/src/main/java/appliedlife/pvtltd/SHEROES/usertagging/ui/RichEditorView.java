@@ -54,7 +54,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestions
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizer;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.impl.WordTokenizerConfig;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 
@@ -74,26 +74,25 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
  * @attr ref R.styleable#RichEditorView_selectedMentionTextColor
  * @attr ref R.styleable#RichEditorView_selectedMentionTextBackgroundColor
  */
-public class RichEditorView extends RelativeLayout implements TextWatcher, QueryTokenReceiver, SuggestionsResultListener, SuggestionsVisibilityManager, UserMentionSuggestionTagCallback {
+public class RichEditorView extends RelativeLayout implements TextWatcher, IQueryTokenReceiver, SuggestionsResultListener, SuggestionsVisibilityManager, UserMentionSuggestionTagCallback {
 
+    //region member variables
     private MentionsEditText mMentionsEditText;
-    private int mOriginalInputType = InputType.TYPE_CLASS_TEXT; // Default to plain text
-
     private RecyclerView mSuggestionsList;
-
-    private QueryTokenReceiver mHostQueryTokenReceiver;
+    private IQueryTokenReceiver mHostQueryTokenReceiver;
     private UserTagSuggestionsAdapter mUserTagSuggestionsAdapter;
     private OnSuggestionsVisibilityChangeListener mActionListener;
-
     private ViewGroup.LayoutParams mPrevEditTextParams;
-    private boolean mEditTextShouldWrapContent = false; // Default to match parent in height
-    private int mPrevEditTextBottomPadding;
 
+    private boolean mEditTextShouldWrapContent = false; // Default to match parent in height
+    private boolean mWaitingForFirstResult = false;
+
+    private int mOriginalInputType = InputType.TYPE_CLASS_TEXT; // Default to plain text
+    private int mPrevEditTextBottomPadding;
     private int mTextCountLimit = -1;
     private int mWithinCountLimitTextColor = Color.BLACK;
     private int mBeyondCountLimitTextColor = Color.RED;
-
-    private boolean mWaitingForFirstResult = false;
+    //endregion member variables
 
     // --------------------------------------------------
     // Constructors & Initialization
@@ -114,6 +113,104 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
         init(context, attrs, defStyleAttr);
     }
 
+
+    // --------------------------------------------------
+    // TextWatcher Implementation
+    // --------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    //region override methods
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        // Do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        // Do nothing
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void afterTextChanged(Editable s) {
+        //  TODO: Here we can implement link rendering
+        textChangeListner(s);
+    }
+
+    // --------------------------------------------------
+    // QueryTokenReceiver Implementation
+    // --------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
+        List<String> buckets = null;
+        // Pass the query token to a host receiver
+        if (mHostQueryTokenReceiver != null) {
+            buckets = mHostQueryTokenReceiver.onQueryReceived(queryToken);
+            mUserTagSuggestionsAdapter.notifyQueryTokenReceived(queryToken, buckets);
+        }
+        return buckets;
+    }
+
+    @Override
+    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
+        Suggestible suggestibleObj = null;
+        // Pass the query token to a host receiver
+        if (mHostQueryTokenReceiver != null) {
+            suggestibleObj = mHostQueryTokenReceiver.onMentionUserSuggestionClick(suggestible, view);
+        }
+        return suggestibleObj;
+    }
+
+    @Override
+    public void textChangeListner(Editable s) {
+        if (mHostQueryTokenReceiver != null) {
+            mHostQueryTokenReceiver.textChangeListner(s);
+        }
+    }
+    // --------------------------------------------------
+    // SuggestionsResultListener Implementation
+    // --------------------------------------------------
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void onReceiveSuggestionsResult(final @NonNull UserTagSuggestionsResult result, final @NonNull String bucket) {
+        // Add the mentions and notify the editor/dropdown of the changes on the UI thread
+        post(new Runnable() {
+            @Override
+            public void run() {
+                if (mUserTagSuggestionsAdapter != null) {
+                    mUserTagSuggestionsAdapter.addSuggestions(result, bucket, mMentionsEditText);
+
+                }
+                // Make sure the list is scrolled to the top once you receive the first query result
+                if (mWaitingForFirstResult && mSuggestionsList != null) {
+                    mSuggestionsList.scrollToPosition(0);
+                    mWaitingForFirstResult = false;
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onSuggestedUserClicked(Suggestible suggestible, View view) {
+        onMentionUserSuggestionClick(suggestible, view);
+    }
+    //endregion override methods
+
+    //region methods
     public void init(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         // Inflate view from XML layout file
 
@@ -257,96 +354,6 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             return layout.getLineForOffset(selectionStart);
         }
         return -1;
-    }
-
-
-    // --------------------------------------------------
-    // TextWatcher Implementation
-    // --------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // Do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        // Do nothing
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void afterTextChanged(Editable s) {
-        //  TODO: Here we can implement link rendering
-        textChangeListner(s);
-    }
-
-    // --------------------------------------------------
-    // QueryTokenReceiver Implementation
-    // --------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
-        List<String> buckets = null;
-        // Pass the query token to a host receiver
-        if (mHostQueryTokenReceiver != null) {
-            buckets = mHostQueryTokenReceiver.onQueryReceived(queryToken);
-            mUserTagSuggestionsAdapter.notifyQueryTokenReceived(queryToken, buckets);
-        }
-        return buckets;
-    }
-
-    @Override
-    public Suggestible onMentionUserSuggestionClick(@NonNull Suggestible suggestible, View view) {
-        Suggestible suggestibleObj = null;
-        // Pass the query token to a host receiver
-        if (mHostQueryTokenReceiver != null) {
-            suggestibleObj = mHostQueryTokenReceiver.onMentionUserSuggestionClick(suggestible, view);
-        }
-        return suggestibleObj;
-    }
-
-    @Override
-    public void textChangeListner(Editable s) {
-        if (mHostQueryTokenReceiver != null) {
-            mHostQueryTokenReceiver.textChangeListner(s);
-        }
-    }
-    // --------------------------------------------------
-    // SuggestionsResultListener Implementation
-    // --------------------------------------------------
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onReceiveSuggestionsResult(final @NonNull UserTagSuggestionsResult result, final @NonNull String bucket) {
-        // Add the mentions and notify the editor/dropdown of the changes on the UI thread
-        post(new Runnable() {
-            @Override
-            public void run() {
-                if (mUserTagSuggestionsAdapter != null) {
-                    mUserTagSuggestionsAdapter.addSuggestions(result, bucket, mMentionsEditText);
-
-                }
-                // Make sure the list is scrolled to the top once you receive the first query result
-                if (mWaitingForFirstResult && mSuggestionsList != null) {
-                    mSuggestionsList.scrollToPosition(0);
-                    mWaitingForFirstResult = false;
-                }
-            }
-        });
     }
 
     public UserTagSuggestionsAdapter notifyAdapterOnData(List<Mention> mentionList) {
@@ -673,7 +680,7 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
      *
      * @param client the object that can receive {@link QueryToken} objects and generate suggestions from them
      */
-    public void setQueryTokenReceiver(final @Nullable QueryTokenReceiver client) {
+    public void setQueryTokenReceiver(final @Nullable IQueryTokenReceiver client) {
         mHostQueryTokenReceiver = client;
     }
 
@@ -708,9 +715,5 @@ public class RichEditorView extends RelativeLayout implements TextWatcher, Query
             mUserTagSuggestionsAdapter.setSuggestionsListBuilder(suggestionsListBuilder);
         }
     }
-
-    @Override
-    public void onSuggestedUserClicked(Suggestible suggestible, View view) {
-        onMentionUserSuggestionClick(suggestible, view);
-    }
+    //endregion methods
 }

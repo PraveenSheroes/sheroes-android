@@ -32,24 +32,25 @@ import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LanguageSelectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.LoginActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
+import appliedlife.pvtltd.SHEROES.views.errorview.NetworkAndApiErrorDialog;
+import appliedlife.pvtltd.SHEROES.views.errorview.OnBoardingMsgDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticleCategorySpinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.BookmarksFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.CommunitiesListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContactListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.EmailVerificationFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
@@ -58,14 +59,11 @@ import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.LikeListBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.LoginFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.ResetPasswordSuccessFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
@@ -73,12 +71,14 @@ import appliedlife.pvtltd.SHEROES.views.fragments.UserGridFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ChallengeWinnerPopUpDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EventDetailDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.DeactivateProfileDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.EmailVerificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.MaleErrorDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileImageDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.DeactivateProfileDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ReportUserProfileDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ResetPasswordDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ResetPasswordSuccessDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.UnFollowDialogFragment;
@@ -91,10 +91,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventDetailHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventSpeakerHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventSponsorHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FAQViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
@@ -114,7 +110,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.NoCommunityHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnBoardingCommunitiesHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.OnceWelcomeCardHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PollTypesViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SuggestedContactCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.UserMentionCardHolder;
@@ -138,8 +133,6 @@ public interface SheroesAppComponent {
     void inject(HomeActivity homeActivity);
 
     void inject(LoginActivity loginActivity);
-
-    void inject(LoginFragment loginFragment);
 
     void inject(ArticleCategorySpinnerFragment articleCategorySpinnerFragment);
 
@@ -205,19 +198,11 @@ public interface SheroesAppComponent {
 
     void inject(OnceWelcomeCardHolder onceWelcomeCardHolder);
 
-    void inject(EventDetailDialogFragment eventDetailDialogFragment);
+    void inject(EmailVerificationDialogFragment emailVerificationDialogFragment);
 
-    void inject(EventDetailHolder eventDetailHolder);
+    void inject(ResetPasswordDialogFragment resetPasswordDialogFragment);
 
-    void inject(EventSpeakerHolder eventSpeakerHolder);
-
-    void inject(EventSponsorHolder eventSponsorHolder);
-
-    void inject(EmailVerificationFragment emailVerificationFragment);
-
-    void inject(ResetPasswordFragment resetPasswordFragment);
-
-    void inject(ResetPasswordSuccessFragment resetPasswordSuccessFragment);
+    void inject(ResetPasswordSuccessDialogFragment resetPasswordSuccessDialogFragment);
 
     void inject(ProfileImageDialogFragment profileImageDialogFragment);
 
@@ -225,11 +210,7 @@ public interface SheroesAppComponent {
 
     void inject(FeedProgressBarHolder feedProgressBarHolder);
 
-    void inject(EventCardHolder eventCardHolder);
-
     void inject(SheroesDeepLinkingActivity sheroesDeepLinkingActivity);
-
-    void inject(OrgReviewCardHolder orgReviewCardHolder);
 
     void inject(AlbumActivity albumActivity);
 
@@ -358,6 +339,10 @@ public interface SheroesAppComponent {
     void inject(LogOutUtils logOutUtils);
 
     void inject(ErrorUtil errorUtil);
+
+    void inject(NetworkAndApiErrorDialog networkAndApiErrorDialog);
+
+    void inject(OnBoardingMsgDialog onBoardingMsgDialog);
 
     void inject(UnFollowDialogFragment unFollowDialogFragment);
 

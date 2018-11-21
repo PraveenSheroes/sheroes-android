@@ -9,8 +9,6 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 
 /**
  * @author amleshsinha
@@ -24,8 +22,6 @@ public class LabelValue extends BaseResponse  {
 	String label;
 	@SerializedName("desc")
 	String desc;
-	@SerializedName("imgUrl")
-	String imgUrl;
 
 	private boolean isSelected;
 
@@ -51,14 +47,6 @@ public class LabelValue extends BaseResponse  {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
 	}
 
 	public boolean isSelected() {

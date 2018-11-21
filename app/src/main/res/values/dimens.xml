@@ -676,5 +676,6 @@
     <dimen name="activity_community_detail_button_join_padding">8dp</dimen>
     <dimen name="activity_community_detail_tooltip_width">10dp</dimen>
     <dimen name="activity_community_detail_tooltip_margin">40dp</dimen>
+    <dimen name="welcome_card_elevation">5dp</dimen>
 </resources>
 

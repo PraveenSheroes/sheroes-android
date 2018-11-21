@@ -8,10 +8,9 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
-import appliedlife.pvtltd.SHEROES.basecomponents.PollTypeCallBack;
+import appliedlife.pvtltd.SHEROES.basecomponents.IPollTypeCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RippleViewLinear;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import butterknife.Bind;
@@ -78,9 +77,9 @@ public class PollTypesViewHolder extends BaseViewHolder<PollOptionType> {
         pollTypeContainer.setOnRippleCompleteListener(new RippleViewLinear.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleViewLinear rippleView) {
-                if (viewInterface instanceof PollTypeCallBack) {
+                if (viewInterface instanceof IPollTypeCallBack) {
                     mPostBottomSheetFragment.dismiss();
-                    ((PollTypeCallBack) viewInterface).onPollTypeClicked(mPollOptionType.pollType);
+                    ((IPollTypeCallBack) viewInterface).onPollTypeClicked(mPollOptionType.pollType);
                 }
             }
         });

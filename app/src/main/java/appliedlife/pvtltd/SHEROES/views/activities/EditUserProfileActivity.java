@@ -708,19 +708,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         showNetworkTimeoutDialog(true, false, s);
         mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     private void requestFocus(View view) {

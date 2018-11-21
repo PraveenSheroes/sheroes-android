@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -99,7 +98,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -120,7 +119,7 @@ import butterknife.OnClick;
  * Created by ujjwal on 07/12/17.
  */
 
-public class PostDetailActivity extends BaseActivity implements BaseHolderInterface, IPostDetailView, PostDetailCallBack, CommentCallBack, QueryTokenReceiver {
+public class PostDetailActivity extends BaseActivity implements BaseHolderInterface, IPostDetailView, PostDetailCallBack, CommentCallBack, IQueryTokenReceiver {
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
@@ -602,18 +601,8 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     // user post detail callbacks
@@ -1000,23 +989,10 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (null != userPostObj) {
-            if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                    if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
-                        Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(url);
-                        startActivity(intent);
-                    }
-                }
+            if (userPostObj.getCommunityId() == 0) {
+                ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
             } else {
-                if (userPostObj.getCommunityId() == 0) {
-                    ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
-
-                } else {
-                    CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                }
+                CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         }
     }

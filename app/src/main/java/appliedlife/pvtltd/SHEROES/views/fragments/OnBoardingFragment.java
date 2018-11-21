@@ -38,7 +38,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -155,22 +154,12 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
-
-    }
-
-    @Override
     protected SheroesPresenter getPresenter() {
         return mOnBoardingPresenter;
     }
 
     @Override
     public void getAllDataResponse(GetAllData getAllData) {
-
-    }
-
-    @Override
-    public void startNextScreen() {
 
     }
 

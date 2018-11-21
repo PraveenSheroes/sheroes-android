@@ -219,11 +219,6 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     };
 
     @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
-
-    @Override
     public void getAllDataResponse(GetAllData getAllData) {
         if (null != getAllData) {
             List<GetAllDataDocument> getAllDataDocuments = getAllData.getGetAllDataDocuments();

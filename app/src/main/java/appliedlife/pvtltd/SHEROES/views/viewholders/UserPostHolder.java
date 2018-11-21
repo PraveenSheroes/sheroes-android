@@ -183,7 +183,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         this.mPostDetailCallback = postDetailCallBack;
         ButterKnife.bind(this, itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet()&& null != userPreference.get().getUserSummary()) {
             mUserId = userPreference.get().getUserSummary().getUserId();
             if (null != userPreference.get().getUserSummary().getUserBO()) {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
@@ -204,7 +204,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
         displayFollowUnFollowButton();
-
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
         } else {
@@ -794,11 +793,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.share_button)
     public void tvShareClick() {
         mPostDetailCallback.onShareButtonClicked(mUserPostObj, mShare);
-        if (mUserPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_FEEDBACK_POST, mUserPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + mUserPostObj.getIdOfEntityOrParticipant());
-        } else {
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
-        }
+        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.like_button)
@@ -919,8 +914,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
         mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
         mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
-
-        // tvMention.setSelected(true);
     }
 
 }

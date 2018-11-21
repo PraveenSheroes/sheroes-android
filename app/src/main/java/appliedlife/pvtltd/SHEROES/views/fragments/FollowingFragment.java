@@ -12,8 +12,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -236,7 +234,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     public void setListData(BaseResponse data, boolean flag) {
     }
 
-
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
     }
@@ -271,13 +268,5 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-    }
-
-    @Override
-    public void startNextScreen() {
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
     }
 }

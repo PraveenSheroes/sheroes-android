@@ -126,8 +126,7 @@ public enum Event {
 
     //endregion
 
-    //region Organization related event
-    ORGANIZATION_UPVOTED(AnalyticsEventType.ORGANIZATION, "Upvoted"),    // region User related events
+    // region User related events
     USER_SIGNUP(AnalyticsEventType.USER, "Signed Up"),
     USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),
     USER_LOG_OUT(AnalyticsEventType.USER, "Logout"),

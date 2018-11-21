@@ -17,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
@@ -37,6 +36,7 @@ public class BaseFragmentUtil {
     private FragmentIntractionWithActivityListner mHomeSearchActivityFragmentIntractionWithActivityListner;
     //endregion
 
+    //region public methods
     public static synchronized BaseFragmentUtil getInstance() {
         if (mInstance == null) {
             mInstance = new BaseFragmentUtil();
@@ -172,7 +172,6 @@ public class BaseFragmentUtil {
                     mAdapter.removeDataOnPosition(feedDetail, feedDetail.getItemPosition());
                     break;
                 default:
-//                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + feedParticipationEnum);
             }
         }
         mAdapter.notifyDataSetChanged();
@@ -191,11 +190,7 @@ public class BaseFragmentUtil {
                         }
                     }
                     mAdapter.notifyItemChanged(mFeedDetail.getItemPosition(), mFeedDetail);
-                    if (mFeedDetail instanceof OrganizationFeedObj) {
-                        AnalyticsManager.trackPostAction(Event.ORGANIZATION_UPVOTED, mFeedDetail, screenName);
-                    } else {
-                        AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail, screenName);
-                    }
+                    AnalyticsManager.trackPostAction(Event.POST_LIKED, mFeedDetail, screenName);
                     break;
                 case AppConstants.FAILED:
                     if (!mFeedDetail.isLongPress()) {
@@ -221,9 +216,9 @@ public class BaseFragmentUtil {
     public void showError(SwipeRefreshLayout mSwipeView, String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         if (feedParticipationEnum == ERROR_FEED_RESPONSE) {
             if (null != mSwipeView) {
-                // mLiNoResult.setVisibility(View.VISIBLE);
                 mSwipeView.setRefreshing(false);
             }
         }
     }
+    //endregion
 }

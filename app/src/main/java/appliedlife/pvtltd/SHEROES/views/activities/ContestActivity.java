@@ -578,17 +578,10 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void startNextScreen() {
-    }
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
     }
 
     @Override
@@ -626,12 +619,6 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
                 feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
 
         }
-    }
-
-    @Override
-    protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        clickCommentReactionFragment(feedDetail);
-
     }
 
     private void clickCommentReactionFragment(FeedDetail feedDetail) {

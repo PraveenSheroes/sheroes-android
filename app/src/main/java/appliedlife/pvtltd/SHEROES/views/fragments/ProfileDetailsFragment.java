@@ -16,8 +16,6 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,14 +37,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.ChampionListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
@@ -73,7 +69,6 @@ import static butterknife.ButterKnife.findById;
 
 public class ProfileDetailsFragment extends BaseFragment implements IProfileView {
     private static final String SCREEN_LABEL = "Profile Details Screen";
-    private final String TAG = LogUtils.makeLogTag(ProfileDetailsFragment.class);
 
     public static final String USER_MENTOR_ID ="USERID";
     public static final String USER_MENTOR_NAME ="USER_NAME";
@@ -174,14 +169,15 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
         ButterKnife.bind(this, view);
 
         Bundle bundle = getArguments();
-        userId = bundle.getLong(USER_MENTOR_ID);
+        if(bundle!=null && bundle.containsKey(USER_MENTOR_ID)) {
+            userId = bundle.getLong(USER_MENTOR_ID);
+        }
 
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserBO()) {
             if (mUserPreference.get().getUserSummary().getUserId() == userId) {
                 isSelfProfile = true;
             }
         }
-
         return view;
     }
 
@@ -572,14 +568,4 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
     }
-
-    @Override
-    public void startNextScreen() {
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-    }
 }
-
-

@@ -316,9 +316,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String notificationId = getIntent().getExtras().getString("notificationId");
                 Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
-                if (!TextUtils.isEmpty(notificationId)) {
-                    setSource(NOTIFICATION_SCREEN);
-                }
                 mImageWidth = getIntent().getExtras().getInt(IMAGE_WIDTH);
                 mImageHeight = getIntent().getExtras().getInt(IMAGE_HEIGHT);
 
@@ -1237,11 +1234,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse, Comment comment, int position) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
 
@@ -1264,10 +1256,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
     }
 
     @OnClick(R.id.like_count)

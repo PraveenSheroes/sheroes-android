@@ -30,8 +30,6 @@ public interface ICommunityPostView extends BaseMvpView {
 
     List<String> onQueryReceived(final @NonNull QueryToken queryToken);
 
-
-
     Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 
     void textChangeListner(final Editable s);

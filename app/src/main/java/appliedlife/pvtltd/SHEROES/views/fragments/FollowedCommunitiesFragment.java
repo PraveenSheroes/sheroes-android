@@ -290,13 +290,4 @@ public class FollowedCommunitiesFragment extends BaseFragment implements IProfil
 
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
-    }
 }

@@ -71,18 +71,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
