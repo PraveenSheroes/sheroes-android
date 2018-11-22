@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThread
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -106,6 +107,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
@@ -302,6 +304,9 @@ public interface SheroesAppServiceApi {
     @POST("participation/helpline/get_thread_details")
     Observable<HelplineGetChatThreadResponse> getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
 
+    @POST("/participation/helpline/rated")
+    Observable<BaseResponse> postHelplineRating(@Body HelplinePostRatingRequest helplinePostRatingRequest);
+
     @POST("participant/user/getUserSummarry")
     Observable<LoginResponse> googlePlusUserResponse();
 
@@ -397,4 +402,7 @@ public interface SheroesAppServiceApi {
     @Headers("X-Producer-Authorization: " + BuildConfig.IMPRESSION_AUTH)
     @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
     Single<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
+
+    @POST("participant/user/update_user_preference")
+    Observable<BaseResponse> updateSelectedLanguage(@Body LanguageUpdateRequest languageUpdateRequest);
 }

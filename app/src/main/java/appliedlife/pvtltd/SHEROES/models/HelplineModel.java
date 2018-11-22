@@ -5,12 +5,12 @@ import com.google.gson.Gson;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
-
-
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -64,5 +64,17 @@ public class HelplineModel {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
+    public Observable<BaseResponse> postHelplineRating(HelplinePostRatingRequest helplinePostRatingRequest) {
+        return sheroesAppServiceApi.postHelplineRating(helplinePostRatingRequest)
+                .map(new Function<BaseResponse, BaseResponse>() {
+                    @Override
+                    public BaseResponse apply(BaseResponse baseResponse) throws Exception {
+                        return baseResponse;
+                    }
+                })
 
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+    
 }

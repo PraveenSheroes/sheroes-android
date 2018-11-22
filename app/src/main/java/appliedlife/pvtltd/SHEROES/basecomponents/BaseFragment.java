@@ -295,7 +295,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
         return false;
     }
 
-
     protected Map<String, Object> getExtraProperties() {
         return null;
     }

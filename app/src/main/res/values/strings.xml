@@ -122,6 +122,7 @@
 
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
+    <string name="HELPLINE_ASK_QUESTION_HINT">Type your question…</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">Follow</string>
     <string name="following_user">Following</string>
@@ -152,7 +153,7 @@
     <string name="ID_WELCOME_FIRST"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    Ask questions and discuss about <span style="font-weight: bold"><b>health, career, relationships</b></span> and more&#8230
+                                                    Ask questions and discuss about <span style="font-weight: bold"><b>health, career</b></span> etc on Ask SHEROES Helpline&#8230
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
@@ -676,4 +677,11 @@
     <string name="load_more_comments">Load more comments</string>
     <string name="contact_not_on_whats">This contact is not on Whatsapp</string>
     <string name="this_user">This User</string>
+    <string name="helpline_rateus_title">Enjoyed chatting with SHEROES counselor? </string>
+    <string name="helpline_rateus_body"> Would you mind taking a moment to rate us ?\n It won’t take more than a minute.\n Thanks for your support !</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="not_now">Not Now</string>
+    <string name="helpline_title">Ask SHEROES Helpline</string>
+
+
 </resources>

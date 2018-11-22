@@ -230,12 +230,23 @@
         <item name="android:textSize">9sp</item>
     </style>
 
+    <style name="TextView10spRegular" parent="TextViewRegular">
+        <item name="android:textSize">10sp</item>
+    </style>
+
     <style name="TextView12spRegular" parent="TextViewRegular">
         <item name="android:textSize">12sp</item>
     </style>
 
     <style name="TextView16spRegular" parent="TextViewRegular">
         <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextView16spRegularHelpline" parent="TextViewRegular">
+    <item name="android:textSize">16sp</item>
+    <item name="android:textSelectHandle">@android:drawable/arrow_down_float</item>
+    <item name="android:textSelectHandleLeft">@android:drawable/arrow_down_float</item>
+    <item name="android:textSelectHandleRight">@android:drawable/arrow_down_float</item>
     </style>
 
     <style name="TextView14spRegular" parent="TextViewRegular">
@@ -310,6 +321,10 @@
 
     <style name="Button14spRegular" parent="ButtonRegular">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Button12spRegular" parent="ButtonRegular">
+        <item name="android:textSize">12sp</item>
     </style>
 
     <style name="Button14spBold" parent="ButtonBold">

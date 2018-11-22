@@ -87,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LanguageType;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -833,12 +834,12 @@ public class CommonUtil {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
             if (prefs != null && prefs.contains(key)) {
-                return prefs.getString(key,"");
+                return prefs.getString(key, LanguageType.ENGLISH.toString());
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
-        return "";
+        return LanguageType.ENGLISH.toString();
     }
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();

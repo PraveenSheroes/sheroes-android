@@ -444,6 +444,5 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     }
     //endregion
-
 }
 

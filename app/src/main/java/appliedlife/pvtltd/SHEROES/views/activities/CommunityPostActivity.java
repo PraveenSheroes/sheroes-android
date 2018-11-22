@@ -1329,7 +1329,8 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void editUserMentionWithFullDescriptionText(@NonNull List<MentionSpan> mentionSpanList, String editDescText) {
-        if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
+
+        if (StringUtil.isNotEmptyCollection(mentionSpanList) && StringUtil.isNotNullOrEmptyString(editDescText)) {
             for (int i = 0; i < mentionSpanList.size(); i++) {
                 final MentionSpan mentionSpan = mentionSpanList.get(i);
                 if (mentionSpan.getDisplayMode() == Mentionable.MentionDisplayMode.PARTIAL) {

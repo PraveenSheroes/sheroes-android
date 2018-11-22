@@ -15,6 +15,8 @@ public class ImpressionSuperProperty {
 
     private String mOrderKey;
 
+    private String mLanguage;
+
     public String getCommunityTab() {
         return mCommunityTab;
     }
@@ -45,5 +47,13 @@ public class ImpressionSuperProperty {
 
     public void setOrderKey(String mOrderKey) {
         this.mOrderKey = mOrderKey;
+    }
+
+    public String getLanguage() {
+        return mLanguage;
+    }
+
+    public void setLanguage(String mLanguage) {
+        this.mLanguage = mLanguage;
     }
 }

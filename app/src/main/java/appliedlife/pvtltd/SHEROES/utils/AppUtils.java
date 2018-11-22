@@ -96,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
@@ -118,6 +119,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import okhttp3.MediaType;
@@ -1231,5 +1233,19 @@ public class AppUtils {
         uploadImageRequest.images = new ArrayList<>();
         uploadImageRequest.images.add(encodedImage);
         return uploadImageRequest;
+    }
+
+    public LanguageUpdateRequest updateSelectedLanguageRequestBuilder(String language, Long userId) {
+        LanguageUpdateRequest languageUpdateRequest = new LanguageUpdateRequest();
+        languageUpdateRequest.language = language;
+        languageUpdateRequest.userId = userId;
+        return languageUpdateRequest;
+    }
+
+    public HelplinePostRatingRequest helpLinePostRatingRequestBuilder(boolean isRating, int answerId) {
+        HelplinePostRatingRequest helplinePostRatingRequest = new HelplinePostRatingRequest();
+        helplinePostRatingRequest.setRating(isRating);
+        helplinePostRatingRequest.setAnswerId(answerId);
+        return helplinePostRatingRequest;
     }
 }

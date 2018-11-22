@@ -450,25 +450,18 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-                                if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
-                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
-                                }
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                            } else {
-                                if (userSolrObj.getUserFollowersCount() > 0) {
-                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
-                                }
-                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
+                            if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
+                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
                             }
-                            getMvpView().invalidateItem(userSolrObj);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         } else {
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         }
+                        getMvpView().invalidateItem(userSolrObj);
                     }
                 });
-
     }
+
 
     public void postBookmarked(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -833,7 +826,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             comment.isLiked = true;
                             comment.likeCount++;
                         }
