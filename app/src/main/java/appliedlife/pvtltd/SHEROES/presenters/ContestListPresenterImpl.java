@@ -15,6 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -52,13 +53,8 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
         }
         getMvpView().startProgressBar();
         sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
             @Override
@@ -70,7 +66,6 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), null);
-
             }
 
             @Override
@@ -99,11 +94,9 @@ public class ContestListPresenterImpl extends BasePresenter<IContestListView> {
                             contest.tag = challengeSolrObj.getChallengeAcceptPostText();
                             contest.thumbImage = challengeSolrObj.getThumbnailImageUrl();
                             contest.createdBy = challengeSolrObj.getCreatedBy();
-                            if(StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls()))
-                            {
+                            if(StringUtil.isNotNullOrEmptyString(challengeSolrObj.getPostShortBranchUrls())) {
                                 contest.shortUrl  = challengeSolrObj.getPostShortBranchUrls();
-                            }else
-                            {
+                            }else {
                                 contest.shortUrl  = challengeSolrObj.getDeepLinkUrl();
                             }
                             contest.mWinnerAddress = challengeSolrObj.getWinnerAddress();

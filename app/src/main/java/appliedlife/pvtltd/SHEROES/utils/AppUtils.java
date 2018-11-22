@@ -526,7 +526,6 @@ public class AppUtils {
     }
 
     private FollowersFollowingRequest followerFollowingRequestBuilder(int pageNo, long userId, boolean is_user, boolean is_listing) {
-
         AppUtils appUtils = AppUtils.getInstance();
         FollowersFollowingRequest followersFollowingRequest = new FollowersFollowingRequest();
         followersFollowingRequest.setPageNo(pageNo);

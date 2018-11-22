@@ -622,12 +622,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getArticleCategoryList())) {
                 mArticleCategoryItemList = mFragmentOpen.getArticleCategoryList();
             }
-            ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
+            ArticleCategorySpinnerFragment articleCategoryFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mArticleCategoryItemList);
             bundle.putParcelable(AppConstants.ARTICLE_CATEGORY_SPINNER_FRAGMENT, parcelable);
-            mArticleCategorySpinnerFragment.setArguments(bundle);
-            addNewFragment(mArticleCategorySpinnerFragment, R.id.fl_article_card_view, ArticleCategorySpinnerFragment.class.getName(), null, true);
+            articleCategoryFragment.setArguments(bundle);
+            addNewFragment(articleCategoryFragment, R.id.fl_article_card_view, ArticleCategorySpinnerFragment.class.getName(), null, true);
         }
     }
 

@@ -154,8 +154,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private static final String SCREEN_LABEL = "Profile Screen";
     private static final String PROFILE_POST_SCREEN_LABEL = "Profile Post Screen";
     private static final String PROFILE_STORY_SCREEN_LABEL = "Profile Stories Screen";
-
-
     private static final String BADGE_COUNTER_FONT_FAMILY = "sans-serif-medium";
     private static final float ORIGINAL_SIZE = 1.0f;
     private static final float EXPANDED_SIZE = 1.02f;
@@ -292,18 +290,10 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     //endregion bind variables
 
     //region member variable
-    private String userNameTitle;
-    private String viewLessText, viewMoreText;
-    private boolean isUserDeactivated;
-    private boolean isProfileClicked = false;
-    private boolean isOwnProfile = false;
-    private boolean isChampion;
-    private boolean isWriteAStory;
-    private Long mChampionId;
-    private long mLoggedInUserIdTypeId = -1;
-    private int mFromNotification;
-    private int itemPosition;
-    private long mLoggedInUserId = -1;
+    private String userNameTitle, viewLessText, viewMoreText;
+    private boolean isUserDeactivated, isProfileClicked, isOwnProfile, isChampion, isWriteAStory;
+    private long mChampionId, mLoggedInUserIdTypeId, mLoggedInUserId = -1;
+    private int mFromNotification, itemPosition;
     //endregion member variable
 
     //region view variable
