@@ -38,6 +38,8 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+
 /**
  * Utility class that deals with operations with an ImageView.
  */
@@ -337,7 +339,7 @@ final class BitmapUtils {
             }
             return uri;
         } catch (Exception e) {
-            Log.w("AIC", "Failed to write bitmap to temp file for image-cropper save instance state", e);
+            LogUtils.error("AIC", "Failed to write bitmap to temp file for image-cropper save instance state", e);
             return null;
         }
     }
@@ -383,7 +385,7 @@ final class BitmapUtils {
                 }
             }
         } catch (Exception e) {
-            Log.w("AIC", "Failed to resize cropped image, return bitmap before resize", e);
+            LogUtils.error("AIC", "Failed to resize cropped image, return bitmap before resize", e);
         }
         return bitmap;
     }

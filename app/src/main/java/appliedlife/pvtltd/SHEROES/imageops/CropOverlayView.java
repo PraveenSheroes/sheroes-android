@@ -29,6 +29,8 @@ import android.view.View;
 
 import java.util.Arrays;
 
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+
 /**
  * A custom View representing the crop window and the shaded background outside the crop window.
  */
@@ -1008,7 +1010,7 @@ public class CropOverlayView extends View {
                 mCropWindowChangeListener.onCropWindowChanged(inProgress);
             }
         } catch (Exception e) {
-            Log.e("AIC", "Exception in crop window changed", e);
+            LogUtils.error("AIC", "Exception in crop window changed", e);
         }
     }
     //endregion

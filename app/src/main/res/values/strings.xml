@@ -375,7 +375,6 @@
     <string name="ID_MENTOR">Champions</string>
     <string name="empty_mentor_text">No champions yet!</string>
     <string name="ID_MENTOR_POST">Posts</string>
-    <string name="ID_MENTOR_Q_A">Q &amp; A</string>
     <string name="ID_ASKING">asking</string>
     <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
     <string name="ID_ANSWERED_QUESTIONS">answered questions</string>

@@ -63,7 +63,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.parceler.Parcels;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +97,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -437,15 +435,22 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     public void onPageSelected(int position) {
         Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, position);
         if (fragment instanceof FeedFragment) {
-            if (isOwnProfile) {
-                mStoryFooter.setVisibility(View.VISIBLE);
-            } else {
+            String title = (String) mViewPagerAdapter.getPageTitle(position);
+            if (StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) {
+                if (isOwnProfile) {
+                    mCreatePost.setVisibility(View.VISIBLE);
+                } else {
+                    mCreatePost.setVisibility(View.GONE);
+                }
                 mStoryFooter.setVisibility(View.GONE);
+            } else {
+                if (isOwnProfile) {
+                    mStoryFooter.setVisibility(View.VISIBLE);
+                } else {
+                    mStoryFooter.setVisibility(View.GONE);
+                }
+                mCreatePost.setVisibility(View.GONE);
             }
-            mCreatePost.setVisibility(View.GONE);
-        } else {
-            mStoryFooter.setVisibility(View.GONE);
-            mCreatePost.setVisibility(View.GONE);
         }
     }
 
@@ -1312,7 +1317,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    private void profileStrengthDialog(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
+    private void profileStrengthDialog(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) { //Profile strength dilaog
         if (mUserSolarObject == null) return;
 
         if (mProfileStrengthDialog != null && mProfileStrengthDialog.isVisible()) {
@@ -1332,7 +1337,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    private void unFollowDialog(final PublicProfileListRequest unFollowRequest) {
+    private void unFollowDialog(final PublicProfileListRequest unFollowRequest) { //Unfollow confirmation dialog
         if (mUserSolarObject == null) return;
 
         if (mUnFollowDialogFragment != null && mUnFollowDialogFragment.isVisible()) {
@@ -1357,7 +1362,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    private void deactivateUserDialog(final UserSolrObj userSolrObj) {
+    private void deactivateUserDialog(final UserSolrObj userSolrObj) { //Deactivation Profile (Only admin have access of this feature)
         if (mUserSolarObject == null || ProfileActivity.this.isFinishing()) return;
 
         if (mDeactivateProfileDialogFragment != null && mDeactivateProfileDialogFragment.isVisible()) {
@@ -1379,7 +1384,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
-    private void reportSpamDialog(final UserSolrObj userSolrObj) { //Add other type as parameterised object
+    private void reportSpamDialog(final UserSolrObj userSolrObj) { //Report Profile Dialog
         if (mUserSolarObject == null || ProfileActivity.this.isFinishing()) return;
 
         if (mReportUserProfileDialogFragment != null && mReportUserProfileDialogFragment.isVisible()) {
@@ -1412,7 +1417,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         } else {
             profileType = ProfileStrengthDialog.ProfileStrengthType.INTERMEDIATE;
         }
-
         return profileType;
     }
 

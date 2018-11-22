@@ -1,9 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-import android.util.Log;
-
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
@@ -11,11 +8,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowingView;
 import io.reactivex.observers.DisposableObserver;
@@ -30,24 +24,15 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_
 public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView> {
 
     //region private variables
-    private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
     private ProfileModel profileModel;
     private SheroesApplication mSheroesApplication;
     //endregion
 
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     //region constructor
     @Inject
-    public FollowingPresenterImpl(ProfileModel profileModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
+    FollowingPresenterImpl(ProfileModel profileModel, SheroesApplication sheroesApplication) {
         this.profileModel = profileModel;
         this.mSheroesApplication = sheroesApplication;
-        this.mUserPreference = userPreference;
-        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
     }
     //endregion
 
@@ -64,7 +49,6 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                 .subscribe(new DisposableObserver<FollowedUsersResponse>() {
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -76,10 +60,8 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
 
                     @Override
                     public void onNext(FollowedUsersResponse profileFeedResponsePojo) {
-                        LogUtils.info(TAG, "********response***********");
                         getMvpView().stopProgressBar();
                         if (null != profileFeedResponsePojo) {
-                            Log.i(TAG, profileFeedResponsePojo.getStatus());
                             getMvpView().getFollowersOrFollowing(profileFeedResponsePojo);
                         }
                     }

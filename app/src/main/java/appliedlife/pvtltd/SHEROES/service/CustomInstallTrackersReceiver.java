@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ReferrerBus;
 
 /**
@@ -80,7 +81,7 @@ public class CustomInstallTrackersReceiver extends BroadcastReceiver {
                 try {
                     return URLDecoder.decode(encoded, "UTF-8");
                 } catch (final UnsupportedEncodingException e) {
-                    Log.e(LOGTAG, "Could not decode a parameter into UTF-8");
+                    LogUtils.error(LOGTAG, "Could not decode a parameter into UTF-8");
                 }
             }
         }

@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
 import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
@@ -14,8 +13,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
@@ -40,28 +37,29 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_
 
 public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
 
+    //region constants
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
+    //endregion constants
 
-    private ProfileModel profileModel;
-    SheroesApplication mSheroesApplication;
+    //region private variable
+    private ProfileModel mProfileModel;
+    private SheroesApplication mSheroesApplication;
+    //endregion private variable
 
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
+    //region injected variable
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
+    //endregion injected variable
 
+    //region constructor
     @Inject
-    public ProfilePresenterImpl(ProfileModel profileModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData) {
-        this.profileModel = profileModel;
+    public ProfilePresenterImpl(ProfileModel profileModel, SheroesApplication sheroesApplication) {
+        this.mProfileModel = profileModel;
         this.mSheroesApplication = sheroesApplication;
-        this.mUserPreference = userPreference;
-        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-
     }
+    //endregion constructor
 
+    //region public methods
     //Get followers or following of users/champions
     public void getFollowedMentors(FollowersFollowingRequest profileFollowedMentor) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -70,7 +68,7 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getFollowerFollowing(profileFollowedMentor)
+        mProfileModel.getFollowerFollowing(profileFollowedMentor)
                 .compose(this.<FollowedUsersResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<FollowedUsersResponse>() {
             @Override
@@ -87,10 +85,8 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
 
             @Override
             public void onNext(FollowedUsersResponse profileFeedResponsePojo) {
-                LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != profileFeedResponsePojo) {
-                    Log.i(TAG, profileFeedResponsePojo.getStatus());
                     getMvpView().getFollowedMentors(profileFeedResponsePojo);
                 }
             }
@@ -104,7 +100,7 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getUserCommunity(profileUsersCommunityRequest)
+        mProfileModel.getUserCommunity(profileUsersCommunityRequest)
                 .compose(this.<ProfileCommunitiesResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
             @Override
@@ -121,15 +117,12 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
 
             @Override
             public void onNext(ProfileCommunitiesResponsePojo userCommunities) {
-                LogUtils.info(TAG, "********response***********");
                 getMvpView().stopProgressBar();
                 if (null != userCommunities) {
-                    Log.i(TAG, userCommunities.getStatus());
                     getMvpView().getUsersCommunities(userCommunities);
                 }
             }
         });
-
     }
 
     //Community For public profile
@@ -140,7 +133,7 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest)
+        mProfileModel.getPublicProfileUserCommunity(profileUsersCommunityRequest)
                 .compose(this.<ProfileCommunitiesResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<ProfileCommunitiesResponsePojo>() {
             @Override
@@ -173,7 +166,7 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.reportSpam(spamPostRequest)
+        mProfileModel.reportSpam(spamPostRequest)
                 .subscribeOn(Schedulers.io())
                 .compose(this.<SpamResponse>bindToLifecycle())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -206,7 +199,7 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
         }
         getMvpView().startProgressBar();
 
-        profileModel.deactivateUser(deactivateUserRequest)
+        mProfileModel.deactivateUser(deactivateUserRequest)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BaseResponse>bindToLifecycle())
@@ -234,4 +227,5 @@ public class ProfilePresenterImpl extends BasePresenter<IProfileView> {
                     }
                 });
     }
+    //endregion public methods
 }
