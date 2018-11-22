@@ -71,7 +71,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.parceler.Parcels;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,7 +113,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListRespon
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -470,7 +468,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
 
         feedUtils.setConfigurableShareOption(isWhatsAppShare());
-        ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
     public void onResume() {
@@ -564,7 +561,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 progressbarContainer.setVisibility(View.GONE);
                 profileLevel.setVisibility(View.GONE);
                 profileToolbarMenu.setVisibility(View.VISIBLE);
-
                 followUnFollowMentor();
             }
         } else {
@@ -591,12 +587,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
 
         updateProfileInfo();
-
         invalidateProfileBadge(userSolrObj);
-
         setPagerAndLayouts();
-
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
     private void updateProfileInfo() {
@@ -692,8 +684,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             followingTitle.setText(getResources().getString(R.string.following));
             liFollowing.setVisibility(View.VISIBLE);
         }
-
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
     private void toolTipForAskQuestion() {
@@ -772,7 +762,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 .start(this);
     }
 
-
     private void setProfileLevel() {
         if (mUserSolarObject.getProfileCompletionWeight() > BEGINNER_START_LIMIT && mUserSolarObject.getProfileCompletionWeight() < INTERMEDIATE_END_LIMIT) {
             profileLevel.setText(R.string.progress_status_beginner);
@@ -806,7 +795,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             }
             allStarTick.setImageResource(R.drawable.vector_all_level_incomplete);
             beginnerTick.setImageResource(R.drawable.vector_level_complete);
-
         }
     }
 
@@ -815,12 +803,10 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.BEGINNER);
     }
 
-
     @OnClick(R.id.intermediate)
     protected void openIntermediateProgressDialog() {
         openProfileProfileLevelDialog(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
     }
-
 
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
@@ -1150,7 +1136,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             clStoryFooter.setVisibility(View.GONE);
             createPost.setVisibility(View.GONE);
         }
-
     }
 
     @Override
@@ -1505,9 +1490,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                         .isOwnProfile(isOwnProfile)
                         .build();
         trackEvent(Event.PROFILE_SHARED, properties);
-
         createShareImage(branchPostDeepLink);
-
     }
 
 
@@ -1694,9 +1677,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                             }
                         }
                     }
-
                     break;
-
                 case AppConstants.REQUEST_CODE_FOR_GALLERY:
                     mImageCaptureUri = intent.getData();
                     if (resultCode == Activity.RESULT_OK) {
@@ -1711,7 +1692,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
                     imageCropping(intent);
                     break;
-
                 case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
                     CropImage.ActivityResult result = CropImage.getActivityResult(intent);
                     if (resultCode == RESULT_OK) {
@@ -1729,10 +1709,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                     } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                         Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                     }
-
                     break;
                 default:
-
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
@@ -1865,7 +1843,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mProfileIcon.bindImage(authorThumborUrl);
             mUserSolarObject.setImageUrl(imageUrl);
         }
-
         invalidateProfileButton();
     }
 

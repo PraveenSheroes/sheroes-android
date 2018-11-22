@@ -42,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -67,7 +66,7 @@ public class FeedUtils {
     //endregion
 
     //region member variables
-    private static FeedUtils mInstance;
+    private static FeedUtils sInstance;
     private FeedDetail mFeedDetail;
     private Fragment mFragment;
     private boolean mIsWhatsAppShare;
@@ -83,24 +82,21 @@ public class FeedUtils {
     //endregion
 
     public static synchronized FeedUtils getInstance() {
-        if (mInstance == null) {
-            mInstance = new FeedUtils();
+        if (sInstance == null) {
+            sInstance = new FeedUtils();
         }
-        return mInstance;
+        return sInstance;
     }
 
     @Inject
     public FeedUtils() {
-        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
+        SheroesApplication.getAppComponent(SheroesApplication.sContext).inject(this);
     }
 
     public void feedCardsHandled(View view, BaseResponse baseResponse, Activity activity, String screenName) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
-            case R.id.tv_featured_community_join:
-                ((SheroesApplication) activity.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
-                break;
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall(activity);
                 break;
@@ -147,7 +143,6 @@ public class FeedUtils {
             case R.id.tv_feed_community_post_user_name:
                 openUserProfileLastComment(view, baseResponse, activity);
                 break;
-
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU, activity, screenName);
                 break;
@@ -184,7 +179,6 @@ public class FeedUtils {
                 //mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(activity, mFeedDetail, screenName);
                 break;
-
             case R.id.tv_join_conversation:
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     PostDetailActivity.navigateTo(activity, screenName, mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
@@ -207,17 +201,14 @@ public class FeedUtils {
             case R.id.feed_img:
                 ProfileActivity.navigateTo(activity, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(), AppConstants.PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
                 break;
-
             case R.id.li_feed_article_images:
                 ArticleSolrObj articleSolrObj = (ArticleSolrObj) mFeedDetail;
                 ArticleActivity.navigateTo(activity, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
                 break;
-
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
                 ArticleSolrObj articleObj = (ArticleSolrObj) mFeedDetail;
                 ArticleActivity.navigateTo(activity, mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleObj.isUserStory());
-
                 break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(activity, (CommunityFeedSolrObj) mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -246,7 +237,6 @@ public class FeedUtils {
                         }
                     } else {
                         CommunityDetailActivity.navigateTo(activity, ((UserPostSolrObj) mFeedDetail).getCommunityId(), screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-
                     }
                 }
                 break;
@@ -326,7 +316,6 @@ public class FeedUtils {
         intent.setPackage(AppConstants.WHATS_APP_URI);
         intent.putExtra(Intent.EXTRA_TEXT, R.string.check_out_share_msg + deepLinkUrl);
         context.startActivity(intent);
-//        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         AnalyticsManager.trackPostAction(Event.POST_SHARED, mFeedDetail, screenName);
     }
 
@@ -343,7 +332,6 @@ public class FeedUtils {
         intent.putExtra(Intent.EXTRA_TEXT, deepLinkUrl);
         intent.putExtra(R.string.check_out_share_msg + Intent.EXTRA_TEXT, deepLinkUrl);
         context.startActivity(Intent.createChooser(intent, AppConstants.SHARE));
-//        moEngageUtills.entityMoEngageCardShareVia(getApplicationContext(), mMoEHelper, payloadBuilder, feedDetail, MoEngageConstants.SHARE_VIA_SOCIAL);
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(feedDetail, screenName);
         AnalyticsManager.trackEvent(Event.POST_SHARED, screenName, properties);
     }
@@ -495,10 +483,8 @@ public class FeedUtils {
                             ((MentorQADetailFragment) mFragment).deleteCommunityPost(mFeedDetail);
                         }
                     }
-                    ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DELETED_CONTENT, GoogleAnalyticsEventActions.DELETED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
                 }
                 break;
-
         }
     }
 
@@ -617,5 +603,4 @@ public class FeedUtils {
             }
         }
     }
-
 }

@@ -43,9 +43,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -60,7 +58,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 
@@ -92,7 +89,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     private long startedTime;
     private String sourceScreen ;
 
-
     public static HelplineFragment createInstance(String sourceScreen) {
         HelplineFragment helplineFragment = new HelplineFragment();
         Bundle bundle = new Bundle();
@@ -100,7 +96,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         helplineFragment.setArguments(bundle);
         return helplineFragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -129,7 +124,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         }
 
         setUpRecyclerView();
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.HELPLINE);
         return view;
     }
 
@@ -143,7 +137,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         } else {
             Toast.makeText(getContext(), R.string.helpline_msg, Toast.LENGTH_SHORT).show();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_MESSAGE, GoogleAnalyticsEventActions.SENT_A_HELPLINE_MESSAGE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.btn_chat_voice)
@@ -212,7 +205,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         setUpRecyclerView();
-
     }
 
     @Override
@@ -233,7 +225,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             }
             //mRecyclerView.smoothScrollToPosition(0);
         }
-
     }
 
     @Override
@@ -295,9 +286,9 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        super.showError(errorMsg,feedParticipationEnum);
+        super.showError(errorMsg, feedParticipationEnum);
         sendChatButton.setEnabled(true);
-           }
+    }
 
     @Override
     public String getScreenName() {

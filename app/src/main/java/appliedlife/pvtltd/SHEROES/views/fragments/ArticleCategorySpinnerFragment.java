@@ -14,8 +14,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,26 +25,20 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 /**
  * Created by Praveen_Singh on 05-01-2017.
@@ -93,7 +85,6 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
         } else {
             mHomePresenter.getMasterDataToPresenter();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.ARTICLE_SELECT_CATEGORY);
         return view;
     }
 
@@ -114,20 +105,17 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
         mHomePresenter.detachView();
     }
 
-
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
         if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_CANCEL);
         }
-
     }
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
         if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_DONE);
-            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
         }
     }
 

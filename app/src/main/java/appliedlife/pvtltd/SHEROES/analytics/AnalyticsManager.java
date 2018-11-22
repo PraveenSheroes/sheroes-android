@@ -44,6 +44,10 @@ public class AnalyticsManager {
     }
 
     // region Individual Analytics Initializers
+    public static synchronized void initializeGoogleAnalytics(Context context) {
+        sAppContext = context;
+        GoogleAnalyticsHelper.initializeAnalyticsTracker(context);
+    }
 
     public static void initializeMixpanel(final Context context, final Boolean isNewUser) {
         sAppContext = context;
@@ -108,6 +112,9 @@ public class AnalyticsManager {
 
         //CleverTap
         CleverTapHelper.trackScreen(sAppContext, properties);
+
+        //Google Analytics
+        GoogleAnalyticsHelper.sendScreenView(screenName);
     }
 
     public static void timeScreenView(String screenName) {
@@ -122,21 +129,6 @@ public class AnalyticsManager {
     @Deprecated
     public static void trackEvent(Event event, Map<String, Object> properties, String sourceScreen) {
         trackEvent(event, sourceScreen, properties);
-    }
-
-    public static void trackNonInteractionEvent(Event event, Map<String, Object> properties) {
-        if (!canSend()) {
-            return;
-        }
-
-        if (properties == null) {
-            properties = new HashMap<>();
-        }
-
-        event.addProperties(properties);
-
-        // TODO(Sowrabh/Avinash): Track global properties also like Total Calls made etc.
-        MixpanelHelper.trackEvent(sAppContext, event.type.name + " " + event.name, properties);
     }
 
     public static void trackEvent(Event event, String screenName, Map<String, Object> properties) {
@@ -172,6 +164,10 @@ public class AnalyticsManager {
         //track all event to CleverTap
         CleverTapHelper.trackEvent(sAppContext, event, properties);
 
+        //track all event to Googel Analytics
+        if(event.trackEventToProvider(AnalyticsProvider.GOOGLE_ANALYTICS)) {
+            GoogleAnalyticsHelper.sendEvent(event.type.name, event.name, null);
+        }
     }
 
     public static void trackCommentAction(Event event, FeedDetail feedDetail, String screenName) {

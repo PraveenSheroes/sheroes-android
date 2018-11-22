@@ -33,7 +33,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -49,7 +48,6 @@ import butterknife.ButterKnife;
 /**
  * Created by Praveen_Singh on 09-01-2017.
  */
-
 
 public class ArticlesFragment extends BaseFragment {
     public static final String SCREEN_LABEL = "Article Listing Screen";
@@ -131,8 +129,6 @@ public class ArticlesFragment extends BaseFragment {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.ARTICLE_LISTING);
-
         return view;
     }
 

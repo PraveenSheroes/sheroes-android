@@ -58,7 +58,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInRespo
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
 import appliedlife.pvtltd.SHEROES.social.FBConnectHelper;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.social.GoogleConnectHelper;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -371,7 +370,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
             mLoginViaSocial = GOOGLE;
             mLoginPresenter.getLoginAuthTokeInPresenter(loginRequest, true);
         }
-
     }
 
     @Override
@@ -437,15 +435,13 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
                     HashMap<String, Object> properties = new EventProperty.Builder().build();
                     AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
                     mUserPreference.delete();
-                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
-                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+                    MixpanelHelper.clearMixpanel(SheroesApplication.sContext);
+                    ((NotificationManager) SheroesApplication.sContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                     break;
                 default:
                     onShowErrorDialog(errorMsg, feedParticipationEnum);
             }
         }
-
     }
     //endregion inherited methods
 
@@ -494,7 +490,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
                 default:
                     break;
             }
-
         } catch (IllegalArgumentException e) {
             Crashlytics.getInstance().core.logException(e);
             LogUtils.error(this.getClass().getName(), e.toString(), e);
@@ -545,7 +540,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
         getFcmId();
 
         loginSetUp();
-        ((SheroesApplication) WelcomeActivity.this.getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     private void loginSetUp() {
@@ -648,7 +642,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
                 mFcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                     //Refresh FCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.sContext);
                     if (cleverTapAPI != null) {
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }
@@ -681,24 +675,9 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
         if (null != loginResponse.getUserSummary() && null != loginResponse.getUserSummary().getUserBO() && StringUtil.isNotNullOrEmptyString(loginResponse.getUserSummary().getUserBO().getCrdt())) {
             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
             AnalyticsManager.initializeCleverTap(WelcomeActivity.this, mCurrentTime < createdDate);
-
+            AnalyticsManager.initializeGoogleAnalytics(WelcomeActivity.this);
             final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider(mLoginViaSocial.equalsIgnoreCase(FACEBOOK) ? "Facebook" : "Google").build();
             AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
-
-            if (createdDate < mCurrentTime) {
-                if (mLoginViaSocial.equalsIgnoreCase(FACEBOOK)) {
-                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                } else {
-                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_WITH_GOOGLE, AppConstants.EMPTY_STRING);
-                }
-
-            } else {
-                if (mLoginViaSocial.equalsIgnoreCase(FACEBOOK)) {
-                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_FACEBOOK, AppConstants.EMPTY_STRING);
-                } else {
-                    ((SheroesApplication) WelcomeActivity.this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SIGN_UP, GoogleAnalyticsEventActions.SIGN_UP_WITH_GOOGLE, AppConstants.EMPTY_STRING);
-                }
-            }
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
         }
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);

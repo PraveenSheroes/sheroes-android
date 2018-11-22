@@ -9,9 +9,7 @@ import com.crashlytics.android.Crashlytics;
 import com.crashlytics.android.core.CrashlyticsCore;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
-import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
-import com.google.android.gms.analytics.StandardExceptionParser;
 import com.google.android.gms.analytics.Tracker;
 
 import java.io.File;
@@ -36,12 +34,12 @@ import io.fabric.sdk.android.Fabric;
  */
 public class SheroesApplication extends MultiDexApplication {
     private final String TAG = LogUtils.makeLogTag(SheroesApplication.class);
-    SheroesAppComponent mSheroesAppComponent;
-    public static volatile SheroesApplication mContext;
+    public static volatile SheroesApplication sContext;
     private String mCurrentActivityName;
+    SheroesAppComponent mSheroesAppComponent;
 
     public static SheroesAppComponent getAppComponent(Context context) {
-        return (mContext).mSheroesAppComponent;
+        return (sContext).mSheroesAppComponent;
     }
 
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
@@ -58,7 +56,7 @@ public class SheroesApplication extends MultiDexApplication {
     public void onCreate() {
         ActivityLifecycleCallback.register(this);
         super.onCreate();
-        mContext = this;
+        sContext = this;
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -70,10 +68,10 @@ public class SheroesApplication extends MultiDexApplication {
         setAppComponent(mSheroesAppComponent);
         Branch.enableLogging();
         Branch.getAutoInstance(this);
-        AnalyticsManager.initializeMixpanel(mContext);
-        AnalyticsManager.initializeFbAnalytics(mContext);
-        //cleverTap
+        AnalyticsManager.initializeMixpanel(sContext);
+        AnalyticsManager.initializeFbAnalytics(sContext);
         AnalyticsManager.initializeCleverTap(this, false);
+        AnalyticsManager.initializeGoogleAnalytics(this);
         StethoUtil.initStetho(this);
     }
 
@@ -87,7 +85,7 @@ public class SheroesApplication extends MultiDexApplication {
 
     public void notifyIfAppInBackground() {
         try {
-            if (getCurrentActivityName() == null) { // App is sent to background perform a background operation
+            if (getCurrentActivityName() == null) { // App is sent to background to perform a background operation
             }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
@@ -96,16 +94,15 @@ public class SheroesApplication extends MultiDexApplication {
     }
 
     public static SharedPreferences getAppSharedPrefs() {
-        if (mContext == null) {
+        if (sContext == null) {
             return null;
         }
-        return mContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
+        return sContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
     }
 
     public synchronized Tracker getGoogleAnalyticsTracker() {
         AnalyticsTrackers analyticsTrackers = AnalyticsTrackers.getInstance();
         return analyticsTrackers.get(AnalyticsTrackers.Target.APP);
-
     }
 
     public void trackUserId(String userId) {
@@ -115,59 +112,5 @@ public class SheroesApplication extends MultiDexApplication {
                 .setCategory("UX")
                 .setAction("User Sign In")
                 .build());
-
-    }
-
-    /***
-     * Tracking screen view
-     *
-     * @param screenName screen name to be displayed on GA dashboard
-     */
-    public void trackScreenView(String screenName) {
-        Tracker t = getGoogleAnalyticsTracker();
-
-        // Set screen name.
-        t.setScreenName(screenName);
-
-        // Send a screen view.
-        t.send(new HitBuilders.ScreenViewBuilder().build());
-
-        GoogleAnalytics.getInstance(this).dispatchLocalHits();
-    }
-
-    /***
-     * Tracking exception
-     *
-     * @param e exception to be tracked
-     */
-    public void trackException(Exception e) {
-        if (e != null) {
-            Tracker t = getGoogleAnalyticsTracker();
-
-            t.send(new HitBuilders.ExceptionBuilder()
-                    .setDescription(
-                            new StandardExceptionParser(this, null)
-                                    .getDescription(Thread.currentThread().getName(), e))
-                    .setFatal(false)
-                    .build()
-            );
-        }
-    }
-
-    /***
-     * Tracking event
-     *
-     * @param category event category
-     * @param action   action of the event
-     * @param label    label
-     */
-    public void trackEvent(String category, String action, String label) {
-        Tracker t = getGoogleAnalyticsTracker();
-       /* if(!StringUtil.isNotNullOrEmptyString(label))
-        {
-            label="-";
-        }*/
-        // Build and send an Event.
-        t.send(new HitBuilders.EventBuilder().setCategory(category).setAction(action).setLabel(label).build());
     }
 }

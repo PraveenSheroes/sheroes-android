@@ -17,13 +17,11 @@ import android.widget.TextView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 /**
  * DialogFragment displayed when timeout in request occurs .
@@ -65,7 +63,6 @@ public class NetworkAndApiErrorDialog extends BaseDialogFragment {
             SpannableString content = new SpannableString(getString(R.string.care_sheroes));
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             mTvCareSheroes.setText(content);
-            ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
             AnalyticsManager.trackScreenView(SCREEN_LABEL);
         } else {
             mliUserDeactivate.setVisibility(View.GONE);

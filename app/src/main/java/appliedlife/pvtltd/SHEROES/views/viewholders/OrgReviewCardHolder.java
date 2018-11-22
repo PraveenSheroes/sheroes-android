@@ -21,7 +21,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -29,7 +28,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -108,14 +106,12 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         organisationReviewPostUI(context);
     }
 
-
     private void organisationReviewPostUI(Context context) {
         upvoteReacted.setEnabled(true);
         tvNoOfUpVotes.setEnabled(true);
         imageOperations(context);
         allReviewTextViewAndImageOperations(context);
     }
-
 
     private void imageOperations(Context context) {
         String authorImageUrl = userPostObj.getAuthorImageUrl();
@@ -235,7 +231,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.tv_feed_review_post_user_share_ic)
     public void reviewShareClick() {
         viewInterface.handleOnClick(userPostObj, reviewPostShareIc);
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ORGANISATION_REVIEW_POST, userPostObj.communityId + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
     }
 
 
@@ -246,11 +241,8 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         userPostObj.setTrending(true);
         if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(userPostObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
         } else {
             viewInterface.userCommentLikeRequest(userPostObj, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ORGANISATION_REVIEW_POST, userPostObj.getCommunityId() + AppConstants.DASH + mUserId + AppConstants.DASH + userPostObj.getIdOfEntityOrParticipant());
-
         }
         if (userPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             userPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
@@ -270,7 +262,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan authorTitle = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
                 // if (userPostObj.isAuthorMentor()) {//todo - naviagte to profile
                 if (viewInterface instanceof FeedItemCallback) {
                     ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
@@ -288,8 +279,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
         ClickableSpan postedInClick = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
-
             }
 
             @Override
@@ -306,7 +295,6 @@ public class OrgReviewCardHolder extends BaseViewHolder<FeedDetail> {
                 }else {
                     viewInterface.handleOnClick(userPostObj, tvReviewPostTitle);
                 }
-
             }
 
             @Override

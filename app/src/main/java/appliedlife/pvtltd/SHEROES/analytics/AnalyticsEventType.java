@@ -41,7 +41,6 @@ public enum AnalyticsEventType {
     FRIEND("Friend"),
     IMAGE_CARD("Image Card"),
     STORY("Story");
-
     // endregion
 
     public final String name;

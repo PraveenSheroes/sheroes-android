@@ -23,7 +23,6 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -48,10 +47,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -64,7 +61,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
-
 
 /**
  * Created by Praveen Singh on 04/01/2017.
@@ -107,7 +103,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
     }
 
     @Override
@@ -155,10 +150,9 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         if (getActivity() != null && null != loginResponse.getUserSummary()) {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
-                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(getContext());
-
-                        AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
+                        AnalyticsManager.initializeCleverTap(SheroesApplication.sContext, currentTime < createdDate);
+                        AnalyticsManager.initializeGoogleAnalytics(getContext());
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         ((LoginActivity) getActivity()).onLoginAuthToken();
@@ -181,16 +175,15 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     mUserPreference.set(loginResponse);
                     if (getActivity() != null) {
                         ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
-                        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     }
                     AnalyticsManager.initializeMixpanel(getContext());
-                    AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
+                    AnalyticsManager.initializeCleverTap(SheroesApplication.sContext, currentTime < createdDate);
+                    AnalyticsManager.initializeGoogleAnalytics(getContext());
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     if (getActivity() != null && !getActivity().isFinishing()) {
                         ((LoginActivity) getActivity()).onLoginAuthToken();
                     }
-
                 } else {
                     LoginManager.getInstance().logOut();
                     if (getActivity() != null)
@@ -363,7 +356,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 mFcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                     //Refresh FCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.sContext);
                     if (cleverTapAPI != null) {
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }

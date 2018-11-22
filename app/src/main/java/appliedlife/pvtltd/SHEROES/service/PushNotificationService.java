@@ -41,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
@@ -75,7 +74,7 @@ public class PushNotificationService extends FirebaseMessagingService {
             if (StringUtil.isNotNullOrEmptyString(isCleverTapNotification) && isCleverTapNotification.equalsIgnoreCase("true")) {
                 handleCleverTapNotification(data);
             } else {
-                    handleOtherNotification(from, data);
+                handleOtherNotification(from, data);
             }
         }
     }
@@ -92,9 +91,8 @@ public class PushNotificationService extends FirebaseMessagingService {
                 if (mUserPreference != null) {
                     mUserPreference.delete();
                 }
-                MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
-                ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
+                MixpanelHelper.clearMixpanel(SheroesApplication.sContext);
+                ((NotificationManager) SheroesApplication.sContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                 return;
             }
 

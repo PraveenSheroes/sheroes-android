@@ -12,9 +12,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -28,7 +25,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollow
 import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.MentorPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -159,7 +155,6 @@ public class MentorInsightActivity extends BaseActivity implements MentorView, B
     @Bind(R.id.rl_follower)
     RelativeLayout rlFollower;
 
-
     @Bind(R.id.tv_mentor_insight_question_count)
     TextView tvMentorInsightQuestionCount;
 
@@ -197,8 +192,6 @@ public class MentorInsightActivity extends BaseActivity implements MentorView, B
 
     @Bind(R.id.view_insight)
     View viewInsight;
-
-
     //endregion
 
     @Override
@@ -215,8 +208,6 @@ public class MentorInsightActivity extends BaseActivity implements MentorView, B
         getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.ID_INSIGHT);
         mMentorPresenter.getMentorInsightFromPresenter(new MentorFollowerRequest());
-        ((SheroesApplication) this.getApplication()).trackScreenView(getString(R.string.ID_MENTOR_INSIGHT));
-
     }
 
     @Override
@@ -338,7 +329,6 @@ public class MentorInsightActivity extends BaseActivity implements MentorView, B
         } else {
             rlAnswer.setVisibility(View.GONE);
         }
-
     }
 
     @OnClick(R.id.tv_mentor_answering_question)
@@ -403,7 +393,6 @@ public class MentorInsightActivity extends BaseActivity implements MentorView, B
                 default:
             }
         }
-
     }
 
     @Override

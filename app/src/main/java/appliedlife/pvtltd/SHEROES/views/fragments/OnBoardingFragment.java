@@ -39,10 +39,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
@@ -126,7 +124,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
             @Override
             public void onShow() {
                 // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
-
             }
 
             @Override
@@ -228,8 +225,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (communityFeedSolrObj.isMember()) {
             OnBoardingActivity.isJoinCount++;
-            if(getActivity()!=null)
-            ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
             AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
         }
@@ -242,8 +237,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
             if (OnBoardingActivity.isJoinCount >= 0) {
                 OnBoardingActivity.isJoinCount--;
             }
-            if(getActivity()!=null)
-            ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.LEAVE_COMMUNITY, AppConstants.EMPTY_STRING);
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
             AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
         }
@@ -274,6 +267,7 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(getContext(), false);
         AnalyticsManager.initializeCleverTap(getContext(), false);
+        AnalyticsManager.initializeGoogleAnalytics(getContext());
     }
 
     @Override

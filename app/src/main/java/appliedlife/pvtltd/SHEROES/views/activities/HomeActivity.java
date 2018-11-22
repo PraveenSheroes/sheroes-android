@@ -124,7 +124,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -378,7 +377,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             if (null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
                 AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
-                AppsFlyerLib.getInstance().startTracking(SheroesApplication.mContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
+                AppsFlyerLib.getInstance().startTracking(SheroesApplication.sContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
                 ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(mUserId));
             }
         }
@@ -500,7 +499,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.START);
-        ((SheroesApplication) this.getApplication()).trackScreenView(AppConstants.DRAWER_NAVIGATION);
     }
 
     @OnClick(R.id.fl_nav_communities)
@@ -757,8 +755,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
         LoginManager.getInstance().logOut();
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
-
     }
 
     public void helplineUi() {
@@ -865,7 +861,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
 
     }
-
 
     @Override
     public String getScreenName() {
@@ -999,6 +994,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(this, false);
         AnalyticsManager.initializeCleverTap(this, false);
+        AnalyticsManager.initializeGoogleAnalytics(this);
     }
 
     @Override
@@ -1280,25 +1276,21 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 }
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
-
                     communityOnClick();
                 }
 
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-
                     mentorListActivity();
                 }
 
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
-
                     renderFAQSView();
                 }
 
 
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
-
                     renderICCMemberListView();
                 }
             } else if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
@@ -1396,7 +1388,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         //For navigation drawer items
         activityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
 
-
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerViewDrawerCommunities.setLayoutManager(gridLayoutManager);
@@ -1443,7 +1434,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
                         // Do not let others grab our call
-                        intent.setPackage(SheroesApplication.mContext.getPackageName());
+                        intent.setPackage(SheroesApplication.sContext.getPackageName());
                     } else {
                         startActivity(intent);
                         return;
@@ -1890,7 +1881,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         }
     }
 
-
     private void invalidatePostItem(FeedDetail feedDetail, long id) {
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(HomeFragment.class.getName());
         if (fragment != null) {
@@ -2017,7 +2007,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mFcmId = registrationId;
                 //Refresh FCM token
-                CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
+                CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.sContext);
                 if (cleverTapAPI != null) {
                     cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                 }

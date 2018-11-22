@@ -17,27 +17,33 @@ public enum Event {
     //region APP related events
     APP_LOGIN(AnalyticsEventType.APP, "Login"),
     LANGUAGE_SELECTED(AnalyticsEventType.LANGUAGE_SELECTED, ""),
-    //endregion
-
-    //region post related events
-    ARTICLE_LIKED(AnalyticsEventType.ARTICLE, "Liked"),
-    ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
-    POST_LIKED(AnalyticsEventType.POST, "Liked"),
-    POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
-    STORY_SHARED(AnalyticsEventType.STORY, "Shared") {
+    APP_UPDATE_YES(AnalyticsEventType.APP, "Update") {
         @Override
-        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return getAnalyticsProviderStatus(analyticsProvider);
+        public void addProperties(Map<String, Object> properties) {
+            super.addProperties(properties);
+            properties.put(EventProperty.ACTION.getString(), "Yes");
+            properties.put(EventProperty.CURRENT_VERSION.getString(), CommonUtil.getCurrentAppVersion());
+        }
+    },
+    APP_UPDATE_NO(AnalyticsEventType.APP, "Update") {
+        @Override
+        public void addProperties(Map<String, Object> properties) {
+            super.addProperties(properties);
+            properties.put(EventProperty.ACTION.getString(), "No");
+            properties.put(EventProperty.CURRENT_VERSION.getString(), CommonUtil.getCurrentAppVersion());
         }
     },
     APP_SHARED(AnalyticsEventType.APP, "Shared"),
+    APP_REVIEW_CLICKED(AnalyticsEventType.APP_REVIEW_CLICKED, ""),
+    APP_INVITE_CLICKED(AnalyticsEventType.APP, " Invite Clicked"),
+    APP_INVITE(AnalyticsEventType.APP, " Invite"),
+    USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),
+    //endregion
+
+    //region post related events
+    POST_LIKED(AnalyticsEventType.POST, "Liked"),
+    POST_UNLIKED(AnalyticsEventType.POST, "UnLiked"),
     POST_SHARED(AnalyticsEventType.POST, "Shared") {
-        @Override
-        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
-            return getAnalyticsProviderStatus(analyticsProvider);
-        }
-    },
-    ARTICLE_SHARED(AnalyticsEventType.ARTICLE, "Shared") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
             return getAnalyticsProviderStatus(analyticsProvider);
@@ -49,7 +55,6 @@ public enum Event {
             return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
-    PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
     POST_BOOKMARKED(AnalyticsEventType.POST, "Bookmarked"),
     POST_UNBOOKMARKED(AnalyticsEventType.POST, "UnBookmarked"),
     POST_EDITED(AnalyticsEventType.POST, "Edited"),
@@ -57,6 +62,7 @@ public enum Event {
     POST_REPORTED(AnalyticsEventType.POST, "Reported"),
     POST_APPROVED(AnalyticsEventType.POST, "Approved"),
     POST_REJECTED(AnalyticsEventType.POST, "Rejected"),
+    POST_LOAD_MORE_CLICKED(AnalyticsEventType.POST_LOAD_MORE, "Clicked"),
     POST_CREATED(AnalyticsEventType.POST, "Created") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
@@ -64,7 +70,27 @@ public enum Event {
         }
     },
     POST_TOP_POST(AnalyticsEventType.POST, "Marked Top Post"),
+    //endregion
 
+    //region article related events
+    ARTICLE_LIKED(AnalyticsEventType.ARTICLE, "Liked"),
+    ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
+    //endregion
+
+    //region story related events
+    STORY_SHARED(AnalyticsEventType.STORY, "Shared") {
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return getAnalyticsProviderStatus(analyticsProvider);
+        }
+    },
+    STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created"),
+    STORY_DRAFT_SAVED(AnalyticsEventType.STORY, "Draft Saved"),
+    STORY_CREATED(AnalyticsEventType.STORY, "Created"),
+    STORY_BOOKMARKED(AnalyticsEventType.STORY, "Bookmarked"),
+    STORY_UN_BOOKMARKED(AnalyticsEventType.STORY, "UnBookmarked"),
+    STORY_LIKED(AnalyticsEventType.STORY, "Liked"),
+    STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
     //endregion
 
     //region reply related events
@@ -85,17 +111,6 @@ public enum Event {
     },
     REPLY_UNLIKED(AnalyticsEventType.REPLY, "Unliked"),
     //endregion
-
-    //region job related events
-    JOBS_CREATED(AnalyticsEventType.JOB, "Created"),
-    JOBS_SEARCH(AnalyticsEventType.JOB, "Search Performed"),
-    JOBS_SEARCH_RESULT_CLICKED(AnalyticsEventType.JOB, "Search Result Click"),
-    JOBS_APPLIED(AnalyticsEventType.JOB, "Applied"),
-    JOBS_BOOKMARKED(AnalyticsEventType.JOB, "Bookmarked"),
-    JOBS_EDITED(AnalyticsEventType.JOB, "Edited"),
-    JOBS_DELETED(AnalyticsEventType.JOB, "Deleted"),
-    JOBS_SHARED(AnalyticsEventType.JOB, "Shared"),
-    JOBS_RECOMMENDED(AnalyticsEventType.JOB, "Recommended"),
 
     //region Helpline message events
     HELPLINE_MESSAGE_CREATED(AnalyticsEventType.HELPLINE_MESSAGE, "Created") {
@@ -130,18 +145,22 @@ public enum Event {
     COMMUNITY_REMOVED_MEMBER(AnalyticsEventType.COMMUNITY, "Removed Member"),
     COMMUNITY_INVITE_CLICKED(AnalyticsEventType.COMMUNITY, "Invite Clicked"),
     COMMUNITY_INVITE(AnalyticsEventType.COMMUNITY, "Invite"),
-    APP_INVITE_CLICKED(AnalyticsEventType.APP, " Invite Clicked"),
-    APP_INVITE(AnalyticsEventType.APP, " Invite"),
+    //endregion
+
+    //region friend related events
     FRIEND_INVITED(AnalyticsEventType.FRIEND, "Invited"),
     FRIEND_SEARCH(AnalyticsEventType.FRIEND, "Searched"),
-
     //endregion
 
     //region Organization related event
-    ORGANIZATION_UPVOTED(AnalyticsEventType.ORGANIZATION, "Upvoted"),    // region User related events
+    ORGANIZATION_UPVOTED(AnalyticsEventType.ORGANIZATION, "Upvoted"),
+    //endregion
+
+    // region User related events
     USER_SIGNUP(AnalyticsEventType.USER, "Signed Up"),
-    USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),
     USER_LOG_OUT(AnalyticsEventType.USER, "Logout"),
+    USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
+    USER_TAGGED(AnalyticsEventType.USER, "Tagged"),
     // endregion
 
     //region Search events
@@ -164,6 +183,7 @@ public enum Event {
     IMAGE_CARD(AnalyticsEventType.IMAGE_CARD, "Clicked"),
     // endregion
 
+    //region profile related events
     PROFILE_FOLLOWED(AnalyticsEventType.PROFILE, "Followed"),
     PROFILE_UNFOLLOWED(AnalyticsEventType.PROFILE, "UnFollowed"),
     PROFILE_EDITED(AnalyticsEventType.PROFILE, "Edited") {
@@ -175,9 +195,10 @@ public enum Event {
     PROFILE_PIC_EDIT_CLICKED(AnalyticsEventType.PROFILE, "Picture Edit Clicked"),
     PROFILE_REPORTED(AnalyticsEventType.PROFILE, "Reported"),
     PROFILE_DEACTIVATE(AnalyticsEventType.PROFILE, "Deactivated"),
-    //region Image related events
-    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
-    USER_INTRO_TUTORIAL(AnalyticsEventType.USER, "Intro Tutorial"),
+    PROFILE_SHARED(AnalyticsEventType.PROFILE, "Shared"),
+    //endregion
+
+    //region Walkthrough related events
     WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " Started"),
     WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
     // endregion
@@ -189,46 +210,21 @@ public enum Event {
 
     //region onboarding
     ONBOARDING_SKIPPED(AnalyticsEventType.ON_BOARDING, "Skipped"),
-    //end region
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
+    //endregion
 
     //region Contact events
     CONTACT_SYNC_ALLOWED(AnalyticsEventType.ALLOWED_CONTACT_SYNC, ""),
     CONTACT_SYNC_DENIED(AnalyticsEventType.DENIED_CONTACT_SYNC, ""),
     //endregion
 
-    APP_UPDATE_YES(AnalyticsEventType.APP, "Update") {
-        @Override
-        public void addProperties(Map<String, Object> properties) {
-            super.addProperties(properties);
-            properties.put(EventProperty.ACTION.getString(), "Yes");
-            properties.put(EventProperty.CURRENT_VERSION.getString(), CommonUtil.getCurrentAppVersion());
-        }
-    },
-    APP_UPDATE_NO(AnalyticsEventType.APP, "Update") {
-        @Override
-        public void addProperties(Map<String, Object> properties) {
-            super.addProperties(properties);
-            properties.put(EventProperty.ACTION.getString(), "No");
-            properties.put(EventProperty.CURRENT_VERSION.getString(), CommonUtil.getCurrentAppVersion());
-        }
-    },
-
-    POST_LOAD_MORE_CLICKED(AnalyticsEventType.POST_LOAD_MORE, "Clicked"),
     //region publish related events
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
     FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, ""),
-    USER_TAGGED(AnalyticsEventType.USER, "Tagged"),
-    STORY_DRAFT_SAVED(AnalyticsEventType.STORY, "Draft Saved"),
-    STORY_CREATED(AnalyticsEventType.STORY, "Created"),
-    STORY_BOOKMARKED(AnalyticsEventType.STORY, "Bookmarked"),
-    STORY_UN_BOOKMARKED(AnalyticsEventType.STORY, "UnBookmarked"),
-    STORY_LIKED(AnalyticsEventType.STORY, "Liked"),
-    STORY_UN_LIKED(AnalyticsEventType.STORY, "UnLiked"),
-    STORY_REPLY_CREATED(AnalyticsEventType.STORY, "Reply Created"),
     GENDER_SELECTED(AnalyticsEventType.GENDER_SELECTED, ""),
-    APP_REVIEW_CLICKED(AnalyticsEventType.APP_REVIEW_CLICKED, ""),
+    //endregion
 
-    //Poll events
+    //region Poll events
     POLL_LIKED(AnalyticsEventType.POLL, "Liked"),
     POLL_CLICKED(AnalyticsEventType.POLL, "Clicked"),
     POLL_VOTED(AnalyticsEventType.POLL, "Voted"),
@@ -263,17 +259,20 @@ public enum Event {
     public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
         return analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS
                 || analyticsProvider == AnalyticsProvider.MIXPANEL
+                || analyticsProvider == AnalyticsProvider.CLEVERTAP
+                || analyticsProvider == AnalyticsProvider.FACEBOOK
                 || analyticsProvider == AnalyticsProvider.APPSFLYER;
     }
 
     public void addProperties(Map<String, Object> properties) {
         type.addProperties(properties);
     }
-    // endregion
 
     boolean getAnalyticsProviderStatus(AnalyticsProvider analyticsProvider) {
-        return analyticsProvider == AnalyticsProvider.FACEBOOK ||
-                analyticsProvider == AnalyticsProvider.MIXPANEL ||
-                analyticsProvider == AnalyticsProvider.APPSFLYER;
+        return analyticsProvider == AnalyticsProvider.GOOGLE_ANALYTICS
+                || analyticsProvider == AnalyticsProvider.MIXPANEL
+                || analyticsProvider == AnalyticsProvider.CLEVERTAP
+                || analyticsProvider == AnalyticsProvider.FACEBOOK
+                || analyticsProvider == AnalyticsProvider.APPSFLYER;
     }
 }

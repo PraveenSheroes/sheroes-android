@@ -7,5 +7,6 @@ public enum AnalyticsProvider {
     GOOGLE_ANALYTICS,
     MIXPANEL,
     APPSFLYER,
+    CLEVERTAP,
     FACEBOOK
 }
