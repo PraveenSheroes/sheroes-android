@@ -34,12 +34,12 @@ import io.fabric.sdk.android.Fabric;
  */
 public class SheroesApplication extends MultiDexApplication {
     private final String TAG = LogUtils.makeLogTag(SheroesApplication.class);
-    public static volatile SheroesApplication sContext;
+    public static volatile SheroesApplication mContext;
     private String mCurrentActivityName;
     SheroesAppComponent mSheroesAppComponent;
 
     public static SheroesAppComponent getAppComponent(Context context) {
-        return (sContext).mSheroesAppComponent;
+        return (mContext).mSheroesAppComponent;
     }
 
     protected void setAppComponent(SheroesAppComponent sheroesAppComponent) {
@@ -56,7 +56,7 @@ public class SheroesApplication extends MultiDexApplication {
     public void onCreate() {
         ActivityLifecycleCallback.register(this);
         super.onCreate();
-        sContext = this;
+        mContext = this;
         final CrashlyticsCore core = new CrashlyticsCore.Builder().build();
         Fabric.with(this, new Crashlytics.Builder().core(core).build(), new Crashlytics());
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -68,8 +68,8 @@ public class SheroesApplication extends MultiDexApplication {
         setAppComponent(mSheroesAppComponent);
         Branch.enableLogging();
         Branch.getAutoInstance(this);
-        AnalyticsManager.initializeMixpanel(sContext);
-        AnalyticsManager.initializeFbAnalytics(sContext);
+        AnalyticsManager.initializeMixpanel(mContext);
+        AnalyticsManager.initializeFbAnalytics(mContext);
         AnalyticsManager.initializeCleverTap(this, false);
         AnalyticsManager.initializeGoogleAnalytics(this);
         StethoUtil.initStetho(this);
@@ -94,10 +94,10 @@ public class SheroesApplication extends MultiDexApplication {
     }
 
     public static SharedPreferences getAppSharedPrefs() {
-        if (sContext == null) {
+        if (mContext == null) {
             return null;
         }
-        return sContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
+        return mContext.getSharedPreferences(AppConstants.SHARED_PREFS, MODE_PRIVATE);
     }
 
     public synchronized Tracker getGoogleAnalyticsTracker() {

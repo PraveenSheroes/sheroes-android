@@ -151,7 +151,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                             ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
                         AnalyticsManager.initializeMixpanel(getContext());
-                        AnalyticsManager.initializeCleverTap(SheroesApplication.sContext, currentTime < createdDate);
+                        AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                         AnalyticsManager.initializeGoogleAnalytics(getContext());
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
@@ -177,7 +177,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         ((SheroesApplication) getActivity().getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     }
                     AnalyticsManager.initializeMixpanel(getContext());
-                    AnalyticsManager.initializeCleverTap(SheroesApplication.sContext, currentTime < createdDate);
+                    AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                     AnalyticsManager.initializeGoogleAnalytics(getContext());
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
@@ -356,7 +356,7 @@ public class LoginFragment extends BaseFragment implements LoginView {
                 mFcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                     //Refresh FCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.sContext);
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if (cleverTapAPI != null) {
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }

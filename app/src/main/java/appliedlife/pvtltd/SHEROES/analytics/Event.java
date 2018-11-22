@@ -75,6 +75,12 @@ public enum Event {
     //region article related events
     ARTICLE_LIKED(AnalyticsEventType.ARTICLE, "Liked"),
     ARTICLE_UNLIKED(AnalyticsEventType.ARTICLE, "UnLiked"),
+    ARTICLE_SHARED(AnalyticsEventType.ARTICLE, "Shared") {
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return getAnalyticsProviderStatus(analyticsProvider);
+        }
+    },
     //endregion
 
     //region story related events

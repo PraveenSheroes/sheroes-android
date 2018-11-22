@@ -4,7 +4,6 @@ import com.crashlytics.android.Crashlytics;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -19,14 +18,11 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IContestView;
+
 import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.Observable;
-
-
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
-import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
@@ -58,7 +54,6 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), null);
-
             }
 
             @Override
@@ -133,7 +128,6 @@ public class ContestPresenterImpl extends BasePresenter<IContestView>{
                 Crashlytics.getInstance().core.logException(e);
                 getMvpView().stopProgressBar();
                 getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
-
             }
 
             @Override

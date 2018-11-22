@@ -181,7 +181,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = first + AppConstants.SPACE + last;
             }
         }
-        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.sContext, AppConstants.WHATS_APP_URI);
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)

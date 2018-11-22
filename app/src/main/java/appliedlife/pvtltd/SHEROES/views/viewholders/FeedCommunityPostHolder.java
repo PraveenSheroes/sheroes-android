@@ -244,7 +244,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 loggedInUser = first + AppConstants.SPACE + last;
             }
         }
-        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.sContext, AppConstants.WHATS_APP_URI);
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (mInstallUpdatePreference.get().isWalkThroughShown()) {
             if (CommonUtil.ensureFirstTime(AppConstants.HOME_USER_NAME_PREF)) {
                 isToolTipForUser = true;

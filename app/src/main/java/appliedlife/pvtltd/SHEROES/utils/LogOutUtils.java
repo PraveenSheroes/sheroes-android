@@ -41,7 +41,7 @@ public class LogOutUtils {
     }
 
     private LogOutUtils() {
-        SheroesApplication.getAppComponent(SheroesApplication.sContext).inject(this);
+        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
     }
 
     public void logOutUser(String screenName, final Context context) {
@@ -64,7 +64,7 @@ public class LogOutUtils {
             });
         }
         mUserPreference.delete();
-        MixpanelHelper.clearMixpanel(SheroesApplication.sContext);
-        ((NotificationManager) SheroesApplication.sContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+        MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+        ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
     }
 }

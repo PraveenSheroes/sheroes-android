@@ -90,7 +90,7 @@ public class FeedUtils {
 
     @Inject
     public FeedUtils() {
-        SheroesApplication.getAppComponent(SheroesApplication.sContext).inject(this);
+        SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
     }
 
     public void feedCardsHandled(View view, BaseResponse baseResponse, Activity activity, String screenName) {

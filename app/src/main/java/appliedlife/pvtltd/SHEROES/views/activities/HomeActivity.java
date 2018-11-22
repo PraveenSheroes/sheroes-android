@@ -377,7 +377,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             if (null != mUserPreference.get().getUserSummary()) {
                 mUserId = mUserPreference.get().getUserSummary().getUserId();
                 AppsFlyerLib.getInstance().setCustomerUserId(String.valueOf(mUserId));
-                AppsFlyerLib.getInstance().startTracking(SheroesApplication.sContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
+                AppsFlyerLib.getInstance().startTracking(SheroesApplication.mContext, getString(R.string.ID_APPS_FLYER_DEV_ID));
                 ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(mUserId));
             }
         }
@@ -1434,7 +1434,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     if (url.startsWith("https://sheroes.com") || url.startsWith("http://sheroes.com") || url.startsWith("https://sheroes.in") || url.startsWith("http://sheroes.in")) {
                         // Do not let others grab our call
-                        intent.setPackage(SheroesApplication.sContext.getPackageName());
+                        intent.setPackage(SheroesApplication.mContext.getPackageName());
                     } else {
                         startActivity(intent);
                         return;
@@ -2007,7 +2007,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             public void onSuccess(String registrationId, boolean isNewRegistration) {
                 mFcmId = registrationId;
                 //Refresh FCM token
-                CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.sContext);
+                CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                 if (cleverTapAPI != null) {
                     cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                 }

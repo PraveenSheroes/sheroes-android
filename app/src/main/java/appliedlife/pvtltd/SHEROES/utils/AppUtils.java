@@ -1,9 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -11,26 +9,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.os.StatFs;
 import android.provider.Settings;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.content.ContextCompat;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -43,34 +29,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.RandomAccessFile;
-import java.io.Reader;
-import java.nio.charset.Charset;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.GZIPInputStream;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -96,7 +63,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -112,9 +78,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.UserBadgeRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
@@ -161,7 +125,6 @@ public class AppUtils {
         float px = dp * (metrics.densityDpi / 160f);
         return Math.round(px);
     }
-
 
     public static int getWindowWidth(Context context) {
         int[] size = getWindowSize(context);
@@ -218,8 +181,6 @@ public class AppUtils {
             return "";
         }
     }
-
-
 
     /**
      * Check for the internet availability.
@@ -299,8 +260,6 @@ public class AppUtils {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
-
-
     public void email(String email, String subject, String text) {
         LogUtils.enter(TAG, LogUtils.getMethodName());
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -312,7 +271,6 @@ public class AppUtils {
         getApplicationContext().startActivity(Intent.createChooser(intent, "Send email"));
         LogUtils.exit(TAG, LogUtils.getMethodName());
     }
-
 
     // Nikhil
     public static <T> T parseUsingGSONFromJSON(String is, String classPath) {
@@ -328,7 +286,6 @@ public class AppUtils {
             Gson gson = gsonBuilder.create();
 
             try {
-
                 try {
                     queryResult = (T) gson.fromJson(is, Class.forName(classPath));
                     // queryResult = (T)
@@ -343,7 +300,6 @@ public class AppUtils {
                 LogUtils.error("G-PAR", "JsonIOException " + e.toString(), e);
                 return null;
             }
-
         }
         LogUtils.exit(TAG, LogUtils.getMethodName());
         return queryResult;
@@ -357,8 +313,6 @@ public class AppUtils {
         return px;
     }
 
-
-
     public static String capitalize(String s) {
         if (s == null || s.length() == 0) {
             return "";
@@ -370,7 +324,6 @@ public class AppUtils {
             return Character.toUpperCase(first) + s.substring(1);
         }
     }
-
 
     /**
      * Request for Navigation drawer items
@@ -405,7 +358,6 @@ public class AppUtils {
         return content;
     }
 
-
     /**
      * @return manufacturer of the device for tracking
      * if not available then Brand
@@ -417,7 +369,6 @@ public class AppUtils {
         }
         return manufacturer;
     }
-
 
     /* Function to check if fragment UI is active*/
     public static boolean isFragmentUIActive(Fragment frag) {
@@ -464,9 +415,7 @@ public class AppUtils {
         removeMemberRequest.setAppVersion(appUtils.getAppVersionName());
         removeMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         return removeMemberRequest;
-
     }
-
 
     public static FeedRequestPojo userCommunityPostRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
@@ -488,10 +437,8 @@ public class AppUtils {
         profileUsersCommunityRequest.setPageNo(pageNo);
         profileUsersCommunityRequest.setPageSize(AppConstants.PAGE_SIZE);
         profileUsersCommunityRequest.setUserId(userId);
-
         return profileUsersCommunityRequest;
     }
-
 
     public static NotificationReadCount notificationReadCountRequestBuilder(String screenName) {
         AppUtils appUtils = AppUtils.getInstance();
@@ -731,7 +678,6 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-
     /**
      * Request for feed api
      */
@@ -770,7 +716,6 @@ public class AppUtils {
         likeRequestPojo.setReactionValue(reactionValue);
         return likeRequestPojo;
     }
-
 
     /**
      * Request for feed api
@@ -828,7 +773,6 @@ public class AppUtils {
 
     public BellNotificationRequest getBellNotificationRequest() {
         AppUtils appUtils = AppUtils.getInstance();
-
         BellNotificationRequest bellNotificationRequest = new BellNotificationRequest();
         bellNotificationRequest.setAppVersion(appUtils.getAppVersionName());
         bellNotificationRequest.setCloudMessagingId(appUtils.getCloudMessaging());

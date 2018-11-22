@@ -435,8 +435,8 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
                     HashMap<String, Object> properties = new EventProperty.Builder().build();
                     AnalyticsManager.trackEvent(Event.USER_LOG_OUT, getScreenName(), properties);
                     mUserPreference.delete();
-                    MixpanelHelper.clearMixpanel(SheroesApplication.sContext);
-                    ((NotificationManager) SheroesApplication.sContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+                    MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
+                    ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
                     break;
                 default:
                     onShowErrorDialog(errorMsg, feedParticipationEnum);
@@ -642,7 +642,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
                 mFcmId = registrationId;
                 if (StringUtil.isNotNullOrEmptyString(mFcmId)) {
                     //Refresh FCM token
-                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.sContext);
+                    CleverTapAPI cleverTapAPI = CleverTapHelper.getCleverTapInstance(SheroesApplication.mContext);
                     if (cleverTapAPI != null) {
                         cleverTapAPI.data.pushFcmRegistrationId(registrationId, true);
                     }

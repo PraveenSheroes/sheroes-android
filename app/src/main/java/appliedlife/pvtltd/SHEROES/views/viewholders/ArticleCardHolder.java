@@ -99,7 +99,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.sContext, AppConstants.WHATS_APP_URI);
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)

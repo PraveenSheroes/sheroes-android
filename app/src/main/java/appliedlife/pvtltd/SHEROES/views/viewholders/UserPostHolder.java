@@ -187,7 +187,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
             }
         }
-        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.sContext, AppConstants.WHATS_APP_URI);
+        isWhatappShareOption = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
     }
 
     @Override
