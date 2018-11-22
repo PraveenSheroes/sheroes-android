@@ -123,6 +123,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
         sendChat.setVisibility(View.GONE);
+        setProgressBar(mProgressBar);
         mChatFetchHandler = new Handler();
         mChatRunnable = new Runnable() {
             public void run() {
@@ -266,13 +267,13 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            //mRecyclerView.smoothScrollToPosition(0);
         }
-
+        mPullRefreshList.setPullToRefresh(false);
     }
 
     @Override
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
+        mPullRefreshList.setPullToRefresh(false);
         sendChat.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             HashMap<String, Object> screenProperties = null;
@@ -352,7 +353,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg,feedParticipationEnum);
         sendChat.setEnabled(true);
-           }
+    }
 
     @Override
     public String getScreenName() {
