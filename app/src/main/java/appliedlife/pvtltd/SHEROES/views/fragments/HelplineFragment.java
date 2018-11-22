@@ -3,26 +3,31 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -43,15 +48,16 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.vernacular.LocaleManager;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HelplineActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -61,7 +67,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.helplineGetChatThreadRequestBuilder;
 
 /**
@@ -80,8 +86,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     ProgressBar mProgressBar;
     @Bind(R.id.et_question_chat)
     EditText questionText;
-    @Bind(R.id.btn_chat_send)
-    Button sendChatButton;
+    @Bind(R.id.iv_chat_send)
+    ImageView sendChat;
+    @Bind(R.id.iv_chat_voice)
+    ImageView chatVoice;
     private FragmentListRefreshData mFragmentListRefreshData;
     private GenericRecyclerViewAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
@@ -89,8 +97,9 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     private AppUtils mAppUtils;
     private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-    private long startedTime;
     private String sourceScreen ;
+    private Handler mChatFetchHandler;
+    private Runnable mChatRunnable;
 
 
     public static HelplineFragment createInstance(String sourceScreen) {
@@ -113,9 +122,17 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mHelplinePresenter.attachView(this);
+        sendChat.setVisibility(View.GONE);
+        setProgressBar(mProgressBar);
+        mChatFetchHandler = new Handler();
+        mChatRunnable = new Runnable() {
+            public void run() {
+                mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+            }
+        };
 
         if(getArguments()!=null) {
-           sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
+            sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
         }
 
         if(getActivity() instanceof HomeActivity){
@@ -128,17 +145,35 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             ((HomeActivity)getActivity()).helplineUi();
         }
 
-        setUpRecyclerView();
+        setUpRecyclerView(false);
+        questionText.addTextChangedListener(editTextWatcher());
+        questionText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                if (!keyboardShown(questionText.getRootView())) {
+                    if(questionText.getText().toString().length()!=0){
+                        sendChat.setVisibility(View.VISIBLE);
+                        chatVoice.setVisibility(View.GONE);
+                    } else {
+                        sendChat.setVisibility(View.GONE);
+                        chatVoice.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    sendChat.setVisibility(View.VISIBLE);
+                    chatVoice.setVisibility(View.GONE);
+                }
+            }
+        });
         ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.HELPLINE);
         return view;
     }
 
-    @OnClick(R.id.btn_chat_send)
+    @OnClick(R.id.iv_chat_send)
     public void sendQuestionText() {
         String text = questionText.getText().toString();
         if (StringUtil.isNotNullOrEmptyString(text)) {
             text = text.trim();
-            sendChatButton.setEnabled(false);
+            sendChat.setEnabled(false);
             mHelplinePresenter.postQuestionHelpline(AppUtils.helplineQuestionBuilder(text));
         } else {
             Toast.makeText(getContext(), R.string.helpline_msg, Toast.LENGTH_SHORT).show();
@@ -146,7 +181,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_MESSAGE, GoogleAnalyticsEventActions.SENT_A_HELPLINE_MESSAGE, AppConstants.EMPTY_STRING);
     }
 
-    @OnClick(R.id.btn_chat_voice)
+    @OnClick(R.id.iv_chat_voice)
     public void speechToText() {
         promptSpeechInput();
     }
@@ -167,6 +202,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             appBarLayoutParams.setBehavior(new AppBarLayout.Behavior());
             ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
         }
+        mChatFetchHandler.removeCallbacksAndMessages(mChatRunnable);
         mHelplinePresenter.detachView();
     }
 
@@ -174,7 +210,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         try {
             Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, CommonUtil.getPrefStringValue(LANGUAGE_KEY));
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ID_SPEECH_PROMPT));
             startActivityForResult(intent, AppConstants.REQ_CODE_SPEECH_INPUT);
         } catch(ActivityNotFoundException e) {
@@ -211,7 +247,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         mPullRefreshList.setPullToRefresh(false);
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        setUpRecyclerView();
+        setUpRecyclerView(true);
 
     }
 
@@ -231,14 +267,14 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             } else {
                 mLayoutManager.scrollToPositionWithOffset(0, 0);
             }
-            //mRecyclerView.smoothScrollToPosition(0);
         }
-
+        mPullRefreshList.setPullToRefresh(false);
     }
 
     @Override
     public void getPostQuestionSuccess(HelplinePostQuestionResponse helplinePostQuestionResponse) {
-        sendChatButton.setEnabled(true);
+        mPullRefreshList.setPullToRefresh(false);
+        sendChat.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             HashMap<String, Object> screenProperties = null;
             if (sourceScreen != null) {
@@ -254,6 +290,22 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     }
 
     @Override
+    public void getPostRatingSuccess(BaseResponse baseResponse,HelplineChatDoc helplineChatDoc) {
+        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+            mAdapter.notifyItemChanged(helplineChatDoc.getItemPosition());
+        }
+        mAdapter.removeDataOnPosition(helplineChatDoc.getItemPosition());
+        mAdapter.notifyDataSetChanged();
+        HashMap<String, Object> screenProperties = null;
+        if (sourceScreen != null) {
+            screenProperties = new EventProperty.Builder()
+                    .sourceScreenId(sourceScreen)
+                    .build();
+        }
+        trackEvent(Event.HELPLINE_RATEUS_CARD_CLICKED, screenProperties);
+    }
+
+    @Override
     protected SheroesPresenter getPresenter() {
         return mHelplinePresenter;
     }
@@ -263,10 +315,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         questionText.setSelection(questionText.getText().length());
     }
 
-    public void setUpRecyclerView(){
+    public void setUpRecyclerView(boolean isFromChatThread){
         mLayoutManager = new LinearLayoutManager(getContext());
-        if(getActivity() instanceof HomeActivity){
-            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        if(getActivity() instanceof HelplineActivity){
+            mAdapter = new GenericRecyclerViewAdapter(getContext(), (HelplineActivity) getActivity());
         }
         if(getActivity() instanceof CommunityDetailActivity){
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunityDetailActivity) getActivity());
@@ -290,14 +342,18 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
             }
         });
-        mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+        if (isFromChatThread) {
+            mChatFetchHandler.postDelayed(mChatRunnable, 1100);
+        } else {
+            mHelplinePresenter.getHelplineChatDetails(helplineGetChatThreadRequestBuilder(AppConstants.ONE_CONSTANT));
+        }
     }
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg,feedParticipationEnum);
-        sendChatButton.setEnabled(true);
-           }
+        sendChat.setEnabled(true);
+    }
 
     @Override
     public String getScreenName() {
@@ -333,5 +389,59 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
+
+    private boolean keyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
+    }
+
+    private TextWatcher editTextWatcher() {
+
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!isAdded())
+                    return;
+                if (questionText.getText().toString().length() != 0) {
+                    sendChat.setColorFilter(getResources().getColor(R.color.email), android.graphics.PorterDuff.Mode.MULTIPLY);
+                } else {
+                    sendChat.setColorFilter(getResources().getColor(R.color.red_opacity), android.graphics.PorterDuff.Mode.MULTIPLY);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable inputSearch) {
+
+                if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > 0) {
+                    if (!keyboardShown(questionText.getRootView())) {
+                        if(questionText.getText().toString().length()!=0){
+                            sendChat.setVisibility(View.VISIBLE);
+                            chatVoice.setVisibility(View.GONE);
+                        } else {
+                            sendChat.setVisibility(View.GONE);
+                            chatVoice.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        sendChat.setVisibility(View.VISIBLE);
+                        chatVoice.setVisibility(View.GONE);
+                    }
+                }
+            }
+        };
+    }
+
+
+    public void checkHelplineRating(HelplineChatDoc helplineChatDoc) {
+        mHelplinePresenter.postHelplineRating(mAppUtils.helpLinePostRatingRequestBuilder(false, helplineChatDoc.getQuestionOrAnswerId()), helplineChatDoc);
+    }
+
 }
 

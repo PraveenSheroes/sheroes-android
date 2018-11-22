@@ -18,6 +18,7 @@ public enum AnalyticsEventType {
     BADGE("Badge"),
     REPLY("Reply"),
     HELPLINE_MESSAGE("Helpline Message "),
+    HELPLINE_RATEUS("Helpline RateUs"),
     CHALLENGE("Challenge"),
     COMMUNITY("Community"),
     ON_BOARDING("Onboarding"),

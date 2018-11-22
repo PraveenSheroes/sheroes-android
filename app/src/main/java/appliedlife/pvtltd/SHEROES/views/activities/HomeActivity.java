@@ -144,7 +144,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
@@ -160,6 +159,7 @@ import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
 
 import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MENU;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_CHAMPION_TITLE;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
@@ -437,6 +437,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             AppStatus appStatus = mInstallUpdatePreference.get();
             appStatus.setAppInstallFirstTime(true);
             mInstallUpdatePreference.set(appStatus);
+            mHomePresenter.updateSelectedLanguage(mAppUtils.updateSelectedLanguageRequestBuilder(CommonUtil.getPrefStringValue(LANGUAGE_KEY), mUserId));
         }
     }
 
@@ -458,6 +459,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         mActivityDataPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+        mHomePresenter.updateSelectedLanguage(mAppUtils.updateSelectedLanguageRequestBuilder(CommonUtil.getPrefStringValue(LANGUAGE_KEY), mUserId));
     }
 
     @Override
@@ -960,7 +962,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     public void fetchAllCommunity() {
@@ -1528,16 +1529,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
     }
 
-    private Runnable openDrawerRunnable() {
-        return new Runnable() {
-
-            @Override
-            public void run() {
-                //  mCommunityDrawerLayout.openDrawer(Gravity.START);
-            }
-        };
-    }
-
     private void challengeIdHandle(String urlOfSharedCard) {
         if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
             try {
@@ -1756,12 +1747,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private void openHelplineFragment() {
-        mTitleText.setText("");
-        mICSheroes.setVisibility(View.VISIBLE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        changeFragmentWithCommunities();
-        HelplineFragment helplineFragment = HelplineFragment.createInstance(AppConstants.helpline_desk);
-        addNewFragment(helplineFragment, R.id.fl_article_card_view, OnBoardingFragment.class.getName(), null, true).popBackStackImmediate(HelplineFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        Intent helplineIntent = new Intent(this, HelplineActivity.class);
+        startActivity(helplineIntent);
     }
 
     private void removeItem(FeedDetail feedDetail) {

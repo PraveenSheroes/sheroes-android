@@ -427,6 +427,9 @@ public class AppConstants {
     public static final String STORY_DRAFT = "Draft";
     public static final int RECYCLER_SMOOTH_SCROLL_COUNT_SIZE = 15;
     public static final int TRENDING_TAB = 1;
+    public static final int HELPLINE_TIME_START = 12;
+    public static final int HELPLINE_DATE_START = 0;
+    public static final int HELPLINE_DATE_END = 11;
     public static final String ARTICLE_LISTING = "article listing";
     public static final String ARTICLE_SELECT_CATEGORY = "article select category";
     public static final String CLEVER_TAP_CHANNEL_ID = "sheroesRelatedChannelID";

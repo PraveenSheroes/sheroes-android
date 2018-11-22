@@ -621,11 +621,6 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
         }
     }
 
-    private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
-    }
-
-
     //endregion
 
     static class Adapter extends FragmentPagerAdapter {

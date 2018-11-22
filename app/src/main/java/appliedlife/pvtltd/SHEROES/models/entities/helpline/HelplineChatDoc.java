@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 
 public class HelplineChatDoc extends BaseResponse {
-
     @SerializedName("id")
     @Expose
     private String id;
@@ -50,10 +49,16 @@ public class HelplineChatDoc extends BaseResponse {
     @SerializedName("solr_ignore_participant_attendant_image_url")
     @Expose
     private String solrIgnoreParticipantAttendantImageUrl;
-
     @SerializedName("solr_ignore_created_on")
     @Expose
     private String formatedDate;
+
+    @SerializedName("need_rating_b")
+    @Expose
+    private boolean rating;
+
+    //Not from API response
+    public int itemPosition;
 
     public String getId() {
         return id;
@@ -154,7 +159,6 @@ public class HelplineChatDoc extends BaseResponse {
 
     }
 
-
     public void setParticipantAttendantid(int participantAttendantid) {
         this.participantAttendantid = participantAttendantid;
     }
@@ -183,5 +187,21 @@ public class HelplineChatDoc extends BaseResponse {
 
     public void setFormatedDate(String formatedDate) {
         this.formatedDate = formatedDate;
+    }
+
+    public void setRating(boolean rating) {
+        this.rating = rating;
+    }
+
+    public boolean getRating() {
+        return rating;
+    }
+
+    public int getItemPosition() {
+        return itemPosition;
+    }
+
+    public void setItemPosition(int itemPosition) {
+        this.itemPosition = itemPosition;
     }
 }

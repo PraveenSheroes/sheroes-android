@@ -119,12 +119,15 @@ import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HeaderRecyclerViewAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BadgeDetailsDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL;
@@ -145,6 +148,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public static final String IS_HOME_FEED = "Is Home Feed";
     public static final String STREAM_NAME = "stream_name";
     public static final String SCREEN_PROPERTIES = "Screen Properties";
+    private Dialog mDialog = null;
     private static final int HIDE_THRESHOLD = 20;
     //endregion
 
@@ -201,6 +205,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Bind(R.id.tv_goto_setting)
     TextView tvGoToSetting;
+
+    @BindDimen(R.dimen.imagesize_unfollow_dialog)
+    int mProfileSizeSmall;
     // endregion
 
     //region private variables
@@ -315,6 +322,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             impressionSuperProperty.setCommunityTab(mCommunityTab != null ? mCommunityTab.key : "");
             impressionSuperProperty.setOrderKey(mSetOrderKey == null ? "" : mSetOrderKey);
             impressionSuperProperty.setLoggedInUserId(mLoggedInUser);
+            impressionSuperProperty.setLanguage(CommonUtil.getPrefStringValue(LANGUAGE_KEY));
             impressionHelper = new ImpressionHelper(impressionSuperProperty, impressionPresenter, mConfiguration, mFeedRecyclerView, mAppUtils, this);
         }
     }
@@ -837,7 +845,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             super.showError(errorMsg, feedParticipationEnum);
         }
     }
-
     //endregion
 
     //region private methods
@@ -1994,12 +2001,54 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             properties.putAll(getExtraProperties());
         }
 
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-            mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+            unFollowConfirmation(publicProfileListRequest, userSolrObj);
         } else {
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFeedPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        }
+    }
+
+    //TODO - Reuse Unfollow dialog fragment
+    public void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
+        if (userSolrObj != null) {
+            if (mDialog != null) {
+                mDialog.dismiss();
+            }
+            mDialog = new Dialog(getContext());
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            mDialog.setCancelable(false);
+            mDialog.setContentView(R.layout.unfollow_confirmation_dialog);
+            CircleImageView circleImageView = mDialog.findViewById(R.id.user_img_icon);
+            if (StringUtil.isNotNullOrEmptyString(userSolrObj.getImageUrl())) {
+                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getImageUrl(), mProfileSizeSmall, mProfileSizeSmall);
+                circleImageView.setCircularImage(true);
+                circleImageView.bindImage(authorThumborUrl);
+            }
+            TextView text = mDialog.findViewById(R.id.title);
+            text.setText(getString(R.string.unfollow_profile, userSolrObj.getNameOrTitle()));
+            TextView dialogButton = mDialog.findViewById(R.id.cancel);
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mDialog.dismiss();
+                }
+            });
+            TextView unFollowButton = mDialog.findViewById(R.id.unfollow);
+            unFollowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                                    .name(userSolrObj.getNameOrTitle())
+                                    .build();
+                    AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
+                    mFeedPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
+                    mDialog.dismiss();
+                }
+            });
+            mDialog.show();
         }
     }
 
@@ -2097,33 +2146,26 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
     //endregion
-
 }

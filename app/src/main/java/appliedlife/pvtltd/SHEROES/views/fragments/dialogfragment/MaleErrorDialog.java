@@ -74,7 +74,7 @@ public class MaleErrorDialog extends BaseDialogFragment {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        SheroesApplication.getAppComponent(getContext()).inject(this);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         View view = inflater.inflate(R.layout.male_error_dialog, container, false);
         ButterKnife.bind(this, view);
         if (null != getArguments()) {

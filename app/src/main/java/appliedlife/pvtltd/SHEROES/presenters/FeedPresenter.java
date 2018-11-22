@@ -19,7 +19,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
-import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
@@ -84,10 +83,10 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class FeedPresenter extends BasePresenter<IFeedView> {
-    private final String TAG = LogUtils.makeLogTag(FeedPresenter.class);
     public static final int NORMAL_REQUEST = 0;
     public static final int LOAD_MORE_REQUEST = 1;
     private static final int END_REQUEST = 2;
+    private final String TAG = LogUtils.makeLogTag(FeedPresenter.class);
     HomeModel mHomeModel;
     SheroesAppServiceApi mSheroesAppServiceApi;
     SheroesApplication mSheroesApplication;
@@ -99,7 +98,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
 
-    MasterDataModel mMasterDataModel;
     private String mEndpointUrl;
     private boolean mIsHomeFeed;
     private String mNextToken = "";
@@ -108,15 +106,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     private List<FeedDetail> mFeedDetailList = new ArrayList<>();
 
     @Inject
-    public FeedPresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi mSheroesAppServiceApi) {
+    public FeedPresenter(HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi mSheroesAppServiceApi) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
 
-        this.mMasterDataModel = masterDataModel;
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
         this.mSheroesAppServiceApi = mSheroesAppServiceApi;
-
     }
 
     @Override
@@ -323,7 +319,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
                         }
-                          getMvpView().invalidateItem(userPostSolrObj);
+                        getMvpView().invalidateItem(userPostSolrObj);
                     }
                 });
 
@@ -407,7 +403,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             getMvpView().invalidateItem(userSolrObj);
                         } else {
-                            if(championFollowedResponse.isAlreadyFollowed()) {
+                            if (championFollowedResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             } else {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -451,12 +447,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             getMvpView().invalidateItem(userSolrObj);
                         } else {
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         }
+                        getMvpView().invalidateItem(userSolrObj);
                     }
                 });
-
     }
+
 
     public void postBookmarked(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -487,7 +484,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
 
     }
-
 
     public void deleteCommunityPostFromPresenter(DeleteCommunityPostRequest deleteCommunityPostRequest, final FeedDetail feedDetail) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -667,7 +663,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail,final long pollOptionId) {
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail, final long pollOptionId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
@@ -710,7 +706,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                         if (pollSolarObj != null) {
                             getMvpView().invalidateItem(pollSolarObj);
-                            getMvpView().pollVoteResponse(pollSolarObj,pollOptionId);
+                            getMvpView().pollVoteResponse(pollSolarObj, pollOptionId);
                         }
                     }
                 });
@@ -821,7 +817,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             comment.isLiked = true;
                             comment.likeCount++;
                         }
