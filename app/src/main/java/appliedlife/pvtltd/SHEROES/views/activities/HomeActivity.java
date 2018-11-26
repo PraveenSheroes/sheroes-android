@@ -1988,6 +1988,5 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             }
         });
     }
-
     //endregion
 }
