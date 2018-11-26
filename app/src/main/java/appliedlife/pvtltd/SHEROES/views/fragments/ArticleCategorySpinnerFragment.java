@@ -136,7 +136,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-    
+
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
