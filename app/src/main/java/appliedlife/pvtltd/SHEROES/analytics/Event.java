@@ -267,8 +267,7 @@ public enum Event {
                 || analyticsProvider == AnalyticsProvider.MIXPANEL
                 || analyticsProvider == AnalyticsProvider.CLEVERTAP
                 || analyticsProvider == AnalyticsProvider.FACEBOOK
-                || analyticsProvider == AnalyticsProvider.APPSFLYER
-                || analyticsProvider == AnalyticsProvider.FIREBASE;
+                || analyticsProvider == AnalyticsProvider.APPSFLYER;
     }
 
     public void addProperties(Map<String, Object> properties) {
@@ -280,7 +279,6 @@ public enum Event {
                 || analyticsProvider == AnalyticsProvider.MIXPANEL
                 || analyticsProvider == AnalyticsProvider.CLEVERTAP
                 || analyticsProvider == AnalyticsProvider.FACEBOOK
-                || analyticsProvider == AnalyticsProvider.APPSFLYER
-                || analyticsProvider == AnalyticsProvider.FIREBASE;
+                || analyticsProvider == AnalyticsProvider.APPSFLYER;
     }
 }

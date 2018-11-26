@@ -268,7 +268,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         AnalyticsManager.initializeMixpanel(getContext(), false);
         AnalyticsManager.initializeCleverTap(getContext(), false);
         AnalyticsManager.initializeGoogleAnalytics(getContext());
-        AnalyticsManager.initializeFirebaseAnalytics(getContext());
     }
 
     @Override

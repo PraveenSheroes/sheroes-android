@@ -153,7 +153,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                         AnalyticsManager.initializeMixpanel(getContext());
                         AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                         AnalyticsManager.initializeGoogleAnalytics(getContext());
-                        AnalyticsManager.initializeFirebaseAnalytics(getContext());
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         ((LoginActivity) getActivity()).onLoginAuthToken();
@@ -180,7 +179,6 @@ public class LoginFragment extends BaseFragment implements LoginView {
                     AnalyticsManager.initializeMixpanel(getContext());
                     AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, currentTime < createdDate);
                     AnalyticsManager.initializeGoogleAnalytics(getContext());
-                    AnalyticsManager.initializeFirebaseAnalytics(getContext());
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(currentTime < createdDate).authProvider("Email").build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                     if (getActivity() != null && !getActivity().isFinishing()) {

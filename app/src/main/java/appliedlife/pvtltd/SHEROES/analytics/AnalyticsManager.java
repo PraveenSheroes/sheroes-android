@@ -1,14 +1,9 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.ContextWrapper;
-import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
-import com.crashlytics.android.Crashlytics;
-import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +25,6 @@ public class AnalyticsManager {
     private static final String TAG = "AnalyticsManager";
     private static Context sAppContext = null;
     private static AnalyticsManager sInstance;
-    private static FirebaseAnalytics mFirebaseAnalytics;
     //endregion
 
     //region private method
@@ -47,11 +41,6 @@ public class AnalyticsManager {
             sInstance = new AnalyticsManager();
         }
         return sInstance;
-    }
-
-    public static synchronized void initializeFirebaseAnalytics(Context context) {
-        sAppContext = context;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
     }
 
     // region Individual Analytics Initializers
@@ -81,6 +70,7 @@ public class AnalyticsManager {
     public static void initializeFbAnalytics(Context context) {
         FBAnalyticsHelper.initializeAnalyticsTracker(context);
     }
+
     //endregion
 
     // region Primary Event Methods
@@ -125,29 +115,6 @@ public class AnalyticsManager {
 
         //Google Analytics
         GoogleAnalyticsHelper.sendScreenView(screenName);
-
-        /*if(getActivityFromContext(sAppContext) != null && screenName != null)
-            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName, null);*/
-    }
-
-    public static Activity getActivityFromContext(Context context)
-    {
-        if (context == null)
-        {
-            return null;
-        }
-        else if (context instanceof ContextWrapper)
-        {
-            if (context instanceof Activity)
-            {
-                return (Activity) context;
-            }
-            else
-            {
-                return getActivityFromContext(((ContextWrapper) context).getBaseContext());
-            }
-        }
-        return null;
     }
 
     public static void timeScreenView(String screenName) {
@@ -183,62 +150,25 @@ public class AnalyticsManager {
             properties.put(EventProperty.SOURCE.getString(), screenName);
         }
 
-        //track all events to Mixpanel Analytics
         if (event.trackEventToProvider(AnalyticsProvider.MIXPANEL)) {
             MixpanelHelper.trackEvent(sAppContext, event.getFullName(), properties);
         }
-
-        //track all events to Appsflyer Analytics
         if (event.trackEventToProvider(AnalyticsProvider.APPSFLYER)) {
             AppsFlyerLib.getInstance().trackEvent(sAppContext, event.getFullName(), properties);
         }
 
-        //track all events to Facebook Analytics
         if (event.trackEventToProvider(AnalyticsProvider.FACEBOOK)) {
             FBAnalyticsHelper.logEvent(event.type.name, event.name, null);
         }
 
-        //track all events to CleverTap
+        //track all event to CleverTap
         CleverTapHelper.trackEvent(sAppContext, event, properties);
 
-        //track all event to Google Analytics
+        //track all event to Googel Analytics
         if(event.trackEventToProvider(AnalyticsProvider.GOOGLE_ANALYTICS)) {
             GoogleAnalyticsHelper.sendEvent(event.type.name, event.name, null);
         }
-
-        //track all events to Firebase Analytics
-        if(event.trackEventToProvider(AnalyticsProvider.FIREBASE)) {
-           /* Bundle bundle = new Bundle();
-            try {
-                bundle = mapToBundle(properties, bundle);
-            } catch (Exception e) {
-                Crashlytics.getInstance().core.logException(e);
-            }
-            if(bundle!=null)*/
-            //Bundle bundle = new Bundle();
-            //bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
-            //mFirebaseAnalytics.logEvent(event.type.name,bundle);
-        }
     }
-
-    /*public static Bundle mapToBundle(Map<String, Object> data, Bundle bundle) throws Exception {
-        if (bundle == null) {
-            bundle = new Bundle();
-        }
-        for (Map.Entry<String, Object> entry : data.entrySet()) {
-            if (entry.getValue() instanceof String)
-                bundle.putString(entry.getKey(), (String) entry.getValue());
-            else if (entry.getValue() instanceof Double) {
-                bundle.putDouble(entry.getKey(), ((Double) entry.getValue()));
-            } else if (entry.getValue() instanceof Integer) {
-                bundle.putInt(entry.getKey(), (Integer) entry.getValue());
-            } else if (entry.getValue() instanceof Float) {
-                bundle.putFloat(entry.getKey(), ((Float) entry.getValue()));
-            }
-        }
-        return bundle;
-    }
-*/
 
     public static void trackCommentAction(Event event, FeedDetail feedDetail, String screenName) {
         if (!canSend()) {
@@ -299,6 +229,7 @@ public class AnalyticsManager {
     public static void incrementPeopleProperty(PeopleProperty peopleProperty) {
         if (peopleProperty != null) {
             MixpanelHelper.getInstance(sAppContext).getPeople().increment(peopleProperty.getString(), 1);
+
         }
     }
 

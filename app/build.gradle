@@ -86,7 +86,7 @@ android {
              *  Test servers
              *  Integration(testservices), Glow(testservicesglow), Play(testservicesplay) , Work(testserviceswork), Conf(testservicesconf) server
              */
-            //buildConfigField "String", "BASE_URL", "\"https://testservices.sheroes.in/\""
+            buildConfigField "String", "BASE_URL", "\"https://testservices.sheroes.in/\""
             //   buildConfigField "String", "BASE_URL","\"http://testservicesglow.sheroes.in/\""
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             //  buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
@@ -95,7 +95,7 @@ android {
             /**
              * Release server
              */
-             buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
+            // buildConfigField "String", "BASE_URL", "\"https://services.sheroes.in/\""
 
             if (System.getProperty("BASE_URL")) { //Used in Jenkins parameterised build
                 buildConfigField "String", "BASE_URL", "\"" + System.getProperty("BASE_URL") + "\""
@@ -168,7 +168,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:15.0.0'
     implementation 'com.google.android.gms:play-services-location:16.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
-    implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.clevertap.android:clevertap-android-sdk:3.1.10'
     implementation 'com.android.support:mediarouter-v7:27.1.1'
     implementation 'com.android.support:multidex:1.0.3'

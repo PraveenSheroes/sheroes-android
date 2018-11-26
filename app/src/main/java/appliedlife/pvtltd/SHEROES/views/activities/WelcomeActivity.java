@@ -676,7 +676,6 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
             long createdDate = Long.parseLong(loginResponse.getUserSummary().getUserBO().getCrdt());
             AnalyticsManager.initializeCleverTap(WelcomeActivity.this, mCurrentTime < createdDate);
             AnalyticsManager.initializeGoogleAnalytics(WelcomeActivity.this);
-            AnalyticsManager.initializeFirebaseAnalytics(WelcomeActivity.this);
             final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider(mLoginViaSocial.equalsIgnoreCase(FACEBOOK) ? "Facebook" : "Google").build();
             AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
             ((SheroesApplication) WelcomeActivity.this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));

@@ -89,6 +89,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
@@ -1725,6 +1726,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             }
         });
         popup.show();
+
     }
 
     public void onHerStoryEdit(ArticleSolrObj articleObj) {
@@ -2091,6 +2093,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             boolean isMentor = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
             ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
+
     }
 
     @Override
