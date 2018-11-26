@@ -77,6 +77,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsProvider;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -995,6 +996,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         AnalyticsManager.initializeMixpanel(this, false);
         AnalyticsManager.initializeCleverTap(this, false);
         AnalyticsManager.initializeGoogleAnalytics(this);
+        AnalyticsManager.initializeFirebaseAnalytics(this);
     }
 
     @Override
