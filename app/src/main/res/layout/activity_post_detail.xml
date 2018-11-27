@@ -77,36 +77,36 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_post_as_label"
-                style="@style/TextView12spBold"
+                style="@style/TextView12spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:enabled="false"
                 android:text="@string/ID_POST"
                 android:textColor="@color/detail_page_text"
-                vernacular:customTextFontFamily="@string/medium_font"/>
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_user_name_for_post"
+                style="@style/TextView12spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_25"
                 android:ellipsize="end"
-                style="@style/TextView12spBold"
                 android:maxLines="@integer/int_value_for_line_1"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
-                vernacular:customTextFontFamily="@string/medium_font"/>
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_anonymous_post"
+                style="@style/TextView12spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_20"
-                style="@style/TextView12spBold"
                 android:text="@string/ID_ANONYMOUS"
                 android:textAllCaps="true"
                 android:textColor="@color/searchbox_text_color"
-                vernacular:customTextFontFamily="@string/medium_font"/>
+                vernacular:customTextFontFamily="@string/medium_font" />
         </LinearLayout>
     </LinearLayout>
 

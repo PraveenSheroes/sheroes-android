@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import org.parceler.Parcels;
 
 import java.util.HashMap;
 
@@ -16,6 +19,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
@@ -48,6 +53,7 @@ public class FollowingActivity extends BaseActivity {
     private long mUserMentorId;
     private boolean mIsSelfProfile;
     private FollowingEnum mMembersType;
+    FollowingFragment mFollowingFragment;
     //endregion
 
     // region lifecycle methods
@@ -79,8 +85,8 @@ public class FollowingActivity extends BaseActivity {
                 mTitleName.setText(R.string.following_public_profile_toolbar_title);
             }
         }
-        FollowingFragment followingFragment = FollowingFragment.createInstance(mUserMentorId, mIsSelfProfile, mMembersType.name());
-        addNewFragment(followingFragment, R.id.container, FollowingFragment.class.getName(), null, false);
+        mFollowingFragment = FollowingFragment.createInstance(mUserMentorId, mIsSelfProfile, mMembersType.name());
+        addNewFragment(mFollowingFragment, R.id.container, FollowingFragment.class.getName(), null, false);
     }
 
     private void setupToolbarItemsColor() {
@@ -101,6 +107,25 @@ public class FollowingActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        /* 2:- For refresh list */
+        if (null != intent) {
+            if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+                Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+                if (parcelable != null) {
+                    UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+
+                    if (mFollowingFragment == null) {
+                        return;
+                    }
+                    mFollowingFragment.invalidateItem(userSolrObj);
+                }
+            }
+        }
     }
     //endregion
 

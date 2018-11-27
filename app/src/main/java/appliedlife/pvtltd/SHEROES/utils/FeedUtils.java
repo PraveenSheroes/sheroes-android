@@ -269,10 +269,6 @@ public class FeedUtils {
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu, context);
     }
 
-    public void onDestroy() {
-        mIsDestroyed = true;
-    }
-
     public void dismissWindow() {
         popupWindow.dismiss();
     }

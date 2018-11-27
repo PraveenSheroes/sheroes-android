@@ -15,7 +15,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -34,12 +33,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -101,6 +99,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mLoginPresenter.attachView(this);
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError("");
@@ -242,13 +241,13 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                         if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
                             deepLinkUrl = deepLink;
 
-                                            if (mInstallUpdatePreference != null) {
-                                                AppStatus appStatus = mInstallUpdatePreference.get();
-                                                appStatus.setOnBoardingSkipped(true);
-                                                mInstallUpdatePreference.set(appStatus);
-                                            }
-                                        }
-                                    }
+                            if (mInstallUpdatePreference != null) {
+                                AppStatus appStatus = mInstallUpdatePreference.get();
+                                appStatus.setOnBoardingSkipped(true);
+                                mInstallUpdatePreference.set(appStatus);
+                            }
+                        }
+                    }
 
                     if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
                         defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);

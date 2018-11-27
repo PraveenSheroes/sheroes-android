@@ -3,18 +3,20 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -40,7 +42,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -49,8 +50,11 @@ import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.FollowerFollowingAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.EmptyRecyclerView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.UnFollowDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
 import butterknife.Bind;
+import butterknife.BindDimen;
 import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION_ID;
@@ -59,7 +63,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.PROFILE_NOTIFICATION
  * Created by Praveen on 05/12/17.
  */
 
-public class ChampionListingActivity extends BaseActivity implements BaseHolderInterface, HomeView , FollowerFollowingCallback {
+public class ChampionListingActivity extends BaseActivity implements BaseHolderInterface, HomeView , FollowerFollowingCallback, IFollowCallback {
     private static final String SCREEN_LABEL = "Mentors Listing Screen";
 
     //region binding view variables
@@ -77,6 +81,9 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
 
     @Bind(R.id.rv_mentor_list)
     EmptyRecyclerView mRecyclerView;
+
+    @BindDimen(R.dimen.imagesize_unfollow_dialog)
+    int mProfileSizeSmall;
     //endregion binding view variables
 
     //region injected variable
@@ -85,12 +92,16 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
 
     @Inject
     HomePresenter mHomePresenter;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     //endregion injected variable
 
     //region member variable
     private SwipPullRefreshList mPullRefreshList;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FollowerFollowingAdapter mAdapter;
+    private UnFollowDialogFragment mUnFollowDialogFragment;
     //endregion member variable
 
     @Override
@@ -120,7 +131,7 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new FollowerFollowingAdapter(this, this);
+        mAdapter = new FollowerFollowingAdapter(this, this, mUserPreference);
         mRecyclerView.setAdapter(mAdapter);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -159,15 +170,20 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
         int id = view.getId();
         if (baseResponse instanceof FeedDetail) {
             switch (id) {
-               // case R.id.tv_mentor_follow:
-               //     followUnFollowRequest((UserSolrObj) baseResponse);
-               //     break;
-               /* case R.id.li_mentor:
-                    openMentorProfileDetail(baseResponse);
-                    break;*/
+                case R.id.tv_follower_count:
+                    followUnFollowRequest((UserSolrObj) baseResponse);
+                    break;
                 default:
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        if (mUnFollowDialogFragment != null && mUnFollowDialogFragment.isVisible()) {
+            mUnFollowDialogFragment.dismiss();
+        }
+        super.onStop();
     }
 
     @Override
@@ -200,23 +216,33 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
         super.onActivityResult(requestCode, resultCode, intent);
         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
-                    if (null != intent.getExtras()) {
-                        UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
-                        if (null != userSolrObj) {
-                            mAdapter.updateData(userSolrObj, userSolrObj.currentItemPosition);
-                            mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
-                        }
+            if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+                Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+                if (parcelable != null) {
+                    UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                    if (mAdapter == null) {
+                        return;
                     }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
-                    setResult(RESULT_OK, intent);
-                    break;
-                default:
+                    mAdapter.findPositionAndUpdateItem(userSolrObj, userSolrObj.getIdOfEntityOrParticipant());
+                }
+            } else {
+                switch (requestCode) {
+                    case AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL:
+                        if (null != intent.getExtras()) {
+                            UserSolrObj userSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.FEED_SCREEN));
+                            if (null != userSolrObj) {
+                                mAdapter.updateData(userSolrObj, userSolrObj.currentItemPosition);
+                                mAdapter.notifyItemChanged(userSolrObj.currentItemPosition);
+                            }
+                        }
+                        break;
+                    case AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST:
+                        setResult(RESULT_OK, intent);
+                        break;
+                    default:
+                }
             }
         }
-
     }
 
     @Override
@@ -254,9 +280,7 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
         List<FeedDetail> feedDetailList = feedResponsePojo.getFeedDetails();
-
         if (StringUtil.isNotEmptyCollection(feedDetailList) && mAdapter != null) {
             int mPageNo = mFragmentListRefreshData.getPageNo();
             mFragmentListRefreshData.setPageNo(++mPageNo);
@@ -354,5 +378,54 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
         ProfileActivity.navigateTo(this, id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION,
                 null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
-}
 
+    @Override
+    public void onFollowFollowingClick(UserSolrObj userSolrObj, String followFollowingBtnText) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
+                        .name(userSolrObj.getNameOrTitle())
+                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                        .build();
+        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+            unFollowConfirmation(userSolrObj);
+        } else {
+            AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
+            mHomePresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
+        }
+    }
+
+    @Override
+    public void onProfileFollowed(UserSolrObj userSolrObj) {
+        mAdapter.notifyItemChanged(userSolrObj.getItemPosition());
+    }
+
+
+    protected final void unFollowConfirmation(final UserSolrObj userSolrObj) {
+        PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
+        publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
+
+        if (mUnFollowDialogFragment != null && mUnFollowDialogFragment.isVisible()) {
+            mUnFollowDialogFragment.dismiss();
+        }
+        mUnFollowDialogFragment = new UnFollowDialogFragment();
+        mUnFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+        if (!mUnFollowDialogFragment.isVisible() && !mIsDestroyed) {
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(userSolrObj);
+            bundle.putParcelable(AppConstants.USER, parcelable);
+
+            Parcelable unFollowRequestParcelable = Parcels.wrap(publicProfileListRequest);
+            bundle.putParcelable(AppConstants.UNFOLLOW, unFollowRequestParcelable);
+
+            bundle.putString(AppConstants.SOURCE_NAME, SCREEN_LABEL);
+            bundle.putBoolean(AppConstants.IS_CHAMPION_ID, userSolrObj.isAuthorMentor());
+            bundle.putBoolean(AppConstants.IS_SELF_PROFILE, false);
+            mUnFollowDialogFragment.setArguments(bundle);
+            mUnFollowDialogFragment.show(getFragmentManager(), UnFollowDialogFragment.class.getName());
+        }
+    }
+}

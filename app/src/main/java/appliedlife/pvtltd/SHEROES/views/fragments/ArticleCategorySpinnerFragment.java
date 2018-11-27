@@ -14,8 +14,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
@@ -114,7 +111,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
 
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
-        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_CANCEL);
         }
 
@@ -122,7 +119,7 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
-        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_DONE);
             ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
         }

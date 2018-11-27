@@ -441,6 +441,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 }
                 mCreatePost.setVisibility(View.GONE);
             }
+        } else {
+            mStoryFooter.setVisibility(View.GONE);
+            mCreatePost.setVisibility(View.GONE);
         }
     }
 

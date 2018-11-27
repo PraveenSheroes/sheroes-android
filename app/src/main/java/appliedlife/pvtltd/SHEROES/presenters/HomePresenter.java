@@ -21,7 +21,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFo
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
@@ -33,8 +32,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCountResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.GcmIdResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -60,7 +57,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKM
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
@@ -68,7 +64,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FCM_ID;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.LIKE_UNLIKE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATION_COUNT;
 
@@ -290,8 +285,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         }
                         getMvpView().getSuccessForAllResponse(userSolrObj, FOLLOW_UNFOLLOW);
                     }
-                });
-
+         });
     }
 
     public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
@@ -362,147 +356,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 }
             }
         });
-
     }
-
-    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getLikesFromModel(likeRequestPojo)
-                .compose(this.<LikeResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LikeResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-
-                    }
-
-                    @Override
-                    public void onNext(LikeResponse likeResponse) {
-                        getMvpView().stopProgressBar();
-                        getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
-                    }
-                });
-
-    }
-
-    public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getUnLikesFromModel(likeRequestPojo)
-                .compose(this.<LikeResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LikeResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-
-                    }
-
-                    @Override
-                    public void onNext(LikeResponse likeResponse) {
-                        getMvpView().stopProgressBar();
-                        getMvpView().getSuccessForAllResponse(likeResponse, LIKE_UNLIKE);
-                    }
-                });
-
-    }
-
-    public void getLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            comment.isLiked = false;
-            comment.likeCount--;
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getLikesFromModel(likeRequestPojo)
-                .compose(this.<LikeResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LikeResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                        comment.isLiked = false;
-                        comment.likeCount--;
-
-                    }
-
-                    @Override
-                    public void onNext(LikeResponse likeResponse) {
-                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                            comment.isLiked = false;
-                            comment.likeCount--;
-                        }
-                        getMvpView().stopProgressBar();
-                    }
-                });
-
-    }
-
-    public void getUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
-            comment.isLiked = true;
-            comment.likeCount++;
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.getUnLikesFromModel(likeRequestPojo)
-                .compose(this.<LikeResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<LikeResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
-                        comment.isLiked = true;
-                        comment.likeCount++;
-                    }
-
-                    @Override
-                    public void onNext(LikeResponse likeResponse) {
-                        getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-                            comment.isLiked = true;
-                            comment.likeCount++;
-                        }
-                        // getMvpView().getFollowUnfollowResponse(likeResponse, LIKE_UNLIKE);
-                    }
-                });
-
-    }
-
 
     public void addBookMarkFromPresenter(BookmarkRequestPojo bookmarkRequestPojo, boolean isBookmarked) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

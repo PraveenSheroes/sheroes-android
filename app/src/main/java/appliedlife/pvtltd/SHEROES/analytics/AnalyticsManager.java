@@ -106,6 +106,8 @@ public class AnalyticsManager {
 
         MixpanelHelper.trackScreenOpen(sAppContext, screenName, properties);
 
+        // track screen CleverTap
+        properties.put(MixpanelHelper.SCREEN_NAME, screenName);
         //CleverTap
         CleverTapHelper.trackScreen(sAppContext, properties);
     }
@@ -149,9 +151,9 @@ public class AnalyticsManager {
         }
 
         event.addProperties(properties);
-        String languageName=CommonUtil.getPrefStringValue(LANGUAGE_KEY);
-        if(StringUtil.isNotNullOrEmptyString(languageName)) {
-            properties.put(SuperProperty.LANGUAGE.getString(),languageName);
+        String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+        if (StringUtil.isNotNullOrEmptyString(languageName)) {
+            properties.put(SuperProperty.LANGUAGE.getString(), languageName);
         }
 
         if (isNotNullOrEmptyString(screenName) && !properties.containsKey(screenName)) {

@@ -74,7 +74,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_post_count"
-                    style="@style/TextView18spBold"
+                    style="@style/TextView18spMediumBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -102,7 +102,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_follower_count"
-                    style="@style/TextView18spBold"
+                    style="@style/TextView18spMediumBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -130,7 +130,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_following_count"
-                    style="@style/TextView18spBold"
+                    style="@style/TextView18spMediumBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -159,7 +159,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_dashboard_follow"
-                style="@style/TextView14spBold"
+                style="@style/TextView14spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_size_35"
                 android:background="@drawable/selecter_invite_friend"
@@ -171,7 +171,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/share_profile"
-                style="@style/TextView14spBold"
+                style="@style/TextView14spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_size_35"
                 android:background="@drawable/selecter_invite_friend"
@@ -311,7 +311,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/profile_level"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_size_16"

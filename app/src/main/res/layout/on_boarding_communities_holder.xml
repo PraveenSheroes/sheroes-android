@@ -27,7 +27,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_boarding_communities"
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -43,7 +43,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_boarding_communities_join"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="@dimen/dp_size_80"
             android:layout_height="@dimen/dp_size_30"
             android:layout_gravity="center|bottom"

@@ -58,6 +58,23 @@ public class UserSolrObj extends FeedDetail {
 
     @SerializedName("solr_ignore_total_no_of_post_created")
     private int postCount;
+    @SerializedName("solr_ignore_no_of_followers")
+    private int followerCount;
+    @SerializedName("solr_ignore_profile_weight_count")
+    private float profileCompletionWeight;
+    @SerializedName("solr_ignore_profile_filled_fields_name")
+    private String filledProfileFields;
+    @SerializedName("solr_ignore_profile_unfilled_fields_name")
+    private String unfilledProfileFields;
+    @SerializedName("solr_ignore_show_profile_badge")
+    private boolean isSheBadgeActive;
+    @SerializedName("solr_ignore_profile_badge_url")
+    private String profileBadgeUrl;
+    @SerializedName("solr_ignore_leaderboard_community_name")
+    private String mSolarIgnoreCommunityName;
+    @SerializedName("solr_ignore_user_badges_list")
+    @Expose
+    private List<BadgeDetails> userBadgesList = null;
 
     public int getFollowerCount() {
         return followerCount;
@@ -67,37 +84,8 @@ public class UserSolrObj extends FeedDetail {
         this.followerCount = followerCount;
     }
 
-    @SerializedName("solr_ignore_no_of_followers")
-    private int followerCount;
-
-    @SerializedName("solr_ignore_profile_weight_count")
-    private float profileCompletionWeight;
-
-    @SerializedName("solr_ignore_profile_filled_fields_name")
-    private String filledProfileFields;
-
-    @SerializedName("solr_ignore_profile_unfilled_fields_name")
-    private String unfilledProfileFields;
-
-    @SerializedName("solr_ignore_show_profile_badge")
-    private boolean isSheBadgeActive;
-
-    @SerializedName("solr_ignore_profile_badge_url")
-    private String profileBadgeUrl;
-
-    @SerializedName("solr_ignore_leaderboard_community_name")
-    private String mSolarIgnoreCommunityName;
-
-    @SerializedName("solr_ignore_user_badges_list")
-    @Expose
-    private List<BadgeDetails> userBadgesList = null;
-
     public List<BadgeDetails> getUserBadgesList() {
         return userBadgesList;
-    }
-
-    public void setUserBadgesList(List<BadgeDetails> userBadgesList) {
-        this.userBadgesList = userBadgesList;
     }
 
     public String getCityName() {
@@ -138,14 +126,6 @@ public class UserSolrObj extends FeedDetail {
         return isCompanyAdmin;
     }
 
-    public void setCompanyAdmin(boolean companyAdmin) {
-        isCompanyAdmin = companyAdmin;
-    }
-
-    public void setCityId(long cityId) {
-        this.cityId = cityId;
-    }
-
     public long getSolrIgnoreMentorCommunityId() {
         return solrIgnoreMentorCommunityId;
     }
@@ -178,16 +158,8 @@ public class UserSolrObj extends FeedDetail {
         this.solrIgnoreIsUserFollowed = solrIgnoreIsUserFollowed;
     }
 
-    public int getUserFollowing() {
-        return userFollowing;
-    }
-
     public void setUserFollowing(int userFollowing) {
         this.userFollowing = userFollowing;
-    }
-
-    public boolean isCompactView() {
-        return isCompactView;
     }
 
     public void setCompactView(boolean compactView) {
@@ -222,16 +194,8 @@ public class UserSolrObj extends FeedDetail {
         return isSheBadgeActive;
     }
 
-    public void setSheBadgeActive(boolean sheBadgeActive) {
-        isSheBadgeActive = sheBadgeActive;
-    }
-
     public String getProfileBadgeUrl() {
         return profileBadgeUrl;
-    }
-
-    public void setProfileBadgeUrl(String profileBadgeUrl) {
-        this.profileBadgeUrl = profileBadgeUrl;
     }
 
     public String getmSolarIgnoreCommunityName() {
@@ -244,10 +208,6 @@ public class UserSolrObj extends FeedDetail {
 
     public int getFollowingCount() {
         return followingCount;
-    }
-
-    public void setFollowingCount(int followingCount) {
-        this.followingCount = followingCount;
     }
 
     public int getPostCount() {

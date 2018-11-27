@@ -1170,12 +1170,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
 
                     @Override
-                    public void onNext(ChampionFollowedResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                            if(championFollowedResponse.isAlreadyFollowed()) {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                             } else {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);

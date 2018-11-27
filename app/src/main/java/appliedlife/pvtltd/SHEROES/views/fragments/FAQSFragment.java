@@ -17,7 +17,6 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,7 +31,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
@@ -121,29 +119,29 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void getAllFAQs(FAQSResponse faqsResponse) {
-        if(faqsResponse!=null && faqsResponse.getListOfFAQs()!=null){
+        if (faqsResponse != null && faqsResponse.getListOfFAQs() != null) {
             List<FAQS> newFaqList = new ArrayList<>();
 
             int i = 1;
             int size = faqsResponse.getListOfFAQs().size();
-            for(FAQS faqs : faqsResponse.getListOfFAQs()){
+            for (FAQS faqs : faqsResponse.getListOfFAQs()) {
 
-                if(i == size){
+                if (i == size) {
                     faqs.setLast(true);
-                }else{
+                } else {
                     faqs.setLast(false);
                 }
 
                 faqs.setItemSelected(false);
 
-                if(faqs.getAnswer()!=null){
+                if (faqs.getAnswer() != null) {
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         faqs.setAnswer(Html.fromHtml(faqs.getAnswer(), 0).toString()); // for 24 api and more
                     } else {
                         faqs.setAnswer(Html.fromHtml(faqs.getAnswer()).toString());
                     }
                 }
-                if(faqs.getQuestion()!=null){
+                if (faqs.getQuestion() != null) {
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         faqs.setQuestion(Html.fromHtml(faqs.getQuestion(), 0).toString()); // for 24 api and more
                     } else {
@@ -159,11 +157,11 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         }
     }
 
-    public void  setDataChange(FAQS faqs) {
+    public void setDataChange(FAQS faqs) {
         mAdapter.setFAQOnPosition(faqs, faqs.getItemPosition());
         mLayoutManager.scrollToPosition(faqs.getItemPosition());
         mAdapter.notifyDataSetChanged();
-        if(faqs.isLast()){
+        if (faqs.isLast()) {
             goToLastInScrollView();
         }
     }

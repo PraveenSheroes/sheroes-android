@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;
@@ -83,10 +82,10 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class FeedPresenter extends BasePresenter<IFeedView> {
+    private final String TAG = LogUtils.makeLogTag(FeedPresenter.class);
     public static final int NORMAL_REQUEST = 0;
     public static final int LOAD_MORE_REQUEST = 1;
     private static final int END_REQUEST = 2;
-    private final String TAG = LogUtils.makeLogTag(FeedPresenter.class);
     HomeModel mHomeModel;
     SheroesAppServiceApi mSheroesAppServiceApi;
     SheroesApplication mSheroesApplication;
@@ -110,9 +109,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
-
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
         this.mSheroesAppServiceApi = mSheroesAppServiceApi;
+
     }
 
     @Override
@@ -284,12 +283,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
-                    @Override
-                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ChampionFollowedResponse>bindToLifecycle())
@@ -319,7 +312,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
                         }
-                        getMvpView().invalidateItem(userPostSolrObj);
+                          getMvpView().invalidateItem(userPostSolrObj);
                     }
                 });
 
@@ -401,15 +394,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
-                            getMvpView().invalidateItem(userSolrObj);
                         } else {
                             if (championFollowedResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             } else {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             }
-                            getMvpView().invalidateItem(userSolrObj);
                         }
+                        getMvpView().invalidateItem(userSolrObj);
                     }
                 });
 
@@ -445,7 +437,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                            getMvpView().invalidateItem(userSolrObj);
                         } else {
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         }

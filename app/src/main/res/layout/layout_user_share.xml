@@ -61,7 +61,7 @@
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/post_count"
-                        style="@style/TextView16spBold"
+                        style="@style/TextView16spMediumBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/light_grey"
@@ -89,7 +89,7 @@
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/followers_count"
-                        style="@style/TextView16spBold"
+                        style="@style/TextView16spMediumBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/light_grey"
@@ -118,7 +118,7 @@
 
                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                         android:id="@+id/following_count"
-                        style="@style/TextView16spBold"
+                        style="@style/TextView16spMediumBold"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/light_grey"
@@ -146,7 +146,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_dashboard_follow"
-                    style="@style/TextView14spBold"
+                    style="@style/TextView14spMediumBold"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/rectangle_feed_commnity_join"
@@ -172,7 +172,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/user_name"
-            style="@style/TextView20spBold"
+            style="@style/TextView20spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"

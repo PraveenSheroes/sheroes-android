@@ -1,7 +1,5 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
-import appliedlife.pvtltd.SHEROES.R;
-
 /**
  * Created by Praveen Singh on 29/12/2016.
  *
@@ -145,7 +143,6 @@ public class AppConstants {
     public static final String FOLLOWERS = "FOLLOWERS";
     public static final String FOLLOWING = "FOLLOWING";
     public static final String HIDE_SPLASH_THEME = "hide_splash_theme";
-    public static final String NETWORK_TIMEOUT = "network_timout";
     public static final String GENDER_INPUT_DIALOG = "GenderInputDialog";
     public static final String SHARE = "Share";
     public static final String WEB_URL_FRAGMENT = "web_url";
@@ -157,8 +154,6 @@ public class AppConstants {
     public static final String MENTOR_DETAIL = "mentor_detail";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String CHALLENGE_GRATIFICATION = "challenge_gratification";
-    public static final String INVITE_FRIEND = "invite_friend";
-    public static final String PIPE = "|";
     public static final String SUCCESS = "SUCCESS";
     public static final String MARK_AS_SPAM = "Reported as spam";
     public static final String FACEBOOK_VERIFICATION = "Your account is not facebook verified please click below continue with facebook";
@@ -232,8 +227,6 @@ public class AppConstants {
     public static final String STRING = SOURCE_NAME;
     public static final String SUMMARY = "SUMMARY";
     public static final String USER_SUMMARY_SERVICE = "USER_SUMMARY_SERVICE";
-    public static final String FB_APP_LINK_URL = "https://fb.me/1358166177608524";
-    public static final String FB_APP_LINK_URL_PREVIEW_IMAGE = "https://img.sheroes.in/img/uploads/sheroespage/logoes/1498221415fb-share-(1).jpg";
     public static final String WEB_BROWSER_MASSAGE = "Please select a web browser";
     public static final String COMMUNITY_POST_URL_COM = "https://sheroes.com/community-post";
     public static final String COMMUNITY_POST_URL = "https://sheroes.in/community-post";
@@ -358,7 +351,6 @@ public class AppConstants {
     public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Completed Screen";
     public static final String WHATSAPP_ICON = "Whatsapp Icon";
     public static final String SHARE_CHOOSER = "Share Chooser";
-    public static final String LIST_TYPE_TAGGING = "COMMENT";
     public static final String CONFIG_KEY = "appliedlife.pvtltd.SHEROES.sharedprefs.CONFIG_KEY";
     public static final String APP_INSTALLATION = "appliedlife.pvtltd.SHEROES.sharedprefs.APP_INSTALLATION";
     public static final String SHARE_TEXT = "share_text";
