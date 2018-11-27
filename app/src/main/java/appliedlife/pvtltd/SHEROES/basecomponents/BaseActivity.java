@@ -141,7 +141,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
                 }
             }
         }));
-
         if (getPresenter() != null) {
             getPresenter().onStart();
         }

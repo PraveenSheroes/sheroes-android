@@ -36,7 +36,6 @@ import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.changeNumb
  */
 
 public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
     private static final int TYPE_COMMUNITY = 0;
     private static final int TYPE_SHOW_MORE = 1;
     private List<UserSolrObj> mChampionUsersList;
@@ -54,7 +53,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     //endregion
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         if (viewType == TYPE_COMMUNITY) {
             return new FollowerFollowingAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.followed_mentor_list_item, parent, false));
@@ -66,9 +64,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         if (CommonUtil.isEmpty(mChampionUsersList)) return;
-
         if (holder.getItemViewType() == TYPE_COMMUNITY) {
             FollowerFollowingAdapter.FollowedUserListItemViewHolder commentListItemViewHolder = (FollowerFollowingAdapter.FollowedUserListItemViewHolder) holder;
             UserSolrObj mentorDetails = mChampionUsersList.get(position);
@@ -148,23 +144,19 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                         ((FollowerFollowingCallback) mBaseHolderInterface).onItemClick(mentor);
                     }
                 });
-
                 if (mentor.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                     verifiedChampionsIcon.setVisibility(View.VISIBLE);
                 } else {
                     verifiedChampionsIcon.setVisibility(View.GONE);
                 }
-
                 if (mentor.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
                     String authorThumborUrl = CommonUtil.getThumborUri(mentor.getThumbnailImageUrl(), authorProfileSize, authorProfileSize);
                     mentorIcon.bindImage(authorThumborUrl);
                 }
-
                 if (mentor.getNameOrTitle() != null) {
                     mentorName.setText(mentor.getNameOrTitle());
                 }
-
                 if (mentor.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                     List<String> canHelpInArea = mentor.getCanHelpIns();
                     if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
