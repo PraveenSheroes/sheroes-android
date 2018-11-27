@@ -22,7 +22,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +50,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.FeedPresenter;
@@ -314,7 +312,6 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
             return SCREEN_LABEL;
         }
     }
-
 
 
     @Override
@@ -636,7 +633,7 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
         for (int i = 0; i < feedDetails.size(); ++i) {
             FeedDetail feedDetail = feedDetails.get(i);
             if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
-                if(feedDetail instanceof UserSolrObj && updatedFeedDetail instanceof UserSolrObj) {
+                if (feedDetail instanceof UserSolrObj && updatedFeedDetail instanceof UserSolrObj) {
                     UserSolrObj userSolrObj1 = (UserSolrObj) feedDetail;
                     if (StringUtil.isNotNullOrEmptyString(userSolrObj1.getmSolarIgnoreCommunityName())) {
                         UserSolrObj updatedUserSolrObj1 = (UserSolrObj) updatedFeedDetail;

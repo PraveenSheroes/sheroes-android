@@ -13,7 +13,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionR
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -29,7 +28,7 @@ public class HelplineModel {
     @Inject
     public HelplineModel(SheroesAppServiceApi sheroesAppServiceApi, Gson gson) {
         this.sheroesAppServiceApi = sheroesAppServiceApi;
-        this.gson= gson;
+        this.gson = gson;
     }
 
     public Observable<HelplinePostQuestionResponse> postHelplineQuestion(HelplinePostQuestionRequest helplinePostQuestionRequest) {
@@ -76,5 +75,4 @@ public class HelplineModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-    
 }

@@ -95,12 +95,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
     private AppUtils mAppUtils;
-    private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-    private String sourceScreen ;
+    private String mSourceScreen;
     private Handler mChatFetchHandler;
     private Runnable mChatRunnable;
-
 
     public static HelplineFragment createInstance(String sourceScreen) {
         HelplineFragment helplineFragment = new HelplineFragment();
@@ -109,7 +107,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         helplineFragment.setArguments(bundle);
         return helplineFragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -131,27 +128,26 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             }
         };
 
-        if(getArguments()!=null) {
-            sourceScreen =  getArguments().getString(AppConstants.SOURCE_NAME);
+        if (getArguments() != null) {
+            mSourceScreen = getArguments().getString(AppConstants.SOURCE_NAME);
         }
 
-        if(getActivity() instanceof HomeActivity){
+        if (getActivity() instanceof HomeActivity) {
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
             CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
             params.setScrollFlags(0);
             appBarLayoutParams.setBehavior(null);
             ((HomeActivity) getActivity()).mAppBarLayout.setLayoutParams(appBarLayoutParams);
-            ((HomeActivity)getActivity()).changeFragmentWithCommunities();
-            ((HomeActivity)getActivity()).helplineUi();
+            ((HomeActivity) getActivity()).changeFragmentWithCommunities();
+            ((HomeActivity) getActivity()).helplineUi();
         }
-
         setUpRecyclerView(false);
         questionText.addTextChangedListener(editTextWatcher());
         questionText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 if (!keyboardShown(questionText.getRootView())) {
-                    if(questionText.getText().toString().length()!=0){
+                    if (questionText.getText().toString().length() != 0) {
                         sendChat.setVisibility(View.VISIBLE);
                         chatVoice.setVisibility(View.GONE);
                     } else {
@@ -195,7 +191,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if(getActivity() instanceof HomeActivity){
+        if (getActivity() instanceof HomeActivity) {
             AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
             CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
             params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
@@ -213,7 +209,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, CommonUtil.getPrefStringValue(LANGUAGE_KEY));
             intent.putExtra(RecognizerIntent.EXTRA_PROMPT, getString(R.string.ID_SPEECH_PROMPT));
             startActivityForResult(intent, AppConstants.REQ_CODE_SPEECH_INPUT);
-        } catch(ActivityNotFoundException e) {
+        } catch (ActivityNotFoundException e) {
             try {
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + mSpeechAppPackageName)));
             } catch (android.content.ActivityNotFoundException exc) {
@@ -277,9 +273,9 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         sendChat.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             HashMap<String, Object> screenProperties = null;
-            if (sourceScreen != null) {
+            if (mSourceScreen != null) {
                 screenProperties = new EventProperty.Builder()
-                        .sourceScreenId(sourceScreen)
+                        .sourceScreenId(mSourceScreen)
                         .build();
             }
             trackEvent(Event.HELPLINE_MESSAGE_CREATED, screenProperties);
@@ -290,16 +286,16 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     }
 
     @Override
-    public void getPostRatingSuccess(BaseResponse baseResponse,HelplineChatDoc helplineChatDoc) {
-        if(baseResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+    public void getPostRatingSuccess(BaseResponse baseResponse, HelplineChatDoc helplineChatDoc) {
+        if (baseResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
             mAdapter.notifyItemChanged(helplineChatDoc.getItemPosition());
         }
         mAdapter.removeDataOnPosition(helplineChatDoc.getItemPosition());
         mAdapter.notifyDataSetChanged();
         HashMap<String, Object> screenProperties = null;
-        if (sourceScreen != null) {
+        if (mSourceScreen != null) {
             screenProperties = new EventProperty.Builder()
-                    .sourceScreenId(sourceScreen)
+                    .sourceScreenId(mSourceScreen)
                     .build();
         }
         trackEvent(Event.HELPLINE_RATEUS_CARD_CLICKED, screenProperties);
@@ -315,12 +311,12 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         questionText.setSelection(questionText.getText().length());
     }
 
-    public void setUpRecyclerView(boolean isFromChatThread){
+    public void setUpRecyclerView(boolean isFromChatThread) {
         mLayoutManager = new LinearLayoutManager(getContext());
-        if(getActivity() instanceof HelplineActivity){
+        if (getActivity() instanceof HelplineActivity) {
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (HelplineActivity) getActivity());
         }
-        if(getActivity() instanceof CommunityDetailActivity){
+        if (getActivity() instanceof CommunityDetailActivity) {
             mAdapter = new GenericRecyclerViewAdapter(getContext(), (CommunityDetailActivity) getActivity());
         }
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -329,12 +325,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHelplinePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                mListLoad = true;
             }
 
             @Override
             public void onShow() {
-                mListLoad = true;
             }
 
             @Override
@@ -351,7 +345,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        super.showError(errorMsg,feedParticipationEnum);
+        super.showError(errorMsg, feedParticipationEnum);
         sendChat.setEnabled(true);
     }
 
@@ -422,7 +416,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
 
                 if (StringUtil.isNotNullOrEmptyString(inputSearch.toString()) && inputSearch.toString().length() > 0) {
                     if (!keyboardShown(questionText.getRootView())) {
-                        if(questionText.getText().toString().length()!=0){
+                        if (questionText.getText().toString().length() != 0) {
                             sendChat.setVisibility(View.VISIBLE);
                             chatVoice.setVisibility(View.GONE);
                         } else {

@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dp_size_16"
@@ -42,11 +42,14 @@
         </FrameLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/dp_size_16"
+            android:layout_marginRight="@dimen/dp_size_16"
             android:layout_marginStart="@dimen/dp_size_16"
+            android:layout_toLeftOf="@+id/follow_following_btn"
+            android:layout_toRightOf="@id/fl_profile_icon"
             android:gravity="center_vertical"
             android:orientation="vertical">
 
@@ -71,7 +74,7 @@
                 android:layout_marginTop="@dimen/dp_size_4"
                 android:ellipsize="end"
                 android:lineSpacingExtra="4sp"
-                android:maxLines="@integer/int_value_for_line_2"
+                android:maxLines="@integer/int_value_for_line_1"
                 android:textColor="#878787"
                 android:textStyle="normal"
                 tools:text="@string/ID_POPULAR"
@@ -96,7 +99,23 @@
                 vernacular:customTextFontFamily="@string/regular_font" />
         </LinearLayout>
 
-    </LinearLayout>
+        <appliedlife.pvtltd.SHEROES.vernacular.FontButton
+            android:id="@+id/follow_following_btn"
+            style="@style/Button14spBold"
+            android:layout_width="@dimen/follow_btn_width"
+            android:layout_height="@dimen/follow_btn_height"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/follow_btn_marginleft"
+            android:layout_marginRight="@dimen/follow_btn_marginright"
+            android:background="@drawable/selecter_invite_friend"
+            android:gravity="center"
+            android:textAllCaps="true"
+            android:textColor="@drawable/selecter_contact_text_color"
+            vernacular:customButtonFontFamily="@string/bold_font" />
+
+    </RelativeLayout>
 
     <TextView
         android:layout_width="match_parent"

@@ -23,7 +23,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_crop_image"
-            style="@style/TextView16spBold"
+            style="@style/TextView16spMediumBold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

@@ -15,8 +15,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.IOException;
-
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
 
@@ -85,7 +83,6 @@ public class FCMClientManager {
                         fcm = FirebaseMessaging.getInstance();
                     }
                     regid = FirebaseInstanceId.getInstance().getToken();
-                    Log.i(TAG, regid);
                     // Persist the regID - no need to register again.
                     storeRegistrationId(getContext(), regid);
                 } catch (Exception ex) {
@@ -169,15 +166,15 @@ public class FCMClientManager {
             int resultCode = googleAPI.isGooglePlayServicesAvailable(getContext());
             if (resultCode != ConnectionResult.SUCCESS) {
                 if (googleAPI.isUserResolvableError(resultCode)) {
-                    if(getContext() instanceof Activity){
-                        googleAPI.getErrorDialog((Activity)getContext(),resultCode,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                    if (getContext() instanceof Activity) {
+                        googleAPI.getErrorDialog((Activity) getContext(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
                     }
                 }
                 return false;
             }
             return true;
         } catch (Exception e) {
-            Toast.makeText(getContext(),getContext().getString(R.string.IDS_PLAY_SERVICE),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.IDS_PLAY_SERVICE), Toast.LENGTH_SHORT).show();
             return false;
         }
     }
