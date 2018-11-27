@@ -41,14 +41,14 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     private static final int TYPE_SHOW_MORE = 1;
     private List<UserSolrObj> mChampionUsersList;
     private final Context mContext;
-    private BaseHolderInterface baseHolderInterface;
+    private BaseHolderInterface mBaseHolderInterface;
     private Preference<LoginResponse> mUserPreference;
 
     //region Constructor
-    public FollowerFollowingAdapter(Context context, BaseHolderInterface baseHolderInterface, Preference<LoginResponse> mUserPreference) {
+    public FollowerFollowingAdapter(Context context, BaseHolderInterface baseHolderInterface, Preference<LoginResponse> userPreference) {
         mContext = context;
-        this.baseHolderInterface = baseHolderInterface;
-        this.mUserPreference = mUserPreference;
+        this.mBaseHolderInterface = baseHolderInterface;
+        this.mUserPreference = userPreference;
     }
 
     //endregion
@@ -60,7 +60,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
             return new FollowerFollowingAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.followed_mentor_list_item, parent, false));
         } else {
             View view = mInflater.inflate(R.layout.feed_progress_bar_holder, parent, false);
-            return new FeedProgressBarHolder(view, baseHolderInterface);
+            return new FeedProgressBarHolder(view, mBaseHolderInterface);
         }
     }
 
@@ -123,7 +123,8 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
 
         @Bind(R.id.follow_following_btn)
         Button followFollowingBtn;
-        private UserSolrObj Mentor;
+
+        private UserSolrObj championObj;
         private int position = -1;
         private long loggedInUserId = -1;
 
@@ -132,22 +133,19 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         public FollowedUserListItemViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                 loggedInUserId = mUserPreference.get().getUserSummary().getUserId();
             }
         }
 
-
         public void bindData(final UserSolrObj mentor, final int position) {
-
             if (null != mentor) {
-                this.Mentor = mentor;
+                this.championObj = mentor;
                 this.position = position;
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((FollowerFollowingCallback) baseHolderInterface).onItemClick(mentor);
+                        ((FollowerFollowingCallback) mBaseHolderInterface).onItemClick(mentor);
                     }
                 });
 
@@ -190,12 +188,10 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                         expertAt.setVisibility(View.GONE);
                     }
                 }
-
                 if (follower != null) {
                     String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
                     follower.setText(String.valueOf(changeNumberToNumericSuffix(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
                 }
-
                 if (loggedInUserId != mentor.getIdOfEntityOrParticipant()) {
                     followFollowingBtn.setVisibility(View.VISIBLE);
 
@@ -227,8 +223,8 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         @OnClick(R.id.follow_following_btn)
         public void onFollowFollowingClick() {
             String followFollowingBtnText = followFollowingBtn.getText().toString();
-            if (position != -1 && followFollowingBtnText != null) {
-                ((FollowerFollowingCallback) baseHolderInterface).onFollowFollowingClick(Mentor, position, followFollowingBtnText);
+            if (position != -1) {
+                ((FollowerFollowingCallback) mBaseHolderInterface).onFollowFollowingClick(championObj, position, followFollowingBtnText);
             }
         }
     }

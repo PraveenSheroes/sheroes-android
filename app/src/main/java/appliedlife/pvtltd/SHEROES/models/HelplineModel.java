@@ -75,5 +75,4 @@ public class HelplineModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 }

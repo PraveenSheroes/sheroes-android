@@ -3,14 +3,13 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFormatException;
 import android.support.v4.app.ActivityCompat;
 import android.util.Base64;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-
-import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -64,9 +63,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     private void logout() {
         ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
         Intent intent = new Intent(this, LanguageSelectionActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }
@@ -75,7 +71,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         try {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                 callDeepLinkingData();
             } else {
                 logout();
@@ -94,11 +90,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         return null;
     }
 
-    private void callDeepLinkingData() throws URISyntaxException {
-        String notificationId = "";
-        String url = "";
+    private void callDeepLinkingData() throws ParcelFormatException {
         String deepLink = "";
-
         if (null != getIntent()) {
             Intent intent = getIntent();
             mIntent = intent;
@@ -116,7 +109,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     openPostActivity(intent);
                 } else if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
-                    notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
                     String trimUrl = CommonUtil.trimBranchIdQuery(deepLink.toString());
                     getDeeplinkUrlFromNotification(trimUrl, intent);
                 }
@@ -624,7 +616,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
         }
         Intent into = new Intent(this, HomeActivity.class);
-        // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
         into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);

@@ -52,8 +52,6 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
                 .requestScopes(new Scope(Scopes.PROFILE))
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .build();
-
-
     }
     //endregion constructor
 

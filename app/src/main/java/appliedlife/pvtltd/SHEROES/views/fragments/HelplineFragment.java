@@ -95,12 +95,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     private LinearLayoutManager mLayoutManager;
     private SwipPullRefreshList mPullRefreshList;
     private AppUtils mAppUtils;
-    private boolean mListLoad = true;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-    private String sourceScreen;
+    private String mSourceScreen;
     private Handler mChatFetchHandler;
     private Runnable mChatRunnable;
-
 
     public static HelplineFragment createInstance(String sourceScreen) {
         HelplineFragment helplineFragment = new HelplineFragment();
@@ -109,7 +107,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         helplineFragment.setArguments(bundle);
         return helplineFragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -132,7 +129,7 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         };
 
         if (getArguments() != null) {
-            sourceScreen = getArguments().getString(AppConstants.SOURCE_NAME);
+            mSourceScreen = getArguments().getString(AppConstants.SOURCE_NAME);
         }
 
         if (getActivity() instanceof HomeActivity) {
@@ -144,7 +141,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).helplineUi();
         }
-
         setUpRecyclerView(false);
         questionText.addTextChangedListener(editTextWatcher());
         questionText.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -277,9 +273,9 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         sendChat.setEnabled(true);
         if (helplinePostQuestionResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
             HashMap<String, Object> screenProperties = null;
-            if (sourceScreen != null) {
+            if (mSourceScreen != null) {
                 screenProperties = new EventProperty.Builder()
-                        .sourceScreenId(sourceScreen)
+                        .sourceScreenId(mSourceScreen)
                         .build();
             }
             trackEvent(Event.HELPLINE_MESSAGE_CREATED, screenProperties);
@@ -297,9 +293,9 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         mAdapter.removeDataOnPosition(helplineChatDoc.getItemPosition());
         mAdapter.notifyDataSetChanged();
         HashMap<String, Object> screenProperties = null;
-        if (sourceScreen != null) {
+        if (mSourceScreen != null) {
             screenProperties = new EventProperty.Builder()
-                    .sourceScreenId(sourceScreen)
+                    .sourceScreenId(mSourceScreen)
                     .build();
         }
         trackEvent(Event.HELPLINE_RATEUS_CARD_CLICKED, screenProperties);
@@ -329,12 +325,10 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHelplinePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                mListLoad = true;
             }
 
             @Override
             public void onShow() {
-                mListLoad = true;
             }
 
             @Override

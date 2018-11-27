@@ -69,7 +69,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     Preference<LoginResponse> mUserPreference;
     @Inject
     Preference<AppInstallation> mAppInstallation;
-    private long mUserId;
     @Inject
     ShareUtils mShareUtils;
     @Inject
@@ -153,8 +152,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
         super.onDestroy();
         try {
             mIsDestroyed = true;
-            mFeedUtils.onDestroy();
-            mErrorUtil.onDestroy();
             mFeedUtils.clearReferences();
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
