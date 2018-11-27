@@ -7,7 +7,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -112,6 +111,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                     public void onComplete() {
                         getMvpView().stopProgressBar();
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
@@ -119,6 +119,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                     }
+
                     @Override
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
@@ -149,6 +150,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                     public void onComplete() {
                         getMvpView().stopProgressBar();
                     }
+
                     @Override
                     public void onError(Throwable e) {
                         Crashlytics.getInstance().core.logException(e);
@@ -156,6 +158,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                     }
+
                     @Override
                     public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();

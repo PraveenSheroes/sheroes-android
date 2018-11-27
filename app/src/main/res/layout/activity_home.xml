@@ -100,9 +100,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/background_color_link_card"
                 android:layout_alignParentBottom="true"
+                android:background="@color/background_color_link_card"
                 android:gravity="center">
+
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/tv_communities_search"
                     style="@style/TextView14spBold"
@@ -117,8 +118,7 @@
                     android:text="@string/explore_All"
                     android:textAllCaps="true"
                     android:textColor="@color/footer_icon_text"
-                    vernacular:customTextFontFamily="@string/bold_font"
-                     />
+                    vernacular:customTextFontFamily="@string/bold_font" />
             </LinearLayout>
 
 

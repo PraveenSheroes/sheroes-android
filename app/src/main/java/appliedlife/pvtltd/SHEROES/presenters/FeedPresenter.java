@@ -322,7 +322,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
                         }
-                          getMvpView().invalidateItem(userPostSolrObj);
+                        getMvpView().invalidateItem(userPostSolrObj);
                     }
                 });
 
@@ -661,7 +661,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
     }
 
-    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail,final long pollOptionId) {
+    public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail, final long pollOptionId) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
@@ -704,7 +704,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                         if (pollSolarObj != null) {
                             getMvpView().invalidateItem(pollSolarObj);
-                            getMvpView().pollVoteResponse(pollSolarObj,pollOptionId);
+                            getMvpView().pollVoteResponse(pollSolarObj, pollOptionId);
                         }
                     }
                 });

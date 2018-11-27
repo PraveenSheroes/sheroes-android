@@ -15,7 +15,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -37,10 +36,8 @@ import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -244,13 +241,13 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                         if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
                             deepLinkUrl = deepLink;
 
-                                            if (mInstallUpdatePreference != null) {
-                                                AppStatus appStatus = mInstallUpdatePreference.get();
-                                                appStatus.setOnBoardingSkipped(true);
-                                                mInstallUpdatePreference.set(appStatus);
-                                            }
-                                        }
-                                    }
+                            if (mInstallUpdatePreference != null) {
+                                AppStatus appStatus = mInstallUpdatePreference.get();
+                                appStatus.setOnBoardingSkipped(true);
+                                mInstallUpdatePreference.set(appStatus);
+                            }
+                        }
+                    }
 
                     if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
                         defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
@@ -263,6 +260,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
             }
         }
     }
+
     private void setUpView() {
         if (CommonUtil.getPrefValue(AppConstants.SELECT_LANGUAGE_SHARE_PREF)) {
             openWelcomeScreen();

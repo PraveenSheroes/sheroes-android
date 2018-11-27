@@ -7,7 +7,9 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
@@ -23,6 +25,7 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
     private GoogleApiClient mGoogleApiClient;
     private GoogleSignInOptions mGSignOptions;
     private IOnGoogleConnectListener mOnGoogleConnectListener;
+    private GoogleSignInClient mGoogleSignInClient;
     //endregion member variables
 
     //region interface
@@ -49,6 +52,8 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
                 .requestScopes(new Scope(Scopes.PROFILE))
                 .requestScopes(new Scope(Scopes.PLUS_LOGIN))
                 .build();
+
+
     }
     //endregion constructor
 
@@ -59,22 +64,22 @@ public class GoogleConnectHelper implements GoogleApiClient.OnConnectionFailedLi
                 .enableAutoManage((FragmentActivity) context, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, mGSignOptions)
                 .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(context, mGSignOptions);
     }
 
 
     public void signIn(Activity activity) {
         //Creating an intent
         signOut();
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         //Starting intent for result
         activity.startActivityForResult(signInIntent, AppConstants.REQUEST_CODE_FOR_GOOGLE_PLUS);
     }
 
     public void signOut() {
-        //Check is required otherwise illegal state exception might be thrown
-        if (null != mGoogleApiClient && mGoogleApiClient.isConnected()) {
-            Auth.GoogleSignInApi.signOut(mGoogleApiClient);
-        }
+        mGoogleSignInClient.signOut();
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

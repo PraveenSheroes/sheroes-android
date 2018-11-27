@@ -247,10 +247,10 @@
     </style>
 
     <style name="TextView16spRegularHelpline" parent="TextViewRegular">
-    <item name="android:textSize">16sp</item>
-    <item name="android:textSelectHandle">@android:drawable/arrow_down_float</item>
-    <item name="android:textSelectHandleLeft">@android:drawable/arrow_down_float</item>
-    <item name="android:textSelectHandleRight">@android:drawable/arrow_down_float</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textSelectHandle">@android:drawable/arrow_down_float</item>
+        <item name="android:textSelectHandleLeft">@android:drawable/arrow_down_float</item>
+        <item name="android:textSelectHandleRight">@android:drawable/arrow_down_float</item>
     </style>
 
     <style name="TextView14spRegular" parent="TextViewRegular">
@@ -281,18 +281,23 @@
     <style name="TextView10spBold" parent="TextViewBold">
         <item name="android:textSize">10sp</item>
     </style>
+
     <style name="TextView14spBold" parent="TextViewBold">
         <item name="android:textSize">14sp</item>
     </style>
+
     <style name="TextView16spBold" parent="TextViewBold">
         <item name="android:textSize">16sp</item>
     </style>
+
     <style name="TextView18spBold" parent="TextViewBold">
         <item name="android:textSize">18sp</item>
     </style>
+
     <style name="TextView22spBold" parent="TextViewBold">
         <item name="android:textSize">22sp</item>
     </style>
+
     <style name="TextView24spBold" parent="TextViewBold">
         <item name="android:textSize">24sp</item>
     </style>
