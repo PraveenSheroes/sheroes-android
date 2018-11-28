@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.CardView;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +20,12 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
@@ -33,7 +38,7 @@ import butterknife.ButterKnife;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
-public class SearchActivity extends BaseActivity implements ISearchView {
+public class SearchActivity extends BaseActivity implements ISearchView, BaseHolderInterface {
 
     private static final String SCREEN_LABEL = "Search Screen";
 
@@ -47,6 +52,12 @@ public class SearchActivity extends BaseActivity implements ISearchView {
     private SearchActivity.SearchPagerAdapter mSearchFragmentAdapter;
     private List<Fragment> mSearchTabFragments = new ArrayList<>();
     private List<String> mSearchTabs = new ArrayList<>();
+    private int[] tabIcons = {
+            R.drawable.vector_video_play_icon,
+            R.drawable.vector_community_search,
+            R.drawable.vector_add,
+            R.drawable.vector_comment_icon
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -97,6 +108,8 @@ public class SearchActivity extends BaseActivity implements ISearchView {
         setupTabLayout();
     }
 
+
+
     private void setupViewPager(final ViewPager viewPager) {
         mSearchFragmentAdapter = new SearchPagerAdapter(getSupportFragmentManager());
         for (String name : mSearchTabs) {
@@ -129,6 +142,36 @@ public class SearchActivity extends BaseActivity implements ISearchView {
 
     private void setupTabLayout() {
         mSearchTabsLayout.setupWithViewPager(mSearchTabsPager);
+    }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     public class SearchPagerAdapter extends FragmentPagerAdapter {
