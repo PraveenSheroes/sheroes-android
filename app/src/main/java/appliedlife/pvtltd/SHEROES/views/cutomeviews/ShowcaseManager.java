@@ -30,8 +30,8 @@ public class ShowcaseManager {
     private ViewTarget target;
     private HashMap<String, Tutorial> tutorial = new HashMap<>();
     private FloatingActionButton floatActionBtn;
-    private TextView tvHome;
-    private TextView tvCommunities;
+    private ImageView tvHome;
+    private ImageView tvCommunities;
     private TextView tvDrawerNavigation;
     private RecyclerView recyclerView;
     private String mUserName;
@@ -40,7 +40,7 @@ public class ShowcaseManager {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, ImageView tvHome, ImageView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
         this.tvHome = tvHome;

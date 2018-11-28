@@ -7,45 +7,40 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="@dimen/dp_size_20"
+        android:layout_height="48dp"
+        android:layout_marginTop="13dp"
         android:background="@drawable/rectangle_grey_round_corner"
         android:elevation="@dimen/dp_size_5"
         android:orientation="horizontal"
         android:weightSum="1">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+
+        <ImageView
             android:id="@+id/tv_home"
-            style="@style/TextView12spRegular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center"
-            android:layout_weight=".5"
-            android:drawablePadding="@dimen/dp_size_4"
-            android:drawableTop="@drawable/vector_home_selected_icon"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/home_label"
-            android:textColor="@color/comment_text"
-            vernacular:customTextFontFamily="@string/regular_font" />
+            android:layout_marginLeft="48dp"
+            android:background="@drawable/vector_home_selected_icon"
+            android:gravity="bottom|center_horizontal" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/spam_dialog_divider" />
+        <ImageView
+            android:id="@+id/tv_search"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="97dp"
+            android:background="@drawable/vector_home_selected_icon"
+            android:gravity="bottom|center_horizontal" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        <ImageView
             android:id="@+id/tv_communities"
-            style="@style/TextView12spRegular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:layout_gravity="center"
-            android:layout_weight=".5"
-            android:drawablePadding="@dimen/dp_size_5"
-            android:drawableTop="@drawable/vector_community_unselected_icon"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/ID_COMMUNITIES"
-            android:textColor="@color/feed_card_time"
-            vernacular:customTextFontFamily="@string/regular_font" />
+            android:layout_marginLeft="100dp"
+            android:background="@drawable/vector_community_unselected_icon"
+            android:gravity="bottom|center_horizontal" />
 
     </LinearLayout>
 </FrameLayout>

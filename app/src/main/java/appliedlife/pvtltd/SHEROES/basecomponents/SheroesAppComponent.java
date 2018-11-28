@@ -38,6 +38,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileCommunitiesActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.SearchActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.UsersCollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.WebViewActivity;
@@ -349,6 +350,8 @@ public interface SheroesAppComponent {
     void inject(DeactivateProfileDialogFragment deactivateProfileDialogFragment);
 
     void inject(ReportUserProfileDialogFragment reportUserProfileDialogFragment);
+
+    void inject(SearchActivity searchActivity);
 }
 
 

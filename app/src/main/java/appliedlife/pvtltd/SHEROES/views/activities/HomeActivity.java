@@ -273,10 +273,13 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     RecyclerView mRecyclerViewDrawerCommunities;
 
     @Bind(R.id.tv_home)
-    public TextView mTvHome;
+    public ImageView mTvHome;
 
     @Bind(R.id.tv_communities)
-    public TextView mTvCommunities;
+    public ImageView mTvCommunities;
+
+    @Bind(R.id.tv_search)
+    public ImageView mTvSearch;
 
     @Bind(R.id.tv_home_notification_icon)
     TextView mTvNotification;
@@ -284,8 +287,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @Bind(R.id.title_text)
     TextView mTitleText;
 
-    @Bind(R.id.tv_communities_text)
-    TextView mTvCommunitiesText;
+/*    @Bind(R.id.tv_communities_text)
+    ImageView mTvCommunitiesText;*/
 
     @Bind(R.id.tv_communities_search)
     TextView mTvCommunitiesSearch;
@@ -445,10 +448,10 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void refreshHomeViews() {
         mHomePresenter.queryConfig();
         initHomeViewPagerAndTabs();
-        mTvHome.setText(R.string.home_label);
-        mTvCommunities.setText(R.string.ID_COMMUNITIES);
+        //mTvHome.setText(R.string.home_label);
+        //mTvCommunities.setText(R.string.ID_COMMUNITIES);
         mTitleText.setText("");
-        mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
+        //mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
         mTvCommunitiesSearch.setText(R.string.explore_All);
         mTvNewTag.setText(R.string.new_tag);
         mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
@@ -597,14 +600,14 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void changeFragmentWithCommunities() {
         mFragmentOpen.setFeedFragment(false);
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
+    //    mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
+     //   mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
 
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.home_label));
+       // mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+      //  mTvHome.setText(getString(R.string.home_label));
 
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+        //TvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+      //  mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
 
         mFloatActionBtn.setVisibility(View.GONE);
 
@@ -652,12 +655,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
 
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_selected_icon), null, null);
-        mTvHome.setText(getString(R.string.home_label));
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+      //  mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
+    //    mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_selected_icon), null, null);
+//        mTvHome.setText(getString(R.string.home_label));
+      //  mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+        //mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
+        //mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
 
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -669,7 +672,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick({R.id.tv_communities, R.id.tv_communities_search})
     public void communityOnClick() {
-        DrawerViewHolder.selectedOptionName = null;
+        /*DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         initCommunityViewPagerAndTabs();
@@ -681,18 +684,39 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         communityButton();
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
+        }*/
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         }
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
+        openProfileActivity(null);
+    }
 
+    @OnClick(R.id.tv_search)
+    public void searchOnClick() {
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        }
+        if (mDrawer.isDrawerOpen(GravityCompat.END)) {
+            mDrawer.closeDrawer(GravityCompat.END);
+        }
+        openSearchActivity();
+    }
+
+    private void openSearchActivity() {
+        SearchActivity.navigateTo(this, AppConstants.REQUEST_CODE_FOR_SEARCH);
     }
 
     public void communityButton() {
 
-        mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_selected_icon), null, null);
-        mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
-        mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-        mTvHome.setText(getString(R.string.home_label));
+      //  mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_selected_icon), null, null);
+       // mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
+        //mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+     //   mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
+     //   mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
+     //   mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText(getString(R.string.ID_COMMUNITIES));
@@ -1700,8 +1724,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         } else {
             ViewCompat.setElevation(mAppBarLayout, 0f);
         }
-        mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-        mTvHome.setText(getString(R.string.home_label));
+       // mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+//        mTvHome.setText(getString(R.string.home_label));
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();

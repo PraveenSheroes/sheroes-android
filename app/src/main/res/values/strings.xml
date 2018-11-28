@@ -600,6 +600,10 @@
     <string name="lang_continue">Continue</string>
     <string name="top_post">Top Post</string>
     <string name="my_feed">My Feed</string>
+    <string name= "top"> Top </string>
+    <string name= "community"> Communities </string>
+    <string name= "hash_tag"> HashTags </string>
+    <string name= "article"> Articles </string>
     <string name="post_header_name_community">%1$s posted in  %2$s"</string>
     <string name="post_header_community">%1$s posted"</string>
     <string name="post_header_asked_community">%1$s asked %2$s"</string>

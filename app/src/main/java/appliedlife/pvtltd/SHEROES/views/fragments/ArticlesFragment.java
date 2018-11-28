@@ -20,6 +20,7 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -94,19 +95,19 @@ public class ArticlesFragment extends BaseFragment {
         }
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new GenericRecyclerViewAdapter(getContext(), (HomeActivity) getActivity());
+        mAdapter = new GenericRecyclerViewAdapter(getContext(), (BaseHolderInterface) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                if (null != getActivity())
+                if (null != getActivity() && getActivity() instanceof HomeActivity)
                     ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
-                if (null != getActivity())
+                if (null != getActivity() && getActivity() instanceof HomeActivity)
                     ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
@@ -126,7 +127,8 @@ public class ArticlesFragment extends BaseFragment {
                 categoryArticleFilter(categoryIdList);
             }
         });
-        if (null != getActivity()) {
+
+        if (null != getActivity() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
