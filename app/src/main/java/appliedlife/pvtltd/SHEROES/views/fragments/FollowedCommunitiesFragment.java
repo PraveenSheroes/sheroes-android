@@ -13,8 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,15 +25,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -45,7 +41,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.ProfileCommunityAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.RecyclerRowDivider;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ProfileView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IProfileView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -57,7 +53,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
  * User's Joined Communities listing from profile
  */
 
-public class FollowedCommunitiesFragment extends BaseFragment implements ProfileView, ProfileCommunityAdapter.OnItemClicked {
+public class FollowedCommunitiesFragment extends BaseFragment implements IProfileView, ProfileCommunityAdapter.OnItemClicked {
 
     public static final String SCREEN_LABEL = "Followed Communities Screen";
 
@@ -123,7 +119,7 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
 
     private void mentorSearchInListPagination(FragmentListRefreshData fragmentListRefreshData) {
 
-        if(getContext() ==null) return;
+        if (getContext() == null) return;
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         RecyclerRowDivider decoration = new RecyclerRowDivider(getContext(), ContextCompat.getColor(getContext(), R.color.on_board_work), 1);
@@ -180,13 +176,8 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
     }
 
     @Override
-    public void getFollowedMentors(UserFollowedMentorsResponse profileFeedResponsePojo) {
+    public void getFollowedMentors(FollowedUsersResponse profileFeedResponsePojo) {
     }
-
-    @Override
-    public void getTopSectionCount(ProfileTopSectionCountsResponse profileTopSectionCountsResponse) {
-    }
-
 
     @Override
     public void onDetach() {
@@ -217,7 +208,7 @@ public class FollowedCommunitiesFragment extends BaseFragment implements Profile
     }
 
     @Override
-    public void onUserDeactivation(BaseResponse baseResponse) {
+    public void onUserDeactivation(BaseResponse baseResponse, boolean isDeactivated) {
     }
 
     public List<CommunityFeedSolrObj> getUsersCommunity(ProfileCommunitiesResponsePojo userCommunities, int mPageNo) {

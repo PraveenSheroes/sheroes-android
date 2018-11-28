@@ -43,11 +43,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -64,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ShareUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import dagger.Module;
@@ -159,8 +158,6 @@ public class SheroesAppModule {
                 .registerSubtype(UserSolrObj.class, AppConstants.USER_SUB_TYPE)
                 .registerSubtype(CommunityFeedSolrObj.class, AppConstants.FEED_COMMUNITY)
                 .registerSubtype(UserPostSolrObj.class, AppConstants.FEED_COMMUNITY_POST)
-                .registerSubtype(EventSolrObj.class, AppConstants.FEED_EVENT)
-                .registerSubtype(OrganizationFeedObj.class, AppConstants.ORGANIZATION_SUB_TYPE)
                 .registerSubtype(ChallengeSolrObj.class, AppConstants.CHALLENGE_SUB_TYPE_NEW)
                 .registerSubtype(CarouselDataObj.class, AppConstants.CAROUSEL_SUB_TYPE)
                 .registerSubtype(LeaderBoardUserSolrObj.class, AppConstants.LEADER_SUB_TYPE)
@@ -359,7 +356,7 @@ public class SheroesAppModule {
 
             userAgent = userAgent + "/" + version + "/" + "Android" + "/" + androidVersion + "/" + deviceModel;
         } catch (PackageManager.NameNotFoundException e) {
-            // Log.e(TAG, "Unable to find self by package name", e);
+            //LogUtils.error(TAG, "Unable to find self by package name", e);
         }
 
         return userAgent;
@@ -371,7 +368,7 @@ public class SheroesAppModule {
             String packageName = mContext.getPackageName();
             version = Integer.toString(mContext.getPackageManager().getPackageInfo(packageName, 0).versionCode);
         } catch (PackageManager.NameNotFoundException e) {
-            // Log.e(TAG, "Unable to find self by package name", e);
+            // LogUtils.error(TAG, "Unable to find self by package name", e);
         }
 
         return version;

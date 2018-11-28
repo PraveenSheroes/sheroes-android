@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -21,11 +20,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -90,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.vernacular.LanguageType;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
@@ -97,11 +95,6 @@ import io.reactivex.schedulers.Schedulers;
 public class CommonUtil {
 
     private static final String TAG = "CommonUtil";
-    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
-    public static boolean isUIThread() {
-        return Looper.myLooper() == Looper.getMainLooper();
-    }
 
     /**
      * Capitalizes first letter of each word in the string
@@ -178,12 +171,6 @@ public class CommonUtil {
         return input.substring(0, maxLength - ellip.length()).concat(ellip);
     }
 
-
-    // int ceil = (numerator - 1) / denominator + 1;
-    public static int getMathCeil(int numerator, int denominator) {
-        return (numerator - 1) / denominator + 1;
-    }
-
     /**
      * This method converts dp unit to equivalent pixels, depending on device density.
      *
@@ -198,25 +185,6 @@ public class CommonUtil {
         return Math.round(px);
     }
 
-    public static float convertPixelToDp(float pixel, Context context) {
-        Resources resources = context.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = pixel / (metrics.densityDpi / 160f);
-        return dp;
-    }
-
-    private static String[] suffix = new String[]{"", "k", "m", "b", "t"};
-    private static int MAX_LENGTH = 4;
-
-    public static String formatMoney(double number) {
-        String r = new DecimalFormat("##0E0").format(number);
-        r = r.replaceAll("E[0-9]", suffix[Character.getNumericValue(r.charAt(r.length() - 1)) / 3]);
-        while (r.length() > MAX_LENGTH || r.matches("[0-9]+\\.[a-z]")) {
-            r = r.substring(0, r.length() - 2) + r.substring(r.length() - 1);
-        }
-        return r;
-    }
-
     public static String getDeviceName() {
         String manufacturer = Build.MANUFACTURER;
         String model = Build.MODEL;
@@ -226,7 +194,6 @@ public class CommonUtil {
             return capitalize(manufacturer) + " " + model;
         }
     }
-
 
     private static String capitalize(String s) {
         if (s == null || s.length() == 0) {
@@ -280,68 +247,9 @@ public class CommonUtil {
         }
     }
 
-    public static List<String> getEmojiListFromText(String string) {
-        String regexPattern = "[\uD83C-\uDBFF\uDC00-\uDFFF]+";
-        List<String> matchList = new ArrayList<>();
-        byte[] utf8;
-        try {
-            utf8 = string.getBytes("UTF-8");
-            String string1 = new String(utf8, "UTF-8");
-            Pattern pattern = Pattern.compile(regexPattern);
-            Matcher matcher = pattern.matcher(string1);
-            while (matcher.find()) {
-                matchList.add(matcher.group());
-            }
-            return matchList;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        return matchList;
-    }
-
-    /**
-     * Compares two version strings.
-     * <p/>
-     * Use this instead of String.compareTo() for a non-lexicographical
-     * comparison that works for version strings. e.g. "1.10".compareTo("1.6").
-     *
-     * @param str1 a string of ordinal numbers separated by decimal points.
-     * @param str2 a string of ordinal numbers separated by decimal points.
-     * @return The result is a negative integer if str1 is _numerically_ less than str2.
-     * The result is a positive integer if str1 is _numerically_ greater than str2.
-     * The result is zero if the strings are _numerically_ equal.
-     * @note It does not work if "1.10" is supposed to be equal to "1.10.0".
-     */
-    public static Integer versionCompare(String str1, String str2) {
-        try {
-            String[] vals1 = str1.split("\\.");
-            String[] vals2 = str2.split("\\.");
-            int i = 0;
-            // set index to first non-equal ordinal or length of shortest version string
-            while (i < vals1.length && i < vals2.length && vals1[i].equals(vals2[i])) {
-                i++;
-            }
-            // compare first non-equal ordinal number
-            if (i < vals1.length && i < vals2.length) {
-                int diff = Integer.valueOf(vals1[i]).compareTo(Integer.valueOf(vals2[i]));
-                return Integer.signum(diff);
-            }
-            // the strings are equal or one string is a substring of the other
-            // e.g. "1.2.3" = "1.2.3" or "1.2.3" < "1.2.3.4"
-            else {
-                return Integer.signum(vals1.length - vals2.length);
-            }
-        } catch (Exception e) {
-            Crashlytics.getInstance().core.logException(e);
-            return 0;
-        }
-    }
-
     public static boolean versionCompare(int ver1, int ver2) {
         return ver1 < ver2;
     }
-
-    private static final X500Principal DEBUG_DN = new X500Principal("CN=Android Debug,O=Android,C=US");
 
     /**
      * From http://stackoverflow.com/questions/7085644/how-to-check-if-apk-is-signed-or-debug-build
@@ -365,21 +273,6 @@ public class CommonUtil {
         return installed;
     }
 
-    public static String getVersionName(Context context, String packageName) {
-
-        if (context != null) {
-            PackageManager pm = context.getPackageManager();
-            try {
-                PackageInfo packageInfo = pm.getPackageInfo(packageName, PackageManager.GET_ACTIVITIES);
-                return packageInfo.versionName;
-
-            } catch (PackageManager.NameNotFoundException e) {
-                return null;
-            }
-        }
-        return null;
-    }
-
     public static PackageInfo getPackageInfo(Context context) {
         try {
             return context.getPackageManager()
@@ -388,19 +281,6 @@ public class CommonUtil {
             return null;
         }
     }
-
-    @NonNull
-    public static Intent getCallIntent(String phoneNumber) {
-        String uri = "tel:" + phoneNumber;
-        Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse(uri));
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        return intent;
-    }
-
-    public static final String SAMSUNG_APP_PACKAGE_NAME = "com.sec.print.mobileprint";
-    public static final String HP_APP_PACKAGE_NAME = "com.hp.android.print";
-    public static final String PRINTHAND_APP_PACKAGE_NAME = "com.dynamixsoftware.printhand";
 
     /**
      * Opens play store screen for the given app package name
@@ -451,41 +331,6 @@ public class CommonUtil {
         return ((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("shrs.me")));
     }
 
-    public static boolean isValidEmail(CharSequence target) {
-        if (TextUtils.isEmpty(target)) {
-            return false;
-        } else {
-            return android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
-        }
-    }
-
-    public static String getThumborUriWithUpscale(String image, int width, int height) {
-        String uri = image;
-        try {
-            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
-                    .resize(width, height)
-                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
-                    .smart()
-                    .toUrl();
-        } catch (UnsupportedEncodingException e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-        return uri;
-    }
-
-    public static String getThumborUriWithoutSmart(String image, int width, int height) {
-        String uri = image;
-        try {
-            uri = SheroesThumbor.getInstance().buildImage(URLEncoder.encode(image, "UTF-8"))
-                    .resize(width, height)
-                    .filter(ThumborUrlBuilder.format(ThumborUrlBuilder.ImageFormat.WEBP))
-                    .toUrl();
-        } catch (UnsupportedEncodingException e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-        return uri;
-    }
-
     public static String getThumborUriWithFit(String image, int width, int height) {
         String uri = image;
         try {
@@ -506,35 +351,6 @@ public class CommonUtil {
         return list.toString().substring(1, list.toString().length() - 1);
     }
 
-    public static String getPrettyStringVertical(ArrayList<String> list, boolean html) {
-        String newline = "\n";
-        if (html) {
-            newline = "<br>";
-        }
-        String str = getPrettyString(list);
-        return (str != null) ? str.replaceAll(", ", newline) : "";
-    }
-
-/*    public static void enableStrictMode(Context context) {
-        if (isDebuggable()) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-//                    .detectAll()
-                    .penaltyLog()
-                    .build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-//                    .detectLeakedSqlLiteObjects()
-//                    .detectLeakedClosableObjects()
-                    .penaltyLog()
-                    .build());
-        }
-    }*/
-
-  /*  public static void assertBackgroundThreadOnDebug() {
-        if (CommonUtil.isDebuggable() && CommonUtil.isUIThread()) {
-            throw new IllegalStateException("Long running operation called from Main thread. Use background thread instead.");
-        }
-    }*/
-
     public static <T> boolean isEmpty(Collection<T> collection) {
         return (collection == null) || collection.isEmpty();
     }
@@ -548,7 +364,6 @@ public class CommonUtil {
             return null;
         return object.toString();
     }
-
 
     public static int colorBurn(int RGBValues) {
         int alpha = RGBValues >> 24;
@@ -610,27 +425,6 @@ public class CommonUtil {
         return 600;
     }
 
-    /**
-     * Check the device to make sure it has the Google Play Services APK. If
-     * it doesn't, display a dialog that allows users to download the APK from
-     * the Google Play Store or enable it in the device's system settings.
-     */
-    public static boolean checkPlayServices(Activity activity) {
-        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-        int resultCode = apiAvailability.isGooglePlayServicesAvailable(activity);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (apiAvailability.isUserResolvableError(resultCode)) {
-                apiAvailability.getErrorDialog(activity, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
-                        .show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-                activity.finish();
-            }
-            return false;
-        }
-        return true;
-    }
-
     public static void shareImageWhatsApp(final Context context, final String imageShareText, final String url, final String sourceScreen, final boolean trackEvent, final Event eventName, final HashMap<String, Object> properties) {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
@@ -655,40 +449,6 @@ public class CommonUtil {
 
     }
 
-    public static Bitmap drawableToBitmap(Drawable drawable) {
-        if (drawable instanceof BitmapDrawable) {
-            return ((BitmapDrawable) drawable).getBitmap();
-        }
-
-        int width = drawable.getIntrinsicWidth();
-        width = width > 0 ? width : 1;
-        int height = drawable.getIntrinsicHeight();
-        height = height > 0 ? height : 1;
-
-        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
-        drawable.draw(canvas);
-
-        return bitmap;
-    }
-
-    public static Bitmap combineImages(Bitmap c, Bitmap s) { // can add a 3rd parameter 'String loc' if you want to save the new image - left some code to do that at the bottom
-        Bitmap cs = null;
-
-        int width, height = 0;
-        width = c.getWidth();
-        height = c.getHeight() + s.getHeight();
-
-        cs = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-
-        Canvas comboImage = new Canvas(cs);
-
-        comboImage.drawBitmap(c, 0f, 0f, null);
-        comboImage.drawBitmap(s, 0f, c.getHeight(), null);
-        return cs;
-    }
-
     public static void shareImageChooser(final Context context, final String imageShareText, final String url) {
         CompressImageUtil.createBitmap(SheroesApplication.mContext, url, 816, 816)
                 .subscribeOn(Schedulers.io())
@@ -710,22 +470,6 @@ public class CommonUtil {
                     }
                 });
 
-    }
-
-    public static String getPathFromURI(Context context, Uri contentURI) {
-        String result = null;
-        Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
-        if (cursor == null) {
-            result = contentURI.getPath();
-        } else {
-            cursor.moveToFirst();
-            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-            if (idx != -1) {
-                result = cursor.getString(idx);
-            }
-            cursor.close();
-        }
-        return result;
     }
 
     public static File getFilFromBitmap(Context context, Bitmap bmp) {
@@ -855,23 +599,6 @@ public class CommonUtil {
         return bitmap;
     }
 
-    public static String encode(String featureImage) {
-        URL url = null;
-        URI uri = null;
-        try {
-            url = new URL(featureImage);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return uri.toASCIIString();
-    }
-
-
     public static String getThumborUri(@NonNull String image, int width, int height) {
         String uri = image;
         if (!CommonUtil.isNotEmpty(uri)) {
@@ -903,10 +630,6 @@ public class CommonUtil {
             Crashlytics.getInstance().core.logException(e);
         }
         return uri;
-    }
-
-    public static String getYoutubeURL(String videoId) {
-        return "https://www.youtube.com/watch?v=" + videoId;
     }
 
     public static Uri getContentUriFromBitmap(Context context, Bitmap bmp) {
@@ -979,81 +702,6 @@ public class CommonUtil {
         return false;
     }
 
-
-    public static class Dimension {
-        public int width;
-        public int height;
-
-        Dimension(int width, int height) {
-            this.width = width;
-            this.height = height;
-        }
-
-        public Dimension(float width, float height) {
-            this.width = (int) width;
-            this.height = (int) height;
-        }
-    }
-
-
-    public static Dimension getScaledDimension(Dimension imgSize, Dimension boundary) {
-
-        int original_width = imgSize.width;
-        int original_height = imgSize.height;
-        int bound_width = boundary.width;
-        int bound_height = boundary.height;
-        int new_width = original_width;
-        int new_height = original_height;
-
-        // first check if we need to scale width
-        if (original_width > bound_width) {
-            //scale width to fit
-            new_width = bound_width;
-            //scale height to maintain aspect ratio
-            new_height = (new_width * original_height) / original_width;
-        }
-
-        // then check if we need to scale even with the new height
-        if (new_height > bound_height) {
-            //scale height to fit instead
-            new_height = bound_height;
-            //scale width to maintain aspect ratio
-            new_width = (new_height * original_width) / original_height;
-        }
-
-        return new Dimension(new_width, new_height);
-    }
-
-    public static InputStream getFileFromAssets(Context context, String pathRelativeToAssetsFolder) {
-        AssetManager am = context.getAssets();
-        try {
-            return am.open(pathRelativeToAssetsFolder);
-        } catch (IOException e) {
-            return null;
-        }
-    }
-
-    public static void navigateToActivitySimple(Activity fromActivity, Class toActivity) {
-        if (fromActivity != null && !fromActivity.isFinishing()) {
-            Intent intent = new Intent(fromActivity, toActivity);
-            ActivityCompat.startActivity(fromActivity, intent, new Bundle());
-        }
-    }
-
-    public static void navigateToActivityForResult(Activity fromActivity, Class toActivity, int requestCode) {
-        Intent intent = new Intent(fromActivity, toActivity);
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, new Bundle());
-    }
-
-    public static boolean containsIgnoreCase(List<String> stringList, String string) {
-        for (String element : stringList) {
-            if (element.equalsIgnoreCase(string)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static <T, U> int contains(Collection<T> objectList, U object, ContainsComparator<T, U> comparator) {
         int position = -1;
         for (T element : objectList) {
@@ -1069,96 +717,12 @@ public class CommonUtil {
         boolean equalsObject(T t, U u);
     }
 
-    public static boolean isMarshmallowAndAbove() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
-    }
-
     public static boolean isNotEmpty(String s) {
         if (s == null) {
             return false;
         }
         return !TextUtils.isEmpty(s);
     }
-
-    public static class OnKeyboardListener {
-        private float oneInchPixels;
-
-        private void setListenerToRootView(Activity activity) {
-            final View activityRootView = activity.getWindow().getDecorView().findViewById(android.R.id.content);
-            activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-
-                    int heightDiff = activityRootView.getRootView().getHeight() - activityRootView.getHeight();
-
-                    if (heightDiff > oneInchPixels) {
-                        onKeyboardVisible(true);
-                    } else {
-                        onKeyboardVisible(false);
-                    }
-                }
-            });
-        }
-
-        public void onKeyboardVisible(boolean visible) {
-
-        }
-
-        public void init(Activity activity) {
-            oneInchPixels = convertDpToPixel(160, activity);
-            setListenerToRootView(activity);
-        }
-
-    }
-
-/*    public static int getCurrentAppVersion() {
-        int currentVersion = 0;
-        try {
-            currentVersion = CareApplication.getAppContext().getPackageManager().getPackageInfo(CareApplication.getAppContext().getPackageName(), 0).versionCode;
-        } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
-        }
-        return currentVersion;
-    }*/
-
-
-    public static boolean matchesWebsiteURLPattern(String sentence) {
-        final Pattern pattern = Pattern.compile("\\b(https?|Https?|ftp)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]",
-                Pattern.MULTILINE | Pattern.DOTALL);
-        Matcher m = pattern.matcher(sentence);
-        return m.find();
-    }
-
-    public static boolean isBabygogoLink(Uri url) {
-        return ((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("bbgo.co") || url.getHost().equalsIgnoreCase("bnc.lt")));
-    }
-
-
-    //returns empty if not youtube url
-    public static String getYoutubeId(String url) {
-        final Pattern pattern = Pattern.compile("(?<=youtube.com\\/watch\\?v=|\\/videos\\/|embed\\/|youtu.be\\/|\\/v\\/|watch\\?v%3D..%2Fvideos%2F|embed%..F|youtu.be%2F|%2Fv%..F)[^#\\&\\?\\n]*",
-                Pattern.MULTILINE | Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(url);
-        if (matcher.find()) {
-            return matcher.group();
-        } else {
-            return "";
-        }
-    }
-
-/*    public static void openChromeTab(Activity activity, Uri url) {
-        CustomTabsIntent customTabsIntent =
-                new CustomTabsIntent.Builder()
-                        .setToolbarColor(ContextCompat.getColor(activity, R.color.primary))
-                        .setShowTitle(true)
-                        .enableUrlBarHiding()
-                        .build();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-            customTabsIntent.intent.putExtra(Intent.EXTRA_REFERRER,
-                    Uri.parse(Intent.URI_ANDROID_APP_SCHEME + "//" + activity.getPackageName()));
-        }
-        customTabsIntent.launchUrl(activity, url);
-    }*/
 
     public static boolean isMainThread() {
         return Looper.myLooper() == Looper.getMainLooper();
@@ -1229,7 +793,7 @@ public class CommonUtil {
                 return prefs.getBoolean(key, false);
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.error(TAG, e.getMessage());
         }
         return false;
     }
@@ -1270,12 +834,12 @@ public class CommonUtil {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
             if (prefs != null && prefs.contains(key)) {
-                return prefs.getString(key,"");
+                return prefs.getString(key, LanguageType.ENGLISH.toString());
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.error(TAG, e.getMessage());
         }
-        return "";
+        return LanguageType.ENGLISH.toString();
     }
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
@@ -1515,40 +1079,6 @@ public class CommonUtil {
             return;
         }
         prefs.edit().putString(AppConstants.NEXT_DAY_DATE, DateUtil.toDateOnlyString(DateUtil.addDays(DateUtil.getCurrentDate(), 1))).apply();
-    }
-
-    private static boolean validateDate(Date date) {
-        return date != null;
-    }
-
-
-    public static Date getCurrentDate() {
-        return Calendar.getInstance().getTime();
-    }
-
-    public static void deleteCache(Context context) {
-        try {
-            File dir = context.getCacheDir();
-            deleteDir(dir);
-        } catch (Exception e) {
-        }
-    }
-
-    public static boolean deleteDir(File dir) {
-        if (dir != null && dir.isDirectory()) {
-            String[] children = dir.list();
-            for (int i = 0; i < children.length; i++) {
-                boolean success = deleteDir(new File(dir, children[i]));
-                if (!success) {
-                    return false;
-                }
-            }
-            return dir.delete();
-        } else if (dir != null && dir.isFile()) {
-            return dir.delete();
-        } else {
-            return false;
-        }
     }
 
     //Show or hide the badge icon from user pic

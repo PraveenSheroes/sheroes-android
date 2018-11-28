@@ -10,10 +10,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorInsightResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleTagResponse;
@@ -29,28 +27,24 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityPostCreateR
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityTopPostRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityOwnerResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.CreateCommunityResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.community.EditCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.MemberListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.SelectedCommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserFollowedMentorsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroScreenResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
@@ -90,13 +84,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPost
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopSectionCountsResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareMailResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.sharemail.ShareViaMail;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
@@ -106,6 +96,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import io.reactivex.Observable;
 import io.reactivex.Single;
 import okhttp3.RequestBody;
@@ -132,11 +123,8 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/")
     Observable<FeedResponsePojo> getFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
 
-    @POST("participant/user/get_user_profile_top_section_count")
-    Observable<ProfileTopSectionCountsResponse> getProfileTopSectionCounts(@Body ProfileTopCountRequest profileTopCountRequest);
-
     @POST("participant/feed/followed_mentor_list")
-    Observable<UserFollowedMentorsResponse> getFollowerOrFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
+    Observable<FollowedUsersResponse> getFollowerOrFollowing(@Body FollowersFollowingRequest profileFollowedMentor);
 
     @POST("participant/feed/mutual_communities")
     Observable<ProfileCommunitiesResponsePojo> getUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
@@ -144,20 +132,14 @@ public interface SheroesAppServiceApi {
     @POST("participant/feed/my_communities")
     Observable<ProfileCommunitiesResponsePojo> getPublicProfileUsersCommunity(@Body ProfileUsersCommunityRequest profileUsersCommunityRequest);
 
-    @POST("participant/feed/")
-    Observable<FeedResponsePojo> getNewFeedFromApi(@Body FeedRequestPojo feedRequestPojo);
-
     @POST("participant/user/get_all_details")
     Observable<UserProfileResponse> getUserDetails();
 
-    @POST("participant/user/get_mentor_insights")
-    Observable<MentorInsightResponse> getMentorInsightFromApi(@Body MentorFollowerRequest mentorFollowerRequest);
-
     @POST("participation/reaction/follow")
-    Observable<MentorFollowUnfollowResponse> getMentorFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    Observable<ChampionFollowedResponse> getMentorFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
 
     @POST("/participation/reaction/unfollow")
-    Observable<MentorFollowUnfollowResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
+    Observable<ChampionFollowedResponse> getMentorUnFollowFromApi(@Body PublicProfileListRequest publicProfileListRequest);
 
     @POST("participant/feed/my_communities")
     Observable<FeedResponsePojo> getMyCommunityFromApi(@Body MyCommunityRequest myCommunityRequest);
@@ -202,9 +184,6 @@ public interface SheroesAppServiceApi {
     @POST("participant/auth/signin")
     Observable<LoginResponse> getLoginAuthToken(@Body LoginRequest loginRequest);
 
-    @POST("participant/user/fbVerification")
-    Observable<LoginResponse> getFBVerification(@Body LoginRequest loginRequest);
-
     @POST("participant/user/fbsignup")
     Observable<LoginResponse> getFbSignUpToken(@Body LoginRequest loginRequest);
 
@@ -217,25 +196,14 @@ public interface SheroesAppServiceApi {
     @POST("participant/community/join")
     Observable<CommunityResponse> getCommunityJoinResponse(@Body CommunityRequest communityRequest);
 
-
     @POST("participation/post/delete")
     Observable<DeleteCommunityPostResponse> getCommunityPostDeleteResponse(@Body DeleteCommunityPostRequest deleteCommunityPostRequest);
 
     @POST("participation/reaction/mark_spam")
     Observable<BookmarkResponsePojo> markAsSpam(@Body BookmarkRequestPojo bookmarkResponsePojo);
 
-    @POST("entity/master/suggest_community")
-    Observable<SelectedCommunityResponse> suggestedCommunity(@Body SelectCommunityRequest selectCommunityRequest);
-
-    @POST("participant/community/edit")
-    Observable<CreateCommunityResponse> postEditCommunity(@Body EditCommunityRequest editCommunityRequest);
-
     @POST("participation/link/render")
     Observable<LinkRenderResponse> linkRenderApi(@Body LinkRequest linkRequest);
-
-    @POST("participation/post/add")
-    Observable<CreateCommunityResponse> createCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
-
 
     @Multipart
     @POST("participation/post/add_post_with_multipart_image")
@@ -252,14 +220,7 @@ public interface SheroesAppServiceApi {
     Observable<CreatePollResponse> deletePoll(@Body DeletePollRequest deletePollRequest);
 
     @POST("participation/post/edit")
-    Observable<CreateCommunityResponse> editCommunityPost(@Body CommunityPostCreateRequest communityPostCreateRequest);
-
-    @POST("participation/post/edit")
     Observable<CreateCommunityResponse> topPostCommunityPost(@Body CommunityTopPostRequest communityPostCreateRequest);
-
-    @POST("participant/community/create_owner")
-    Observable<CreateCommunityOwnerResponse> postCreateCommunityOwner(@Body CreateCommunityOwnerRequest createCommunityOwnerRequest);
-
 
     @POST("entity/master/all_data")
     Observable<MasterDataResponse> getOnBoardingMasterDataFromApi();
@@ -267,10 +228,8 @@ public interface SheroesAppServiceApi {
     @POST("entity/master/get_data")
     Observable<GetAllData> getOnBoardingSearchFromApi(@Body GetAllDataRequest getAllDataRequest);
 
-
     @POST("participant/user/gcmIdChange")
     Observable<GcmIdResponse> getNewGCMidFromApi(@Body LoginRequest loginRequest);
-
 
     @POST("participant/user/add_or_edit")
     Observable<BoardingDataResponse> getPersonalBasicDetailsAuthToken(@Body PersonalBasicDetailsRequest personalBasicDetailsRequest);
@@ -280,9 +239,6 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/community/unjoin")
     Observable<MemberListResponse> removeMember(@Body RemoveMemberRequest removeMemberRequest);
-
-    @POST("participant/community/invite")
-    Observable<ShareMailResponse> shareCommunityViaMail(@Body ShareViaMail shareViaMail);
 
     @POST("participation/notification/bell")
     Observable<BelNotificationListResponse> bellNotification(@Body BellNotificationRequest bellNotificationRequest);
@@ -302,8 +258,8 @@ public interface SheroesAppServiceApi {
     @POST("participation/helpline/get_thread_details")
     Observable<HelplineGetChatThreadResponse> getHelplineChatDetails(@Body HelplineGetChatThreadRequest helplineGetChatThreadRequest);
 
-    @POST("participant/user/getUserSummarry")
-    Observable<LoginResponse> googlePlusUserResponse();
+    @POST("/participation/helpline/rated")
+    Observable<BaseResponse> postHelplineRating(@Body HelplinePostRatingRequest helplinePostRatingRequest);
 
     @POST("entity/she/all_faqs")
     Observable<FAQSResponse> getAllSHEFAQS(@Body FAQSRequest faqsRequest);
@@ -343,9 +299,6 @@ public interface SheroesAppServiceApi {
 
     @GET("participant/remote_config/AppConfig")
     Observable<ConfigurationResponse> getConfig();
-
-    @GET("participant/feed/community_feed?")
-    Observable<FeedResponsePojo> getChallengeResponse(@Query("sub_type") String subType, @Query("source_entity_id") String sourceEntityId);
 
     @POST("participant/user/refresh_user_app_invite_url")
     Observable<UpdateInviteUrlResponse> updateInviteUrl(@Body UpdateInviteUrlRequest updateInviteUrlRequest);
@@ -397,4 +350,7 @@ public interface SheroesAppServiceApi {
     @Headers("X-Producer-Authorization: " + BuildConfig.IMPRESSION_AUTH)
     @POST(BuildConfig.IMPRESSION_URL + "user/event/producer")
     Single<ImpressionResponse> updateImpressionData(@Body UserEvents userEventsContainer);
+
+    @POST("participant/user/update_user_preference")
+    Observable<BaseResponse> updateSelectedLanguage(@Body LanguageUpdateRequest languageUpdateRequest);
 }

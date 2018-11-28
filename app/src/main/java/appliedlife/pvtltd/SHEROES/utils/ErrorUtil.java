@@ -7,20 +7,18 @@ import android.os.Bundle;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.errorview.NetworkAndApiErrorDialog;
-import appliedlife.pvtltd.SHEROES.views.fragmentlistner.FragmentIntractionWithActivityListner;
 
 public class ErrorUtil {
     //region member variables
     private static ErrorUtil mInstance;
-    private boolean mIsDestroyed=false;
+    private boolean mIsDestroyed = false;
     //endregion
 
 
-    public static synchronized ErrorUtil getInstance(){
-        if(mInstance == null){
+    public static synchronized ErrorUtil getInstance() {
+        if (mInstance == null) {
             mInstance = new ErrorUtil();
         }
         return mInstance;
@@ -31,7 +29,7 @@ public class ErrorUtil {
     }
 
     public void showErrorDialogOnUserAction(Context context, boolean finishParentOnBackOrTryagain, boolean isCancellable, String errorMessage, String isDeactivated) {
-        NetworkAndApiErrorDialog fragment = (NetworkAndApiErrorDialog) ((Activity)context).getFragmentManager().findFragmentByTag(AppConstants.NETWORK_TIMEOUT);
+        NetworkAndApiErrorDialog fragment = (NetworkAndApiErrorDialog) ((Activity) context).getFragmentManager().findFragmentByTag(NetworkAndApiErrorDialog.class.getName());
         if (fragment == null) {
             fragment = new NetworkAndApiErrorDialog();
             Bundle b = new Bundle();
@@ -41,14 +39,9 @@ public class ErrorUtil {
             b.putString(BaseDialogFragment.USER_DEACTIVATED, isDeactivated);
             fragment.setArguments(b);
         }
-        if (!fragment.isVisible() && !fragment.isAdded() && !((Activity)context).isFinishing() && !mIsDestroyed) {
-            fragment.show(((Activity)context).getFragmentManager(), AppConstants.NETWORK_TIMEOUT);
+        if (!fragment.isVisible() && !fragment.isAdded() && !((Activity) context).isFinishing() && !mIsDestroyed) {
+            fragment.show(((Activity) context).getFragmentManager(), NetworkAndApiErrorDialog.class.getName());
         }
-    }
-
-
-    public void onDestroy(){
-        mIsDestroyed = true;
     }
 
     public void onShowErrorDialog(Context context, String errorReason, FeedParticipationEnum feedParticipationEnum) {
@@ -69,7 +62,7 @@ public class ErrorUtil {
                 }
             }
         } else {
-            showErrorDialogOnUserAction(context, true, false, context.getString(R.string.ID_GENERIC_ERROR),  "");
+            showErrorDialogOnUserAction(context, true, false, context.getString(R.string.ID_GENERIC_ERROR), "");
         }
 
 

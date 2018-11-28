@@ -15,10 +15,9 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 
-import java.io.IOException;
-
 import appliedlife.pvtltd.SHEROES.BuildConfig;
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 public class FCMClientManager {
     // Constants
@@ -62,11 +61,11 @@ public class FCMClientManager {
             if (regid.isEmpty()) {
                 registerInBackground(handler);
             } else { // got id from cache
-                Log.i(TAG, regid);
+                LogUtils.info(TAG, regid);
                 handler.onSuccess(regid, false);
             }
         } else { // no play services
-            Log.i(TAG, "No valid Google Play Services APK found.");
+            LogUtils.info(TAG, "No valid Google Play Services APK found.");
         }
     }
 
@@ -85,7 +84,6 @@ public class FCMClientManager {
                         fcm = FirebaseMessaging.getInstance();
                     }
                     regid = FirebaseInstanceId.getInstance().getToken();
-                    Log.i(TAG, regid);
                     // Persist the regID - no need to register again.
                     storeRegistrationId(getContext(), regid);
                 } catch (Exception ex) {
@@ -119,7 +117,7 @@ public class FCMClientManager {
         final SharedPreferences prefs = getFCMPreferences(context);
         String registrationId = prefs.getString(PROPERTY_REG_ID, "");
         if (registrationId.isEmpty()) {
-            Log.i(TAG, "Registration not found.");
+            LogUtils.info(TAG, "Registration not found.");
             return "";
         }
         // Check if app was updated; if so, it must clear the registration ID
@@ -128,7 +126,7 @@ public class FCMClientManager {
         int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
         int currentVersion = getAppVersion(context);
         if (registeredVersion != currentVersion) {
-            Log.i(TAG, "App version changed.");
+            LogUtils.info(TAG, "App version changed.");
             return "";
         }
         return registrationId;
@@ -144,7 +142,7 @@ public class FCMClientManager {
     private void storeRegistrationId(Context context, String regId) {
         final SharedPreferences prefs = getFCMPreferences(context);
         int appVersion = getAppVersion(context);
-        Log.i(TAG, "Saving regId on app version " + appVersion);
+        LogUtils.info(TAG, "Saving regId on app version " + appVersion);
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(PROPERTY_REG_ID, regId);
         editor.putInt(PROPERTY_APP_VERSION, appVersion);
@@ -169,15 +167,15 @@ public class FCMClientManager {
             int resultCode = googleAPI.isGooglePlayServicesAvailable(getContext());
             if (resultCode != ConnectionResult.SUCCESS) {
                 if (googleAPI.isUserResolvableError(resultCode)) {
-                    if(getContext() instanceof Activity){
-                        googleAPI.getErrorDialog((Activity)getContext(),resultCode,PLAY_SERVICES_RESOLUTION_REQUEST).show();
+                    if (getContext() instanceof Activity) {
+                        googleAPI.getErrorDialog((Activity) getContext(), resultCode, PLAY_SERVICES_RESOLUTION_REQUEST).show();
                     }
                 }
                 return false;
             }
             return true;
         } catch (Exception e) {
-            Toast.makeText(getContext(),getContext().getString(R.string.IDS_PLAY_SERVICE),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), getContext().getString(R.string.IDS_PLAY_SERVICE), Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -193,7 +191,7 @@ public class FCMClientManager {
             // If there is an error, don't just keep trying to register.
             // Require the user to click a button again, or perform
             // exponential back-off.
-            Log.e(TAG, ex);
+            LogUtils.error(TAG, ex);
         }
     }
 }

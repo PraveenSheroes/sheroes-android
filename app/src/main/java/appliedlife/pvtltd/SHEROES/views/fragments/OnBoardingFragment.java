@@ -38,11 +38,11 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.OnBoardingActivity;
@@ -53,6 +53,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.OnBoardingView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.communityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.makeFeedRequest;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
@@ -64,26 +65,29 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
 public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     private static final String SCREEN_LABEL = "Onboarding Screen - Join Communities";
     private final String TAG = LogUtils.makeLogTag(OnBoardingFragment.class);
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-    @Inject
-    Preference<LoginResponse> userPreference;
+
     @Bind(R.id.swipe_view_boarding)
     SwipeRefreshLayout mSwipeView;
     @Bind(R.id.pb_boarding_progress_bar)
     ProgressBar mProgressBar;
     @Bind(R.id.rv_on_boarding_communities_icon)
     EmptyRecyclerView mRecyclerView;
+
+    @Inject
+    Preference<MasterDataResponse> mUserPreferenceMasterData;
+    @Inject
+    Preference<LoginResponse> mUserPreference;
     @Inject
     OnBoardingPresenter mOnBoardingPresenter;
+    @Inject
+    AppUtils mAppUtils;
 
     private GenericRecyclerViewAdapter mAdapter;
     private GridLayoutManager mGridManager;
     private SwipPullRefreshList mPullRefreshList;
     private FragmentListRefreshData mFragmentListRefreshData;
     private int mPageNo = AppConstants.ONE_CONSTANT;
-    @Inject
-    AppUtils mAppUtils;
+
 
     @Override
     public void onAttach(Context context) {
@@ -117,20 +121,15 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mOnBoardingPresenter, mRecyclerView, mGridManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.GONE);
-
             }
 
             @Override
             public void onShow() {
-                // ((OnBoardingActivity) getActivity()).tvOnBoardingFinish.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void dismissReactions() {
-
             }
-
         });
         setProgressBar(mProgressBar);
         refreshCommunitiesMethod();
@@ -140,6 +139,9 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
                 refreshCommunitiesMethod();
             }
         });
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            mOnBoardingPresenter.updateSelectedLanguage(mAppUtils.updateSelectedLanguageRequestBuilder(CommonUtil.getPrefStringValue(LANGUAGE_KEY), mUserPreference.get().getUserSummary().getUserId()));
+        }
     }
 
     private void refreshCommunitiesMethod() {
@@ -163,18 +165,8 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
-    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg, feedParticipationEnum);
-    }
-
-    @Override
-    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override
@@ -231,7 +223,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
         mAdapter.notifyItemChanged(communityFeedSolrObj.getItemPosition(), communityFeedSolrObj);
     }
 
-
     public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (!communityFeedSolrObj.isMember()) {
             if (OnBoardingActivity.isJoinCount >= 0) {
@@ -277,16 +268,16 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
             List<Long> userIdList = new ArrayList();
-            userIdList.add(userPreference.get().getUserSummary().getUserId());
+            userIdList.add(mUserPreference.get().getUserSummary().getUserId());
             mOnBoardingPresenter.communityJoinFromPresenter(communityRequestBuilder(userIdList, communityFeedSolrObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), communityFeedSolrObj);
         }
     }
 
     public void unJoinCommunity(CommunityFeedSolrObj communityFeedSolrObj) {
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
-            mOnBoardingPresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), userPreference.get().getUserSummary().getUserId()), communityFeedSolrObj);
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            mOnBoardingPresenter.leaveCommunityAndRemoveMemberToPresenter(removeMemberRequestBuilder(communityFeedSolrObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), communityFeedSolrObj);
         }
     }
 
@@ -294,5 +285,4 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

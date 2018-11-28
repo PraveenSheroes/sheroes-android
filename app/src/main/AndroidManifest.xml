@@ -150,16 +150,17 @@
             android:windowSoftInputMode="stateHidden"/>
 
         <activity
+            android:name=".views.activities.HelplineActivity"
+            android:parentActivityName=".views.activities.HomeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustResize"/>
+        <activity
             android:name=".views.activities.ProfileActivity"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".views.activities.MentorsUserListingActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".views.activities.MentorInsightActivity"
+            android:name=".views.activities.ChampionListingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity

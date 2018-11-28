@@ -13,8 +13,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -209,16 +209,16 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse championFollowedResponse) {
+                        return championFollowedResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -233,18 +233,13 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                            } else {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() + 1);
-                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
-                            }
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setFollowerCount(userSolrObj.getFollowingCount() + 1);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                            if (championFollowedResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
@@ -262,16 +257,16 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse championFollowedResponse) {
+                        return championFollowedResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -286,18 +281,13 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID && userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                            } else {
-                                if (userSolrObj.getUserFollowersCount() > 0) {
-                                    userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getUserFollowersCount() - 1);
-                                }
-                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            if (userSolrObj.getFollowerCount() > 0) {
+                                userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                         }

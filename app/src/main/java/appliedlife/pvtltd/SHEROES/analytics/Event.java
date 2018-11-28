@@ -125,6 +125,12 @@ public enum Event {
             return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
+    HELPLINE_RATEUS_CARD_CLICKED(AnalyticsEventType.HELPLINE_RATEUS, "Clicked"){
+        @Override
+        public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
+            return getAnalyticsProviderStatus(analyticsProvider);
+        }
+    },
     //endregion
 
     //region Challenge related events
@@ -156,10 +162,6 @@ public enum Event {
     //region friend related events
     FRIEND_INVITED(AnalyticsEventType.FRIEND, "Invited"),
     FRIEND_SEARCH(AnalyticsEventType.FRIEND, "Searched"),
-    //endregion
-
-    //region Organization related event
-    ORGANIZATION_UPVOTED(AnalyticsEventType.ORGANIZATION, "Upvoted"),
     //endregion
 
     // region User related events

@@ -15,8 +15,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -35,12 +33,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
+import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.EmailVerificationResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.ForgotPasswordResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -102,6 +99,7 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
+        mLoginPresenter.attachView(this);
         AppsFlyerLib.getInstance().setAndroidIdData(appUtils.getDeviceId());
         if (CommonUtil.getPrefValue(AppConstants.MALE_ERROR_SHARE_PREF)) {
             showMaleError("");
@@ -205,51 +203,60 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
                     branch.setRequestMetadata(CleverTapHelper.CLEVERTAP_ATTRIBUTION_ID,
                             CleverTapHelper.getCleverTapInstance(getApplicationContext()).getCleverTapAttributionIdentifier());
                 }
-                branch.initSession(new Branch.BranchReferralInitListener() {
-                    @Override
-                    public void onInitFinished(JSONObject sessionParams, BranchError error) {
-                        isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
-                        if (isBranchFirstSession) {
-                            if (sessionParams.has(BRANCH_DEEP_LINK)) {
-                                String deepLink;
-                                String branchLink;
-                                try {
-                                    deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
-                                    branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
-                                    if (StringUtil.isNotNullOrEmptyString(deepLink)) {
-                                        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
-                                        SharedPreferences.Editor editor = null;
-                                        if (prefs != null) {
-                                            editor = prefs.edit();
-                                            editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
-                                            editor.apply();
-                                        }
-                                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(LanguageSelectionActivity.this);
-                                        appInstallationHelper.setupAndSaveInstallation(false);
-                                        if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
-                                            deepLinkUrl = deepLink;
+                JSONObject sessionParams = branch.getLatestReferringParams();
+                if (sessionParams == null) {
+                    branch.initSession(new Branch.BranchReferralInitListener() {
+                        @Override
+                        public void onInitFinished(JSONObject sessionParams, BranchError error) {
+                            branchSessionData(sessionParams);
+                        }
+                    });
+                } else {
+                    branchSessionData(sessionParams);
+                }
+                setUpView();
+            }
+        }
+    }
 
-                                            if (mInstallUpdatePreference != null) {
-                                                AppStatus appStatus = mInstallUpdatePreference.get();
-                                                appStatus.setOnBoardingSkipped(true);
-                                                mInstallUpdatePreference.set(appStatus);
-                                            }
-                                        }
-                                    }
+    private void branchSessionData(JSONObject sessionParams) {
+        isBranchFirstSession = CommonUtil.deepLinkingRedirection(sessionParams);
+        if (isBranchFirstSession) {
+            if (sessionParams.has(BRANCH_DEEP_LINK)) {
+                String deepLink;
+                String branchLink;
+                try {
+                    deepLink = sessionParams.getString(BRANCH_DEEP_LINK);
+                    branchLink = sessionParams.getString(BRANCH_REFERRER_LINK);
+                    if (StringUtil.isNotNullOrEmptyString(deepLink)) {
+                        SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+                        SharedPreferences.Editor editor = null;
+                        if (prefs != null) {
+                            editor = prefs.edit();
+                            editor.putString(AppConstants.REFERRER_BRANCH_LINK_URL, branchLink);
+                            editor.apply();
+                        }
+                        AppInstallationHelper appInstallationHelper = new AppInstallationHelper(LanguageSelectionActivity.this);
+                        appInstallationHelper.setupAndSaveInstallation(false);
+                        if (deepLink.contains("sheroes") && deepLink.contains("/communities")) {  //Currently it allows only community
+                            deepLinkUrl = deepLink;
 
-                                    if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
-                                        defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
-                                    }
-                                } catch (JSONException e) {
-                                    deepLinkUrl = null;
-                                    defaultTab = null;
-                                    isBranchFirstSession = false;
-                                }
+                            if (mInstallUpdatePreference != null) {
+                                AppStatus appStatus = mInstallUpdatePreference.get();
+                                appStatus.setOnBoardingSkipped(true);
+                                mInstallUpdatePreference.set(appStatus);
                             }
                         }
-                        setUpView();
                     }
-                });
+
+                    if (sessionParams.has(CommunityDetailActivity.TAB_KEY)) {
+                        defaultTab = sessionParams.getString(CommunityDetailActivity.TAB_KEY);
+                    }
+                } catch (JSONException e) {
+                    deepLinkUrl = null;
+                    defaultTab = null;
+                    isBranchFirstSession = false;
+                }
             }
         }
     }

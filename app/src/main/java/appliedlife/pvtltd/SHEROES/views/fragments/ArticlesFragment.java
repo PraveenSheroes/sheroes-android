@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -100,14 +99,14 @@ public class ArticlesFragment extends BaseFragment {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                if(null!=getActivity())
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+                if (null != getActivity())
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
-                if(null!=getActivity())
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                if (null != getActivity())
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -115,17 +114,18 @@ public class ArticlesFragment extends BaseFragment {
 
             }
         });
-        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mFragmentListRefreshData.setCategoryIdList(categoryIdList);
         categoryArticleFilter(categoryIdList);
+
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 categoryArticleFilter(categoryIdList);
             }
         });
-        if(null!=getActivity()) {
+        if (null != getActivity()) {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
@@ -141,7 +141,7 @@ public class ArticlesFragment extends BaseFragment {
         mTrendingFeedDetail.clear();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
+        FeedRequestPojo feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
     }
@@ -204,10 +204,10 @@ public class ArticlesFragment extends BaseFragment {
                 }
                 mPullRefreshList.allListData(trendingWithNormalArticleList);
                 mFragmentListRefreshData.setPageNo(++mPageNo);
-                List<FeedDetail> data=null;
-                FeedDetail feedProgressBar=new FeedDetail();
+                List<FeedDetail> data = null;
+                FeedDetail feedProgressBar = new FeedDetail();
                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-                data=mPullRefreshList.getFeedResponses();
+                data = mPullRefreshList.getFeedResponses();
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
                 mAdapter.notifyDataSetChanged();
@@ -223,21 +223,20 @@ public class ArticlesFragment extends BaseFragment {
                 }
                 mPullRefreshList.allListData(newFeedDetailList);
                 mFragmentListRefreshData.setPageNo(++mPageNo);
-                List<FeedDetail> data=null;
-                FeedDetail feedProgressBar=new FeedDetail();
+                List<FeedDetail> data = null;
+                FeedDetail feedProgressBar = new FeedDetail();
                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-                data=mPullRefreshList.getFeedResponses();
-                int position=data.size()- newFeedDetailList.size();
-                if(position>0) {
-                    data.remove(position-1);
+                data = mPullRefreshList.getFeedResponses();
+                int position = data.size() - newFeedDetailList.size();
+                if (position > 0) {
+                    data.remove(position - 1);
                 }
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
                 if (mPageNo == AppConstants.TWO_CONSTANT) {
                     mAdapter.notifyDataSetChanged();
-                }else
-                {
-                    mAdapter.notifyItemRangeChanged(position+1, newFeedDetailList.size());
+                } else {
+                    mAdapter.notifyItemRangeChanged(position + 1, newFeedDetailList.size());
                 }
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
@@ -285,5 +284,4 @@ public class ArticlesFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
-
 }

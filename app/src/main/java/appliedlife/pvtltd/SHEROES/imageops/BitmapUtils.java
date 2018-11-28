@@ -22,7 +22,6 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.support.media.ExifInterface;
-import android.util.Log;
 import android.util.Pair;
 
 import java.io.Closeable;
@@ -37,6 +36,8 @@ import javax.microedition.khronos.egl.EGL10;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
+
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Utility class that deals with operations with an ImageView.
@@ -61,16 +62,14 @@ final class BitmapUtils {
      * Reusable point for general internal usage
      */
     static final float[] POINTS2 = new float[6];
-
-    /**
-     * Used to know the max texture size allowed to be rendered
-     */
-    private static int mMaxTextureSize;
-
     /**
      * used to save bitmaps during state save and restore so not to reload them.
      */
     static Pair<String, WeakReference<Bitmap>> mStateBitmap;
+    /**
+     * Used to know the max texture size allowed to be rendered
+     */
+    private static int mMaxTextureSize;
 
     /**
      * Rotate the given image by reading the Exif value of the image (uri).<br>
@@ -337,7 +336,7 @@ final class BitmapUtils {
             }
             return uri;
         } catch (Exception e) {
-            Log.w("AIC", "Failed to write bitmap to temp file for image-cropper save instance state", e);
+            LogUtils.error("AIC", "Failed to write bitmap to temp file for image-cropper save instance state", e);
             return null;
         }
     }
@@ -383,7 +382,7 @@ final class BitmapUtils {
                 }
             }
         } catch (Exception e) {
-            Log.w("AIC", "Failed to resize cropped image, return bitmap before resize", e);
+            LogUtils.error("AIC", "Failed to resize cropped image, return bitmap before resize", e);
         }
         return bitmap;
     }
@@ -393,8 +392,8 @@ final class BitmapUtils {
     /**
      * Crop image bitmap from URI by decoding it with specific width and height to down-sample if required.
      *
-     * @param orgWidth used to get rectangle from points (handle edge cases to limit rectangle)
-     * @param orgHeight used to get rectangle from points (handle edge cases to limit rectangle)
+     * @param orgWidth    used to get rectangle from points (handle edge cases to limit rectangle)
+     * @param orgHeight   used to get rectangle from points (handle edge cases to limit rectangle)
      * @param sampleMulti used to increase the sampling of the image to handle memory issues.
      */
     private static BitmapSampled cropBitmap(Context context, Uri loadedImageUri, float[] points, int degreesRotated,

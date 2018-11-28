@@ -599,17 +599,14 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
@@ -623,11 +620,6 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
 
         }
     }
-
-    private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
-    }
-
 
     //endregion
 

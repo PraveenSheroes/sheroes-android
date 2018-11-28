@@ -107,14 +107,14 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
 
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
-        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_CANCEL);
         }
     }
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
-        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_DONE);
         }
     }

@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,16 +28,11 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.OnBoardingEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingInterestJobSearch;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -66,7 +59,6 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
     private GenericRecyclerViewAdapter mAdapter;
     private Handler mHandler = new Handler();
     private String mMasterDataSkill = AppConstants.EMPTY_STRING;
-    OnBoardingEnum SEARCH_TYPE = null;
     @Inject
     AppUtils mAppUtils;
 
@@ -97,7 +89,6 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         if (null != getArguments()) {
             mMasterDataSkill = getArguments().getString(AppConstants.MASTER_SKILL);
-            SEARCH_TYPE = (OnBoardingEnum) getArguments().getSerializable(AppConstants.BOARDING_SEARCH);
         }
 
         if(mMasterDataSkill ==null) {
@@ -237,35 +228,6 @@ public class SearchProfileLocationDialogFragment extends BaseDialogFragment impl
             }
 
         }
-    }
-
-    @Override
-    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
-        if (null != getInterestJobResponse) {
-
-            List<BoardingInterestJobSearch> getAllDataDocuments = getInterestJobResponse.getGetBoardingInterestJobSearches();
-            if (StringUtil.isNotEmptyCollection(getAllDataDocuments)) {
-                switch (SEARCH_TYPE) {
-                    case INTEREST_SEARCH:
-                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
-                        mAdapter.setCallForRecycler(AppConstants.FEED_SUB_TYPE);
-                        break;
-                    case JOB_AT_SEARCH:
-                        mAdapter.setSheroesGenericListData(getAllDataDocuments);
-                        break;
-                    default:
-                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + SEARCH_TYPE);
-
-                }
-                mAdapter.notifyDataSetChanged();
-            }
-
-        }
-    }
-
-    @Override
-    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override

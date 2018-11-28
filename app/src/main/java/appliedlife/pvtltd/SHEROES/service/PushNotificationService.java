@@ -221,13 +221,11 @@ public class PushNotificationService extends FirebaseMessagingService {
         protected void onPostExecute(Bitmap result) {
             super.onPostExecute(result);
             try {
-
                 Uri url = Uri.parse(urlText);
                 mCount++;
 
                 NotificationManager notificationManager = (NotificationManager) PushNotificationService.this.getSystemService(Activity.NOTIFICATION_SERVICE);
-
-                String relatedChannelId =AppConstants.CLEVER_TAP_CHANNEL_ID;
+                String relatedChannelId = AppConstants.CLEVER_TAP_CHANNEL_ID;
                 CharSequence channelName = AppConstants.CLEVER_TAP_CHANNEL_NAME;
                 int importance = NotificationManagerCompat.IMPORTANCE_HIGH;
                 NotificationChannel notificationChannel = null;

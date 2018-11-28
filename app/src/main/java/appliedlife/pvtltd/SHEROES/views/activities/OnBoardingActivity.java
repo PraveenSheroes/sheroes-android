@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -31,7 +30,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -117,7 +115,6 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
                         } else {
                             ((OnBoardingFragment) fragment).joinRequestForOpenCommunity(communityFeedSolrObj);
                         }
-
                     }
                     break;
                 default:
@@ -128,27 +125,22 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     @Override
@@ -215,10 +207,7 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
             tvDescription.setText(Html.fromHtml(getString(R.string.ID_BOARDING_COMMUNITIES)));// or for older api
         }
         OnBoardingFragment onBoardingFragment = new OnBoardingFragment();
-        Bundle bundleArticle = new Bundle();
-        onBoardingFragment.setArguments(bundleArticle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fl_onboarding_fragment, onBoardingFragment, OnBoardingFragment.class.getName()).commitAllowingStateLoss();
-
+        addNewFragment(onBoardingFragment, R.id.fl_onboarding_fragment, OnBoardingFragment.class.getName(), null, false);
     }
 
     @OnClick(R.id.tv_on_boarding_finish)

@@ -3,13 +3,13 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFormatException;
 import android.support.v4.app.ActivityCompat;
 import android.util.Base64;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -33,17 +33,26 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INV
  */
 
 public class SheroesDeepLinkingActivity extends BaseActivity {
+    // region constants
     private static final String SCREEN_LABEL = "DeepLink Screen";
     public static final String OPEN_FRAGMENT = "Open Fragment";
     public static final int COMMUNITY_DEEP_LINK_URL_BACK_SLASH = 4;
+    // endregion
+
+    // region Inject
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    // endregion
+
+    // region member variables
     private Uri mData;
     private int mIndexOfBackSlaceInPostDeeplink;
     private int mFromNotification;
     private String mSource;
     private Intent mIntent;
-    @Inject
-    Preference<LoginResponse> mUserPreference;
+    // endregion
 
+    // region public and lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,19 +60,16 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     }
 
     private void logout() {
-        Intent intent = new Intent(this, WelcomeActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
+        Intent intent = new Intent(this, LanguageSelectionActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
         try {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                 callDeepLinkingData();
             } else {
                 logout();
@@ -74,17 +80,16 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
 
     }
+    // endregion
 
+    // region protected methods
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
     }
 
-    private void callDeepLinkingData() throws URISyntaxException {
-        String notificationId = "";
-        String url = "";
+    private void callDeepLinkingData() throws ParcelFormatException {
         String deepLink = "";
-
         if (null != getIntent()) {
             Intent intent = getIntent();
             mIntent = intent;
@@ -102,7 +107,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     openPostActivity(intent);
                 } else if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
-                    notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
                     String trimUrl = CommonUtil.trimBranchIdQuery(deepLink.toString());
                     getDeeplinkUrlFromNotification(trimUrl, intent);
                 }
@@ -299,26 +303,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             openCommunityPostPollDeepLink(urlSharedViaSocial, baseUrl, sourceIntent);
-        } else if (AppConstants.EVENT_URL.equalsIgnoreCase(baseUrl) || AppConstants.EVENT_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.EVENT_URL.length() < fullLength) {
-            try {
-                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
-                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
-                byte[] id1 = Base64.decode(id, Base64.DEFAULT);
-                dataIdString = new String(id1, AppConstants.UTF_8);
-                dataIdString = dataIdString.replaceAll("\\D+", "");
-                Intent eventDetail = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
-                eventDetail.putExtra(AppConstants.EVENT_ID, Long.parseLong(dataIdString));
-                //  eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                eventDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                eventDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
-                eventDetail.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                addShareLink(sourceIntent, eventDetail);
-                startActivity(eventDetail);
-                finish();
-            } catch (Exception e) {
-                Crashlytics.getInstance().core.logException(e);
-                homeActivityCall("");
-            }
         } else if (AppConstants.CHAMPION_URL.equalsIgnoreCase(baseUrl) || AppConstants.CHAMPION_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.CHAMPION_URL.length() < fullLength) {
             try {
                 int champId = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
@@ -331,7 +315,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, true);
+                intent.putExtra(AppConstants.IS_CHAMPION_ID, true);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
                 finish();
@@ -362,7 +346,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
+                intent.putExtra(AppConstants.IS_CHAMPION_ID, AppConstants.FROM_PUSH_NOTIFICATION);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
 
@@ -389,7 +373,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
             finish();
         }
-
     }
 
     private void showUserProfile(boolean isWriteStory, Intent sourceIntent) {
@@ -402,7 +385,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
             Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);
             intent.putExtra(AppConstants.CHAMPION_ID, userId);
-            intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+            intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
             intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
             intent.putExtra(BaseActivity.STORIES_TAB, isWriteStory);
             intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
@@ -537,7 +520,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
 
     private void homeActivityCall(String fragmentName) {
         Intent into = new Intent(this, HomeActivity.class);
-        // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
         into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);

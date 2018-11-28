@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.parceler.Parcel;
@@ -195,7 +194,7 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     private boolean isAuthorMentor;
 
     @SerializedName(value = "solr_ignore_mentor_deep_link_url")
-    private String mentorDeepLinkUrl;
+    private String championDeepLinkUrl;
 
     @SerializedName(value = "blog_link_s")
     private String blogLinkUrl;
@@ -762,12 +761,12 @@ public class FeedDetail extends BaseResponse implements Cloneable{
         isAuthorMentor = authorMentor;
     }
 
-    public String getMentorDeepLinkUrl() {
-        return mentorDeepLinkUrl;
+    public String getChampionDeepLinkUrl() {
+        return championDeepLinkUrl;
     }
 
-    public void setMentorDeepLinkUrl(String mentorDeepLinkUrl) {
-        this.mentorDeepLinkUrl = mentorDeepLinkUrl;
+    public void setChampionDeepLinkUrl(String championDeepLinkUrl) {
+        this.championDeepLinkUrl = championDeepLinkUrl;
     }
 
     public String getBlogLinkUrl() {

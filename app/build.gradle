@@ -1,6 +1,6 @@
 def versionMajor = 7
 def versionMinor = 1
-def versionPatch = 0
+def versionPatch = 3
 def versionBuild = 0 // bump for dogfood builds, public betas, etc.
 
 apply plugin: 'com.android.application'
@@ -91,6 +91,7 @@ android {
             // buildConfigField "String", "BASE_URL","\"http://testserviceswork.sheroes.in/\""
             //  buildConfigField "String", "BASE_URL", "\"https://testservicesplay.sheroes.in/\""
             //buildConfigField "String", "BASE_URL", "\"https://testservicesconf.sheroes.in/\""
+            //buildConfigField "String", "BASE_URL", "\"http://testservicesmasp.sheroes.in/\""
 
             /**
              * Release server

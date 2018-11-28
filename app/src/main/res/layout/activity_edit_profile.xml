@@ -44,7 +44,7 @@
                     android:layout_marginTop="@dimen/dp_size_16" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    android:id="@+id/iv_mentor_verified"
+                    android:id="@+id/iv_champion_verified"
                     style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -223,7 +223,7 @@
                 android:paddingStart="@dimen/dp_size_16">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    style="@style/TextView14spBold"
+                    style="@style/TextView14spMediumBold"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/dp_size_3"
@@ -365,7 +365,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontButton
         android:id="@+id/btn_personal_basic_details_save"
-        style="@style/TextView14spBold"
+        style="@style/TextView14spMediumBold"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_size_40"
         android:layout_alignParentBottom="true"

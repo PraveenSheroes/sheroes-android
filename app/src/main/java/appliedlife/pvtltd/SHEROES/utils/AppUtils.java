@@ -41,7 +41,7 @@ import java.util.regex.Pattern;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.article.ArticleSubmissionRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -55,7 +55,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.RemoveMemberRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.SelectCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.community.WinnerRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -63,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineGetChatThreadRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostQuestionRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplinePostRatingRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.home.NotificationReadCount;
 import appliedlife.pvtltd.SHEROES.models.entities.imageUpload.UploadImageRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.like.LikeRequestPojo;
@@ -76,12 +76,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
 import appliedlife.pvtltd.SHEROES.models.entities.postdelete.DeleteCommunityPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileTopCountRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileUsersCommunityRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import okhttp3.MediaType;
@@ -518,19 +518,6 @@ public class AppUtils {
         followersFollowingRequest.setIsUser(is_user);
         followersFollowingRequest.setPageSize(AppConstants.PAGE_SIZE);
         return followersFollowingRequest;
-    }
-
-    public ProfileTopCountRequest profileTopSectionCount(long id) {
-        AppUtils appUtils = AppUtils.getInstance();
-        ProfileTopCountRequest profileTopCountRequest = new ProfileTopCountRequest();
-        profileTopCountRequest.setPageNo(AppConstants.ONE_CONSTANT);
-        profileTopCountRequest.setAppVersion(appUtils.getAppVersionName());
-        profileTopCountRequest.setUserId(id);
-        profileTopCountRequest.setMentorId(id);
-        profileTopCountRequest.setUsersFollower(true);
-        profileTopCountRequest.setUsersFollowing(true);
-        profileTopCountRequest.setPageSize(AppConstants.PAGE_SIZE);
-        return profileTopCountRequest;
     }
 
     public FeedRequestPojo articleCategoryRequestBuilder(String typeOfFeed, int pageNo, List<Long> categoryIds) {
@@ -982,16 +969,6 @@ public class AppUtils {
         return approveSpamPostRequest;
     }
 
-    public SelectCommunityRequest selectCommunityRequestBuilder() {
-        AppUtils appUtils = AppUtils.getInstance();
-        SelectCommunityRequest selectCommunityRequest = new SelectCommunityRequest();
-        selectCommunityRequest.setAppVersion(appUtils.getAppVersionName());
-        selectCommunityRequest.setCloudMessagingId(appUtils.getCloudMessaging());
-        selectCommunityRequest.setDeviceUniqueId(appUtils.getDeviceId());
-        selectCommunityRequest.setMasterDataType(AppConstants.JOB_AT_GET_ALL_DATA_KEY);
-        return selectCommunityRequest;
-    }
-
     public BookmarkRequestPojo bookMarkRequestBuilder(long entityId) {
         AppUtils appUtils = AppUtils.getInstance();
         BookmarkRequestPojo bookmarkRequestPojo = new BookmarkRequestPojo();
@@ -1185,5 +1162,19 @@ public class AppUtils {
         uploadImageRequest.images = new ArrayList<>();
         uploadImageRequest.images.add(encodedImage);
         return uploadImageRequest;
+    }
+
+    public LanguageUpdateRequest updateSelectedLanguageRequestBuilder(String language, Long userId) {
+        LanguageUpdateRequest languageUpdateRequest = new LanguageUpdateRequest();
+        languageUpdateRequest.language = language;
+        languageUpdateRequest.userId = userId;
+        return languageUpdateRequest;
+    }
+
+    public HelplinePostRatingRequest helpLinePostRatingRequestBuilder(boolean isRating, int answerId) {
+        HelplinePostRatingRequest helplinePostRatingRequest = new HelplinePostRatingRequest();
+        helplinePostRatingRequest.setRating(isRating);
+        helplinePostRatingRequest.setAnswerId(answerId);
+        return helplinePostRatingRequest;
     }
 }

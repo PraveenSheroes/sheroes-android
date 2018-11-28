@@ -18,7 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationDr
 import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationItems;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
@@ -31,7 +31,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
  * Created by ravi on 01/12/17.
  */
 
-public class MainActivityPresenter extends BasePresenter<MainActivityNavDrawerView> {
+public class MainActivityPresenter extends BasePresenter<INavDrawerCallback> {
     SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi sheroesAppServiceApi;
 

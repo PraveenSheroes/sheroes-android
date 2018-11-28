@@ -181,7 +181,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         this.mPostDetailCallback = postDetailCallBack;
         ButterKnife.bind(this, itemView);
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
-        if (null != userPreference && userPreference.isSet() && null != userPreference.get() && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet()&& null != userPreference.get().getUserSummary()) {
             mUserId = userPreference.get().getUserSummary().getUserId();
             if (null != userPreference.get().getUserSummary().getUserBO()) {
                 mAdminId = userPreference.get().getUserSummary().getUserBO().getUserTypeId();
@@ -202,7 +202,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
         mUserPostObj.setItemPosition(position);
         normalCommunityPostUi(mUserId, mAdminId);
         displayFollowUnFollowButton();
-
         if (mUserPostObj.isSpamPost()) {
             handlingSpamUi(mUserId, mAdminId);
         } else {
@@ -911,8 +910,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
 
         mPostDescription.setMovementMethod(LinkMovementMethod.getInstance());
         mPostDescription.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
-
-        // tvMention.setSelected(true);
     }
 
 }

@@ -430,7 +430,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 }
 
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
-                    userSummary.getUserBO().setEmailid(userDetails.getEmailid());
+                    userSummary.getUserBO().setEmailId(userDetails.getEmailid());
                 }
 
                 String relationshipStatus = userDetails.getMaritalStatus();
@@ -451,7 +451,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
 
                 //Save image
-                userSummary.getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
                 userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
                 userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
 
@@ -511,27 +510,22 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     private void dataOnClickForCardItem(View view, BaseResponse baseResponse) {
@@ -937,7 +931,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
                         profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
                         //Save image
-                        userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.set(userDetailsResponse);

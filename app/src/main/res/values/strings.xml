@@ -63,9 +63,6 @@
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;View More</string>
     <string name="ID_JOIN">Join</string>
-    <string name="ID_INTERESTED">Interested</string>
-    <string name="ID_GOING">Going</string>
-    <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_VIEW">View</string>
     <string name="ID_VIEWS">Views</string>
@@ -74,7 +71,6 @@
     <string name="ID_LIKE">Like</string>
     <string name="comment">Comment</string>
     <string name="ID_PROFILE">About</string>
-    <string name="ID_PROFILE_POST">Profile Post Screen</string>
     <string name="ID_ARTICLE">Articles</string>
     <string name="ID_POST">Post as:</string>
     <string name="ID_POSTED">posted</string>
@@ -123,6 +119,7 @@
 
     <!-- String related to setting_feedback page-->
     <string name="ID_ASK_QUESTION">Ask a Question</string>
+    <string name="HELPLINE_ASK_QUESTION_HINT">Type your question…</string>
     <string name="ID_SUBMIT">SUBMIT</string>
     <string name="follow_user">Follow</string>
     <string name="following_user">Following</string>
@@ -153,7 +150,7 @@
     <string name="ID_WELCOME_FIRST"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    Ask questions and discuss about <span style="font-weight: bold"><b>health, career, relationships</b></span> and more&#8230
+                                                    Ask questions and discuss about <span style="font-weight: bold"><b>health, career</b></span> etc on Ask SHEROES Helpline&#8230
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
@@ -192,8 +189,6 @@
         <item>Other</item>
     </string-array>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
-    <string name="ID_SPEAKER">Speaker</string>
-    <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
     <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
     <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>
@@ -375,7 +370,6 @@
     <string name="ID_MENTOR">Champions</string>
     <string name="empty_mentor_text">No champions yet!</string>
     <string name="ID_MENTOR_POST">Posts</string>
-    <string name="ID_MENTOR_Q_A">Q &amp; A</string>
     <string name="ID_ASKING">asking</string>
     <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
     <string name="ID_ANSWERED_QUESTIONS">answered questions</string>
@@ -386,11 +380,13 @@
     <string name="ID_FOLLOWER_VISITOR">Followers in last 7 days</string>
     <string name="ID_POSTS">Posts created in last 7 days</string>
     <string name="ID_QUESTIONS">Questions in last 7 days</string>
-    <string name="ID_ANSWERS">Answered questions in last 7 days</string>
-    <string name="ID_ANSWER_QUESTION">Answer questions</string>
-    <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
     <string name="private_information">Private Information (Only Visible to You)</string>
-    <string name="ID_LOGIN_MSG">Email login is only for existing users. New users should login via Facebook or Google only.</string>
+    <string name="ID_LOGIN_MSG"><![CDATA[ <html><body> <div style="text-align: center;margin: 0px 0px 5px 0px;">Email login is
+                                                    <span style="color:#3C3C3C;"><b>only for existing users.</b> </span>
+                                                    New users should login via Facebook or Google only.
+                                                    </div>
+                                                    </body>
+                                                    </html>  ]]></string>
     <string name="ID_GOT"> Got it!</string>
     <string name="ID_SHOW_CASE_CREATE_POST_TITLE">Need help with a problem?</string>
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">Ask a question and get it answered by experts &amp; experienced women.</string>
@@ -672,4 +668,11 @@
     <string name="load_more_comments">Load more comments</string>
     <string name="contact_not_on_whats">This contact is not on Whatsapp</string>
     <string name="this_user">This User</string>
+    <string name="helpline_rateus_title">Enjoyed chatting with SHEROES counselor? </string>
+    <string name="helpline_rateus_body"> Would you mind taking a moment to rate us ?\n It won’t take more than a minute.\n Thanks for your support !</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="not_now">Not Now</string>
+    <string name="helpline_title">Ask SHEROES Helpline</string>
+
+
 </resources>

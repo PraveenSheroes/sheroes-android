@@ -39,8 +39,6 @@
 
     <!--Fragment classes-->
     <string name="ID_COMMUNITIES">समुदाय</string>
-    <string name="ID_PEOPLE_INTERESTED">people are interested</string>
-    <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">सूचनाएं</string>
     <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
     <string name="follower_toolbar_title">मेरे फॉलोवर्स</string>
@@ -63,9 +61,6 @@
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
     <string name="ID_JOIN">जुड़ें</string>
-    <string name="ID_INTERESTED">Interested</string>
-    <string name="ID_GOING">Going</string>
-    <string name="ID_REQUESTED">अनुरोध किया</string>
     <string name="ID_JOINED">जुड़ गए</string>
     <string name="ID_VIEW">देखें</string>
     <string name="ID_VIEWS">ने देखा</string>
@@ -74,7 +69,6 @@
     <string name="ID_LIKE">लाइक</string>
     <string name="comment">कमेंट</string>
     <string name="ID_PROFILE">परिचय</string>
-    <string name="ID_PROFILE_POST">प्रोफाइल पोस्ट स्क्रीन</string>
     <string name="ID_ARTICLE">लेख</string>
     <string name="ID_POST">कमेंट इस रूप में करें:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
@@ -94,7 +88,6 @@
     <string name="banned_user_device">यूज़र डिवाइस पर प्रतिबंध लगाओ</string>
     <string name="ID_NO_RESULT_FOUND">कोई परिणाम नहीं मिला, दोबारा क्लिक करें</string>
     <string name="ID_NO_POST">कोई पोस्ट नहीं है</string>
-    <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">गुमनाम</string>
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
@@ -122,7 +115,8 @@
     <string name="ID_CLOSE">बंद हो गया</string>
 
     <!-- String related to setting_feedback page-->
-    <string name="ID_ASK_QUESTION">सवाल पूछें</string>
+    <string name="HELPLINE_ASK_QUESTION_HINT">अपना सवाल लिखें…</string>
+    <string name="ID_ASK_QUESTION">अपना सवाल लिखें</string>
     <string name="ID_SUBMIT">जमा करें</string>
     <string name="follow_user">फॉलो</string>
     <string name="following_user">फॉलोइंग</string>
@@ -155,7 +149,7 @@
     <string name="ID_WELCOME_FIRST"> <![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर, रिश्तों </b></span> और अधिक के बारे में चर्चा करें और सवाल पूछें&#8230;
+                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर </b></span> आदि के बारे में SHEROES हेल्पलाइन पर चर्चा करें और सवाल पूंछें&#8230;
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
@@ -194,9 +188,6 @@
         <item>विधवा</item>
         <item>अन्य</item>
     </string-array>
-    <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
-    <string name="ID_SPEAKER">Speaker</string>
-    <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">SHEROES फीड में आपका स्वागत है</string>
     <string name="ID_CIRCLE_SUPPORT">आपकी महिला साथियों का समूह</string>
     <string name="ID_ONCE_CARD_DETAIL1">प्रभावशाली महिलाओं के साथ जुड़ें , नेटवर्क बनाएं और हैंगऑउट करें</string>
@@ -375,7 +366,6 @@
     <string name="ID_MENTOR">चैंपियंस</string>
     <string name="empty_mentor_text">अभी तक कोई चैंपियन नहीं है!</string>
     <string name="ID_MENTOR_POST">पोस्ट्स</string>
-    <string name="ID_MENTOR_Q_A">प्र• और उ•</string>
     <string name="ID_ASKING">पूछ रहा है</string>
     <string name="ID_WHAT_IS_QUESTION">आपका क्या सवाल है?</string>
     <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
@@ -386,11 +376,13 @@
     <string name="ID_FOLLOWER_VISITOR">पिछले 7 दिनों में फॉलोवर्स</string>
     <string name="ID_POSTS">पिछले 7 दिनों में बनाए गए पोस्ट्स</string>
     <string name="ID_QUESTIONS">पिछले 7 दिनों में प्रश्न</string>
-    <string name="ID_ANSWERS">पिछले 7 दिनों में उत्तर दिए गए प्रश्न</string>
-    <string name="ID_ANSWER_QUESTION">सवालों के जवाब दें</string>
-    <string name="ID_START_ANSWER_QUESTION">सवालों का जवाब देना शुरू करें</string>
     <string name="private_information">निजी जानकारी (केवल आपको दिखेगी)</string>
-    <string name="ID_LOGIN_MSG">ईमेल लॉगिन केवल मौजूदा यूज़र्स के लिए है। नए यूज़र्स को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।</string>
+    <string name="ID_LOGIN_MSG"><![CDATA[ <html><body> <div style="text-align: center;margin: 0px 0px 5px 0px;">ईमेल लॉगिन
+                                                    <span style="color:#3C3C3C;"><b>केवल मौजूदा यूज़र्स</b> </span>
+                                                    के लिए है। नए यूज़र्स को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।
+                                                    </div>
+                                                    </body>
+                                                    </html>  ]]></string>
     <string name="ID_GOT">समझ गए !</string>
     <string name="ID_SHOW_CASE_CREATE_POST_TITLE">किसी प्रकार की मदद चाहिए?</string>
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">अपने सवाल पूँछे और विशेषज्ञों व अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
@@ -672,4 +664,9 @@
     <string name="load_more_comments">अधिक कमेंट्स लोड करें</string>
     <string name="contact_not_on_whats">यह कॉन्टेक्ट व्हाट्सएप पर नहीं है</string>
     <string name="this_user">आप</string>
+    <string name="helpline_rateus_body">महिलाओं की सेवा करना हमारा उद्देश्य है। क्या आप हमें 5-स्टार रेटिंग देकर सभी महिलाओं का सहयोग करना चाहती हैं? \n एक मिनट से ज़्यादा समय नहीं लगेगा। \n सपोर्ट करने के लिए धन्यवाद!</string>
+    <string name="rate_us">सहयोग दें :)</string>
+    <string name="not_now">नहीं देना :(</string>
+    <string name="helpline_title">SHEROES हेल्पलाइन</string>
+    <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
 </resources>

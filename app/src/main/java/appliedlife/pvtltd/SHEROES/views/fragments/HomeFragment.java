@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
@@ -26,7 +25,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -67,7 +65,7 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-        mDefaultTabKey=getString(R.string.my_feed);
+        mDefaultTabKey = getString(R.string.my_feed);
         initializeHomeViews();
         return view;
     }
@@ -165,7 +163,7 @@ public class HomeFragment extends BaseFragment {
             if (name.equalsIgnoreCase(getString(R.string.my_feed))) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream");
+                bundle.putString(AppConstants.END_POINT_URL, AppConstants.MY_FEED_POST_STREAM);
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, true);
                 bundle.putString(AppConstants.SCREEN_NAME, FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
@@ -176,11 +174,11 @@ public class HomeFragment extends BaseFragment {
             if (name.equalsIgnoreCase(getString(R.string.ID_TRENDING))) {
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
+                bundle.putString(AppConstants.END_POINT_URL, AppConstants.TRENDING_POST_STREAM);
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
                 bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
                 feedFragment.setArguments(bundle);
-                mFragmentAdapter.addFragment(feedFragment,getString(R.string.ID_TRENDING));
+                mFragmentAdapter.addFragment(feedFragment, getString(R.string.ID_TRENDING));
                 mTabFragments.add(feedFragment);
             }
         }
