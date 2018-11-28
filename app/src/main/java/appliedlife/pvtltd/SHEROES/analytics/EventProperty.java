@@ -57,7 +57,7 @@ public enum EventProperty {
     STREAM_TYPE("Stream Type"),
     SOURCE_COLLECTION_NAME("Source Collection Name"),
     POSITION_OF_CAROUSEL("Position Of Carousel"),
-    POST_COMMENT_ID("Post / Comment ID"),
+    POST_COMMENT_ID("Post or Comment ID"),
     TAGGED_IN("Tagged In"),
     TAGGED_USER_ID("Tagged User ID"),
     CURRENT_VERSION("Current Version"),
