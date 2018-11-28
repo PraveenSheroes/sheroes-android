@@ -107,6 +107,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
@@ -353,4 +354,7 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_user_preference")
     Observable<BaseResponse> updateSelectedLanguage(@Body LanguageUpdateRequest languageUpdateRequest);
+
+    @GET("participant/search/")
+    Observable<FeedResponsePojo> searchQuery(@Query("search_text") String param1, @Query("search_category") String param2, @Query("start") String pagestart, @Query("page_size") String pagesize);
 }

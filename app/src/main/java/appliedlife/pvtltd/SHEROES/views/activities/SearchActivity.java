@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -35,6 +37,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HashTagFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ISearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
@@ -49,6 +52,8 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
     ViewPager mSearchTabsPager;
     @Bind(R.id.tabLayout)
     TabLayout mSearchTabsLayout;
+    @Bind(R.id.et_search)
+    EditText mETSearch;
     private SearchActivity.SearchPagerAdapter mSearchFragmentAdapter;
     private List<Fragment> mSearchTabFragments = new ArrayList<>();
     private List<String> mSearchTabs = new ArrayList<>();
@@ -181,6 +186,21 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
 
     }
 
+    @OnClick(R.id.iv_search_icon)
+    public void searchProceed() {
+        mSearchPresenter.searchQuery(mETSearch.getText().toString(), "posts");
+    }
+
+    @Override
+    public void onSearchRespose(FeedResponsePojo feedResponsePojo) {
+        int index = mSearchTabsPager.getCurrentItem();
+        SearchPagerAdapter adapter = ((SearchPagerAdapter)mSearchTabsPager.getAdapter());
+        Fragment fragment = adapter.getFragment(index);
+        if (fragment instanceof FeedFragment) {
+            ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+        }
+    }
+
     public class SearchPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mSearchFragments = new ArrayList<>();
         private final List<String> mSearchFragmentTitles = new ArrayList<>();
@@ -192,6 +212,10 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
         public void addFragment(Fragment fragment, String title) {
             mSearchFragments.add(fragment);
             mSearchFragmentTitles.add(title);
+        }
+
+        public Fragment getFragment(int key) {
+            return mSearchFragments.get(key);
         }
 
         @Override
