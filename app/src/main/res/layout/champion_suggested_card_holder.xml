@@ -26,14 +26,14 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/icon"
+                    style="@style/TextView14spMediumBold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextView14spMediumBold"
-                    android:layout_marginEnd="@dimen/dp_size_16"
-                    android:layout_marginLeft="@dimen/dp_size_16"
-                    android:layout_marginRight="@dimen/dp_size_16"
                     android:layout_marginStart="@dimen/dp_size_16"
+                    android:layout_marginLeft="@dimen/dp_size_16"
                     android:layout_marginTop="@dimen/dp_size_16"
+                    android:layout_marginEnd="@dimen/dp_size_16"
+                    android:layout_marginRight="@dimen/dp_size_16"
                     android:gravity="center"
                     android:letterSpacing="0.07"
                     android:padding="@dimen/dp_size_2"
@@ -41,19 +41,19 @@
                     android:textAllCaps="true"
                     android:textColor="@color/footer_icon_text"
                     tools:text="@string/more"
-                    vernacular:customTextFontFamily="@string/medium_font"/>
+                    vernacular:customTextFontFamily="@string/medium_font" />
             </FrameLayout>
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/title"
+                style="@style/TextView16spRegular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextView16spRegular"
-                android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginStart="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="16dp"
-                android:layout_toLeftOf="@id/icon_container"
                 android:layout_toStartOf="@id/icon_container"
+                android:layout_toLeftOf="@id/icon_container"
                 android:letterSpacing="0.04"
                 android:text="@string/ID_GET_EXPERT_ADVICE"
                 android:textColor="#3c3c3c"
@@ -65,14 +65,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title"
-                android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginStart="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_16"
                 android:layout_marginTop="@dimen/dp_size_4"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:textColor="@color/gray_light"
-                vernacular:customTextFontFamily="@string/regular_font"
-                tools:text="@string/top_communities_text" />
+                tools:text="@string/top_communities_text"
+                vernacular:customTextFontFamily="@string/regular_font" />
 
         </RelativeLayout>
 
@@ -80,7 +80,7 @@
             android:id="@+id/rv_suggested_mentor_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/top_section"
+            android:layout_below="@+id/top_section"
             android:divider="@color/fully_transparent"
             android:padding="@dimen/dp_size_8" />
     </RelativeLayout>

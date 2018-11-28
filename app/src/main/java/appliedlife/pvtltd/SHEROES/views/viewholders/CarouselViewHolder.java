@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Parcelable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseArray;
@@ -113,10 +114,9 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         List<FeedDetail> list = item.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(list)) {
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
-            mRecyclerView.setLayoutManager(mLayoutManager);
+            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
+            mRecyclerView.setLayoutManager(gridLayoutManager);
             mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setData(item.getFeedDetails());
             for (int i = 0; i < list.size(); i++) {
