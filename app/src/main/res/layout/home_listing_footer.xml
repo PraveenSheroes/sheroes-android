@@ -12,35 +12,35 @@
         android:background="@drawable/rectangle_grey_round_corner"
         android:elevation="@dimen/dp_size_5"
         android:orientation="horizontal"
-        android:weightSum="1">
+        android:weightSum="1.5">
 
 
         <ImageView
             android:id="@+id/tv_home"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="48dp"
-            android:background="@drawable/vector_home_selected_icon"
-            android:gravity="bottom|center_horizontal" />
+            android:layout_weight="0.5"
+            android:src="@drawable/vector_home_selected_icon"
+            />
 
         <ImageView
             android:id="@+id/tv_search"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
             android:layout_gravity="center"
-            android:layout_marginLeft="97dp"
-            android:background="@drawable/vector_home_selected_icon"
-            android:gravity="bottom|center_horizontal" />
+            android:src="@drawable/vector_search"
+            />
 
         <ImageView
             android:id="@+id/tv_communities"
-            android:layout_width="24dp"
+            android:layout_width="0dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="100dp"
-            android:background="@drawable/vector_community_unselected_icon"
-            android:gravity="bottom|center_horizontal" />
+            android:layout_weight="0.5"
+            android:src="@drawable/vector_community_unselected_icon"
+            />
 
     </LinearLayout>
 </FrameLayout>

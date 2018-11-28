@@ -669,4 +669,5 @@
     <string name="not_now">नहीं देना :(</string>
     <string name="helpline_title">SHEROES हेल्पलाइन</string>
     <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
+    <string name="search_hint_text">पोस्ट, समुदायों और hastags द्वारा खोजें</string>
 </resources>

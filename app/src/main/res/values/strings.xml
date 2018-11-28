@@ -677,6 +677,7 @@
     <string name="rate_us">Rate Us</string>
     <string name="not_now">Not Now</string>
     <string name="helpline_title">Ask SHEROES Helpline</string>
+    <string name="search_hint_text">Search by posts, communities &amp; hastags</string>
 
 
 </resources>

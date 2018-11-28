@@ -53,10 +53,10 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
     private List<Fragment> mSearchTabFragments = new ArrayList<>();
     private List<String> mSearchTabs = new ArrayList<>();
     private int[] tabIcons = {
-            R.drawable.vector_video_play_icon,
-            R.drawable.vector_community_search,
-            R.drawable.vector_add,
-            R.drawable.vector_comment_icon
+            R.drawable.search_tab_top,
+            R.drawable.search_tab_communities,
+            R.drawable.search_tab_hashtag,
+            R.drawable.search_tab_articles
     };
 
     @Override
@@ -106,9 +106,15 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
         mSearchTabs.add(getString(R.string.article));
         setupViewPager(mSearchTabsPager);
         setupTabLayout();
+        setupTabIcons();
     }
 
-
+    private void setupTabIcons() {
+        mSearchTabsLayout.getTabAt(0).setIcon(tabIcons[0]);
+        mSearchTabsLayout.getTabAt(1).setIcon(tabIcons[1]);
+        mSearchTabsLayout.getTabAt(2).setIcon(tabIcons[2]);
+        mSearchTabsLayout.getTabAt(3).setIcon(tabIcons[3]);
+    }
 
     private void setupViewPager(final ViewPager viewPager) {
         mSearchFragmentAdapter = new SearchPagerAdapter(getSupportFragmentManager());
@@ -137,6 +143,7 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
             }
         }
         viewPager.setAdapter(mSearchFragmentAdapter);
+
     }
 
 
