@@ -348,7 +348,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, true);
+                intent.putExtra(AppConstants.IS_CHAMPION_ID, true);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
                 finish();
@@ -386,7 +386,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
+                intent.putExtra(AppConstants.IS_CHAMPION_ID, AppConstants.FROM_PUSH_NOTIFICATION);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
 
@@ -456,7 +456,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
             Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);
             intent.putExtra(AppConstants.CHAMPION_ID, userId);
-            intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+            intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
             intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
             intent.putExtra(BaseActivity.STORIES_TAB, isWriteStory);
             intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);

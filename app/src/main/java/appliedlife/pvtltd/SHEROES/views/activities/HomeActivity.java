@@ -116,7 +116,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.navigation_drawer.NavigationIt
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -145,12 +144,12 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.MainActivityNavDrawerView;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileProgressDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -172,7 +171,8 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.loginRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.notificationReadCountRequestBuilder;
 
-public class HomeActivity extends BaseActivity implements BaseHolderInterface, MainActivityNavDrawerView, CustomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
+public class HomeActivity extends BaseActivity implements BaseHolderInterface, INavDrawerCallback, CustomActionBarToggle.DrawerStateListener, NavigationView.OnNavigationItemSelectedListener, HomeView {
+
     // region Constants
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
@@ -183,7 +183,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     //endregion
 
     // region inject variables
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
     @Inject
@@ -318,12 +317,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     // endregion
 
     // region member variables
-
     private boolean mIsSheUser = false;
     private boolean mIsInviteReferral;
     public boolean mIsFirstTimeOpen = false;
     boolean mDoubleBackToExitPressedOnce = false;
-    boolean mIsMentor;
+    boolean mIsChampion;
     private long mUserId = -1L;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private String mFcmId;
@@ -331,7 +329,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     private String mUserName;
     private GenericRecyclerViewAdapter mAdapter;
     private List<ArticleCategory> mArticleCategoryItemList = new ArrayList<>();
-    private ArticleCategorySpinnerFragment mArticleCategorySpinnerFragment;
     private FragmentOpen mFragmentOpen;
     private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
@@ -355,7 +352,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             mUserId = mUserPreference.get().getUserSummary().getUserId();
             mUserName = mUserPreference.get().getUserSummary().getFirstName();
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                mIsMentor = true;
+                mIsChampion = true;
             }
         }
         renderHomeFragmentView();
@@ -626,12 +623,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             } else if (StringUtil.isNotEmptyCollection(mFragmentOpen.getArticleCategoryList())) {
                 mArticleCategoryItemList = mFragmentOpen.getArticleCategoryList();
             }
-            mArticleCategorySpinnerFragment = new ArticleCategorySpinnerFragment();
+            ArticleCategorySpinnerFragment articleCategoryFragment = new ArticleCategorySpinnerFragment();
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mArticleCategoryItemList);
             bundle.putParcelable(AppConstants.ARTICLE_CATEGORY_SPINNER_FRAGMENT, parcelable);
-            mArticleCategorySpinnerFragment.setArguments(bundle);
-            addNewFragment(mArticleCategorySpinnerFragment, R.id.fl_article_card_view, ArticleCategorySpinnerFragment.class.getName(), null, true);
+            articleCategoryFragment.setArguments(bundle);
+            addNewFragment(articleCategoryFragment, R.id.fl_article_card_view, ArticleCategorySpinnerFragment.class.getName(), null, true);
         }
     }
 
@@ -639,7 +636,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     @OnClick({R.id.tv_home, R.id.ic_sheroes})
     public void homeOnClick() {
         DrawerViewHolder.selectedOptionName = null;
-        resetHamburgerSelectedItems();
         flFeedFullView.setVisibility(View.VISIBLE);
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         homeButtonUi();
@@ -829,7 +825,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
@@ -1054,11 +1049,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         if (mValue == REQUEST_CODE_FOR_USER_PROFILE_DETAIL) {
             ArticleSolrObj articleSolrObj = (ArticleSolrObj) baseResponse;
             if (mUserPreference.get().getUserSummary().getUserBO().getUserTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                mIsMentor = true;
+                mIsChampion = true;
             }
-            championDetailActivity(articleSolrObj.getCreatedBy(), 1, mIsMentor, ArticlesFragment.SCREEN_LABEL); //self profile
+            championDetailActivity(articleSolrObj.getCreatedBy(), 1, mIsChampion, ArticlesFragment.SCREEN_LABEL); //self profile
         } else if (mValue == REQUEST_CODE_FOR_SELF_PROFILE_DETAIL) {
-            championDetailActivity(mUserId, 1, mIsMentor, AppConstants.FEED_SCREEN); //self profile
+            championDetailActivity(mUserId, 1, mIsChampion, AppConstants.FEED_SCREEN); //self profile
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
             championLinkHandle(feedDetail);
@@ -1089,17 +1084,17 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     // region Protected methods
     @OnClick({R.id.beginner})
     protected void openBeginnerDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.BEGINNER);
+        openProfileActivity(ProfileStrengthDialog.ProfileStrengthType.BEGINNER);
     }
 
     @OnClick(R.id.intermediate)
     protected void openIntermediateProgressDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.INTERMEDIATE);
+        openProfileActivity(ProfileStrengthDialog.ProfileStrengthType.INTERMEDIATE);
     }
 
     @OnClick(R.id.all_star)
     protected void openAllStarProgressDialog() {
-        openProfileActivity(ProfileProgressDialog.ProfileLevelType.ALLSTAR);
+        openProfileActivity(ProfileStrengthDialog.ProfileStrengthType.ALLSTAR);
     }
 
     @Override
@@ -1233,36 +1228,17 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
             if (CommonUtil.isNotEmpty(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
                 if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.WRITE_STORY_URL)) {
                     writeAStory();
-                }
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
                     showSelectLanguageOption();
-                }
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
                     openArticleFragment(intent);
-                }
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.COMMUNITY_URL)) {
                     communityOnClick();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
                     mentorListActivity();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.FAQ_URL)) {
                     renderFAQSView();
-                }
-
-
-                if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
-
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
                 }
             } else if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
@@ -1615,14 +1591,14 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     private void mentorListActivity() {
-        Intent intent = new Intent(this, MentorsUserListingActivity.class);
+        Intent intent = new Intent(this, ChampionListingActivity.class);
         startActivityForResult(intent, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
-            case R.id.icon:  //TODO - Fix hardcoding
+            case R.id.icon:
                 if (baseResponse instanceof CarouselDataObj) {
                     CarouselDataObj carouselDataObj = (CarouselDataObj) baseResponse;
                     if (carouselDataObj.getFeedDetails().get(0) instanceof UserSolrObj) {
@@ -1630,19 +1606,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                     } else {
                         navigateToCollectionScreen(carouselDataObj);
                     }
-                }
-                break;
-
-            case R.id.tv_mentor_ask_question:
-                CommunityPost mentorPost = new CommunityPost();
-                mFeedDetail = (FeedDetail) baseResponse;
-                if (mFeedDetail instanceof UserSolrObj) {
-                    UserSolrObj userSolrObj = (UserSolrObj) mFeedDetail;
-                    mentorPost.community = new Community();
-                    mentorPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
-                    mentorPost.community.name = userSolrObj.getNameOrTitle();
-                    mentorPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
-                    createCommunityPostOnClick(mentorPost);
                 }
                 break;
 
@@ -1661,9 +1624,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 CommunityPost communityPost = new CommunityPost();
                 communityPost.createPostRequestFrom = AppConstants.CREATE_POST;
                 createCommunityPostOnClick(communityPost);
-                break;
-            case R.id.li_mentor:
-                openMentorProfileDetail(baseResponse);
                 break;
             case R.id.share:
                 if (StringUtil.isNotNullOrEmptyString(((FeedDetail) baseResponse).getPostShortBranchUrls())) {
@@ -1689,7 +1649,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
                 }
                 mFeedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
         }
-
     }
 
     private void navigateToCollectionScreen(CarouselDataObj carouselDataObj) {
@@ -1703,15 +1662,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         }
     }
 
-    private void openMentorProfileDetail(BaseResponse baseResponse) {
-        UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-        userSolrObj.setSuggested(false);
-        mFeedDetail = userSolrObj;
-        ProfileActivity.navigateTo(this, userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.HOME_FRAGMENT, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-    }
-
-    private void openProfileActivity(ProfileProgressDialog.ProfileLevelType profileLevelType) {
-        ProfileActivity.navigateTo(this, mUserId, mIsMentor, profileLevelType, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+    private void openProfileActivity(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
+        //TODO - Its was added to show profile strength on Nav menu, required api changes, future task
+        ProfileActivity.navigateTo(this, mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
@@ -1875,7 +1828,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
     }
 
     private void championLinkHandle(UserPostSolrObj userPostSolrObj) {
-        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), mIsMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userPostSolrObj.getAuthorParticipantId(), mIsChampion, PROFILE_NOTIFICATION_ID,
+                AppConstants.FEED_SCREEN, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
     }
 
     private void unReadNotificationCount(BaseResponse baseResponse) {

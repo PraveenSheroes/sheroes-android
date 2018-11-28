@@ -18,7 +18,6 @@ public class AppConstants {
     public static final String YOUTUBE_VIDEO_CODE = "youtu.be";
     public static final String MOBILE_YOUTUBE_VIDEO_CODE = "m.youtube";
     public static final int APP_INTRO = 34;
-    public static final int ONEGIGABYTE = 1024 * 1024 * 1024;
     public static final int ANDROID_SDK_24 = 24;
     public static final int READ_TIME_OUT = 180;
     public static final int CONNECTION_TIME_OUT = 60;
@@ -58,7 +57,6 @@ public class AppConstants {
     public static final String USER_YOU_TUBE = "youtube.com/user";
     public static final String CHANNEL_YOU_TUBE = "youtube.com/channel";
     public static final String SHARE_MENU_TYPE = "text/plain";
-    public static final String AVAILABLE = "Available";
     public static final String FOR_ALL = "All";
     public static final String FEED_SUB_TYPE = "F";
     public static final String USER_SUB_TYPE = "U";
@@ -71,8 +69,6 @@ public class AppConstants {
     public static final String SOURCE_NAME = "android";
     public static final String UTF_8 = "UTF-8";
     public static final String USER = "USER";
-    public static final String ASKING_QUESTION = "asking_question";
-    public static final int ASKING_QUESTION_CALL = 101;
     public static final String FEED_COMMUNITY = "C";
     public static final String FEED_ARTICLE = "A";
     public static final String FEED_COMMUNITY_POST = "P";
@@ -94,13 +90,10 @@ public class AppConstants {
     public static final int REQUEST_CODE_FOR_CHALLENGE_DETAIL = 1901;
     public static final int REQUEST_CODE_FOR_POST_DETAIL = 1902;
     public static final int REQUEST_CODE_FOR_COMMUNITY_DETAIL = 2001;
-    public static final int REQUEST_CODE_FOR_MY_COMMUNITY_DETAIL = 2002;
     public static final int REQUEST_CODE_FOR_PROFILE_DETAIL = 2003;
     public static final int REQUEST_CODE_FOR_FACEBOOK = 4001;
     public static final int REQUEST_CODE_FOR_COMMUNITY_POST = 5001;
     public static final int REQUEST_CODE_FOR_ADDRESS = 50011;
-    public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY = 6001;
-    public static final int REQUEST_CODE_FOR_CREATE_COMMUNITY_POST = 8001;
     public static final int REQUEST_CODE_FOR_GALLERY = 9001;
     public static final int REQUEST_CODE_FOR_CAMERA = 1101;
     public static final int RESULT_CODE_FOR_DEACTIVATION = 10007;
@@ -144,7 +137,6 @@ public class AppConstants {
     public static final String NO_STORIES = "no_stories";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
-    public static final String BOARDING_SEARCH = "boarding_Search";
     public static final String IMAGE = "Img";
     public static final String FOLLOWED_CHAMPION = "FOLLOWED_CHAMPIONS";
     public static final String FOLLOWED_CHAMPION_LABEL = "Followed Champions Screen";
@@ -160,7 +152,6 @@ public class AppConstants {
     public static final String BACK_SLASH = "/";
     public static final String ARTICLE_DETAIL = "article_detail";
     public static final String MENTOR_DETAIL = "mentor_detail";
-    public static final String MENTOR_INSIGHT = "mentor_insight";
     public static final String COMMUNITY_DETAIL = "community_detail";
     public static final String CHALLENGE_GRATIFICATION = "challenge_gratification";
     public static final String SUCCESS = "SUCCESS";
@@ -199,8 +190,6 @@ public class AppConstants {
     public static final int COMMUNITY_POLL_ADMIN = 18;
     public static final int SHEROES_EVENT_ID = 299;
     public static final String HOME_USER_NAME_PREF = "HOME_USERANAME";
-    public static final String ASK_QUESTION_SHARE_PREF = "ASK_QUESTION_ANONYMOUS";
-    public static final String ASK_QUESTION_SESSION_SHARE_PREF = "ASK_QUESTION_SESSION_ANONYMOUS";
     public static final String NOTIFICATION_SESSION_SHARE_PREF = "BELL_NOTIFICATION_SESSION";
     public static final String NOTIFICATION_SHARE_PREF = "BELL_NOTIFICATION";
     public static final String MALE_ERROR_SHARE_PREF = "MALE_USER_ERROR";
@@ -290,7 +279,8 @@ public class AppConstants {
     public static final String ARTICLE_ID = "article_id";
     public static final String ARTICLE_CATEGORY_ID = "article_category_id";
     public static final String CHAMPION_ID = "champion_id";
-    public static final String IS_MENTOR_ID = "is_mentor";
+    public static final String IS_CHAMPION_ID = "is_mentor";
+    public static final String IS_SELF_PROFILE = "is_self_profile";
     public static final String COMMUNITY_ID = "community_id";
     public static final String FROM_DEEPLINK = "from_deep_link";
     public static final String CHALLENGE_ID = "challenge_id";
@@ -357,7 +347,6 @@ public class AppConstants {
     public static final int ARTICLE_SESSION = 2;
     public static final int HEADER_SESSION = 3;
     public static final int INVITE_FRIEND_SESSION = 2;
-    public static final int ASK_QUESTION_SESSION = 2;
     public static final String CHALLENGE_GRATIFICATION_OBJ = "challenge_gratification_obj";
     public static final String CHALLENGE_GRATIFICATION_SCREEN = "Challenge Completed Screen";
     public static final String WHATSAPP_ICON = "Whatsapp Icon";
@@ -410,6 +399,9 @@ public class AppConstants {
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";
     public static final String WHATS_APP_URI = "com.whatsapp";
+    public static final String UNFOLLOW = "UNFOLLOW";
+    public static final String LOGGED_IN_USER = "LoggedInUser";
+    public static final String CHAMPION_SUBTYPE = "C";
 
     // Stream name
     public static final String STORY_STREAM = "story_stream";

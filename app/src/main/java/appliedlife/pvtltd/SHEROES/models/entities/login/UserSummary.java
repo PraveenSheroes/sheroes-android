@@ -36,27 +36,12 @@ public class UserSummary{
     @SerializedName("photo_url")
     @Expose
     private String photoUrl;
-
     @SerializedName("user_details")
     @Expose
     private  UserBO userBO;
-
-    @SerializedName("educations")
-    @Expose
-    private  List<EducationEntityBO> educationBO;
-
-    @SerializedName("experiences")
-    @Expose
-    private  List<ExprienceEntityBO> exprienceBO;
-
-    @SerializedName("projects")
-    @Expose
-    private  List<ProjectEntityBO> projectsBO;
-
     @SerializedName("fb_verification_required")
     @Expose
     private boolean fbVerificationRequired;
-
     @SerializedName("user_app_invite_url")
     private String appShareUrl;
 
@@ -116,46 +101,7 @@ public class UserSummary{
         this.photoUrl = photoUrl;
     }
 
-    public UserSummary() {
-    }
-
     public UserBO getUserBO() {
         return userBO;
-    }
-
-    public void setUserBO(UserBO userBO) {
-        this.userBO = userBO;
-    }
-
-    public List<EducationEntityBO> getEducationBO() {
-        return educationBO;
-    }
-
-    public void setEducationBO(List<EducationEntityBO> educationBO) {
-        this.educationBO = educationBO;
-    }
-
-    public List<ExprienceEntityBO> getExprienceBO() {
-        return exprienceBO;
-    }
-
-    public void setExprienceBO(List<ExprienceEntityBO> exprienceBO) {
-        this.exprienceBO = exprienceBO;
-    }
-
-    public List<ProjectEntityBO> getProjectsBO() {
-        return projectsBO;
-    }
-
-    public void setProjectsBO(List<ProjectEntityBO> projectsBO) {
-        this.projectsBO = projectsBO;
-    }
-
-    public boolean isFbVerificationRequired() {
-        return fbVerificationRequired;
-    }
-
-    public void setFbVerificationRequired(boolean fbVerificationRequired) {
-        this.fbVerificationRequired = fbVerificationRequired;
     }
 }

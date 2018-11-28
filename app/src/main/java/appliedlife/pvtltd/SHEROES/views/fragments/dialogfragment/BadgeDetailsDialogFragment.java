@@ -193,7 +193,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String day = dayFormat.format(startDateObj);
             String endDateText = dateFormat.format(endDateObj);
 
-            //For profile if badge is inactive show message "Won last on" & for other "Won Latest on"
+            //For profile if badge is inactive show mMessage "Won last on" & for other "Won Latest on"
             if (!isLeaderBoard) {
                 String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : getString(R.string.this_user);
                 if (mBadgeDetails.isActive()) {
@@ -280,7 +280,8 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     @OnClick(R.id.view_profile)
     protected void openUserProfile() {
         dismiss();
-        ProfileActivity.navigateTo(getActivity(), mUserSolrObj.getIdOfEntityOrParticipant(), false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), mUserSolrObj.getIdOfEntityOrParticipant(), false, -1,
+                SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
     @OnClick(R.id.show_leaderBoard)

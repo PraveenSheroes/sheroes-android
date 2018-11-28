@@ -763,7 +763,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
-        ProfileActivity.navigateTo(this, userId, isMentor, PROFILE_NOTIFICATION_ID, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userId, isMentor, PROFILE_NOTIFICATION_ID, source, null,
+                AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
     }
 
     private void updateTitleCommentCountView() {

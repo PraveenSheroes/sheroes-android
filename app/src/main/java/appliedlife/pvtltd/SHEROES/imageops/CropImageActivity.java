@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Built-in activity for image cropping.<br>
@@ -281,7 +282,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
                     menuItemIcon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
                     menuItem.setIcon(menuItemIcon);
                 } catch (Exception e) {
-                    Log.w("AIC", "Failed to update menu item color", e);
+                    LogUtils.error("AIC", "Failed to update menu item color", e);
                 }
             }
         }

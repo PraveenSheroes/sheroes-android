@@ -40,7 +40,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.UserCardCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityTab;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -70,8 +70,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 
 /**
  * Created by Ravi on 05/09/18.
@@ -321,17 +319,14 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     //region private methods
@@ -496,7 +491,7 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -506,7 +501,7 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
                     new EventProperty.Builder()
                             .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                             .name(userSolrObj.getNameOrTitle())
-                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                            .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mUserListPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
@@ -524,9 +519,9 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
     @Override
     public void onUserProfileClicked(UserSolrObj userSolrObj) {
         if (userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         } else {
-            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, -1, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 

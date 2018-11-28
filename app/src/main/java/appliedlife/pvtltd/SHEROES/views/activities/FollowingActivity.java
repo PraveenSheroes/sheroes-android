@@ -4,21 +4,33 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import org.parceler.Parcels;
+
 import java.util.HashMap;
+
+import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.enums.FollowingEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.UnFollowDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -29,7 +41,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.FOLLOWED_CHAMPION_LA
  * Listing of Followed Champions
  */
 
-public class FollowingActivity extends BaseActivity {
+public class FollowingActivity extends BaseActivity implements IFollowCallback {
     // region Constants
     public static final String Followers_Screen = "Followers Screen";
     public static final String Following_Screen = "Following Screen";
@@ -47,6 +59,8 @@ public class FollowingActivity extends BaseActivity {
     private long mUserMentorId;
     private boolean mIsSelfProfile;
     private FollowingEnum mMembersType;
+    FollowingFragment mFollowingFragment;
+    private UnFollowDialogFragment mUnFollowDialogFragment;
     //endregion
 
     // region lifecycle methods
@@ -78,8 +92,18 @@ public class FollowingActivity extends BaseActivity {
                 mTitleName.setText(R.string.following_public_profile_toolbar_title);
             }
         }
-        FollowingFragment followingFragment = FollowingFragment.createInstance(mUserMentorId, mIsSelfProfile, mMembersType.name());
-        addNewFragment(followingFragment, R.id.container, FollowingFragment.class.getName(), null, false);
+        mFollowingFragment = FollowingFragment.createInstance(mUserMentorId, mIsSelfProfile, mMembersType.name());
+        addNewFragment(mFollowingFragment, R.id.container, FollowingFragment.class.getName(), null, false);
+    }
+
+    private void setupToolbarItemsColor() {
+        setSupportActionBar(mToolbar);
+        if(getSupportActionBar()!=null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("");
+            final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
     }
 
     @Override
@@ -90,6 +114,25 @@ public class FollowingActivity extends BaseActivity {
                 break;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        /* 2:- For refresh list */
+        if (null != intent) {
+            if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+                Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+                if (parcelable != null) {
+                    UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+
+                    if (mFollowingFragment == null) {
+                        return;
+                    }
+                    mFollowingFragment.invalidateItem(userSolrObj);
+                }
+            }
+        }
     }
     //endregion
 
@@ -149,15 +192,32 @@ public class FollowingActivity extends BaseActivity {
         setResult(RESULT_OK, intent);
     }
 
-    private void setupToolbarItemsColor() {
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        mTitleName.setText(R.string.ID_EDIT_PROFILE);
+    @Override
+    public void onProfileFollowed(UserSolrObj userSolrObj) {
+        if(mFollowingFragment!=null && mFollowingFragment.isVisible()) {
+            mFollowingFragment.refreshItem(userSolrObj);
+        }
+    }
+
+    public void unFollowConfirmation(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj, String screenName) {
+        if (mUnFollowDialogFragment != null && mUnFollowDialogFragment.isVisible()) {
+            mUnFollowDialogFragment.dismiss();
+        }
+        mUnFollowDialogFragment = new UnFollowDialogFragment();
+        mUnFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+
+        if (!mUnFollowDialogFragment.isVisible() && !mIsDestroyed) {
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(userSolrObj);
+            bundle.putParcelable(AppConstants.USER, parcelable);
+            Parcelable unFollowRequestParcelable = Parcels.wrap(publicProfileListRequest);
+            bundle.putParcelable(AppConstants.UNFOLLOW, unFollowRequestParcelable);
+            bundle.putString(AppConstants.SOURCE_NAME, screenName);
+            bundle.putBoolean(AppConstants.IS_CHAMPION_ID, userSolrObj.isAuthorMentor());
+            bundle.putBoolean(AppConstants.IS_SELF_PROFILE, false);
+            mUnFollowDialogFragment.setArguments(bundle);
+            mUnFollowDialogFragment.show(getFragmentManager(), UnFollowDialogFragment.class.getName());
+        }
     }
     //endregion
-
-
 }

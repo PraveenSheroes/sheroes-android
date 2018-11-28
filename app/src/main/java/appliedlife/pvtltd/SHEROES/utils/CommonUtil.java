@@ -793,7 +793,7 @@ public class CommonUtil {
                 return prefs.getBoolean(key, false);
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.error(TAG, e.getMessage());
         }
         return false;
     }
@@ -837,7 +837,7 @@ public class CommonUtil {
                 return prefs.getString(key, LanguageType.ENGLISH.toString());
             }
         } catch (Exception e) {
-            Log.e(TAG, e.getMessage());
+            LogUtils.error(TAG, e.getMessage());
         }
         return LanguageType.ENGLISH.toString();
     }

@@ -91,7 +91,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_CAROUSEL:
-                return new CarouselViewHolder(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
+                return new CarouselViewHolder(mInflater.inflate(R.layout.champion_suggested_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_USER_COMPACT:
                 return new UserProfileCompactViewHolder(mInflater.inflate(R.layout.list_user_flat_item, parent, false), mContext, mBaseHolderInterface);
             case TYPE_LEADERBOARD:
@@ -121,7 +121,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 FeedCommunityPostHolder feedCommunityPostHolder = (FeedCommunityPostHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetailList.get(position);
                 feedCommunityPostHolder.bindData(userPostSolrObj, mContext, position);
-
                 break;
             case TYPE_POLL:
                 FeedPollCardHolder feedPollHolder = (FeedPollCardHolder) holder;

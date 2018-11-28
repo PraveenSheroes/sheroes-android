@@ -77,7 +77,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -114,9 +114,6 @@ import butterknife.Bind;
 import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
-
 
 /**
  * Created by ujjwal on 07/12/17.
@@ -903,7 +900,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
                     new EventProperty.Builder()
                             .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
                             .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -913,7 +910,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
                     new EventProperty.Builder()
                             .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
                             .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mPostDetailPresenter.getPostAuthorFollowed(publicProfileListRequest, userPostSolrObj);
@@ -1436,32 +1433,25 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
-    }
-
-    @Override
-    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+    }
 }

@@ -101,7 +101,7 @@ public class FileUtil {
 
     public static File createImageFile(String path, String imageFileName) throws IOException {
         // Create an image file name
-        Log.v(TAG, "createImageFile() " + path + "/" + imageFileName);
+        LogUtils.info(TAG, "createImageFile() " + path + "/" + imageFileName);
         File storageDir = new File(path);
         boolean mkdirs = createDirIfNotExists(storageDir.getAbsolutePath());
         File image = new File(storageDir, imageFileName);
@@ -261,7 +261,7 @@ public class FileUtil {
                 datasets.add(entries);
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error reading file " + file + " - " + e.getMessage());
+            LogUtils.error(TAG, "Error reading file " + file + " - " + e.getMessage());
             Crashlytics.getInstance().core.logException(e);
         } finally {
             bufferedReader.close();

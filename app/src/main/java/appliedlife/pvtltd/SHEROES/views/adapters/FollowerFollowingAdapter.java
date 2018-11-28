@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,12 +18,14 @@ import java.util.List;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FollowerFollowingCallback;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
+import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -55,7 +58,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
         if (viewType == TYPE_COMMUNITY) {
-            return new FollowerFollowingAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.followed_mentor_list_item, parent, false));
+            return new FollowerFollowingAdapter.FollowedUserListItemViewHolder(mInflater.inflate(R.layout.adapter_champion_list_item, parent, false));
         } else {
             View view = mInflater.inflate(R.layout.feed_progress_bar_holder, parent, false);
             return new FeedProgressBarHolder(view, mBaseHolderInterface);
@@ -95,11 +98,31 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         notifyItemChanged(position);
     }
 
+    public void updateData(UserSolrObj userSolrObj, int position) {
+        if(mChampionUsersList.size()> position) {
+            mChampionUsersList.set(position, userSolrObj);
+        }
+    }
+
+    public void findPositionAndUpdateItem(UserSolrObj updateUserObj, long id) {
+        if (CommonUtil.isEmpty(mChampionUsersList)) {
+            return;
+        }
+
+        for (int i = 0; i < mChampionUsersList.size(); ++i) {
+            FeedDetail feedDetail = mChampionUsersList.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                setData(i, updateUserObj);
+                break;
+            }
+        }
+    }
+
     // region Followers or Following List Item ViewHolder
     public class FollowedUserListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
-        @Bind(R.id.iv_mentor_full_view_icon)
+        @Bind(R.id.iv_profile_full_view_icon)
         CircleImageView mentorIcon;
 
         @Bind(R.id.user_name)
@@ -108,7 +131,7 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         @Bind(R.id.expert_at)
         TextView expertAt;
 
-        @Bind(R.id.iv_mentor_verified)
+        @Bind(R.id.iv_champion_verified)
         ImageView verifiedChampionsIcon;
 
         @Bind(R.id.follower)
@@ -121,7 +144,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         Button followFollowingBtn;
 
         private UserSolrObj championObj;
-        private int position = -1;
         private long loggedInUserId = -1;
 
         // endregion
@@ -134,31 +156,31 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
             }
         }
 
-        public void bindData(final UserSolrObj mentor, final int position) {
-            if (null != mentor) {
-                this.championObj = mentor;
-                this.position = position;
+        public void bindData(final UserSolrObj championObj, final int position) {
+            if (null != championObj) {
+                this.championObj = championObj;
+                championObj.setItemPosition(position);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        ((FollowerFollowingCallback) mBaseHolderInterface).onItemClick(mentor);
+                        ((FollowerFollowingCallback) mBaseHolderInterface).onItemClick(championObj);
                     }
                 });
-                if (mentor.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
+                if (championObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
                     verifiedChampionsIcon.setVisibility(View.VISIBLE);
                 } else {
                     verifiedChampionsIcon.setVisibility(View.GONE);
                 }
-                if (mentor.getThumbnailImageUrl() != null) {  //mentor image icon
+                if (championObj.getThumbnailImageUrl() != null) {  //mentor image icon
                     mentorIcon.setCircularImage(true);
-                    String authorThumborUrl = CommonUtil.getThumborUri(mentor.getThumbnailImageUrl(), authorProfileSize, authorProfileSize);
+                    String authorThumborUrl = CommonUtil.getThumborUri(championObj.getThumbnailImageUrl(), authorProfileSize, authorProfileSize);
                     mentorIcon.bindImage(authorThumborUrl);
                 }
-                if (mentor.getNameOrTitle() != null) {
-                    mentorName.setText(mentor.getNameOrTitle());
+                if (championObj.getNameOrTitle() != null) {
+                    mentorName.setText(championObj.getNameOrTitle());
                 }
-                if (mentor.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
-                    List<String> canHelpInArea = mentor.getCanHelpIns();
+                if (championObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID) {
+                    List<String> canHelpInArea = championObj.getCanHelpIns();
                     if (StringUtil.isNotEmptyCollection(canHelpInArea)) {
                         StringBuilder expertFields = new StringBuilder();
                         for (int i = 0; i < canHelpInArea.size(); i++) {
@@ -173,21 +195,21 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                         expertAt.setVisibility(View.GONE);
                     }
                 } else {
-                    if (CommonUtil.isNotEmpty(mentor.getCityName())) {
-                        expertAt.setText(mentor.getCityName());
+                    if (CommonUtil.isNotEmpty(championObj.getCityName())) {
+                        expertAt.setText(championObj.getCityName());
                         expertAt.setVisibility(View.VISIBLE);
                     } else {
                         expertAt.setVisibility(View.GONE);
                     }
                 }
                 if (follower != null) {
-                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, mentor.getSolrIgnoreNoOfMentorFollowers());
-                    follower.setText(String.valueOf(changeNumberToNumericSuffix(mentor.getSolrIgnoreNoOfMentorFollowers()) + AppConstants.SPACE + pluralComments));
+                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, championObj.getFollowerCount());
+                    follower.setText(String.valueOf(changeNumberToNumericSuffix(championObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
                 }
-                if (loggedInUserId != mentor.getIdOfEntityOrParticipant()) {
+                if (loggedInUserId != championObj.getIdOfEntityOrParticipant()) {
                     followFollowingBtn.setVisibility(View.VISIBLE);
 
-                    if (mentor.isSolrIgnoreIsMentorFollowed()) {
+                    if (championObj.isSolrIgnoreIsMentorFollowed() || championObj.isSolrIgnoreIsUserFollowed()) {
                         showFollowing();
                     } else {
                         showFollow();
@@ -215,8 +237,12 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         @OnClick(R.id.follow_following_btn)
         public void onFollowFollowingClick() {
             String followFollowingBtnText = followFollowingBtn.getText().toString();
-            if (position != -1) {
-                ((FollowerFollowingCallback) mBaseHolderInterface).onFollowFollowingClick(championObj, position, followFollowingBtnText);
+            ((FollowerFollowingCallback) mBaseHolderInterface).onFollowFollowingClick(championObj, followFollowingBtnText);
+
+            if (!championObj.isSolrIgnoreIsMentorFollowed() || !championObj.isSolrIgnoreIsUserFollowed()) {
+                championObj.setSolrIgnoreIsMentorFollowed(true);
+                championObj.setSolrIgnoreIsUserFollowed(true);
+                showFollowing();
             }
         }
     }

@@ -115,7 +115,6 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
                         } else {
                             ((OnBoardingFragment) fragment).joinRequestForOpenCommunity(communityFeedSolrObj);
                         }
-
                     }
                     break;
                 default:
@@ -126,27 +125,22 @@ public class OnBoardingActivity extends BaseActivity implements BaseHolderInterf
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     @Override

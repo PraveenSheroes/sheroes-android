@@ -69,7 +69,7 @@ import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
@@ -131,7 +131,6 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_MEN
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_SELF_PROFILE_DETAIL;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilder;
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuilder;
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
 
 /**
  * Created by ujjwal on 27/12/17.
@@ -567,22 +566,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
@@ -1791,7 +1786,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onLeaderBoardUserClick(long userId, String sourceScreenName) {
-        ProfileActivity.navigateTo(getActivity(), userId, false, PROFILE_NOTIFICATION_ID, sourceScreenName, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), userId, false, PROFILE_NOTIFICATION_ID, sourceScreenName,
+                null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
     }
 
     @Override
@@ -1803,7 +1799,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 new EventProperty.Builder()
                         .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
                         .name(userPostSolrObj.getNameOrTitle())
-                        .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                        .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                         .build();
         if (getExtraProperties() != null && properties != null && mCommunityTab != null) {
             properties.putAll(getExtraProperties());
@@ -1996,7 +1992,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 new EventProperty.Builder()
                         .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                         .name(userSolrObj.getNameOrTitle())
-                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                         .build();
         if (getExtraProperties() != null && properties != null && mCommunityTab != null) {
             properties.putAll(getExtraProperties());
@@ -2068,17 +2064,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onMentorProfileClicked(UserSolrObj userSolrObj) {
         if (userSolrObj.getEntityOrParticipantTypeId() == 7) {
-            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, -1, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), true, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         } else if (userSolrObj.getEntityOrParticipantTypeId() == 1) {
-            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, -1, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            ProfileActivity.navigateTo(getActivity(), userSolrObj, userSolrObj.getIdOfEntityOrParticipant(), false, AppConstants.FEED_SCREEN, mScreenProperties, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 
     @Override
     public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
         if (!userSolrObj.isAnonymous() && userSolrObj.getEntityOrParticipantTypeId() == 14) { //for user post .Here type 14 for user & mentor
-            boolean isMentor = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
-            ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            boolean isMentor = (userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+            ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID,
+                    AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
         }
 
     }
@@ -2090,7 +2087,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             if (StringUtil.isNotEmptyCollection(lastComments)) {
                 Comment comment = lastComments.get(0);
                 if (comment != null && !comment.isAnonymous()) {
-                    ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(), PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+                    ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(),
+                    PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
                 }
             }
 

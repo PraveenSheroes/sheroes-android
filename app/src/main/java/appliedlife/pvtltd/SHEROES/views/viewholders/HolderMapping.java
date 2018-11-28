@@ -114,18 +114,7 @@ public enum HolderMapping {
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new FAQViewHolder(view, viewInterface);
         }
-    }, FEED_MENTOR_CARD_HOLDER(R.layout.feed_mentor_card) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new MentorCard(view, viewInterface);
-        }
-    }, MENTOR_SUGGESTED_CARD_HOLDER(R.layout.mentor_suggested_card_holder) {
-        @Override
-        public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
-            return new CarouselViewHolder(view, viewInterface);
-        }
-    },
-    HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
+    }, HEADER_VIEW_HOLDER(R.layout.header_view_layout) {
         @Override
         public BaseViewHolder getViewHolder(View view, BaseHolderInterface viewInterface) {
             return new HomeHeaderViewHolder(view, viewInterface);
@@ -198,12 +187,6 @@ public enum HolderMapping {
                             case AppConstants.HOME_FEED_HEADER:
                                 returnView = HEADER_VIEW_HOLDER.ordinal();
                                 break;
-                            case AppConstants.CAROUSEL_SUB_TYPE:
-                                returnView = MENTOR_SUGGESTED_CARD_HOLDER.ordinal();
-                                break;
-                            case AppConstants.USER_SUB_TYPE:
-                                returnView = FEED_MENTOR_CARD_HOLDER.ordinal();
-                                break;
                             default:
                         }
                     }
@@ -218,8 +201,7 @@ public enum HolderMapping {
                                 returnView = ARTICLE_CARD_HOLDER.ordinal();
                                 break;
                             case AppConstants.FEED_COMMUNITY_POST:
-                                UserPostSolrObj userPostSolrObj = new UserPostSolrObj();
-                                userPostSolrObj = (UserPostSolrObj) feedDetail;
+                                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                                 if (feedDetail.isSpamPost()) {
                                     if (userId == feedDetail.getAuthorId() || userPostSolrObj.isCommunityOwner()) {
                                         returnView = FEED_COMMUNITY_POST.ordinal();
@@ -235,9 +217,6 @@ public enum HolderMapping {
                                 break;
                             case AppConstants.FEED_PROGRESS_BAR:
                                 returnView = FEED_PROGRESS_BAR_HOLDER.ordinal();
-                                break;
-                            case AppConstants.USER_SUB_TYPE:
-                                returnView = FEED_MENTOR_CARD_HOLDER.ordinal();
                                 break;
                             default:
                         }

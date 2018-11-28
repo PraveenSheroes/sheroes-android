@@ -77,7 +77,7 @@ public class MixpanelHelper {
 
         MixpanelAPI mixpanel = MixpanelHelper.getInstance(context);
 
-        if (mixpanel != null && userSummary != null) {
+        if (mixpanel != null) {
             mixpanel.identify(Long.toString(userSummary.getUserId()));
             mixpanel.getPeople().identify(Long.toString(userSummary.getUserId()));
 
@@ -123,19 +123,6 @@ public class MixpanelHelper {
                 };
                 mixpanel.updateSuperProperties(superPropertyUpdate);
             }
-            if (userSummary.getUserBO().getInterestLabel() != null && !userSummary.getUserBO().getInterestLabel().isEmpty()) {
-                mixpanel.getPeople().set(PeopleProperty.INTEREST.getString(), userSummary.getUserBO().getInterestLabel());
-            }
-
-            if (userSummary.getUserBO().getSkillsLabel() != null && !userSummary.getUserBO().getSkillsLabel().isEmpty()) {
-                mixpanel.getPeople().set(PeopleProperty.SKILLS.getString(), userSummary.getUserBO().getSkillsLabel());
-            }
-
-            if (userSummary.getUserBO().getJobTag() != null && !userSummary.getUserBO().getJobTag().isEmpty()) {
-                mixpanel.getPeople().set(PeopleProperty.CURRENT_STATUS.getString(), userSummary.getUserBO().getJobTag());
-            }
-
-            mixpanel.getPeople().set(PeopleProperty.WORK_EXPERIENCE.getString(), userSummary.getUserBO().getTotalExp());
 
             if (!TextUtils.isEmpty(userSummary.getMobile())) {
                 mixpanel.getPeople().set("$name", userSummary.getFirstName() + " " + userSummary.getLastName());

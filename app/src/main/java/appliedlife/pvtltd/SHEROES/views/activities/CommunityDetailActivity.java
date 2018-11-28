@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -84,7 +83,6 @@ import appliedlife.pvtltd.SHEROES.presenters.CommunitiesListPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CommunityDetailAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesDrawerAdapter;
@@ -115,6 +113,7 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private static final String COMMUNITY_TITLE_TEXT_COLOR = "#3c3c3c";
     private static final int MY_COMMUNITY_SPAN_SIZE = 2;
     private static final int INVITE_FRIEND_TOOLTIP_WIDTH_MULTIPLIER = 2;
+    private static final int mToolTipDelay = 1000;
     //endregion static constants
 
     //region injected variables
@@ -122,8 +121,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     CommunitiesListPresenter mCommunityDetailPresenter;
     @Inject
     Preference<LoginResponse> mUserPreference;
-    @Inject
-    FeedUtils mFeedUtils;
     //endregion injected variables
 
     //region bind view variables
@@ -147,8 +144,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     View mInviteToolTip;
     @Bind(R.id.drawer_community_layout)
     DrawerLayout mCommunityDrawerLayout;
-    @Bind(R.id.nav_view_right_drawer_community_detail)
-    NavigationView mRightDrawerNavigation;
     @Bind(R.id.rv_right_drawer_community_detail)
     RecyclerView mCommunitiesRecycler;
     //endregion bind view variables
@@ -159,7 +154,6 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     private final int mMarginLeftToolTip = 10;
     private final int mScreenWidthMdpi = 600;
     private final int mScreenWidthHdpi = 750;
-    private final int mToolTipDelay = 1000;
 
     private String mStreamType;
     private String mDefaultTabKey = "";

@@ -108,36 +108,6 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/answers_count_container"
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
-                    android:layout_marginRight="3dp"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                        android:id="@+id/answers_count"
-                        style="@style/TextView16spMediumBold"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/light_grey"
-                        android:textStyle="bold"
-                        vernacular:customTextFontFamily="@string/medium_font" />
-
-                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                        android:id="@+id/answers_text"
-                        style="@style/TextView14spRegular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:text="@string/answers"
-                        vernacular:customTextFontFamily="@string/regular_font" />
-
-                </LinearLayout>
-
-                <LinearLayout
                     android:id="@+id/followings_count_view"
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
@@ -175,7 +145,7 @@
                 android:layout_marginTop="@dimen/dp_size_12">
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    android:id="@+id/tv_mentor_dashboard_follow"
+                    android:id="@+id/tv_dashboard_follow"
                     style="@style/TextView14spMediumBold"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

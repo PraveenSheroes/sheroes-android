@@ -62,6 +62,7 @@ import appliedlife.pvtltd.SHEROES.utils.DateUtil;
 import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.ShareUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import dagger.Module;
@@ -355,7 +356,7 @@ public class SheroesAppModule {
 
             userAgent = userAgent + "/" + version + "/" + "Android" + "/" + androidVersion + "/" + deviceModel;
         } catch (PackageManager.NameNotFoundException e) {
-            // Log.e(TAG, "Unable to find self by package name", e);
+            //LogUtils.error(TAG, "Unable to find self by package name", e);
         }
 
         return userAgent;
@@ -367,7 +368,7 @@ public class SheroesAppModule {
             String packageName = mContext.getPackageName();
             version = Integer.toString(mContext.getPackageManager().getPackageInfo(packageName, 0).versionCode);
         } catch (PackageManager.NameNotFoundException e) {
-            // Log.e(TAG, "Unable to find self by package name", e);
+            // LogUtils.error(TAG, "Unable to find self by package name", e);
         }
 
         return version;

@@ -14,7 +14,6 @@ public interface FollowerFollowingCallback extends BaseHolderInterface {
      * Click event on follower/Following list
      *
      * @param userSolrObj user/ champion
-     * @param position    position in list
      */
-    void onFollowFollowingClick(UserSolrObj userSolrObj, int position, String followFollowingBtnText);
+    void onFollowFollowingClick(UserSolrObj userSolrObj, String followFollowingBtnText);
 }

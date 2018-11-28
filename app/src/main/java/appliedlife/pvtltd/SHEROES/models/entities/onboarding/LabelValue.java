@@ -22,8 +22,6 @@ public class LabelValue extends BaseResponse  {
 	String label;
 	@SerializedName("desc")
 	String desc;
-	@SerializedName("imgUrl")
-	String imgUrl;
 
 	private boolean isSelected;
 
@@ -49,14 +47,6 @@ public class LabelValue extends BaseResponse  {
 
 	public void setDesc(String desc) {
 		this.desc = desc;
-	}
-
-	public String getImgUrl() {
-		return imgUrl;
-	}
-
-	public void setImgUrl(String imgUrl) {
-		this.imgUrl = imgUrl;
 	}
 
 	public boolean isSelected() {
