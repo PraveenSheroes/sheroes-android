@@ -61,7 +61,6 @@
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
     <string name="ID_JOIN">जुड़ें</string>
-    <string name="ID_REQUESTED">अनुरोध किया</string>
     <string name="ID_JOINED">जुड़ गए</string>
     <string name="ID_VIEW">देखें</string>
     <string name="ID_VIEWS">ने देखा</string>
@@ -377,9 +376,6 @@
     <string name="ID_FOLLOWER_VISITOR">पिछले 7 दिनों में फॉलोवर्स</string>
     <string name="ID_POSTS">पिछले 7 दिनों में बनाए गए पोस्ट्स</string>
     <string name="ID_QUESTIONS">पिछले 7 दिनों में प्रश्न</string>
-    <string name="ID_ANSWERS">पिछले 7 दिनों में उत्तर दिए गए प्रश्न</string>
-    <string name="ID_ANSWER_QUESTION">सवालों के जवाब दें</string>
-    <string name="ID_START_ANSWER_QUESTION">सवालों का जवाब देना शुरू करें</string>
     <string name="private_information">निजी जानकारी (केवल आपको दिखेगी)</string>
     <string name="ID_LOGIN_MSG"><![CDATA[ <html><body> <div style="text-align: center;margin: 0px 0px 5px 0px;">ईमेल लॉगिन
                                                     <span style="color:#3C3C3C;"><b>केवल मौजूदा यूज़र्स</b> </span>

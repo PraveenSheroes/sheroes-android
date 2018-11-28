@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +44,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.like.LikeResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.miscellanous.ApproveSpamPostResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatePollResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.DeletePollRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollVote;
@@ -61,9 +59,7 @@ import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
-import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -82,18 +78,12 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class FeedPresenter extends BasePresenter<IFeedView> {
-    private final String TAG = LogUtils.makeLogTag(FeedPresenter.class);
     public static final int NORMAL_REQUEST = 0;
     public static final int LOAD_MORE_REQUEST = 1;
     private static final int END_REQUEST = 2;
-    HomeModel mHomeModel;
-    SheroesAppServiceApi mSheroesAppServiceApi;
-    SheroesApplication mSheroesApplication;
+    private final String TAG = LogUtils.makeLogTag(FeedPresenter.class);
     @Inject
     Preference<LoginResponse> mUserPreference;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
 
@@ -102,16 +92,17 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
     private String mNextToken = "";
     private boolean mIsFeedLoading;
     private int mFeedState;
+    private HomeModel mHomeModel;
+    private SheroesAppServiceApi mSheroesAppServiceApi;
+    private SheroesApplication mSheroesApplication;
     private List<FeedDetail> mFeedDetailList = new ArrayList<>();
 
     @Inject
-    public FeedPresenter(HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi mSheroesAppServiceApi) {
+    public FeedPresenter(HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
         this.mUserPreference = userPreference;
-        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
-        this.mSheroesAppServiceApi = mSheroesAppServiceApi;
-
+        this.mSheroesAppServiceApi = sheroesAppServiceApi;
     }
 
     @Override
@@ -180,7 +171,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showFeedList(mFeedDetailList);
-
                     }
 
                     @Override
@@ -223,9 +213,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                     }
                                     break;
                             }
-
                         } else {
-
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
@@ -235,7 +223,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                     }
                 });
-
     }
 
     public boolean isFeedLoading() {
@@ -261,7 +248,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
-
                     }
 
                     @Override
@@ -272,7 +258,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                     }
                 });
-
     }
 
     //Post Follow /Following
@@ -312,10 +297,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
                             }
                         }
-                          getMvpView().invalidateItem(userPostSolrObj);
+                        getMvpView().invalidateItem(userPostSolrObj);
                     }
                 });
-
     }
 
     //Unfollowed
@@ -326,12 +310,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
-                    @Override
-                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ChampionFollowedResponse>bindToLifecycle())
@@ -404,7 +382,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().invalidateItem(userSolrObj);
                     }
                 });
-
     }
 
     public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
@@ -465,7 +442,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
-
                     }
 
                     @Override
@@ -473,7 +449,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                     }
                 });
-
     }
 
     public void deleteCommunityPostFromPresenter(DeleteCommunityPostRequest deleteCommunityPostRequest, final FeedDetail feedDetail) {
@@ -519,7 +494,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -536,7 +510,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                         getMvpView().stopProgressBar();
                     }
-
                 });
     }
 
@@ -572,7 +545,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                     }
                 });
-
     }
 
 
@@ -595,7 +567,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), ERROR_BOOKMARK_UNBOOKMARK);
-
                     }
 
                     @Override
@@ -608,7 +579,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                     }
                 });
-
     }
 
     public void getPostLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
@@ -620,7 +590,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        getLikesFromModel(likeRequestPojo)
+        mSheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
                     @Override
@@ -636,7 +608,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         feedDetail.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
                         feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() - AppConstants.ONE_CONSTANT);
                         getMvpView().invalidateItem(feedDetail);
-
                     }
 
                     @Override
@@ -651,7 +622,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().likeUnlikeResponse(feedDetail, true);
                     }
                 });
-
     }
 
     public void getPollVoteFromPresenter(PollVote pollVote, final FeedDetail feedDetail, final long pollOptionId) {
@@ -701,20 +671,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         }
                     }
                 });
-
-    }
-
-
-    public Observable<LikeResponse> getLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return mSheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
-                .map(new Function<LikeResponse, LikeResponse>() {
-                    @Override
-                    public LikeResponse apply(LikeResponse likeResponse) {
-                        return likeResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void getPostUnLikesFromPresenter(LikeRequestPojo likeRequestPojo, final FeedDetail feedDetail) {
@@ -722,12 +678,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_LIKE_UNLIKE);
             feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
             feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-            //mBaseResponseList.set(0, userPostSolrObj);
             getMvpView().invalidateItem(feedDetail);
             return;
         }
         getMvpView().startProgressBar();
-        getUnLikesFromModel(likeRequestPojo)
+        mSheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
                     @Override
@@ -742,37 +699,20 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().showError(e.getMessage(), ERROR_LIKE_UNLIKE);
                         feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                         feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                        // mBaseResponseList.set(0, userPostSolrObj);
                         getMvpView().invalidateItem(feedDetail);
-
                     }
 
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             feedDetail.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
                             feedDetail.setNoOfLikes(feedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
-                            //  mBaseResponseList.set(0, userPostSolrObj);
                         }
                         getMvpView().invalidateItem(feedDetail);
                         getMvpView().likeUnlikeResponse(feedDetail, false);
                     }
                 });
-
-    }
-
-
-    public Observable<LikeResponse> getUnLikesFromModel(LikeRequestPojo likeRequestPojo) {
-        return mSheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
-                .map(new Function<LikeResponse, LikeResponse>() {
-                    @Override
-                    public LikeResponse apply(LikeResponse likeResponse) {
-                        return likeResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void getCommentUnLikesFromPresenter(final LikeRequestPojo likeRequestPojo, final Comment comment, final UserPostSolrObj userPostSolrObj) {
@@ -786,7 +726,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        getUnLikesFromModel(likeRequestPojo)
+        mSheroesAppServiceApi.getUnLikesFromApi(likeRequestPojo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
                     @Override
@@ -826,7 +768,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         AnalyticsManager.trackEvent(Event.REPLY_UNLIKED, PostDetailActivity.SCREEN_LABEL, properties);
                     }
                 });
-
     }
 
     public void getCommentLikesFromPresenter(LikeRequestPojo likeRequestPojo, final Comment comment, final UserPostSolrObj userPostSolrObj) {
@@ -839,7 +780,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        getLikesFromModel(likeRequestPojo)
+        mSheroesAppServiceApi.getLikesFromApi(likeRequestPojo)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<LikeResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<LikeResponse>() {
                     @Override
@@ -861,7 +804,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     @Override
                     public void onNext(LikeResponse likeResponse) {
                         getMvpView().stopProgressBar();
-                        if (likeResponse.getStatus() == AppConstants.FAILED) {
+                        if (likeResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             comment.isLiked = false;
                             comment.likeCount--;
                             userPostSolrObj.getLastComments().set(0, comment);
@@ -879,7 +822,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         AnalyticsManager.trackEvent(Event.REPLY_LIKED, PostDetailActivity.SCREEN_LABEL, properties);
                     }
                 });
-
     }
 
     public void editTopPost(final CommunityTopPostRequest communityTopPostRequest) {
@@ -888,13 +830,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
         getMvpView().startProgressBar();
-        editPostCommunity(communityTopPostRequest)
+        mSheroesAppServiceApi.topPostCommunityPost(communityTopPostRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CreateCommunityResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<CreateCommunityResponse>() {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -909,22 +852,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         getMvpView().invalidateItem(communityPostCreateResponse.getFeedDetail());
                     }
-
                 });
-
-    }
-
-    public Observable<CreateCommunityResponse> editPostCommunity(CommunityTopPostRequest communityPostCreateRequest) {
-        LogUtils.info(TAG, "***************edit community Post****" + new Gson().toJson(communityPostCreateRequest));
-        return mSheroesAppServiceApi.topPostCommunityPost(communityPostCreateRequest)
-                .map(new Function<CreateCommunityResponse, CreateCommunityResponse>() {
-                    @Override
-                    public CreateCommunityResponse apply(CreateCommunityResponse communityTagsListResponse) {
-                        return communityTagsListResponse;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
     }
 
     public void onStop() {
@@ -950,12 +878,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         getMvpView().startProgressBar();
 
         mSheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
-                .map(new Function<CommunityResponse, CommunityResponse>() {
-                    @Override
-                    public CommunityResponse apply(CommunityResponse communityResponse) {
-                        return communityResponse;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<CommunityResponse>bindToLifecycle())
@@ -973,7 +895,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
                         communityFeedSolrObj.setMember(false);
                         getMvpView().invalidateCommunityJoin(communityFeedSolrObj);
-
                     }
 
                     @Override
@@ -1002,12 +923,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         getMvpView().startProgressBar();
 
         mSheroesAppServiceApi.removeMember(removeMemberRequest)
-                .map(new Function<MemberListResponse, MemberListResponse>() {
-                    @Override
-                    public MemberListResponse apply(MemberListResponse memberListResponse) {
-                        return memberListResponse;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<MemberListResponse>bindToLifecycle())
@@ -1038,7 +953,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                     }
                 });
-
     }
 
 

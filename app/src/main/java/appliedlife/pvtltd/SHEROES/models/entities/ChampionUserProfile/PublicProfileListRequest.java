@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 import org.parceler.Parcel;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baserequest.BaseRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 
 /**
  * Created by Praveen_Singh on 03-08-2017.

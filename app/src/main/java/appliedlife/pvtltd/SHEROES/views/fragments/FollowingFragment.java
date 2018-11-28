@@ -10,10 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -48,12 +46,10 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequ
 import appliedlife.pvtltd.SHEROES.presenters.FollowingPresenterImpl;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.FollowingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FollowerFollowingAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowerFollowingView;
 import butterknife.Bind;
@@ -70,17 +66,11 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment.
  */
 
 public class FollowingFragment extends BaseFragment implements IFollowerFollowingView, FollowerFollowingCallback {
+    //region constants
     private static final String SCREEN_LABEL = "Followed Champions Screen";
+    //endregion constants
 
-    @Inject
-    FollowingPresenterImpl mFollowingPresenter;
-
-    @Inject
-    AppUtils mAppUtils;
-
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-
+    //region bind variable
     @Bind(R.id.communities)
     RecyclerView mRecyclerView;
 
@@ -90,21 +80,36 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
 
-    @BindDimen(R.dimen.imagesize_unfollow_dialog)
-    int mProfileSizeSmall;
-
     @Bind(R.id.progress_bar)
     ProgressBar mProgressBar;
 
+    @BindDimen(R.dimen.imagesize_unfollow_dialog)
+    int mProfileSizeSmall;
+    //endregion bind variable
+
+    //region injected variable
+    @Inject
+    FollowingPresenterImpl mFollowingPresenter;
+
+    @Inject
+    AppUtils mAppUtils;
+
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    //endregion injected variable
+
+    //region private member variable
     private long mUserMentorId;
-    private boolean isSelfProfile;
+    private boolean mIsSelfProfile;
     private FragmentListRefreshData mFragmentListRefreshData;
     private FollowerFollowingAdapter mAdapter;
     private SwipPullRefreshList mPullRefreshList;
     private FollowingEnum mMode;
     private FollowersFollowingRequest mProfileFollowedMentor;
     private Dialog mDialog = null;
+    //endregion private member variable
 
+    //region constructor
     public static FollowingFragment createInstance(long userId, boolean isSelfProfile, String enumValue) {
         FollowingFragment followingFragment = new FollowingFragment();
         Bundle bundle = new Bundle();
@@ -114,7 +119,9 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
         followingFragment.setArguments(bundle);
         return followingFragment;
     }
+    //endregion constructor
 
+    //region fragment lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -124,22 +131,17 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
         if (getArguments() != null) {
             mUserMentorId = getArguments().getLong(USER_MENTOR_ID);
-            isSelfProfile = getArguments().getBoolean(SELF_PROFILE);
+            mIsSelfProfile = getArguments().getBoolean(SELF_PROFILE);
             mMode = FollowingEnum.valueOf(getArguments().getString(FollowingActivity.MEMBERS_TYPE));
         }
 
         if (mMode == null) return null;
-
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, mMode.name(), AppConstants.NO_REACTION_CONSTANT);
-        mFragmentListRefreshData.setSelfProfile(isSelfProfile);
+        mFragmentListRefreshData.setSelfProfile(mIsSelfProfile);
         mFragmentListRefreshData.setMentorUserId(mUserMentorId);
-
         mProfileFollowedMentor = mAppUtils.followerFollowingRequest(mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getMentorUserId(), mMode.name());
-
         if (mProfileFollowedMentor == null) return null;
-
         followedListPagination(mFragmentListRefreshData);
-
         return view;
     }
 
@@ -148,49 +150,14 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
         return mFollowingPresenter;
     }
 
-    private void followedListPagination(FragmentListRefreshData mFragmentListRefreshData) {
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new FollowerFollowingAdapter(getContext(), this, mUserPreference);
-        mRecyclerView.setAdapter(mAdapter);
-        mPullRefreshList = new SwipPullRefreshList();
-        mPullRefreshList.setPullToRefresh(false);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mFollowingPresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
-            @Override
-            public void onHide() {
-            }
-
-            @Override
-            public void onShow() {
-            }
-
-            @Override
-            public void dismissReactions() {
-            }
-        });
-        mFollowingPresenter.getFollowersFollowing(mProfileFollowedMentor);
-
-        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                refreshFeedMethod();
-            }
-        });
-    }
-
-    private void refreshFeedMethod() {
-        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
-        mPullRefreshList = new SwipPullRefreshList();
-        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        mFollowingPresenter.getFollowersFollowing(mProfileFollowedMentor);
-    }
-
     @Override
     public void onDetach() {
         super.onDetach();
         mFollowingPresenter.detachView();
     }
+    //endregion fragment lifecycle methods
 
+    //region override methods
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
@@ -251,52 +218,12 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
                         .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                         .build();
         if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
-            unFollowConfirmation(publicProfileListRequest, userSolrObj);
+            if(getActivity()!=null && !getActivity().isFinishing()) {
+                ((FollowingActivity) getActivity()).unFollowConfirmation(publicProfileListRequest, userSolrObj, getScreenName());
+            }
         } else {
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mFollowingPresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);
-        }
-    }
-
-    protected final void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
-        if (userSolrObj != null) {
-            if (mDialog != null) {
-                mDialog.dismiss();
-            }
-            mDialog = new Dialog(getContext());
-            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            mDialog.setCancelable(false);
-            mDialog.setContentView(R.layout.unfollow_confirmation_dialog);
-            CircleImageView circleImageView = mDialog.findViewById(R.id.user_img_icon);
-            if (StringUtil.isNotNullOrEmptyString(userSolrObj.getImageUrl())) {
-                String authorThumborUrl = CommonUtil.getThumborUri(userSolrObj.getImageUrl(), mProfileSizeSmall, mProfileSizeSmall);
-                circleImageView.setCircularImage(true);
-                circleImageView.bindImage(authorThumborUrl);
-            }
-            TextView text = mDialog.findViewById(R.id.title);
-            text.setText(getString(R.string.unfollow_profile, userSolrObj.getNameOrTitle()));
-            TextView dialogButton = mDialog.findViewById(R.id.cancel);
-            dialogButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mDialog.dismiss();
-                }
-            });
-            TextView unFollowButton = mDialog.findViewById(R.id.unfollow);
-            unFollowButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    HashMap<String, Object> properties =
-                            new EventProperty.Builder()
-                                    .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
-                                    .name(userSolrObj.getNameOrTitle())
-                                    .build();
-                    AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
-                    mFollowingPresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
-                    mDialog.dismiss();
-                }
-            });
-            mDialog.show();
         }
     }
 
@@ -362,4 +289,44 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
     }
+    //endregion override methods
+
+    //region private methods
+    private void followedListPagination(FragmentListRefreshData mFragmentListRefreshData) {
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new FollowerFollowingAdapter(getContext(), this, mUserPreference);
+        mRecyclerView.setAdapter(mAdapter);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        mRecyclerView.addOnScrollListener(new HidingScrollListener(mFollowingPresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onHide() {
+            }
+
+            @Override
+            public void onShow() {
+            }
+
+            @Override
+            public void dismissReactions() {
+            }
+        });
+        mFollowingPresenter.getFollowersFollowing(mProfileFollowedMentor);
+
+        mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                refreshFeedMethod();
+            }
+        });
+    }
+
+    private void refreshFeedMethod() {
+        mFragmentListRefreshData.setPageNo(AppConstants.ONE_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
+        mFollowingPresenter.getFollowersFollowing(mProfileFollowedMentor);
+    }
+    //endregion private methods
 }

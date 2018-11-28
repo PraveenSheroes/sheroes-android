@@ -1,20 +1,16 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -34,25 +30,14 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
 public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView> {
 
     //region private variables
-    private ProfileModel profileModel;
     private SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi mSheroesAppServiceApi;
     //endregion
 
-    //region injected variable
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-    //endregion injected variable
-
     //region constructor
     @Inject
-    public FollowingPresenterImpl(ProfileModel profileModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference , SheroesAppServiceApi sheroesAppServiceApi) {
-        this.profileModel = profileModel;
+    public FollowingPresenterImpl(SheroesApplication sheroesApplication, SheroesAppServiceApi sheroesAppServiceApi) {
         this.mSheroesApplication = sheroesApplication;
-        this.mUserPreference = userPreference;
         this.mSheroesAppServiceApi = sheroesAppServiceApi;
     }
     //endregion
@@ -64,8 +49,9 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
             return;
         }
         getMvpView().startProgressBar();
-
-        profileModel.getFollowerFollowing(profileFollowedMentor)
+        mSheroesAppServiceApi.getFollowerOrFollowing(profileFollowedMentor)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FollowedUsersResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<FollowedUsersResponse>() {
                     @Override

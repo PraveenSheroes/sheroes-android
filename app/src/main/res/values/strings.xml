@@ -63,9 +63,6 @@
     <string name="ID_VIEW_MORE">View More</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;View More</string>
     <string name="ID_JOIN">Join</string>
-    <string name="ID_INTERESTED">Interested</string>
-    <string name="ID_GOING">Going</string>
-    <string name="ID_REQUESTED">Requested</string>
     <string name="ID_JOINED">Joined</string>
     <string name="ID_VIEW">View</string>
     <string name="ID_VIEWS">Views</string>
@@ -192,8 +189,6 @@
         <item>Other</item>
     </string-array>
     <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
-    <string name="ID_SPEAKER">Speaker</string>
-    <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
     <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
     <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>
@@ -385,9 +380,6 @@
     <string name="ID_FOLLOWER_VISITOR">Followers in last 7 days</string>
     <string name="ID_POSTS">Posts created in last 7 days</string>
     <string name="ID_QUESTIONS">Questions in last 7 days</string>
-    <string name="ID_ANSWERS">Answered questions in last 7 days</string>
-    <string name="ID_ANSWER_QUESTION">Answer questions</string>
-    <string name="ID_START_ANSWER_QUESTION">Start answering questions</string>
     <string name="private_information">Private Information (Only Visible to You)</string>
     <string name="ID_LOGIN_MSG"><![CDATA[ <html><body> <div style="text-align: center;margin: 0px 0px 5px 0px;">Email login is
                                                     <span style="color:#3C3C3C;"><b>only for existing users.</b> </span>

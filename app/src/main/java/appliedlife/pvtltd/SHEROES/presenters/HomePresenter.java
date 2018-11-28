@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
 import android.content.SharedPreferences;
 
 import com.crashlytics.android.Crashlytics;
@@ -16,15 +15,12 @@ import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigurationResponse;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.MasterDataModel;
-import appliedlife.pvtltd.SHEROES.models.ProfileModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.CommunityResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
@@ -56,14 +52,12 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_AUTH_
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOKMARK_UNBOOKMARK;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_BOOK_MARK_LIST;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_SEARCH_DATA;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FCM_ID;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.MARK_AS_SPAM;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATION_COUNT;
 
@@ -75,28 +69,31 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATIO
  * @since 29/12/2016.
  * Title: Hotel presenter perform required response data for Home activity.
  */
+
 public class HomePresenter extends BasePresenter<HomeView> {
+    //region constant
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
+    //endregion constant
 
-    private HomeModel mHomeModel;
-    private MasterDataModel mMasterDataModel;
-    private SheroesApplication mSheroesApplication;
-    private SheroesAppServiceApi mSheroesAppServiceApi;
-
+    //region injected variable
     @Inject
     Preference<LoginResponse> mUserPreference;
     @Inject
     Preference<MasterDataResponse> mUserPreferenceMasterData;
-
     @Inject
     Preference<AllCommunitiesResponse> mAllCommunities;
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
+    //endregion injected variable
 
-    @Inject
-    ProfileModel profileModel;
+    //region private member variable
+    private HomeModel mHomeModel;
+    private MasterDataModel mMasterDataModel;
+    private SheroesApplication mSheroesApplication;
+    private SheroesAppServiceApi mSheroesAppServiceApi;
+    //endregion private member variable
 
+    //region constructor
     @Inject
     public HomePresenter(MasterDataModel masterDataModel, HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, Preference<AppConfiguration> mConfiguration,SheroesAppServiceApi sheroesAppServiceApi) {
         this.mHomeModel = homeModel;
@@ -107,7 +104,9 @@ public class HomePresenter extends BasePresenter<HomeView> {
         this.mUserPreferenceMasterData = mUserPreferenceMasterData;
         this.mSheroesAppServiceApi= sheroesAppServiceApi;
     }
+    //endregion constructor
 
+    //region public methods
     public void getMasterDataToPresenter() {
         super.getMasterDataToAllPresenter(mSheroesApplication, mMasterDataModel, mUserPreferenceMasterData);
     }
@@ -146,7 +145,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 });
 
     }
-
 
     public void getFeedFromPresenter(final FeedRequestPojo feedRequestPojo) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -333,12 +331,13 @@ public class HomePresenter extends BasePresenter<HomeView> {
             return;
         }
         getMvpView().startProgressBar();
-        profileModel.getPersonalUserSummaryDetails(userSummaryRequest)
+        mSheroesAppServiceApi.getPersonalUserSummaryDetailsAuthToken(userSummaryRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<BoardingDataResponse>bindToLifecycle())
                 .subscribe(new DisposableObserver<BoardingDataResponse>() {
             @Override
             public void onComplete() {
-
             }
 
             @Override
@@ -384,37 +383,6 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     public void onNext(BookmarkResponsePojo bookmarkResponsePojo) {
                         getMvpView().stopProgressBar();
                         getMvpView().getSuccessForAllResponse(bookmarkResponsePojo, BOOKMARK_UNBOOKMARK);
-                    }
-                });
-
-    }
-
-    public void communityJoinFromPresenter(CommunityRequest communityRequest) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mHomeModel.communityJoinFromModel(communityRequest)
-                .compose(this.<CommunityResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<CommunityResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
-
-                    }
-
-                    @Override
-                    public void onNext(CommunityResponse communityResponse) {
-                        getMvpView().stopProgressBar();
-                        getMvpView().getSuccessForAllResponse(communityResponse, JOIN_INVITE);
                     }
                 });
 
@@ -600,5 +568,5 @@ public class HomePresenter extends BasePresenter<HomeView> {
     public void onStop() {
         detachView();
     }
-
+    //endregion public methods
 }
