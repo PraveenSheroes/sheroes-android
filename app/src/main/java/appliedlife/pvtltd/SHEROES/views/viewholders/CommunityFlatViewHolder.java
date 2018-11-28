@@ -39,9 +39,6 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     //endregion
 
     //region bind variables
-    @Bind(R.id.feature_image)
-    ImageView mFeatureImage;
-
     @Bind(R.id.community_icon)
     ImageView mCommunityIcon;
 
@@ -85,15 +82,15 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
 
-        int imageHeight = (int) (((float) 1 / (float) 2) * CommonUtil.getWindowWidth(mContext));
-        mFeatureImage.getLayoutParams().height = imageHeight;
-        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
-            String finalImageUri = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
-            Glide.with(context)
-                    .asBitmap()
-                    .load(finalImageUri)
-                    .into(mFeatureImage);
-        }
+//        int imageHeight = (int) (((float) 1 / (float) 2) * CommonUtil.getWindowWidth(mContext));
+//        mFeatureImage.getLayoutParams().height = imageHeight;
+//        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
+//            String finalImageUri = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
+//            Glide.with(context)
+//                    .asBitmap()
+//                    .load(finalImageUri)
+//                    .into(mFeatureImage);
+//        }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getThumbnailImageUrl())) {
             String thumbImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
