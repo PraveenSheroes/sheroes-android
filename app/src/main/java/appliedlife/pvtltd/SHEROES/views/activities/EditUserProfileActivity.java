@@ -74,7 +74,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
