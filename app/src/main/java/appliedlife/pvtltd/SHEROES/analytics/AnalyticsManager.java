@@ -1,6 +1,9 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
+import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
@@ -12,6 +15,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.isNotNullOrEmptyString;
@@ -25,6 +30,7 @@ public class AnalyticsManager {
     private static final String TAG = "AnalyticsManager";
     private static Context sAppContext = null;
     private static AnalyticsManager sInstance;
+    private static FirebaseAnalytics mFirebaseAnalytics;
     //endregion
 
     //region private method
@@ -49,6 +55,11 @@ public class AnalyticsManager {
         GoogleAnalyticsHelper.initializeAnalyticsTracker(context);
     }
 
+    public static synchronized void initializeFirebaseAnalytics(Context context) {
+        sAppContext = context;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+    }
+
     public static void initializeMixpanel(final Context context, final Boolean isNewUser) {
         sAppContext = context;
         MixpanelHelper mixpanelHelper = new MixpanelHelper();
@@ -70,7 +81,6 @@ public class AnalyticsManager {
     public static void initializeFbAnalytics(Context context) {
         FBAnalyticsHelper.initializeAnalyticsTracker(context);
     }
-
     //endregion
 
     // region Primary Event Methods
@@ -115,6 +125,27 @@ public class AnalyticsManager {
 
         //Google Analytics
         GoogleAnalyticsHelper.sendScreenView(screenName);
+
+        //Firebase Analytics
+        if(getActivityFromContext(sAppContext) != null && screenName != null) {
+            screenName = screenName.replaceAll(" ","_");
+            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName, null);
+        }
+    }
+
+    public static Activity getActivityFromContext(Context context) {
+        if (context == null) {
+            return null;
+        }
+        else if (context instanceof ContextWrapper) {
+            if (context instanceof Activity) {
+                return (Activity) context;
+            }
+            else {
+                return getActivityFromContext(((ContextWrapper) context).getBaseContext());
+            }
+        }
+        return null;
     }
 
     public static void timeScreenView(String screenName) {
@@ -168,6 +199,48 @@ public class AnalyticsManager {
         if(event.trackEventToProvider(AnalyticsProvider.GOOGLE_ANALYTICS)) {
             GoogleAnalyticsHelper.sendEvent(event.type.name, event.name, null);
         }
+
+        //track all events to Firebase Analytics
+        if(event.trackEventToProvider(AnalyticsProvider.FIREBASE)) {
+            Bundle bundle = new Bundle();
+            try {
+                bundle = mapToBundle(properties, bundle, event.type.name, event.name);
+            } catch (Exception e) {
+                Crashlytics.getInstance().core.logException(e);
+            }
+            if(bundle!=null)
+            mFirebaseAnalytics.logEvent(event.type.name,bundle);
+        }
+    }
+
+    public static Bundle mapToBundle(Map<String, Object> data, Bundle bundle, String eventType, String eventName) throws Exception {
+        if (bundle == null) {
+            bundle = new Bundle();
+        }
+
+        bundle.putString(eventType, eventName);
+        int i=0;
+        for (Map.Entry<String, Object> entry : data.entrySet()) {
+            if(i<24) {
+                String key = entry.getKey().replaceAll(" ", "_");
+                key = key.replaceAll("[$]", "");
+                //google_ , ga_ , firebase_ are reserved prefixes in firebase so can't be used in parameter
+                if(key.equals("google_play_services"))
+                    key = key.replace(key, "fa_play_services");
+                if (entry.getValue() instanceof String) {
+                    bundle.putString(key, (String) entry.getValue());
+                } else if (entry.getValue() instanceof Double) {
+                    bundle.putDouble(key, ((Double) entry.getValue()));
+                } else if (entry.getValue() instanceof Integer) {
+                    bundle.putInt(key, (Integer) entry.getValue());
+                } else if (entry.getValue() instanceof Float) {
+                    bundle.putFloat(key, ((Float) entry.getValue()));
+                }
+                i++;
+            } else
+                break;
+        }
+        return bundle;
     }
 
     public static void trackCommentAction(Event event, FeedDetail feedDetail, String screenName) {

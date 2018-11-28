@@ -72,6 +72,7 @@ public class SheroesApplication extends MultiDexApplication {
         AnalyticsManager.initializeFbAnalytics(mContext);
         AnalyticsManager.initializeCleverTap(this, false);
         AnalyticsManager.initializeGoogleAnalytics(this);
+        AnalyticsManager.initializeFirebaseAnalytics(this);
         StethoUtil.initStetho(this);
     }
 

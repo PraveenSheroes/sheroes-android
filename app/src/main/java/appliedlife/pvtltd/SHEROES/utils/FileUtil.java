@@ -29,8 +29,6 @@ import java.util.concurrent.ExecutionException;
 
 import io.reactivex.Observable;
 
-
-
 /**
  * Created by Sowrabh on 2/22/14.
  */

@@ -18,7 +18,7 @@ public enum AnalyticsEventType {
     BADGE("Badge"),
     REPLY("Reply"),
     JOB("Job"),
-    HELPLINE_MESSAGE("Helpline Message "),
+    HELPLINE_MESSAGE("Helpline Message"),
     CHALLENGE("Challenge"),
     COMMUNITY("Community"),
     ON_BOARDING("Onboarding"),
@@ -46,6 +46,7 @@ public enum AnalyticsEventType {
     public final String name;
 
     AnalyticsEventType(String name) {
+        name = name.replaceAll(" ","_");
         this.name = name;
     }
 

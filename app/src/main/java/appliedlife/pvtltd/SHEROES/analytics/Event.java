@@ -35,8 +35,8 @@ public enum Event {
     },
     APP_SHARED(AnalyticsEventType.APP, "Shared"),
     APP_REVIEW_CLICKED(AnalyticsEventType.APP_REVIEW_CLICKED, ""),
-    APP_INVITE_CLICKED(AnalyticsEventType.APP, " Invite Clicked"),
-    APP_INVITE(AnalyticsEventType.APP, " Invite"),
+    APP_INVITE_CLICKED(AnalyticsEventType.APP, "Invite Clicked"),
+    APP_INVITE(AnalyticsEventType.APP, "Invite"),
     USER_ONBOARDED(AnalyticsEventType.APP, "Onboarded"),
     //endregion
 
@@ -205,8 +205,8 @@ public enum Event {
     //endregion
 
     //region Walkthrough related events
-    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, " Started"),
-    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, " Completed"),
+    WALKTHROUGH_STARTED(AnalyticsEventType.WALKTHROUGH, "Started"),
+    WALKTHROUGH_COMPLETED(AnalyticsEventType.WALKTHROUGH, "Completed"),
     // endregion
 
     //region leaderBoard
@@ -216,7 +216,7 @@ public enum Event {
 
     //region onboarding
     ONBOARDING_SKIPPED(AnalyticsEventType.ON_BOARDING, "Skipped"),
-    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, " Completed"),
+    ONBOARDING_COMPLETED(AnalyticsEventType.ON_BOARDING, "Completed"),
     //endregion
 
     //region Contact events
@@ -255,6 +255,7 @@ public enum Event {
 
     Event(AnalyticsEventType eventType, String eventName) {
         this.type = eventType;
+        eventName = eventName.replaceAll(" ","_");
         this.name = eventName;
     }
 
@@ -267,7 +268,8 @@ public enum Event {
                 || analyticsProvider == AnalyticsProvider.MIXPANEL
                 || analyticsProvider == AnalyticsProvider.CLEVERTAP
                 || analyticsProvider == AnalyticsProvider.FACEBOOK
-                || analyticsProvider == AnalyticsProvider.APPSFLYER;
+                || analyticsProvider == AnalyticsProvider.APPSFLYER
+                || analyticsProvider == AnalyticsProvider.FIREBASE;
     }
 
     public void addProperties(Map<String, Object> properties) {
@@ -279,6 +281,7 @@ public enum Event {
                 || analyticsProvider == AnalyticsProvider.MIXPANEL
                 || analyticsProvider == AnalyticsProvider.CLEVERTAP
                 || analyticsProvider == AnalyticsProvider.FACEBOOK
-                || analyticsProvider == AnalyticsProvider.APPSFLYER;
+                || analyticsProvider == AnalyticsProvider.APPSFLYER
+                || analyticsProvider == AnalyticsProvider.FIREBASE;
     }
 }

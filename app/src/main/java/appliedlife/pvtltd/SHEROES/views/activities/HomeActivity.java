@@ -995,6 +995,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, M
         AnalyticsManager.initializeMixpanel(this, false);
         AnalyticsManager.initializeCleverTap(this, false);
         AnalyticsManager.initializeGoogleAnalytics(this);
+        AnalyticsManager.initializeFirebaseAnalytics(this);
     }
 
     @Override

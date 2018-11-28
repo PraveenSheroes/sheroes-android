@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "657938611740",
+    "firebase_url": "https://sheroes-app-dev.firebaseio.com",
+    "project_id": "sheroes-app-dev",
+    "storage_bucket": "sheroes-app-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657938611740:android:814e402ae95b5f94",
+        "android_client_info": {
+          "package_name": "appliedlife.pvtltd.SHEROES"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "657938611740-524u64qqqh2lon9u7uu5jfk14bomibp5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOV4I_y3LHi2maknYGBPgchET1kwFrCCc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
