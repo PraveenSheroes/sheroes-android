@@ -472,8 +472,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             ((FeedItemCallback) viewInterface).onPostAuthorFollowed(mUserPostObj);
         } else {
             feedUtils.dataOperationOnClick(mContext, mUserPostObj);
-
-//            viewInterface.dataOperationOnClick(mUserPostObj);
         }
     }
 
@@ -716,11 +714,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             if (!mUserPostObj.isSolrIgnoreIsUserFollowed()) {
                 mFollowButton.setVisibility(View.VISIBLE);
-                mFollowButton.setEnabled(true);
-                mFollowButton.setAlpha(FOLLOW_BUTTON_ORIGINAL);
-                mFollowButton.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-                mFollowButton.setText(R.string.follow_user);
-                mFollowButton.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+                followButtonVisibility(mContext, false);
             } else {
                 mFollowButton.setVisibility(View.GONE);
             }
@@ -1294,7 +1288,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     private void feedAlbum(Context context, String firstImage, String secondImage, String thirdImage, int typeOfHolder) {
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View child = layoutInflater.inflate(R.layout.feed_community_post_feed_album, null);
+        View child = LayoutInflater.from(mContext).inflate(R.layout.feed_community_post_feed_album, null);
 
         final LinearLayout liFeedAlbum = child.findViewById(R.id.li_feed_album);
         double imageRatio;

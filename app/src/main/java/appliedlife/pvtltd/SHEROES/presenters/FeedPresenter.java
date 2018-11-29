@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -189,12 +190,14 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
                                         feedList.add(0, homeFeedHeader);
                                     } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
-                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM))
+                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
                                             if (!StringUtil.isNotEmptyCollection(feedList)) {
                                                 FeedDetail noStoryFeed = new FeedDetail();
-                                                noStoryFeed.setSubType(AppConstants.NO_STORIES);
+                                                noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
+                                                noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
                                                 feedList.add(noStoryFeed);
                                             }
+                                        }
                                     }
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);
@@ -363,6 +366,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                     }
 
@@ -372,10 +376,13 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
                             if (championFollowedResponse.isAlreadyFollowed()) {
                                 userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                                userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             }
                         }
@@ -403,6 +410,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                     }
 
@@ -414,7 +422,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         } else {
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         }
                         getMvpView().invalidateItem(userSolrObj);

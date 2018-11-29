@@ -384,13 +384,7 @@ public class FeedUtils {
             case FEED_CARD_MENU:
                 if (null != mFeedDetail) {
                     if (mFeedDetail instanceof UserPostSolrObj) {
-                        UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetail;
-                        if (userPostSolrObj.getCommTypeId() == ASK_QUESTION_POST) {
-                            userPostSolrObj.askQuestionFromMentor = AppConstants.MENTOR_CREATE_QUESTION;
-                            CommunityPostActivity.navigateTo((Activity) context, userPostSolrObj, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
-                        } else {
-                            CommunityPostActivity.navigateTo((Activity) context, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
-                        }
+                        CommunityPostActivity.navigateTo((Activity) context, mFeedDetail, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, null);
                     }
                 }
                 break;

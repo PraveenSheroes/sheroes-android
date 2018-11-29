@@ -217,7 +217,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
                         .name(userSolrObj.getNameOrTitle())
                         .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                         .build();
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             if(getActivity()!=null && !getActivity().isFinishing()) {
                 ((FollowingActivity) getActivity()).unFollowConfirmation(publicProfileListRequest, userSolrObj, getScreenName());
             }

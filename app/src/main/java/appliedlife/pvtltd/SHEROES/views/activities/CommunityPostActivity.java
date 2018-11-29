@@ -34,7 +34,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.util.Base64;
 import android.util.DisplayMetrics;
@@ -114,7 +113,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionRequestModel;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollType;
@@ -461,7 +459,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     hidePollIcon();
                 }
             } else {
-                if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
+                if (mCommunityPost != null) {
                     mEtView.getEditText().requestFocus();
                     if (!mIsChallengePost) {
                         mFbShareContainer.setVisibility(View.VISIBLE);
@@ -992,7 +990,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.isAnonymous = userPostObj.isAnonymous();
             communityPost.isEdit = true;
             communityPost.isPostByCommunity = userPostObj.isCommunityPost();
-            communityPost.createPostRequestFrom = userPostObj.askQuestionFromMentor;
             if (userPostObj.isHasMention()) {
                 communityPost.hasMention = userPostObj.isHasMention();
                 communityPost.userMentionList = userPostObj.getUserMentionList();
@@ -1143,7 +1140,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (mIsSharedContent) {
                 mCommunityPost = new CommunityPost();
                 mCommunityPost.community = community;
-                mCommunityPost.createPostRequestFrom = -1;
                 mCommunityPost.isChallengeType = false;
                 mCommunityPost.community.id = community.id;
                 mCommunityPost.community.name = community.name;
@@ -1389,7 +1385,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             }
         }
         invalidateUserDropDownView();
-        if (mCommunityPost != null && mCommunityPost.createPostRequestFrom != AppConstants.MENTOR_CREATE_QUESTION) {
+        if (mCommunityPost != null) {
             mEtView.getEditText().requestFocus();
             if (!mIsChallengePost) {
                 mFbShareContainer.setVisibility(View.VISIBLE);
@@ -1467,9 +1463,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 case AppConstants.CREATE_POST:
                     mAction.setText(getResources().getString(R.string.action_post));
                     break;
-                case AppConstants.MENTOR_CREATE_QUESTION:
-                    mAction.setText(getResources().getString(R.string.action_mentor_post));
-                    break;
                 default:
                     mAction.setText(getResources().getString(R.string.action_post));
                     break;
@@ -1480,7 +1473,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         } else {
             mAction.setTextColor(Color.parseColor(mTitleTextColor));
         }
-
     }
 
     // Handle multiple images being sent
@@ -1551,10 +1543,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             switch (mCommunityPost.createPostRequestFrom) {
                 case AppConstants.CREATE_POST:
                     mTitleToolbar.setText(R.string.title_create_post);
-                    break;
-                case AppConstants.MENTOR_CREATE_QUESTION:
-                    mFbShareContainer.setVisibility(View.GONE);
-                    mTitleToolbar.setText(R.string.title_ask_question);
                     break;
                 default:
                     mTitleToolbar.setText(R.string.title_create_post);
@@ -1890,31 +1878,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     private void setCommunityName() {
-        if (mCommunityPost != null && mCommunityPost.createPostRequestFrom == AppConstants.MENTOR_CREATE_QUESTION) {
-            mCommunityName.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-            String fullString = getString(R.string.ID_ASKING) + AppConstants.SPACE + mCommunityPost.community.name;
-            SpannableString SpanString = new SpannableString(fullString);
-            SpanString.setSpan(null, 0, getString(R.string.ID_ASKING).length(), 0);
-            SpanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.recent_post_comment)), 0, getString(R.string.ID_ASKING).length(), 0);
+        if (mIsChallengePost) {
+            mCommunityName.setVisibility(View.VISIBLE);
+            mCommunityName.setText(getString(R.string.challenge));
             mCommunityName.setEnabled(false);
-            mCommunityName.setMovementMethod(LinkMovementMethod.getInstance());
-            mCommunityName.setText(SpanString, TextView.BufferType.SPANNABLE);
-            mCommunityName.setSelected(true);
-            mEtView.getEditText().setHint(getString(R.string.ID_WHAT_IS_QUESTION));
-            mEtView.getEditText().requestFocus();
             hidePollIcon();
         } else {
-            if (mIsChallengePost) {
-                mCommunityName.setVisibility(View.VISIBLE);
-                mCommunityName.setText(getString(R.string.challenge));
-                mCommunityName.setEnabled(false);
-                hidePollIcon();
-            } else {
-                if (mCommunityPost != null && mCommunityPost.community != null)
-                    mCommunityName.setText(mCommunityPost.community.name);
-            }
+            if (mCommunityPost != null && mCommunityPost.community != null)
+                mCommunityName.setText(mCommunityPost.community.name);
         }
-
     }
 
     private void invalidateUserDropDownView() {

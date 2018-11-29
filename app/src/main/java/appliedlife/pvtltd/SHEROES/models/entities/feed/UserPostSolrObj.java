@@ -14,9 +14,6 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
  */
 @Parcel(analyze = {UserPostSolrObj.class, FeedDetail.class})
 public class UserPostSolrObj extends FeedDetail {
-
-    public int askQuestionFromMentor;
-
     public boolean isRecentCommentClicked = false;
 
     public Boolean isTextExpanded = false;

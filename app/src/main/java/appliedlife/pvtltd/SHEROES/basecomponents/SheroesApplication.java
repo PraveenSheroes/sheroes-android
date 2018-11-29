@@ -31,7 +31,7 @@ import io.fabric.sdk.android.Fabric;
  * @author Praveen Singh
  * @version 5.0
  * @since 29/12/2016.
- * Title: Application level context and all app componets register here.
+ * Title: Application level context and all app components register here.
  * dagger used for components injection in app.
  */
 public class SheroesApplication extends MultiDexApplication {
