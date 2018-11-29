@@ -11,8 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
@@ -57,6 +62,7 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
     private SearchActivity.SearchPagerAdapter mSearchFragmentAdapter;
     private List<Fragment> mSearchTabFragments = new ArrayList<>();
     private List<String> mSearchTabs = new ArrayList<>();
+    private String mSearchCategory;
     private int[] tabIcons = {
             R.drawable.search_tab_top,
             R.drawable.search_tab_communities,
@@ -72,6 +78,20 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
         ButterKnife.bind(this);
         mSearchPresenter.attachView(this);
         initializeSearchViews();
+        searchListener();
+    }
+
+    public void searchListener() {
+        mETSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    searchProceed();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -188,18 +208,42 @@ public class SearchActivity extends BaseActivity implements ISearchView, BaseHol
 
     @OnClick(R.id.iv_search_icon)
     public void searchProceed() {
-        mSearchPresenter.searchQuery(mETSearch.getText().toString(), "posts");
+        int index = mSearchTabsPager.getCurrentItem();
+        SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
+        Fragment fragment = adapter.getFragment(index);
+        mSearchCategory = getSearchCategory(fragment);
+        mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
     }
 
     @Override
     public void onSearchRespose(FeedResponsePojo feedResponsePojo) {
         int index = mSearchTabsPager.getCurrentItem();
-        SearchPagerAdapter adapter = ((SearchPagerAdapter)mSearchTabsPager.getAdapter());
+        SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
         Fragment fragment = adapter.getFragment(index);
         if (fragment instanceof FeedFragment) {
-            ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+            // ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+        } else if (fragment instanceof CommunitiesListFragment) {
+             ((CommunitiesListFragment)fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+        } else if (fragment instanceof HashTagFragment) {
+//            ((HashTagFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+        } else if (fragment instanceof ArticlesFragment) {
+            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
     }
+
+    public String getSearchCategory(Fragment fragment) {
+        if (fragment instanceof FeedFragment) {
+            mSearchCategory = SearchEnum.TOP.toString();
+        } else if (fragment instanceof CommunitiesListFragment) {
+            mSearchCategory = SearchEnum.COMMUNITIES.toString();
+        } else if (fragment instanceof HashTagFragment) {
+            mSearchCategory = SearchEnum.HASHTAGS.toString();
+        } else if (fragment instanceof ArticlesFragment) {
+            mSearchCategory = SearchEnum.ARTICLES.toString();
+        }
+        return mSearchCategory;
+    }
+
 
     public class SearchPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mSearchFragments = new ArrayList<>();
