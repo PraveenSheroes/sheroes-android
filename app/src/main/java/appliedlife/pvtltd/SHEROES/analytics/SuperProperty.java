@@ -29,7 +29,7 @@ public enum SuperProperty {
     private final String string;
 
     SuperProperty(String string) {
-        string = string.replaceAll(" ","_");
+        string = string.replaceAll(" ", "_");
         this.string = string;
     }
 

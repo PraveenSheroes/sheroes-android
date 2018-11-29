@@ -13,6 +13,7 @@ import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import com.crashlytics.android.Crashlytics;
@@ -138,12 +139,10 @@ public class AnalyticsManager {
     public static Activity getActivityFromContext(Context context) {
         if (context == null) {
             return null;
-        }
-        else if (context instanceof ContextWrapper) {
+        } else if (context instanceof ContextWrapper) {
             if (context instanceof Activity) {
                 return (Activity) context;
-            }
-            else {
+            } else {
                 return getActivityFromContext(((ContextWrapper) context).getBaseContext());
             }
         }
@@ -221,13 +220,13 @@ public class AnalyticsManager {
         }
 
         bundle.putString(eventType, eventName);
-        int i=0;
+        int faParameters = 0;
         for (Map.Entry<String, Object> entry : data.entrySet()) {
-            if(i<24) {
+            if (faParameters < AppConstants.FIREBASE_MAX_PARAMETERS - 1) {
                 String key = entry.getKey().replaceAll(" ", "_");
                 key = key.replaceAll("[$]", "");
                 //google_ , ga_ , firebase_ are reserved prefixes in firebase so can't be used in parameter
-                if(key.equals("google_play_services"))
+                if (key.equals("google_play_services"))
                     key = key.replace(key, "fa_play_services");
                 if (entry.getValue() instanceof String) {
                     bundle.putString(key, (String) entry.getValue());
@@ -238,7 +237,7 @@ public class AnalyticsManager {
                 } else if (entry.getValue() instanceof Float) {
                     bundle.putFloat(key, ((Float) entry.getValue()));
                 }
-                i++;
+                faParameters++;
             } else
                 break;
         }
