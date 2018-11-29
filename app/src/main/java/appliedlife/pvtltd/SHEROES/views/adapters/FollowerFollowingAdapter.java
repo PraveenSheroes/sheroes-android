@@ -240,8 +240,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
             ((FollowerFollowingCallback) mBaseHolderInterface).onFollowFollowingClick(championObj, followFollowingBtnText);
 
             if (!championObj.isSolrIgnoreIsMentorFollowed() || !championObj.isSolrIgnoreIsUserFollowed()) {
-                championObj.setSolrIgnoreIsMentorFollowed(true);
-                championObj.setSolrIgnoreIsUserFollowed(true);
                 showFollowing();
             }
         }

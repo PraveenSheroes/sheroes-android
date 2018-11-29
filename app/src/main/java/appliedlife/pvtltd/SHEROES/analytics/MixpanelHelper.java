@@ -378,7 +378,7 @@ public class MixpanelHelper {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
-                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .pollId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .communityName(pollSolarObj != null ? pollSolarObj.getPollCommunityName() : "")
                             .communityId(pollSolarObj != null ? Long.toString(pollSolarObj.getCommunityId()) : "not defined")
                             .title(feedDetail.getNameOrTitle())

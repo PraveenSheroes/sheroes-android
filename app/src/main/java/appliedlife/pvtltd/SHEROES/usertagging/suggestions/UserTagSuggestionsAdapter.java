@@ -198,7 +198,6 @@ public class UserTagSuggestionsAdapter extends RecyclerView.Adapter<RecyclerView
     //region ContactListAdapter methods
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater mInflater = LayoutInflater.from(mContext);
         switch (viewType) {
             case TYPE_CONTACT:
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tagged_user_list_item, parent, false);

@@ -123,7 +123,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.MainActivityPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -485,7 +484,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
         mDrawer.openDrawer(Gravity.START);
-        ((SheroesApplication) this.getApplication()).trackScreenView(AppConstants.DRAWER_NAVIGATION);
     }
 
     @OnClick(R.id.fl_nav_communities)
@@ -743,8 +741,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mProgressDialog.setCancelable(true);
         mProgressDialog.show();
         LoginManager.getInstance().logOut();
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_INVITES, GoogleAnalyticsEventActions.OPEN_INVITE_FB_FRDZ, AppConstants.EMPTY_STRING);
-
     }
 
     public void helplineUi() {
@@ -983,6 +979,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(this, false);
         AnalyticsManager.initializeCleverTap(this, false);
+        AnalyticsManager.initializeGoogleAnalytics(this);
+        AnalyticsManager.initializeFirebaseAnalytics(this);
     }
 
     @Override
@@ -1359,7 +1357,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
         //For navigation drawer items
         mActivityDataPresenter.getNavigationDrawerOptions(mAppUtils.navigationOptionsRequestBuilder());
-
 
         mMyCommunitiesAdapter = new MyCommunitiesDrawerAdapter(this, this);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);

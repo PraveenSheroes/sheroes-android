@@ -306,7 +306,7 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
                         .name(userSolrObj.getNameOrTitle())
                         .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
                         .build();
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             unFollowConfirmation(userSolrObj);
         } else {
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
@@ -324,7 +324,7 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
     public void followUnFollowRequest(UserSolrObj userSolrObj) {
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userSolrObj.getIdOfEntityOrParticipant());
-        if (userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             mHomePresenter.getUnFollowFromPresenter(publicProfileListRequest, userSolrObj);
         } else {
             mHomePresenter.getFollowFromPresenter(publicProfileListRequest, userSolrObj);

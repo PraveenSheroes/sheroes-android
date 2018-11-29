@@ -366,9 +366,6 @@
     <string name="ID_MENTOR">चैंपियंस</string>
     <string name="empty_mentor_text">अभी तक कोई चैंपियन नहीं है!</string>
     <string name="ID_MENTOR_POST">पोस्ट्स</string>
-    <string name="ID_ASKING">पूछ रहा है</string>
-    <string name="ID_WHAT_IS_QUESTION">आपका क्या सवाल है?</string>
-    <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
     <string name="ID_GET_EXPERT_ADVICE">चैंपियन से प्रतिष्ठित सलाह प्राप्त करें</string>
     <string name="ID_INSIGHT">इनसाइट्स</string>
     <string name="ID_SEE_INSIGHT">इनसाइट्स देखें</string>
@@ -670,4 +667,6 @@
     <string name="helpline_title">SHEROES हेल्पलाइन</string>
     <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
     <string name="search_hint_text">पोस्ट, समुदायों और hastags द्वारा खोजें</string>
+    <string name="empty_post">कोई पोस्ट नहीं</string>
+    <string name="empty_stories">कोई कहानियाँ नहीं</string>
 </resources>

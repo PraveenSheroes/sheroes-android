@@ -20,7 +20,6 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
@@ -85,7 +84,6 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         ivFemale.setImageResource(R.drawable.vector_female);
         ivMale.setImageResource(R.drawable.vector_male);
         tvGenderSelectFinish.setEnabled(false);
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return v;
     }
@@ -111,7 +109,6 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
         ivFemale.setImageResource(R.drawable.vector_female);
         tvWomen.setTextColor(ContextCompat.getColor(getActivity(), R.color.comment_text));
         tvGenderSelectFinish.setEnabled(true);
-
     }
 
     @OnClick(R.id.li_female_layout)

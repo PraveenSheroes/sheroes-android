@@ -89,7 +89,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Config;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -174,6 +173,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Inject
     Preference<LoginResponse> mUserPreference;
+    //endregion
 
     // region View variables
     @Bind(R.id.swipeRefreshContainer)
@@ -342,12 +342,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     protected Map<String, Object> getExtraProperties() {
         if (mCommunityTab != null) {
-            HashMap<String, Object> properties = new EventProperty.Builder()
+            return new EventProperty.Builder()
                     .sourceScreenId(getActivity() instanceof CommunityDetailActivity ? ((CommunityDetailActivity) getActivity()).getCommunityId() : "")
                     .sourceTabKey(mCommunityTab.key)
                     .sourceTabTitle(mCommunityTab.title)
                     .build();
-            return properties;
         } else {
             if (mProperties != null) {
                 return mProperties;
@@ -441,6 +440,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void invalidateItem(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
             ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, false);
+        }  if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof ProfileActivity && feedDetail instanceof UserPostSolrObj) {
+            UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+            ((ProfileActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            findPositionAndUpdateItem(userPostSolrObj, userPostSolrObj.getIdOfEntityOrParticipant());
         } else {
             updateItem(feedDetail);
         }
@@ -805,7 +808,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             } else if (feedDetail != null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
                 UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
-                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID ? userSolrObj.isSolrIgnoreIsMentorFollowed() : userSolrObj.isSolrIgnoreIsUserFollowed());
+                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.isSolrIgnoreIsUserFollowed());
                 mAdapter.setData(i, userPostSolrObj);
             }
         }
@@ -1394,8 +1397,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void onStop() {
-        super.onStop();
         isActiveTabFragment = false;
+        if (mDialog != null) {
+            mDialog.dismiss();
+        }
+        super.onStop();
     }
 
     @Override
@@ -1795,8 +1801,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
         publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
 
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
+        HashMap<String, Object> properties = new EventProperty.Builder()
                         .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
                         .name(userPostSolrObj.getNameOrTitle())
                         .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
@@ -1823,7 +1828,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     @Override
-    public void onAskQuestionClicked() {
+    public void onHeaderCreatePostClicked() {
         CommunityPost communityPost = new CommunityPost();
         communityPost.isEdit = false;
         CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, mScreenProperties);
@@ -1998,7 +2003,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             properties.putAll(getExtraProperties());
         }
 
-        if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
+        if (userSolrObj.isSolrIgnoreIsUserFollowed()) {
             unFollowConfirmation(publicProfileListRequest, userSolrObj);
         } else {
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
@@ -2006,13 +2011,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         }
     }
 
-    //TODO - Reuse Unfollow dialog fragment
     public void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
-        if (userSolrObj != null) {
+        if (userSolrObj != null && getActivity()!=null) {
             if (mDialog != null) {
                 mDialog.dismiss();
             }
-            mDialog = new Dialog(getContext());
+            mDialog = new Dialog(getActivity());
             mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.setCancelable(false);
             mDialog.setContentView(R.layout.unfollow_confirmation_dialog);
@@ -2047,18 +2051,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             });
             mDialog.show();
         }
-    }
-
-    @Override
-    public void onMentorAskQuestionClicked(UserSolrObj userSolrObj) {
-        CommunityPost communityPost = new CommunityPost();
-        communityPost.community = new Community();
-        communityPost.community.id = userSolrObj.getSolrIgnoreMentorCommunityId();
-        communityPost.community.name = userSolrObj.getNameOrTitle();
-        communityPost.createPostRequestFrom = AppConstants.MENTOR_CREATE_QUESTION;
-        communityPost.isEdit = false;
-        communityPost.isCompanyAdmin = userSolrObj.getCompanyAdmin();
-        CommunityPostActivity.navigateTo(getActivity(), communityPost, AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST, false, mPrimaryColor, mTitleTextColor, mScreenProperties);
     }
 
     @Override

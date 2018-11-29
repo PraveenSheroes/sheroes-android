@@ -218,7 +218,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         mBaseFragmentUtil.showError(mSwipeView, errorMsg, feedParticipationEnum);
         mErrorUtil.onShowErrorDialog(getActivity(), errorMsg, feedParticipationEnum);
-
     }
 
     @Override
@@ -230,7 +229,6 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
         if (getPresenter() != null) {
             getPresenter().onResume();
         }
-
     }
 
     @Override
@@ -266,9 +264,7 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
                 super.startActivity(intent);
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
-                //Toast.makeText(getContext(),"Please goto playstore and download request Url app ",Toast.LENGTH_SHORT).show();
             }
-
         }
     }
 
@@ -301,5 +297,4 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
     }
 
     protected abstract SheroesPresenter getPresenter();
-
 }

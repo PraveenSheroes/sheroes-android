@@ -49,7 +49,6 @@ import butterknife.ButterKnife;
  * Created by Praveen_Singh on 09-01-2017.
  */
 
-
 public class ArticlesFragment extends BaseFragment {
     public static final String SCREEN_LABEL = "Article Listing Screen";
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
@@ -132,8 +131,6 @@ public class ArticlesFragment extends BaseFragment {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.ARTICLE_LISTING);
-
         return view;
     }
 
