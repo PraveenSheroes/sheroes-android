@@ -154,7 +154,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onComplete(RippleView rippleView) {
                 if(viewInterface instanceof FeedItemCallback){
-                    ((FeedItemCallback)viewInterface).onAskQuestionClicked();
+                    ((FeedItemCallback)viewInterface).onHeaderCreatePostClicked();
                 }else {
                     viewInterface.handleOnClick(dataItem, headerMsg);
                 }

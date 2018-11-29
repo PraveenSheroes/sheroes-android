@@ -370,9 +370,6 @@
     <string name="ID_MENTOR">Champions</string>
     <string name="empty_mentor_text">No champions yet!</string>
     <string name="ID_MENTOR_POST">Posts</string>
-    <string name="ID_ASKING">asking</string>
-    <string name="ID_WHAT_IS_QUESTION">What is your question?</string>
-    <string name="ID_ANSWERED_QUESTIONS">answered questions</string>
     <string name="ID_GET_EXPERT_ADVICE">Get expert advice from champions</string>
     <string name="ID_INSIGHT">Insights</string>
     <string name="ID_SEE_INSIGHT">See Insights</string>
@@ -673,6 +670,6 @@
     <string name="rate_us">Rate Us</string>
     <string name="not_now">Not Now</string>
     <string name="helpline_title">Ask SHEROES Helpline</string>
-
-
+    <string name="empty_post">No post yet</string>
+    <string name="empty_stories">No stories yet</string>
 </resources>

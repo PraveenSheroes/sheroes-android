@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-
 import com.crashlytics.android.Crashlytics;
-import com.f2prateek.rx.preferences2.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,18 +13,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
-import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
-import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
-import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFeedView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
@@ -42,19 +35,13 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class UsersListPresenter extends BasePresenter<IFeedView> {
-    private final String TAG = LogUtils.makeLogTag(UsersListPresenter.class);
+    //region constants
     private static final int NORMAL_REQUEST = 0;
     private static final int LOAD_MORE_REQUEST = 1;
     private static final int END_REQUEST = 2;
+    //endregion constants
 
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-    @Inject
-    Preference<MasterDataResponse> mUserPreferenceMasterData;
-
-    @Inject
-    Preference<AllCommunitiesResponse> mAllCommunities;
-
+    //region member variable
     private HomeModel mHomeModel;
     private SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi mSheroesAppServiceApi;
@@ -64,16 +51,18 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
     private boolean mIsFeedLoading;
     private int mFeedState;
     private List<FeedDetail> mFeedDetailList = new ArrayList<>();
+    //endregion member variable
 
+    //region constructor
     @Inject
-    public UsersListPresenter(HomeModel homeModel, SheroesApplication sheroesApplication, Preference<LoginResponse> userPreference, Preference<MasterDataResponse> mUserPreferenceMasterData, SheroesAppServiceApi mSheroesAppServiceApi) {
+    public UsersListPresenter(HomeModel homeModel, SheroesApplication sheroesApplication, SheroesAppServiceApi mSheroesAppServiceApi) {
         this.mHomeModel = homeModel;
         this.mSheroesApplication = sheroesApplication;
-        this.mUserPreference = userPreference;
         this.mSheroesAppServiceApi = mSheroesAppServiceApi;
-        this.mUserPreferenceMasterData = mUserPreferenceMasterData;
     }
+    //endregion constructor
 
+    //region override methods
     @Override
     public void detachView() {
         super.detachView();
@@ -83,7 +72,9 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
     public boolean isViewAttached() {
         return super.isViewAttached();
     }
+    //endregion override methods
 
+    //region public methods
     public void fetchUserFeed(final int feedState, final String streamName) {
         if (mIsFeedLoading) {
             return;
@@ -140,7 +131,6 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showFeedList(mFeedDetailList);
-
                     }
 
                     @Override
@@ -154,18 +144,6 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                             switch (mFeedState) {
                                 case NORMAL_REQUEST:
                                     getMvpView().stopProgressBar();
-                                    if (mIsHomeFeed) {
-                                        FeedDetail homeFeedHeader = new FeedDetail();
-                                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                                        feedList.add(0, homeFeedHeader);
-                                    } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
-                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM))
-                                            if (!StringUtil.isNotEmptyCollection(feedList)) {
-                                                FeedDetail noStoryFeed = new FeedDetail();
-                                                noStoryFeed.setSubType(AppConstants.NO_STORIES);
-                                                feedList.add(noStoryFeed);
-                                            }
-                                    }
                                     mFeedDetailList = feedList;
                                     getMvpView().setFeedEnded(false);
                                     List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
@@ -183,9 +161,7 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                                     }
                                     break;
                             }
-
                         } else {
-
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
@@ -195,7 +171,6 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                         }
                     }
                 });
-
     }
 
     public boolean isFeedLoading() {
@@ -209,12 +184,6 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
-                    @Override
-                    public ChampionFollowedResponse apply(ChampionFollowedResponse championFollowedResponse) {
-                        return championFollowedResponse;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ChampionFollowedResponse>bindToLifecycle())
@@ -229,6 +198,7 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                     }
 
@@ -238,10 +208,13 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                         if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userSolrObj.setFollowerCount(userSolrObj.getFollowingCount() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
                             if (championFollowedResponse.isAlreadyFollowed()) {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(true);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                             } else {
+                                userSolrObj.setSolrIgnoreIsUserFollowed(false);
                                 userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             }
                         }
@@ -257,12 +230,6 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
-                    @Override
-                    public ChampionFollowedResponse apply(ChampionFollowedResponse championFollowedResponse) {
-                        return championFollowedResponse;
-                    }
-                })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<ChampionFollowedResponse>bindToLifecycle())
@@ -277,6 +244,7 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                     }
 
@@ -288,13 +256,14 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
                                 userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
+                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                         }
                         getMvpView().invalidateItem(userSolrObj);
                     }
                 });
-
     }
 
     public void onStop() {
@@ -308,4 +277,5 @@ public class UsersListPresenter extends BasePresenter<IFeedView> {
     public void setIsHomeFeed(boolean isHomeFeed) {
         this.mIsHomeFeed = isHomeFeed;
     }
+    //endregion public methods
 }

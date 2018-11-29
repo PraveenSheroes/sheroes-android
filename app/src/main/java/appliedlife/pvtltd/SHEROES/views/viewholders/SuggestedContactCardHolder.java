@@ -83,6 +83,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
             btnFollowFriend.setEnabled(false);
             mPostDetailCallback.onSuggestedContactClicked(mUseSolarObj, btnFollowFriend);
             mUseSolarObj.setSolrIgnoreIsUserFollowed(true);
+            mUseSolarObj.setSolrIgnoreIsMentorFollowed(true);
             setFollowUnFollow();
         }
     }
@@ -118,6 +119,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
                 btnFollowFriend.setEnabled(false);
                 mPostDetailCallback.onSuggestedContactClicked(mUseSolarObj, btnFollowFriend);
                 mUseSolarObj.setSolrIgnoreIsUserFollowed(false);
+                mUseSolarObj.setSolrIgnoreIsMentorFollowed(true);
                 setFollowUnFollow();
                 dialog.dismiss();
             }

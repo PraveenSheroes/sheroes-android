@@ -6,8 +6,6 @@ import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FollowedUsersResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.FollowersFollowingRequest;
@@ -52,20 +50,6 @@ public class ProfileModel {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-    public Observable<FeedResponsePojo> getFeedFromModelForTestProfile(FeedRequestPojo feedRequestPojo) {
-        LogUtils.info(TAG, "*******************" + new Gson().toJson(feedRequestPojo));
-        return sheroesAppServiceApi.getFeedFromApi(feedRequestPojo)
-                .map(new Function<FeedResponsePojo, FeedResponsePojo>() {
-                    @Override
-                    public FeedResponsePojo apply(FeedResponsePojo feedResponsePojo) {
-                        return feedResponsePojo;
-                    }
-                })
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
      /*for  user personal basic details details */
 
 

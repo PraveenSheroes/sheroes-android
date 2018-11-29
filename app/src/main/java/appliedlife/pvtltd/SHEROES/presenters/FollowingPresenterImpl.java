@@ -98,6 +98,7 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(false);
                     }
 
                     @Override
@@ -106,51 +107,12 @@ public class FollowingPresenterImpl extends BasePresenter<IFollowerFollowingView
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() + 1);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
+                            userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         }
                         getMvpView().refreshItem(userSolrObj);
-                    }
-                });
-    }
-
-    //for unfollow
-    public void getUnFollowFromPresenter(PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
-        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, FOLLOW_UNFOLLOW);
-            return;
-        }
-        getMvpView().startProgressBar();
-        mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
-                    @Override
-                    public void onComplete() {
-                        getMvpView().stopProgressBar();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Crashlytics.getInstance().core.logException(e);
-                        getMvpView().stopProgressBar();
-                        getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
-                        userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                    }
-
-                    @Override
-                    public void onNext(ChampionFollowedResponse mentorFollowUnfollowResponse) {
-                        getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getFollowerCount() > 0) {
-                                userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
-                                userSolrObj.setSolrIgnoreIsMentorFollowed(false);
-                            }
-                            getMvpView().refreshItem(userSolrObj);
-                        } else {
-                            userSolrObj.setSolrIgnoreIsMentorFollowed(true);
-                        }
                     }
                 });
     }

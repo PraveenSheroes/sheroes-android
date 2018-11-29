@@ -645,6 +645,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         mFollowedUserSolrObj = userSolrObj;
         mFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount())));
         updateFollowedButton();
+        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
+        String title = (String) mViewPagerAdapter.getPageTitle(mViewPager.getCurrentItem());
+        if (fragment instanceof FeedFragment && StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) { //refresh if current tab is post to change follow button visibility
+            ((FeedFragment) fragment).refreshList();
+        }
     }
 
     @Override
@@ -676,47 +681,44 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         super.onActivityResult(requestCode, resultCode, intent);
         /* 2:- For refresh list if value pass two Home activity means its Detail section changes of activity*/
         if (null != intent) {
-
             if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
                 Bundle bundle = intent.getExtras();
                 if (bundle != null) {
                     updateProfileDetails(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
                             bundle.getString(EditUserProfileActivity.FILLED_FIELDS), bundle.getString(EditUserProfileActivity.UNFILLED_FIELDS), bundle.getFloat(EditUserProfileActivity.PROFILE_COMPLETION_WEIGHT));
                 }
-            }
-
-            switch (requestCode) {
-                case AppConstants.REQUEST_CODE_FOR_CAMERA:
-                case AppConstants.REQUEST_CODE_FOR_GALLERY:
-                    mImageCaptureUri = intent.getData();
-                    if (resultCode == Activity.RESULT_OK) {
-                        croppingIMG();
-                    }
-                    break;
-                case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
-                    imageCropping(intent);
-                    break;
-
-                case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
-                    CropImage.ActivityResult result = CropImage.getActivityResult(intent);
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            if (result != null && result.getUri() != null && result.getUri().getPath() != null) {
-                                File file = new File(result.getUri().getPath());
-                                Bitmap photo = CompressImageUtil.decodeFile(file);
-                                mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+            } else {
+                switch (requestCode) {
+                    case AppConstants.REQUEST_CODE_FOR_CAMERA:
+                    case AppConstants.REQUEST_CODE_FOR_GALLERY:
+                        mImageCaptureUri = intent.getData();
+                        if (resultCode == Activity.RESULT_OK) {
+                            croppingIMG();
                         }
-                        mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
-                    } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                        Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
-                    }
-
-                    break;
-                default:
-                    LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                        break;
+                    case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
+                        imageCropping(intent);
+                        break;
+                    case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE:
+                        CropImage.ActivityResult result = CropImage.getActivityResult(intent);
+                        if (resultCode == RESULT_OK) {
+                            try {
+                                if (result != null && result.getUri() != null && result.getUri().getPath() != null) {
+                                    File file = new File(result.getUri().getPath());
+                                    Bitmap photo = CompressImageUtil.decodeFile(file);
+                                    mEncodeImageUrl = CompressImageUtil.setImageOnHolder(photo);
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
+                        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                            Toast.makeText(this, "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
+                        }
+                        break;
+                    default:
+                        LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
+                }
             }
         }
     }
@@ -797,10 +799,8 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @OnClick({R.id.tv_profile_name, R.id.tv_loc})
     public void navigateToProfileEditing() {
-        if (isOwnProfile) {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
-                EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
-            }
+        if (isOwnProfile && null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getPhotoUrl())) {
+            EditUserProfileActivity.navigateTo(ProfileActivity.this, SCREEN_LABEL, mUserSolarObject.getImageUrl(), null, 1);
         }
     }
 
@@ -820,7 +820,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             PublicProfileListRequest publicProfileListRequest = mAppUtils.pubicProfileRequestBuilder(1);
             publicProfileListRequest.setIdOfEntityParticipant(mUserSolarObject.getIdOfEntityOrParticipant());
 
-            if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
+            if (mUserSolarObject.isSolrIgnoreIsUserFollowed() || mUserSolarObject.isSolrIgnoreIsMentorFollowed()) {
                 unFollowDialog(publicProfileListRequest);
             } else {
                 mHomePresenter.getFollowFromPresenter(publicProfileListRequest, mUserSolarObject);
@@ -988,8 +988,16 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }
 
+    public void updateFollowOnAuthorFollowed(boolean isFollowed) {
+        if(mUserSolarObject!=null) {
+            mUserSolarObject.setSolrIgnoreIsMentorFollowed(isFollowed);
+            mUserSolarObject.setSolrIgnoreIsUserFollowed(isFollowed);
+            updateFollowedButton();
+        }
+    }
+
     private void updateFollowedButton() {
-        if (mUserSolarObject.isSolrIgnoreIsMentorFollowed() || mUserSolarObject.isSolrIgnoreIsUserFollowed()) {
+        if (mUserSolarObject.isSolrIgnoreIsUserFollowed() || mUserSolarObject.isSolrIgnoreIsMentorFollowed()) {
             mDashBoardFollow.setTextColor(ContextCompat.getColor(this, R.color.white));
             mDashBoardFollow.setText(this.getString(R.string.following_user));
             mDashBoardFollow.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
@@ -1163,11 +1171,15 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
     private void setupSheBadge(UserSolrObj userSolrObj) {
         if (!TextUtils.isEmpty(userSolrObj.getProfileBadgeUrl())) {
             mUserBadgeIcon.setVisibility(View.VISIBLE);
+            verifiedIcon.setVisibility(View.GONE);
             Glide.with(mUserBadgeIcon.getContext())
                     .load(userSolrObj.getProfileBadgeUrl())
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mUserBadgeIcon.getContext())))
                     .into(mUserBadgeIcon);
         } else {
+            if(isChampion) {
+                verifiedIcon.setVisibility(View.VISIBLE);
+            }
             mUserBadgeIcon.setVisibility(View.GONE);
         }
     }
@@ -1601,7 +1613,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
 
         if (isOwnProfile) {
-            verifiedIcon.setVisibility(View.GONE);
             mEditIcon.setVisibility(View.VISIBLE);
         } else {
             mEditIcon.setVisibility(View.GONE);

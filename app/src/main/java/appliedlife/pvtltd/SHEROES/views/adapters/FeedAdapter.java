@@ -102,8 +102,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new HomeHeaderViewHolder(mInflater.inflate(R.layout.header_view_layout, parent, false), mBaseHolderInterface);
             case TYPE_IMAGE:
                 return new ImageViewHolder(mInflater.inflate(R.layout.image_item, parent, false), mBaseHolderInterface);
-            case TYPE_NO_STORIES:
-                return new NoStoriesHolder(mInflater.inflate(R.layout.no_stories_holder, parent, false), mBaseHolderInterface);
+            case TYPE_EMPTY_VIEW:
+                return new NoStoriesHolder(mInflater.inflate(R.layout.empty_view_holder, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -175,7 +175,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 imageViewHolder.bindData(feedDetail2, mContext, position);
                 break;
 
-            case TYPE_NO_STORIES:
+            case TYPE_EMPTY_VIEW:
                 NoStoriesHolder noStoriesHolder = (NoStoriesHolder) holder;
                 FeedDetail noStoryFeed = mFeedDetailList.get(position);
                 noStoriesHolder.bindData(noStoryFeed, mContext, position);
@@ -193,7 +193,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_COMMUNITY = 12;
     private static final int TYPE_HOME_FEED_HEADER = 13;
     private static final int TYPE_IMAGE = 14;
-    private static final int TYPE_NO_STORIES = 15;
+    private static final int TYPE_EMPTY_VIEW = 15;
     private static final int TYPE_POLL = 3;
     private static final int TYPE_LOADER = -1;
 
@@ -241,8 +241,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)) {
                 return TYPE_HOME_FEED_HEADER;
             }
-            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.NO_STORIES)) {
-                return TYPE_NO_STORIES;
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.TYPE_EMPTY_VIEW)) {
+                return TYPE_EMPTY_VIEW;
             }
         }
         return TYPE_LOADER;
