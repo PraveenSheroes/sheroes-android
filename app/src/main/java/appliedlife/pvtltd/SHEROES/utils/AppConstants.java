@@ -391,8 +391,7 @@ public class AppConstants {
     public static final int HELPLINE_TIME_START = 12;
     public static final int HELPLINE_DATE_START = 0;
     public static final int HELPLINE_DATE_END = 11;
-    public static final String ARTICLE_LISTING = "article listing";
-    public static final String ARTICLE_SELECT_CATEGORY = "article select category";
+    public static final int FIREBASE_MAX_PARAMETERS = 25;
     public static final String CLEVER_TAP_CHANNEL_ID = "sheroesRelatedChannelID";
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";

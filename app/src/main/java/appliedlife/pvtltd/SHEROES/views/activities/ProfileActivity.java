@@ -360,7 +360,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         mHomePresenter.getFeedFromPresenter(mAppUtils.feedDetailRequestBuilder(feedSubType, AppConstants.ONE_CONSTANT, mChampionId));
 
         mFeedUtils.setConfigurableShareOption(isWhatsAppShare());
-        ((SheroesApplication) getApplication()).trackScreenView(AppConstants.PUBLIC_PROFILE);
     }
 
     @Override
@@ -921,8 +920,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         setPostCount(mUserSolarObject.getPostCount());
         setFollowerCount(mUserSolarObject.getFollowerCount());
         setFollowingCount(mUserSolarObject.getFollowingCount());
-
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
     private void toolTipForFollowUser() {
@@ -1617,14 +1614,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         } else {
             mEditIcon.setVisibility(View.GONE);
         }
-
         invalidateProfileButton();
         updateProfileInfo();
         setupSheBadge(userSolrObj); //setup She badge
         setupProfileBadges(userSolrObj); //horizontal badge list on profile
         setPagerAndLayouts();
-
-        ((SheroesApplication) getApplication()).trackScreenView(getString(R.string.ID_PUBLIC_PROFILE));
     }
 
     public void onProfileMenuClick(final UserSolrObj userPostObj, final TextView tvFeedCommunityPostUserCommentPostMenu) {

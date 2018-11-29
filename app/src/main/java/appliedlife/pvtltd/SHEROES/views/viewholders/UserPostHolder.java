@@ -34,14 +34,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -707,7 +705,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
                 tvMoreImage.setVisibility(View.VISIBLE);
         }
 
-
         ivFirst.setOnClickListener(this);
         if (StringUtil.isNotNullOrEmptyString(firstImage)) {
             String firstThumborUrl = firstImage;
@@ -793,7 +790,6 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
     @OnClick(R.id.share_button)
     public void tvShareClick() {
         mPostDetailCallback.onShareButtonClicked(mUserPostObj, mShare);
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.like_button)

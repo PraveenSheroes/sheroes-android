@@ -41,7 +41,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.googleplus.ExpireInResponse;
 import appliedlife.pvtltd.SHEROES.presenters.LoginPresenter;
 import appliedlife.pvtltd.SHEROES.service.FCMClientManager;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -187,9 +186,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         if (null != loginResponse.getUserSummary()) {
                             ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                         }
-                        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                         AnalyticsManager.initializeMixpanel(this);
-
                         AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, mCurrentTime < createdDate);
                         final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider("Email").build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
@@ -211,7 +208,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     loginResponse.setFcmId(mFcmId);
                     mUserPreference.set(loginResponse);
                     ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOGINS, GoogleAnalyticsEventActions.LOGGED_IN_USING_EMAIL, AppConstants.EMPTY_STRING);
                     AnalyticsManager.initializeMixpanel(this);
                     AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, mCurrentTime < createdDate);
                     final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider("Email").build();

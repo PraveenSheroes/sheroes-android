@@ -40,7 +40,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -75,7 +74,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -307,7 +305,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
-
     }
     //endregion
 
@@ -868,8 +865,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             } else {
                 editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
             }
-
-            ((SheroesApplication) getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_BASIC_DETAIl_PERSONAL, AppConstants.EMPTY_STRING);
             //endregion
         }
     }
@@ -879,13 +874,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
 
             if (userDetailsResponse != null) {
-
                 try {
                     //update the progressbar weight and filled , unfilled fields
                     filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
                     unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
                     profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
-
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
                     String userName = name.getText().toString().trim();
 
@@ -906,10 +899,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         String city = location.getText() != null ? location.getText().toString() : ""; //name
                         userSummary.getUserBO().setCityMasterId(cityId);
                         userSummary.getUserBO().setCityMaster(city);
-
                         String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
                         userSummary.getUserBO().setUserSummary(userBio);
-
                         userDetailsResponse.setUserSummary(userSummary);
                         mUserPreference.get().getUserSummary().setFirstName(userSummary.getFirstName());
                         mUserPreference.get().getUserSummary().setLastName(userSummary.getLastName());
@@ -922,7 +913,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     LogUtils.info(TAG, "Error while saving details to preference");
                 }
             }
-
             onBackPressed();
         }
     }
@@ -935,17 +925,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
-
                         //update the progressbar weight and filled , unfilled fields
                         filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
                         unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
                         profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
-
                         //Save image
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.set(userDetailsResponse);
-
                     } else {
                         String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
                         userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
@@ -959,7 +946,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         }
     }
 
-
     public static void navigateTo(Activity fromActivity, String sourceScreen, String imageUrl, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, EditUserProfileActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -969,5 +955,4 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
-
 }

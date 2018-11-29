@@ -126,7 +126,6 @@ public class AppUtils {
         return Math.round(px);
     }
 
-
     public static int getWindowWidth(Context context) {
         int[] size = getWindowSize(context);
         return size[0];
@@ -182,8 +181,6 @@ public class AppUtils {
             return "";
         }
     }
-
-
 
     /**
      * Check for the internet availability.
@@ -263,8 +260,6 @@ public class AppUtils {
         return EMAIL_ADDRESS_PATTERN.matcher(email).matches();
     }
 
-
-
     public void email(String email, String subject, String text) {
         LogUtils.enter(TAG, LogUtils.getMethodName());
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -276,7 +271,6 @@ public class AppUtils {
         getApplicationContext().startActivity(Intent.createChooser(intent, "Send email"));
         LogUtils.exit(TAG, LogUtils.getMethodName());
     }
-
 
     // Nikhil
     public static <T> T parseUsingGSONFromJSON(String is, String classPath) {
@@ -292,7 +286,6 @@ public class AppUtils {
             Gson gson = gsonBuilder.create();
 
             try {
-
                 try {
                     queryResult = (T) gson.fromJson(is, Class.forName(classPath));
                     // queryResult = (T)
@@ -307,7 +300,6 @@ public class AppUtils {
                 LogUtils.error("G-PAR", "JsonIOException " + e.toString(), e);
                 return null;
             }
-
         }
         LogUtils.exit(TAG, LogUtils.getMethodName());
         return queryResult;
@@ -321,8 +313,6 @@ public class AppUtils {
         return px;
     }
 
-
-
     public static String capitalize(String s) {
         if (s == null || s.length() == 0) {
             return "";
@@ -334,7 +324,6 @@ public class AppUtils {
             return Character.toUpperCase(first) + s.substring(1);
         }
     }
-
 
     /**
      * Request for Navigation drawer items
@@ -369,7 +358,6 @@ public class AppUtils {
         return content;
     }
 
-
     /**
      * @return manufacturer of the device for tracking
      * if not available then Brand
@@ -381,7 +369,6 @@ public class AppUtils {
         }
         return manufacturer;
     }
-
 
     /* Function to check if fragment UI is active*/
     public static boolean isFragmentUIActive(Fragment frag) {
@@ -428,9 +415,7 @@ public class AppUtils {
         removeMemberRequest.setAppVersion(appUtils.getAppVersionName());
         removeMemberRequest.setCloudMessagingId(appUtils.getCloudMessaging());
         return removeMemberRequest;
-
     }
-
 
     public static FeedRequestPojo userCommunityPostRequestBuilder(String typeOfFeed, int pageNo, long communityId) {
         FeedRequestPojo feedRequestPojo = makeFeedRequest(typeOfFeed, pageNo);
@@ -452,10 +437,8 @@ public class AppUtils {
         profileUsersCommunityRequest.setPageNo(pageNo);
         profileUsersCommunityRequest.setPageSize(AppConstants.PAGE_SIZE);
         profileUsersCommunityRequest.setUserId(userId);
-
         return profileUsersCommunityRequest;
     }
-
 
     public static NotificationReadCount notificationReadCountRequestBuilder(String screenName) {
         AppUtils appUtils = AppUtils.getInstance();
@@ -682,7 +665,6 @@ public class AppUtils {
         return feedRequestPojo;
     }
 
-
     /**
      * Request for feed api
      */
@@ -721,7 +703,6 @@ public class AppUtils {
         likeRequestPojo.setReactionValue(reactionValue);
         return likeRequestPojo;
     }
-
 
     /**
      * Request for feed api
@@ -779,7 +760,6 @@ public class AppUtils {
 
     public BellNotificationRequest getBellNotificationRequest() {
         AppUtils appUtils = AppUtils.getInstance();
-
         BellNotificationRequest bellNotificationRequest = new BellNotificationRequest();
         bellNotificationRequest.setAppVersion(appUtils.getAppVersionName());
         bellNotificationRequest.setCloudMessagingId(appUtils.getCloudMessaging());

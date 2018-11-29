@@ -35,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
@@ -57,13 +56,11 @@ public class FeedUtils {
     //endregion
 
     //region member variables
-    private static FeedUtils mInstance;
+    private static FeedUtils sInstance;
     private FeedDetail mFeedDetail;
     private Fragment mFragment;
     private boolean mIsWhatsAppShare;
-    private long mUserId;
-    public PopupWindow popupWindow;
-    private boolean mIsDestroyed = false;
+    public PopupWindow mPopupWindow;
     SheroesApplication mSheroesApplication;
     //endregion
 
@@ -79,19 +76,16 @@ public class FeedUtils {
 
     //region public methods
     public static synchronized FeedUtils getInstance() {
-        if (mInstance == null) {
-            mInstance = new FeedUtils();
+        if (sInstance == null) {
+            sInstance = new FeedUtils();
         }
-        return mInstance;
+        return sInstance;
     }
 
     public void feedCardsHandled(View view, BaseResponse baseResponse, Activity activity, String screenName) {
         mFeedDetail = (FeedDetail) baseResponse;
         int id = view.getId();
         switch (id) {
-            case R.id.tv_featured_community_join:
-                ((SheroesApplication) activity.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
-                break;
             case R.id.tv_feed_article_user_bookmark:
                 bookmarkCall(activity);
                 break;
@@ -126,7 +120,6 @@ public class FeedUtils {
             case R.id.tv_feed_community_post_user_name:
                 openUserProfileLastComment(view, baseResponse, activity);
                 break;
-
             case R.id.tv_feed_community_post_user_menu:
                 clickMenuItem(view, baseResponse, FEED_CARD_MENU, activity, screenName);
                 break;
@@ -163,7 +156,6 @@ public class FeedUtils {
                 //mFragmentOpen.setCommentList(true);
                 openCommentReactionFragment(activity, mFeedDetail, screenName);
                 break;
-
             case R.id.tv_join_conversation:
                 if (mFeedDetail instanceof UserPostSolrObj) {
                     PostDetailActivity.navigateTo(activity, screenName, mFeedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, true);
@@ -179,17 +171,14 @@ public class FeedUtils {
                 ProfileActivity.navigateTo(activity, mFeedDetail.getProfileId(), mFeedDetail.isAuthorMentor(),
                         AppConstants.PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
                 break;
-
             case R.id.li_feed_article_images:
                 ArticleSolrObj articleSolrObj = (ArticleSolrObj) mFeedDetail;
                 ArticleActivity.navigateTo(activity, mFeedDetail, "Feed", null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleSolrObj.isUserStory());
                 break;
-
             case R.id.li_article_cover_image:
                 String sourceScreen = "";
                 ArticleSolrObj articleObj = (ArticleSolrObj) mFeedDetail;
                 ArticleActivity.navigateTo(activity, mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleObj.isUserStory());
-
                 break;
             case R.id.li_featured_community_images:
                 CommunityDetailActivity.navigateTo(activity, (CommunityFeedSolrObj) mFeedDetail, screenName, null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
@@ -220,13 +209,13 @@ public class FeedUtils {
     public void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum, final Context context, final String screenName) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
-        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        mPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         final LinearLayout liFeedMenu = popupView.findViewById(R.id.li_feed_menu);
@@ -236,41 +225,41 @@ public class FeedUtils {
         final TextView tvReport = popupView.findViewById(R.id.tv_article_menu_report);
 
         // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view, -150, -10);
+        mPopupWindow.showAsDropDown(view, -150, -10);
 
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editOperationOnMenu(menuEnum, baseResponse, null, context, screenName);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteOperationOnMenu(menuEnum, baseResponse, null, screenName, context);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 shareWithMultipleOption(baseResponse, context, screenName);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         tvReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 markAsSpam(menuEnum, baseResponse, null);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu, context);
     }
 
     public void dismissWindow() {
-        popupWindow.dismiss();
+        mPopupWindow.dismiss();
     }
 
     public void onReferrerReceived(Context context, Boolean isReceived) {
@@ -411,7 +400,6 @@ public class FeedUtils {
                     openCommentReactionFragment(context, mFeedDetail, screenName);
                 }
                 break;
-
         }
     }
 
@@ -486,11 +474,7 @@ public class FeedUtils {
     private void markAsSpam(MenuEnum menuEnum, BaseResponse baseResponse, Fragment fragmentCommentReaction) {
         switch (menuEnum) {
             case FEED_CARD_MENU:
-                if (null != mFeedDetail) {
-
-                }
                 break;
-
         }
     }
 

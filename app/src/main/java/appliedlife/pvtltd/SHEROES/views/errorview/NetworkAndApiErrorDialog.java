@@ -24,7 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
  * DialogFragment displayed when timeout in request occurs .
  */
@@ -66,7 +65,6 @@ public class NetworkAndApiErrorDialog extends BaseDialogFragment {
             SpannableString content = new SpannableString(getString(R.string.care_sheroes));
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             mTvCareSheroes.setText(content);
-            ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
             AnalyticsManager.trackScreenView(SCREEN_LABEL);
         } else {
             mliUserDeactivate.setVisibility(View.GONE);

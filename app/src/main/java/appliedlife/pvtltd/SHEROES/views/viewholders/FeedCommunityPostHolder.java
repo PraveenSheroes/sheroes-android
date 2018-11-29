@@ -40,7 +40,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -52,7 +51,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.AppStatus;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -482,7 +480,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.handleOnClick(mUserPostObj, tvFeedCommunityPostUserShare);
         }
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_COMMUNITY_POST, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.tv_feed_community_post_total_reactions)
@@ -898,7 +895,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         ((FeedItemCallback) viewInterface).onChampionProfileClicked(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                     } else {
                         viewInterface.navigateToProfileView(mUserPostObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-
                     }
                 }
             }
@@ -1199,7 +1195,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                         tvFeedCommunityPostUserCommentPost.setText(hashTagColorInString(lastComment.getComment()));
                     }
 
-
                     if (!lastComment.getParticipantName().equalsIgnoreCase(mContext.getString(R.string.ID_COMMUNITY_ANNONYMOUS))) {
                         if (lastComment.isVerifiedMentor()) {
                             ivFeedCommunityPostUserIconVerified.setVisibility(View.VISIBLE);
@@ -1390,13 +1385,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         tvFeedCommunityPostUserReaction.setTag(false);
         mUserPostObj.setLongPress(false);
         if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
-            viewInterface.userCommentLikeRequest(mUserPostObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_COMMUNITY_POST, AppConstants.EMPTY_STRING);
-        } else {
-            viewInterface.userCommentLikeRequest(mUserPostObj, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_COMMUNITY_POST, AppConstants.EMPTY_STRING);
-        }
-        if (mUserPostObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             mUserPostObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
             mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() - AppConstants.ONE_CONSTANT);
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_in_active, 0, 0, 0);
@@ -1404,8 +1392,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             mUserPostObj.setReactionValue(AppConstants.HEART_REACTION_CONSTANT);
             mUserPostObj.setNoOfLikes(mUserPostObj.getNoOfLikes() + AppConstants.ONE_CONSTANT);
             tvFeedCommunityPostUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
-
-
         }
         likeCommentOps();
     }
@@ -1470,7 +1456,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                             ((FeedItemCallback) viewInterface).onChampionProfileClicked(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                         } else {
                             viewInterface.navigateToProfileView(userPostSolrObj, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
-
                         }
                     }
 
@@ -1486,7 +1471,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                     spannableString.setSpan(postedInClick, start, end + 1, 0);
                     spannableString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.user_tagg)), start, end + 1, 0);
                 }
-
             }
         }
         if (isComment) {
@@ -1495,7 +1479,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             tvFeedCommunityPostText.setMovementMethod(LinkMovementMethod.getInstance());
             tvFeedCommunityPostText.setText(hashTagColorInString(spannableString), TextView.BufferType.SPANNABLE);
         }
-
     }
     // endregion
 }

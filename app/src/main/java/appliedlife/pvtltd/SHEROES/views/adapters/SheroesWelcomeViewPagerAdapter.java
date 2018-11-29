@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 /**
@@ -54,7 +53,6 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
         } else {
             textView.setText(Html.fromHtml(text));// or for older api
         }
-        ((SheroesApplication) context.getApplicationContext()).trackScreenView(text);
         container.addView(itemView);
         return itemView;
     }
