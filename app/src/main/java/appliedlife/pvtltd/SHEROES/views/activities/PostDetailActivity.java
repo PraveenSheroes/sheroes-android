@@ -513,8 +513,20 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
         if (null == mFeedDetail) {
             FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
-            if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, feedDetail.getAuthorName()));
+            if (feedDetail instanceof UserPostSolrObj) {
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
+                } else {
+                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
+                }
+            } else if (feedDetail instanceof PollSolarObj) {
+                PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+                if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
+                } else {
+                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
+                }
             }
         }
     }
