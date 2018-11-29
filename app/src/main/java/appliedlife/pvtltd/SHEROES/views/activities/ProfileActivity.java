@@ -1177,7 +1177,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(mUserBadgeIcon.getContext())))
                     .into(mUserBadgeIcon);
         } else {
-            if(isChampion) {
+            if (isChampion) {
                 verifiedIcon.setVisibility(View.VISIBLE);
             }
             mUserBadgeIcon.setVisibility(View.GONE);
