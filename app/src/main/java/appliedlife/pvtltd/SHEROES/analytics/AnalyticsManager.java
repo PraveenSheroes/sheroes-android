@@ -130,8 +130,8 @@ public class AnalyticsManager {
         GoogleAnalyticsHelper.sendScreenView(screenName);
 
         //Firebase Analytics
-        if(getActivityFromContext(sAppContext) != null && screenName != null) {
-            screenName = screenName.replaceAll(" ","_");
+        if (getActivityFromContext(sAppContext) != null && screenName != null) {
+            screenName = screenName.replaceAll(" ", "_");
             mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName, null);
         }
     }

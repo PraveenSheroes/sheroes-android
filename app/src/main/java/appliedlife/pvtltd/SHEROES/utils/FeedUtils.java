@@ -60,7 +60,7 @@ public class FeedUtils {
     private FeedDetail mFeedDetail;
     private Fragment mFragment;
     private boolean mIsWhatsAppShare;
-    public PopupWindow popupWindow;
+    public PopupWindow mPopupWindow;
     SheroesApplication mSheroesApplication;
     //endregion
 
@@ -209,13 +209,13 @@ public class FeedUtils {
     public void clickMenuItem(View view, final BaseResponse baseResponse, final MenuEnum menuEnum, final Context context, final String screenName) {
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View popupView = layoutInflater.inflate(R.layout.menu_option_layout, null);
-        popupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
-        popupWindow.setOutsideTouchable(true);
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        mPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
             public void onDismiss() {
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         final LinearLayout liFeedMenu = popupView.findViewById(R.id.li_feed_menu);
@@ -225,41 +225,41 @@ public class FeedUtils {
         final TextView tvReport = popupView.findViewById(R.id.tv_article_menu_report);
 
         // final Fragment fragmentCommentReaction = getSupportFragmentManager().findFragmentByTag(CommentReactionFragment.class.getName());
-        popupWindow.showAsDropDown(view, -150, -10);
+        mPopupWindow.showAsDropDown(view, -150, -10);
 
         tvEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 editOperationOnMenu(menuEnum, baseResponse, null, context, screenName);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         tvDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteOperationOnMenu(menuEnum, baseResponse, null, screenName, context);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         tvShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 shareWithMultipleOption(baseResponse, context, screenName);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         tvReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 markAsSpam(menuEnum, baseResponse, null);
-                popupWindow.dismiss();
+                mPopupWindow.dismiss();
             }
         });
         setMenuOptionVisibility(view, tvEdit, tvDelete, tvShare, tvReport, baseResponse, liFeedMenu, context);
     }
 
     public void dismissWindow() {
-        popupWindow.dismiss();
+        mPopupWindow.dismiss();
     }
 
     public void onReferrerReceived(Context context, Boolean isReceived) {
