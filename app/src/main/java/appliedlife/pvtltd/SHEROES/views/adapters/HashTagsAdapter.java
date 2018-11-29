@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.views.fragments.HashTagFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HashTagsHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HashTagsViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.PhotoViewHolder;
@@ -19,9 +20,11 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private static final int TYPE_ITEM = 2;
     private Context context;
     private List<String> hashTagsList;
+    private HashTagFragment hashTagFragment;
 
-    public HashTagsAdapter(Context context, List<String> hashTagsList) {
+    public HashTagsAdapter(Context context, HashTagFragment hashTagFragment, List<String> hashTagsList) {
         this.context = context;
+        this.hashTagFragment = hashTagFragment;
         this.hashTagsList = hashTagsList;
     }
 
@@ -65,7 +68,15 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 HashTagsViewHolder hashTagsViewHolder = (HashTagsViewHolder) holder;
 
                 hashTagsViewHolder.getHashTagTxt().setText(hashTagsList.get(pos));
+
+                hashTagsViewHolder.getHashTagTxt().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        hashTagFragment.onHashTagClicked();
+                    }
+                });
                 break;
+
         }
 
 

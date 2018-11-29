@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.IHashTagCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
@@ -25,9 +27,10 @@ import appliedlife.pvtltd.SHEROES.views.adapters.HashTagsAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HashTagFragment extends BaseFragment {
+public class HashTagFragment extends BaseFragment implements IHashTagCallBack {
     View view;
     @Bind(R.id.rv_hashtags)RecyclerView hashTagsView;
+    @Bind(R.id.tv_hashtag)TextView hashtagTxt;
     private HashTagsAdapter hashTagsAdapter;
     private List<String> hashTagsList;
 
@@ -50,9 +53,8 @@ public class HashTagFragment extends BaseFragment {
 
         hashTagsView.setLayoutManager(linearLayoutManager);
 
-        hashTagsAdapter = new HashTagsAdapter(getActivity(), hashTagsList);
+        hashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
         hashTagsView.setAdapter(hashTagsAdapter);
-
 
         return view;
 
@@ -96,5 +98,11 @@ public class HashTagFragment extends BaseFragment {
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
+    }
+
+    @Override
+    public void onHashTagClicked() {
+        hashTagsView.setVisibility(View.GONE);
+        hashtagTxt.setVisibility(View.VISIBLE);
     }
 }

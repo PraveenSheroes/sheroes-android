@@ -11,4 +11,14 @@
 
     </android.support.v7.widget.RecyclerView>
 
+
+    <TextView
+        android:id="@+id/tv_hashtag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="HASH TAG CLICKED"
+        android:layout_centerInParent="true"
+        android:textSize="20sp"
+        android:visibility="gone"/>
+
 </RelativeLayout>
