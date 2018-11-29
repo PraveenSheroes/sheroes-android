@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -29,6 +30,9 @@ public class NoStoriesHolder extends BaseViewHolder<FeedDetail> {
     private Context mContext;
     //endregion
 
+    @Bind(R.id.tv_msg)
+    public TextView message;
+
     public NoStoriesHolder(View itemView, BaseHolderInterface baseHolderInterface) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -39,6 +43,7 @@ public class NoStoriesHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail feedDetail, Context context, int position) {
         mContext = context;
+        message.setText(feedDetail.getNameOrTitle());
     }
 
     @Override

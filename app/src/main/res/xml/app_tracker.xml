@@ -3,17 +3,11 @@
 
     <!-- Enable automatic Activity measurement -->
     <bool name="ga_autoActivityTracking">false</bool>
-
     <!--  The property id associated with this analytics tracker -->
     <string name="ga_trackingId">UA-43289318-4</string>
-
-
-
     <bool name="ga_reportUncaughtExceptions">false</bool>
-
-
     <!--
-      See Project Structure -> Analytics -> Google Analytics -> Learn More
-      to learn more about configuring this file.
+        See Project Structure -> Analytics -> Google Analytics -> Learn More
+        to learn more about configuring this file.
     -->
 </resources>

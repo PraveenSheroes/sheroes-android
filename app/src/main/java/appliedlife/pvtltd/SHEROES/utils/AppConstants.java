@@ -23,7 +23,6 @@ public class AppConstants {
     public static final int CONNECTION_TIME_OUT = 60;
     public static final int FEED_FIRST_TIME = 10;
     public static final int CREATE_POST = 101;
-    public static final int MENTOR_CREATE_QUESTION = 201;
     public static final int SECONDS_IN_MIN = 60;
     public static final int MINUTES_IN_HOUR = 60;
     public static final int HOURS_IN_DAY = 24;
@@ -130,12 +129,11 @@ public class AppConstants {
     public static final String USER_COMMUNITY_POST_FRAGMENT = "user_community_post_fragment";
     public static final String QA_POST_FRAGMENT = "question_answer_fragment";
     public static final String INVITE_MEMBER = "invite_member";
-    public static final String MY_COMMUNITIES_HEADER = "COMMUNITY_HEADER";
     public static final String APP_INTRO_SUB_TYPE = "APP_INTRO_TYPE";
     public static final String ONCE_WELCOME = "ONCE_WELCOME";
     public static final String FEED_PROGRESS_BAR = "FEED_PROGRESS_BAR";
     public static final String HOME_FEED_HEADER = "HEADER";
-    public static final String NO_STORIES = "no_stories";
+    public static final String TYPE_EMPTY_VIEW = "empty_view";
     public static final String NO_COMMUNITIES = "NO_COMMUNITIES";
     public static final String COMMUNITIES_DETAIL = "community_detail";
     public static final String IMAGE = "Img";
@@ -394,8 +392,7 @@ public class AppConstants {
     public static final int HELPLINE_TIME_START = 12;
     public static final int HELPLINE_DATE_START = 0;
     public static final int HELPLINE_DATE_END = 11;
-    public static final String ARTICLE_LISTING = "article listing";
-    public static final String ARTICLE_SELECT_CATEGORY = "article select category";
+    public static final int FIREBASE_MAX_PARAMETERS = 25;
     public static final String CLEVER_TAP_CHANNEL_ID = "sheroesRelatedChannelID";
     public static final String CLEVER_TAP_CHANNEL_NAME = "Related to you and your posts";
     public static final String CLEVER_TAP_CHANNEL_DESC = "Sheroes Channel Desc";

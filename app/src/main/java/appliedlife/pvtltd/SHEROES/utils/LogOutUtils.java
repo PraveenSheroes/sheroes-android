@@ -19,12 +19,11 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.AppInstallationHelper;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.views.activities.WelcomeActivity;
 
 public class LogOutUtils {
     //region member variables
-    private static LogOutUtils mInstance;
+    private static LogOutUtils sInstance;
     //endregion
 
     //region injected variables
@@ -35,16 +34,15 @@ public class LogOutUtils {
     //endregion
 
     public static synchronized LogOutUtils getInstance() {
-        if (mInstance == null) {
-            mInstance = new LogOutUtils();
+        if (sInstance == null) {
+            sInstance = new LogOutUtils();
         }
-        return mInstance;
+        return sInstance;
     }
 
     private LogOutUtils() {
         SheroesApplication.getAppComponent(SheroesApplication.mContext).inject(this);
     }
-
 
     public void logOutUser(String screenName, final Context context) {
         HashMap<String, Object> properties = new EventProperty.Builder().build();
@@ -68,7 +66,5 @@ public class LogOutUtils {
         mUserPreference.delete();
         MixpanelHelper.clearMixpanel(SheroesApplication.mContext);
         ((NotificationManager) SheroesApplication.mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-        ((SheroesApplication) context.getApplicationContext()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_LOG_OUT, GoogleAnalyticsEventActions.LOG_OUT_OF_APP, AppConstants.EMPTY_STRING);
-
     }
 }

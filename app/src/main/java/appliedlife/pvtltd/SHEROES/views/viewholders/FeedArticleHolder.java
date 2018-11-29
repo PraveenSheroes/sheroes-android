@@ -28,7 +28,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -38,7 +37,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -622,15 +620,12 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 viewInterface.handleOnClick(articleObj, tvFeedArticleUserBookmark);
 
             }
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
             if (viewInterface instanceof FeedItemCallback) {
                 ((FeedItemCallback) viewInterface).onArticleBookMarkClicked(articleObj);
             } else {
                 viewInterface.handleOnClick(articleObj, tvFeedArticleUserBookmark);
-
             }
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (!articleObj.isBookmarked()) {
             articleObj.setBookmarked(true);
@@ -646,7 +641,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             ((FeedItemCallback) viewInterface).onPostShared(articleObj);
         } else {
             viewInterface.handleOnClick(articleObj, tvFeedArticleUserShare);
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
         }
     }
 
@@ -687,10 +681,8 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         articleObj.setLongPress(false);
         if (articleObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             viewInterface.userCommentLikeRequest(articleObj, AppConstants.NO_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UNDO_REACTIONS, GoogleAnalyticsEventActions.UNDO_REACTIONS_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
             viewInterface.userCommentLikeRequest(articleObj, AppConstants.HEART_REACTION_CONSTANT, getAdapterPosition());
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_REACTIONS, GoogleAnalyticsEventActions.REACTED_TO_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (articleObj.getReactionValue() != AppConstants.NO_REACTION_CONSTANT) {
             articleObj.setReactionValue(AppConstants.NO_REACTION_CONSTANT);
@@ -702,9 +694,7 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
             tvFeedArticleUserReaction.setCompoundDrawablesWithIntrinsicBounds(R.drawable.vector_heart_active, 0, 0, 0);
         }
         allTextViewStringOperations(mContext);
-
     }
-
 
     @Override
     public void onClick(View view) {
@@ -729,8 +719,6 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.handleOnClick(articleObj, tvFeedArticleUserComment);
         }
-
-
     }
 
     @OnClick(R.id.tv_article_join_conversation)
@@ -746,14 +734,11 @@ public class FeedArticleHolder extends BaseViewHolder<FeedDetail> {
                 }
             }
         });
-
     }
 
     enum ArticleStatusEnum {
         PUBLIC("Public"),
         DRAFT("Draft");
-
-
         private final String string;
 
         ArticleStatusEnum(final String string) {

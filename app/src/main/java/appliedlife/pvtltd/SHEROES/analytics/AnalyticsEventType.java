@@ -45,6 +45,7 @@ public enum AnalyticsEventType {
     public final String name;
 
     AnalyticsEventType(String name) {
+        name = name.replaceAll(" ", "_");
         this.name = name;
     }
 

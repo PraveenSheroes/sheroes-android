@@ -101,7 +101,7 @@ public class BookmarksFragment extends BaseFragment {
             }
             @Override
             public void dismissReactions() {
-                if (null != feedUtils.popupWindow) {
+                if (null != feedUtils.mPopupWindow) {
                     feedUtils.dismissWindow();
                 }
             }

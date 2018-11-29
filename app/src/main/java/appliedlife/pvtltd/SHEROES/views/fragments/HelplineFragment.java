@@ -49,7 +49,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HelplinePresenter;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -160,7 +159,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
                 }
             }
         });
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.HELPLINE);
         return view;
     }
 
@@ -174,7 +172,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         } else {
             Toast.makeText(getContext(), R.string.helpline_msg, Toast.LENGTH_SHORT).show();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_MESSAGE, GoogleAnalyticsEventActions.SENT_A_HELPLINE_MESSAGE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick(R.id.iv_chat_voice)
@@ -244,7 +241,6 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         setUpRecyclerView(true);
-
     }
 
     @Override

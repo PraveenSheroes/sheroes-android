@@ -262,6 +262,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), FOLLOW_UNFOLLOW);
+                        userSolrObj.setSolrIgnoreIsUserFollowed(false);
                         userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                     }
 
