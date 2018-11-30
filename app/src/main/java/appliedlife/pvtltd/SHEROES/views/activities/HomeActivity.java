@@ -143,9 +143,11 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
+import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
@@ -313,6 +315,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @Bind(R.id.tv_new_tag)
     public TextView mTvNewTag;
+
+    @Bind(R.id.rl_search_box)RelativeLayout searchBoxLayout;
 
     @BindDimen(R.dimen.dp_size_64)
     int navProfileSize;
@@ -636,9 +640,15 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     //Refresh the feed after clicking the Sheroes logo and home button
     @OnClick({R.id.tv_home, R.id.ic_sheroes})
     public void homeOnClick() {
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                flFeedFullView.getLayoutParams();
+
+        params.setBehavior(new AppBarLayout.ScrollingViewBehavior(flFeedFullView.getContext(), null));
+        highlightHome();
+        mAppBarLayout.setVisibility(View.VISIBLE);
         DrawerViewHolder.selectedOptionName = null;
         flFeedFullView.setVisibility(View.VISIBLE);
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
+//        mliArticleSpinnerIcon.setVisibility(View.GONE);
         homeButtonUi();
         initHomeViewPagerAndTabs();
         mTitleText.setText("");
@@ -683,6 +693,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }*/
+
+        highlightProfile();
+
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
             mDrawer.closeDrawer(GravityCompat.START);
         }
@@ -694,18 +707,31 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.tv_search)
     public void searchOnClick() {
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                flFeedFullView.getLayoutParams();
+
+        params.setBehavior(null);
+
+        highlightSearch();
+        openSearchFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+            fm.popBackStack();
         }
+        fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+//        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+//            mDrawer.closeDrawer(GravityCompat.START);
+//        }
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
-        openSearchActivity();
+//        openSearchActivity();
     }
 
-    private void openSearchActivity() {
-        SearchActivity.navigateTo(this, AppConstants.REQUEST_CODE_FOR_SEARCH);
-    }
+//    private void openSearchActivity() {
+//        SearchActivity.navigateTo(this, AppConstants.REQUEST_CODE_FOR_SEARCH);
+//    }
 
     public void communityButton() {
 
@@ -1734,6 +1760,36 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         homeFragment.setArguments(bundle);
         mFragmentOpen.setFeedFragment(true);
         addNewFragment(homeFragment, R.id.fl_article_card_view, HomeFragment.class.getName(), null, false);
+    }
+
+    private void highlightHome(){
+        mTvHome.setImageResource(R.drawable.home_red_vector);
+        mTvSearch.setImageResource(R.drawable.search_grey_vector);
+        mTvCommunities.setImageResource(R.drawable.profile_grey_vector);
+    }
+
+    private void highlightSearch(){
+        mTvHome.setImageResource(R.drawable.ic_home_unselected_icon);
+        mTvSearch.setImageResource(R.drawable.search_red_vector);
+        mTvCommunities.setImageResource(R.drawable.profile_grey_vector);
+    }
+
+    private void highlightProfile(){
+        mTvHome.setImageResource(R.drawable.ic_home_unselected_icon);
+        mTvSearch.setImageResource(R.drawable.search_grey_vector);
+        mTvCommunities.setImageResource(R.drawable.profile_red_vector);
+    }
+
+    private void openSearchFragment(){
+        SearchFragment searchFragment = new SearchFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        addNewFragment(searchFragment, R.id.fl_article_card_view, SearchFragment.class.getName(), null, false);
+        mAppBarLayout.setVisibility(View.GONE);
+
     }
 
     private void initCommunityViewPagerAndTabs() {
