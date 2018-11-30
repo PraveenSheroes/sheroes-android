@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +133,8 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     private boolean mIsSelfProfile, mIsFragmentVisible;
     private List<CommunityFeedSolrObj> mCommunities;
     private List<UserSolrObj> mFollowedChampions;
+    private FragmentManager manager;
+    private ProfileFragment fragment;
     //endregion private variable
 
     //region fragment lifecycle methods
@@ -142,6 +145,8 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
         View view = inflater.inflate(R.layout.profile_community_champion_layout, container, false);
         mProfilePresenter.attachView(this);
         ButterKnife.bind(this, view);
+         manager = getActivity().getSupportFragmentManager();
+         fragment =(ProfileFragment) manager.findFragmentById(R.id.fl_article_card_view);
 
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(USER_MENTOR_ID)) {
@@ -185,7 +190,11 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             mEmptyFollowedMentorContainer.setVisibility(View.VISIBLE);
             String name = "User";
             if (getActivity() != null && !getActivity().isFinishing()) {
-                name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
+                if (getActivity() instanceof ProfileActivity) {
+                    name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
+                } else {
+                    name = fragment.getUserNameTitle() == null ? "User" : fragment.getUserNameTitle();
+                }
             }
             String message = getString(R.string.empty_followed_mentor, name);
             mEmptyViewFollowedChampion.setText(message);
@@ -267,7 +276,12 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             if (getActivity() == null) {
                 return;
             }
-            String name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
+            String name;
+            if (getActivity() instanceof ProfileActivity) {
+                name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : fragment.getUserNameTitle();
+            } else {
+                name = fragment.getUserNameTitle() == null ? "User" : fragment.getUserNameTitle();
+            }
             String message = getString(R.string.empty_followed_community, name);
             mEmptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vector_community_member_public, 0, 0);
             mEmptyViewCommunities.setText(message);
@@ -521,7 +535,11 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((ProfileActivity) getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    if (getActivity() instanceof ProfileActivity) {
+                        ((ProfileActivity) getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    } else {
+                        fragment.championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                    }
                 }
             });
 

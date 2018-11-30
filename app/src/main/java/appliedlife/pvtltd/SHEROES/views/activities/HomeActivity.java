@@ -144,6 +144,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
@@ -680,16 +681,20 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick({R.id.tv_communities, R.id.tv_communities_search})
     public void communityOnClick() {
-        /*DrawerViewHolder.selectedOptionName = null;
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                flFeedFullView.getLayoutParams();
+
+        params.setBehavior(null);
+       /* DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
-        mliArticleSpinnerIcon.setVisibility(View.GONE);
-        initCommunityViewPagerAndTabs();
+        mliArticleSpinnerIcon.setVisibility(View.GONE);*/
+        initProfileViewPagerAndTabs();
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        communityButton();
+       /* communityButton();
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }*/
@@ -702,7 +707,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
-        openProfileActivity(null);
+
+        //openProfileActivity(null);
     }
 
     @OnClick(R.id.tv_search)
@@ -1800,6 +1806,20 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
         fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         addNewFragment(communitiesListFragment, R.id.fl_article_card_view, CommunitiesListFragment.class.getName(), null, false);
+    }
+
+    private void initProfileViewPagerAndTabs() {
+        ProfileFragment profileFragment = ProfileFragment.createInstance(mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);;
+       // ProfileActivity.navigateTo(this, mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
+            fragmentManager.popBackStack();
+        }
+        fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        addNewFragment(profileFragment, R.id.fl_article_card_view, CommunitiesListFragment.class.getName(), null, false);
+
+
     }
 
     private void resetHamburgerSelectedItems() { //Reset navigation drawer selected item
