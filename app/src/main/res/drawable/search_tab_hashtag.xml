@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@drawable/ic_active_badge_blank"
+    <item android:drawable="@drawable/hashtag_active_vector"
         android:state_selected="true"/>
-    <item android:drawable="@drawable/ic_inactive_badge"
+    <item android:drawable="@drawable/hashtag_inactive_vector"
         android:state_selected="false"/>
 </selector>

@@ -42,12 +42,12 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             case TYPE_ITEM:
                 View itemView = inflater.inflate(R.layout.hashtag_row_element_layout, parent, false);
-                viewHolder = new HashTagsViewHolder(itemView);
+                viewHolder = new HashTagsViewHolder(itemView, hashTagFragment);
             break;
 
             default:
                 View view = inflater.inflate(R.layout.hashtag_row_element_layout, parent, false);
-                viewHolder = new HashTagsViewHolder(view);
+                viewHolder = new HashTagsViewHolder(view, hashTagFragment);
             break;
         }
         return viewHolder;
@@ -57,7 +57,7 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int pos = position - 1;
 
-        switch (holder.getItemViewType()){
+        switch (holder.getItemViewType()) {
             case TYPE_HEADER:
                 HashTagsHeaderViewHolder hashTagsHeaderViewHolder = (HashTagsHeaderViewHolder) holder;
 
@@ -68,18 +68,9 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 HashTagsViewHolder hashTagsViewHolder = (HashTagsViewHolder) holder;
 
                 hashTagsViewHolder.getHashTagTxt().setText(hashTagsList.get(pos));
-
-                hashTagsViewHolder.getHashTagTxt().setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        hashTagFragment.onHashTagClicked();
-                    }
-                });
                 break;
 
         }
-
-
     }
 
     @Override
