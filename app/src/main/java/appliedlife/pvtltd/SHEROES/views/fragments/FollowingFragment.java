@@ -201,7 +201,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     @Override
     public void onItemClick(UserSolrObj userSolrObj) {
-        boolean isChampion = (userSolrObj.getUserSubType()!=null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor();
+        boolean isChampion = userSolrObj.getEntityOrParticipantTypeId()!=null && userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID;
         long id = userSolrObj.getIdOfEntityOrParticipant();
         ProfileActivity.navigateTo(getActivity(), id, isChampion, PROFILE_NOTIFICATION_ID, AppConstants.PROFILE_FOLLOWED_CHAMPION,
                 null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
@@ -215,7 +215,7 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
                 new EventProperty.Builder()
                         .id(Long.toString(userSolrObj.getIdOfEntityOrParticipant()))
                         .name(userSolrObj.getNameOrTitle())
-                        .isMentor((userSolrObj.getUserSubType() != null && userSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userSolrObj.isAuthorMentor())
+                        .isMentor(userSolrObj.getEntityOrParticipantTypeId()!=null && userSolrObj.getEntityOrParticipantTypeId() == AppConstants.CHAMPION_TYPE_ID)
                         .build();
         if (userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed()) {
             if(getActivity()!=null && !getActivity().isFinishing()) {
