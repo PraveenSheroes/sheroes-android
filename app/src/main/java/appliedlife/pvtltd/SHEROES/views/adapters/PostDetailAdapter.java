@@ -93,6 +93,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TYPE_LOADER:
                 CommentLoaderViewHolder commentLoaderViewHolder = ((CommentLoaderViewHolder) holder);
                 commentLoaderViewHolder.bindData(holder.getAdapterPosition(), showLoader, mPostDetailCallback);
+                break;
         }
     }
 

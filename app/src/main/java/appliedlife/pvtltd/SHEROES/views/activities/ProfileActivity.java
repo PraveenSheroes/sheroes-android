@@ -990,6 +990,12 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mUserSolarObject.setSolrIgnoreIsMentorFollowed(isFollowed);
             mUserSolarObject.setSolrIgnoreIsUserFollowed(isFollowed);
             updateFollowedButton();
+
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
+            String title = (String) mViewPagerAdapter.getPageTitle(mViewPager.getCurrentItem());
+            if (fragment instanceof FeedFragment && StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) { //refresh if current tab is post to change follow button visibility
+                ((FeedFragment) fragment).refreshList();
+            }
         }
     }
 
