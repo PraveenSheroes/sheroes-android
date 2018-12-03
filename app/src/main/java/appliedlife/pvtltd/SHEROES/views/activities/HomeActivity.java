@@ -247,6 +247,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @Bind(R.id.iv_drawer_profile_circle_icon)
     CircleImageView ivDrawerProfileCircleIcon;
 
+    @Bind(R.id.verified_icon)
+    ImageView verifiedIcon;
+
     @Bind(R.id.tv_user_name)
     TextView mTvUserName;
 
@@ -1492,6 +1495,13 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             mTvUserName.setText(profileUserName);
             if (mUserPreference.get().getUserSummary().getEmailId() != null) {
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getEmailId());
+            }
+
+            int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
+            if (userType == AppConstants.CHAMPION_TYPE_ID) {
+                verifiedIcon.setVisibility(View.VISIBLE);
+            } else {
+                verifiedIcon.setVisibility(View.GONE);
             }
         }
     }

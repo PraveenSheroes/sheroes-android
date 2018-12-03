@@ -55,6 +55,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     @Bind(R.id.iv_header_circle_icon)
     CircleImageView ivLoginUserPic;
+    @Bind(R.id.iv_feed_community_post_circle_icon_verified)
+    ImageView verifiedIcon;
     @Bind(R.id.header_msg)
     TextView headerMsg;
     @Bind(R.id.user_name)
@@ -113,6 +115,14 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);
         }
+
+        //champion tick
+        if(dataItem.isAuthorMentor()) {
+            verifiedIcon.setVisibility(View.VISIBLE);
+        } else {
+            verifiedIcon.setVisibility(View.GONE);
+        }
+
         if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             headerMsg.setText(mConfiguration.get().configData.mFeedHeaderPostText);
         } else {

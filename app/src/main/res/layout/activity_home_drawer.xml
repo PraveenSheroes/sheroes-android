@@ -12,13 +12,28 @@
         android:background="@drawable/nav_header_background"
         android:orientation="vertical">
 
-        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-            android:id="@+id/iv_drawer_profile_circle_icon"
-            android:layout_width="@dimen/dp_size_64"
-            android:layout_height="@dimen/dp_size_64"
-            android:layout_marginLeft="@dimen/dp_size_16"
-            android:layout_marginStart="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_16" />
+        <FrameLayout
+            android:id="@+id/frameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical">
+
+            <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+                android:id="@+id/iv_drawer_profile_circle_icon"
+                android:layout_width="@dimen/dp_size_64"
+                android:layout_height="@dimen/dp_size_64"
+                android:layout_marginStart="@dimen/dp_size_16"
+                android:layout_marginLeft="@dimen/dp_size_16"
+                android:layout_marginTop="@dimen/dp_size_16" />
+
+            <ImageView
+                android:id="@+id/verified_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:background="@drawable/vector_verified"
+                android:visibility="gone" />
+        </FrameLayout>
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/tv_user_name"
