@@ -358,10 +358,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
-        mMyToast.setText(stringID);
-        mMyToast.show();
-        if (!isFinishing()) {
-            Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
+        if (!isFinishing() && mMyToast != null) {
+            mMyToast.setText(stringID);
+            mMyToast.show();
         }
     }
 

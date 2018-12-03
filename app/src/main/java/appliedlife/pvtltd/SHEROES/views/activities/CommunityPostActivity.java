@@ -2078,7 +2078,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     pollType = TEXT;
                     Set<String> hash_Set = new HashSet<String>();
                     for (int i = 0; i < mEtTextPollList.size(); i++) {
-                        hash_Set.add(mEtTextPollList.get(i).getText().toString());
+                        hash_Set.add(mEtTextPollList.get(i).getText().toString().trim());
                     }
                     if (hash_Set.size() < mEtTextPollList.size()) {     //same option
                         Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
@@ -2114,6 +2114,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         imagePollOptionModelRight.setImageUrl(mImagePollRightUrl);
                     } else {
                         Snackbar.make(mRlMainLayout, getString(R.string.option_image_empty), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if (mEtImagePollLeft.getText().toString().trim().equalsIgnoreCase(mEtImagePollRight.getText().toString().trim())) {
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
