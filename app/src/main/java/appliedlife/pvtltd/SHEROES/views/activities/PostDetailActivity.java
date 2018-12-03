@@ -558,7 +558,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
             if (parcelable != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
-                mPostDetailPresenter.updateFollowedAuthor(mFeedDetail, userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed());
+                mPostDetailPresenter.updateFollowedAuthor(userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed());
             }
         }
     }
