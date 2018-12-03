@@ -556,12 +556,6 @@
         <item>1 Week</item>
         <item>1 Month</item>
     </string-array>
-    <integer-array name="poll_days_count">
-        <item>1</item>
-        <item>2</item>
-        <item>7</item>
-        <item>30</item>
-    </integer-array>
     <string name="percent_vote">% vote</string>
     <string name="poll_end">Ends in: %1$s</string>
     <string name="ended">Poll ended</string>

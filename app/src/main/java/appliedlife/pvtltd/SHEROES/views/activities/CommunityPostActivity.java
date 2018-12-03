@@ -709,7 +709,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRlImageList.setVisibility(View.GONE);
         mLiUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        ArrayList<Integer> pollDaysCount = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        pollDaysCount.add(1);
+        pollDaysCount.add(2);
+        pollDaysCount.add(7);
+        pollDaysCount.add(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
@@ -718,12 +723,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     addTextPollOptionView();
                 }
                 mTvDaySelector.setText(pollTime[0]);
-                mTvDaySelector.setTag(pollDaysCount[0]);
+                mTvDaySelector.setTag(pollDaysCount.get(0));
                 break;
             case IMAGE:
                 addImagePollView();
                 mTvDaySelector.setText(pollTime[0]);
-                mTvDaySelector.setTag(pollDaysCount[0]);
+                mTvDaySelector.setTag(pollDaysCount.get(0));
                 break;
             default:
                 break;
@@ -2151,10 +2156,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void addPollSelectionDay() {
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        ArrayList<Integer> pollDaysCount = new ArrayList<>();
+        Calendar calendar = Calendar.getInstance();
+        pollDaysCount.add(1);
+        pollDaysCount.add(2);
+        pollDaysCount.add(7);
+        pollDaysCount.add(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         PopupMenu popup = new PopupMenu(this, mTvDaySelector);
         for (int i = 1; i <= pollTime.length; i++) {
-            popup.getMenu().add(0, pollDaysCount[i - 1], i, menuWithText(pollTime[i - 1]));
+            popup.getMenu().add(0, pollDaysCount.get(i - 1), i, menuWithText(pollTime[i - 1]));
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
