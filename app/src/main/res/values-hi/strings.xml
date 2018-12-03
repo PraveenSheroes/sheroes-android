@@ -543,8 +543,8 @@
     <string name="poll">पोल</string>
     <string name="photo_video">फोटो</string>
     <string name="choose_poll">अपना पोल का चुनाव करें </string>
-    <string name="title.create_poll">पोल बनाए </string>
-    <string name="poll_option_text">और विकल्प भरे</string>
+    <string name="title.create_poll">पोल बनाएं</string>
+    <string name="poll_option_text">और विकल्प भरें</string>
     <string name="poll_option_end_text">पोल समाप्त:</string>
     <string-array name="poll_time">
         <item>1 दिन</item>
@@ -577,7 +577,7 @@
     <string name="leaderboard_rank_unavailable">--</string>
     <string name="edit">बदलें</string>
     <string name="poll_result_percent">%</string>
-    <string name="poll_ask_question">सवाल पूछे (%1$d वर्ण)</string>
+    <string name="poll_ask_question">सवाल पूछें (%1$d वर्ण)</string>
     <string name="poll_text_option">(%1$d वर्ण)</string>
     <string name="challenge">चैलेंज</string>
     <string name="care_msg"><![CDATA[ <html>
