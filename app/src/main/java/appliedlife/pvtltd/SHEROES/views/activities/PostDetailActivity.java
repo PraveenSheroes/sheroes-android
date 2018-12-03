@@ -1331,7 +1331,8 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            boolean isChampion = comment.getParticipationTypeId() == AppConstants.CHAMPION_TYPE_ID;
+            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), isChampion, 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 
