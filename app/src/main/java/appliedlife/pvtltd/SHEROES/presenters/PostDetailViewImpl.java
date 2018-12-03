@@ -928,13 +928,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
     }
 
 
-    public  void updateFollowedAuthor(FeedDetail userPostSolrObj, boolean isFollowed) {
-        if(mFeedDetail!=null && mFeedDetail instanceof UserPostSolrObj) {
+    public void updateFollowedAuthor(boolean isFollowed) {
+        if (mFeedDetail != null && mFeedDetail instanceof UserPostSolrObj) {
             UserPostSolrObj userPostDetail = (UserPostSolrObj) mFeedDetail;
             userPostDetail.setSolrIgnoreIsUserFollowed(isFollowed);
-            mFeedDetail = userPostSolrObj;
-            mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().setData(0, userPostSolrObj);
+            mBaseResponseList.set(0, userPostDetail);
+            getMvpView().setData(0, userPostDetail);
         }
     }
 
