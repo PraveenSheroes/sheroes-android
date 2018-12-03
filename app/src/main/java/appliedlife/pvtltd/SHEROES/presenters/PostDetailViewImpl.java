@@ -153,7 +153,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        mSheroesAppServiceApi.getPollDetail(mFeedDetailObjId,feedRequestPojo)
+        mSheroesAppServiceApi.getPollDetail(mFeedDetailObjId, feedRequestPojo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
@@ -181,8 +181,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             getMvpView().addData(0, mFeedDetail);
                             headerCount++;
                             getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
-                        }else
-                        {
+                        } else {
                             getMvpView().stopProgressBar();
                         }
                     }
@@ -440,7 +439,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void editCommentListFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId) {
+    public void editCommentListFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId, final Comment comment) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
@@ -463,7 +462,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().stopProgressBar();
                 if (commentResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
 
-                    if (editDeleteId == AppConstants.ONE_CONSTANT) {
+                    if (editDeleteId == AppConstants.COMMENT_DELETE) {
                         int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
                         if (pos != RecyclerView.NO_POSITION) {
                             mBaseResponseList.remove(pos);
@@ -474,7 +473,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             getMvpView().setData(0, mFeedDetail);
                         }
                     } else {
-                        getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
+                        Comment updatedComment = commentResponsePojo.getCommentReactionModel();
+                        updatedComment.isLiked = comment.isLiked;
+                        updatedComment.likeCount = comment.likeCount;
+                        getMvpView().updateComment(updatedComment);
                     }
                 }
             }
@@ -722,7 +724,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         PollSolarObj pollSolarObj = null;
                         if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
-                            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL,pollOptionModel.getPollOptionId());
+                            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL, pollOptionModel.getPollOptionId());
                         } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
@@ -1174,7 +1176,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            if(championFollowedResponse.isAlreadyFollowed()) {
+                            if (championFollowedResponse.isAlreadyFollowed()) {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                             } else {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
