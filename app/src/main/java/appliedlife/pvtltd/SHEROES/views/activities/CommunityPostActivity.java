@@ -1223,16 +1223,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString().trim(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
         } else if (!mIsEditPost) {
             String accessToken = "";
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
