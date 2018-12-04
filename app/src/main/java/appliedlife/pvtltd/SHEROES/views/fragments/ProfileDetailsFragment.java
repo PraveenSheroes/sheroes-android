@@ -544,7 +544,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
 
             if (follower != null) {
                 String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getFollowerCount());
-                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
+                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getChampionFollowerCount()) + AppConstants.SPACE + pluralComments));
             }
 
             followFollowingBtn.setVisibility(View.GONE);
