@@ -38,7 +38,7 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        mSheroesAppServiceApi.searchQuery(searchText, searchCategory,"0","10")
+        mSheroesAppServiceApi.searchQuery(searchText, searchCategory, "0", "10")
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())

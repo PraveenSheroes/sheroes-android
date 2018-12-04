@@ -6,7 +6,6 @@ public enum SearchEnum {
     HASHTAGS("hashtags"),
     ARTICLES("articles");
 
-
     private final String string;
 
     SearchEnum(final String string) {
