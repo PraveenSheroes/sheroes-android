@@ -261,11 +261,6 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             //Ignore header
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER))
                 return null;
-
-            /*if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
-                //Add position in list
-            }*/
-
             if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
                 String configVersion = prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0");
                 configVersion = StringUtil.isNotNullOrEmptyString(configVersion) ? configVersion : "0";
@@ -409,8 +404,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     @Override
     public void sendImpressions() {
-        mImpressionPresenter.sendImpressions(mImpressionBatchSize,null, true);
+        mImpressionPresenter.sendImpressions(mImpressionBatchSize, null, true);
     }
-
     //endregion
 }
