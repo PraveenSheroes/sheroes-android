@@ -8,21 +8,21 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.IntDef;
-import android.support.annotation.IntRange;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RestrictTo;
-import android.support.annotation.StyleRes;
-import android.support.design.widget.AppBarLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IntDef;
+import androidx.annotation.IntRange;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RestrictTo;
+import androidx.annotation.StyleRes;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
@@ -36,7 +36,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import appliedlife.pvtltd.SHEROES.R;
 
-import static android.support.annotation.RestrictTo.Scope.GROUP_ID;
+import static androidx.annotation.RestrictTo.Scope.GROUP_ID;
 import static appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.MathUtils.constrain;
 import static appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar.ViewUtils.objectEquals;
 
@@ -195,7 +195,7 @@ import static appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToo
         mCollapsingTextHelper.setExpandedTextAppearance(
                 R.style.TextAppearance_Design_CollapsingToolbar_Expanded);
         mCollapsingTextHelper.setCollapsedTextAppearance(
-                android.support.v7.appcompat.R.style.TextAppearance_AppCompat_Widget_ActionBar_Title);
+                androidx.appcompat.R.style.TextAppearance_AppCompat_Widget_ActionBar_Title);
 
         // Now overlay any custom text appearances
         if (a.hasValue(R.styleable.CollapsingToolbarLayout_expandedTitleTextAppearance)) {
@@ -226,7 +226,7 @@ import static appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToo
         setWillNotDraw(false);
 
         ViewCompat.setOnApplyWindowInsetsListener(this,
-                new android.support.v4.view.OnApplyWindowInsetsListener() {
+                new androidx.core.view.OnApplyWindowInsetsListener() {
                     @Override
                     public WindowInsetsCompat onApplyWindowInsets(View v,
                                                                   WindowInsetsCompat insets) {

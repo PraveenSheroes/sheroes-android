@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         style="@style/TextAppearance.Toolbar"
         android:layout_width="match_parent"
@@ -52,7 +52,7 @@
             android:textAllCaps="true"
             android:textColor="#90949c"
             vernacular:customTextFontFamily="@string/medium_font" />
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <include
         layout="@layout/layout_article_post_final"

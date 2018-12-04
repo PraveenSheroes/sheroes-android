@@ -9,9 +9,9 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.animation.FastOutSlowInInterpolator;
+import androidx.fragment.app.Fragment;
+import androidx.core.content.ContextCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
@@ -221,7 +221,7 @@ public class ContestInfoFragment extends BaseFragment {
             return;
         }
         if (mContest != null && getActivity() != null && CommonUtil.isNotEmpty(mContest.authorImageUrl)) {
-            Glide.with(this)
+            Glide.with(getActivity())
                     .load(mContest.authorImageUrl)
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
                     .into(mAuthorPic);

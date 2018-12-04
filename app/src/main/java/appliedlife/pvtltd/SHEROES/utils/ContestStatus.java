@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import appliedlife.pvtltd.SHEROES.R;
 

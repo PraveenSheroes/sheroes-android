@@ -18,8 +18,8 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Looper;
-import android.support.annotation.NonNull;
-import android.support.v4.content.FileProvider;
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -874,8 +874,8 @@ public class CommonUtil {
     }
 
     public static class CircleTransform extends BitmapTransformation {
-        public CircleTransform(Context context) {
-            super(context);
+        public CircleTransform(Context mContext) {
+            super();
         }
 
         @Override

@@ -1,7 +1,7 @@
 
 package appliedlife.pvtltd.SHEROES.preferences;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.f2prateek.rx.preferences2.Preference;
 import com.google.gson.Gson;

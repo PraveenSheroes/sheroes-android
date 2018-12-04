@@ -14,7 +14,7 @@
 
 package appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Spanned;
 
 /**

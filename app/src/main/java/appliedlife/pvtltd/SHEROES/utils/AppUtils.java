@@ -15,8 +15,8 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.customtabs.CustomTabsIntent;
-import android.support.v4.content.ContextCompat;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.core.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -376,7 +376,7 @@ public class AppUtils {
     }
 
     /* Function to check if support fragment UI is active*/
-    public static boolean isFragmentUIActive(android.support.v4.app.Fragment frag) {
+    public static boolean isFragmentUIActive(androidx.fragment.app.Fragment frag) {
         return frag != null && frag.getActivity() != null && frag.isAdded() && !frag.isDetached() && !frag.isRemoving();
     }
 

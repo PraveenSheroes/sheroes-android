@@ -12,7 +12,7 @@
         android:icon="@drawable/vector_search"
         app:showAsAction="always|collapseActionView"
         android:textSize="@dimen/menu_item_text_size"
-        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:title="@string/ID_SEARCH"/>
 
 </menu>

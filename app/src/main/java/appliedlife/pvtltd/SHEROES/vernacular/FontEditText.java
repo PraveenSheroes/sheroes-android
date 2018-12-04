@@ -3,8 +3,8 @@ package appliedlife.pvtltd.SHEROES.vernacular;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.util.AttributeSet;
 
 import java.util.Map;

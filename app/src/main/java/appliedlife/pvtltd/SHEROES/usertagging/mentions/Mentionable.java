@@ -14,7 +14,7 @@
 
 package appliedlife.pvtltd.SHEROES.usertagging.mentions;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 

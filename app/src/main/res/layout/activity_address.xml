@@ -13,7 +13,7 @@
             android:id="@+id/toolbar"
             layout="@layout/toolbar" />
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/name_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,9 +34,9 @@
                 android:textSize="20sp"
                 vernacular:customEditTextFontFamily="@string/regular_font"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/phone_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -57,9 +57,9 @@
                 android:maxLength="10"
                 android:maxLines="1" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/address_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -79,9 +79,9 @@
                 android:inputType="textPostalAddress"
                 android:maxLines="1"/>
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/email_id_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -100,10 +100,10 @@
                 android:maxLines="1"
                 android:textSize="20sp" />
 
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/pin_code_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                 android:inputType="number"
                 android:hint="@string/hint.pin_code"
                 android:maxLines="1"/>
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 </ScrollView>

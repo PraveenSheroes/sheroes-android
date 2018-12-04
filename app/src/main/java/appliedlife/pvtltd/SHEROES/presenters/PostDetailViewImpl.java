@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.crashlytics.android.Crashlytics;
 

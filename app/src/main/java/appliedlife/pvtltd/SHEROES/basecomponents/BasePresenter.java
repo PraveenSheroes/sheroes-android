@@ -1,6 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;

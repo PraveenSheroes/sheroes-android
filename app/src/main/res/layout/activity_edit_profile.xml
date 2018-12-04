@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,7 +15,7 @@
         <include
             android:id="@id/toolbar"
             layout="@layout/toolbar" />
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
         android:id="@+id/scroll_fragment_edit"
@@ -97,7 +97,7 @@
                     android:visibility="gone" />
             </FrameLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_full_name_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -118,7 +118,7 @@
                     android:textColor="@color/text_color_contactdetails_page"
                     android:textColorHint="@color/gray_light"
                     vernacular:customEditTextFontFamily="@string/regular_font" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_loaction"
@@ -288,7 +288,7 @@
                 android:layout_marginTop="@dimen/dp_size_8"
                 android:entries="@array/relationship_status_arr" />
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_childno_basicdetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -310,9 +310,9 @@
                     android:textColorHint="@color/gray_light"
                     vernacular:customEditTextFontFamily="@string/regular_font" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_mobile_holder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -333,7 +333,7 @@
                     android:textColorHint="@color/gray_light"
                     vernacular:customEditTextFontFamily="@string/regular_font" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_user_email_id"
