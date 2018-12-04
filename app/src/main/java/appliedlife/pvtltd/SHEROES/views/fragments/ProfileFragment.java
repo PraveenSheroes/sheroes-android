@@ -370,8 +370,8 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mLoaderGif.setVisibility(View.VISIBLE);
         mLoaderGif.bringToFront();
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
-           mUserSolarObject = Parcels.unwrap(args.getInt(AppConstants.GROWTH_PUBLIC_PROFILE)));
-            /*mFeedDetail = Parcels.unwrap(getActivity().getIntent().getParcelableExtra(AppConstants.MENTOR_DETAIL));*/
+//           mUserSolarObject = Parcels.unwrap(getArguments().getInt(AppConstants.GROWTH_PUBLIC_PROFILE));
+          mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.MENTOR_DETAIL));
             mFromNotification = getArguments().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
             mChampionId = getArguments().getLong(AppConstants.CHAMPION_ID);
             isChampion = getArguments().getBoolean(AppConstants.IS_CHAMPION_ID);
@@ -1767,6 +1767,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
 
     public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, ProfileActivity.class);
+        ProfileFragment profileFragment = new ProfileFragment();
         Bundle bundle = new Bundle();
         dataItem.setIdOfEntityOrParticipant(mChampionId);
         dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);

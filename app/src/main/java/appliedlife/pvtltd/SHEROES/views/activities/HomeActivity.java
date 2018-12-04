@@ -88,6 +88,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.imageops.CropImage;
+import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -1090,6 +1091,20 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
     }
 
+    public void selectImageFrmCamera() {
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        selectImageFrmGallery();
+    }
+
+    public void selectImageFrmGallery() {
+        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+                .setRequestedSize(400, 400)
+                .setAspectRatio(1, 1)
+                .setAllowRotation(true)
+                .start(this);
+    }
+
     @OnClick(R.id.nav_menu_header)
     public void onClickProfile() {
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -1717,7 +1732,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void openProfileActivity(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
         //TODO - Its was added to show profile strength on Nav menu, required api changes, future task
-        ProfileActivity.navigateTo(this, mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
+        ProfileFragment.createInstance(mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
+//        ProfileActivity.navigateTo(this, mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
     private void handleHelpLineFragmentFromDeepLinkAndLoading() {
@@ -1921,6 +1937,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
+//        ProfileFragment.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
