@@ -709,12 +709,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRlImageList.setVisibility(View.GONE);
         mLiUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        ArrayList<Integer> pollDaysCount = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        pollDaysCount.add(1);
-        pollDaysCount.add(2);
-        pollDaysCount.add(7);
-        pollDaysCount.add(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        List<Integer> pollDaysCount = getPollDaysCountList();
         CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
@@ -2156,12 +2151,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void addPollSelectionDay() {
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        ArrayList<Integer> pollDaysCount = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        pollDaysCount.add(1);
-        pollDaysCount.add(2);
-        pollDaysCount.add(7);
-        pollDaysCount.add(calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        List<Integer> pollDaysCount = getPollDaysCountList();
         PopupMenu popup = new PopupMenu(this, mTvDaySelector);
         for (int i = 1; i <= pollTime.length; i++) {
             popup.getMenu().add(0, pollDaysCount.get(i - 1), i, menuWithText(pollTime[i - 1]));
@@ -2261,6 +2251,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liImagePollRow.setLayoutParams(params);
         mLiPollContainer.addView(liImagePollRow);
+    }
+
+    private List<Integer> getPollDaysCountList() {
+        List<Integer> pollDaysCount = new ArrayList<>();
+        pollDaysCount.add(1);
+        pollDaysCount.add(2);
+        pollDaysCount.add(7);
+        pollDaysCount.add(Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
+        return pollDaysCount;
     }
     //endregion private methods
 }

@@ -69,15 +69,14 @@ import static butterknife.ButterKnife.findById;
  */
 
 public class ProfileDetailsFragment extends BaseFragment implements IProfileView {
-
     //region constants
+    private static final String SCREEN_LABEL = "Profile Details Screen";
     public static final String USER_MENTOR_ID = "USERID";
     public static final String USER_MENTOR_NAME = "USER_NAME";
     public static final String SELF_PROFILE = "SELF_PROFILE";
-    private static final String SCREEN_LABEL = "Profile Details Screen";
     //endregion constants
 
-    //region bind variable
+    //region bind views
     @BindDimen(R.dimen.dp_size_12)
     public int mImageMargin;
     @BindDimen(R.dimen.dp_size_4)
@@ -121,10 +120,8 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     //region injected variable
     @Inject
     Preference<LoginResponse> mUserPreference;
-
     @Inject
     AppUtils mAppUtils;
-
     @Inject
     ProfilePresenterImpl mProfilePresenter;
     //endregion injected variable
