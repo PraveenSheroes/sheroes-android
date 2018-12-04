@@ -925,8 +925,10 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
             mFeedDetail.setStreamType(getMvpView().getStreamType());
         }
-        mBaseResponseList.set(0, userPostSolrObj);
-        getMvpView().setData(0, userPostSolrObj);
+        if (mBaseResponseList.size() > 0) {
+            mBaseResponseList.set(0, userPostSolrObj);
+            getMvpView().setData(0, userPostSolrObj);
+        }
     }
 
 
