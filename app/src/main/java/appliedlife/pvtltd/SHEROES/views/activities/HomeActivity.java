@@ -28,7 +28,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -147,7 +146,6 @@ import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
-import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SearchProfileLocationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.SelectLanguageDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.INavDrawerCallback;
@@ -273,23 +271,20 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @Bind(R.id.rv_right_drawer_communities)
     RecyclerView mRecyclerViewDrawerCommunities;
 
-    @Bind(R.id.tv_home)
-    public ImageView mTvHome;
+    @Bind(R.id.iv_home)
+    public ImageView mIvHome;
 
-    @Bind(R.id.tv_communities)
-    public ImageView mTvCommunities;
+    @Bind(R.id.iv_profile)
+    public ImageView mIvProfile;
 
-    @Bind(R.id.tv_search)
-    public ImageView mTvSearch;
+    @Bind(R.id.iv_search)
+    public ImageView mIvSearch;
 
     @Bind(R.id.tv_home_notification_icon)
     TextView mTvNotification;
 
     @Bind(R.id.title_text)
     TextView mTitleText;
-
-/*    @Bind(R.id.tv_communities_text)
-    ImageView mTvCommunitiesText;*/
 
     @Bind(R.id.tv_communities_search)
     TextView mTvCommunitiesSearch;
@@ -316,7 +311,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @Bind(R.id.tv_new_tag)
     public TextView mTvNewTag;
 
-    @Bind(R.id.rl_search_box)RelativeLayout searchBoxLayout;
+    @Bind(R.id.rl_search_box)
+    RelativeLayout searchBoxLayout;
 
     @BindDimen(R.dimen.dp_size_64)
     int navProfileSize;
@@ -439,7 +435,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void showCaseDesign() {
         if (mIsFirstTimeOpen) {
             this.mIsFirstTimeOpen = false;
-            ShowcaseManager showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mTvHome, mTvCommunities, tvDrawerNavigation, mRecyclerView, mUserName);
+            ShowcaseManager showcaseManager = new ShowcaseManager(this, mFloatActionBtn, mIvHome, mIvProfile, tvDrawerNavigation, mRecyclerView, mUserName);
             showcaseManager.showFirstMainActivityShowcase();
             AppStatus appStatus = mInstallUpdatePreference.get();
             appStatus.setAppInstallFirstTime(true);
@@ -451,10 +447,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void refreshHomeViews() {
         mHomePresenter.queryConfig();
         initHomeViewPagerAndTabs();
-        //mTvHome.setText(R.string.home_label);
-        //mTvCommunities.setText(R.string.ID_COMMUNITIES);
         mTitleText.setText("");
-        //mTvCommunitiesText.setText(R.string.ID_MY_COMMUNITIES);
         mTvCommunitiesSearch.setText(R.string.explore_All);
         mTvNewTag.setText(R.string.new_tag);
         mTvCategoryChoose.setText(R.string.ID_CHOOSE_CATEGORY);
@@ -602,14 +595,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void changeFragmentWithCommunities() {
         mFragmentOpen.setFeedFragment(false);
-    //    mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
-     //   mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
-
-       // mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-      //  mTvHome.setText(getString(R.string.home_label));
-
-        //TvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-      //  mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
 
         mFloatActionBtn.setVisibility(View.GONE);
 
@@ -638,7 +623,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     //Refresh the feed after clicking the Sheroes logo and home button
-    @OnClick({R.id.tv_home, R.id.ic_sheroes})
+    @OnClick({R.id.iv_home, R.id.ic_sheroes})
     public void homeOnClick() {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
@@ -648,7 +633,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mAppBarLayout.setVisibility(View.VISIBLE);
         DrawerViewHolder.selectedOptionName = null;
         flFeedFullView.setVisibility(View.VISIBLE);
-//        mliArticleSpinnerIcon.setVisibility(View.GONE);
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         homeButtonUi();
         initHomeViewPagerAndTabs();
         mTitleText.setText("");
@@ -663,14 +648,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
 
-      //  mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
-    //    mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_selected_icon), null, null);
-//        mTvHome.setText(getString(R.string.home_label));
-      //  mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-        //mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_unselected_icon), null, null);
-        //mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-
-
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.VISIBLE);
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
@@ -678,9 +655,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
     }
 
-    @OnClick({R.id.tv_communities, R.id.tv_communities_search})
+    @OnClick(R.id.tv_communities_search)
     public void communityOnClick() {
-        /*DrawerViewHolder.selectedOptionName = null;
+        DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         initCommunityViewPagerAndTabs();
@@ -690,10 +667,19 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         communityButton();
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        }
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
-        }*/
+        }
+    }
 
+    @OnClick(R.id.iv_profile)
+    public void profileOnClick() {
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         highlightProfile();
 
         if (mDrawer.isDrawerOpen(GravityCompat.START)) {
@@ -705,13 +691,14 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         openProfileActivity(null);
     }
 
-    @OnClick(R.id.tv_search)
+    @OnClick(R.id.iv_search)
     public void searchOnClick() {
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
-
         params.setBehavior(null);
-
+        DrawerViewHolder.selectedOptionName = null;
+        resetHamburgerSelectedItems();
+        mliArticleSpinnerIcon.setVisibility(View.GONE);
         highlightSearch();
         openSearchFragment();
         FragmentManager fm = getSupportFragmentManager();
@@ -720,27 +707,15 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
         fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
-//        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-//            mDrawer.closeDrawer(GravityCompat.START);
-//        }
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
+        }
         if (mDrawer.isDrawerOpen(GravityCompat.END)) {
             mDrawer.closeDrawer(GravityCompat.END);
         }
-//        openSearchActivity();
     }
 
-//    private void openSearchActivity() {
-//        SearchActivity.navigateTo(this, AppConstants.REQUEST_CODE_FOR_SEARCH);
-//    }
-
     public void communityButton() {
-
-      //  mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_selected_icon), null, null);
-       // mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
-        //mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-     //   mTvHome.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_home_unselected_icon), null, null);
-     //   mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
-     //   mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFloatActionBtn.setVisibility(View.GONE);
         mTitleText.setText(getString(R.string.ID_COMMUNITIES));
@@ -1763,21 +1738,21 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private void highlightHome(){
-        mTvHome.setImageResource(R.drawable.home_red_vector);
-        mTvSearch.setImageResource(R.drawable.search_grey_vector);
-        mTvCommunities.setImageResource(R.drawable.profile_grey_vector);
+        mIvHome.setImageResource(R.drawable.home_red_vector);
+        mIvSearch.setImageResource(R.drawable.search_grey_vector);
+        mIvProfile.setImageResource(R.drawable.profile_grey_vector);
     }
 
     private void highlightSearch(){
-        mTvHome.setImageResource(R.drawable.ic_home_unselected_icon);
-        mTvSearch.setImageResource(R.drawable.search_red_vector);
-        mTvCommunities.setImageResource(R.drawable.profile_grey_vector);
+        mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
+        mIvSearch.setImageResource(R.drawable.search_red_vector);
+        mIvProfile.setImageResource(R.drawable.profile_grey_vector);
     }
 
     private void highlightProfile(){
-        mTvHome.setImageResource(R.drawable.ic_home_unselected_icon);
-        mTvSearch.setImageResource(R.drawable.search_grey_vector);
-        mTvCommunities.setImageResource(R.drawable.profile_red_vector);
+        mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
+        mIvSearch.setImageResource(R.drawable.search_grey_vector);
+        mIvProfile.setImageResource(R.drawable.profile_red_vector);
     }
 
     private void openSearchFragment(){
