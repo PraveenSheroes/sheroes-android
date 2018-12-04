@@ -442,7 +442,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, false);
         }  if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof ProfileActivity && feedDetail instanceof UserPostSolrObj) {
             UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-            ((ProfileActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            if (getActivity() != null && getActivity() instanceof ProfileActivity) {
+                ((ProfileActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            } else if (getActivity() != null && getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            }
             findPositionAndUpdateItem(userPostSolrObj, userPostSolrObj.getIdOfEntityOrParticipant());
         } else {
             updateItem(feedDetail);

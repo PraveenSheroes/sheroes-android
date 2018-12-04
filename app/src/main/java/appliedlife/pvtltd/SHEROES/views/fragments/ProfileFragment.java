@@ -102,6 +102,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.ProfileCommunitiesResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.presenters.ProfilePresenterImpl;
@@ -317,7 +318,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     //endregion view variable
     //region activity lifecycle methods
 
-    public static ProfileFragment createInstance(long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
+    public static ProfileFragment createInstance(UserSolrObj userSolrObj, FeedDetail feedDetail, ProfileStrengthDialog.ProfileStrengthType profileStrengthType, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle bundle = new Bundle();/*
         if(isWriteAStory) {
@@ -332,6 +333,9 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
             } catch (Exception e){
             }
         }
+        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, Parcels.wrap(userSolrObj));
+        bundle.putParcelable(AppConstants.MENTOR_DETAIL, Parcels.wrap(feedDetail));
+        bundle.putSerializable(ProfileStrengthDialog.PROFILE_LEVEL, profileStrengthType);
         bundle.putBoolean(BaseActivity.STORIES_TAB, isWriteAStory);
         bundle.putLong(AppConstants.CHAMPION_ID, mChampionId);
         bundle.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -358,7 +362,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        view = inflater.inflate(R.layout.activity_profile_layout, container, false);
+        view = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, view);
         mHomePresenter.attachView(this);
         mProfilePresenter.attachView(this);
@@ -370,13 +374,13 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mLoaderGif.setVisibility(View.VISIBLE);
         mLoaderGif.bringToFront();
         mCollapsingToolbarLayout.setTitle(AppConstants.EMPTY_STRING);
-//           mUserSolarObject = Parcels.unwrap(getArguments().getInt(AppConstants.GROWTH_PUBLIC_PROFILE));
-          mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.MENTOR_DETAIL));
-            mFromNotification = getArguments().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
-            mChampionId = getArguments().getLong(AppConstants.CHAMPION_ID);
-            isChampion = getArguments().getBoolean(AppConstants.IS_CHAMPION_ID);
-            isWriteAStory = getArguments().getBoolean(STORIES_TAB);
-          //  mProfileStrengthType = (ProfileStrengthDialog.ProfileStrengthType) getArguments().getSerializableExtra(ProfileStrengthDialog.PROFILE_LEVEL);
+        mUserSolarObject = Parcels.unwrap(getArguments().getParcelable(AppConstants.GROWTH_PUBLIC_PROFILE));
+        mFeedDetail = Parcels.unwrap(getArguments().getParcelable(AppConstants.MENTOR_DETAIL));
+        mFromNotification = getArguments().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+        mChampionId = getArguments().getLong(AppConstants.CHAMPION_ID);
+        isChampion = getArguments().getBoolean(AppConstants.IS_CHAMPION_ID);
+        isWriteAStory = getArguments().getBoolean(STORIES_TAB);
+        mProfileStrengthType = (ProfileStrengthDialog.ProfileStrengthType) getArguments().getSerializable(ProfileStrengthDialog.PROFILE_LEVEL);
         if (null != mUserSolarObject) {
             itemPosition = mUserSolarObject.getItemPosition();
         } else if (null != mFeedDetail) {
@@ -741,7 +745,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            mHomePresenter.getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
+                            getUserSummaryDetails(mAppUtils.getUserProfileRequestBuilder(AppConstants.PROFILE_PIC_SUB_TYPE, AppConstants.PROFILE_PIC_TYPE, mEncodeImageUrl));
                         } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                             Toast.makeText(getActivity(), "Cropping failed: " + result.getError(), Toast.LENGTH_LONG).show();
                         }
@@ -751,6 +755,10 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
                 }
             }
         }
+    }
+
+    public void getUserSummaryDetails(UserSummaryRequest userSummaryRequest) {
+        mHomePresenter.getUserSummaryDetails(userSummaryRequest);
     }
     //endregion override methods
 
@@ -838,7 +846,10 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     public void onImageEditClicked() {
         if (isOwnProfile) {
             addAnalyticsEvents(Event.PROFILE_PIC_EDIT_CLICKED);
-            CameraBottomSheetFragment.showDialog((HomeActivity) getActivity(), SCREEN_LABEL);
+            if (getActivity() != null && getActivity() instanceof HomeActivity)
+                CameraBottomSheetFragment.showDialog((HomeActivity) getActivity(), SCREEN_LABEL);
+            else if (getActivity() != null && getActivity() instanceof ProfileActivity)
+                CameraBottomSheetFragment.showDialog((ProfileActivity) getActivity(), SCREEN_LABEL);
         }
     }
 
@@ -1286,7 +1297,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         }
     }
 
-    private void croppingIMG() {
+    public void croppingIMG() {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
         List list = getActivity().getPackageManager().queryIntentActivities(intent, 0);
@@ -1519,7 +1530,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         //ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
-    private void updateProfileDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
+    public void updateProfileDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
         if (StringUtil.isNotNullOrEmptyString(name)) { //Name
             name = CommonUtil.camelCaseString(name);
             mUserName.setText(name);
@@ -1556,7 +1567,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         }
     }
 
-    private void imageCropping(Intent intent) {
+    public void imageCropping(Intent intent) {
         try {
             if (mLocalImageSaveForChallenge.exists()) {
                 Bitmap photo = CompressImageUtil.decodeFile(mLocalImageSaveForChallenge);

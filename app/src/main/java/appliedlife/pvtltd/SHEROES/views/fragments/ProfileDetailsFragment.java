@@ -133,11 +133,11 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     private boolean mIsSelfProfile, mIsFragmentVisible;
     private List<CommunityFeedSolrObj> mCommunities;
     private List<UserSolrObj> mFollowedChampions;
-    private FragmentManager manager;
-    private ProfileFragment fragment;
+    private FragmentManager mManagerFragment;
+    private ProfileFragment mProfileFragment;
     //endregion private variable
 
-    //region fragment lifecycle methods
+    //region mProfileFragment lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
@@ -145,8 +145,8 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
         View view = inflater.inflate(R.layout.profile_community_champion_layout, container, false);
         mProfilePresenter.attachView(this);
         ButterKnife.bind(this, view);
-         manager = getActivity().getSupportFragmentManager();
-         fragment =(ProfileFragment) manager.findFragmentById(R.id.fl_article_card_view);
+        mManagerFragment = getActivity().getSupportFragmentManager();
+        mProfileFragment = (ProfileFragment) mManagerFragment.findFragmentById(R.id.fl_article_card_view);
 
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(USER_MENTOR_ID)) {
@@ -172,7 +172,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
         super.onDetach();
         mProfilePresenter.detachView();
     }
-    //endregion fragment lifecycle methods
+    //endregion mProfileFragment lifecycle methods
 
     //region inherited methods
     @Override
@@ -193,7 +193,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
                 if (getActivity() instanceof ProfileActivity) {
                     name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
                 } else {
-                    name = fragment.getUserNameTitle() == null ? "User" : fragment.getUserNameTitle();
+                    name = mProfileFragment.getUserNameTitle() == null ? "User" : mProfileFragment.getUserNameTitle();
                 }
             }
             String message = getString(R.string.empty_followed_mentor, name);
@@ -278,9 +278,9 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             }
             String name;
             if (getActivity() instanceof ProfileActivity) {
-                name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : fragment.getUserNameTitle();
+                name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : mProfileFragment.getUserNameTitle();
             } else {
-                name = fragment.getUserNameTitle() == null ? "User" : fragment.getUserNameTitle();
+                name = mProfileFragment.getUserNameTitle() == null ? "User" : mProfileFragment.getUserNameTitle();
             }
             String message = getString(R.string.empty_followed_community, name);
             mEmptyViewCommunities.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vector_community_member_public, 0, 0);
@@ -538,7 +538,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
                     if (getActivity() instanceof ProfileActivity) {
                         ((ProfileActivity) getActivity()).championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                     } else {
-                        fragment.championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
+                        mProfileFragment.championDetailActivity(userSolrObj.getIdOfEntityOrParticipant(), true);
                     }
                 }
             });

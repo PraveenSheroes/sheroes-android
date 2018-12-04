@@ -7,7 +7,13 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
+    <FrameLayout
+    android:id = "@+id/profile_frame_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_collapseMode="parallax"/>
+
+   <!-- <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -151,6 +157,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:layout_gravity="end|bottom" />
+        android:layout_gravity="end|bottom" />-->
 
 </android.support.design.widget.CoordinatorLayout>
