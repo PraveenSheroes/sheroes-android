@@ -664,10 +664,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.tv_communities_search)
     public void communityOnClick() {
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
-                flFeedFullView.getLayoutParams();
-
-        params.setBehavior(null);
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
@@ -688,6 +684,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.iv_profile)
     public void profileOnClick() {
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
+                flFeedFullView.getLayoutParams();
+        params.setBehavior(null);
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
         mliArticleSpinnerIcon.setVisibility(View.GONE);
