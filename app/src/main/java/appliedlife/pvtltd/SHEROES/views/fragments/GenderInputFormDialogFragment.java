@@ -134,7 +134,6 @@ public class GenderInputFormDialogFragment extends BaseDialogFragment {
             if (StringUtil.isNotNullOrEmptyString(mPersonnelEmailId)) {
                 gender = "Female";
                 ((WelcomeActivity) getActivity()).getTokenFromGoogleAuth(mPersonnelEmailId);
-                dismiss();
             }
         }
         final HashMap<String, Object> properties =

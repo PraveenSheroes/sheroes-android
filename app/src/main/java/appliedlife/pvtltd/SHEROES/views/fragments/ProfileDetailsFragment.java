@@ -183,15 +183,13 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             //empty view
             mEmptyFollowedMentorContainer.setVisibility(View.VISIBLE);
             String name = "User";
-            if (getActivity() instanceof  ProfileActivity && getActivity() != null && !getActivity().isFinishing()) {
+            if (getActivity() instanceof ProfileActivity && getActivity() != null && !getActivity().isFinishing()) {
                 name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
             }
             String message = getString(R.string.empty_followed_mentor, name);
             mEmptyViewFollowedChampion.setText(message);
             mEmptyViewFollowedChampion.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vector_public_business_woman, 0, 0);
-
             mFollowedChampionContainer.setVisibility(View.GONE);
-
             if (mIsSelfProfile) {
                 mEmptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
                 mEmptyViewFollowedChampion.setText(R.string.champions_followed);
@@ -199,12 +197,10 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             } else {
                 mEmptyViewDottedBorder.setBackgroundResource(0);
             }
-
         } else {
             mEmptyFollowedMentorContainer.setVisibility(View.GONE);
             mEmptyViewDottedBorder.setVisibility(View.GONE);
             mFollowedChampionContainer.setVisibility(View.VISIBLE);
-
             List<UserSolrObj> feedDetailList = feedResponsePojo.getFeedDetails();
             if (StringUtil.isNotEmptyCollection(feedDetailList)) {
                 populateFollowedMentors(feedDetailList);  //followed mentor
