@@ -515,21 +515,24 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
             @Override
             public void onPageSelected(int position) {
-                if (mCommunityFeedSolrObj == null || mCommunityFeedSolrObj.communityTabs == null || CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)
+                if ( mCommunityFeedSolrObj == null || mCommunityFeedSolrObj.communityTabs == null || CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)
                         || mCommunityFeedSolrObj.communityTabs.size() <= position) {
                     return;
                 }
-                CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                        .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                        .title(mCommunityFeedSolrObj.getNameOrTitle())
-                        .tabTitle(communityTab.title)
-                        .tabKey(communityTab.key)
-                        .streamType(mCommunityFeedSolrObj.getStreamType())
-                        .build();
-                AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
-                UpdateFabVisibility(communityTab);
+
+                if (StringUtil.isNotEmptyCollection(mCommunityFeedSolrObj.communityTabs)) {
+                    CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                            .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                            .title(mCommunityFeedSolrObj.getNameOrTitle())
+                            .tabTitle(communityTab.title)
+                            .tabKey(communityTab.key)
+                            .streamType(mCommunityFeedSolrObj.getStreamType())
+                            .build();
+                    AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
+                    UpdateFabVisibility(communityTab);
+                }
             }
 
             @Override

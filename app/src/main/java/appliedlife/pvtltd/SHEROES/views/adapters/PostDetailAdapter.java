@@ -93,6 +93,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             case TYPE_LOADER:
                 CommentLoaderViewHolder commentLoaderViewHolder = ((CommentLoaderViewHolder) holder);
                 commentLoaderViewHolder.bindData(holder.getAdapterPosition(), showLoader, mPostDetailCallback);
+                break;
         }
     }
 
@@ -179,8 +180,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public void setHasMoreComments(boolean hasMoreComments) {
         if(!hasMoreComments){
             int lodPos = getLoaderPostion();
-            mFeedDetail.remove(lodPos);
-            notifyItemRemoved(lodPos);
+            if (lodPos >= 0) {
+                mFeedDetail.remove(lodPos);
+                notifyItemRemoved(lodPos);
+            }
         }
         this.hasMoreItem = hasMoreComments;
     }

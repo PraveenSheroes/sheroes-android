@@ -73,7 +73,7 @@
     <string name="ID_POST">कमेंट इस रूप में करें:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
     <string name="ID_MEMBERS">सदस्य</string>
-    <string name="ID_ADMIN">एडमिन</string>
+    <string name="ID_ADMIN">Admin</string>
     <string name="ID_REMOVE">हटाएं</string>
     <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">बदलें</string>
@@ -543,8 +543,8 @@
     <string name="poll">पोल</string>
     <string name="photo_video">फोटो</string>
     <string name="choose_poll">अपना पोल का चुनाव करें </string>
-    <string name="title.create_poll">पोल बनाए </string>
-    <string name="poll_option_text">और विकल्प भरे</string>
+    <string name="title.create_poll">पोल बनाएं</string>
+    <string name="poll_option_text">और विकल्प भरें</string>
     <string name="poll_option_end_text">पोल समाप्त:</string>
     <string-array name="poll_time">
         <item>1 दिन</item>
@@ -552,17 +552,12 @@
         <item>1 सप्ताह</item>
         <item>1 महीना</item>
     </string-array>
-    <integer-array name="poll_days_count">
-        <item>1</item>
-        <item>2</item>
-        <item>7</item>
-        <item>30</item>
-    </integer-array>
     <string name="percent_vote">% वोट</string>
     <string name="poll_end">%1$s में समाप्त</string>
     <string name="ended">पोल समाप्त</string>
     <string name="option_empty">विकल्प खाली नहीं हो सकता है</string>
     <string name="option_same">दो या दो से अधिक विकल्प समान नहीं हो सकते हैं</string>
+    <string name="image_poll_option_same">विकल्प समान नहीं हो सकते हैं</string>
     <string name="option_image_empty">फोटो खाली नहीं हो सकती है</string>
     <string name="poll_text_limit">विवरण 500 अक्षर से अधिक नहीं हो सकता है</string>
     <string name="paste_on_playstore">प्लेस्टोर पर समीक्षा के रूप में पेस्ट करें</string>
@@ -576,7 +571,7 @@
     <string name="leaderboard_rank_unavailable">--</string>
     <string name="edit">बदलें</string>
     <string name="poll_result_percent">%</string>
-    <string name="poll_ask_question">सवाल पूछे (%1$d वर्ण)</string>
+    <string name="poll_ask_question">सवाल पूछें (%1$d वर्ण)</string>
     <string name="poll_text_option">(%1$d वर्ण)</string>
     <string name="challenge">चैलेंज</string>
     <string name="care_msg"><![CDATA[ <html>

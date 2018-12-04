@@ -352,7 +352,6 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     private void allTextViewStringOperations(Context context) {
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getAuthorName())) {
-            StringBuilder posted = new StringBuilder();
             String feedTitle = mUserPostObj.getAuthorName();
             String acceptPostText = mUserPostObj.getChallengeAcceptPostTextS() == null ? "" : mUserPostObj.getChallengeAcceptPostTextS();
             String communityName = mUserPostObj.communityId == 0 ? acceptPostText + " " + mContext.getString(R.string.challenge) : mUserPostObj.getPostCommunityName();
@@ -397,7 +396,6 @@ public class UserPostCompactViewHolder extends RecyclerView.ViewHolder {
                         clickOnUserNameAndCommunityName(header, feedTitle, communityName, isMentor);
                     }
                 }
-
             }
         }
         if (StringUtil.isNotNullOrEmptyString(mUserPostObj.getCreatedDate())) {

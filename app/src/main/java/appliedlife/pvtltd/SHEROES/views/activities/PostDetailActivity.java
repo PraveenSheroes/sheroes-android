@@ -85,7 +85,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
@@ -120,9 +119,24 @@ import butterknife.OnClick;
  */
 
 public class PostDetailActivity extends BaseActivity implements BaseHolderInterface, IPostDetailView, PostDetailCallBack, CommentCallBack, IQueryTokenReceiver {
+    //region constants
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
+    //endregion
+
+    //region inject
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    @Inject
+    Preference<AppConfiguration> mConfiguration;
+    @Inject
+    AppUtils mAppUtils;
+    @Inject
+    PostDetailViewImpl mPostDetailPresenter;
+    //endregion
+
+    //region member variables
     private boolean mStatusBarColorEmpty = true;
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
@@ -133,16 +147,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     private boolean mIsDirty = false;
     private Comment mEditedComment = null;
     private Map<Integer, Comment> mLastEditedComment = new HashMap<>();
-
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-    @Inject
-    Preference<AppConfiguration> mConfiguration;
-    @Inject
-    AppUtils mAppUtils;
-
-    @Inject
-    PostDetailViewImpl mPostDetailPresenter;
+    //endregion
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -225,9 +230,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-
         initAdapter();
-
         mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId, mCommunityPostDetailDeepLink);
         mPostDetailPresenter.fetchUserPost();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
@@ -260,62 +263,6 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             }
         });
         mPostDetailPresenter.getUserMentionSuggestion(etView, mFeedDetail);
-    }
-
-    private void initExtractIntentExtras() {
-        if (null != getIntent() && getIntent().getExtras() != null) {
-            Parcelable parcelable = getIntent().getParcelableExtra(FeedDetail.FEED_COMMENTS);
-            if (parcelable != null) {
-                mFeedDetail = Parcels.unwrap(parcelable);
-                mPositionInFeed = mFeedDetail.getItemPosition();
-                mStreamType = mFeedDetail.getStreamType();
-                boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
-                if (showKeyboard) {
-                    if (mFeedDetail instanceof UserPostSolrObj) {
-                        UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetail;
-                        if (userPostSolrObj.isRecentCommentClicked) {
-                            userPostSolrObj.isRecentCommentClicked = false;
-                            mPostDetailPresenter.smoothScrollOnComment(true);
-                        } else {
-                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                            mPostDetailPresenter.smoothScrollOnComment(true);
-                        }
-                    } else if (mFeedDetail instanceof PollSolarObj) {
-                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-                        mPostDetailPresenter.smoothScrollOnComment(true);
-                    }
-                } else {
-                    mPostDetailPresenter.smoothScrollOnComment(false);
-                }
-            } else {
-                mFeedDetailObjId = getIntent().getStringExtra(FeedDetail.FEED_OBJ_ID);
-                mCommunityPostDetailDeepLink = getIntent().getStringExtra(BaseActivity.KEY_FOR_DEEPLINK_DETAIL);
-                if (!CommonUtil.isNotEmpty(mFeedDetailObjId)) {
-                    return;
-                }
-            }
-            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
-            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
-            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
-            if (getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
-                mStatusBarColorEmpty = true;
-            }
-        }
-    }
-
-    private boolean keyboardShown(View rootView) {
-        final int softKeyboardHeight = 100;
-        Rect r = new Rect();
-        rootView.getWindowVisibleDisplayFrame(r);
-        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
-        int heightDiff = rootView.getBottom() - r.bottom;
-        return heightDiff > softKeyboardHeight * dm.density;
-    }
-
-    private void setIsLoggedInUser() {
-        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
-            mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
-        }
     }
 
     @OnClick(R.id.tv_user_name_for_post)
@@ -388,37 +335,9 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         return true;
     }
 
-    private void setResult() {
-        FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
-        if (feedDetail == null) {
-            return;
-        }
-        feedDetail.setItemPosition(mPositionInFeed);
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(feedDetail);
-        bundle.putParcelable(FeedDetail.FEED_COMMENTS, parcelable);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-    }
-
     public void setTitleToToolbar(FeedDetail feedDetail) {
         if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-            if (feedDetail instanceof UserPostSolrObj) {
-                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-                if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
-                } else {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
-                }
-            } else if (feedDetail instanceof PollSolarObj) {
-                PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
-                if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
-                } else {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
-                }
-            }
+            setToolbarTitleName(feedDetail);
         }
     }
 
@@ -513,9 +432,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
         if (null == mFeedDetail) {
             FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
-            if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, feedDetail.getAuthorName()));
-            }
+            setToolbarTitleName(feedDetail);
         }
     }
 
@@ -546,7 +463,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
             if (parcelable != null) {
                 UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
-                mPostDetailPresenter.updateFollowedAuthor(mFeedDetail, userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed());
+                mPostDetailPresenter.updateFollowedAuthor(userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed());
             }
         }
     }
@@ -584,6 +501,116 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
 
     //region private methods
 
+    private void setupToolbarItemsColor() {
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        if (upArrow != null) {
+            upArrow.mutate();
+            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mStatusBarColorEmpty) {
+                if (upArrow != null) {
+                    upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+                }
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
+            } else {
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+            }
+        }
+
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
+    }
+
+    private void initExtractIntentExtras() {
+        if (null != getIntent() && getIntent().getExtras() != null) {
+            Parcelable parcelable = getIntent().getParcelableExtra(FeedDetail.FEED_COMMENTS);
+            if (parcelable != null) {
+                mFeedDetail = Parcels.unwrap(parcelable);
+                mPositionInFeed = mFeedDetail.getItemPosition();
+                mStreamType = mFeedDetail.getStreamType();
+                boolean showKeyboard = getIntent().getExtras().getBoolean(SHOW_KEYBOARD, false);
+                if (showKeyboard) {
+                    if (mFeedDetail instanceof UserPostSolrObj) {
+                        UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetail;
+                        if (userPostSolrObj.isRecentCommentClicked) {
+                            userPostSolrObj.isRecentCommentClicked = false;
+                            mPostDetailPresenter.smoothScrollOnComment(true);
+                        } else {
+                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                            mPostDetailPresenter.smoothScrollOnComment(true);
+                        }
+                    } else if (mFeedDetail instanceof PollSolarObj) {
+                        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+                        mPostDetailPresenter.smoothScrollOnComment(true);
+                    }
+                } else {
+                    mPostDetailPresenter.smoothScrollOnComment(false);
+                }
+            } else {
+                mFeedDetailObjId = getIntent().getStringExtra(FeedDetail.FEED_OBJ_ID);
+                mCommunityPostDetailDeepLink = getIntent().getStringExtra(BaseActivity.KEY_FOR_DEEPLINK_DETAIL);
+                if (!CommonUtil.isNotEmpty(mFeedDetailObjId)) {
+                    return;
+                }
+            }
+            mFromNotification = getIntent().getExtras().getInt(AppConstants.FROM_PUSH_NOTIFICATION);
+            mPrimaryColor = getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR, mPrimaryColor);
+            mTitleTextColor = getIntent().getExtras().getString(FeedFragment.TITLE_TEXT_COLOR, mTitleTextColor);
+            if (getIntent().getExtras().getString(FeedFragment.PRIMARY_COLOR) == null) {
+                mStatusBarColorEmpty = true;
+            }
+        }
+    }
+
+    private boolean keyboardShown(View rootView) {
+        final int softKeyboardHeight = 100;
+        Rect r = new Rect();
+        rootView.getWindowVisibleDisplayFrame(r);
+        DisplayMetrics dm = rootView.getResources().getDisplayMetrics();
+        int heightDiff = rootView.getBottom() - r.bottom;
+        return heightDiff > softKeyboardHeight * dm.density;
+    }
+
+    private void setIsLoggedInUser() {
+        if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && null != mUserPreference.get().getUserSummary().getUserId()) {
+            mLoggedInUser = mUserPreference.get().getUserSummary().getUserId();
+        }
+    }
+
+    private void setResult() {
+        FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
+        if (feedDetail == null) {
+            return;
+        }
+        feedDetail.setItemPosition(mPositionInFeed);
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        bundle.putParcelable(FeedDetail.FEED_COMMENTS, parcelable);
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+    }
+
+    private void setToolbarTitleName(FeedDetail feedDetail) {
+        if (feedDetail instanceof UserPostSolrObj) {
+            UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+            if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
+            } else {
+                mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
+            }
+        } else if (feedDetail instanceof PollSolarObj) {
+            PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+            if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
+            } else {
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
+            }
+        }
+    }
 
     private void initAdapter() {
         mPostDetailListAdapter = new PostDetailAdapter(this, this, this);
@@ -613,10 +640,10 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         }
         if (mFeedDetail != null) {
             MixpanelHelper.getPostProperties(mFeedDetail, getScreenName());
+            mPostDetailPresenter.fetchMoreComments();
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mFeedDetail, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED_CLICKED, getScreenName(), properties);
-        mPostDetailPresenter.fetchMoreComments();
     }
 
     @Override
@@ -1052,7 +1079,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             addMentionSpanDetail();
 
             if (mIsDirty && mEditedComment != null) {
-                mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
+                mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.COMMENT_EDIT, mEditedComment);
             } else {
                 String message = etView.getEditText().getText().toString();
                 if (!TextUtils.isEmpty(message)) {
@@ -1147,7 +1174,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
                         .streamType(mStreamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), mHasMentions, mMentionSpanList), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), mHasMentions, mMentionSpanList), AppConstants.COMMENT_DELETE, comment);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -1319,7 +1346,8 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            boolean isChampion = comment.getParticipationTypeId() == AppConstants.CHAMPION_TYPE_ID;
+            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), isChampion, 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 
@@ -1329,29 +1357,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     }
     //endregion
 
-    private void setupToolbarItemsColor() {
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
-        if (upArrow != null) {
-            upArrow.mutate();
-            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-        }
-
-        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (mStatusBarColorEmpty) {
-                if (upArrow != null) {
-                    upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-                }
-                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
-            } else {
-                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
-            }
-        }
-
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
-    }
-
+    //region public methods
     public void onDestroy() {
         super.onDestroy();
         mPostDetailPresenter.detachView();
@@ -1454,4 +1460,5 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
     }
+    //endregion public methods
 }

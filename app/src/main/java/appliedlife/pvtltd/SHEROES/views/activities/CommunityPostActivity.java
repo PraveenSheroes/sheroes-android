@@ -462,7 +462,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (mCommunityPost != null) {
                     mEtView.getEditText().requestFocus();
                     if (!mIsChallengePost) {
-                        mFbShareContainer.setVisibility(View.VISIBLE);
+                        updateFacebookShareVisibility();
                     }
                     if (!mIsFromCommunity && !mIsChallengePost) {
                         PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
@@ -498,8 +498,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupToolbarItemsColor();
             externalImageWithTextShare();
             setupToolBarItem();
-
-
         }
         mEtView.onReceiveSuggestionsListView(mSuggestionList);
 
@@ -709,7 +707,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mRlImageList.setVisibility(View.GONE);
         mLiUploadImageContainer.setVisibility(View.GONE);
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        List<Integer> pollDaysCount = getPollDaysCountList();
         CommonUtil.showKeyboard(this);
         switch (pollType) {
             case TEXT:
@@ -718,12 +716,12 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     addTextPollOptionView();
                 }
                 mTvDaySelector.setText(pollTime[0]);
-                mTvDaySelector.setTag(pollDaysCount[0]);
+                mTvDaySelector.setTag(pollDaysCount.get(0));
                 break;
             case IMAGE:
                 addImagePollView();
                 mTvDaySelector.setText(pollTime[0]);
-                mTvDaySelector.setTag(pollDaysCount[0]);
+                mTvDaySelector.setTag(pollDaysCount.get(0));
                 break;
             default:
                 break;
@@ -1218,16 +1216,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString().trim(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
         } else if (!mIsEditPost) {
             String accessToken = "";
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
@@ -1388,7 +1386,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mCommunityPost != null) {
             mEtView.getEditText().requestFocus();
             if (!mIsChallengePost) {
-                mFbShareContainer.setVisibility(View.VISIBLE);
+               updateFacebookShareVisibility();
             }
         }
         setSupportActionBar(mToolbar);
@@ -1418,6 +1416,19 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setViewByCreatePostCall();
         setupToolbarItemsColor();
         setupToolBarItem();
+    }
+
+    //Enable FB share from remote config
+    private void updateFacebookShareVisibility() {
+        boolean isShareableOnFb = new ConfigData().isFbShareEnabled;
+        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            isShareableOnFb = mConfiguration.get().configData.isFbShareEnabled;
+        }
+        if (isShareableOnFb) {
+            mFbShareContainer.setVisibility(View.VISIBLE);
+        } else {
+            mFbShareContainer.setVisibility(View.GONE);
+        }
     }
 
     private void externalImageWithTextShare() {
@@ -2078,7 +2089,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     pollType = TEXT;
                     Set<String> hash_Set = new HashSet<String>();
                     for (int i = 0; i < mEtTextPollList.size(); i++) {
-                        hash_Set.add(mEtTextPollList.get(i).getText().toString());
+                        hash_Set.add(mEtTextPollList.get(i).getText().toString().trim());
                     }
                     if (hash_Set.size() < mEtTextPollList.size()) {     //same option
                         Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
@@ -2117,6 +2128,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                         return;
                     }
 
+                    if (mEtImagePollLeft.getText().toString().trim().equalsIgnoreCase(mEtImagePollRight.getText().toString().trim())) {
+                        Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     pollOptionModelList.add(imagePollOptionModelLeft);
                     pollOptionModelList.add(imagePollOptionModelRight);
                     pollType = IMAGE;
@@ -2146,10 +2162,10 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     private void addPollSelectionDay() {
         String[] pollTime = getResources().getStringArray(R.array.poll_time);
-        int[] pollDaysCount = getResources().getIntArray(R.array.poll_days_count);
+        List<Integer> pollDaysCount = getPollDaysCountList();
         PopupMenu popup = new PopupMenu(this, mTvDaySelector);
         for (int i = 1; i <= pollTime.length; i++) {
-            popup.getMenu().add(0, pollDaysCount[i - 1], i, menuWithText(pollTime[i - 1]));
+            popup.getMenu().add(0, pollDaysCount.get(i - 1), i, menuWithText(pollTime[i - 1]));
         }
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             public boolean onMenuItemClick(MenuItem item) {
@@ -2246,6 +2262,15 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         params.setMargins(mPollMarginLeftRight, mPollMarginTop, mPollMarginLeftRight, mPollMarginTop);
         liImagePollRow.setLayoutParams(params);
         mLiPollContainer.addView(liImagePollRow);
+    }
+
+    private List<Integer> getPollDaysCountList() {
+        List<Integer> pollDaysCount = new ArrayList<>();
+        pollDaysCount.add(1);
+        pollDaysCount.add(2);
+        pollDaysCount.add(7);
+        pollDaysCount.add(Calendar.getInstance().getActualMaximum(Calendar.DAY_OF_MONTH));
+        return pollDaysCount;
     }
     //endregion private methods
 }

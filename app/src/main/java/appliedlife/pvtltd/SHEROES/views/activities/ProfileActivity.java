@@ -902,7 +902,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 mDescriptionContainer.setVisibility(View.GONE);
             }
         }
-
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) { //profile pic
             if (!isFinishing()) {
                 String profilePic = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), mProfileSize, mProfileSize);
@@ -910,7 +909,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 mProfileIcon.bindImage(profilePic);
             }
         }
-
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) { //Name
             String userNameTitle = CommonUtil.camelCaseString(mUserSolarObject.getNameOrTitle());
             mUserName.setText(userNameTitle);
@@ -990,6 +988,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mUserSolarObject.setSolrIgnoreIsMentorFollowed(isFollowed);
             mUserSolarObject.setSolrIgnoreIsUserFollowed(isFollowed);
             updateFollowedButton();
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
+            String title = (String) mViewPagerAdapter.getPageTitle(mViewPager.getCurrentItem());
+            if (fragment instanceof FeedFragment && StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) { //refresh if current tab is post to change follow button visibility
+                ((FeedFragment) fragment).refreshList();
+            }
         }
     }
 
@@ -1545,14 +1548,14 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         return userNameTitle;
     }
 
-    public void selectImageFrmCamera() {
+    public void selectImageFrmCamera(int viewType) {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        selectImageFrmGallery();
+        openGalleryOrCamera(viewType);
     }
 
-    public void selectImageFrmGallery() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+    public void openGalleryOrCamera(int viewType) {
+        CropImage.activity(null, viewType).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
                 .setAspectRatio(1, 1)
                 .setAllowRotation(true)

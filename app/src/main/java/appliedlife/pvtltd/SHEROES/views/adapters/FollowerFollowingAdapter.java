@@ -203,12 +203,11 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 }
                 if (follower != null) {
-                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, championObj.getFollowerCount());
-                    follower.setText(String.valueOf(changeNumberToNumericSuffix(championObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
+                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, championObj.getChampionFollowerCount());
+                    follower.setText(String.valueOf(changeNumberToNumericSuffix(championObj.getChampionFollowerCount()) + AppConstants.SPACE + pluralComments));
                 }
                 if (loggedInUserId != championObj.getIdOfEntityOrParticipant()) {
                     followFollowingBtn.setVisibility(View.VISIBLE);
-
                     if (championObj.isSolrIgnoreIsMentorFollowed() || championObj.isSolrIgnoreIsUserFollowed()) {
                         showFollowing();
                     } else {
@@ -238,7 +237,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onFollowFollowingClick() {
             String followFollowingBtnText = followFollowingBtn.getText().toString();
             ((FollowerFollowingCallback) mBaseHolderInterface).onFollowFollowingClick(championObj, followFollowingBtnText);
-
             if (!championObj.isSolrIgnoreIsMentorFollowed() || !championObj.isSolrIgnoreIsUserFollowed()) {
                 showFollowing();
             }
