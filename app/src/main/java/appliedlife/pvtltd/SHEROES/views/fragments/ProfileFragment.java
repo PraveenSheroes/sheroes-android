@@ -292,6 +292,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     View mToolTipFollow;
     @Bind(R.id.dashed_progressbar)
     DashProgressBar mDashProgressBar;
+    @Bind(R.id.tv_drawer_navigation)ImageView backNavigationImg;
     //endregion bind variables
 
     //region member variable
@@ -370,6 +371,21 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         viewLessText = getString(R.string.ID_LESS);
       //  setupToolbarItemsColor();
         /*invalidateOptionsMenu();*/
+
+        if(getActivity() instanceof ProfileActivity){
+            backNavigationImg.setVisibility(View.VISIBLE);
+
+            backNavigationImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((ProfileActivity) getActivity()).onBackPressed();
+                }
+            });
+        } else {
+            backNavigationImg.setVisibility(View.GONE);
+        }
+
+
 
         mLoaderGif.setVisibility(View.VISIBLE);
         mLoaderGif.bringToFront();
