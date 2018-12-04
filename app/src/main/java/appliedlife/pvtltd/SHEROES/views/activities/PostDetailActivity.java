@@ -640,10 +640,10 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         }
         if (mFeedDetail != null) {
             MixpanelHelper.getPostProperties(mFeedDetail, getScreenName());
+            mPostDetailPresenter.fetchMoreComments();
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mFeedDetail, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED_CLICKED, getScreenName(), properties);
-        mPostDetailPresenter.fetchMoreComments();
     }
 
     @Override
