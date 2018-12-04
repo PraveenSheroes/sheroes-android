@@ -1496,7 +1496,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             if (mUserPreference.get().getUserSummary().getEmailId() != null) {
                 mTvUserLocation.setText(mUserPreference.get().getUserSummary().getEmailId());
             }
-
             int userType = mUserPreference.get().getUserSummary().getUserBO().getUserTypeId();
             if (userType == AppConstants.CHAMPION_TYPE_ID) {
                 verifiedIcon.setVisibility(View.VISIBLE);
