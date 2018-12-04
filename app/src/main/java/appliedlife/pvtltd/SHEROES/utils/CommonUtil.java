@@ -355,6 +355,10 @@ public class CommonUtil {
         return (collection == null) || collection.isEmpty();
     }
 
+    public static boolean isNullOrEmpty(String s) {
+        return s == null || s.length() == 0;
+    }
+
     public static <S, T> boolean isEmpty(Map<S, T> collection) {
         return (collection == null) || collection.isEmpty();
     }

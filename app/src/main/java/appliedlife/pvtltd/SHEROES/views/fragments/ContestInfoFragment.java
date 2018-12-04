@@ -33,8 +33,6 @@ import com.bumptech.glide.request.RequestOptions;
 
 import org.parceler.Parcels;
 
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -255,15 +253,19 @@ public class ContestInfoFragment extends BaseFragment {
     @SuppressLint("AddJavascriptInterface")
     private void showContestInfo() {
         mTitle.setText(mContest.title);
-        if (CommonUtil.isNotEmpty(mContest.tag)) {
-            String tag = "#" + mContest.tag;
-            String tagText = tag + " " + getString(R.string.challenge);
-            final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
-            final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.email));
-            spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            mContestTag.setText(spannableStringBuilder);
-        } else {
-            mContestTag.setText(R.string.challenge);
+        if (mContestTag != null) {
+            if (!CommonUtil.isNullOrEmpty(mContest.tag)) {
+                String tag = "#" + mContest.tag;
+                String tagText = tag + " " + getString(R.string.challenge);
+                final SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(tagText);
+                if (null != getActivity()) {
+                    final ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(ContextCompat.getColor(getActivity(), R.color.email));
+                    spannableStringBuilder.setSpan(foregroundColorSpan, 0, tag.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                mContestTag.setText(spannableStringBuilder);
+            } else {
+                mContestTag.setText(R.string.challenge);
+            }
         }
         VideoEnabledWebChromeClient webChromeClient = new VideoEnabledWebChromeClient(rootLayout, videoLayout, null, webViewText);
         webChromeClient.setOnToggledFullscreen(new VideoEnabledWebChromeClient.ToggledFullscreenCallback() {
