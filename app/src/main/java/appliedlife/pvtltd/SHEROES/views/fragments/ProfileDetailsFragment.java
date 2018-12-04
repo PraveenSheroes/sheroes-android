@@ -183,7 +183,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             //empty view
             mEmptyFollowedMentorContainer.setVisibility(View.VISIBLE);
             String name = "User";
-            if (getActivity() != null && !getActivity().isFinishing()) {
+            if (getActivity() instanceof  ProfileActivity && getActivity() != null && !getActivity().isFinishing()) {
                 name = ((ProfileActivity) getActivity()).getUserNameTitle() == null ? "User" : ((ProfileActivity) getActivity()).getUserNameTitle();
             }
             String message = getString(R.string.empty_followed_mentor, name);
@@ -541,7 +541,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
 
             if (follower != null) {
                 String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getFollowerCount());
-                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
+                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getChampionFollowerCount()) + AppConstants.SPACE + pluralComments));
             }
 
             followFollowingBtn.setVisibility(View.GONE);
