@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 public abstract class BaseViewHolder<T extends Object> extends RecyclerView.ViewHolder implements View.OnClickListener {

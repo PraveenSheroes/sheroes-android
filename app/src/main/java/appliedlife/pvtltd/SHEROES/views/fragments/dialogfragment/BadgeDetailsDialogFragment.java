@@ -8,8 +8,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +32,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import androidx.fragment.app.DialogFragment;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -258,7 +259,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         args.putParcelable(USER_DETAILS, userObjParcelable);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         badgeDetailsDialogFragment.setArguments(args);
-        badgeDetailsDialogFragment.setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, 0);
+        badgeDetailsDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
         badgeDetailsDialogFragment.show(activity.getFragmentManager(), SCREEN_NAME);
 
         return badgeDetailsDialogFragment;

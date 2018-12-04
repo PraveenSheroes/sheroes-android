@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;

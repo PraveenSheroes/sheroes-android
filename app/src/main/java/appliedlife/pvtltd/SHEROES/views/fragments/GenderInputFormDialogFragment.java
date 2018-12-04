@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;

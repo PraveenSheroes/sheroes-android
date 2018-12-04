@@ -2,9 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 
 import appliedlife.pvtltd.SHEROES.R;

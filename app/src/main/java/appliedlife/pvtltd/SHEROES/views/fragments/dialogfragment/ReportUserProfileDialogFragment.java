@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

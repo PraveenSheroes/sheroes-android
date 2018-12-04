@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;

@@ -1,10 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
-import android.content.Intent;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.view.View;
-
-import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
