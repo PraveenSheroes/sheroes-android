@@ -79,6 +79,15 @@
                          android:padding="@dimen/dp_size_20"
                          android:visibility="visible" />
 
+                   <ImageView
+                       android:id="@+id/tv_drawer_navigation"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_back_arrow"
+                       android:layout_centerVertical="true"
+                       android:layout_marginRight="16dp"
+                       android:visibility="gone"/>
+
                      <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                          android:id="@+id/tv_mentor_toolbar_name"
                          style="@style/TextAppearance.Toolbar"
