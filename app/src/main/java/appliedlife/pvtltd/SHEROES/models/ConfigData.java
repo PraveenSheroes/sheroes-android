@@ -135,4 +135,6 @@ public class ConfigData {
     @SerializedName("shouldTrackImpressions")
     public boolean isImpressionTrackEnabled = true;
 
+    @SerializedName("isFbShareEnabled")
+    public boolean isFbShareEnabled;
 }

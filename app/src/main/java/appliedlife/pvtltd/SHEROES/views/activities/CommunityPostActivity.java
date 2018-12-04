@@ -462,7 +462,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 if (mCommunityPost != null) {
                     mEtView.getEditText().requestFocus();
                     if (!mIsChallengePost) {
-                        mFbShareContainer.setVisibility(View.VISIBLE);
+                        updateFacebookShareVisibility();
                     }
                     if (!mIsFromCommunity && !mIsChallengePost) {
                         PostBottomSheetFragment.showDialog(this, SOURCE_SCREEN);
@@ -498,8 +498,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             setupToolbarItemsColor();
             externalImageWithTextShare();
             setupToolBarItem();
-
-
         }
         mEtView.onReceiveSuggestionsListView(mSuggestionList);
 
@@ -1388,7 +1386,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mCommunityPost != null) {
             mEtView.getEditText().requestFocus();
             if (!mIsChallengePost) {
-                mFbShareContainer.setVisibility(View.VISIBLE);
+               updateFacebookShareVisibility();
             }
         }
         setSupportActionBar(mToolbar);
@@ -1418,6 +1416,19 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         setViewByCreatePostCall();
         setupToolbarItemsColor();
         setupToolBarItem();
+    }
+
+    //Enable FB share from remote config
+    private void updateFacebookShareVisibility() {
+        boolean isShareableOnFb = new ConfigData().isFbShareEnabled;
+        if (null != mConfiguration && mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            isShareableOnFb = mConfiguration.get().configData.isFbShareEnabled;
+        }
+        if (isShareableOnFb) {
+            mFbShareContainer.setVisibility(View.VISIBLE);
+        } else {
+            mFbShareContainer.setVisibility(View.GONE);
+        }
     }
 
     private void externalImageWithTextShare() {
