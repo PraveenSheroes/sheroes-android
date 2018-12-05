@@ -193,7 +193,6 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     //region private methods
 
     private String getDateString(String winnerAnnouncementDate) {
-        winnerAnnouncementDate = null;
         if (winnerAnnouncementDate == null) {
             return this.getResources().getString(R.string.soon);
         } else {
@@ -203,7 +202,6 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     }
 
     private String prefixBeforeDate(String winnerAnnouncementDate) {
-        winnerAnnouncementDate = null;
         if (winnerAnnouncementDate == null) {
             return "";
         } else {
