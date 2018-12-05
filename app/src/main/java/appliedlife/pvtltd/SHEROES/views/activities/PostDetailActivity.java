@@ -296,8 +296,7 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
 
     @Override
     public void showError(@StringRes int stringRes) {
-        Snackbar.make(mRecyclerView, stringRes, Snackbar.LENGTH_LONG)
-                .show();
+        Snackbar.make(mRecyclerView, stringRes, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
@@ -378,14 +377,18 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
     @Override
     public void onPostDeleted() {
         FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
-        feedDetail.setItemPosition(mPositionInFeed);
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(feedDetail);
-        bundle.putParcelable(FeedDetail.FEED_COMMENTS, parcelable);
-        bundle.putBoolean(IS_POST_DELETED, true);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
+        if(feedDetail!=null) {
+            feedDetail.setItemPosition(mPositionInFeed);
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            bundle.putParcelable(FeedDetail.FEED_COMMENTS, parcelable);
+            bundle.putBoolean(IS_POST_DELETED, true);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+        }else{
+            Toast.makeText(this, R.string.deleted_content, Toast.LENGTH_SHORT).show();
+        }
         onBackPressed();
     }
 

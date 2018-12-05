@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -181,8 +180,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             getMvpView().addData(0, mFeedDetail);
                             headerCount++;
                             getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
-                        } else {
                             getMvpView().stopProgressBar();
+                        } else {
+                            getMvpView().onPostDeleted();
                         }
                     }
                 });
@@ -281,7 +281,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -345,6 +344,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     getMvpView().addData(0, mFeedDetail);
                     headerCount++;
                     getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
+                } else {
+                    getMvpView().onPostDeleted();
                 }
             }
         });
@@ -467,7 +468,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         if (pos != RecyclerView.NO_POSITION) {
                             mBaseResponseList.remove(pos);
                             getMvpView().removeData(pos);
-
                             mFeedDetail.setNoOfComments(mFeedDetail.getNoOfComments() - 1);
                             mBaseResponseList.set(0, mFeedDetail);
                             getMvpView().setData(0, mFeedDetail);
@@ -653,7 +653,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -810,7 +809,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 mBaseResponseList.set(0, feedDetail);
                 getMvpView().setData(0, feedDetail);
-
             }
 
             @Override
@@ -826,7 +824,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 } else if (feedDetail instanceof PollSolarObj) {
                     AnalyticsManager.trackPollAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 }
-
                 getMvpView().setData(0, feedDetail);
             }
         });

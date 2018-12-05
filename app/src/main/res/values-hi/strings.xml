@@ -664,4 +664,5 @@
     <string name="empty_post">कोई पोस्ट नहीं</string>
     <string name="empty_stories">कोई कहानियाँ नहीं</string>
     <string name="winner_date">को</string>
+    <string name="deleted_content">जिस विषय को आप ढूंढ रहे हैं वह मौजूद नहीं है</string>
 </resources>
