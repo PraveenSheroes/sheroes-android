@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -696,7 +697,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPollOptionType = pollType;
         mIsPollOptionClicked = true;
         mImageList.clear();
-        mEtView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
         mEtView.getEditText().getText().clear();
         mEtView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
@@ -726,6 +726,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             default:
                 break;
         }
+        mEtView.getEditText().setFilters(new InputFilter[] {new InputFilter.LengthFilter(mMaxLength)});
     }
 
     @Override
