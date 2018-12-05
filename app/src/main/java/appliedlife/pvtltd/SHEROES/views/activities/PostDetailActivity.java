@@ -1197,11 +1197,10 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             etView.getEditText().setText(comment.getComment());
             etView.getEditText().setSelection(comment.getComment().length());
         }
+        CommonUtil.showKeyboard(this);
         int pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
-
         if (mPostDetailListAdapter.getItemCount() > pos) {
             if (pos != RecyclerView.NO_POSITION) {
-
                 if (mIsDirty && !mLastEditedComment.isEmpty()) {
                     Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
                     mLastEditedComment.clear();
@@ -1210,7 +1209,6 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
                 }
 
                 mPostDetailListAdapter.removeData(pos);
-
                 mLastEditedComment.put(pos, comment);
                 mIsDirty = true;
             }
@@ -1390,13 +1388,12 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
             mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
             mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(mentionList));
             mMentionList = mentionList;
         }
-        List<String> buckets = Collections.singletonList("user-history");
-        return buckets;
+        return Collections.singletonList("user-history");
     }
 
     @Override

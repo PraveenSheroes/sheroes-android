@@ -543,7 +543,7 @@
     <string name="poll">पोल</string>
     <string name="photo_video">फोटो</string>
     <string name="choose_poll">अपना पोल का चुनाव करें </string>
-    <string name="title.create_poll">पोल बनाएं</string>
+    <string name="title.create_poll">पोल बनायें</string>
     <string name="poll_option_text">और विकल्प भरें</string>
     <string name="poll_option_end_text">पोल समाप्त:</string>
     <string-array name="poll_time">
