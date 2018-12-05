@@ -70,7 +70,7 @@
             android:orientation="horizontal">
 
             <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                android:id="@+id/iv_mentor_full_view_icon"
+                android:id="@+id/iv_profile_full_view_icon"
                 android:layout_width="@dimen/dp_size_65"
                 android:layout_height="@dimen/dp_size_65"
                 android:layout_gravity="center_vertical" />

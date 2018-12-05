@@ -1,7 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import appliedlife.pvtltd.SHEROES.viewholder.UserPostCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.viewholder.UserProfileCompactViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCompactViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.MentorCard;
 import appliedlife.pvtltd.SHEROES.views.viewholders.SeeMoreCompactViewHolder;
 
 /**
@@ -53,9 +53,6 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             case TYPE_COMMUNITY:
                 View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_layout, parent, false);
                 return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
-            case TYPE_MENTOR:
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.feed_mentor_card, parent, false);
-                return new MentorCard(view, mBaseHolderInterface);
             case TYPE_USER:
                 View viewUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_user_compact_item, parent, false);
                 return new UserProfileCompactViewHolder(viewUser, mContext, mBaseHolderInterface);
@@ -87,13 +84,6 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 CommunityFeedSolrObj communityFeedSolrObj = (CommunityFeedSolrObj) mFeedDetails.get(position);
                 communityFeedSolrObj.setItemPosition(mCarouselDataObj != null ? mCarouselDataObj.getItemPosition() : 0);
                 communityCompactViewHolder.bindData(communityFeedSolrObj, mContext, position);
-                break;
-
-            case TYPE_MENTOR:
-                MentorCard mentorCard = (MentorCard) holder;
-                UserSolrObj userSolrObj = (UserSolrObj) mFeedDetails.get(position);
-                userSolrObj.setCompactView(true);
-                mentorCard.bindData(userSolrObj, mContext, position);
                 break;
 
             case TYPE_USER:

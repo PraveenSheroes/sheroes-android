@@ -4,7 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Build;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
@@ -30,7 +30,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -39,8 +38,6 @@ import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.DateUtil;
@@ -275,7 +272,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
                     });
 
             liArticleCoverImage.addView(backgroundImage);
-
         }
 
     }
@@ -299,7 +295,6 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         } else {
             viewInterface.handleOnClick(dataItem, tvArticleShare);
         }
-        ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_EXTERNAL_SHARE, GoogleAnalyticsEventActions.SHARED_ARTICLE, AppConstants.EMPTY_STRING);
     }
 
     @OnClick({R.id.li_article_cover_image, R.id.li_article_decription, R.id.tv_article_description_text})
@@ -321,14 +316,12 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             } else {
                 viewInterface.handleOnClick(dataItem, tvArticleBookmark);
             }
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_UN_BOOKMARK, GoogleAnalyticsEventActions.UN_BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         } else {
             if (viewInterface instanceof FeedItemCallback) {
                 ((FeedItemCallback) viewInterface).onArticleBookMarkClicked(dataItem);
             } else {
                 viewInterface.handleOnClick(dataItem, tvArticleBookmark);
             }
-            ((SheroesApplication) ((BaseActivity) mContext).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_BOOKMARK, GoogleAnalyticsEventActions.BOOKMARKED_ON_ARTICLE, AppConstants.EMPTY_STRING);
         }
         if (!dataItem.isBookmarked()) {
             dataItem.setBookmarked(true);
@@ -338,11 +331,8 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         onBookMarkClick();
     }
 
-
     @Override
     public void onClick(View view) {
 
-
     }
-
 }

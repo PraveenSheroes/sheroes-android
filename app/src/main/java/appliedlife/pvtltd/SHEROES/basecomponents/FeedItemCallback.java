@@ -65,19 +65,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onChallengePostShared(BaseResponse baseResponse);
 
-    void onEventPostClicked(UserPostSolrObj userPostSolrObj);
-
-    void onEventInterestedClicked(UserPostSolrObj userPostSolrObj);
-
-    void onEventNotInterestedClicked(UserPostSolrObj userPostSolrObj);
-
-    void onEventGoingClicked(UserPostSolrObj userPostSolrObj);
-
-    void onOrgTitleClicked(UserPostSolrObj userPostObj);
-
     void onFollowClicked(UserSolrObj userSolrObj);
-
-    void onMentorAskQuestionClicked(UserSolrObj userSolrObj);
 
     void onMentorProfileClicked(UserSolrObj userSolrObj);
 
@@ -99,7 +87,7 @@ public interface FeedItemCallback extends BaseHolderInterface {
 
     void onCommunityClicked(long communityId);
 
-    void onAskQuestionClicked();
+    void onHeaderCreatePostClicked();
 
     void onCommunityJoinOrLeave(CommunityFeedSolrObj communityFeedSolrObj);
 
@@ -124,5 +112,4 @@ public interface FeedItemCallback extends BaseHolderInterface {
     void onLeaderBoardUserClick(long userId, String screenName);
 
     void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj);
-
 }

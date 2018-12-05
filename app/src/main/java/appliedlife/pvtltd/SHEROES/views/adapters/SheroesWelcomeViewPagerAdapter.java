@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 
 /**
@@ -54,7 +53,6 @@ public class SheroesWelcomeViewPagerAdapter extends PagerAdapter {
         } else {
             textView.setText(Html.fromHtml(text));// or for older api
         }
-        ((SheroesApplication) context.getApplicationContext()).trackScreenView(text);
         container.addView(itemView);
         return itemView;
     }

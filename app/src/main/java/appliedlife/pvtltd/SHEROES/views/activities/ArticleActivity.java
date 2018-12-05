@@ -12,27 +12,26 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ImageSpan;
@@ -91,7 +90,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.presenters.ArticlePresenterImpl;
@@ -316,9 +314,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
                 String notificationId = getIntent().getExtras().getString("notificationId");
                 Long i = getIntent().getExtras().getLong(AppConstants.ARTICLE_ID, -1);
                 mArticleId = i.intValue();
-                if (!TextUtils.isEmpty(notificationId)) {
-                    setSource(NOTIFICATION_SCREEN);
-                }
                 mImageWidth = getIntent().getExtras().getInt(IMAGE_WIDTH);
                 mImageHeight = getIntent().getExtras().getInt(IMAGE_HEIGHT);
 
@@ -766,7 +761,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     private void openProfile(Long userId, boolean isMentor, String source) {
-        ProfileActivity.navigateTo(this, userId, isMentor, PROFILE_NOTIFICATION_ID, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(this, userId, isMentor, PROFILE_NOTIFICATION_ID, source, null,
+                AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
     }
 
     private void updateTitleCommentCountView() {
@@ -1236,11 +1232,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse, Comment comment, int position) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
 
@@ -1263,11 +1254,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @OnClick(R.id.like_count)

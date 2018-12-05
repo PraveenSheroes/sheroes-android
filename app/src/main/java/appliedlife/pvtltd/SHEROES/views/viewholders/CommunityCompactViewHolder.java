@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -89,7 +89,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        } else if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner() && !mCommunityFeedObj.isRequestPending()) {
+        } else if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner()) {
             mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);

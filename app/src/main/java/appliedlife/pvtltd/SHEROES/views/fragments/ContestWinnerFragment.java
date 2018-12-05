@@ -2,9 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +19,22 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
@@ -108,7 +113,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
+        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate), prefixBeforeDate(mContest.winnerAnnouncementDate)));
         if (CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt()) == ContestStatus.COMPLETED) {
             if (!mContest.hasMyPost) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -188,11 +193,21 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     //region private methods
 
     private String getDateString(String winnerAnnouncementDate) {
+        winnerAnnouncementDate = null;
         if (winnerAnnouncementDate == null) {
             return this.getResources().getString(R.string.soon);
         } else {
             Date announcementDate = DateUtil.parseDateFormat(mContest.winnerAnnouncementDate, AppConstants.DATE_FORMAT);
-            return "on" + " <b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) + "</b>";
+            return "<b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) + "</b>";
+        }
+    }
+
+    private String prefixBeforeDate(String winnerAnnouncementDate) {
+        winnerAnnouncementDate = null;
+        if (winnerAnnouncementDate == null) {
+            return "";
+        } else {
+            return getResources().getString(R.string.winner_date);
         }
     }
 
@@ -201,7 +216,8 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
             @Override
             public void onItemClick(Winner item) {
                 long userId = Long.valueOf(item.userId);
-                ProfileActivity.navigateTo(mActivity, userId, false, PROFILE_NOTIFICATION_ID, SCREEN_LABEL, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+                ProfileActivity.navigateTo(mActivity, userId, false, PROFILE_NOTIFICATION_ID, SCREEN_LABEL,
+                        null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
             }
         });
 
@@ -248,4 +264,33 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         }
     }
 
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
 }

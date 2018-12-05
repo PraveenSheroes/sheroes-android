@@ -1,8 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +76,7 @@ public class ProfileCommunityAdapter extends RecyclerView.Adapter<RecyclerView.V
     public class FollowedUserListItemViewHolder extends RecyclerView.ViewHolder {
 
         // region Butterknife Bindings
-        @Bind(R.id.iv_mentor_full_view_icon)
+        @Bind(R.id.iv_profile_full_view_icon)
         CircleImageView mentorIcon;
 
         @Bind(R.id.community_name)

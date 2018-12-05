@@ -8,8 +8,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +32,7 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import androidx.fragment.app.DialogFragment;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -193,7 +194,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
             String day = dayFormat.format(startDateObj);
             String endDateText = dateFormat.format(endDateObj);
 
-            //For profile if badge is inactive show message "Won last on" & for other "Won Latest on"
+            //For profile if badge is inactive show mMessage "Won last on" & for other "Won Latest on"
             if (!isLeaderBoard) {
                 String userName = mUserSolrObj.getNameOrTitle()!=null ? mUserSolrObj.getNameOrTitle() : getString(R.string.this_user);
                 if (mBadgeDetails.isActive()) {
@@ -258,7 +259,7 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
         args.putParcelable(USER_DETAILS, userObjParcelable);
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         badgeDetailsDialogFragment.setArguments(args);
-        badgeDetailsDialogFragment.setStyle(android.support.v4.app.DialogFragment.STYLE_NO_TITLE, 0);
+        badgeDetailsDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
         badgeDetailsDialogFragment.show(activity.getFragmentManager(), SCREEN_NAME);
 
         return badgeDetailsDialogFragment;
@@ -280,7 +281,8 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
     @OnClick(R.id.view_profile)
     protected void openUserProfile() {
         dismiss();
-        ProfileActivity.navigateTo(getActivity(), mUserSolrObj.getIdOfEntityOrParticipant(), false, -1, SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), mUserSolrObj.getIdOfEntityOrParticipant(), false, -1,
+                SCREEN_NAME, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
     @OnClick(R.id.show_leaderBoard)

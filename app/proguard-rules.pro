@@ -18,10 +18,8 @@
 
 -keepattributes *Annotation*,EnclosingMethod,JavascriptInterface
 -keepattributes SourceFile,LineNumberTable
-
 -keep public class * extends android.app.Activity
--keep public class * extends android.support.v4.app.Fragment
--keep public class * extends android.app.Fragment
+-keep public class * extends androidx.fragment.app.Fragment
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
@@ -165,47 +163,6 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -dontwarn com.google.android.gms.gcm.**
 -dontwarn com.google.android.gms.iid.**
 
-#Moengage
--dontwarn com.google.android.gms.location.**
--dontwarn com.google.android.gms.gcm.**
--dontwarn com.google.android.gms.iid.**
-
--keep class com.google.android.gms.gcm.** { *; }
--keep class com.google.android.gms.iid.** { *; }
--keep class com.google.android.gms.location.** { *; }
-
--keep class com.moe.pushlibrary.activities.** { *; }
--keep class com.moe.pushlibrary.MoEHelper
--keep class com.moengage.locationlibrary.GeofenceIntentService
--keep class com.moe.pushlibrary.InstallReceiver
--keep class com.moengage.push.MoEPushWorker
--keep class com.moe.pushlibrary.providers.MoEProvider
--keep class com.moengage.receiver.MoEInstanceIDListener
--keep class com.moengage.worker.MoEGCMListenerService
--keep class com.moe.pushlibrary.models.** { *;}
--keep class com.moengage.core.GeoTask
--keep class com.moengage.location.GeoManager
--keep class com.moengage.inapp.InAppManager
--keep class com.moengage.push.PushManager
--keep class com.moengage.inapp.InAppController
-
--keep class com.moengage.pushbase.activities.PushTracker
--keep class com.moengage.pushbase.activities.SnoozeTracker
--keep class com.moengage.pushbase.push.MoEPushWorker
--keep class com.moe.pushlibrary.MoEWorker
--keep class com.moe.pushlibrary.AppUpdateReceiver
--keep class com.moengage.core.MoEAlarmReceiver
-
-
--dontwarn com.moengage.location.GeoManager
--dontwarn com.moengage.core.GeoTask
--dontwarn com.moengage.receiver.*
--dontwarn com.moengage.worker.*
--dontwarn com.moengage.inapp.ViewEngine
-
--keep class com.delight.**  { *; }
-#endregion
-
 -keep class java.awt.** { *; }
 -keep class com.google.firebase.iid.** { *; }
 -keep class com.google.firebase.messaging.FirebaseMessagingService { *; }
@@ -215,7 +172,6 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class java.nio.file.**
 -keep class java.lang.invoke.**
 
--dontwarn com.moengage.firebase.**
 -dontwarn com.google.firebase.**
 
 -dontwarn com.flurry.**
@@ -244,8 +200,12 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class android.support.v4.view.ViewPager
 -keepclassmembers class android.support.v4.view.ViewPager$LayoutParams { *; }
 
+-keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
 
 -keep class com.google.android.gms.analytics.Tracker { *; }
 -keep class com.google.analytics.tracking.android.Tracker { *; }

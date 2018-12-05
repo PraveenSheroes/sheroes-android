@@ -7,12 +7,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.telephony.PhoneNumberUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,8 +24,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -40,12 +38,16 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.ContactDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.UserContactDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.InviteFriendViewPresenterImp;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -108,10 +110,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
 
     private boolean hasFeedEnded;
 
-    private MoEHelper mMoEHelper;
-    private PayloadBuilder payloadBuilder;
-    private MoEngageUtills moEngageUtills;
-
     //region Member variables
     private String mSmsShareLink;
     private String isWhatsAppNumber;
@@ -132,10 +130,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
         View view = inflater.inflate(R.layout.contact_list_fragment_layout, container, false);
         ButterKnife.bind(this, view);
         mInviteFriendViewPresenterImp.attachView(this);
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
-        Bundle bundle = getArguments();
         initViews();
         return view;
     }
@@ -325,7 +319,6 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
                         sendIntent.putExtra(Intent.EXTRA_TEXT, mSmsShareLink);
                         startActivityForResult(sendIntent, 1);
                         //startActivity(sendIntent);
-                        moEngageUtills.entityMoEngageShareCard(mMoEHelper, payloadBuilder, "Invite friend", "Invite Friend", Long.parseLong(PhoneNumberUtils.stripSeparators(isWhatsAppNumber)), contactDetail.getName(), getScreenName(), "", contactDetail.getName(), getScreenName(), contactDetail.getItemPosition());
                         HashMap<String, Object> properties = new EventProperty.Builder().id(isWhatsAppNumber).sharedTo("Whatsapp").build();
                         AnalyticsManager.trackEvent(Event.FRIEND_INVITED, getScreenName(), properties);
 
@@ -478,5 +471,35 @@ public class ContactListFragment extends BaseFragment implements ContactDetailCa
     @Override
     protected SheroesPresenter getPresenter() {
         return mInviteFriendViewPresenterImp;
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 }

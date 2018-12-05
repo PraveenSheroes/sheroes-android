@@ -16,8 +16,8 @@ package appliedlife.pvtltd.SHEROES.usertagging.mentions;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import android.text.Editable;
 import android.text.Selection;
 import android.text.Spannable;

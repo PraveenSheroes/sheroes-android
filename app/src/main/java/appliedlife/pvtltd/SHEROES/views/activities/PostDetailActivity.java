@@ -7,23 +7,23 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.StringRes;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.PopupMenu;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -66,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -76,7 +77,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -84,9 +85,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.Mention;
@@ -96,7 +97,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -113,17 +114,29 @@ import butterknife.BindDimen;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static appliedlife.pvtltd.SHEROES.views.activities.MentorsUserListingActivity.CHAMPION_SUBTYPE;
-
-
 /**
  * Created by ujjwal on 07/12/17.
  */
 
-public class PostDetailActivity extends BaseActivity implements IPostDetailView, PostDetailCallBack, CommentCallBack, QueryTokenReceiver {
+public class PostDetailActivity extends BaseActivity implements BaseHolderInterface, IPostDetailView, PostDetailCallBack, CommentCallBack, IQueryTokenReceiver {
+    //region constants
     public static final String SCREEN_LABEL = "Post Detail Screen";
     public static final String IS_POST_DELETED = "Is Post Deleted";
     public static final String SHOW_KEYBOARD = "Show Keyboard";
+    //endregion
+
+    //region inject
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    @Inject
+    Preference<AppConfiguration> mConfiguration;
+    @Inject
+    AppUtils mAppUtils;
+    @Inject
+    PostDetailViewImpl mPostDetailPresenter;
+    //endregion
+
+    //region member variables
     private boolean mStatusBarColorEmpty = true;
     public static final int SINGLE_LINE = 1;
     public static final int MAX_LINE = 5;
@@ -134,16 +147,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     private boolean mIsDirty = false;
     private Comment mEditedComment = null;
     private Map<Integer, Comment> mLastEditedComment = new HashMap<>();
-
-    @Inject
-    Preference<LoginResponse> mUserPreference;
-    @Inject
-    Preference<AppConfiguration> mConfiguration;
-    @Inject
-    AppUtils mAppUtils;
-
-    @Inject
-    PostDetailViewImpl mPostDetailPresenter;
+    //endregion
 
     //region binding view variables
     @Bind(R.id.toolbar)
@@ -226,9 +230,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-
         initAdapter();
-
         mPostDetailPresenter.setUserPost(mFeedDetail, mFeedDetailObjId, mCommunityPostDetailDeepLink);
         mPostDetailPresenter.fetchUserPost();
         if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary() && StringUtil.isNotNullOrEmptyString(mUserPreference.get().getUserSummary().getFirstName())) {
@@ -261,6 +263,268 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         });
         mPostDetailPresenter.getUserMentionSuggestion(etView, mFeedDetail);
+    }
+
+    @OnClick(R.id.tv_user_name_for_post)
+    public void userNamePostForComment() {
+        mIsAnonymous = false;
+        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.red));
+        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
+    }
+
+    @OnClick(R.id.tv_anonymous_post)
+    public void anonymousPostForComment() {
+        mIsAnonymous = true;
+        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
+        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.red));
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public void showProgressBar() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        mProgressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(@StringRes int stringRes) {
+        Snackbar.make(mRecyclerView, stringRes, Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent upIntent = NavUtils.getParentActivityIntent(this);
+        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(upIntent)
+                    .startActivities();
+        } else {
+            if (mFromNotification > 0) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(upIntent)
+                        .startActivities();
+            }
+        }
+        setResult();
+        super.onBackPressed();
+
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return mPostDetailPresenter;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        CommonUtil.hideKeyboard(this);
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+    public void setTitleToToolbar(FeedDetail feedDetail) {
+        if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
+            setToolbarTitleName(feedDetail);
+        }
+    }
+
+    @Override
+    public void addAllPost(int startIndex, List<Comment> commentList) {
+        mPostDetailListAdapter.addDatas(startIndex, commentList);
+    }
+
+    @Override
+    public void addData(int index, BaseResponse baseResponse) {
+        if (baseResponse instanceof FeedDetail) {
+            setTitleToToolbar((FeedDetail) baseResponse);
+        }
+        mPostDetailListAdapter.addData(baseResponse, index);
+    }
+
+    @Override
+    public void removeData(int index) {
+        mPostDetailListAdapter.removeData(index);
+    }
+
+    @Override
+    public void setData(int index, BaseResponse baseResponse) {
+        mPostDetailListAdapter.setData(index, baseResponse);
+    }
+
+    @Override
+    public void updateComment(Comment comment) {
+        if (mIsDirty && !mLastEditedComment.isEmpty()) {
+            mIsDirty = false;
+            Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
+            mLastEditedComment.clear();
+            mPostDetailListAdapter.addData(comment, entry.getKey());
+            mLayoutManager.scrollToPositionWithOffset(entry.getKey(), 0);
+        }
+    }
+
+    @Override
+    public void onPostDeleted() {
+        FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
+        if(feedDetail!=null) {
+            feedDetail.setItemPosition(mPositionInFeed);
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            Parcelable parcelable = Parcels.wrap(feedDetail);
+            bundle.putParcelable(FeedDetail.FEED_COMMENTS, parcelable);
+            bundle.putBoolean(IS_POST_DELETED, true);
+            intent.putExtras(bundle);
+            setResult(RESULT_OK, intent);
+        }else{
+            Toast.makeText(this, R.string.deleted_content, Toast.LENGTH_SHORT).show();
+        }
+        onBackPressed();
+    }
+
+    @Override
+    public void editLastComment() {
+        Comment comment = mPostDetailPresenter.getLastComment();
+        if (comment != null) {
+            mIsDirty = true;
+            onEditMenuClicked(comment);
+        }
+    }
+
+    @Override
+    public void deleteLastComment() {
+        Comment comment = mPostDetailPresenter.getLastComment();
+        if (comment != null) {
+            if (adminId == AppConstants.TWO_CONSTANT && !comment.isMyOwnParticipation()) {
+                // if admin deletes the comment it also need to send reason
+                reportSpamDialog(SpamContentType.COMMENT, null, comment);
+            } else {
+                // if own comment directly delete the comment
+                onDeleteMenuClicked(comment);
+            }
+        }
+    }
+
+    @Override
+    public String getStreamType() {
+        return mStreamType;
+    }
+
+    @Override
+    public void addData(BaseResponse baseResponse) {
+        mPostDetailListAdapter.addData(baseResponse);
+    }
+
+    @Override
+    public void setHasMoreComments(boolean b) {
+        mPostDetailListAdapter.setHasMoreComments(b);
+    }
+
+    @Override
+    public void smoothScrollToBottom() {
+        mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
+        if (null == mFeedDetail) {
+            FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
+            setToolbarTitleName(feedDetail);
+        }
+    }
+
+    @Override
+    public void commentStartedLoading() {
+        mPostDetailListAdapter.commentStartedLoading();
+    }
+
+    @Override
+    public void commentFinishedLoading() {
+        mPostDetailListAdapter.commentFinishedLoading();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (resultCode == Activity.RESULT_OK) {
+            if (intent == null) {
+                return;
+            }
+            if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST) {
+                if (null != intent.getExtras()) {
+                    UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
+                    mPostDetailPresenter.updateUserPost(userPostSolrObj);
+                }
+            }
+        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
+            Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
+            if (parcelable != null) {
+                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
+                mPostDetailPresenter.updateFollowedAuthor(userSolrObj.isSolrIgnoreIsUserFollowed() || userSolrObj.isSolrIgnoreIsMentorFollowed());
+            }
+        }
+    }
+
+    //endregion
+
+    //region static methods
+    public static void navigateTo(Activity fromActivity, String sourceScreen, FeedDetail feedDetail, int requestCode, HashMap<String, Object> properties, boolean showKeyboard) {
+        Intent intent = new Intent(fromActivity, PostDetailActivity.class);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        intent.putExtra(FeedDetail.FEED_COMMENTS, parcelable);
+        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        // ActivityCompat.startActivity(fromActivity, intent, null);
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+
+    public static void navigateTo(Activity fromActivity, String sourceScreen, FeedDetail feedDetail, int requestCode, HashMap<String, Object> properties, boolean showKeyboard, String primaryColor, String titleTextColor) {
+        Intent intent = new Intent(fromActivity, PostDetailActivity.class);
+        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
+        Parcelable parcelable = Parcels.wrap(feedDetail);
+        intent.putExtra(FeedDetail.FEED_COMMENTS, parcelable);
+        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
+        if (!CommonUtil.isEmpty(properties)) {
+            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
+        }
+        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
+        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
+        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
+    }
+    //endregion
+
+    //region private methods
+
+    private void setupToolbarItemsColor() {
+        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
+        if (upArrow != null) {
+            upArrow.mutate();
+            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+        }
+
+        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (mStatusBarColorEmpty) {
+                if (upArrow != null) {
+                    upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
+                }
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
+            } else {
+                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
+            }
+        }
+
+        getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
     }
 
     private void initExtractIntentExtras() {
@@ -319,76 +583,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
     }
 
-    @OnClick(R.id.tv_user_name_for_post)
-    public void userNamePostForComment() {
-        mIsAnonymous = false;
-        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.red));
-        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
-    }
-
-    @OnClick(R.id.tv_anonymous_post)
-    public void anonymousPostForComment() {
-        mIsAnonymous = true;
-        tvUserNameForPost.setTextColor(ContextCompat.getColor(this, R.color.searchbox_text_color));
-        tvAnonymousPost.setTextColor(ContextCompat.getColor(this, R.color.red));
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    public void showProgressBar() {
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgressBar() {
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showError(@StringRes int stringRes) {
-        Snackbar.make(mRecyclerView, stringRes, Snackbar.LENGTH_LONG)
-                .show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent upIntent = NavUtils.getParentActivityIntent(this);
-        if (NavUtils.shouldUpRecreateTask(this, upIntent)) {
-            TaskStackBuilder.create(this)
-                    .addNextIntentWithParentStack(upIntent)
-                    .startActivities();
-        } else {
-            if (mFromNotification > 0) {
-                TaskStackBuilder.create(this)
-                        .addNextIntentWithParentStack(upIntent)
-                        .startActivities();
-            }
-        }
-        setResult();
-        super.onBackPressed();
-
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return mPostDetailPresenter;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        CommonUtil.hideKeyboard(this);
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
-        return true;
-    }
-
     private void setResult() {
         FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
         if (feedDetail == null) {
@@ -403,188 +597,23 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         setResult(RESULT_OK, intent);
     }
 
-    public void setTitleToToolbar(FeedDetail feedDetail) {
-        if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-            if (feedDetail instanceof UserPostSolrObj) {
-                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-                if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
-                } else {
-                    mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
-                }
-            } else if (feedDetail instanceof PollSolarObj) {
-                PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
-                if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
-                } else {
-                    mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
-                }
-            }
-        }
-    }
-
-    @Override
-    public void addAllPost(int startIndex, List<Comment> commentList) {
-        mPostDetailListAdapter.addDatas(startIndex, commentList);
-    }
-
-    @Override
-    public void addData(int index, BaseResponse baseResponse) {
-        if (baseResponse instanceof FeedDetail) {
-            setTitleToToolbar((FeedDetail) baseResponse);
-        }
-        mPostDetailListAdapter.addData(baseResponse, index);
-    }
-
-    @Override
-    public void removeData(int index) {
-        mPostDetailListAdapter.removeData(index);
-    }
-
-    @Override
-    public void setData(int index, BaseResponse baseResponse) {
-        mPostDetailListAdapter.setData(index, baseResponse);
-    }
-
-    @Override
-    public void updateComment(Comment comment) {
-        if (mIsDirty && !mLastEditedComment.isEmpty()) {
-            mIsDirty = false;
-            Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
-            mLastEditedComment.clear();
-            mPostDetailListAdapter.addData(comment, entry.getKey());
-            mLayoutManager.scrollToPositionWithOffset(entry.getKey(), 0);
-        }
-    }
-
-    @Override
-    public void onPostDeleted() {
-        FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
-        feedDetail.setItemPosition(mPositionInFeed);
-        Intent intent = new Intent();
-        Bundle bundle = new Bundle();
-        Parcelable parcelable = Parcels.wrap(feedDetail);
-        bundle.putParcelable(FeedDetail.FEED_COMMENTS, parcelable);
-        bundle.putBoolean(IS_POST_DELETED, true);
-        intent.putExtras(bundle);
-        setResult(RESULT_OK, intent);
-        onBackPressed();
-    }
-
-    @Override
-    public void editLastComment() {
-        Comment comment = mPostDetailPresenter.getLastComment();
-        if (comment != null) {
-            mIsDirty = true;
-            onEditMenuClicked(comment);
-        }
-    }
-
-    @Override
-    public void deleteLastComment() {
-        Comment comment = mPostDetailPresenter.getLastComment();
-        if (comment != null) {
-            if (adminId == AppConstants.TWO_CONSTANT && !comment.isMyOwnParticipation()) {
-                // if admin deletes the comment it also need to send reason
-                reportSpamDialog(SpamContentType.COMMENT, null, comment);
+    private void setToolbarTitleName(FeedDetail feedDetail) {
+        if (feedDetail instanceof UserPostSolrObj) {
+            UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+            if (userPostSolrObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title, userPostSolrObj.getPostCommunityName()));
             } else {
-                // if own comment directly delete the comment
-                onDeleteMenuClicked(comment);
+                mTitleToolbar.setText(getString(R.string.post_detail_toolbar_title_multiple, userPostSolrObj.getAuthorName()));
+            }
+        } else if (feedDetail instanceof PollSolarObj) {
+            PollSolarObj pollSolarObj = (PollSolarObj) feedDetail;
+            if (pollSolarObj.getAuthorName().equalsIgnoreCase(getString(R.string.ID_ADMIN))) {
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title, pollSolarObj.getPollCommunityName()));
+            } else {
+                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, pollSolarObj.getAuthorName()));
             }
         }
     }
-
-    @Override
-    public String getStreamType() {
-        return mStreamType;
-    }
-
-    @Override
-    public void addData(BaseResponse baseResponse) {
-        mPostDetailListAdapter.addData(baseResponse);
-    }
-
-    @Override
-    public void setHasMoreComments(boolean b) {
-        mPostDetailListAdapter.setHasMoreComments(b);
-    }
-
-    @Override
-    public void smoothScrollToBottom() {
-        mRecyclerView.smoothScrollToPosition(mPostDetailListAdapter.getItemCount() - 1);
-        if (null == mFeedDetail) {
-            FeedDetail feedDetail = mPostDetailPresenter.getUserPostObj();
-            if (feedDetail != null && StringUtil.isNotNullOrEmptyString(feedDetail.getAuthorName())) {
-                mTitleToolbar.setText(getString(R.string.poll_detail_toolbar_title_multiple, feedDetail.getAuthorName()));
-            }
-        }
-    }
-
-    @Override
-    public void commentStartedLoading() {
-        mPostDetailListAdapter.commentStartedLoading();
-    }
-
-    @Override
-    public void commentFinishedLoading() {
-        mPostDetailListAdapter.commentFinishedLoading();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        if (resultCode == Activity.RESULT_OK) {
-            if (intent == null) {
-                return;
-            }
-            if (requestCode == AppConstants.REQUEST_CODE_FOR_COMMUNITY_POST) {
-                if (null != intent.getExtras()) {
-                    UserPostSolrObj userPostSolrObj = Parcels.unwrap(intent.getParcelableExtra(AppConstants.COMMUNITY_POST_FRAGMENT));
-                    mPostDetailPresenter.updateUserPost(userPostSolrObj);
-                }
-            }
-        } else if (resultCode == AppConstants.RESULT_CODE_FOR_PROFILE_FOLLOWED) {
-            Parcelable parcelable = intent.getParcelableExtra(AppConstants.USER_FOLLOWED_DETAIL);
-            if (parcelable != null) {
-                UserSolrObj userSolrObj = Parcels.unwrap(parcelable);
-                mPostDetailPresenter.updateFollowedAuthor(mFeedDetail, userSolrObj.isSolrIgnoreIsMentorFollowed());
-            }
-        }
-    }
-
-    //endregion
-
-    //region static methods
-    public static void navigateTo(Activity fromActivity, String sourceScreen, FeedDetail feedDetail, int requestCode, HashMap<String, Object> properties, boolean showKeyboard) {
-        Intent intent = new Intent(fromActivity, PostDetailActivity.class);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        Parcelable parcelable = Parcels.wrap(feedDetail);
-        intent.putExtra(FeedDetail.FEED_COMMENTS, parcelable);
-        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        // ActivityCompat.startActivity(fromActivity, intent, null);
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, String sourceScreen, FeedDetail feedDetail, int requestCode, HashMap<String, Object> properties, boolean showKeyboard, String primaryColor, String titleTextColor) {
-        Intent intent = new Intent(fromActivity, PostDetailActivity.class);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        Parcelable parcelable = Parcels.wrap(feedDetail);
-        intent.putExtra(FeedDetail.FEED_COMMENTS, parcelable);
-        intent.putExtra(SHOW_KEYBOARD, showKeyboard);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        intent.putExtra(FeedFragment.PRIMARY_COLOR, primaryColor);
-        intent.putExtra(FeedFragment.TITLE_TEXT_COLOR, titleTextColor);
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-    //endregion
-
-    //region private methods
-
 
     private void initAdapter() {
         mPostDetailListAdapter = new PostDetailAdapter(this, this, this);
@@ -602,18 +631,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     // user post detail callbacks
@@ -624,10 +643,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
         }
         if (mFeedDetail != null) {
             MixpanelHelper.getPostProperties(mFeedDetail, getScreenName());
+            mPostDetailPresenter.fetchMoreComments();
         }
         HashMap<String, Object> properties = MixpanelHelper.getPostProperties(mFeedDetail, getScreenName());
         AnalyticsManager.trackEvent(Event.POST_SHARED_CLICKED, getScreenName(), properties);
-        mPostDetailPresenter.fetchMoreComments();
     }
 
     @Override
@@ -911,7 +930,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     new EventProperty.Builder()
                             .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
                             .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_UNFOLLOWED, getScreenName(), properties);
 
@@ -921,7 +940,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                     new EventProperty.Builder()
                             .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
                             .name(userPostSolrObj.getNameOrTitle())
-                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                            .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
                             .build();
             AnalyticsManager.trackEvent(Event.PROFILE_FOLLOWED, getScreenName(), properties);
             mPostDetailPresenter.getPostAuthorFollowed(publicProfileListRequest, userPostSolrObj);
@@ -1000,23 +1019,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     @Override
     public void onCommunityTitleClicked(UserPostSolrObj userPostObj) {
         if (null != userPostObj) {
-            if (userPostObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-
-                if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
-                    if (StringUtil.isNotNullOrEmptyString(userPostObj.getDeepLinkUrl())) {
-                        Uri url = Uri.parse(userPostObj.getDeepLinkUrl());
-                        Intent intent = new Intent(Intent.ACTION_VIEW);
-                        intent.setData(url);
-                        startActivity(intent);
-                    }
-                }
+            if (userPostObj.getCommunityId() == 0) {
+                ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
             } else {
-                if (userPostObj.getCommunityId() == 0) {
-                    ContestActivity.navigateTo(this, Long.toString(userPostObj.getUserPostSourceEntityId()), userPostObj.getScreenName(), null);
-
-                } else {
-                    CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
-                }
+                CommunityDetailActivity.navigateTo(this, userPostObj.getCommunityId(), getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
             }
         }
     }
@@ -1076,7 +1082,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             addMentionSpanDetail();
 
             if (mIsDirty && mEditedComment != null) {
-                mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.TWO_CONSTANT);
+                mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(mEditedComment.getEntityId(), etView.getEditText().getText().toString(), mIsAnonymous, true, mEditedComment.getId(), mHasMentions, mMentionSpanList), AppConstants.COMMENT_EDIT, mEditedComment);
             } else {
                 String message = etView.getEditText().getText().toString();
                 if (!TextUtils.isEmpty(message)) {
@@ -1171,7 +1177,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                         .streamType(mStreamType)
                         .build();
         trackEvent(Event.REPLY_DELETED, propertiesDelete);
-        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), mHasMentions, mMentionSpanList), AppConstants.ONE_CONSTANT);
+        mPostDetailPresenter.editCommentListFromPresenter(AppUtils.editCommentRequestBuilder(comment.getEntityId(), comment.getComment(), false, false, comment.getId(), mHasMentions, mMentionSpanList), AppConstants.COMMENT_DELETE, comment);
     }
 
     private void onEditMenuClicked(Comment comment) {
@@ -1194,11 +1200,10 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             etView.getEditText().setText(comment.getComment());
             etView.getEditText().setSelection(comment.getComment().length());
         }
+        CommonUtil.showKeyboard(this);
         int pos = PostDetailViewImpl.findCommentPositionById(mPostDetailListAdapter.getItems(), comment.getId());
-
         if (mPostDetailListAdapter.getItemCount() > pos) {
             if (pos != RecyclerView.NO_POSITION) {
-
                 if (mIsDirty && !mLastEditedComment.isEmpty()) {
                     Map.Entry<Integer, Comment> entry = mLastEditedComment.entrySet().iterator().next();
                     mLastEditedComment.clear();
@@ -1207,7 +1212,6 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
                 }
 
                 mPostDetailListAdapter.removeData(pos);
-
                 mLastEditedComment.put(pos, comment);
                 mIsDirty = true;
             }
@@ -1343,7 +1347,8 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(comment.getParticipantUserId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), comment.isVerifiedMentor(), 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+            boolean isChampion = comment.getParticipationTypeId() == AppConstants.CHAMPION_TYPE_ID;
+            ProfileActivity.navigateTo(this, communityFeedSolrObj, comment.getParticipantUserId(), isChampion, 0, AppConstants.COMMUNITY_POST_FRAGMENT, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
         }
     }
 
@@ -1353,29 +1358,7 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
     }
     //endregion
 
-    private void setupToolbarItemsColor() {
-        final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
-        if (upArrow != null) {
-            upArrow.mutate();
-            upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-        }
-
-        mTitleToolbar.setTextColor(Color.parseColor(mTitleTextColor));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (mStatusBarColorEmpty) {
-                if (upArrow != null) {
-                    upArrow.setColorFilter(Color.parseColor(mTitleTextColor), PorterDuff.Mode.SRC_ATOP);
-                }
-                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mStatusBarColor)));
-            } else {
-                getWindow().setStatusBarColor(CommonUtil.colorBurn(Color.parseColor(mPrimaryColor)));
-            }
-        }
-
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        mToolbar.setBackgroundColor(Color.parseColor(mPrimaryColor));
-    }
-
+    //region public methods
     public void onDestroy() {
         super.onDestroy();
         mPostDetailPresenter.detachView();
@@ -1408,13 +1391,12 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCommentInfoText, "", "", 0));
             mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
 
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(etView.notifyAdapterOnData(mentionList));
             mMentionList = mentionList;
         }
-        List<String> buckets = Collections.singletonList("user-history");
-        return buckets;
+        return Collections.singletonList("user-history");
     }
 
     @Override
@@ -1454,4 +1436,29 @@ public class PostDetailActivity extends BaseActivity implements IPostDetailView,
             }
         }
     }
+
+    @Override
+    public void handleOnClick(BaseResponse baseResponse, View view) {
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+    }
+    //endregion public methods
 }

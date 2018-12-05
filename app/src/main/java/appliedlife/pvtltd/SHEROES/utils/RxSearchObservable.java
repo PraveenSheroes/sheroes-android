@@ -1,16 +1,14 @@
 package appliedlife.pvtltd.SHEROES.utils;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.view.View;
 
 import java.util.List;
 
-import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.ui.RichEditorView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunityPostView;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IPostDetailView;
@@ -26,7 +24,7 @@ public class RxSearchObservable {
 
         final PublishSubject<String> subject = PublishSubject.create();
 
-        richEditorView.setQueryTokenReceiver(new QueryTokenReceiver() {
+        richEditorView.setQueryTokenReceiver(new IQueryTokenReceiver() {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 String searchText=queryToken.getTokenString();
@@ -54,7 +52,7 @@ public class RxSearchObservable {
 
         final PublishSubject<String> subject = PublishSubject.create();
 
-        richEditorView.setQueryTokenReceiver(new QueryTokenReceiver() {
+        richEditorView.setQueryTokenReceiver(new IQueryTokenReceiver() {
             @Override
             public List<String> onQueryReceived(@NonNull QueryToken queryToken) {
                 String searchText=queryToken.getTokenString();

@@ -22,10 +22,10 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +38,7 @@ import java.io.File;
 import java.io.IOException;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 /**
  * Built-in activity for image cropping.<br>
@@ -281,7 +282,7 @@ public class CropImageActivity extends AppCompatActivity implements CropImageVie
                     menuItemIcon.setColorFilter(color, PorterDuff.Mode.SRC_ATOP);
                     menuItem.setIcon(menuItemIcon);
                 } catch (Exception e) {
-                    Log.w("AIC", "Failed to update menu item color", e);
+                    LogUtils.error("AIC", "Failed to update menu item color", e);
                 }
             }
         }

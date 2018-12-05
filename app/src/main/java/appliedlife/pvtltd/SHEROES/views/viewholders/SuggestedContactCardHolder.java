@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -83,6 +83,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
             btnFollowFriend.setEnabled(false);
             mPostDetailCallback.onSuggestedContactClicked(mUseSolarObj, btnFollowFriend);
             mUseSolarObj.setSolrIgnoreIsUserFollowed(true);
+            mUseSolarObj.setSolrIgnoreIsMentorFollowed(true);
             setFollowUnFollow();
         }
     }
@@ -118,6 +119,7 @@ public class SuggestedContactCardHolder extends BaseViewHolder<UserSolrObj> {
                 btnFollowFriend.setEnabled(false);
                 mPostDetailCallback.onSuggestedContactClicked(mUseSolarObj, btnFollowFriend);
                 mUseSolarObj.setSolrIgnoreIsUserFollowed(false);
+                mUseSolarObj.setSolrIgnoreIsMentorFollowed(true);
                 setFollowUnFollow();
                 dialog.dismiss();
             }

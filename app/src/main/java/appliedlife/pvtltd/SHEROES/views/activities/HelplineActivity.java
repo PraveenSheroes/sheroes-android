@@ -2,8 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.helpline.HelplineChatDoc;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import butterknife.Bind;
@@ -52,11 +54,13 @@ public class HelplineActivity extends BaseActivity implements BaseHolderInterfac
 
     private void setupToolbarItemsColor() {
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
-        final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
-        getSupportActionBar().setHomeAsUpIndicator(upArrow);
         titleToolbar.setText(R.string.helpline_title);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("");
+            final Drawable upArrow = getResources().getDrawable(R.drawable.vector_back_arrow);
+            getSupportActionBar().setHomeAsUpIndicator(upArrow);
+        }
     }
 
     @Override
@@ -66,5 +70,25 @@ public class HelplineActivity extends BaseActivity implements BaseHolderInterfac
             HelplineChatDoc helplineChatDoc = (HelplineChatDoc) baseResponse;
             ((HelplineFragment) helplineFragment).checkHelplineRating(helplineChatDoc);
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
     }
 }

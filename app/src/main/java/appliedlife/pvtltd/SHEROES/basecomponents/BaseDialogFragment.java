@@ -3,19 +3,12 @@ package appliedlife.pvtltd.SHEROES.basecomponents;
 import android.app.DialogFragment;
 import android.app.FragmentManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 
@@ -74,18 +67,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
@@ -95,11 +77,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
-    }
-
-    @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
 
     }
 
@@ -116,11 +93,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
-    }
-
-    @Override
-    public void invalidateLikeUnlike(Comment comment) {
 
     }
 

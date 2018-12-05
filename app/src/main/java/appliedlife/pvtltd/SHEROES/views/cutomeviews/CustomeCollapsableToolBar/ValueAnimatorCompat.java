@@ -16,7 +16,7 @@
 
 package appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.animation.Interpolator;
 
 /**

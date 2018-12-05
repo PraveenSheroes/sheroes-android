@@ -30,7 +30,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/comment_relative_time"
-        style="@style/TextView12spRegular"
+        style="@style/TextView14spRegular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

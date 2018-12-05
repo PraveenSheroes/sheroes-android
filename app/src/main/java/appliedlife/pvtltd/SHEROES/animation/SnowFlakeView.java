@@ -6,11 +6,9 @@ package appliedlife.pvtltd.SHEROES.animation;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.support.annotation.VisibleForTesting;
+import androidx.annotation.VisibleForTesting;
 import android.util.AttributeSet;
 import android.view.View;
-
-import appliedlife.pvtltd.SHEROES.R;
 
 public class SnowFlakeView extends View {
 

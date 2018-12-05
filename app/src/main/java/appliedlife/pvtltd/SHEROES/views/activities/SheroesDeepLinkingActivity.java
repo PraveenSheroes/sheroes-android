@@ -3,16 +3,13 @@ package appliedlife.pvtltd.SHEROES.views.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
+import android.os.ParcelFormatException;
+import androidx.core.app.ActivityCompat;
 import android.util.Base64;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
-
-import java.net.URISyntaxException;
 
 import javax.inject.Inject;
 
@@ -23,9 +20,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
-import appliedlife.pvtltd.SHEROES.models.entities.vernacular.LanguageUpdateRequest;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -39,48 +33,43 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INV
  */
 
 public class SheroesDeepLinkingActivity extends BaseActivity {
+    // region constants
     private static final String SCREEN_LABEL = "DeepLink Screen";
     public static final String OPEN_FRAGMENT = "Open Fragment";
     public static final int COMMUNITY_DEEP_LINK_URL_BACK_SLASH = 4;
+    // endregion
+
+    // region Inject
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+    // endregion
+
+    // region member variables
     private Uri mData;
     private int mIndexOfBackSlaceInPostDeeplink;
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
     private int mFromNotification;
     private String mSource;
     private Intent mIntent;
-    @Inject
-    Preference<LoginResponse> mUserPreference;
+    // endregion
 
+    // region public and lifecycle methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mMoEHelper = MoEHelper.getInstance(this);
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
-        moEngageUtills.entityMoEngageDeeplink(this, mMoEHelper, payloadBuilder);
         SheroesApplication.getAppComponent(this).inject(this);
     }
 
     private void logout() {
-        ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.LOGGED_OUT_USER, AppConstants.EMPTY_STRING);
         Intent intent = new Intent(this, LanguageSelectionActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        // intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         startActivity(intent);
         finish();
     }
 
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
-        if (null != mMoEHelper) {
-            mMoEHelper.onStart(this);
-        }
         try {
-            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get().getUserSummary()) {
                 callDeepLinkingData();
             } else {
                 logout();
@@ -91,23 +80,16 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         }
 
     }
+    // endregion
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        mMoEHelper.onResume(this);
-    }
-
+    // region protected methods
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
     }
 
-    private void callDeepLinkingData() throws URISyntaxException {
-        String notificationId = "";
-        String url = "";
+    private void callDeepLinkingData() throws ParcelFormatException {
         String deepLink = "";
-
         if (null != getIntent()) {
             Intent intent = getIntent();
             mIntent = intent;
@@ -125,12 +107,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                     openPostActivity(intent);
                 } else if (null != intent.getExtras()) {
                     deepLink = intent.getExtras().getString(AppConstants.DEEP_LINK_URL);
-                    notificationId = intent.getExtras().getString(AppConstants.NOTIFICATION_ID);
                     String trimUrl = CommonUtil.trimBranchIdQuery(deepLink.toString());
                     getDeeplinkUrlFromNotification(trimUrl, intent);
                 }
             }
-
         } else {
             homeActivityCall("");
         }
@@ -159,11 +139,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 addShareLink(sourceIntent, into);
                                 startActivity(into);
                                 finish();
-                            }
-                            if (mFromNotification > 0) {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
-                            } else {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
                             }
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
@@ -200,11 +175,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                                 startActivity(into);
                                 finish();
                             }
-                            if (mFromNotification > 0) {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
-                            } else {
-                                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HOME_CHALLENGE, AppConstants.EMPTY_STRING);
-                            }
                         } catch (Exception e) {
                             Crashlytics.getInstance().core.logException(e);
                             homeActivityCall("");
@@ -219,11 +189,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         addShareLink(sourceIntent, helplineIntent);
                         startActivity(helplineIntent);
                         finish();
-                        if (mFromNotification > 0) {
-                            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_HELP_LINE, AppConstants.EMPTY_STRING);
-                        } else {
-                            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HELP_LINE, AppConstants.EMPTY_STRING);
-                        }
                     } else if (urlOfSharedCard.equals(AppConstants.WRITE_STORY_URL) || urlOfSharedCard.equals(AppConstants.WRITE_STORY_URL_COM)) {
                         homeActivityCall(AppConstants.WRITE_STORY_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM) || urlOfSharedCard.equals(AppConstants.SELECT_LANGUAGE_URL_COM)) {
@@ -239,10 +204,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         homeActivityCall(ArticlesFragment.SCREEN_LABEL);
                     } else if (urlOfSharedCard.startsWith(AppConstants.ARTICLE_CATEGORY_URL_COM) || urlOfSharedCard.startsWith(AppConstants.ARTICLE_CATEGORY_URL_IN)) {
                         homeActivityCallForArticleCategory(urlOfSharedCard);
-
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
-
                     } else if (urlOfSharedCard.equals(AppConstants.FAQ_URL) || urlOfSharedCard.equals(AppConstants.FAQ_URL_COM)) {
                         homeActivityCall(AppConstants.FAQ_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.ICC_MEMBERS_URL) || urlOfSharedCard.equals(AppConstants.ICC_MEMBERS_URL_COM)) {
@@ -279,7 +242,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             if (StringUtil.isNotNullOrEmptyString(baseUrl)) {
                 openEndPointActivities(urlOfSharedCard, baseUrl, fullLength, sourceIntent);
             }
-
         } else {
             Toast.makeText(getApplicationContext(), R.string.invalid_url, Toast.LENGTH_SHORT).show();
         }
@@ -314,12 +276,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 addShareLink(mIntent, articleDetail);
                 startActivity(articleDetail);
                 finish();
-                if (mFromNotification > 0) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_ARTICLE, AppConstants.EMPTY_STRING);
-
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_ARTICLE, AppConstants.EMPTY_STRING);
-                }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
@@ -339,12 +295,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 addShareLink(mIntent, articleDetail);
                 startActivity(articleDetail);
                 finish();
-                if (mFromNotification > 0) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_ARTICLE, AppConstants.EMPTY_STRING);
-
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_ARTICLE, AppConstants.EMPTY_STRING);
-                }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
@@ -353,32 +303,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         //In case of communities
         else if (AppConstants.COMMUNITY_URL.equalsIgnoreCase(baseUrl) || AppConstants.COMMUNITY_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.COMMUNITY_URL.length() < fullLength) {
             openCommunityPostPollDeepLink(urlSharedViaSocial, baseUrl, sourceIntent);
-        } else if (AppConstants.EVENT_URL.equalsIgnoreCase(baseUrl) || AppConstants.EVENT_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.EVENT_URL.length() < fullLength) {
-            try {
-                int sareid = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
-                String id = urlSharedViaSocial.substring(sareid + 1, fullLength);
-                byte[] id1 = Base64.decode(id, Base64.DEFAULT);
-                dataIdString = new String(id1, AppConstants.UTF_8);
-                dataIdString = dataIdString.replaceAll("\\D+", "");
-                Intent eventDetail = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
-                eventDetail.putExtra(AppConstants.EVENT_ID, Long.parseLong(dataIdString));
-                //  eventDetail.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                eventDetail.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-                eventDetail.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
-                eventDetail.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                addShareLink(sourceIntent, eventDetail);
-                startActivity(eventDetail);
-                finish();
-                if (mFromNotification > 0) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_EVENT, AppConstants.EMPTY_STRING);
-
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_EVENT, AppConstants.EMPTY_STRING);
-                }
-            } catch (Exception e) {
-                Crashlytics.getInstance().core.logException(e);
-                homeActivityCall("");
-            }
         } else if (AppConstants.CHAMPION_URL.equalsIgnoreCase(baseUrl) || AppConstants.CHAMPION_URL_COM.equalsIgnoreCase(baseUrl) && AppConstants.CHAMPION_URL.length() < fullLength) {
             try {
                 int champId = urlSharedViaSocial.lastIndexOf(AppConstants.BACK_SLASH);
@@ -391,17 +315,10 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, true);
+                intent.putExtra(AppConstants.IS_CHAMPION_ID, true);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
                 finish();
-                if (mFromNotification > 0) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_CHAMPION, AppConstants.EMPTY_STRING);
-
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_CHAMPION, AppConstants.EMPTY_STRING);
-
-                }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
@@ -429,19 +346,12 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 // intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
                 intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
                 intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
-                intent.putExtra(AppConstants.IS_MENTOR_ID, AppConstants.FROM_PUSH_NOTIFICATION);
+                intent.putExtra(AppConstants.IS_CHAMPION_ID, AppConstants.FROM_PUSH_NOTIFICATION);
                 addShareLink(sourceIntent, intent);
                 ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
 
                 //ProfileActivity.navigateTo(this, Long.parseLong(dataIdString), isChampion, mFromNotification, AppConstants.FROM_PUSH_NOTIFICATION, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
                 finish();
-                if (mFromNotification > 0) {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
-
-                } else {
-                    ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_PROFILE, AppConstants.EMPTY_STRING);
-
-                }
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
                 homeActivityCall("");
@@ -456,37 +366,13 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             addShareLink(sourceIntent, into);
             startActivity(into);
             finish();
-            if (mFromNotification > 0) {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
-
-            } else {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_PROFILE, AppConstants.EMPTY_STRING);
-
-            }
-
         } else if ((AppConstants.INVITE_FRIEND_URL).equalsIgnoreCase(baseUrl) || AppConstants.INVITE_FRIEND_URL_COM.equalsIgnoreCase(baseUrl)) {
             AllContactActivity.navigateTo(this, mFromNotification, null, null, REQUEST_CODE_FOR_INVITE_FRIEND);
             finish();
-            if (mFromNotification > 0) {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
-
-            } else {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_PROFILE, AppConstants.EMPTY_STRING);
-
-            }
-
         } else {
             Toast.makeText(SheroesDeepLinkingActivity.this, AppConstants.WEB_BROWSER_MASSAGE, Toast.LENGTH_SHORT).show();
             finish();
-            if (mFromNotification > 0) {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_WEB, AppConstants.EMPTY_STRING);
-
-            } else {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_WEB, AppConstants.EMPTY_STRING);
-
-            }
         }
-
     }
 
     private void showUserProfile(boolean isWriteStory, Intent sourceIntent) {
@@ -499,19 +385,13 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             }
             Intent intent = new Intent(SheroesDeepLinkingActivity.this, ProfileActivity.class);
             intent.putExtra(AppConstants.CHAMPION_ID, userId);
-            intent.putExtra(AppConstants.IS_MENTOR_ID, isMentor);
+            intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
             intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
             intent.putExtra(BaseActivity.STORIES_TAB, isWriteStory);
             intent.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
             addShareLink(sourceIntent, intent);
             ActivityCompat.startActivityForResult(SheroesDeepLinkingActivity.this, intent, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, null);
             finish();
-            if (mFromNotification > 0) {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_PROFILE, AppConstants.EMPTY_STRING);
-            } else {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_PROFILE, AppConstants.EMPTY_STRING);
-
-            }
         }
     }
 
@@ -555,12 +435,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             addShareLink(mIntent, articleDetail);
             startActivity(articleDetail);
             finish();
-            if (mFromNotification > 0) {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_ARTICLE, AppConstants.EMPTY_STRING);
-
-            } else {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_ARTICLE, AppConstants.EMPTY_STRING);
-            }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
             homeActivityCall("");
@@ -638,12 +512,6 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                 startActivity(into);
             }
             finish();
-            if (mFromNotification > 0) {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_COMMUNITY, AppConstants.EMPTY_STRING);
-
-            } else {
-                ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_COMMUNITY, AppConstants.EMPTY_STRING);
-            }
         } catch (Exception e) {
             Crashlytics.getInstance().core.logException(e);
             homeActivityCall("");
@@ -651,15 +519,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     }
 
     private void homeActivityCall(String fragmentName) {
-        if (mFromNotification > 0) {
-            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.BELL_NOTIFICATION_TO_HOME, AppConstants.EMPTY_STRING);
-
-        } else {
-            ((SheroesApplication) this.getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_DEEP_LINK, GoogleAnalyticsEventActions.DEEP_LINK_TO_HOME, AppConstants.EMPTY_STRING);
-
-        }
         Intent into = new Intent(this, HomeActivity.class);
-        // into.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NO_HISTORY);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
         into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);

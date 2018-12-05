@@ -13,10 +13,11 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.Toolbar;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -39,7 +40,6 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -56,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -66,13 +67,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllDataDocument;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.PersonalBasicDetailsRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserSummaryRequest;
 import appliedlife.pvtltd.SHEROES.presenters.EditProfilePresenterImpl;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -94,7 +94,7 @@ import butterknife.OnClick;
  * User Profile Edit Screen
  */
 
-public class EditUserProfileActivity extends BaseActivity implements IEditProfileView {
+public class EditUserProfileActivity extends BaseActivity implements IEditProfileView,BaseHolderInterface, View.OnClickListener {
 
     //region private variable
     private static final String SCREEN_LABEL = "Edit Profile Screen";
@@ -304,7 +304,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     LogUtils.error(TAG, AppConstants.CASE_NOT_HANDLED + AppConstants.SPACE + TAG + AppConstants.SPACE + requestCode);
             }
         }
-
     }
     //endregion
 
@@ -429,7 +428,7 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 }
 
                 if (StringUtil.isNotNullOrEmptyString(userDetails.getEmailid())) {
-                    userSummary.getUserBO().setEmailid(userDetails.getEmailid());
+                    userSummary.getUserBO().setEmailId(userDetails.getEmailid());
                 }
 
                 String relationshipStatus = userDetails.getMaritalStatus();
@@ -450,7 +449,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                 userSummary.getUserBO().setCityMasterId(userDetails.getCityMasterId());
 
                 //Save image
-                userSummary.getUserBO().setPhotoUrlPath(userDetails.getPhotoUrlPath());
                 userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
                 userSummary.setPhotoUrl(userDetails.getPhotoUrlPath());
 
@@ -506,6 +504,26 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (baseResponse instanceof GetAllDataDocument) {
             dataOnClickForCardItem(view, baseResponse);
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
+    }
+
+    @Override
+    public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
     }
 
     private void dataOnClickForCardItem(View view, BaseResponse baseResponse) {
@@ -686,19 +704,9 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         showNetworkTimeoutDialog(true, false, s);
         mProgressBar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     private void requestFocus(View view) {
@@ -739,10 +747,10 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
     }
 
     private boolean validateMobileNumber() {
-        if (StringUtil.isNotNullOrEmptyString(mobileNumber.getText().toString()) && mobileNumber.getText().toString().length() < 10) {
+        if (mobileNumber.getText().toString().length() < 10) {
             inputMobileNumberHolder.setError(getString(R.string.mobile_no_error_msg));
             requestFocus(mobileNumber);
-            scrollView.scrollTo(0, mobileNumber.getBottom());
+            scrollView.scrollTo(0, inputMobileNumberHolder.getBottom());
             return false;
         } else {
             inputMobileNumberHolder.setError(null);
@@ -856,8 +864,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
             } else {
                 editProfilePresenter.getPersonalBasicDetails(personalBasicDetailsRequest);
             }
-
-            ((SheroesApplication) getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_PROFILE_EDITS, GoogleAnalyticsEventActions.EDIT_BASIC_DETAIl_PERSONAL, AppConstants.EMPTY_STRING);
             //endregion
         }
     }
@@ -867,13 +873,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         if (boardingDataResponse.getStatus().equals(AppConstants.SUCCESS)) {
 
             if (userDetailsResponse != null) {
-
                 try {
                     //update the progressbar weight and filled , unfilled fields
                     filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
                     unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
                     profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
-
                     UserSummary userSummary = userDetailsResponse.getUserSummary();
                     String userName = name.getText().toString().trim();
 
@@ -894,10 +898,8 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                         String city = location.getText() != null ? location.getText().toString() : ""; //name
                         userSummary.getUserBO().setCityMasterId(cityId);
                         userSummary.getUserBO().setCityMaster(city);
-
                         String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
                         userSummary.getUserBO().setUserSummary(userBio);
-
                         userDetailsResponse.setUserSummary(userSummary);
                         mUserPreference.get().getUserSummary().setFirstName(userSummary.getFirstName());
                         mUserPreference.get().getUserSummary().setLastName(userSummary.getLastName());
@@ -910,7 +912,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
                     LogUtils.info(TAG, "Error while saving details to preference");
                 }
             }
-
             onBackPressed();
         }
     }
@@ -923,18 +924,14 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
                     if (boardingDataResponse.getResponse() != null && boardingDataResponse.getResponse().contains("img.") && boardingDataResponse.getResponse().startsWith("http")) {
                         setProfileNameData(boardingDataResponse.getResponse());
-
                         //update the progressbar weight and filled , unfilled fields
                         filledDetails = boardingDataResponse.getUserSolrObj().getFilledProfileFields();
                         unfilledDetails = boardingDataResponse.getUserSolrObj().getUnfilledProfileFields();
                         profileProgress = boardingDataResponse.getUserSolrObj().getProfileCompletionWeight();
-
                         //Save image
-                        userDetailsResponse.getUserSummary().getUserBO().setPhotoUrlPath(boardingDataResponse.getResponse());
                         userDetailsResponse.getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.get().getUserSummary().setPhotoUrl(boardingDataResponse.getResponse());
                         mUserPreference.set(userDetailsResponse);
-
                     } else {
                         String userBio = aboutMe.getText() != null ? aboutMe.getText().toString() : "";
                         userDetailsResponse.getUserSummary().getUserBO().setUserSummary(userBio);
@@ -948,7 +945,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         }
     }
 
-
     public static void navigateTo(Activity fromActivity, String sourceScreen, String imageUrl, HashMap<String, Object> properties, int requestCode) {
         Intent intent = new Intent(fromActivity, EditUserProfileActivity.class);
         intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
@@ -958,5 +954,4 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         }
         ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
     }
-
 }

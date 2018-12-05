@@ -32,13 +32,15 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.util.Log;
+import androidx.annotation.ColorInt;
+import androidx.annotation.NonNull;
+
 import android.widget.ImageView.ScaleType;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 public class RoundedDrawable extends Drawable {
@@ -138,7 +140,7 @@ public class RoundedDrawable extends Drawable {
       drawable.draw(canvas);
     } catch (Exception e) {
       e.printStackTrace();
-      Log.w(TAG, "Failed to create bitmap from drawable!");
+      LogUtils.info(TAG, "Failed to create bitmap from drawable!");
       bitmap = null;
     }
 

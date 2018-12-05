@@ -1,18 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import javax.inject.Inject;
 
@@ -20,9 +17,14 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.SHEPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -51,11 +53,6 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
 
     GenericRecyclerViewAdapter mAdapter;
 
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
-    private long startedTime;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -64,11 +61,6 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
         shePresenter.attachView(this);
         setProgressBar(pbIccMemberProgreeBar);
         assignNavigationRecyclerListView();
-        payloadBuilder = new PayloadBuilder();
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        moEngageUtills = MoEngageUtills.getInstance();
-        startedTime = System.currentTimeMillis();
-        moEngageUtills.entityMoEngageViewICCMember(getActivity(),mMoEHelper,payloadBuilder,startedTime);
 
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
         CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
@@ -94,8 +86,6 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
     public void onDestroyView() {
         super.onDestroyView();
         shePresenter.detachView();
-        long timeSpent = System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewICCMember(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
 
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
         CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
@@ -110,8 +100,8 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
     }
 
     @Override
-    public void getAllICCMembers(ICCMemberListResponse iccMemberListResponse){
-        if(iccMemberListResponse != null && iccMemberListResponse.getListOfICCMembers()!=null){
+    public void getAllICCMembers(ICCMemberListResponse iccMemberListResponse) {
+        if (iccMemberListResponse != null && iccMemberListResponse.getListOfICCMembers() != null) {
             mAdapter.setSheroesGenericListData(iccMemberListResponse.getListOfICCMembers());
             mAdapter.notifyDataSetChanged();
         }
@@ -129,4 +119,35 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
 }

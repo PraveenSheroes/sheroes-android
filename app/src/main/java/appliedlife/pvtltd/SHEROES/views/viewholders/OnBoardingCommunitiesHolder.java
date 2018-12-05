@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
@@ -72,7 +72,7 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
     }
 
     private void joinCommunity() {
-        if (!communityFeedObj.isMember() && !communityFeedObj.isOwner() && !communityFeedObj.isRequestPending()) {
+        if (!communityFeedObj.isMember() && !communityFeedObj.isOwner()) {
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
             tvJoin.setText(mContext.getString(R.string.ID_JOIN));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
@@ -80,10 +80,6 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
             tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
             tvJoin.setText(mContext.getString(R.string.ID_JOINED));
             tvJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        } else {
-            tvJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
-            tvJoin.setText(mContext.getString(R.string.ID_JOIN));
-            tvJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
         }
     }
 
@@ -103,11 +99,9 @@ public class OnBoardingCommunitiesHolder extends BaseViewHolder<CommunityFeedSol
         if (tvJoin.getText().toString().equalsIgnoreCase(mContext.getString(R.string.ID_JOINED))) {
             viewInterface.handleOnClick(communityFeedObj, tvJoin);
             communityFeedObj.setMember(false);
-            communityFeedObj.setRequestPending(false);
         } else {
             viewInterface.handleOnClick(communityFeedObj, tvJoin);
             communityFeedObj.setMember(true);
-            communityFeedObj.setRequestPending(false);
         }
         joinCommunity();
     }

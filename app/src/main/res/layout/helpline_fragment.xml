@@ -6,16 +6,6 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/pb_chat_progress_bar"
-        android:layout_width="@dimen/dp_size_30"
-        android:layout_height="@dimen/dp_size_30"
-        android:layout_gravity="center|top"
-        android:layout_marginLeft="@dimen/dp_size_170"
-        android:background="@drawable/ripple_button"
-        android:backgroundTint="@color/grey2"
-        android:indeterminateTint="@color/white" />
-
     <LinearLayout
         android:id="@+id/bottom_container"
         android:layout_width="match_parent"
@@ -67,7 +57,7 @@
     </LinearLayout>
 
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_chat_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -76,5 +66,15 @@
         android:divider="@android:color/transparent"
         android:paddingBottom="8dp"
         android:paddingTop="8dp" />
+
+    <ProgressBar
+        android:id="@+id/pb_chat_progress_bar"
+        android:layout_width="@dimen/dp_size_30"
+        android:layout_height="@dimen/dp_size_30"
+        android:layout_gravity="center|top"
+        android:layout_marginLeft="@dimen/dp_size_170"
+        android:background="@drawable/ripple_button"
+        android:backgroundTint="@color/grey2"
+        android:indeterminateTint="@color/white" />
 
 </RelativeLayout>

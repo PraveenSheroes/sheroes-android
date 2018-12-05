@@ -1,6 +1,6 @@
 package appliedlife.pvtltd.SHEROES.models.entities.feed;
 
-import android.support.annotation.DrawableRes;
+import androidx.annotation.DrawableRes;
 
 import com.google.gson.annotations.SerializedName;
 

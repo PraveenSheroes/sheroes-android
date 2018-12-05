@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.drawable.PictureDrawable;
 import android.os.Build;
-import android.support.constraint.ConstraintLayout;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;

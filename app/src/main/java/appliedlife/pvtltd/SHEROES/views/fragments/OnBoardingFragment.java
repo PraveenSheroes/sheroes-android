@@ -2,9 +2,9 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,20 +26,20 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.community.GetAllData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.GetInterestJobResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.OnBoardingPresenter;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -155,11 +155,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult) {
-
-    }
-
-    @Override
     protected SheroesPresenter getPresenter() {
         return mOnBoardingPresenter;
     }
@@ -170,18 +165,8 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
-    public void getIntersetJobResponse(GetInterestJobResponse getInterestJobResponse) {
-
-    }
-
-    @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg, feedParticipationEnum);
-    }
-
-    @Override
-    public void getBoardingJobResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override
@@ -232,22 +217,17 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     public void joinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (communityFeedSolrObj.isMember()) {
             OnBoardingActivity.isJoinCount++;
-            if(getActivity()!=null)
-            ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.REQUEST_JOIN_OPEN_COMMUNITY, AppConstants.EMPTY_STRING);
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
             AnalyticsManager.trackEvent(Event.COMMUNITY_JOINED, getScreenName(), properties);
         }
         mAdapter.notifyItemChanged(communityFeedSolrObj.getItemPosition(), communityFeedSolrObj);
     }
 
-
     public void unJoinResponse(CommunityFeedSolrObj communityFeedSolrObj) {
         if (!communityFeedSolrObj.isMember()) {
             if (OnBoardingActivity.isJoinCount >= 0) {
                 OnBoardingActivity.isJoinCount--;
             }
-            if(getActivity()!=null)
-            ((SheroesApplication) (getActivity()).getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_COMMUNITY_MEMBERSHIP, GoogleAnalyticsEventActions.LEAVE_COMMUNITY, AppConstants.EMPTY_STRING);
             HashMap<String, Object> properties = new EventProperty.Builder().id(Long.toString(communityFeedSolrObj.getIdOfEntityOrParticipant())).name(communityFeedSolrObj.getNameOrTitle()).build();
             AnalyticsManager.trackEvent(Event.COMMUNITY_LEFT, getScreenName(), properties);
         }
@@ -255,9 +235,36 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
     public void onConfigFetched() {
         AnalyticsManager.initializeMixpanel(getContext(), false);
         AnalyticsManager.initializeCleverTap(getContext(), false);
+        AnalyticsManager.initializeGoogleAnalytics(getContext());
+        AnalyticsManager.initializeFirebaseAnalytics(getContext());
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {

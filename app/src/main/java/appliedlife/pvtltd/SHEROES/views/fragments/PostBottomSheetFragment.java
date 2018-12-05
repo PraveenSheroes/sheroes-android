@@ -4,14 +4,13 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.view.Gravity;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,7 +20,6 @@ import com.f2prateek.rx.preferences2.Preference;
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.community.AllCommunitiesResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -39,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Community;
 import appliedlife.pvtltd.SHEROES.models.entities.post.MyCommunities;
 import appliedlife.pvtltd.SHEROES.models.entities.post.PollOptionType;
@@ -205,11 +201,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
-    public void startNextScreen() {
-
-    }
-
-    @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         if (getActivity() instanceof CommunityPostActivity) {
             mCommunityPostActivity.showError(s, feedParticipationEnum);
@@ -218,11 +209,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
                 mCreateStoryActivity.showError(s, feedParticipationEnum);
             }
         }
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
@@ -244,11 +230,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
             mMyCommunities.myCommunities = new ArrayList<>(mCommunityList);
             showCommunity();
         }
-    }
-
-    @Override
-    public void showHomeFeedList(List<FeedDetail> feedDetailList) {
-
     }
 
     @Override
@@ -324,11 +305,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
         args.putString(BaseActivity.SOURCE_SCREEN, sourceScreen);
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
-    }
-
-    @Override
-    public void invalidateLikeUnlike(Comment comment) {
-
     }
 
     @Override

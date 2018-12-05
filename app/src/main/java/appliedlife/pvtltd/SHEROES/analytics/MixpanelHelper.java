@@ -29,7 +29,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
@@ -42,6 +41,8 @@ public class MixpanelHelper {
 
     public static final String SCREEN_OPEN = "Screen open";
     public static final String SCREEN_NAME = "Screen name";
+    public static final String COMMUNITY_POST = "community post";
+    public static final String ARTICLE = "article";
 
     @Inject
     Preference<LoginResponse> mUserPreference;
@@ -76,7 +77,7 @@ public class MixpanelHelper {
 
         MixpanelAPI mixpanel = MixpanelHelper.getInstance(context);
 
-        if (mixpanel != null && userSummary != null) {
+        if (mixpanel != null) {
             mixpanel.identify(Long.toString(userSummary.getUserId()));
             mixpanel.getPeople().identify(Long.toString(userSummary.getUserId()));
 
@@ -122,19 +123,6 @@ public class MixpanelHelper {
                 };
                 mixpanel.updateSuperProperties(superPropertyUpdate);
             }
-            if (userSummary.getUserBO().getInterestLabel() != null && !userSummary.getUserBO().getInterestLabel().isEmpty()) {
-                mixpanel.getPeople().set(PeopleProperty.INTEREST.getString(), userSummary.getUserBO().getInterestLabel());
-            }
-
-            if (userSummary.getUserBO().getSkillsLabel() != null && !userSummary.getUserBO().getSkillsLabel().isEmpty()) {
-                mixpanel.getPeople().set(PeopleProperty.SKILLS.getString(), userSummary.getUserBO().getSkillsLabel());
-            }
-
-            if (userSummary.getUserBO().getJobTag() != null && !userSummary.getUserBO().getJobTag().isEmpty()) {
-                mixpanel.getPeople().set(PeopleProperty.CURRENT_STATUS.getString(), userSummary.getUserBO().getJobTag());
-            }
-
-            mixpanel.getPeople().set(PeopleProperty.WORK_EXPERIENCE.getString(), userSummary.getUserBO().getTotalExp());
 
             if (!TextUtils.isEmpty(userSummary.getMobile())) {
                 mixpanel.getPeople().set("$name", userSummary.getFirstName() + " " + userSummary.getLastName());
@@ -390,7 +378,7 @@ public class MixpanelHelper {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(feedDetail.getEntityOrParticipantId()))
-                            .postId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
+                            .pollId(Long.toString(feedDetail.getIdOfEntityOrParticipant()))
                             .communityName(pollSolarObj != null ? pollSolarObj.getPollCommunityName() : "")
                             .communityId(pollSolarObj != null ? Long.toString(pollSolarObj.getCommunityId()) : "not defined")
                             .title(feedDetail.getNameOrTitle())
@@ -461,11 +449,11 @@ public class MixpanelHelper {
         String type = null;
         switch (subType) {
             case AppConstants.FEED_ARTICLE:
-                type = MoEngageConstants.ARTICLE;
+                type = ARTICLE;
                 break;
 
             case AppConstants.FEED_COMMUNITY_POST:
-                type = MoEngageConstants.COMMUNITY_POST;
+                type = COMMUNITY_POST;
                 break;
 
         }

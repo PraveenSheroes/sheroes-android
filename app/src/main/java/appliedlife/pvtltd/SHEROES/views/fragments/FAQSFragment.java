@@ -3,21 +3,18 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
-
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,10 +25,15 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQS;
 import appliedlife.pvtltd.SHEROES.models.entities.she.FAQSResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.she.ICCMemberListResponse;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
 import appliedlife.pvtltd.SHEROES.presenters.SHEPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -63,11 +65,6 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     ScrollView svFaqs;
 
     GenericRecyclerViewAdapter mAdapter;
-
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
-    private long startedTime;
     private LinearLayoutManager mLayoutManager;
 
     @Override
@@ -78,11 +75,6 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         shePresenter.attachView(this);
         setProgressBar(pbFAQsProgreeBar);
         assignNavigationRecyclerListView();
-        payloadBuilder = new PayloadBuilder();
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        moEngageUtills = MoEngageUtills.getInstance();
-        startedTime = System.currentTimeMillis();
-        moEngageUtills.entityMoEngageViewFAQ(getActivity(),mMoEHelper,payloadBuilder,startedTime);
 
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
         CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
@@ -116,8 +108,6 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     public void onDestroyView() {
         super.onDestroyView();
         shePresenter.detachView();
-        long timeSpent=System.currentTimeMillis() - startedTime;
-        moEngageUtills.entityMoEngageViewFAQ(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
 
         AppBarLayout.LayoutParams params = (AppBarLayout.LayoutParams) ((HomeActivity) getActivity()).mToolbar.getLayoutParams();
         CoordinatorLayout.LayoutParams appBarLayoutParams = (CoordinatorLayout.LayoutParams) ((HomeActivity) getActivity()).mAppBarLayout.getLayoutParams();
@@ -129,29 +119,29 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
     public void getAllFAQs(FAQSResponse faqsResponse) {
-        if(faqsResponse!=null && faqsResponse.getListOfFAQs()!=null){
+        if (faqsResponse != null && faqsResponse.getListOfFAQs() != null) {
             List<FAQS> newFaqList = new ArrayList<>();
 
             int i = 1;
             int size = faqsResponse.getListOfFAQs().size();
-            for(FAQS faqs : faqsResponse.getListOfFAQs()){
+            for (FAQS faqs : faqsResponse.getListOfFAQs()) {
 
-                if(i == size){
+                if (i == size) {
                     faqs.setLast(true);
-                }else{
+                } else {
                     faqs.setLast(false);
                 }
 
                 faqs.setItemSelected(false);
 
-                if(faqs.getAnswer()!=null){
+                if (faqs.getAnswer() != null) {
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         faqs.setAnswer(Html.fromHtml(faqs.getAnswer(), 0).toString()); // for 24 api and more
                     } else {
                         faqs.setAnswer(Html.fromHtml(faqs.getAnswer()).toString());
                     }
                 }
-                if(faqs.getQuestion()!=null){
+                if (faqs.getQuestion() != null) {
                     if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                         faqs.setQuestion(Html.fromHtml(faqs.getQuestion(), 0).toString()); // for 24 api and more
                     } else {
@@ -167,11 +157,11 @@ public class FAQSFragment extends BaseFragment implements SHEView {
         }
     }
 
-    public void  setDataChange(FAQS faqs) {
+    public void setDataChange(FAQS faqs) {
         mAdapter.setFAQOnPosition(faqs, faqs.getItemPosition());
         mLayoutManager.scrollToPosition(faqs.getItemPosition());
         mAdapter.notifyDataSetChanged();
-        if(faqs.isLast()){
+        if (faqs.isLast()) {
             goToLastInScrollView();
         }
     }
@@ -195,4 +185,35 @@ public class FAQSFragment extends BaseFragment implements SHEView {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
 }

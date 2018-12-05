@@ -1,10 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +21,15 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
-import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
@@ -54,6 +57,8 @@ public class BookmarksFragment extends BaseFragment {
     private SwipPullRefreshList mPullRefreshList;
     @Inject
     AppUtils mAppUtils;
+    @Inject
+    FeedUtils feedUtils;
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
     private  int mPageNo=AppConstants.ONE_CONSTANT;
@@ -91,8 +96,8 @@ public class BookmarksFragment extends BaseFragment {
             }
             @Override
             public void dismissReactions() {
-                if (null != ((HomeActivity) getActivity()).popupWindow) {
-                    ((HomeActivity) getActivity()).popupWindow.dismiss();
+                if (null != feedUtils.mPopupWindow) {
+                    feedUtils.dismissWindow();
                 }
             }
         });
@@ -112,10 +117,16 @@ public class BookmarksFragment extends BaseFragment {
         });
         return view;
     }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
+    }
+
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
         mProgressBarFirstLoad.setVisibility(View.GONE);
-      super.getFeedListSuccess(feedResponsePojo);
+//        getFeedListSuccess(feedResponsePojo);
     }
 
     @Override
@@ -124,24 +135,37 @@ public class BookmarksFragment extends BaseFragment {
     }
 
     @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
     }
+
     public void markAsSpamCommunityPost(FeedDetail feedDetail) {
         super.markAsSpamCommunityPost(feedDetail);
     }
+
     public void deleteCommunityPost(FeedDetail feedDetail) {
         super.deleteCommunityPost(feedDetail);
-    }
-    public void bookMarkForCard(FeedDetail feedDetail, FragmentOpen fragmentOpen) {
-        setFragmentData(fragmentOpen);
-       super.bookMarkForCard(feedDetail);
-    }
-
-
-    public void likeAndUnlikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-       super.likeAndUnlikeRequest(baseResponse,reactionValue,position);
     }
 
     @Override
@@ -149,13 +173,9 @@ public class BookmarksFragment extends BaseFragment {
         return mHomePresenter;
     }
 
-
-    public void commentListRefresh(FeedDetail feedDetail, FeedParticipationEnum feedParticipationEnum) {
-     super.commentListRefresh(feedDetail,feedParticipationEnum);
-    }
-
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
 }

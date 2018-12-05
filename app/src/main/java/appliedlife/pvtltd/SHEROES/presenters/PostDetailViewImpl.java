@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
 
-import android.support.v7.widget.RecyclerView;
-
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
@@ -13,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsEventType;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -22,8 +21,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.bookmark.BookmarkResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
@@ -153,7 +152,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
             return;
         }
         getMvpView().startProgressBar();
-        mSheroesAppServiceApi.getPollDetail(mFeedDetailObjId,feedRequestPojo)
+        mSheroesAppServiceApi.getPollDetail(mFeedDetailObjId, feedRequestPojo)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
@@ -181,9 +180,9 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                             getMvpView().addData(0, mFeedDetail);
                             headerCount++;
                             getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
-                        }else
-                        {
                             getMvpView().stopProgressBar();
+                        } else {
+                            getMvpView().onPostDeleted();
                         }
                     }
                 });
@@ -282,7 +281,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -346,6 +344,8 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     getMvpView().addData(0, mFeedDetail);
                     headerCount++;
                     getAllCommentFromPresenter(getCommentRequestBuilder(mFeedDetail.getEntityOrParticipantId(), pageNumber));
+                } else {
+                    getMvpView().onPostDeleted();
                 }
             }
         });
@@ -440,7 +440,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public void editCommentListFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId) {
+    public void editCommentListFromPresenter(final CommentReactionRequestPojo commentReactionRequestPojo, final int editDeleteId, final Comment comment) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_COMMENT_REACTION);
             return;
@@ -463,18 +463,20 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 getMvpView().stopProgressBar();
                 if (commentResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
 
-                    if (editDeleteId == AppConstants.ONE_CONSTANT) {
+                    if (editDeleteId == AppConstants.COMMENT_DELETE) {
                         int pos = findCommentPositionById(mBaseResponseList, commentReactionRequestPojo.getParticipationId());
                         if (pos != RecyclerView.NO_POSITION) {
                             mBaseResponseList.remove(pos);
                             getMvpView().removeData(pos);
-
                             mFeedDetail.setNoOfComments(mFeedDetail.getNoOfComments() - 1);
                             mBaseResponseList.set(0, mFeedDetail);
                             getMvpView().setData(0, mFeedDetail);
                         }
                     } else {
-                        getMvpView().updateComment(commentResponsePojo.getCommentReactionModel());
+                        Comment updatedComment = commentResponsePojo.getCommentReactionModel();
+                        updatedComment.isLiked = comment.isLiked;
+                        updatedComment.likeCount = comment.likeCount;
+                        getMvpView().updateComment(updatedComment);
                     }
                 }
             }
@@ -651,7 +653,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
 
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override
@@ -722,7 +723,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                         PollSolarObj pollSolarObj = null;
                         if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             pollSolarObj = voteResponse.getPollReactionModel().getPollSolrObj();
-                            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL,pollOptionModel.getPollOptionId());
+                            AnalyticsManager.trackPollAction(Event.POLL_VOTED, feedDetail, PostDetailActivity.SCREEN_LABEL, pollOptionModel.getPollOptionId());
                         } else if (voteResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
                             pollSolarObj = (PollSolarObj) feedDetail;
                             pollSolarObj.setTotalNumberOfResponsesOnPoll(pollSolarObj.getTotalNumberOfResponsesOnPoll() - AppConstants.ONE_CONSTANT);
@@ -808,7 +809,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 feedDetail.setNoOfLikes(mFeedDetail.getNoOfLikes() + AppConstants.ONE_CONSTANT);
                 mBaseResponseList.set(0, feedDetail);
                 getMvpView().setData(0, feedDetail);
-
             }
 
             @Override
@@ -824,7 +824,6 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                 } else if (feedDetail instanceof PollSolarObj) {
                     AnalyticsManager.trackPollAction(Event.POLL_UNLIKED, feedDetail, PostDetailActivity.SCREEN_LABEL);
                 }
-
                 getMvpView().setData(0, feedDetail);
             }
         });
@@ -923,18 +922,19 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         if (CommonUtil.isNotEmpty(getMvpView().getStreamType())) {
             mFeedDetail.setStreamType(getMvpView().getStreamType());
         }
-        mBaseResponseList.set(0, userPostSolrObj);
-        getMvpView().setData(0, userPostSolrObj);
+        if (mBaseResponseList.size() > 0) {
+            mBaseResponseList.set(0, userPostSolrObj);
+            getMvpView().setData(0, userPostSolrObj);
+        }
     }
 
 
-    public  void updateFollowedAuthor(FeedDetail userPostSolrObj, boolean isFollowed) {
-        if(mFeedDetail!=null && mFeedDetail instanceof UserPostSolrObj) {
+    public void updateFollowedAuthor(boolean isFollowed) {
+        if (mFeedDetail != null && mFeedDetail instanceof UserPostSolrObj) {
             UserPostSolrObj userPostDetail = (UserPostSolrObj) mFeedDetail;
             userPostDetail.setSolrIgnoreIsUserFollowed(isFollowed);
-            mFeedDetail = userPostSolrObj;
-            mBaseResponseList.set(0, userPostSolrObj);
-            getMvpView().setData(0, userPostSolrObj);
+            mBaseResponseList.set(0, userPostDetail);
+            getMvpView().setData(0, userPostDetail);
         }
     }
 
@@ -1146,16 +1146,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -1170,12 +1170,12 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                         } else {
-                            if(mentorFollowUnfollowResponse.isAlreadyFollowed()) {
+                            if (championFollowedResponse.isAlreadyFollowed()) {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(true);
                             } else {
                                 userPostSolrObj.setSolrIgnoreIsUserFollowed(false);
@@ -1195,16 +1195,16 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
         }
         getMvpView().startProgressBar();
         mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         return mentorFollowUnfollowResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -1219,7 +1219,7 @@ public class PostDetailViewImpl extends BasePresenter<IPostDetailView> {
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse mentorFollowUnfollowResponse) {
                         getMvpView().stopProgressBar();
                         if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                             if (userPostSolrObj.getEntityOrParticipantTypeId() == 7) {

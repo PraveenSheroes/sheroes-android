@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -18,6 +18,7 @@ import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 
 /**
  * Helper class for Impression help to detect visible impression and exit of impression view
@@ -260,15 +261,11 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
             //Ignore header
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER))
                 return null;
-
-            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.CAROUSEL_SUB_TYPE)) {
-                //Add position in list
-            }
-
             if (prefs != null && prefs.contains(AppConstants.FEED_CONFIG_VERSION)) {
-                impressionData.setFeedConfigVersion(Integer.valueOf(prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0")));
+                String configVersion = prefs.getString(AppConstants.FEED_CONFIG_VERSION, "0");
+                configVersion = StringUtil.isNotNullOrEmptyString(configVersion) ? configVersion : "0";
+                impressionData.setFeedConfigVersion(Integer.valueOf(configVersion));
             }
-
             impressionData.setTimeStamp(System.currentTimeMillis());
             impressionData.setPostType(feedDetail.getSubType());
             impressionData.setStreamName(feedDetail.getStreamType());
@@ -407,8 +404,7 @@ public class ImpressionHelper implements ImpressionTimer.ITimerCallback {
 
     @Override
     public void sendImpressions() {
-        mImpressionPresenter.sendImpressions(mImpressionBatchSize,null, true);
+        mImpressionPresenter.sendImpressions(mImpressionBatchSize, null, true);
     }
-
     //endregion
 }

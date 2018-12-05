@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +22,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ChallengeSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.EventSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.OrganizationFeedObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
@@ -38,7 +36,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.AppIntroCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ChallengeFeedHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityFlatViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.EventCardHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedArticleHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedCommunityPostHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
@@ -46,7 +43,6 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.HomeHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.ImageViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.LeaderBoardViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.NoStoriesHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.OrgReviewCardHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -81,7 +77,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     @Override
     public RecyclerView.ViewHolder customOnCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater mInflater = LayoutInflater.from(mContext);
-
         switch (viewType) {
             case TYPE_ARTICLE:
                 return new FeedArticleHolder(mInflater.inflate(R.layout.feed_article_card_normal, parent, false), mBaseHolderInterface);
@@ -93,14 +88,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new LoaderViewHolder(mInflater.inflate(R.layout.infinite_loading, parent, false));
             case TYPE_CHALLENGE:
                 return new ChallengeFeedHolder(mInflater.inflate(R.layout.challenge_feed_item, parent, false), mBaseHolderInterface);
-            case TYPE_EVENT:
-                return new EventCardHolder(mInflater.inflate(R.layout.event_card_holder, parent, false), mBaseHolderInterface);
-            case TYPE_ORGANIZATION:
-                return new OrgReviewCardHolder(mInflater.inflate(R.layout.review_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_CAROUSEL:
-                return new CarouselViewHolder(mInflater.inflate(R.layout.mentor_suggested_card_holder, parent, false), mBaseHolderInterface);
+                return new CarouselViewHolder(mInflater.inflate(R.layout.champion_suggested_card_holder, parent, false), mBaseHolderInterface);
             case TYPE_USER_COMPACT:
                 return new UserProfileCompactViewHolder(mInflater.inflate(R.layout.list_user_flat_item, parent, false), mContext, mBaseHolderInterface);
             case TYPE_LEADERBOARD:
@@ -111,8 +102,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 return new HomeHeaderViewHolder(mInflater.inflate(R.layout.header_view_layout, parent, false), mBaseHolderInterface);
             case TYPE_IMAGE:
                 return new ImageViewHolder(mInflater.inflate(R.layout.image_item, parent, false), mBaseHolderInterface);
-            case TYPE_NO_STORIES:
-                return new NoStoriesHolder(mInflater.inflate(R.layout.no_stories_holder, parent, false), mBaseHolderInterface);
+            case TYPE_EMPTY_VIEW:
+                return new NoStoriesHolder(mInflater.inflate(R.layout.empty_view_holder, parent, false), mBaseHolderInterface);
         }
         return null;
     }
@@ -130,7 +121,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 FeedCommunityPostHolder feedCommunityPostHolder = (FeedCommunityPostHolder) holder;
                 UserPostSolrObj userPostSolrObj = (UserPostSolrObj) mFeedDetailList.get(position);
                 feedCommunityPostHolder.bindData(userPostSolrObj, mContext, position);
-
                 break;
             case TYPE_POLL:
                 FeedPollCardHolder feedPollHolder = (FeedPollCardHolder) holder;
@@ -145,16 +135,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 ChallengeFeedHolder challengeFeedHolder = (ChallengeFeedHolder) holder;
                 ChallengeSolrObj challengeSolrObj = (ChallengeSolrObj) mFeedDetailList.get(position);
                 challengeFeedHolder.bindData(challengeSolrObj, mContext, position);
-                break;
-            case TYPE_EVENT:
-                EventCardHolder eventCardHolder = (EventCardHolder) holder;
-                UserPostSolrObj userPostSolrObj1 = (UserPostSolrObj) mFeedDetailList.get(position);
-                eventCardHolder.bindData(userPostSolrObj1, mContext, position);
-                break;
-            case TYPE_ORGANIZATION:
-                OrgReviewCardHolder orgReviewCardHolder = (OrgReviewCardHolder) holder;
-                UserPostSolrObj userPostSolrObj2 = (UserPostSolrObj) mFeedDetailList.get(position);
-                orgReviewCardHolder.bindData(userPostSolrObj2, mContext, position);
                 break;
             case TYPE_INRO:
                 AppIntroCardHolder appIntroCardHolder = (AppIntroCardHolder) holder;
@@ -195,7 +175,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
                 imageViewHolder.bindData(feedDetail2, mContext, position);
                 break;
 
-            case TYPE_NO_STORIES:
+            case TYPE_EMPTY_VIEW:
                 NoStoriesHolder noStoriesHolder = (NoStoriesHolder) holder;
                 FeedDetail noStoryFeed = mFeedDetailList.get(position);
                 noStoriesHolder.bindData(noStoryFeed, mContext, position);
@@ -206,8 +186,6 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_ARTICLE = 1;
     private static final int TYPE_USER_POST = 2;
     private static final int TYPE_CHALLENGE = 5;
-    private static final int TYPE_EVENT = 6;
-    private static final int TYPE_ORGANIZATION = 7;
     private static final int TYPE_INRO = 8;
     private static final int TYPE_CAROUSEL = 9;
     private static final int TYPE_USER_COMPACT = 10;
@@ -215,7 +193,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private static final int TYPE_COMMUNITY = 12;
     private static final int TYPE_HOME_FEED_HEADER = 13;
     private static final int TYPE_IMAGE = 14;
-    private static final int TYPE_NO_STORIES = 15;
+    private static final int TYPE_EMPTY_VIEW = 15;
     private static final int TYPE_POLL = 3;
     private static final int TYPE_LOADER = -1;
 
@@ -232,15 +210,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             }
 
             if (feedDetail instanceof UserPostSolrObj) {
-                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-                if (userPostSolrObj.getCommunityId() == AppConstants.EVENT_COMMUNITY_ID && userPostSolrObj.getCommunityTypeId() != AppConstants.ORGANISATION_COMMUNITY_TYPE_ID) {
-                    return TYPE_EVENT;
-
-                } else if (userPostSolrObj.getCommunityTypeId() == AppConstants.ORGANISATION_COMMUNITY_TYPE_ID && (!userPostSolrObj.isCommentAllowed())) {
-                    return TYPE_ORGANIZATION;
-                } else {
-                    return TYPE_USER_POST;
-                }
+                return TYPE_USER_POST;
             }
             if (feedDetail instanceof PollSolarObj) {
                 return TYPE_POLL;
@@ -248,15 +218,10 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail instanceof ChallengeSolrObj) {
                 return TYPE_CHALLENGE;
             }
-            if (feedDetail instanceof EventSolrObj) {
-                return TYPE_EVENT;
-            }
-            if (feedDetail instanceof OrganizationFeedObj) {
-                return TYPE_ORGANIZATION;
-            }
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.APP_INTRO_SUB_TYPE)) {
                 return TYPE_INRO;
             }
+
             if (feedDetail instanceof CarouselDataObj) {
                 return TYPE_CAROUSEL;
             }
@@ -276,8 +241,8 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.HOME_FEED_HEADER)) {
                 return TYPE_HOME_FEED_HEADER;
             }
-            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.NO_STORIES)) {
-                return TYPE_NO_STORIES;
+            if (feedDetail.getSubType().equalsIgnoreCase(AppConstants.TYPE_EMPTY_VIEW)) {
+                return TYPE_EMPTY_VIEW;
             }
         }
         return TYPE_LOADER;

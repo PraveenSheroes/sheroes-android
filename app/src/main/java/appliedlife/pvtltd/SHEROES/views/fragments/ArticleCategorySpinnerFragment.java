@@ -1,9 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +14,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -24,27 +22,29 @@ import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.ArticleCategory;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
-import appliedlife.pvtltd.SHEROES.social.GoogleAnalyticsEventActions;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.GenericRecyclerViewAdapter;
-import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
  * Created by Praveen_Singh on 05-01-2017.
  */
 
-public class ArticleCategorySpinnerFragment extends BaseFragment implements HomeView {
+public class ArticleCategorySpinnerFragment extends BaseFragment {
     private static final String SCREEN_LABEL = "Article Category Spinner Screen";
     public static final int CATEGORY_SELECTED_DONE = 1;
     public static final int CATEGORY_SELECTED_CANCEL = 0;
@@ -85,7 +85,6 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         } else {
             mHomePresenter.getMasterDataToPresenter();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.ARTICLE_SELECT_CATEGORY);
         return view;
     }
 
@@ -106,24 +105,17 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         mHomePresenter.detachView();
     }
 
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-        setArticleCategoryFilterValues();
-    }
-
     @OnClick(R.id.tv_cancel)
     public void onCancelClick() {
-        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_CANCEL);
         }
-
     }
 
     @OnClick(R.id.tv_done)
     public void onDoneClick() {
-        if (getActivity() != null && !getActivity().isFinishing()&& getActivity() instanceof HomeActivity) {
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).onCancelDone(CATEGORY_SELECTED_DONE);
-            ((SheroesApplication) getActivity().getApplication()).trackEvent(GoogleAnalyticsEventActions.CATEGORY_SEARCH_FILTER, GoogleAnalyticsEventActions.USED_FILTER_ON_ARTICLES, AppConstants.EMPTY_STRING);
         }
     }
 
@@ -132,31 +124,33 @@ public class ArticleCategorySpinnerFragment extends BaseFragment implements Home
         return SCREEN_LABEL;
     }
 
-    private void setArticleCategoryFilterValues() {
-        if (null != mUserPreferenceMasterData && mUserPreferenceMasterData.isSet() && null != mUserPreferenceMasterData.get().getData()) {
-            HashMap<String, HashMap<String, ArrayList<LabelValue>>> masterDataResult = mUserPreferenceMasterData.get().getData();
-            if (null != masterDataResult && null != masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY)) {
-                {
-                    HashMap<String, ArrayList<LabelValue>> hashMap = masterDataResult.get(AppConstants.MASTER_DATA_ARTICLE_KEY);
-                    List<LabelValue> labelValueArrayList = hashMap.get(AppConstants.MASTER_DATA_POPULAR_CATEGORY);
-                    if (StringUtil.isNotEmptyCollection(labelValueArrayList)) {
-                        List<ArticleCategory> articleCategoryList = new ArrayList<>();
-                        ArticleCategory homeSpinnerFirst = new ArticleCategory();
-                        homeSpinnerFirst.setName(AppConstants.FOR_ALL);
-                        articleCategoryList.add(homeSpinnerFirst);
-                        for (LabelValue lookingFor : labelValueArrayList) {
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
 
-                            ArticleCategory articleCategory = new ArticleCategory();
-                            articleCategory.setId(lookingFor.getValue());
-                            articleCategory.setName(lookingFor.getLabel());
-                            articleCategoryList.add(articleCategory);
-                        }
-                        mArticleCategoryList = articleCategoryList;
-                    }
-                    mAdapter.setSheroesGenericListData(mArticleCategoryList);
-                    mAdapter.notifyDataSetChanged();
-                }
-            }
-        }
+    }
+
+    @Override
+    public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+
+    }
+
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
     }
 }

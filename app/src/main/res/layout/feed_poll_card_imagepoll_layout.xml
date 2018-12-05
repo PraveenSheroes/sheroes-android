@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_imagepoll_left_container"
         android:layout_width="@dimen/feed_imagepoll_width"
         android:layout_height="wrap_content">
@@ -56,9 +56,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_left"
             vernacular:customTextFontFamily="@string/regular_font" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_imagepoll_right_container"
         android:layout_width="@dimen/feed_imagepoll_width"
         android:layout_height="wrap_content"
@@ -110,6 +110,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_feed_image_poll_right"
             vernacular:customTextFontFamily="@string/regular_font" />
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

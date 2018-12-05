@@ -6,13 +6,11 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
+import androidx.core.content.FileProvider;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.webkit.MimeTypeMap;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+
 import com.crashlytics.android.Crashlytics;
 
 import java.io.BufferedReader;
@@ -25,11 +23,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
-import io.reactivex.Observable;
-
-
 
 /**
  * Created by Sowrabh on 2/22/14.
@@ -101,7 +94,7 @@ public class FileUtil {
 
     public static File createImageFile(String path, String imageFileName) throws IOException {
         // Create an image file name
-        Log.v(TAG, "createImageFile() " + path + "/" + imageFileName);
+        LogUtils.info(TAG, "createImageFile() " + path + "/" + imageFileName);
         File storageDir = new File(path);
         boolean mkdirs = createDirIfNotExists(storageDir.getAbsolutePath());
         File image = new File(storageDir, imageFileName);
@@ -261,7 +254,7 @@ public class FileUtil {
                 datasets.add(entries);
             }
         } catch (Exception e) {
-            Log.e(TAG, "Error reading file " + file + " - " + e.getMessage());
+            LogUtils.error(TAG, "Error reading file " + file + " - " + e.getMessage());
             Crashlytics.getInstance().core.logException(e);
         } finally {
             bufferedReader.close();

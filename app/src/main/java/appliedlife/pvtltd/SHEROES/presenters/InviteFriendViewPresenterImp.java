@@ -16,12 +16,11 @@ import java.util.TreeSet;
 
 import javax.inject.Inject;
 
-import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.MentorFollowUnfollowResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.MentorUserprofile.PublicProfileListRequest;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.AllContactListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.invitecontact.ContactListSyncRequest;
@@ -422,8 +421,8 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
         }
         getMvpView().startProgressBar();
         getFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -438,10 +437,10 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() + 1);
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() + 1);
                             userSolrObj.setSolrIgnoreIsUserFollowed(true);
                             userSolrObj.setSolrIgnoreIsMentorFollowed(true);
                         } else {
@@ -461,8 +460,8 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
         }
         getMvpView().startProgressBar();
         getUnFollowFromModel(publicProfileListRequest)
-                .compose(this.<MentorFollowUnfollowResponse>bindToLifecycle())
-                .subscribe(new DisposableObserver<MentorFollowUnfollowResponse>() {
+                .compose(this.<ChampionFollowedResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<ChampionFollowedResponse>() {
                     @Override
                     public void onComplete() {
                         getMvpView().stopProgressBar();
@@ -476,11 +475,11 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
                     }
 
                     @Override
-                    public void onNext(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
+                    public void onNext(ChampionFollowedResponse championFollowedResponse) {
                         getMvpView().stopProgressBar();
-                        if (mentorFollowUnfollowResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (userSolrObj.getSolrIgnoreNoOfMentorFollowers() > 0) {
-                                userSolrObj.setSolrIgnoreNoOfMentorFollowers(userSolrObj.getSolrIgnoreNoOfMentorFollowers() - 1);
+                        if (championFollowedResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            if (userSolrObj.getFollowerCount() > 0) {
+                                userSolrObj.setFollowerCount(userSolrObj.getFollowerCount() - 1);
                             }
                             userSolrObj.setSolrIgnoreIsMentorFollowed(false);
                             userSolrObj.setSolrIgnoreIsUserFollowed(false);
@@ -495,24 +494,24 @@ public class InviteFriendViewPresenterImp extends BasePresenter<IInviteFriendVie
     }
 
 
-    private Observable<MentorFollowUnfollowResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
+    private Observable<ChampionFollowedResponse> getFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
         return mSheroesAppServiceApi.getMentorFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse championFollowedResponse) {
+                        return championFollowedResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    private Observable<MentorFollowUnfollowResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
+    private Observable<ChampionFollowedResponse> getUnFollowFromModel(PublicProfileListRequest publicProfileListRequest) {
         return mSheroesAppServiceApi.getMentorUnFollowFromApi(publicProfileListRequest)
-                .map(new Function<MentorFollowUnfollowResponse, MentorFollowUnfollowResponse>() {
+                .map(new Function<ChampionFollowedResponse, ChampionFollowedResponse>() {
                     @Override
-                    public MentorFollowUnfollowResponse apply(MentorFollowUnfollowResponse mentorFollowUnfollowResponse) {
-                        return mentorFollowUnfollowResponse;
+                    public ChampionFollowedResponse apply(ChampionFollowedResponse championFollowedResponse) {
+                        return championFollowedResponse;
                     }
                 })
                 .subscribeOn(Schedulers.io())

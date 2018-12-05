@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/toolbar"
@@ -47,4 +47,4 @@
             android:textColor="@color/post_action"
             vernacular:customTextFontFamily="@string/medium_font" />
     </RelativeLayout>
-</android.support.v7.widget.Toolbar>
+</androidx.appcompat.widget.Toolbar>

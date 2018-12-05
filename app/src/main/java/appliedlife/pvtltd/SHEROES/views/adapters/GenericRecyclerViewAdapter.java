@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +42,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     private String mCallFromType = AppConstants.FOR_ALL;
     private long mUserId;
     private int mPosition;
+
     public GenericRecyclerViewAdapter(Context context, BaseHolderInterface viewHolderInterface) {
         this.context = context;
         this.viewHolderInterface = viewHolderInterface;
@@ -51,12 +52,15 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.mSheroesGenericListData = mSheroesGenericListData;
         this.filterListData = mSheroesGenericListData;
     }
+
     public void setSuggestedCardPosition(int position) {
         mPosition = position;
     }
+
     public void setUserId(long userId) {
         mUserId = userId;
     }
+
     public void setCallForRecycler(String callFromType) {
         this.mCallFromType = callFromType;
     }
@@ -76,18 +80,21 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
     public void addAllDataForList(List<T> data) {
         this.filterListData.addAll(data);
     }
+
     public void setSuggestedDataOnPosition(CarouselDataObj carouselDataObj, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
             this.filterListData.add(position, (T) carouselDataObj);
         }
     }
+
     public void setDataOnPosition(FeedDetail feedDetail, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
             this.filterListData.add(position, (T) feedDetail);
         }
     }
+
     public void setMentoreDataOnPosition(UserSolrObj userSolrObj, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
@@ -99,17 +106,20 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
         this.filterListData.remove(position);
         this.filterListData.add(position, (T) faqs);
     }
+
     public void setMentoreDataOnPosition(CarouselDataObj carouselDataObj, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.remove(position);
             this.filterListData.add(position, (T) carouselDataObj);
         }
     }
+
     public void addDataOnPosition(FeedDetail feedDetail, int position) {
         if (StringUtil.isNotEmptyCollection(filterListData) && filterListData.size() > position) {
             this.filterListData.add(position, (T) feedDetail);
         }
     }
+
     public void clearAllDataForList() {
         this.filterListData.clear();
     }
@@ -151,7 +161,7 @@ public class GenericRecyclerViewAdapter<T extends BaseResponse> extends Recycler
 
     @Override
     public int getItemViewType(int position) {
-        return HolderMapping.getOrdinal(filterListData.get(position),mUserId , mCallFromType);
+        return HolderMapping.getOrdinal(filterListData.get(position), mUserId, mCallFromType);
     }
 
     @Override

@@ -20,9 +20,6 @@ public interface BaseMvpView {
 
     void stopProgressBar();
 
-    void startNextScreen();
-
     void showError(String s, FeedParticipationEnum feedParticipationEnum);
 
-    void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult);
 }

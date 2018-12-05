@@ -5,17 +5,18 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.viewpager.widget.ViewPager;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,7 @@ import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -51,7 +53,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.MasterDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Address;
 import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
@@ -62,6 +63,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.ContestStatus;
+import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestInfoFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ContestWinnerFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
@@ -80,7 +82,7 @@ import static appliedlife.pvtltd.SHEROES.enums.MenuEnum.USER_COMMENT_ON_CARD_MEN
  * Created by ujjwal on 11/20/17.
  */
 
-public class ContestActivity extends BaseActivity implements IContestView {
+public class ContestActivity extends BaseActivity implements IContestView, BaseHolderInterface {
     private static final String SCREEN_LABEL = "Challenge Activity";
     public static final String IS_CHALLENGE = "Is Challenge";
     public static final String CHALLENGE_OBJ = "Challenge Obj";
@@ -101,6 +103,9 @@ public class ContestActivity extends BaseActivity implements IContestView {
 
     @Inject
     Preference<LoginResponse> mUserPreference;
+
+    @Inject
+    FeedUtils feedUtils;
 
     //region Bind view variables
     @Bind(R.id.toolbar)
@@ -177,7 +182,7 @@ public class ContestActivity extends BaseActivity implements IContestView {
             initializeAllViews();
         }
         setupToolbarItemsColor();
-        setConfigurableShareOption(isWhatsAppShare());
+        feedUtils.setConfigurableShareOption(isWhatsAppShare());
     }
 
     private boolean isWhatsAppShare() {
@@ -572,19 +577,10 @@ public class ContestActivity extends BaseActivity implements IContestView {
         mProgressBar.setVisibility(View.GONE);
     }
 
-    @Override
-    public void startNextScreen() {
-
-    }
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
-    }
-
-    @Override
-    public void getMasterDataResponse(HashMap<String, HashMap<String, ArrayList<LabelValue>>> mapOfResult) {
-
     }
 
     @Override
@@ -596,32 +592,33 @@ public class ContestActivity extends BaseActivity implements IContestView {
         if (baseResponse instanceof Comment) {
             // setAllValues(mFragmentOpen);
             /* Comment mCurrentStatusDialog list  comment menu option edit,delete */
-            super.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU);
+            feedUtils.clickMenuItem(view, baseResponse, USER_COMMENT_ON_CARD_MENU, this, getScreenName());
         }
+    }
+
+    @Override
+    public void dataOperationOnClick(BaseResponse baseResponse) {
+    }
+
+    @Override
+    public void setListData(BaseResponse data, boolean flag) {
+    }
+
+    @Override
+    public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
     }
 
     private void feedRelatedOptions(View view, BaseResponse baseResponse) {
         int id = view.getId();
         switch (id) {
             case R.id.tv_feed_community_post_user_comment:
-                super.feedCardsHandled(view, baseResponse);
+                feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
                 break;
             default:
-                super.feedCardsHandled(view, baseResponse);
+                feedUtils.feedCardsHandled(view, baseResponse, this, getScreenName());
 
         }
     }
-
-    @Override
-    protected void openCommentReactionFragment(FeedDetail feedDetail) {
-        clickCommentReactionFragment(feedDetail);
-
-    }
-
-    private void clickCommentReactionFragment(FeedDetail feedDetail) {
-        PostDetailActivity.navigateTo(this, SCREEN_LABEL, feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, null, false);
-    }
-
 
     //endregion
 
@@ -730,6 +727,11 @@ public class ContestActivity extends BaseActivity implements IContestView {
                 championDetailActivity(postDetails.getCreatedBy(), 0, postDetails.isAuthorMentor(), SOURCE_SCREEN);
             }
         }
+    }
+
+    @Override
+    public void contestOnClick(Contest mContest, CardView mCardChallenge) {
+
     }
 
     private void championDetailActivity(Long userId, int position, boolean isMentor, String source) {

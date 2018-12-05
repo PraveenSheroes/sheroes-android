@@ -1,20 +1,17 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
+import androidx.annotation.Nullable;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-
-import com.moe.pushlibrary.MoEHelper;
-import com.moe.pushlibrary.PayloadBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +27,11 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
-import appliedlife.pvtltd.SHEROES.moengage.MoEngageUtills;
+import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
@@ -48,7 +47,6 @@ import butterknife.ButterKnife;
 /**
  * Created by Praveen_Singh on 09-01-2017.
  */
-
 
 public class ArticlesFragment extends BaseFragment {
     public static final String SCREEN_LABEL = "Article Listing Screen";
@@ -79,19 +77,12 @@ public class ArticlesFragment extends BaseFragment {
     CardView loaderGif;
     private List<Long> categoryIdList = new ArrayList<>();
     private View view;
-    private MoEHelper mMoEHelper;
-    private MoEngageUtills moEngageUtills;
-    private PayloadBuilder payloadBuilder;
-    private long startedTime;
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
-        mMoEHelper = MoEHelper.getInstance(getActivity());
-        payloadBuilder = new PayloadBuilder();
-        moEngageUtills = MoEngageUtills.getInstance();
-        startedTime=System.currentTimeMillis();
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -108,14 +99,14 @@ public class ArticlesFragment extends BaseFragment {
         mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
-                if(null!=getActivity())
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
+                if (null != getActivity())
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onShow() {
-                if(null!=getActivity())
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+                if (null != getActivity())
+                    ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -123,24 +114,21 @@ public class ArticlesFragment extends BaseFragment {
 
             }
         });
-        ((SimpleItemAnimator)mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
+        ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mFragmentListRefreshData.setCategoryIdList(categoryIdList);
         categoryArticleFilter(categoryIdList);
-        long timeSpent=System.currentTimeMillis()-startedTime;
-        moEngageUtills.entityMoEngageArticleListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
+
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 categoryArticleFilter(categoryIdList);
             }
         });
-        if(null!=getActivity()) {
+        if (null != getActivity()) {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
-        ((SheroesApplication) getActivity().getApplication()).trackScreenView(AppConstants.ARTICLE_LISTING);
-
         return view;
     }
 
@@ -153,7 +141,7 @@ public class ArticlesFragment extends BaseFragment {
         mTrendingFeedDetail.clear();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo=mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
+        FeedRequestPojo feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
         mHomePresenter.getFeedFromPresenter(feedRequestPojo);
     }
@@ -167,6 +155,11 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     protected SheroesPresenter getPresenter() {
         return mHomePresenter;
+    }
+
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
+
     }
 
     @Override
@@ -211,10 +204,10 @@ public class ArticlesFragment extends BaseFragment {
                 }
                 mPullRefreshList.allListData(trendingWithNormalArticleList);
                 mFragmentListRefreshData.setPageNo(++mPageNo);
-                List<FeedDetail> data=null;
-                FeedDetail feedProgressBar=new FeedDetail();
+                List<FeedDetail> data = null;
+                FeedDetail feedProgressBar = new FeedDetail();
                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-                data=mPullRefreshList.getFeedResponses();
+                data = mPullRefreshList.getFeedResponses();
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
                 mAdapter.notifyDataSetChanged();
@@ -230,21 +223,20 @@ public class ArticlesFragment extends BaseFragment {
                 }
                 mPullRefreshList.allListData(newFeedDetailList);
                 mFragmentListRefreshData.setPageNo(++mPageNo);
-                List<FeedDetail> data=null;
-                FeedDetail feedProgressBar=new FeedDetail();
+                List<FeedDetail> data = null;
+                FeedDetail feedProgressBar = new FeedDetail();
                 feedProgressBar.setSubType(AppConstants.FEED_PROGRESS_BAR);
-                data=mPullRefreshList.getFeedResponses();
-                int position=data.size()- newFeedDetailList.size();
-                if(position>0) {
-                    data.remove(position-1);
+                data = mPullRefreshList.getFeedResponses();
+                int position = data.size() - newFeedDetailList.size();
+                if (position > 0) {
+                    data.remove(position - 1);
                 }
                 data.add(feedProgressBar);
                 mAdapter.setSheroesGenericListData(data);
                 if (mPageNo == AppConstants.TWO_CONSTANT) {
                     mAdapter.notifyDataSetChanged();
-                }else
-                {
-                    mAdapter.notifyItemRangeChanged(position+1, newFeedDetailList.size());
+                } else {
+                    mAdapter.notifyItemRangeChanged(position + 1, newFeedDetailList.size());
                 }
             }
         } else if (!StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses())) {
@@ -258,6 +250,26 @@ public class ArticlesFragment extends BaseFragment {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
     }
 
+    @Override
+    public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
+
+    }
+
+    @Override
+    public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
+
+    }
+
+    @Override
+    public void onConfigFetched() {
+
+    }
+
+    @Override
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
+
+    }
+
     public void bookMarkForCard(FeedDetail feedDetail) {
         super.bookMarkForCard(feedDetail);
     }
@@ -266,8 +278,6 @@ public class ArticlesFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         mHomePresenter.detachView();
-        long timeSpent=System.currentTimeMillis()-startedTime;
-        moEngageUtills.entityMoEngageArticleListing(getActivity(),mMoEHelper,payloadBuilder,timeSpent);
     }
 
     @Override

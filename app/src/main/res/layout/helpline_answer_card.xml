@@ -1,5 +1,4 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_view"
     android:layout_width="fill_parent"
@@ -89,7 +88,7 @@
                     style="@style/TextView16spRegularHelpline"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
-        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/time_answer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

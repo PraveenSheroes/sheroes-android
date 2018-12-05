@@ -17,7 +17,7 @@ package appliedlife.pvtltd.SHEROES.usertagging.mentions;
 import android.graphics.Color;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
+import androidx.annotation.ColorInt;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

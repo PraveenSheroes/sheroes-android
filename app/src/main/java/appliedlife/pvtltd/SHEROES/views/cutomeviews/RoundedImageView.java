@@ -27,16 +27,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
-import android.support.annotation.ColorInt;
-import android.support.annotation.DimenRes;
-import android.support.annotation.DrawableRes;
-import android.support.v7.widget.AppCompatImageView;
+import androidx.annotation.ColorInt;
+import androidx.annotation.DimenRes;
+import androidx.annotation.DrawableRes;
+import androidx.appcompat.widget.AppCompatImageView;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.crashlytics.android.Crashlytics;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 public class RoundedImageView extends AppCompatImageView {
@@ -270,7 +270,7 @@ public class RoundedImageView extends AppCompatImageView {
       try {
         d = rsrc.getDrawable(mResource);
       } catch (Exception e) {
-        Log.w(TAG, "Unable to find resource: " + mResource, e);
+        LogUtils.error(TAG, "Unable to find resource: " + mResource, e);
         Crashlytics.getInstance().core.logException(e);
         // Don't try again.
         mResource = 0;
@@ -309,7 +309,7 @@ public class RoundedImageView extends AppCompatImageView {
       try {
         d = rsrc.getDrawable(mBackgroundResource);
       } catch (Exception e) {
-        Log.w(TAG, "Unable to find resource: " + mBackgroundResource, e);
+        LogUtils.error(TAG, "Unable to find resource: " + mBackgroundResource, e);
         // Don't try again.
         mBackgroundResource = 0;
       }

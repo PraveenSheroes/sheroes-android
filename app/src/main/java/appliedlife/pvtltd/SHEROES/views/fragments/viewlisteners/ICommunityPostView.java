@@ -1,6 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.text.Editable;
 import android.view.View;
 
@@ -10,8 +10,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.community.LinkRenderResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.usertagging.SearchUserDataResponse;
-import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionSpan;
-import appliedlife.pvtltd.SHEROES.usertagging.suggestions.UserTagSuggestionsAdapter;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.Suggestible;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
 
@@ -29,8 +27,6 @@ public interface ICommunityPostView extends BaseMvpView {
     void finishActivity();
 
     List<String> onQueryReceived(final @NonNull QueryToken queryToken);
-
-
 
     Suggestible onMentionUserSuggestionClick(final @NonNull Suggestible suggestible, View view);
 

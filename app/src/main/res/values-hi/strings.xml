@@ -39,8 +39,6 @@
 
     <!--Fragment classes-->
     <string name="ID_COMMUNITIES">समुदाय</string>
-    <string name="ID_PEOPLE_INTERESTED">people are interested</string>
-    <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">सूचनाएं</string>
     <string name="ID_MY_COMMUNITIES">मेरे समुदाय</string>
     <string name="follower_toolbar_title">मेरे फॉलोवर्स</string>
@@ -63,9 +61,6 @@
     <string name="ID_VIEW_MORE">और देखें</string>
     <string name="ID_VIEW_MORE_MENTOR">&#8230;और देखें</string>
     <string name="ID_JOIN">जुड़ें</string>
-    <string name="ID_INTERESTED">Interested</string>
-    <string name="ID_GOING">Going</string>
-    <string name="ID_REQUESTED">अनुरोध किया</string>
     <string name="ID_JOINED">जुड़ गए</string>
     <string name="ID_VIEW">देखें</string>
     <string name="ID_VIEWS">ने देखा</string>
@@ -74,12 +69,11 @@
     <string name="ID_LIKE">लाइक</string>
     <string name="comment">कमेंट</string>
     <string name="ID_PROFILE">परिचय</string>
-    <string name="ID_PROFILE_POST">प्रोफाइल पोस्ट स्क्रीन</string>
     <string name="ID_ARTICLE">लेख</string>
     <string name="ID_POST">कमेंट इस रूप में करें:</string>
     <string name="ID_POSTED">पोस्ट हुआ</string>
     <string name="ID_MEMBERS">सदस्य</string>
-    <string name="ID_ADMIN">एडमिन</string>
+    <string name="ID_ADMIN">Admin</string>
     <string name="ID_REMOVE">हटाएं</string>
     <string name="ID_SHARE">शेयर</string>
     <string name="ID_EDIT">बदलें</string>
@@ -94,7 +88,6 @@
     <string name="banned_user_device">यूज़र डिवाइस पर प्रतिबंध लगाओ</string>
     <string name="ID_NO_RESULT_FOUND">कोई परिणाम नहीं मिला, दोबारा क्लिक करें</string>
     <string name="ID_NO_POST">कोई पोस्ट नहीं है</string>
-    <string name="ID_POPULAR">Popular</string>
     <string name="ID_ANONYMOUS">गुमनाम</string>
     <string name="ID_LESS">कम देखें</string>
     <string name="ID_LESS_MENTOR">&#8230;कम देखें</string>
@@ -195,9 +188,6 @@
         <item>विधवा</item>
         <item>अन्य</item>
     </string-array>
-    <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
-    <string name="ID_SPEAKER">Speaker</string>
-    <string name="ID_SPONSORS">Sponsors</string>
     <string name="ID_ONCE_CARD_TITLE">SHEROES फीड में आपका स्वागत है</string>
     <string name="ID_CIRCLE_SUPPORT">आपकी महिला साथियों का समूह</string>
     <string name="ID_ONCE_CARD_DETAIL1">प्रभावशाली महिलाओं के साथ जुड़ें , नेटवर्क बनाएं और हैंगऑउट करें</string>
@@ -351,7 +341,7 @@
     <string name="completed">पूरा कर लिया है</string>
     <string name="submit_response">प्रतिक्रिया जमा करें</string>
     <string name="empty_winner_text">&lt;b&gt;अभी तक कोई विजेता घोषित नहीं किया गया है!&lt;/b&gt;</string>
-    <string name="empty_winner_subtext">विजेता की घोषणा %1$s होगी। तब तक हमारे साथ बने रहे</string>
+    <string name="empty_winner_subtext">विजेता की घोषणा %1$s %2$s होगी। तब तक हमारे साथ बने रहें</string>
     <string name="joined">शामिल हो चुके हैं</string>
     <string name="title.contest_list">मेरे चैलेंजेस</string>
     <string name="soon">जल्द ही</string>
@@ -376,10 +366,6 @@
     <string name="ID_MENTOR">चैंपियंस</string>
     <string name="empty_mentor_text">अभी तक कोई चैंपियन नहीं है!</string>
     <string name="ID_MENTOR_POST">पोस्ट्स</string>
-    <string name="ID_MENTOR_Q_A">प्र• और उ•</string>
-    <string name="ID_ASKING">पूछ रहा है</string>
-    <string name="ID_WHAT_IS_QUESTION">आपका क्या सवाल है?</string>
-    <string name="ID_ANSWERED_QUESTIONS">सवालों के जवाब दिए गए</string>
     <string name="ID_GET_EXPERT_ADVICE">चैंपियन से प्रतिष्ठित सलाह प्राप्त करें</string>
     <string name="ID_INSIGHT">इनसाइट्स</string>
     <string name="ID_SEE_INSIGHT">इनसाइट्स देखें</string>
@@ -387,11 +373,13 @@
     <string name="ID_FOLLOWER_VISITOR">पिछले 7 दिनों में फॉलोवर्स</string>
     <string name="ID_POSTS">पिछले 7 दिनों में बनाए गए पोस्ट्स</string>
     <string name="ID_QUESTIONS">पिछले 7 दिनों में प्रश्न</string>
-    <string name="ID_ANSWERS">पिछले 7 दिनों में उत्तर दिए गए प्रश्न</string>
-    <string name="ID_ANSWER_QUESTION">सवालों के जवाब दें</string>
-    <string name="ID_START_ANSWER_QUESTION">सवालों का जवाब देना शुरू करें</string>
     <string name="private_information">निजी जानकारी (केवल आपको दिखेगी)</string>
-    <string name="ID_LOGIN_MSG">ईमेल लॉगिन केवल मौजूदा यूज़र्स के लिए है। नए यूज़र्स को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।</string>
+    <string name="ID_LOGIN_MSG"><![CDATA[ <html><body> <div style="text-align: center;margin: 0px 0px 5px 0px;">ईमेल लॉगिन
+                                                    <span style="color:#3C3C3C;"><b>केवल मौजूदा यूज़र्स</b> </span>
+                                                    के लिए है। नए यूज़र्स को केवल फेसबुक या गूगल के माध्यम से लॉगिन करना चाहिए।
+                                                    </div>
+                                                    </body>
+                                                    </html>  ]]></string>
     <string name="ID_GOT">समझ गए !</string>
     <string name="ID_SHOW_CASE_CREATE_POST_TITLE">किसी प्रकार की मदद चाहिए?</string>
     <string name="ID_SHOW_CASE_CREATE_POST_DESC">अपने सवाल पूँछे और विशेषज्ञों व अनुभवी महिलाओं द्वारा उत्तर पायें।</string>
@@ -555,8 +543,8 @@
     <string name="poll">पोल</string>
     <string name="photo_video">फोटो</string>
     <string name="choose_poll">अपना पोल का चुनाव करें </string>
-    <string name="title.create_poll">पोल बनाए </string>
-    <string name="poll_option_text">और विकल्प भरे</string>
+    <string name="title.create_poll">पोल बनायें</string>
+    <string name="poll_option_text">और विकल्प भरें</string>
     <string name="poll_option_end_text">पोल समाप्त:</string>
     <string-array name="poll_time">
         <item>1 दिन</item>
@@ -564,19 +552,14 @@
         <item>1 सप्ताह</item>
         <item>1 महीना</item>
     </string-array>
-    <integer-array name="poll_days_count">
-        <item>1</item>
-        <item>2</item>
-        <item>7</item>
-        <item>30</item>
-    </integer-array>
     <string name="percent_vote">% वोट</string>
     <string name="poll_end">%1$s में समाप्त</string>
     <string name="ended">पोल समाप्त</string>
     <string name="option_empty">विकल्प खाली नहीं हो सकता है</string>
     <string name="option_same">दो या दो से अधिक विकल्प समान नहीं हो सकते हैं</string>
+    <string name="image_poll_option_same">विकल्प समान नहीं हो सकते हैं</string>
     <string name="option_image_empty">फोटो खाली नहीं हो सकती है</string>
-    <string name="poll_text_limit">विवरण 500 अक्षर से अधिक नहीं हो सकता है</string>
+    <string name="poll_text_limit">विवरण 150 अक्षर से अधिक नहीं हो सकता है</string>
     <string name="paste_on_playstore">प्लेस्टोर पर समीक्षा के रूप में पेस्ट करें</string>
     <string name="winner_msg">क्या आप गूगल प्लेस्टोर पर हमारे बारे में कुछ बयां करना चाहते हैं?</string>
     <string name="congratulation">बधाई हो</string>
@@ -588,7 +571,7 @@
     <string name="leaderboard_rank_unavailable">--</string>
     <string name="edit">बदलें</string>
     <string name="poll_result_percent">%</string>
-    <string name="poll_ask_question">सवाल पूछे (%1$d वर्ण)</string>
+    <string name="poll_ask_question">सवाल पूछें (%1$d वर्ण)</string>
     <string name="poll_text_option">(%1$d वर्ण)</string>
     <string name="challenge">चैलेंज</string>
     <string name="care_msg"><![CDATA[ <html>
@@ -678,4 +661,8 @@
     <string name="not_now">नहीं देना :(</string>
     <string name="helpline_title">SHEROES हेल्पलाइन</string>
     <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
+    <string name="empty_post">कोई पोस्ट नहीं</string>
+    <string name="empty_stories">कोई कहानियाँ नहीं</string>
+    <string name="winner_date">को</string>
+    <string name="deleted_content">जिस विषय को आप ढूंढ रहे हैं वह मौजूद नहीं है</string>
 </resources>

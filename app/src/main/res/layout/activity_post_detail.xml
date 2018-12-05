@@ -6,7 +6,7 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         <include
             android:id="@id/toolbar"
             layout="@layout/toolbar" />
-    </android.support.design.widget.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -83,34 +83,34 @@
                 android:enabled="false"
                 android:text="@string/ID_POST"
                 android:textColor="@color/detail_page_text"
-                vernacular:customTextFontFamily="@string/medium_font"/>
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_user_name_for_post"
+                style="@style/TextView12spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_25"
                 android:ellipsize="end"
-                style="@style/TextView12spMediumBold"
                 android:maxLines="@integer/int_value_for_line_1"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
-                vernacular:customTextFontFamily="@string/medium_font"/>
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/tv_anonymous_post"
+                style="@style/TextView12spMediumBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_size_20"
-                style="@style/TextView12spMediumBold"
                 android:text="@string/ID_ANONYMOUS"
                 android:textAllCaps="true"
                 android:textColor="@color/searchbox_text_color"
-                vernacular:customTextFontFamily="@string/medium_font"/>
+                vernacular:customTextFontFamily="@string/medium_font" />
         </LinearLayout>
     </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/user_comment_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -121,7 +121,7 @@
         android:paddingBottom="8dp"
         android:paddingTop="8dp" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/suggestions_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

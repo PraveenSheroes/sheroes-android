@@ -24,7 +24,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-
 /**
  * DialogFragment displayed when timeout in request occurs .
  */
@@ -50,6 +49,7 @@ public class NetworkAndApiErrorDialog extends BaseDialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_network_timeout, container, false);
+        SheroesApplication.getAppComponent(getActivity()).inject(this);
         ButterKnife.bind(this, view);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         finishParent = getArguments().getBoolean(DISMISS_PARENT_ON_OK_OR_BACK);
@@ -65,7 +65,6 @@ public class NetworkAndApiErrorDialog extends BaseDialogFragment {
             SpannableString content = new SpannableString(getString(R.string.care_sheroes));
             content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
             mTvCareSheroes.setText(content);
-            ((SheroesApplication) getActivity().getApplication()).trackScreenView(SCREEN_LABEL);
             AnalyticsManager.trackScreenView(SCREEN_LABEL);
         } else {
             mliUserDeactivate.setVisibility(View.GONE);

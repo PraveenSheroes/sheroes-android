@@ -25,12 +25,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.IntRange;
-import android.support.annotation.MenuRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.AppCompatEditText;
+import androidx.annotation.ColorInt;
+import androidx.annotation.IntRange;
+import androidx.annotation.MenuRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Selection;
@@ -63,7 +63,7 @@ import appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable;
 import appliedlife.pvtltd.SHEROES.usertagging.mentions.MentionsEditable;
 import appliedlife.pvtltd.SHEROES.usertagging.suggestions.interfaces.SuggestionsVisibilityManager;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.QueryToken;
-import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.QueryTokenReceiver;
+import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.IQueryTokenReceiver;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.TokenSource;
 import appliedlife.pvtltd.SHEROES.usertagging.tokenization.interfaces.Tokenizer;
 
@@ -84,11 +84,12 @@ import static appliedlife.pvtltd.SHEROES.usertagging.mentions.Mentionable.Mentio
  */
 public class MentionsEditText extends AppCompatEditText implements TokenSource {
 
+    //region member variables
     private static final String KEY_MENTION_SPANS = "mention_spans";
     private static final String KEY_MENTION_SPAN_STARTS = "mention_span_starts";
 
     private Tokenizer mTokenizer;
-    private QueryTokenReceiver mQueryTokenReceiver;
+    private IQueryTokenReceiver mQueryTokenReceiver;
     private SuggestionsVisibilityManager mSuggestionsVisibilityManager;
 
     private List<MentionWatcher> mMentionWatchers = new ArrayList<>();
@@ -104,6 +105,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
     private boolean isLongPressed;
     private CheckLongClickRunnable longClickRunnable;
     RichEditorView richEditView;
+    //endregion member variables
+
+    //region constructor
     public MentionsEditText(@NonNull Context context) {
         super(context);
         init(null, 0);
@@ -118,7 +122,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
     }
+    //endregion constructor
 
+    //region methods
     /**
      * Initialization method called by all constructors.
      */
@@ -1316,9 +1322,9 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
      * Sets the receiver of query tokens used by this class. The query token receiver will use the
      * tokens to generate suggestions, which can then be inserted back into this edit text.
      *
-     * @param queryTokenReceiver the {@link QueryTokenReceiver} to use
+     * @param queryTokenReceiver the {@link IQueryTokenReceiver} to use
      */
-    public void setQueryTokenReceiver(@Nullable final QueryTokenReceiver queryTokenReceiver) {
+    public void setQueryTokenReceiver(@Nullable final IQueryTokenReceiver queryTokenReceiver) {
         mQueryTokenReceiver = queryTokenReceiver;
     }
 
@@ -1427,6 +1433,7 @@ public class MentionsEditText extends AppCompatEditText implements TokenSource {
             }
         };
     }
+    //region methods
 
     // --------------------------------------------------
     // MentionWatcher Interface & Simple Implementation

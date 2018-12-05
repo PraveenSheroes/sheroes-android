@@ -42,7 +42,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:label">
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="appliedlife.pvtltd.SHEROES.provider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -122,15 +122,6 @@
             android:value="1" />
 
         <activity
-            android:name="com.moe.pushlibrary.activities.MoEActivity"
-            android:parentActivityName=".views.activities.HomeActivity">
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="appliedlife.pvtltd.SHEROES.views.activities.HomeActivity" />
-        </activity>
-        <activity
             android:name=".views.activities.OnBoardingActivity"
             android:noHistory="true"
             android:screenOrientation="portrait"
@@ -169,11 +160,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
-            android:name=".views.activities.MentorsUserListingActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
-        <activity
-            android:name=".views.activities.MentorInsightActivity"
+            android:name=".views.activities.ChampionListingActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
