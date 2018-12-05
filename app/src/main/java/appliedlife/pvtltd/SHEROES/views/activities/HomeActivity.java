@@ -334,7 +334,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private FragmentOpen mFragmentOpen;
     private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
-    private long mChallengeId;
     private ProgressDialog mProgressDialog;
     private FragmentListRefreshData mFragmentListRefreshData;
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
@@ -483,7 +482,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
-        mDrawer.openDrawer(Gravity.START);
+        mDrawer.openDrawer(GravityCompat.START);
     }
 
     @OnClick(R.id.fl_nav_communities)
@@ -897,8 +896,10 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
-            data.remove(data.size() - 1);
-            mMyCommunitiesAdapter.notifyDataSetChanged();
+            if (null!=data && data.size() > 0) {
+                data.remove(data.size() - 1);
+                mMyCommunitiesAdapter.notifyDataSetChanged();
+            }
         }
     }
 
