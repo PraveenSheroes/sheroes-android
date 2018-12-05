@@ -38,8 +38,6 @@
 
     <!--Fragment classes-->
     <string name="ID_COMMUNITIES">Communities</string>
-    <string name="ID_PEOPLE_INTERESTED">people are interested</string>
-    <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notifications</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="follower_toolbar_title">People who follow me</string>
@@ -188,7 +186,6 @@
         <item>Widowed</item>
         <item>Other</item>
     </string-array>
-    <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
     <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
     <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>

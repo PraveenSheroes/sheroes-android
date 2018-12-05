@@ -2129,7 +2129,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
 
                     if (mEtImagePollLeft.getText().toString().trim().equalsIgnoreCase(mEtImagePollRight.getText().toString().trim())) {
-                        Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mRlMainLayout, getString(R.string.image_poll_option_same), Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 
