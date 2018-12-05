@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
@@ -482,7 +483,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (mUserSummary == null) {
                 return;
             }
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             mImageListView.setLayoutManager(layoutManager);
             ((SimpleItemAnimator) mImageListView.getItemAnimator()).setSupportsChangeAnimations(false);
 
@@ -620,7 +621,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             List<Mention> mentionList = new ArrayList<>();
             mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
             mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(mEtView.notifyAdapterOnData(mentionList));
             mMentionList = mentionList;
@@ -696,7 +697,6 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         mPollOptionType = pollType;
         mIsPollOptionClicked = true;
         mImageList.clear();
-        mEtView.getEditText().setMaxLines(mMaxLength);
         mTitleToolbar.setText(R.string.title_create_poll);
         mEtView.getEditText().getText().clear();
         mEtView.getEditText().setHint(getString(R.string.poll_ask_question, 150));
@@ -726,6 +726,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             default:
                 break;
         }
+        mEtView.getEditText().setFilters(new InputFilter[] {new InputFilter.LengthFilter(mMaxLength)});
     }
 
     @Override
@@ -1216,16 +1217,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString().trim(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
         } else if (!mIsEditPost) {
             String accessToken = "";
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
@@ -1401,7 +1402,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mUserSummary == null) {
             return;
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         mImageListView.setLayoutManager(layoutManager);
         ((SimpleItemAnimator) mImageListView.getItemAnimator()).setSupportsChangeAnimations(false);
 
@@ -2129,7 +2130,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                     }
 
                     if (mEtImagePollLeft.getText().toString().trim().equalsIgnoreCase(mEtImagePollRight.getText().toString().trim())) {
-                        Snackbar.make(mRlMainLayout, getString(R.string.option_same), Snackbar.LENGTH_SHORT).show();
+                        Snackbar.make(mRlMainLayout, getString(R.string.image_poll_option_same), Snackbar.LENGTH_SHORT).show();
                         return;
                     }
 

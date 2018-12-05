@@ -2,9 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +19,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -113,7 +113,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
+        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate), prefixBeforeDate(mContest.winnerAnnouncementDate)));
         if (CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt()) == ContestStatus.COMPLETED) {
             if (!mContest.hasMyPost) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -193,11 +193,21 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     //region private methods
 
     private String getDateString(String winnerAnnouncementDate) {
+        winnerAnnouncementDate = null;
         if (winnerAnnouncementDate == null) {
             return this.getResources().getString(R.string.soon);
         } else {
             Date announcementDate = DateUtil.parseDateFormat(mContest.winnerAnnouncementDate, AppConstants.DATE_FORMAT);
-            return "on" + " <b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) + "</b>";
+            return "<b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) + "</b>";
+        }
+    }
+
+    private String prefixBeforeDate(String winnerAnnouncementDate) {
+        winnerAnnouncementDate = null;
+        if (winnerAnnouncementDate == null) {
+            return "";
+        } else {
+            return getResources().getString(R.string.winner_date);
         }
     }
 

@@ -38,8 +38,6 @@
 
     <!--Fragment classes-->
     <string name="ID_COMMUNITIES">Communities</string>
-    <string name="ID_PEOPLE_INTERESTED">people are interested</string>
-    <string name="ID_TOTAL_GOING"> are going</string>
     <string name="ID_NOTIFICATION">Notifications</string>
     <string name="ID_MY_COMMUNITIES">My Communities</string>
     <string name="follower_toolbar_title">People who follow me</string>
@@ -188,7 +186,6 @@
         <item>Widowed</item>
         <item>Other</item>
     </string-array>
-    <string name="ID_DETAIL_ABOUT_EVENT">Details about the event</string>
     <string name="ID_ONCE_CARD_TITLE">Welcome To The SHEROES Feed</string>
     <string name="ID_CIRCLE_SUPPORT">Your Circle Of Support</string>
     <string name="ID_ONCE_CARD_DETAIL1">Connect, Network and Hangout with peers and influencers</string>
@@ -346,7 +343,7 @@
     <string name="completed">completed</string>
     <string name="submit_response">Submit a response</string>
     <string name="empty_winner_text">&lt;b&gt;No winners announced yet!&lt;/b&gt;</string>
-    <string name="empty_winner_subtext">Winner will be announced %1$s. Till then keep checking this place</string>
+    <string name="empty_winner_subtext">Winner will be announced %2$s %1$s. Till then keep checking this place</string>
     <string name="joined">Joined</string>
     <string name="title.contest_list">My Challenges</string>
     <string name="soon">soon</string>
@@ -563,7 +560,7 @@
     <string name="option_same">Two or more options can\'t be same</string>
     <string name="image_poll_option_same">Options can\'t be same</string>
     <string name="option_image_empty">Image can\'t be empty</string>
-    <string name="poll_text_limit">Description can\'t exceed 500 char</string>
+    <string name="poll_text_limit">Description can\'t exceed 150 char</string>
     <string name="paste_on_playstore">Paste as Review on Playstore</string>
     <string name="winner_msg">Would you like to shower some love on us on Google Playstore?</string>
     <string name="congratulation">Congratulations</string>
@@ -667,4 +664,6 @@
     <string name="helpline_title">Ask SHEROES Helpline</string>
     <string name="empty_post">No post yet</string>
     <string name="empty_stories">No stories yet</string>
+    <string name="winner_date">on</string>
+    <string name="deleted_content">Content your are looking for is not present</string>
 </resources>
