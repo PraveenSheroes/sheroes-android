@@ -343,7 +343,7 @@
     <string name="completed">completed</string>
     <string name="submit_response">Submit a response</string>
     <string name="empty_winner_text">&lt;b&gt;No winners announced yet!&lt;/b&gt;</string>
-    <string name="empty_winner_subtext">Winner will be announced %1$s. Till then keep checking this place</string>
+    <string name="empty_winner_subtext">Winner will be announced %2$s %1$s. Till then keep checking this place</string>
     <string name="joined">Joined</string>
     <string name="title.contest_list">My Challenges</string>
     <string name="soon">soon</string>
@@ -664,4 +664,5 @@
     <string name="helpline_title">Ask SHEROES Helpline</string>
     <string name="empty_post">No post yet</string>
     <string name="empty_stories">No stories yet</string>
+    <string name="winner_date">on</string>
 </resources>

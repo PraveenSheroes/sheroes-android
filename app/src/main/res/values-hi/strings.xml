@@ -341,7 +341,7 @@
     <string name="completed">पूरा कर लिया है</string>
     <string name="submit_response">प्रतिक्रिया जमा करें</string>
     <string name="empty_winner_text">&lt;b&gt;अभी तक कोई विजेता घोषित नहीं किया गया है!&lt;/b&gt;</string>
-    <string name="empty_winner_subtext">विजेता की घोषणा %1$s होगी। तब तक हमारे साथ बने रहे</string>
+    <string name="empty_winner_subtext">विजेता की घोषणा %1$s %2$s होगी। तब तक हमारे साथ बने रहें</string>
     <string name="joined">शामिल हो चुके हैं</string>
     <string name="title.contest_list">मेरे चैलेंजेस</string>
     <string name="soon">जल्द ही</string>
@@ -663,4 +663,5 @@
     <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
     <string name="empty_post">कोई पोस्ट नहीं</string>
     <string name="empty_stories">कोई कहानियाँ नहीं</string>
+    <string name="winner_date">को</string>
 </resources>
