@@ -26,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_below="@id/appbar_layout"
-        android:background="#ebebeb">
+        android:background="#ebebeb"
+        android:visibility="gone">
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/share_on_fb"

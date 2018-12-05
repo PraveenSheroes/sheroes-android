@@ -482,7 +482,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             if (mUserSummary == null) {
                 return;
             }
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
             mImageListView.setLayoutManager(layoutManager);
             ((SimpleItemAnimator) mImageListView.getItemAnimator()).setSupportsChangeAnimations(false);
 
@@ -620,7 +620,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             List<Mention> mentionList = new ArrayList<>();
             mentionList.add(0, new Mention(AppConstants.USER_MENTION_HEADER, mUserTagCreatePostText, "", "", 0));
             mentionList.add(1, new Mention(AppConstants.USER_MENTION_NO_RESULT_FOUND, getString(R.string.searching), "", "", 0));
-            LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.VERTICAL, false);
             mSuggestionList.setLayoutManager(layoutManager);
             mSuggestionList.setAdapter(mEtView.notifyAdapterOnData(mentionList));
             mMentionList = mentionList;
@@ -1216,16 +1216,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText().toString().trim(), getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
         } else if (!mIsEditPost) {
             String accessToken = "";
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText().toString().trim(), (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
@@ -1401,7 +1401,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mUserSummary == null) {
             return;
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false);
         mImageListView.setLayoutManager(layoutManager);
         ((SimpleItemAnimator) mImageListView.getItemAnimator()).setSupportsChangeAnimations(false);
 

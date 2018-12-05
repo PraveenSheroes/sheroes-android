@@ -113,7 +113,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         List<FeedDetail> list = item.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(list)) {
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
             mRecyclerView.setLayoutManager(mLayoutManager);
             mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setLayoutManager(mLayoutManager);
