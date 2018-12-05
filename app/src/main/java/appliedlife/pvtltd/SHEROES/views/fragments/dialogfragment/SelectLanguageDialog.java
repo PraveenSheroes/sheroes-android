@@ -48,10 +48,6 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     ImageView ivLanguageCross;
     //endregion
 
-    //region member variables
-    private boolean isLanguageSelected;
-    //endregion
-
     //region overridden variables
     @TargetApi(AppConstants.ANDROID_SDK_24)
     @Override
@@ -60,13 +56,14 @@ public class SelectLanguageDialog extends BaseDialogFragment {
         SheroesApplication.getAppComponent(getActivity()).inject(this);
         ButterKnife.bind(this, view);
         setCancelable(true);
+        if (CommonUtil.getPrefStringValue(LANGUAGE_KEY).equalsIgnoreCase(LanguageType.ENGLISH.toString())) {
+            setEngCheckVisible();
+        } else {
+            setHindiCheckVisible();
+        }
         ivLanguageCross.setVisibility(View.VISIBLE);
         AnalyticsManager.trackScreenView(SCREEN_LABEL);
         return view;
-    }
-
-    private void setNewLocale(String language) {
-        LocaleManager.setNewLocale(getActivity().getBaseContext(), language);
     }
 
     @Override
@@ -83,38 +80,48 @@ public class SelectLanguageDialog extends BaseDialogFragment {
     //region onclick methods
     @OnClick(R.id.fl_hindi)
     public void onHindiClick() {
-        tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        ivLangHind.setVisibility(View.VISIBLE);
-        ivLangEng.setVisibility(View.GONE);
+        setHindiCheckVisible();
         setNewLocale(LanguageType.HINDI.toString());
-        isLanguageSelected = true;
     }
 
     @OnClick(R.id.fl_english)
     public void onEnglishClick() {
-        tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
-        ivLangEng.setVisibility(View.VISIBLE);
-        ivLangHind.setVisibility(View.GONE);
+        setEngCheckVisible();
         setNewLocale(LanguageType.ENGLISH.toString());
-        isLanguageSelected = true;
     }
 
     @OnClick(R.id.tv_continue)
     public void onContinueClick() {
-        if (isLanguageSelected) {
-            if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).refreshHomeViews();
-                final HashMap<String, Object> properties =new EventProperty.Builder().build();
-                properties.put(SuperProperty.LANGUAGE.getString(), CommonUtil.getPrefStringValue(LANGUAGE_KEY));
-                AnalyticsManager.trackEvent(Event.LANGUAGE_SELECTED, SCREEN_LABEL, properties);
-            }
-            dismiss();
+        if (getActivity() instanceof HomeActivity) {
+            ((HomeActivity) getActivity()).refreshHomeViews();
+            final HashMap<String, Object> properties = new EventProperty.Builder().build();
+            properties.put(SuperProperty.LANGUAGE.getString(), CommonUtil.getPrefStringValue(LANGUAGE_KEY));
+            AnalyticsManager.trackEvent(Event.LANGUAGE_SELECTED, SCREEN_LABEL, properties);
         }
+        dismiss();
     }
 
     @OnClick(R.id.iv_language_cross)
     public void onCrossClick() {
         dismiss();
+    }
+    //endregion
+
+    //region private methods
+    private void setNewLocale(String language) {
+        LocaleManager.setNewLocale(getActivity().getBaseContext(), language);
+    }
+
+    private void setHindiCheckVisible() {
+        tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+        ivLangHind.setVisibility(View.VISIBLE);
+        ivLangEng.setVisibility(View.GONE);
+    }
+
+    private void setEngCheckVisible() {
+        tvContinue.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+        ivLangEng.setVisibility(View.VISIBLE);
+        ivLangHind.setVisibility(View.GONE);
     }
     //endregion
 }

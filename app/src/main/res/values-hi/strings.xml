@@ -559,7 +559,7 @@
     <string name="option_same">दो या दो से अधिक विकल्प समान नहीं हो सकते हैं</string>
     <string name="image_poll_option_same">विकल्प समान नहीं हो सकते हैं</string>
     <string name="option_image_empty">फोटो खाली नहीं हो सकती है</string>
-    <string name="poll_text_limit">विवरण 500 अक्षर से अधिक नहीं हो सकता है</string>
+    <string name="poll_text_limit">विवरण 150 अक्षर से अधिक नहीं हो सकता है</string>
     <string name="paste_on_playstore">प्लेस्टोर पर समीक्षा के रूप में पेस्ट करें</string>
     <string name="winner_msg">क्या आप गूगल प्लेस्टोर पर हमारे बारे में कुछ बयां करना चाहते हैं?</string>
     <string name="congratulation">बधाई हो</string>
