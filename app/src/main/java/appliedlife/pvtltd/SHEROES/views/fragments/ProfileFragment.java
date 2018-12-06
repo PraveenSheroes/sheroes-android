@@ -533,6 +533,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
+        if (getActivity() == null) return;
         mErrorUtil.onShowErrorDialog(getActivity(), s, feedParticipationEnum);
         mLoaderGif.setVisibility(View.GONE);
     }
@@ -568,7 +569,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     @Override
     public void onSpamPostOrCommentReported(SpamResponse spamResponse) {
         if (spamResponse.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-            if (getActivity().isFinishing()) return;
+            if (getActivity() != null && getActivity().isFinishing()) return;
 
             if (spamResponse.isSpammed()) {
                 CommonUtil.createDialog(getActivity(), getResources().getString(R.string.spam_confirmation_dialog_title), getResources().getString(R.string.reported_spam_marked_dialog_message, spamResponse.getModelType().toLowerCase()));
@@ -617,8 +618,9 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
             championDetailActivity(mLoggedInUserId, 1, isChampion, AppConstants.FEED_SCREEN); //self profile
         } else if (mValue == REQUEST_CODE_CHAMPION_TITLE) {
             UserPostSolrObj feedDetail = (UserPostSolrObj) baseResponse;
-            /*ProfileActivity.navigateTo(this, feedDetail.getAuthorParticipantId(), isChampion,
-                    PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);*/
+            if (getActivity() != null) return;
+            ProfileActivity.navigateTo(getActivity(), feedDetail.getAuthorParticipantId(), isChampion,
+                    PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
         }
     }
 
@@ -962,7 +964,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         }
 
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) { //profile pic
-            if (!getActivity().isFinishing()) {
+            if (getActivity() != null && !getActivity().isFinishing()) {
                 String profilePic = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), mProfileSize, mProfileSize);
                 mProfileIcon.setCircularImage(true);
                 mProfileIcon.bindImage(profilePic);
@@ -981,6 +983,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     }
 
     private void toolTipForFollowUser() {
+        if (getActivity() == null) return;
         try {
             mToolTipFollow.setVisibility(View.INVISIBLE);
             final View popupFollowToolTip = LayoutInflater.from(getActivity()).inflate(R.layout.tooltip_arrow_up_side, null);
@@ -1171,13 +1174,14 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     }
 
     private void setupProfileBadges(final UserSolrObj userSolrObj) {
-        if (userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList())) return;
+        if (getActivity() == null || userSolrObj == null || !StringUtil.isNotEmptyCollection(userSolrObj.getUserBadgesList()))
+            return;
 
         mBadgeContainer.setVisibility(View.VISIBLE);
         int length = userSolrObj.getUserBadgesList().size();
         int counter = 0;
         for (final BadgeDetails badgeDetails : userSolrObj.getUserBadgesList()) {
-            final ImageView badge = new ImageView(getContext());
+            final ImageView badge = new ImageView(getActivity());
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(mBadgeIconSize, mBadgeIconSize);
             layoutParams.setMargins(0, 0, mBadgeIconMargin, 0);
             badge.setLayoutParams(layoutParams);
@@ -1314,6 +1318,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     }
 
     public void croppingIMG() {
+        if (getActivity() == null) return;
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(mImageCaptureUri, "image/*");
         List list = getActivity().getPackageManager().queryIntentActivities(intent, 0);
@@ -1330,6 +1335,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     }
 
     private void invalidateProfileButton() {
+        if (getActivity() == null) return;
         int mButtonSize = 31;
         if (isOwnProfile) {
             mShareProfile.setVisibility(View.VISIBLE);
@@ -1386,7 +1392,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mProfileStrengthDialog = new ProfileStrengthDialog();
         mProfileStrengthDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mProfileStrengthDialog.isVisible() && !getActivity().isDestroyed()) {
+        if (!mProfileStrengthDialog.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1406,7 +1412,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mUnFollowDialogFragment = new UnFollowDialogFragment();
         mUnFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mUnFollowDialogFragment.isVisible() && !getActivity().isDestroyed()) {
+        if (!mUnFollowDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1431,7 +1437,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mDeactivateProfileDialogFragment = new DeactivateProfileDialogFragment();
         mDeactivateProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mDeactivateProfileDialogFragment.isVisible() && !getActivity().isDestroyed()) {
+        if (!mDeactivateProfileDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(userSolrObj);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1453,7 +1459,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mReportUserProfileDialogFragment = new ReportUserProfileDialogFragment();
         mReportUserProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mReportUserProfileDialogFragment.isVisible() && !getActivity().isDestroyed()) {
+        if (!mReportUserProfileDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(userSolrObj);
             bundle.putParcelable(AppConstants.USER, parcelable);
