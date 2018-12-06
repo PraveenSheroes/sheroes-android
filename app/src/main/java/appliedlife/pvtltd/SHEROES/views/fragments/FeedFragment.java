@@ -1006,6 +1006,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     }
 
+    public void filterFeed(String searchText, String searchCategory) {
+        if(mFeedPresenter !=null)
+        mFeedPresenter.getFeeds(searchText, searchCategory);
+    }
+
     private void initializeRecyclerView() {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(mLinearLayoutManager);

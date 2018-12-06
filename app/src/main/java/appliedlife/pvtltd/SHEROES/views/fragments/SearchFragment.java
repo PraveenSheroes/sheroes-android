@@ -257,7 +257,16 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
         Fragment fragment = adapter.getFragment(index);
         mSearchCategory = getSearchCategory(fragment);
-        mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
+        if (fragment instanceof FeedFragment) {
+            ((FeedFragment) fragment).filterFeed(mETSearch.getText().toString(), mSearchCategory);
+        } else if (fragment instanceof CommunitiesListFragment) {
+            ((CommunitiesListFragment)fragment).filterCommunities();
+        } else if (fragment instanceof HashTagFragment) {
+            //((HashTagFragment)fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+        } else if (fragment instanceof ArticlesFragment) {
+            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+        }
+      //  mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
     }
 
     @OnClick(R.id.iv_search_close)

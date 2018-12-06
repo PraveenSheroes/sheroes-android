@@ -354,6 +354,9 @@ public interface SheroesAppServiceApi {
     @POST("participant/user/update_user_preference")
     Observable<BaseResponse> updateSelectedLanguage(@Body LanguageUpdateRequest languageUpdateRequest);
 
+    @GET
+    Observable<FeedResponsePojo> getSearchResponse(@Url String url);
+
     @GET("participant/search/")
     Observable<FeedResponsePojo> searchQuery(@Query("search_text") String searchText, @Query("search_category") String searchCategory, @Query("start") String pageStart, @Query("page_size") String pageSize);
 }
