@@ -70,6 +70,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREAT
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
+import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
@@ -227,6 +228,38 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                     }
                 });
     }
+
+    public void getFeeds(String searchText, String searchCategory) {
+        String URL = "";
+            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+                return;
+            }
+            mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .compose(this.<FeedResponsePojo>bindToLifecycle())
+                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                        @Override
+                        public void onComplete() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            Crashlytics.getInstance().core.logException(e);
+                            getMvpView().showError(e.getMessage(), ERROR_TAG);
+                        }
+
+                        @Override
+                        public void onNext(FeedResponsePojo feedResponsePojo) {
+                            if (null != feedResponsePojo) {
+                                getMvpView().showFeedList(feedResponsePojo.getFeedDetails());
+                                /*getMvpView().onSearchRespose(feedResponsePojo);*/
+                            }
+                        }
+                    });
+        }
 
     public boolean isFeedLoading() {
         return mIsFeedLoading;

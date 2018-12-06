@@ -347,6 +347,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mCommunitiesListPresenter.fetchAllCommunities();
     }
 
+    public void filterCommunities() {
+
+    }
+
     public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {
         String position[] = new String[2];
         if (mFeedAdapter == null) {
