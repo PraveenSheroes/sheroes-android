@@ -1,12 +1,15 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.List;
+
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.views.fragments.HashTagFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.IHashTagCallBack;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -14,21 +17,23 @@ import butterknife.OnClick;
 public class HashTagsViewHolder extends RecyclerView.ViewHolder{
     @Bind(R.id.tv_hashtag)TextView hashTagTxt;
     @Bind(R.id.ll_hashtag)LinearLayout hashTagLayout;
-    private HashTagFragment hashTagFragment;
+    private List<String> hashTagsList;
+    private IHashTagCallBack iHashTagCallBack;
 
-    public HashTagsViewHolder(View itemView, HashTagFragment hashTagFragment) {
+    public HashTagsViewHolder(View itemView, IHashTagCallBack iHashTagCallBack, List<String> hashTagsList) {
         super(itemView);
-        this.hashTagFragment = hashTagFragment;
+        this.iHashTagCallBack = iHashTagCallBack;
+        this.hashTagsList = hashTagsList;
+
         ButterKnife.bind(this, itemView);
 
     }
 
     @OnClick(R.id.ll_hashtag)
     public void onHashTagClick(){
-        int position = getAdapterPosition();
-
-        hashTagFragment.onHashTagClicked();
-
+        String query = hashTagsList.get(getAdapterPosition() - 1).startsWith("#")
+                ? hashTagsList.get(getAdapterPosition() - 1).substring(1) : hashTagsList.get(getAdapterPosition() - 1);
+        iHashTagCallBack.onHashTagClicked(query);
     }
 
     public TextView getHashTagTxt() {

@@ -8,6 +8,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.IHashTagCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
@@ -37,6 +40,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataRespons
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ISearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,6 +70,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
             R.drawable.search_tab_hashtag,
             R.drawable.search_tab_articles
     };
+    private HashTagFragment hashTagFragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -76,6 +81,27 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         mSearchPresenter.attachView(this);
         initializeSearchViews();
         searchListener();
+
+        mETSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.toString().trim().length() == 0){
+                    hashTagFragment.populateTrendingHashTags();
+                }
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         return view;
     }
 
@@ -136,7 +162,9 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
                 mSearchFragmentAdapter.addFragment(communitiesListFragment, getString(R.string.community));
                 mSearchTabFragments.add(communitiesListFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.hash_tag))) {
-                HashTagFragment hashTagFragment = new HashTagFragment();
+                if(hashTagFragment == null) {
+                    hashTagFragment = new HashTagFragment();
+                }
                 mSearchFragmentAdapter.addFragment(hashTagFragment, getString(R.string.hash_tag));
                 mSearchTabFragments.add(hashTagFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.article))) {
@@ -216,6 +244,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
 
     @OnClick(R.id.iv_search_icon)
     public void searchProceed() {
+        CommonUtil.hideKeyboard(getActivity());
         int index = mSearchTabsPager.getCurrentItem();
         SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
         Fragment fragment = adapter.getFragment(index);
@@ -233,7 +262,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         } else if (fragment instanceof CommunitiesListFragment) {
             ((CommunitiesListFragment)fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof HashTagFragment) {
-//            ((HashTagFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+            ((HashTagFragment)fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof ArticlesFragment) {
             //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
@@ -250,6 +279,10 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
             mSearchCategory = SearchEnum.ARTICLES.toString();
         }
         return mSearchCategory;
+    }
+
+    public void onHashTagClicked(String query) {
+        mSearchPresenter.searchQuery(query, SearchEnum.HASHTAGS.toString());
     }
 
 
