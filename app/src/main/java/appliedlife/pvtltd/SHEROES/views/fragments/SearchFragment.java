@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -71,6 +72,12 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
             R.drawable.search_tab_articles
     };
     private HashTagFragment hashTagFragment;
+    @Bind(R.id.iv_search_close)
+    ImageView closeImg;
+    @Bind(R.id.iv_back)
+    ImageView backImg;
+    @Bind(R.id.iv_search_icon)
+    ImageView searchImg;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -90,7 +97,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.toString().trim().length() == 0){
+                if (charSequence.toString().trim().length() == 0) {
                     hashTagFragment.populateTrendingHashTags();
                 }
 
@@ -162,7 +169,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
                 mSearchFragmentAdapter.addFragment(communitiesListFragment, getString(R.string.community));
                 mSearchTabFragments.add(communitiesListFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.hash_tag))) {
-                if(hashTagFragment == null) {
+                if (hashTagFragment == null) {
                     hashTagFragment = new HashTagFragment();
                 }
                 mSearchFragmentAdapter.addFragment(hashTagFragment, getString(R.string.hash_tag));
@@ -244,12 +251,43 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
 
     @OnClick(R.id.iv_search_icon)
     public void searchProceed() {
+        searchingState();
         CommonUtil.hideKeyboard(getActivity());
         int index = mSearchTabsPager.getCurrentItem();
         SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
         Fragment fragment = adapter.getFragment(index);
         mSearchCategory = getSearchCategory(fragment);
         mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
+    }
+
+    @OnClick(R.id.iv_search_close)
+    public void resetSearch() {
+        searchInitState();
+        int index = mSearchTabsPager.getCurrentItem();
+        SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
+        Fragment fragment = adapter.getFragment(index);
+        if (fragment instanceof FeedFragment) {
+
+            // ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+        } else if (fragment instanceof CommunitiesListFragment) {
+//            ((CommunitiesListFragment) fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+        } else if (fragment instanceof HashTagFragment) {
+            ((HashTagFragment) fragment).populateTrendingHashTags();
+        } else if (fragment instanceof ArticlesFragment) {
+            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+        }
+    }
+
+    private void searchInitState() {
+        searchImg.setVisibility(View.VISIBLE);
+        backImg.setVisibility(View.GONE);
+        closeImg.setVisibility(View.GONE);
+    }
+
+    private void searchingState() {
+        searchImg.setVisibility(View.INVISIBLE);
+        backImg.setVisibility(View.VISIBLE);
+        closeImg.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -260,9 +298,9 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         if (fragment instanceof FeedFragment) {
             // ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment)fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+            ((CommunitiesListFragment) fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment)fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+            ((HashTagFragment) fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof ArticlesFragment) {
             //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
@@ -282,7 +320,10 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
     }
 
     public void onHashTagClicked(String query) {
-        mSearchPresenter.searchQuery(query, SearchEnum.HASHTAGS.toString());
+//        mSearchPresenter.searchQuery(query, SearchEnum.HASHTAGS.toString());
+        mETSearch.setText(query);
+        mETSearch.setSelection(mETSearch.getText().length());
+        searchingState();
     }
 
 

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="40dp"
-    >
+    android:paddingBottom="40dp">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_hashtags"
@@ -16,9 +15,56 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_hashtag_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
     </android.support.v7.widget.RecyclerView>
+
+    <FrameLayout
+        android:id="@+id/fl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_loader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <pl.droidsonroids.gif.GifTextView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:background="@drawable/she" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            style="@style/TextView16spRegular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginBottom="@dimen/dp_size_16"
+            android:gravity="center"
+            android:text="@string/ID_LOADER"
+            android:textColor="@color/feed_article_label"
+            vernacular:customTextFontFamily="@string/regular_font" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_no_results"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_margin="36dp"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="No results found. Try searching for something else."/>
 
 
 </RelativeLayout>

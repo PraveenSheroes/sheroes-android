@@ -2,12 +2,15 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -19,23 +22,36 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
+import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.IHashTagCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.ImageSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
+import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HashTagsAdapter;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class HashTagFragment extends BaseFragment implements BaseHolderInterface, IHashTagCallBack {
+import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
+
+public class HashTagFragment extends BaseFragment implements BaseHolderInterface, IHashTagCallBack, FeedItemCallback {
     View view;
     @Bind(R.id.rv_hashtags)RecyclerView hashTagsView;
     @Bind(R.id.rv_hashtag_details)RecyclerView hashTagDetailsView;
@@ -43,6 +59,9 @@ public class HashTagFragment extends BaseFragment implements BaseHolderInterface
     private List<FeedDetail> hashTagDetails ;
     private List<String> hashTagsList;
     private FeedAdapter feedAdapter;
+    @Bind(R.id.ll_loader)LinearLayout loaderLayout;
+    @Bind(R.id.tv_no_results)TextView noResultsTxt;
+    @Bind(R.id.fl_container)FrameLayout containerLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -131,18 +150,26 @@ public class HashTagFragment extends BaseFragment implements BaseHolderInterface
 //    }
 
     public void showAllHashTags(ArrayList<FeedDetail> feedDetails) {
+        loaderLayout.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.GONE);
-        feedAdapter.setData(feedDetails);
-        feedAdapter.notifyDataSetChanged();
-        hashTagDetailsView.setVisibility(View.VISIBLE);
 
+        if(feedDetails != null && feedDetails.size()>0){
+            noResultsTxt.setVisibility(View.GONE);
+            feedAdapter.setData(feedDetails);
+            feedAdapter.notifyDataSetChanged();
+            hashTagDetailsView.setVisibility(View.VISIBLE);
+        }else{
+            noResultsTxt.setVisibility(View.VISIBLE);
+        }
 //        hashTagsAdapter.refreshList(feedDetails);
-
     }
 
     public void populateTrendingHashTags(){
+        containerLayout.setVisibility(View.GONE);
+        loaderLayout.setVisibility(View.GONE);
+        noResultsTxt.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.VISIBLE);
-        hashTagDetailsView.setVisibility(View.GONE);
+//        hashTagDetailsView.setVisibility(View.GONE);
 //        hashTagsAdapter.refreshList(hashTagsList);
     }
 
@@ -178,7 +205,254 @@ public class HashTagFragment extends BaseFragment implements BaseHolderInterface
 
     @Override
     public void onHashTagClicked(String query) {
+//        loaderLayout.setVisibility(View.VISIBLE);
+        hashTagsView.setVisibility(View.GONE);
+        containerLayout.setVisibility(View.VISIBLE);
         SearchFragment searchFragment = (SearchFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
         searchFragment.onHashTagClicked(query);
+
+        FeedFragment feedFragment = new FeedFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
+        bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
+        bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
+        feedFragment.setArguments(bundle);
+
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction =
+                fragmentManager.beginTransaction();
+        feedFragment.setArguments(bundle);
+        fragmentTransaction.replace(R.id.fl_container, feedFragment);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onArticleUnBookMarkClicked(ArticleSolrObj articleSolrObj) {
+
+    }
+
+    @Override
+    public void onArticleBookMarkClicked(ArticleSolrObj articleSolrObj) {
+
+    }
+
+    @Override
+    public void onArticleItemClicked(ArticleSolrObj articleSolrObj) {
+
+    }
+
+    @Override
+    public void onPostShared(FeedDetail feedDetail) {
+
+    }
+
+    @Override
+    public void onUserPostClicked(FeedDetail feedDetail) {
+
+    }
+
+    @Override
+    public void onUserPostCommentClicked(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onUserPostImageClicked(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onPostMenuClicked(UserPostSolrObj userPostObj, View tvFeedCommunityPostUserMenu) {
+
+    }
+
+    @Override
+    public void onPollMenuClicked(PollSolarObj pollSolarObj, View tvFeedCommunityPollMenu) {
+
+    }
+
+    @Override
+    public void onCommentMenuClicked(UserPostSolrObj userPostObj, TextView tvFeedCommunityPostUserCommentPostMenu) {
+
+    }
+
+    @Override
+    public void onPostBookMarkedClicked(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onLikesCountClicked(long postId) {
+
+    }
+
+    @Override
+    public void onUserPostLiked(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onPollLiked(PollSolarObj pollSolarObj) {
+
+    }
+
+    @Override
+    public void onPollVote(PollSolarObj pollSolarObj, PollOptionModel pollOptionModel) {
+
+    }
+
+    @Override
+    public void onUserPostUnLiked(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onPollUnLiked(PollSolarObj pollSolarObj) {
+
+    }
+
+    @Override
+    public void onChampionProfileClicked(FeedDetail feedDetail, int requestCodeForMentorProfileDetail) {
+
+    }
+
+    @Override
+    public void onCommunityTitleClicked(FeedDetail feedDetail) {
+
+    }
+
+    @Override
+    public void userCommentLikeRequest(UserPostSolrObj comment, boolean isLikedAction, int adapterPosition) {
+
+    }
+
+    @Override
+    public void onChallengeClicked(Contest contest) {
+
+    }
+
+    @Override
+    public void onChallengePostShared(BaseResponse baseResponse) {
+
+    }
+
+    @Override
+    public void onFollowClicked(UserSolrObj userSolrObj) {
+
+    }
+
+    @Override
+    public void onMentorProfileClicked(UserSolrObj userSolrObj) {
+
+    }
+
+    @Override
+    public void onMentorProfileClicked(UserPostSolrObj userSolrObj) {
+
+    }
+
+    @Override
+    public void onFeedLastCommentUserClicked(UserPostSolrObj userSolrObj) {
+
+    }
+
+    @Override
+    public void onArticleCommentClicked(ArticleSolrObj articleObj) {
+
+    }
+
+    @Override
+    public void onArticlePostLiked(ArticleSolrObj articleSolrObj) {
+
+    }
+
+    @Override
+    public void onArticlePostUnLiked(ArticleSolrObj articleSolrObj) {
+
+    }
+
+    @Override
+    public void onSpamPostApprove(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onSpamPostDelete(UserPostSolrObj userPostObj) {
+
+    }
+
+    @Override
+    public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
+
+    }
+
+    @Override
+    public void onCommunityClicked(long communityId) {
+
+    }
+
+    @Override
+    public void onHeaderCreatePostClicked() {
+
+    }
+
+    @Override
+    public void onCommunityJoinOrLeave(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void onSeeMoreClicked(CarouselDataObj carouselDataObj) {
+
+    }
+
+    @Override
+    public void onImagePostClicked(ImageSolrObj imageSolrObj) {
+
+    }
+
+    @Override
+    public void onUserHeaderClicked(CommunityFeedSolrObj communityFeedSolrObj, boolean authorMentor) {
+
+    }
+
+    @Override
+    public void onPostMenuClicked(ArticleSolrObj articleObj, View view) {
+
+    }
+
+    @Override
+    public void onHerStoryPostMenuClicked(ArticleSolrObj articleObj, View view) {
+
+    }
+
+    @Override
+    public void onUpdateNowClicked() {
+
+    }
+
+    @Override
+    public void onUpdateLaterClicked() {
+
+    }
+
+    @Override
+    public void onLeaderBoardItemClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
+
+    }
+
+    @Override
+    public void onLeaderBoardHeaderClick(LeaderBoardUserSolrObj leaderBoardUserSolrObj, String screenName) {
+
+    }
+
+    @Override
+    public void onLeaderBoardUserClick(long userId, String screenName) {
+
+    }
+
+    @Override
+    public void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj) {
+
     }
 }

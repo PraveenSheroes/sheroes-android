@@ -26,8 +26,8 @@
             app:cardCornerRadius="2dp"
             app:cardElevation="4dp">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <RelativeLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
@@ -39,6 +39,15 @@
                     android:layout_margin="12dp"
                     android:src="@drawable/search_icon_vector" />
 
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="12dp"
+                    android:src="@drawable/ic_back_arrow"
+                    android:visibility="gone"
+                    />
+
                 <EditText
                     android:id="@+id/et_search"
                     android:layout_width="wrap_content"
@@ -48,10 +57,24 @@
                     android:hint="@string/search_hint_text"
                     android:imeOptions="actionSearch"
                     android:singleLine="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/iv_search_icon"
                     android:textColorHint="@color/sheroes_warm_grey"
                     android:textSize="15sp"
                     vernacular:customTextFontFamily="@string/regular_font" />
-            </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/iv_search_close"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/close_grey_vector"
+                    android:visibility="gone"
+                    android:layout_marginRight="16dp"/>
+
+
+            </RelativeLayout>
 
         </android.support.v7.widget.CardView>
 

@@ -1259,7 +1259,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     case AppConstants.REQUEST_CODE_FOR_GALLERY:
                         mImageCaptureUri = intent.getData();
                         if (resultCode == Activity.RESULT_OK) {
-                            mProfileFragment.croppingIMG();
+                            if(mProfileFragment != null) {
+                                mProfileFragment.croppingIMG();
+                            }
                         }
                         break;
                     case AppConstants.REQUEST_CODE_FOR_IMAGE_CROPPING:
