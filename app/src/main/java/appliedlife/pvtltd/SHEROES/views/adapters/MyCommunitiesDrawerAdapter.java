@@ -80,7 +80,7 @@ public class MyCommunitiesDrawerAdapter extends RecyclerView.Adapter<RecyclerVie
 
     //region Public method
     public void setData(List<FeedDetail> communities) {
-        if (!StringUtil.isNotEmptyCollection(communities)) {
+        if (StringUtil.isNotEmptyCollection(communities)) {
             this.mCommunities = communities;
         }
     }
