@@ -65,6 +65,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
@@ -352,6 +353,8 @@ public interface SheroesAppComponent {
     void inject(ReportUserProfileDialogFragment reportUserProfileDialogFragment);
 
     void inject(SearchFragment searchFragment);
+
+    void inject(ProfileFragment profileFragment);
 }
 
 

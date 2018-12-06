@@ -1,19 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:fitsSystemWindows="true">
 
-    <FrameLayout
-        android:id="@+id/profile_frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <!-- <android.support.design.widget.AppBarLayout
+     <android.support.design.widget.AppBarLayout
          android:id="@+id/app_bar_layout"
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
@@ -27,7 +21,6 @@
              android:fitsSystemWindows="true"
              app:contentScrim="?attr/colorPrimary"
              app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
-             android:minHeight="0dp"
              app:title=" ">
 
              <ImageView
@@ -70,7 +63,7 @@
                  app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                  app:theme="@style/ToolBarStyle">
 
-                 <RelativeLayout
+               <RelativeLayout
                      android:layout_width="match_parent"
                      android:layout_height="match_parent">
 
@@ -85,6 +78,15 @@
                          android:drawableRight="@drawable/vector_menu_dashboard"
                          android:padding="@dimen/dp_size_20"
                          android:visibility="visible" />
+
+                   <ImageView
+                       android:id="@+id/tv_drawer_navigation"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_back_arrow"
+                       android:layout_centerVertical="true"
+                       android:layout_marginRight="16dp"
+                       android:visibility="gone"/>
 
                      <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                          android:id="@+id/tv_mentor_toolbar_name"
@@ -158,6 +160,6 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:visibility="gone"
-         android:layout_gravity="end|bottom" />-->
+         android:layout_gravity="end|bottom" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

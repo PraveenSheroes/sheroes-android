@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
@@ -13,11 +14,14 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
+import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -1070,6 +1074,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
         } else {
             tvFeedCommunityPostText.setVisibility(View.VISIBLE);
         }
+
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -1102,12 +1107,20 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             if (StringUtil.isNotEmptyCollection(mentionSpanList)) {
                 showUserMentionName(listDescription, mentionSpanList, false);
             } else {
-                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
+                setTextViewHTML(tvFeedCommunityPostText, listDescription);
+//                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
             }
         } else {
-            tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
+            setTextViewHTML(tvFeedCommunityPostText, listDescription);
+//            tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
         }
         linkifyURLs(tvFeedCommunityPostText);
+    }
+
+    public void setTextViewHTML(TextView text, String html) {
+        Log.e("setTextViewHTML", html + "");
+        CharSequence sequence = Html.fromHtml(html);
+        text.setText(sequence);
     }
 
     @TargetApi(AppConstants.ANDROID_SDK_24)

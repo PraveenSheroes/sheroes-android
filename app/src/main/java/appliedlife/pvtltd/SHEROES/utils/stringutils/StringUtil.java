@@ -515,7 +515,7 @@ public class StringUtil {
      *
 	 * public static boolean matches(String regexp, String s) { RE r = new
 	 * RE(regexp); return r.match(s); }
-	 * 
+	 *
 	 * public static boolean containsDigit(String str) { char [] c =
 	 * str.toCharArray(); int size =c.length; for(int i =0 ; i < size ;i++) {
 	 * if(CharacterUtilities.isDigit(c[i])) { return true; } } return false; }

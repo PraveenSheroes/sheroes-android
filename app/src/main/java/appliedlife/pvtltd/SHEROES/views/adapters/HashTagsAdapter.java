@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,21 +12,20 @@ import android.view.ViewGroup;
 import java.util.List;
 
 import appliedlife.pvtltd.SHEROES.R;
-import appliedlife.pvtltd.SHEROES.views.fragments.HashTagFragment;
+import appliedlife.pvtltd.SHEROES.basecomponents.IHashTagCallBack;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HashTagsHeaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.HashTagsViewHolder;
-import appliedlife.pvtltd.SHEROES.views.viewholders.PhotoViewHolder;
 
 public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_HEADER = 1;
     private static final int TYPE_ITEM = 2;
     private Context context;
     private List<String> hashTagsList;
-    private HashTagFragment hashTagFragment;
+    private IHashTagCallBack iHashTagCallBack;
 
-    public HashTagsAdapter(Context context, HashTagFragment hashTagFragment, List<String> hashTagsList) {
+    public HashTagsAdapter(Context context, IHashTagCallBack hashTagCallBack, List<String> hashTagsList) {
         this.context = context;
-        this.hashTagFragment = hashTagFragment;
+        this.iHashTagCallBack = hashTagCallBack;
         this.hashTagsList = hashTagsList;
     }
 
@@ -42,12 +43,12 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
             case TYPE_ITEM:
                 View itemView = inflater.inflate(R.layout.hashtag_row_element_layout, parent, false);
-                viewHolder = new HashTagsViewHolder(itemView, hashTagFragment);
+                viewHolder = new HashTagsViewHolder(itemView, iHashTagCallBack, hashTagsList);
             break;
 
             default:
                 View view = inflater.inflate(R.layout.hashtag_row_element_layout, parent, false);
-                viewHolder = new HashTagsViewHolder(view, hashTagFragment);
+                viewHolder = new HashTagsViewHolder(view, iHashTagCallBack, hashTagsList);
             break;
         }
         return viewHolder;
@@ -86,5 +87,10 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public int getItemCount() {
         return hashTagsList.size() + 1;
+    }
+
+    public void refreshList(List<String> hashTagsList){
+        this.hashTagsList.addAll(hashTagsList);
+        notifyDataSetChanged();
     }
 }

@@ -247,6 +247,14 @@ public class ArticlesFragment extends BaseFragment {
         mSwipeView.setRefreshing(false);
     }
 
+    public void updatedata(FeedResponsePojo feedResponsePojo) {
+        List<FeedDetail> feedDetailList;
+        List<FeedDetail> newFeedDetailList = new ArrayList<>();
+        newFeedDetailList = feedResponsePojo.getFeedDetails();
+        mAdapter.setSheroesGenericListData(newFeedDetailList);
+        mAdapter.notifyDataSetChanged();
+    }
+
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
         super.getSuccessForAllResponse(baseResponse, feedParticipationEnum);
