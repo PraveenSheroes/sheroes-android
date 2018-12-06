@@ -1522,7 +1522,9 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
                 photo.file = file;
                 mImageList.add(photo);
                 File compressSharedFile = compressFile(file);
-                mFilePathList.add(compressSharedFile.getAbsolutePath());
+                if (compressSharedFile != null) {
+                    mFilePathList.add(compressSharedFile.getAbsolutePath());
+                }
                 setImageCount();
                 mPostPhotoAdapter.addPhoto(photo);
             }
@@ -1533,7 +1535,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
 
     //get path from Uri
     private String getFilePath(Uri imageUri) {
-        if (imageUri.getScheme().equalsIgnoreCase(TYPE_FILE)) {
+        if (TYPE_FILE.equalsIgnoreCase(imageUri.getScheme())) {
             return imageUri.getPath();
         } else {
             return CommonUtil.getImagePathFromInputStreamUri(this, imageUri);

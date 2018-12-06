@@ -801,9 +801,9 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     private void UpdateFabVisibility(CommunityTab communityTab) {
         if (communityTab == null) return;
-        mFabButton.setVisibility(View.GONE);
+        mFabButton.hide();
         if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
-            mFabButton.setVisibility(View.VISIBLE);
+            mFabButton.show();
             if (CommonUtil.isValidContextForGlide(mFabButton.getContext())) {
                 Glide.with(mFabButton.getContext())
                         .load(communityTab.fabIconUrl)
