@@ -20,24 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import androidx.annotation.NonNull;
-import com.google.android.material.appbar.AppBarLayout;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.core.view.ViewCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.appcompat.widget.Toolbar;
 import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -56,6 +38,10 @@ import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.tooltip.Tooltip;
 
 import org.json.JSONException;
@@ -75,6 +61,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.core.view.ViewCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
@@ -334,7 +334,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private FragmentOpen mFragmentOpen;
     private CustomActionBarToggle mCustomActionBarToggle;
     private FeedDetail mFeedDetail;
-    private long mChallengeId;
     private ProgressDialog mProgressDialog;
     private FragmentListRefreshData mFragmentListRefreshData;
     private MyCommunitiesDrawerAdapter mMyCommunitiesAdapter;
@@ -483,7 +482,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick(R.id.tv_drawer_navigation)
     public void drawerNavigationClick() {
         AppUtils.hideKeyboard(mTvUserName, TAG);
-        mDrawer.openDrawer(Gravity.START);
+        mDrawer.openDrawer(GravityCompat.START);
     }
 
     @OnClick(R.id.fl_nav_communities)
@@ -504,9 +503,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void removeTrendingFAB(int tabPosition) {
         if (tabPosition == AppConstants.TRENDING_TAB) {
-            mFloatActionBtn.setVisibility(View.GONE);
+            mFloatActionBtn.hide();
         } else {
-            mFloatActionBtn.setVisibility(View.VISIBLE);
+            mFloatActionBtn.show();
         }
     }
 
@@ -568,7 +567,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void resetUiSelectedOptions() {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.GONE);
+        mFloatActionBtn.hide();
         mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
@@ -607,8 +606,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
 
-        mFloatActionBtn.setVisibility(View.GONE);
-
+        mFloatActionBtn.hide();
         flFeedFullView.setVisibility(View.VISIBLE);
     }
 
@@ -662,7 +660,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.show();
         mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
         mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
         mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
@@ -687,7 +685,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     public void communityButton() {
-
         mTvCommunities.setCompoundDrawablesWithIntrinsicBounds(null, ContextCompat.getDrawable(getApplication(), R.drawable.vector_community_selected_icon), null, null);
         mTvCommunities.setTextColor(ContextCompat.getColor(getApplication(), R.color.comment_text));
         mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
@@ -695,7 +692,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mTvHome.setTextColor(ContextCompat.getColor(getApplication(), R.color.recent_post_comment));
         mTvHome.setText(getString(R.string.home_label));
         mliArticleSpinnerIcon.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.GONE);
+        mFloatActionBtn.hide();
         mTitleText.setText(getString(R.string.ID_COMMUNITIES));
         mICSheroes.setVisibility(View.GONE);
     }
@@ -708,7 +705,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void articleUi() {
         mliArticleSpinnerIcon.setVisibility(View.VISIBLE);
-        mFloatActionBtn.setVisibility(View.GONE);
+        mFloatActionBtn.hide();
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
@@ -725,7 +722,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void helplineUi() {
         mliArticleSpinnerIcon.setVisibility(View.GONE);
         mFlHomeFooterList.setVisibility(View.GONE);
-        mFloatActionBtn.setVisibility(View.GONE);
+        mFloatActionBtn.hide();
         mTitleText.setText("");
         mICSheroes.setVisibility(View.VISIBLE);
     }
@@ -897,8 +894,10 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             mMyCommunitiesAdapter.notifyItemRangeInserted(position, data.size());
         } else if (StringUtil.isNotEmptyCollection(mPullRefreshList.getFeedResponses()) && mMyCommunitiesAdapter != null) {
             List<FeedDetail> data = mPullRefreshList.getFeedResponses();
-            data.remove(data.size() - 1);
-            mMyCommunitiesAdapter.notifyDataSetChanged();
+            if (null != data && data.size() > 0) {
+                data.remove(data.size() - 1);
+                mMyCommunitiesAdapter.notifyDataSetChanged();
+            }
         }
     }
 

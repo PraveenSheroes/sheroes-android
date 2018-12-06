@@ -427,9 +427,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             String title = (String) mViewPagerAdapter.getPageTitle(position);
             if (StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) {
                 if (isOwnProfile) {
-                    mCreatePost.setVisibility(View.VISIBLE);
+                    mCreatePost.show();
                 } else {
-                    mCreatePost.setVisibility(View.GONE);
+                    mCreatePost.hide();
                 }
                 mStoryFooter.setVisibility(View.GONE);
             } else {
@@ -438,11 +438,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 } else {
                     mStoryFooter.setVisibility(View.GONE);
                 }
-                mCreatePost.setVisibility(View.GONE);
+                mCreatePost.hide();
             }
         } else {
             mStoryFooter.setVisibility(View.GONE);
-            mCreatePost.setVisibility(View.GONE);
+            mCreatePost.hide();
         }
     }
 
@@ -1057,9 +1057,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mViewPager.setCurrentItem(mViewPagerAdapter.getCount() - 1);
         } else {
             if (isOwnProfile) {
-                mCreatePost.setVisibility(View.VISIBLE);
+                mCreatePost.show();
             } else {
-                mCreatePost.setVisibility(View.GONE);
+                mCreatePost.hide();
             }
             if (!isChampion) { //for user make post as default tab
                 mViewPager.setCurrentItem(1);
@@ -1251,6 +1251,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                                     intent.putExtra(Intent.EXTRA_STREAM, contentUri);
                                     intent.setType("image/*");
                                     startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+                                }
+                                if (null != bitmap && !bitmap.isRecycled()) {
+                                    bitmap.recycle();
                                 }
                             }
                         });
