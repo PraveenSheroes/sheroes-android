@@ -637,19 +637,20 @@ public class CommonUtil {
         String imagePath = cachePath + "/" + fileName;
         try {
             stream = new FileOutputStream(imagePath);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
         } catch (FileNotFoundException e) {
             Crashlytics.getInstance().core.logException(e);
+        } finally {
+            if(null!= stream) {
+                try {
+                    stream.close();
+                } catch (IOException e) {
+                    Crashlytics.getInstance().core.logException(e);
+                }
+            }
         }
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        try {
-            stream.close();
-        } catch (IOException e) {
-            Crashlytics.getInstance().core.logException(e);
-        }
-
         File newFile = new File(cachePath, fileName);
-        Uri contentUri = FileProvider.getUriForFile(context, "appliedlife.pvtltd.SHEROES.provider", newFile);
-        return contentUri;
+        return FileProvider.getUriForFile(context, "appliedlife.pvtltd.SHEROES.provider", newFile);
     }
 
     public static void shareLinkToWhatsApp(Context context, String mShareText) {

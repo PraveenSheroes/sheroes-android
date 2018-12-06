@@ -85,6 +85,4 @@ public class MyCommunitiesDrawerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
     //endregion
-
 }
-

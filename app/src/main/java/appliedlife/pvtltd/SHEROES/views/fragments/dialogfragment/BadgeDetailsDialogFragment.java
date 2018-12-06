@@ -8,8 +8,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +30,8 @@ import java.util.HashMap;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
@@ -40,8 +40,8 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseDialogFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.community.BadgeDetails;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -326,13 +326,15 @@ public class BadgeDetailsDialogFragment extends BaseDialogFragment {
                     .load(badgeUrl)
                     .apply(new RequestOptions().transform(new CommonUtil.CircleTransform(getActivity())))
                     .into(new BitmapImageViewTarget(badgeIcon) {
-
                         @Override
                         public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                             super.onResourceReady(resource, transition);
                             badgeIcon.setImageBitmap(resource);
                             Bitmap bitmap = CommonUtil.getViewBitmap(cardContainer);
                             Uri contentUri = CommonUtil.getContentUriFromBitmap(getActivity(), bitmap);
+                            if (null != bitmap && !bitmap.isRecycled()) {
+                                bitmap.recycle();
+                            }
                             dismiss();
                             if (contentUri != null) {
                                 //Analytics for Badge Shared

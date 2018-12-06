@@ -1252,6 +1252,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                                     intent.setType("image/*");
                                     startActivity(Intent.createChooser(intent, AppConstants.SHARE));
                                 }
+                                if (null != bitmap && !bitmap.isRecycled()) {
+                                    bitmap.recycle();
+                                }
                             }
                         });
             }
