@@ -76,12 +76,14 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if(position == 0){
-            return TYPE_HEADER;
-        } else {
-            return TYPE_ITEM;
+        if(hashTagsList.size() > 0) {
+            if (position == 0) {
+                return TYPE_HEADER;
+            } else {
+                return TYPE_ITEM;
+            }
         }
-
+        return -1;
     }
 
     @Override
@@ -90,7 +92,7 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void refreshList(List<String> hashTagsList){
-        this.hashTagsList.addAll(hashTagsList);
+        this.hashTagsList = hashTagsList;
         notifyDataSetChanged();
     }
 }

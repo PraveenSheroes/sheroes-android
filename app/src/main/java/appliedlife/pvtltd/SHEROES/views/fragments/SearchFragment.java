@@ -49,7 +49,7 @@ import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
-public class SearchFragment extends BaseFragment implements ISearchView, BaseHolderInterface {
+public class SearchFragment extends BaseFragment implements BaseHolderInterface {
     private static final String SCREEN_LABEL = "Search Screen";
 
     @Inject
@@ -85,7 +85,6 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         View view = inflater.inflate(R.layout.activity_search, container, false);
         ButterKnife.bind(this, view);
 
-        mSearchPresenter.attachView(this);
         initializeSearchViews();
         searchListener();
 
@@ -98,13 +97,35 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() == 0) {
-                    hashTagFragment.populateTrendingHashTags();
+                    hashTagFragment.callHashTagApi();
                 }
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        mSearchTabsPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position == 2){
+                    if(mETSearch.getText().toString().trim().length()>0){
+                        hashTagFragment.filterFeed(mETSearch.getText().toString());
+                    }else{
+                        hashTagFragment.callHashTagApi();
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
@@ -262,11 +283,10 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         } else if (fragment instanceof CommunitiesListFragment) {
             ((CommunitiesListFragment)fragment).filterCommunities();
         } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment)fragment).populateTrendingHashTags();
+            ((HashTagFragment)fragment).filterFeed(mETSearch.getText().toString());
         } else if (fragment instanceof ArticlesFragment) {
             //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
-      //  mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
     }
 
     @OnClick(R.id.iv_search_close)
@@ -281,13 +301,14 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         } else if (fragment instanceof CommunitiesListFragment) {
 //            ((CommunitiesListFragment) fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment) fragment).populateTrendingHashTags();
+            ((HashTagFragment) fragment).callHashTagApi();
         } else if (fragment instanceof ArticlesFragment) {
             //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
     }
 
     private void searchInitState() {
+        mETSearch.setText("");
         searchImg.setVisibility(View.VISIBLE);
         backImg.setVisibility(View.GONE);
         closeImg.setVisibility(View.GONE);
@@ -299,21 +320,6 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         closeImg.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public void onSearchRespose(FeedResponsePojo feedResponsePojo) {
-        int index = mSearchTabsPager.getCurrentItem();
-        SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
-        Fragment fragment = adapter.getFragment(index);
-        if (fragment instanceof FeedFragment) {
-            // ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
-        } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment) fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
-        } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment) fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
-        } else if (fragment instanceof ArticlesFragment) {
-            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
-        }
-    }
 
     public String getSearchCategory(Fragment fragment) {
         if (fragment instanceof FeedFragment) {

@@ -2,6 +2,8 @@ package appliedlife.pvtltd.SHEROES.presenters;
 
 import com.crashlytics.android.Crashlytics;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
@@ -33,16 +35,16 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
         mSheroesApplication = sheroesApplication;
     }
 
-    public void searchQuery(String searchText, String searchCategory) {
+    public void getTrendingHashtags() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
             return;
         }
-        mSheroesAppServiceApi.searchQuery(searchText, searchCategory, "0", "10")
+        mSheroesAppServiceApi.fetchTrendingHashtags()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<FeedResponsePojo>bindToLifecycle())
-                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                .compose(this.<List<String>>bindToLifecycle())
+                .subscribe(new DisposableObserver<List<String>>() {
                     @Override
                     public void onComplete() {
 
@@ -55,10 +57,8 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
                     }
 
                     @Override
-                    public void onNext(FeedResponsePojo feedResponsePojo) {
-                        if (null != feedResponsePojo) {
-                            getMvpView().onSearchRespose(feedResponsePojo);
-                        }
+                    public void onNext(List<String> hashTagsList) {
+                        getMvpView().onHashTagsResponse(hashTagsList);
                     }
                 });
     }

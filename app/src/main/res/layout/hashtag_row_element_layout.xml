@@ -19,7 +19,7 @@
         android:ellipsize="end"
         android:maxLines="@integer/int_value_for_line_1"
         android:textColor="@color/sheroes_greyish_brown"
-        android:text="@string/ID_USER_NAME"
+        tools:text="@string/ID_USER_NAME"
         vernacular:customTextFontFamily="@string/medium_font" />
 
 </LinearLayout>

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import java.util.List;
 import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
@@ -357,6 +358,6 @@ public interface SheroesAppServiceApi {
     @GET
     Observable<FeedResponsePojo> getSearchResponse(@Url String url);
 
-    @GET("participant/search/")
-    Observable<FeedResponsePojo> searchQuery(@Query("search_text") String searchText, @Query("search_category") String searchCategory, @Query("start") String pageStart, @Query("page_size") String pageSize);
+    @GET("participant/search/getHashtags")
+    Observable<List<String>> fetchTrendingHashtags();
 }

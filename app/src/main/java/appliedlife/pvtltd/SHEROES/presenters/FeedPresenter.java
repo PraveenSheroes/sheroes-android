@@ -375,7 +375,9 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         break;
                                 }
                             }else{
-                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                if(mFeedState == NORMAL_REQUEST) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                }
                             }
                         }else {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
