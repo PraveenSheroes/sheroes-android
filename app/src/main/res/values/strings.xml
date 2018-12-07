@@ -148,21 +148,24 @@
     <string name="ID_WELCOME_FIRST"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    Ask questions and discuss about <span style="font-weight: bold"><b>health, career</b></span> etc on Ask SHEROES Helpline&#8230
+                                                    Join your <span style="font-weight: bold"><b>favorite communities!</b></span> Learn everyday from
+                                                    each other.
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
     <string name="ID_WELCOME_SECOND"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    Join <span style="font-weight: bold"><b>Communities you like</b></span> and talk to other women even anonymously
+                                                    Meet <span style="font-weight: bold"><b>new friends.</b></span> Connect with women as awesome
+                                                    as you.
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
     <string name="ID_WELCOME_THIRD"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>Get expert advice</b></span> from champions -  achievers from within the community
+                                                    Use <span style="font-weight: bold"><b>Helpline</b></span> to <span style="font-weight: bold"><b>chat privately</b></span> with our professional counsellors
+                                                    for <span style="font-weight: bold"><b>FREE</b></span>
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>

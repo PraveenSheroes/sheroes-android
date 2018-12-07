@@ -149,22 +149,24 @@
     <string name="ID_WELCOME_FIRST"> <![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b>स्वास्थ्य, करियर </b></span> आदि के बारे में SHEROES हेल्पलाइन पर चर्चा करें और सवाल पूंछें&#8230;
+                                                    अपना <span style="font-weight: bold"><b>मनपसंद समुदाय</b></span> ज्वाइन करें!
+                                                    हर रोज़ कुछ नया सीखें
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
     <string name="ID_WELCOME_SECOND"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    35+ मौजूदा <span style="font-weight: bold"><b> समुदायों</b></span> में से अपनी
-                                                    <span style="font-weight: bold"><b>पसंद</b></span> के किसी भी समुदाय में शामिल हों।
+                                                    <span style="font-weight: bold"><b>नए दोस्त</b></span> बनाएं। अपने जैसी बेहतरीन
+                                                    महिलाओं से मिलें
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>
     <string name="ID_WELCOME_THIRD"><![CDATA[ <html>
                                                     <body>
                                                     <div style="text-align: center;margin: 0px 0px 5px 0px; color: #3c3c3c;">
-                                                    <span style="font-weight: bold"><b> अकेलापन महसूस</b></span> करती हैं? हमारे सलाहकारों से बात करें और परामर्श लें।
+                                                    हमारे <span style="font-weight: bold"><b>प्रोफेशनल काउन्सलर</b></span> से <span style="font-weight: bold"><b>हेल्पलाइन
+                                                    पर फ्री</b></span> में बेजिझक गुप्त चैट करें
                                                     </div>
                                                     </body>
                                                     </html>  ]]></string>

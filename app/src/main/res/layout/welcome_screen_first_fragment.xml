@@ -5,6 +5,13 @@
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:gravity="center">
+    <ImageView
+        android:id="@+id/iv_welcome_screen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/tv_welcome_text"
+        android:layout_marginTop="@dimen/welcome_screen_top_margin"
+        android:layout_marginBottom="@dimen/welcome_screen_bottom_margin" />
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_welcome_text"
@@ -12,18 +19,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/dp_size_20"
-        android:layout_marginRight="@dimen/dp_size_20"
+        android:layout_marginLeft="@dimen/welcome_text_left_right_margin"
+        android:layout_marginRight="@dimen/welcome_text_left_right_margin"
         android:maxLines="@integer/int_value_for_line_2"
         android:textColor="@color/feed_article_label"
         vernacular:customTextFontFamily="@string/regular_font"
         android:textAlignment="center" />
-
-    <ImageView
-        android:id="@+id/iv_welcome_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/tv_welcome_text"
-        android:layout_marginBottom="@dimen/dp_size_32" />
-
 </RelativeLayout>
