@@ -54,6 +54,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private FragmentListRefreshData mFragmentListRefreshData;
     private OnBoardingPresenter mOnBoardingPresenter;
     private MainActivityPresenter mMainActivityPresenter;
+    private boolean mIsSearch = false;
+    private String mSearchText, mSearchCategory;
 
     public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mOnBoardingPresenter = onBoardingPresenter;
@@ -118,6 +120,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         this.mFragmentListRefreshData = mFragmentListRefreshData;
     }
 
+    public void setSearchParameter(boolean isSearch, String searchText, String searchCategory) {
+        mIsSearch = isSearch;
+        mSearchText = searchText;
+        mSearchCategory = searchCategory;
+    }
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
@@ -171,8 +179,12 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 }
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
-                        FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
-                        mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
+                        if (mIsSearch) {
+                            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false);
+                        } else {
+                            FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
+                            mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
+                        }
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
                         FeedRequestPojo feedRequestCommPostFragPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo);

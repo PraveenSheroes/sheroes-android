@@ -260,13 +260,12 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         if (fragment instanceof FeedFragment) {
             ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
         } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment)fragment).filterCommunities();
+            ((CommunitiesListFragment) fragment).filterCommunities();
         } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment)fragment).populateTrendingHashTags();
+            ((HashTagFragment) fragment).populateTrendingHashTags();
         } else if (fragment instanceof ArticlesFragment) {
-            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+            ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
         }
-      //  mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
     }
 
     @OnClick(R.id.iv_search_close)
@@ -311,6 +310,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         } else if (fragment instanceof HashTagFragment) {
             ((HashTagFragment) fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
         } else if (fragment instanceof ArticlesFragment) {
+            ((ArticlesFragment)fragment).getFeedListSuccess(feedResponsePojo);
             //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
     }

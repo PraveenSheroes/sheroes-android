@@ -68,10 +68,13 @@ public class ArticlesFragment extends BaseFragment {
     @Inject
     AppUtils mAppUtils;
     private FragmentListRefreshData mFragmentListRefreshData;
+    private HidingScrollListener mHidingScrollListener;
     private int mPageNo = AppConstants.ONE_CONSTANT;
     private List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
     private boolean mListLoad = true;
     private boolean mIsEdit = false;
+    private boolean mIsSearch = false;
+    private String mSearchText, mSearchCategory;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.loader_gif)
@@ -97,7 +100,7 @@ public class ArticlesFragment extends BaseFragment {
         mAdapter = new GenericRecyclerViewAdapter(getContext(), (BaseHolderInterface) getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
-        mRecyclerView.addOnScrollListener(new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
+        mHidingScrollListener = new HidingScrollListener(mHomePresenter, mRecyclerView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
                 if (null != getActivity() && getActivity() instanceof HomeActivity)
@@ -114,7 +117,8 @@ public class ArticlesFragment extends BaseFragment {
             public void dismissReactions() {
 
             }
-        });
+        };
+        mRecyclerView.addOnScrollListener(mHidingScrollListener);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
         mFragmentListRefreshData.setCategoryIdList(categoryIdList);
@@ -145,7 +149,22 @@ public class ArticlesFragment extends BaseFragment {
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-        mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+        if (mIsSearch == true && mSearchText != null && mSearchCategory != null) {
+            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, true);
+        } else {
+            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+        }
+    }
+
+    public void fetchSearchedArticles(boolean isSearch, String searchText, String searchCategory) {
+        mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
+        mPullRefreshList = new SwipPullRefreshList();
+        mPullRefreshList.setPullToRefresh(false);
+        mIsSearch = isSearch;
+        mSearchText = searchText;
+        mSearchCategory = searchCategory;
+        mHidingScrollListener.setSearchParameter(true, mSearchText, mSearchCategory);
+        mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false);
     }
 
     @Override
@@ -245,14 +264,6 @@ public class ArticlesFragment extends BaseFragment {
             mLiNoResult.setVisibility(View.VISIBLE);
         }
         mSwipeView.setRefreshing(false);
-    }
-
-    public void updatedata(FeedResponsePojo feedResponsePojo) {
-        List<FeedDetail> feedDetailList;
-        List<FeedDetail> newFeedDetailList = new ArrayList<>();
-        newFeedDetailList = feedResponsePojo.getFeedDetails();
-        mAdapter.setSheroesGenericListData(newFeedDetailList);
-        mAdapter.notifyDataSetChanged();
     }
 
     @Override
