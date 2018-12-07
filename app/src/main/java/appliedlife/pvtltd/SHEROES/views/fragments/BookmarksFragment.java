@@ -183,4 +183,8 @@ public class BookmarksFragment extends BaseFragment {
         return SCREEN_LABEL;
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

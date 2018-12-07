@@ -605,6 +605,11 @@ public class PostDetailActivity extends BaseActivity implements BaseHolderInterf
         onShowErrorDialog(s, feedParticipationEnum);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     // user post detail callbacks
     @Override
     public void loadMoreComments() {

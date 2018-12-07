@@ -287,4 +287,8 @@ public class FollowedCommunitiesFragment extends BaseFragment implements IProfil
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

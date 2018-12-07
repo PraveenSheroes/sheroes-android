@@ -586,5 +586,10 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
         profileDetailsFragment.setArguments(bundle);
         return profileDetailsFragment;
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
     //endregion private methods
 }

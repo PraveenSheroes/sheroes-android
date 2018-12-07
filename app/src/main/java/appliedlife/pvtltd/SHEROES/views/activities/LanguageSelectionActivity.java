@@ -401,4 +401,9 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
 }

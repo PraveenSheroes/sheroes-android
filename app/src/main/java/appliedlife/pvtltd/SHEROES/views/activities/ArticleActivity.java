@@ -1258,6 +1258,11 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         onShowErrorDialog(s, feedParticipationEnum);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     @OnClick(R.id.like_count)
     public void onLikeCountClicked() {
         LikeListBottomSheetFragment.showDialog(this, "", mArticleSolrObj.getEntityOrParticipantId());

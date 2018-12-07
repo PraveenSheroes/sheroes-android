@@ -71,6 +71,11 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
     }

@@ -406,6 +406,11 @@ public class ContestInfoFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     //endregion
 
 }

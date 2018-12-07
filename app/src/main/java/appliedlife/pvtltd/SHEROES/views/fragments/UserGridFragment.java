@@ -652,6 +652,11 @@ public class UserGridFragment extends BaseFragment implements IFeedView, UserCar
         }
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     @OnClick({R.id.tv_retry_for_internet})
     public void onRetryClick() {
         noInternet.setVisibility(View.GONE);

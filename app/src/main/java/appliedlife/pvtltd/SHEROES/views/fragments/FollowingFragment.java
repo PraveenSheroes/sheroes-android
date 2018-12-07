@@ -328,5 +328,10 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mFollowingPresenter.getFollowersFollowing(mProfileFollowedMentor);
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
     //endregion private methods
 }

@@ -230,6 +230,11 @@ public class ChampionListingActivity extends BaseActivity implements BaseHolderI
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void getLogInResponse(LoginResponse loginResponse) {
     }
 

@@ -153,7 +153,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
     }
 
     private void setupViewPager(final ViewPager viewPager) {
-        mSearchFragmentAdapter = new SearchPagerAdapter(getActivity().getSupportFragmentManager());
+        mSearchFragmentAdapter = new SearchPagerAdapter(getChildFragmentManager());
         for (String name : mSearchTabs) {
             if (name.equalsIgnoreCase(getString(R.string.top))) {
                 FeedFragment feedFragment = new FeedFragment();
@@ -258,11 +258,11 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
         Fragment fragment = adapter.getFragment(index);
         mSearchCategory = getSearchCategory(fragment);
         if (fragment instanceof FeedFragment) {
-            ((FeedFragment) fragment).filterFeed(mETSearch.getText().toString(), mSearchCategory);
+            ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
         } else if (fragment instanceof CommunitiesListFragment) {
             ((CommunitiesListFragment)fragment).filterCommunities();
         } else if (fragment instanceof HashTagFragment) {
-            //((HashTagFragment)fragment).showAllHashTags((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+            ((HashTagFragment)fragment).populateTrendingHashTags();
         } else if (fragment instanceof ArticlesFragment) {
             //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
         }
@@ -330,9 +330,15 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
 
     public void onHashTagClicked(String query) {
 //        mSearchPresenter.searchQuery(query, SearchEnum.HASHTAGS.toString());
+
         mETSearch.setText(query);
         mETSearch.setSelection(mETSearch.getText().length());
         searchingState();
+    }
+
+    @Override
+    public void showEmptyScreen(String s) {
+
     }
 
 

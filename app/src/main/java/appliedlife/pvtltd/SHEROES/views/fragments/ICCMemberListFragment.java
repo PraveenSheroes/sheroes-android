@@ -150,4 +150,8 @@ public class ICCMemberListFragment extends BaseFragment implements SHEView {
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

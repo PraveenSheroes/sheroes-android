@@ -539,6 +539,11 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void getLogInResponse(LoginResponse loginResponse) {
     }
 

@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
+import android.app.Application;
+
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 
@@ -17,6 +19,7 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
+import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
@@ -229,37 +232,162 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-    public void getFeeds(String searchText, String searchCategory) {
-        String URL = "";
-            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
-                return;
-            }
-            mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .compose(this.<FeedResponsePojo>bindToLifecycle())
-                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
-                        @Override
-                        public void onComplete() {
+//    public void getFeeds(String searchText, String searchCategory) {
+//        String URL = "";
+//            if (!NetworkUtil.isConnected(mSheroesApplication)) {
+//                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+//                return;
+//            }
+//            mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory +"&next_token=" +nextToken)
+//                    .subscribeOn(Schedulers.io())
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .compose(this.<FeedResponsePojo>bindToLifecycle())
+//                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
+//                        @Override
+//                        public void onComplete() {
+//
+//                        }
+//
+//                        @Override
+//                        public void onError(Throwable e) {
+//                            Crashlytics.getInstance().core.logException(e);
+//                            getMvpView().showError(e.getMessage(), ERROR_TAG);
+//                        }
+//
+//                        @Override
+//                        public void onNext(FeedResponsePojo feedResponsePojo) {
+//                            getMvpView().stopProgressBar();
+//                            getMvpView().hideGifLoader();
+//                            if (null != feedResponsePojo) {
+//                                if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+//                                    List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+//
+//                                    getMvpView().showFeedList(feedResponsePojo.getFeedDetails());
+//                                    nextToken = feedResponsePojo.getNextToken();
+//                                }
+//                            }
+//                        }
+//                    });
+//        }
 
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Crashlytics.getInstance().core.logException(e);
-                            getMvpView().showError(e.getMessage(), ERROR_TAG);
-                        }
-
-                        @Override
-                        public void onNext(FeedResponsePojo feedResponsePojo) {
-                            if (null != feedResponsePojo) {
-                                getMvpView().showFeedList(feedResponsePojo.getFeedDetails());
-                                /*getMvpView().onSearchRespose(feedResponsePojo);*/
-                            }
-                        }
-                    });
+    public void getFeeds(final int feedState, final String streamName, String searchText, String searchCategory){
+        if (mIsFeedLoading) {
+            return;
         }
+        Integer limit = null;
+        // only load more requests should be disabled when end of feed is reached
+        if (feedState == LOAD_MORE_REQUEST) {
+            if (mFeedState != END_REQUEST) {
+                mFeedState = feedState;
+            }
+        } else {
+            mFeedState = feedState;
+        }
+
+        switch (mFeedState) {
+            case NORMAL_REQUEST:
+                mNextToken = "";
+                if (mIsHomeFeed) {
+                    if (CommonUtil.isEmpty(mFeedDetailList)) {
+                        List<FeedDetail> feedList = new ArrayList<>();
+                        FeedDetail homeFeedHeader = new FeedDetail();
+                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                        feedList.add(0, homeFeedHeader);
+                        getMvpView().showFeedList(feedList);
+                    }
+                }
+                break;
+            case LOAD_MORE_REQUEST:
+                break;
+            case END_REQUEST:
+                getMvpView().startProgressBar();
+                return;
+        }
+        mIsFeedLoading = true;
+
+//        CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
+//        communityFeedRequestPojo.setNextToken(mNextToken);
+
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+
+        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory +"&next_token=" +mNextToken)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mIsFeedLoading = false;
+                        getMvpView().stopProgressBar();
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showFeedList(mFeedDetailList);
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        mIsFeedLoading = false;
+                        getMvpView().stopProgressBar();
+                        getMvpView().hideGifLoader();
+                        if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+                                mNextToken = feedResponsePojo.getNextToken();
+                                switch (mFeedState) {
+                                    case NORMAL_REQUEST:
+                                        getMvpView().stopProgressBar();
+                                        if (mIsHomeFeed) {
+                                            FeedDetail homeFeedHeader = new FeedDetail();
+                                            homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                            feedList.add(0, homeFeedHeader);
+                                        } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
+                                            if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
+                                                if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                                    FeedDetail noStoryFeed = new FeedDetail();
+                                                    noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
+                                                    noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
+                                                    feedList.add(noStoryFeed);
+                                                }
+                                            }
+                                        }
+                                        mFeedDetailList = feedList;
+                                        getMvpView().setFeedEnded(false);
+                                        List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                                        getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                        getMvpView().showFeedList(feedDetails);
+                                        break;
+                                    case LOAD_MORE_REQUEST:
+                                        // append in case of load more
+                                        if (!CommonUtil.isEmpty(feedList)) {
+                                            mFeedDetailList.addAll(feedList);
+                                            //getMvpView().showFeedList(mFeedDetailList);
+                                            getMvpView().addAllFeed(feedList);
+                                        } else {
+                                            getMvpView().setFeedEnded(true);
+                                        }
+                                        break;
+                                }
+                            }else{
+                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            }
+                        }else {
+                            if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
+                                getMvpView().setFeedEnded(true);
+                            } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
+                                getMvpView().setFeedEnded(true);
+                            }
+                            getMvpView().showFeedList(mFeedDetailList);
+                        }
+                    }
+                });
+    }
 
     public boolean isFeedLoading() {
         return mIsFeedLoading;

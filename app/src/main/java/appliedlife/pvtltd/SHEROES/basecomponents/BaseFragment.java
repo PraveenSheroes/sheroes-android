@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -297,4 +298,5 @@ public abstract class BaseFragment extends Fragment implements EventInterface, H
     }
 
     protected abstract SheroesPresenter getPresenter();
+
 }

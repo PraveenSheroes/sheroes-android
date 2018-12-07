@@ -391,6 +391,11 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     @OnClick({R.id.tv_retry_for_internet})
     public void onRetryClick() {
         noInternet.setVisibility(View.GONE);

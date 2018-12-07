@@ -600,6 +600,11 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void onPostSend(FeedDetail feedDetail) {
         if (feedDetail != null) {
             Intent intent = new Intent();

@@ -215,6 +215,11 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void onContactClicked(Contest contest, View view) {
         ContestActivity.navigateTo(ContestListActivity.this, contest, getScreenName(), null, ContestListActivity.CONTEST_LIST_ACTIVITY, -1, 1);
     }

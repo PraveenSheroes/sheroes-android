@@ -295,6 +295,11 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     //endregion
 
     // region Static innerclass

@@ -710,6 +710,11 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
         mProgressBar.setVisibility(View.GONE);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
     private void requestFocus(View view) {
         if (view.requestFocus()) {
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);

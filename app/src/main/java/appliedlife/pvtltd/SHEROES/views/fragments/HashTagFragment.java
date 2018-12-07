@@ -73,6 +73,7 @@ public class HashTagFragment extends BaseFragment implements BaseHolderInterface
 
         hashTagsList.add("#start ups");
         hashTagsList.add("hello");
+        hashTagsList.add("sheroes");
         hashTagsList.add("#culture");
         hashTagsList.add("#beauty");
         hashTagsList.add("#health");
@@ -205,25 +206,26 @@ public class HashTagFragment extends BaseFragment implements BaseHolderInterface
 
     @Override
     public void onHashTagClicked(String query) {
-//        loaderLayout.setVisibility(View.VISIBLE);
         hashTagsView.setVisibility(View.GONE);
         containerLayout.setVisibility(View.VISIBLE);
+
         SearchFragment searchFragment = (SearchFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
         searchFragment.onHashTagClicked(query);
 
         FeedFragment feedFragment = new FeedFragment();
         Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
+        bundle.putString(AppConstants.END_POINT_URL, "");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
         bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
         feedFragment.setArguments(bundle);
 
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction =
                 fragmentManager.beginTransaction();
         feedFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_container, feedFragment);
         fragmentTransaction.commit();
+        feedFragment.paramsToFilterFeed(true, query, "hashtags");
     }
 
     @Override
@@ -453,6 +455,11 @@ public class HashTagFragment extends BaseFragment implements BaseHolderInterface
 
     @Override
     public void onPostAuthorFollowed(UserPostSolrObj userPostSolrObj) {
+
+    }
+
+    @Override
+    public void showEmptyScreen(String s) {
 
     }
 }

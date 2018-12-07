@@ -22,4 +22,6 @@ public interface BaseMvpView {
 
     void showError(String s, FeedParticipationEnum feedParticipationEnum);
 
+    void showEmptyScreen(String s);
+
 }

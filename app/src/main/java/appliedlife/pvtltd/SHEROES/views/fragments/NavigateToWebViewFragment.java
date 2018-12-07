@@ -304,4 +304,8 @@ public class NavigateToWebViewFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

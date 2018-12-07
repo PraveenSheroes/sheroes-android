@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -205,6 +206,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @BindDimen(R.dimen.imagesize_unfollow_dialog)
     int mProfileSizeSmall;
+
+    @Bind(R.id.rl_empty)
+    RelativeLayout emptyLayout;
+
+    @Bind(R.id.tv_no_results)
+    TextView noResultsTxt;
     // endregion
 
     //region private variables
@@ -234,6 +241,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
     private boolean isTrackingEnabled = true;
+    private String searchText, searchCategory;
+    private boolean isFilter=false;
+
     //endregion
 
     //region fragment lifecycle method
@@ -252,7 +262,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setIsLoggedInUser();
         setupRecyclerScrollListener();
         showGifLoader();
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+
+        if(!isFilter)
+            mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+        else
+            mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
+
+      //  mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
@@ -820,9 +836,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void refreshList() {
+        if(!isFilter){
         mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         if (getActivity() != null && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).fetchAllCommunity();
+        }
         }
     }
 
@@ -848,6 +866,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
+    }
+
+    @Override
+    public void showEmptyScreen(String s) {
+        noResultsTxt.setText(s);
+        emptyLayout.setVisibility(View.VISIBLE);
     }
     //endregion
 
@@ -978,7 +1002,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         mAdapter.feedStartedLoading();
                     }
                 });
-                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
+
+                if(!isFilter){
+                    mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
+                }else {
+                    mFeedPresenter.getFeeds(FeedPresenter.LOAD_MORE_REQUEST, mStreamName, searchText, searchCategory);
+                }
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
@@ -999,16 +1028,26 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+                if(!isFilter) {
+                    mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+                }else{
+                    mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
+                }
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
 
     }
 
-    public void filterFeed(String searchText, String searchCategory) {
-        if(mFeedPresenter !=null)
-        mFeedPresenter.getFeeds(searchText, searchCategory);
+    public void paramsToFilterFeed(boolean isFilter, String searchText, String searchCategory){
+        this.isFilter = isFilter;
+        this.searchText = searchText;
+        this.searchCategory = searchCategory;
+    }
+
+    public void filterFeed(boolean isFilter,String searchText, String searchCategory) {
+        paramsToFilterFeed(isFilter, searchText, searchCategory);
+        mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
     }
 
     private void initializeRecyclerView() {

@@ -340,6 +340,11 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public boolean shouldTrackScreen() {
         return true;
     }

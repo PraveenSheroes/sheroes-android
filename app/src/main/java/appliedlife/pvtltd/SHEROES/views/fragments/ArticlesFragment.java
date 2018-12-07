@@ -294,4 +294,9 @@ public class ArticlesFragment extends BaseFragment {
     public String getScreenName() {
         return SCREEN_LABEL;
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

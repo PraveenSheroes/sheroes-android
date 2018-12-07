@@ -1042,6 +1042,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
     }

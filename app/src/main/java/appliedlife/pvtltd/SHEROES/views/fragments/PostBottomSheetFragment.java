@@ -214,6 +214,11 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
     }

@@ -170,6 +170,11 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void showDataList(List<FeedDetail> feedDetailList) {
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(0, 0);
         mProgressBar.setLayoutParams(params);

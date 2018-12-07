@@ -233,6 +233,11 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     protected SheroesPresenter getPresenter() {
         return mContestWinnerPresenter;
     }

@@ -202,6 +202,11 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public void onSuggestedContactClicked(UserSolrObj userSolrObj, View view) {
         int id = view.getId();
         switch (id) {
