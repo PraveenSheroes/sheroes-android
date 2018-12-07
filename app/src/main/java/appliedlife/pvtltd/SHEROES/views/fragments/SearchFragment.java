@@ -281,11 +281,11 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         if (fragment instanceof FeedFragment) {
             ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
         } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment)fragment).filterCommunities();
+            ((CommunitiesListFragment) fragment).filterCommunities();
         } else if (fragment instanceof HashTagFragment) {
             ((HashTagFragment)fragment).filterFeed(mETSearch.getText().toString());
         } else if (fragment instanceof ArticlesFragment) {
-            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+            ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
         }
     }
 

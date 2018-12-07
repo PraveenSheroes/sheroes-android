@@ -91,6 +91,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     private MasterDataModel mMasterDataModel;
     private SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi mSheroesAppServiceApi;
+    private String mNextToken = "";
     //endregion private member variable
 
     //region constructor
@@ -174,6 +175,41 @@ public class HomePresenter extends BasePresenter<HomeView> {
                         getMvpView().stopProgressBar();
                         if (null != feedResponsePojo) {
                             getMvpView().getFeedListSuccess(feedResponsePojo);
+                        }
+                    }
+                });
+    }
+
+    public void getArticleFeeds(String searchText, String searchCategory, boolean pullToRefresh) {
+        String URL = "participant/search/?search_text=" + searchText + "&search_category=" + searchCategory;
+        if (!pullToRefresh && mNextToken != null) {
+            URL = URL + "&next_token=" + mNextToken;
+        }
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
+            return;
+        }
+        mSheroesAppServiceApi.getSearchResponse(URL)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showError(e.getMessage(), ERROR_TAG);
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        if (null != feedResponsePojo) {
+                            getMvpView().getFeedListSuccess(feedResponsePojo);
+                            mNextToken = feedResponsePojo.getNextToken();
                         }
                     }
                 });
