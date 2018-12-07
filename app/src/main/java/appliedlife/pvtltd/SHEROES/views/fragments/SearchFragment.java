@@ -146,7 +146,7 @@ public class SearchFragment extends BaseFragment implements ISearchView, BaseHol
     }
 
     private void setupViewPager(final ViewPager viewPager) {
-        mSearchFragmentAdapter = new SearchPagerAdapter(getActivity().getSupportFragmentManager());
+        mSearchFragmentAdapter = new SearchPagerAdapter(getChildFragmentManager());
         for (String name : mSearchTabs) {
             if (name.equalsIgnoreCase(getString(R.string.top))) {
                 FeedFragment feedFragment = new FeedFragment();
