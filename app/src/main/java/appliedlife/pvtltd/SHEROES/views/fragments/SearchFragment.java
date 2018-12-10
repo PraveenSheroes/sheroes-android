@@ -72,6 +72,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             R.drawable.search_tab_articles
     };
     private HashTagFragment hashTagFragment;
+    private CommunitiesListFragment communitiesListFragment;
     @Bind(R.id.iv_search_close)
     ImageView closeImg;
     @Bind(R.id.iv_back)
@@ -98,6 +99,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().trim().length() == 0) {
                     hashTagFragment.callHashTagApi();
+                    communitiesListFragment.callCommunityApi();
                 }
             }
 
@@ -120,6 +122,12 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                         hashTagFragment.filterFeed(mETSearch.getText().toString());
                     }else{
                         hashTagFragment.callHashTagApi();
+                    }
+                }else if(position == 1){
+                    if(mETSearch.getText().toString().trim().length()>0){
+                        communitiesListFragment.filterCommunities(false, mETSearch.getText().toString(), SearchEnum.COMMUNITIES.toString());
+                    }else{
+                        communitiesListFragment.callCommunityApi();
                     }
                 }
             }
@@ -186,7 +194,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 mSearchFragmentAdapter.addFragment(feedFragment, getString(R.string.top));
                 mSearchTabFragments.add(feedFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.community))) {
-                CommunitiesListFragment communitiesListFragment = new CommunitiesListFragment();
+                if(communitiesListFragment == null) {
+                    communitiesListFragment = new CommunitiesListFragment();
+                }
                 mSearchFragmentAdapter.addFragment(communitiesListFragment, getString(R.string.community));
                 mSearchTabFragments.add(communitiesListFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.hash_tag))) {
@@ -281,7 +291,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         if (fragment instanceof FeedFragment) {
             ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
         } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment) fragment).filterCommunities();
+            ((CommunitiesListFragment) fragment).filterCommunities(false,  mETSearch.getText().toString(), mSearchCategory );
         } else if (fragment instanceof HashTagFragment) {
             ((HashTagFragment)fragment).filterFeed(mETSearch.getText().toString());
         } else if (fragment instanceof ArticlesFragment) {

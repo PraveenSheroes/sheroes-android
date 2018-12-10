@@ -211,6 +211,9 @@ public class FeedDetail extends BaseResponse implements Cloneable{
     @SerializedName(value = "solr_ignore_stream_name")
     private String streamType;
 
+    @SerializedName(value = "solr_ignore_searchable_fields")
+    private List<String> searchableFields;
+
     //These fields are not from API response
     private int itemPosition;
     private boolean isLongPress;
@@ -815,5 +818,13 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     public void setSharedFromExternalApp(boolean sharedFromExternalApp) {
         isSharedFromExternalApp = sharedFromExternalApp;
+    }
+
+    public List<String> getSearchableFields() {
+        return searchableFields;
+    }
+
+    public void setSearchableFields(List<String> searchableFields) {
+        this.searchableFields = searchableFields;
     }
 }

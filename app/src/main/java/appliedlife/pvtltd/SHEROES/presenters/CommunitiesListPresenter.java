@@ -100,6 +100,46 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 });
     }
 
+    public void getSearchedCommunity(String searchText, String searchCategory) {
+        if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), null);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        getMvpView().stopProgressBar();
+                        if (feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
+                            if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
+                                getMvpView().showAllCommunity(feedDetails);
+                            }else{
+                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            }
+                        }else {
+                            getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                        }
+                    }
+                });
+    }
+
     //get my communities
     public void fetchMyCommunities(MyCommunityRequest myCommunityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -177,6 +217,49 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 });
     }
 
+    public void joinCommunity(CommunityRequest communityRequest, final CommunityFeedSolrObj communityFeedSolrObj) {
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+            communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
+            communityFeedSolrObj.setMember(false);
+//            getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
+            return;
+        }
+        getMvpView().startProgressBar();
+
+        mSheroesAppServiceApi.getCommunityJoinResponse(communityRequest)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<CommunityResponse>bindToLifecycle())
+                .subscribe(new DisposableObserver<CommunityResponse>() {
+                    @Override
+                    public void onComplete() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+                        communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
+                        communityFeedSolrObj.setMember(false);
+//                        getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
+                    }
+
+                    @Override
+                    public void onNext(CommunityResponse communityResponse) {
+                        if (communityResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+                            communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() - 1);
+                            communityFeedSolrObj.setMember(false);
+//                            getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
+                        } else {
+//                            getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
+                        }
+                        getMvpView().stopProgressBar();
+                    }
+                });
+    }
+
     //community left
     public void communityLeft(RemoveMemberRequest removeMemberRequest, final CommunityFeedSolrObj communityFeedSolrObj, final CarouselViewHolder carouselViewHolder) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
@@ -219,6 +302,48 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                     }
                 });
     }
+
+//    public void communityLeft(RemoveMemberRequest removeMemberRequest, final CommunityFeedSolrObj communityFeedSolrObj) {
+//        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+//            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+//            communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
+//            communityFeedSolrObj.setMember(true);
+////            getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
+//            return;
+//        }
+//        getMvpView().startProgressBar();
+//
+//        mSheroesAppServiceApi.removeMember(removeMemberRequest)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .compose(this.<MemberListResponse>bindToLifecycle())
+//                .subscribe(new DisposableObserver<MemberListResponse>() {
+//                    @Override
+//                    public void onComplete() {
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Crashlytics.getInstance().core.logException(e);
+//                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
+//                        communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
+//                        communityFeedSolrObj.setMember(true);
+////                        getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
+//                        getMvpView().stopProgressBar();
+//                    }
+//
+//                    @Override
+//                    public void onNext(MemberListResponse memberListResponse) {
+//                        if (memberListResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
+//                            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
+//                            communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
+//                            communityFeedSolrObj.setMember(true);
+//                        }
+////                        getMvpView().onCommunityLeft(communityFeedSolrObj, carouselViewHolder);
+//                        getMvpView().stopProgressBar();
+//                    }
+//                });
+//    }
 
     //Get community details
     public void fetchCommunity(String communityId) {

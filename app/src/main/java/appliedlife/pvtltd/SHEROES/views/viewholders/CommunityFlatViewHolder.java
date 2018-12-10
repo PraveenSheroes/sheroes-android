@@ -3,6 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -102,7 +104,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
-            mCommunityName.setText(mCommunityFeedObj.getNameOrTitle());
+            mCommunityName.setText(Html.fromHtml(mCommunityFeedObj.getNameOrTitle()));
         }
 
         String pluralMember = mContext.getResources().getQuantityString(R.plurals.numberOfMembers, mCommunityFeedObj.getNoOfMembers());
@@ -125,6 +127,9 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void onCommunityJoinUnjoinedClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
+        }
+        else if(viewInterface instanceof AllCommunityItemCallback) {
+//            ((AllCommunityItemCallback) viewInterface).onCommunityJoinOrUnjoin(mCommunityFeedObj);
         }
     }
 

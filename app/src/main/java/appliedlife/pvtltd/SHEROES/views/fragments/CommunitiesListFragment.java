@@ -13,7 +13,9 @@ import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.f2prateek.rx.preferences2.Preference;
@@ -34,6 +36,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.models.entities.Image;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -82,9 +85,13 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
+    private boolean showMyCommunities;
     //endregion
 
     //region Bind view variables
+    @Inject
+    Preference<LoginResponse> mUserPreference;
+
     @Inject
     CommunitiesListPresenter mCommunitiesListPresenter;
 
@@ -108,6 +115,18 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Bind(R.id.tv_goto_setting)
     TextView tvGoToSetting;
+
+    @Bind(R.id.community_card_view)
+    CardView myCommunityCardView;
+
+    @Bind(R.id.rl_empty)
+    RelativeLayout emptyLayout;
+
+    @Bind(R.id.tv_no_results_title)TextView noResultsTitleTxt;
+
+    @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
+
+    @Bind(R.id.iv_image)ImageView noResultsImage;
 
     @Inject
     AppUtils mAppUtils;
@@ -150,9 +169,9 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         loaderGif.setVisibility(View.VISIBLE);
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
-
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-        mCommunitiesListPresenter.fetchAllCommunities();
+
+        callCommunityApi();
 
         mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunitiesListPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
             @Override
@@ -177,6 +196,13 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
         return view;
+    }
+
+    public void callCommunityApi(){
+        emptyLayout.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.VISIBLE);
+        this.showMyCommunities = true;
+        mCommunitiesListPresenter.fetchAllCommunities();
     }
 
     @Override
@@ -252,10 +278,19 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void showAllCommunity(ArrayList<FeedDetail> feedDetails) {
+        emptyLayout.setVisibility(View.GONE);
         mFeedAdapter.setData(feedDetails);
         mFeedAdapter.notifyDataSetChanged();
         loaderGif.setVisibility(View.GONE);
         communitiesContainer.setVisibility(View.VISIBLE);
+
+        if (showMyCommunities) {
+            mMyCommunitiesListView.setVisibility(View.VISIBLE);
+            mMyCommunitiesLabel.setVisibility(View.VISIBLE);
+        }else{
+            mMyCommunitiesListView.setVisibility(View.GONE);
+            mMyCommunitiesLabel.setVisibility(View.GONE);
+        }
     }
 
 
@@ -291,6 +326,29 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Override
     public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
         CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+    }
+
+    @Override
+    public void onCommunityJoinOrUnjoin(CommunityFeedSolrObj mCommunityFeedObj, CarouselViewHolder carouselViewHolder) {
+//        if (mCommunityFeedObj.isMember()) {
+//            mCommunityFeedObj.setMember(false);
+//            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+//            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
+//
+//            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+//                mCommunitiesListPresenter.communityLeft(removeMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), mCommunityFeedObj);
+//            }
+//        } else {
+//            mCommunityFeedObj.setMember(true);
+//            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+//            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
+//
+//            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+//                List<Long> userIdList = new ArrayList();
+//                userIdList.add(mUserPreference.get().getUserSummary().getUserId());
+//                mCommunitiesListPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), mCommunityFeedObj);
+//            }
+//        }
     }
 
     @Override
@@ -347,8 +405,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mCommunitiesListPresenter.fetchAllCommunities();
     }
 
-    public void filterCommunities() {
-
+    public void filterCommunities(boolean showMyCommunities, String searchText, String searchCategory) {
+        emptyLayout.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.VISIBLE);
+        this.showMyCommunities = showMyCommunities;
+//        mMyCommunitiesListView.setVisibility(View.GONE);
+        mCommunitiesListPresenter.getSearchedCommunity(searchText, searchCategory);
     }
 
     public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {
@@ -393,7 +455,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void showEmptyScreen(String s) {
-
+        loaderGif.setVisibility(View.GONE);
+        communitiesContainer.setVisibility(View.GONE);
+        emptyLayout.setVisibility(View.VISIBLE);
+        noResultsSubTitleTxt.setText(s);
+        noResultsTitleTxt.setText("No Communities FOund");
+        noResultsImage.setImageResource(R.drawable.communities_vector_layout);
     }
 
     @OnClick({R.id.tv_retry_for_internet})

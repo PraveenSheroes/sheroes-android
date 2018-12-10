@@ -210,8 +210,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Bind(R.id.rl_empty)
     RelativeLayout emptyLayout;
 
-    @Bind(R.id.tv_no_results)
-    TextView noResultsTxt;
+    @Bind(R.id.tv_no_results_title)TextView noResultsTitleTxt;
+
+    @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
+
+    @Bind(R.id.iv_image)ImageView noResultsImage;
     // endregion
 
     //region private variables
@@ -373,6 +376,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private void loadEmptyView() {
+        emptyLayout.setVisibility(View.GONE);
         if (mCommunityTab != null) {
             if (CommonUtil.isNotEmpty(mCommunityTab.emptyTitle)) {
                 emptyText.setVisibility(View.VISIBLE);
@@ -870,8 +874,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void showEmptyScreen(String s) {
-        noResultsTxt.setText(s);
-        emptyLayout.setVisibility(View.VISIBLE);
+        if(isFilter) {
+            noResultsImage.setImageResource(R.drawable.hashtag_empty_vector);
+            emptyLayout.setVisibility(View.VISIBLE);
+            mFeedRecyclerView.setVisibility(View.GONE);
+            hideGifLoader();
+            noResultsTitleTxt.setText("No Hashtags found");
+            noResultsSubTitleTxt.setText(s);
+        }
     }
     //endregion
 
