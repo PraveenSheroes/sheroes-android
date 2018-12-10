@@ -182,7 +182,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             tvArticleTime.setText(stringBuilder);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
+            tvArticleDescriptionHeader.setText(Html.fromHtml(dataItem.getNameOrTitle()));
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
             List<String> tags = dataItem.getTags();
