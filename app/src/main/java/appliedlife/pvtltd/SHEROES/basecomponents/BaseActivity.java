@@ -320,8 +320,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Fragment
     }
 
     protected abstract SheroesPresenter getPresenter();
-
-
     //endregion
 
 }

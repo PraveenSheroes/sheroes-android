@@ -348,48 +348,6 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 });
     }
 
-//    public void communityLeft(RemoveMemberRequest removeMemberRequest, final CommunityFeedSolrObj communityFeedSolrObj) {
-//        if (!NetworkUtil.isConnected(mSheroesApplication)) {
-//            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-//            communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-//            communityFeedSolrObj.setMember(true);
-////            getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
-//            return;
-//        }
-//        getMvpView().startProgressBar();
-//
-//        mSheroesAppServiceApi.removeMember(removeMemberRequest)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .compose(this.<MemberListResponse>bindToLifecycle())
-//                .subscribe(new DisposableObserver<MemberListResponse>() {
-//                    @Override
-//                    public void onComplete() {
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        Crashlytics.getInstance().core.logException(e);
-//                        getMvpView().showError(e.getMessage(), ERROR_JOIN_INVITE);
-//                        communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-//                        communityFeedSolrObj.setMember(true);
-////                        getMvpView().onCommunityJoined(communityFeedSolrObj, carouselViewHolder);
-//                        getMvpView().stopProgressBar();
-//                    }
-//
-//                    @Override
-//                    public void onNext(MemberListResponse memberListResponse) {
-//                        if (memberListResponse.getStatus().equalsIgnoreCase(AppConstants.FAILED)) {
-//                            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_JOIN_INVITE);
-//                            communityFeedSolrObj.setNoOfMembers(communityFeedSolrObj.getNoOfMembers() + 1);
-//                            communityFeedSolrObj.setMember(true);
-//                        }
-////                        getMvpView().onCommunityLeft(communityFeedSolrObj, carouselViewHolder);
-//                        getMvpView().stopProgressBar();
-//                    }
-//                });
-//    }
-
     //Get community details
     public void fetchCommunity(String communityId) {
         if (!TextUtils.isDigitsOnly(communityId)) return;

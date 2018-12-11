@@ -232,44 +232,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-//    public void getFeeds(String searchText, String searchCategory) {
-//        String URL = "";
-//            if (!NetworkUtil.isConnected(mSheroesApplication)) {
-//                getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
-//                return;
-//            }
-//            mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory +"&next_token=" +nextToken)
-//                    .subscribeOn(Schedulers.io())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .compose(this.<FeedResponsePojo>bindToLifecycle())
-//                    .subscribe(new DisposableObserver<FeedResponsePojo>() {
-//                        @Override
-//                        public void onComplete() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//                            Crashlytics.getInstance().core.logException(e);
-//                            getMvpView().showError(e.getMessage(), ERROR_TAG);
-//                        }
-//
-//                        @Override
-//                        public void onNext(FeedResponsePojo feedResponsePojo) {
-//                            getMvpView().stopProgressBar();
-//                            getMvpView().hideGifLoader();
-//                            if (null != feedResponsePojo) {
-//                                if(feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-//                                    List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
-//
-//                                    getMvpView().showFeedList(feedResponsePojo.getFeedDetails());
-//                                    nextToken = feedResponsePojo.getNextToken();
-//                                }
-//                            }
-//                        }
-//                    });
-//        }
-
     public void getFeeds(final int feedState, final String streamName, String searchText, String searchCategory){
         if (mIsFeedLoading) {
             return;
@@ -304,9 +266,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 return;
         }
         mIsFeedLoading = true;
-
-//        CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
-//        communityFeedRequestPojo.setNextToken(mNextToken);
 
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
