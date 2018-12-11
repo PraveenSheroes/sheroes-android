@@ -603,9 +603,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void changeFragmentWithCommunities() {
         mFragmentOpen.setFeedFragment(false);
-
         mFloatActionBtn.setVisibility(View.GONE);
-
         flFeedFullView.setVisibility(View.VISIBLE);
     }
 
@@ -896,6 +894,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     }
                 }, 2000);
 
+            } else if(fragment instanceof  SearchFragment || fragment instanceof ProfileFragment){
+                homeOnClick();
             } else {
                 resetUiSelectedOptions();
                 super.onBackPressed();

@@ -107,7 +107,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                     feedFragment.callFeedApi();
                     articlesFragment.setFilterParams(false, "", "");
                     articlesFragment.categoryArticleFilter(null);
-
                 }
             }
 
