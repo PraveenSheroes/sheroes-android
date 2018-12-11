@@ -20,6 +20,10 @@ public interface ICommunitiesListView extends BaseMvpView {
 
     void setCommunity(CommunityFeedSolrObj communityFeedSolrObj);
 
+    void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj);
+
+    void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj);
+
     void onCommunityJoined(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
 
     void onCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);

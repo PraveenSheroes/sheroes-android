@@ -127,9 +127,8 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void onCommunityJoinUnjoinedClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
-        }
-        else if(viewInterface instanceof AllCommunityItemCallback) {
-//            ((AllCommunityItemCallback) viewInterface).onCommunityJoinOrUnjoin(mCommunityFeedObj);
+        } else if (viewInterface instanceof AllCommunityItemCallback) {
+            ((AllCommunityItemCallback) viewInterface).onCommunityJoinOrUnjoin(mCommunityFeedObj);
         }
     }
 
@@ -137,6 +136,8 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void onCardClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
+        } else if (viewInterface instanceof AllCommunityItemCallback) {
+            ((AllCommunityItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
         }
     }
     //endregion
