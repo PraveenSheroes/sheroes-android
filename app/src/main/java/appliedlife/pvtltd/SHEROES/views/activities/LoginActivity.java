@@ -19,6 +19,9 @@ import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
 import com.facebook.login.LoginManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 
 import javax.inject.Inject;
@@ -28,6 +31,7 @@ import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.analytics.SuperProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
@@ -55,8 +59,13 @@ import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.LoginView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.branch.referral.Branch;
 
+import static appliedlife.pvtltd.SHEROES.analytics.EventProperty.AUTH_PROVIDER;
+import static appliedlife.pvtltd.SHEROES.analytics.EventProperty.IS_NEW_USER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.EMAIL_PREF;
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 
 
 /**
@@ -188,8 +197,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         }
                         AnalyticsManager.initializeMixpanel(this);
                         AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, mCurrentTime < createdDate);
-                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider("Email").build();
+                        final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider(EMAIL_PREF).build();
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
+                        setBranchCustomEvent(createdDate, loginResponse);
                         onLoginAuthToken();
                         break;
                     case AppConstants.FAILED:
@@ -210,8 +220,9 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     ((SheroesApplication) this.getApplication()).trackUserId(String.valueOf(loginResponse.getUserSummary().getUserId()));
                     AnalyticsManager.initializeMixpanel(this);
                     AnalyticsManager.initializeCleverTap(SheroesApplication.mContext, mCurrentTime < createdDate);
-                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider("Email").build();
+                    final HashMap<String, Object> properties = new EventProperty.Builder().isNewUser(mCurrentTime < createdDate).authProvider(EMAIL_PREF).build();
                     AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
+                    setBranchCustomEvent(createdDate, loginResponse);
                     if (!this.isFinishing()) {
                         onLoginAuthToken();
                     }
@@ -422,6 +433,25 @@ public class LoginActivity extends BaseActivity implements LoginView {
     //endregion
 
     // region private methods
+    private void setBranchCustomEvent(long createdDate, LoginResponse loginResponse) {
+        final Branch branch = Branch.getInstance();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put(IS_NEW_USER.toString(), mCurrentTime < createdDate);
+            jsonObject.put(AUTH_PROVIDER.toString(), EMAIL_PREF);
+            jsonObject.put(SuperProperty.USER_ID.toString(), loginResponse.getUserSummary().getUserId());
+            jsonObject.put(SuperProperty.EMAIL_ID.toString(), loginResponse.getUserSummary().getEmailId());
+            jsonObject.put(SuperProperty.USER_NAME.toString(), loginResponse.getUserSummary().getFirstName() + " " + loginResponse.getUserSummary().getLastName());
+            String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            if (StringUtil.isNotNullOrEmptyString(languageName)) {
+                jsonObject.put(SuperProperty.LANGUAGE.getString(), languageName);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        branch.userCompletedAction(Event.APP_LOGIN.toString(), jsonObject);
+    }
+
     private void getFcmId() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
