@@ -373,11 +373,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     public void onHashTagClicked(String query) {
-//        mSearchPresenter.searchQuery(query, SearchEnum.HASHTAGS.toString());
-
         mETSearch.setText(query);
         mETSearch.setSelection(mETSearch.getText().length());
         searchingState();
+        searchProceed();
     }
 
     @Override

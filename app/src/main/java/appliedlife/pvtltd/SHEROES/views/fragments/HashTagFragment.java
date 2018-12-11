@@ -217,7 +217,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         SearchFragment searchFragment = (SearchFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
         searchFragment.onHashTagClicked(query);
 
-        filterFeed(query);
+//        filterFeed(query);
     }
 
     public void filterFeed(String query) {

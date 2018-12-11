@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.enums;
 
 public enum SearchEnum {
-    TOP("posts "),
+    TOP("posts"),
     COMMUNITIES("communities"),
     HASHTAGS("hashtags"),
     ARTICLES("articles");
