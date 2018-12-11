@@ -711,7 +711,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
                 jsonObject.put(SuperProperty.LANGUAGE.getString(), languageName);
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Crashlytics.getInstance().core.logException(e);
         }
         branch.userCompletedAction(Event.APP_LOGIN.toString(), jsonObject);
     }
