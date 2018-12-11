@@ -395,6 +395,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         return mIsFeedLoading;
     }
 
+    public void setmIsFeedLoading(boolean mIsFeedLoading) {
+        this.mIsFeedLoading = mIsFeedLoading;
+    }
+
     public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MY_COMMUNITIES);

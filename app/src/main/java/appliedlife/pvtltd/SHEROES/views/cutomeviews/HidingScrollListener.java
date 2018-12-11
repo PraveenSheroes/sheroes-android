@@ -180,7 +180,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
                         if (mIsSearch) {
-                            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false);
+                            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, false);
                         } else {
                             FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
                             mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);

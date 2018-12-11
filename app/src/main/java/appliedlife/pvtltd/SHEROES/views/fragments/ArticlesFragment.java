@@ -149,22 +149,27 @@ public class ArticlesFragment extends BaseFragment {
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         FeedRequestPojo feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
-        if (mIsSearch == true && mSearchText != null && mSearchCategory != null) {
-            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, true);
+
+        if (mIsSearch && mSearchText != null && mSearchCategory != null) {
+            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, true, true);
         } else {
             mHomePresenter.getFeedFromPresenter(feedRequestPojo);
         }
+    }
+
+    public void setFilterParams(boolean mIsSearch, String searchText, String searchCategory){
+        this.mIsSearch = mIsSearch;
+        this.mSearchText = searchText;
+        this.mSearchCategory = searchCategory;
     }
 
     public void fetchSearchedArticles(boolean isSearch, String searchText, String searchCategory) {
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
-        mIsSearch = isSearch;
-        mSearchText = searchText;
-        mSearchCategory = searchCategory;
+        setFilterParams(isSearch, searchText, searchCategory);
         mHidingScrollListener.setSearchParameter(true, mSearchText, mSearchCategory);
-        mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false);
+        mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, true);
     }
 
     @Override

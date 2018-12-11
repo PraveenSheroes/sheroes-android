@@ -73,6 +73,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     };
     private HashTagFragment hashTagFragment;
     private CommunitiesListFragment communitiesListFragment;
+    private FeedFragment feedFragment;
+    private ArticlesFragment articlesFragment;
     @Bind(R.id.iv_search_close)
     ImageView closeImg;
     @Bind(R.id.iv_back)
@@ -88,6 +90,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
         initializeSearchViews();
         searchListener();
+        mSearchTabsPager.setOffscreenPageLimit(3);
 
         mETSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,6 +103,11 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 if (charSequence.toString().trim().length() == 0) {
                     hashTagFragment.callHashTagApi();
                     communitiesListFragment.callCommunityApi();
+                    feedFragment.paramsToFilterFeed(false, "", "");
+                    feedFragment.callFeedApi();
+                    articlesFragment.setFilterParams(false, "", "");
+                    articlesFragment.categoryArticleFilter(null);
+
                 }
             }
 
@@ -117,17 +125,32 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             @Override
             public void onPageSelected(int position) {
-                if(position == 2){
-                    if(mETSearch.getText().toString().trim().length()>0){
+
+                if (position == 0) {
+                    if (mETSearch.getText().toString().trim().length() > 0) {
+                        feedFragment.filterFeed(true, mETSearch.getText().toString(), SearchEnum.TOP.toString());
+                    } else {
+                        feedFragment.paramsToFilterFeed(false, mETSearch.getText().toString(), SearchEnum.TOP.toString());
+                        feedFragment.callFeedApi();
+                    }
+                } else if (position == 2) {
+                    if (mETSearch.getText().toString().trim().length() > 0) {
                         hashTagFragment.filterFeed(mETSearch.getText().toString());
-                    }else{
+                    } else {
                         hashTagFragment.callHashTagApi();
                     }
-                }else if(position == 1){
-                    if(mETSearch.getText().toString().trim().length()>0){
+                } else if (position == 1) {
+                    if (mETSearch.getText().toString().trim().length() > 0) {
                         communitiesListFragment.filterCommunities(false, mETSearch.getText().toString(), SearchEnum.COMMUNITIES.toString());
-                    }else{
+                    } else {
                         communitiesListFragment.callCommunityApi();
+                    }
+                } else if (position == 3) {
+                    if (mETSearch.getText().toString().trim().length() > 0) {
+                        articlesFragment.fetchSearchedArticles(true, mETSearch.getText().toString(), SearchEnum.ARTICLES.toString());
+                    } else {
+                        articlesFragment.setFilterParams(false, "", "");
+                        articlesFragment.categoryArticleFilter(null);
                     }
                 }
             }
@@ -185,7 +208,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         mSearchFragmentAdapter = new SearchPagerAdapter(getChildFragmentManager());
         for (String name : mSearchTabs) {
             if (name.equalsIgnoreCase(getString(R.string.top))) {
-                FeedFragment feedFragment = new FeedFragment();
+                if (feedFragment == null) {
+                    feedFragment = new FeedFragment();
+                }
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
@@ -194,7 +219,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 mSearchFragmentAdapter.addFragment(feedFragment, getString(R.string.top));
                 mSearchTabFragments.add(feedFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.community))) {
-                if(communitiesListFragment == null) {
+                if (communitiesListFragment == null) {
                     communitiesListFragment = new CommunitiesListFragment();
                 }
                 mSearchFragmentAdapter.addFragment(communitiesListFragment, getString(R.string.community));
@@ -206,7 +231,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 mSearchFragmentAdapter.addFragment(hashTagFragment, getString(R.string.hash_tag));
                 mSearchTabFragments.add(hashTagFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.article))) {
-                ArticlesFragment articlesFragment = new ArticlesFragment();
+                if (articlesFragment == null) {
+                    articlesFragment = new ArticlesFragment();
+                }
                 mSearchFragmentAdapter.addFragment(articlesFragment, getString(R.string.article));
                 mSearchTabFragments.add(articlesFragment);
             }
@@ -291,9 +318,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         if (fragment instanceof FeedFragment) {
             ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
         } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment) fragment).filterCommunities(false,  mETSearch.getText().toString(), mSearchCategory );
+            ((CommunitiesListFragment) fragment).filterCommunities(false, mETSearch.getText().toString(), mSearchCategory);
         } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment)fragment).filterFeed(mETSearch.getText().toString());
+            ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString());
         } else if (fragment instanceof ArticlesFragment) {
             ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
         }
@@ -306,14 +333,15 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
         Fragment fragment = adapter.getFragment(index);
         if (fragment instanceof FeedFragment) {
-
-            // ((FeedFragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+            ((FeedFragment) fragment).paramsToFilterFeed(false, "", "");
+            ((FeedFragment) fragment).callFeedApi();
         } else if (fragment instanceof CommunitiesListFragment) {
-//            ((CommunitiesListFragment) fragment).showAllCommunity((ArrayList<FeedDetail>) feedResponsePojo.getFeedDetails());
+            ((CommunitiesListFragment) fragment).callCommunityApi();
         } else if (fragment instanceof HashTagFragment) {
             ((HashTagFragment) fragment).callHashTagApi();
         } else if (fragment instanceof ArticlesFragment) {
-            //((Articlefragment)fragment).addAllFeed(feedResponsePojo.getFeedDetails());
+            ((ArticlesFragment) fragment).setFilterParams(false, "", "");
+            ((ArticlesFragment) fragment).categoryArticleFilter(null);
         }
     }
 

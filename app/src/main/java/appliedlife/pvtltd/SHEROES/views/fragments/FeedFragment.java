@@ -266,10 +266,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setupRecyclerScrollListener();
         showGifLoader();
 
-        if(!isFilter)
-            mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-        else
-            mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
+        callFeedApi();
 
       //  mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
@@ -292,6 +289,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         }
         return view;
+    }
+
+    public void callFeedApi(){
+        if(!isFilter)
+            mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+        else
+            mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
     }
 
     @Override
@@ -1056,6 +1060,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void filterFeed(boolean isFilter,String searchText, String searchCategory) {
+        mFeedPresenter.setmIsFeedLoading(false);
         paramsToFilterFeed(isFilter, searchText, searchCategory);
         mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
     }

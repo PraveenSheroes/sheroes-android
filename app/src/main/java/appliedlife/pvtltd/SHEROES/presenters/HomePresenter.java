@@ -180,7 +180,11 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 });
     }
 
-    public void getArticleFeeds(String searchText, String searchCategory, boolean pullToRefresh) {
+    public void getArticleFeeds(String searchText, String searchCategory, boolean pullToRefresh, boolean initialCall) {
+        if(initialCall){
+            mNextToken = "";
+        }
+
         String URL = "participant/search/?search_text=" + searchText + "&search_category=" + searchCategory;
         if (!pullToRefresh && mNextToken != null) {
             URL = URL + "&next_token=" + mNextToken;
