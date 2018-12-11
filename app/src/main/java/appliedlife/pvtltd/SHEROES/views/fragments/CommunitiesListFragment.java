@@ -41,6 +41,9 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.LeaderBoardUserSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
@@ -272,6 +275,18 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
 
     @Override
+    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
+        mFeedAdapter.setData(mFeedAdapter.getDataList());
+    }
+
+    @Override
+    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
+        findPositionAndUpdateItem(communityFeedSolrObj, communityFeedSolrObj.getIdOfEntityOrParticipant());
+        mFeedAdapter.setData(mFeedAdapter.getDataList());
+    }
+
+    @Override
     public void onCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
         carouselViewHolder.mAdapter.setData(communityFeedSolrObj);
     }
@@ -325,30 +340,76 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void onCommunityClicked(CommunityFeedSolrObj communityFeedObj) {
-        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj, getScreenName(), null, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
+        HashMap<String, Object> screenProperties = new HashMap<>();
+        screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(communityFeedObj.getItemPosition()));
+        CommunityDetailActivity.navigateTo(getActivity(), communityFeedObj.getIdOfEntityOrParticipant(), getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_COMMUNITY_DETAIL);
     }
 
     @Override
-    public void onCommunityJoinOrUnjoin(CommunityFeedSolrObj mCommunityFeedObj, CarouselViewHolder carouselViewHolder) {
-//        if (mCommunityFeedObj.isMember()) {
-//            mCommunityFeedObj.setMember(false);
-//            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
-//            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
-//
-//            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-//                mCommunitiesListPresenter.communityLeft(removeMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), mCommunityFeedObj);
-//            }
-//        } else {
-//            mCommunityFeedObj.setMember(true);
-//            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
-//            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
-//
-//            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
-//                List<Long> userIdList = new ArrayList();
-//                userIdList.add(mUserPreference.get().getUserSummary().getUserId());
-//                mCommunitiesListPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), mCommunityFeedObj);
-//            }
-//        }
+    public void onCommunityJoinOrUnjoin(CommunityFeedSolrObj mCommunityFeedObj) {
+        if (mCommunityFeedObj.isMember()) {
+            mCommunityFeedObj.setMember(false);
+            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
+
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                mCommunitiesListPresenter.leaveCommunity(removeMemberRequestBuilder(mCommunityFeedObj.getIdOfEntityOrParticipant(), mUserPreference.get().getUserSummary().getUserId()), mCommunityFeedObj);
+            }
+        } else {
+            mCommunityFeedObj.setMember(true);
+            mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+            AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
+
+            if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
+                List<Long> userIdList = new ArrayList();
+                userIdList.add(mUserPreference.get().getUserSummary().getUserId());
+                mCommunitiesListPresenter.joinCommunity(AppUtils.communityRequestBuilder(userIdList, mCommunityFeedObj.getIdOfEntityOrParticipant(), AppConstants.OPEN_COMMUNITY), mCommunityFeedObj);
+            }
+        }
+    }
+
+    public void findPositionAndUpdateItem(FeedDetail updatedFeedDetail, long id) { //TODO - move to presenter
+        if (mFeedAdapter == null) {
+            return;
+        }
+        List<FeedDetail> feedDetails = mFeedAdapter.getDataList();
+
+        if (CommonUtil.isEmpty(feedDetails)) {
+            return;
+        }
+
+        for (int i = 0; i < feedDetails.size(); ++i) {
+            FeedDetail feedDetail = feedDetails.get(i);
+            if (feedDetail != null && feedDetail.getIdOfEntityOrParticipant() == id) {
+                mFeedAdapter.setData(i, updatedFeedDetail);
+            } else if (feedDetail instanceof CarouselDataObj) {
+                for (int j = 0; j < ((CarouselDataObj) feedDetail).getFeedDetails().size(); j++) {
+                    FeedDetail innerFeedDetail = ((CarouselDataObj) feedDetail).getFeedDetails().get(j);
+                    if (innerFeedDetail != null && innerFeedDetail.getIdOfEntityOrParticipant() == id) {
+                        if (updatedFeedDetail instanceof UserSolrObj && innerFeedDetail instanceof UserSolrObj) { //Since community name not available in user solr object
+                            UserSolrObj updatedUserSolrObj = (UserSolrObj) updatedFeedDetail;
+                            if (!StringUtil.isNotNullOrEmptyString(updatedUserSolrObj.getmSolarIgnoreCommunityName())) {
+                                UserSolrObj userSolrObj = (UserSolrObj) innerFeedDetail;
+                                updatedUserSolrObj.setmSolarIgnoreCommunityName(userSolrObj.getmSolarIgnoreCommunityName());
+                                updatedFeedDetail = updatedUserSolrObj;
+                            }
+                        }
+                        ((CarouselDataObj) feedDetail).getFeedDetails().set(j, updatedFeedDetail);
+                        mFeedAdapter.setData(i, feedDetail);
+                    }
+                }
+            } else if (feedDetail != null && feedDetail instanceof LeaderBoardUserSolrObj) {
+                if (((LeaderBoardUserSolrObj) feedDetail).getUserSolrObj() != null) {
+                    mFeedAdapter.setData(i, feedDetail);
+                }
+            } else if (feedDetail != null && feedDetail instanceof UserPostSolrObj && updatedFeedDetail instanceof UserSolrObj && feedDetail.getAuthorId() == id) {
+                UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
+                UserSolrObj userSolrObj = (UserSolrObj) updatedFeedDetail;
+                userPostSolrObj.setSolrIgnoreIsUserFollowed(userSolrObj.isSolrIgnoreIsUserFollowed());
+                mFeedAdapter.setData(i, userPostSolrObj);
+            }
+        }
+        return;
     }
 
     @Override

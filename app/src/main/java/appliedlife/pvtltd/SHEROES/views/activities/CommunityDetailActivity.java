@@ -382,6 +382,16 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     @Override
+    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
+    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
+
+    }
+
+    @Override
     public void showAllCommunity(ArrayList<FeedDetail> feedDetails) {
     }
 
