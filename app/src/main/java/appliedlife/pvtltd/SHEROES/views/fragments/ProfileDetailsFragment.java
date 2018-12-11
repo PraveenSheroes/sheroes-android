@@ -3,8 +3,8 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
+
+import androidx.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.fragment.app.FragmentManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -70,13 +71,14 @@ import static butterknife.ButterKnife.findById;
  */
 
 public class ProfileDetailsFragment extends BaseFragment implements IProfileView {
-
+    //region constants
+    private static final String SCREEN_LABEL = "Profile Details Screen";
     public static final String USER_MENTOR_ID = "USERID";
     public static final String USER_MENTOR_NAME = "USER_NAME";
     public static final String SELF_PROFILE = "SELF_PROFILE";
-    //region constants
-    private static final String SCREEN_LABEL = "Profile Details Screen";
     //endregion constants
+
+    //region bind views
     @BindDimen(R.dimen.dp_size_12)
     public int mImageMargin;
     @BindDimen(R.dimen.dp_size_4)
@@ -120,10 +122,8 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
     //region injected variable
     @Inject
     Preference<LoginResponse> mUserPreference;
-
     @Inject
     AppUtils mAppUtils;
-
     @Inject
     ProfilePresenterImpl mProfilePresenter;
     //endregion injected variable
@@ -199,9 +199,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             String message = getString(R.string.empty_followed_mentor, name);
             mEmptyViewFollowedChampion.setText(message);
             mEmptyViewFollowedChampion.setCompoundDrawablesWithIntrinsicBounds(0, R.drawable.vector_public_business_woman, 0, 0);
-
             mFollowedChampionContainer.setVisibility(View.GONE);
-
             if (mIsSelfProfile) {
                 mEmptyViewDottedBorder.setBackgroundResource(R.drawable.dotted_line_border);
                 mEmptyViewFollowedChampion.setText(R.string.champions_followed);
@@ -209,12 +207,10 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
             } else {
                 mEmptyViewDottedBorder.setBackgroundResource(0);
             }
-
         } else {
             mEmptyFollowedMentorContainer.setVisibility(View.GONE);
             mEmptyViewDottedBorder.setVisibility(View.GONE);
             mFollowedChampionContainer.setVisibility(View.VISIBLE);
-
             List<UserSolrObj> feedDetailList = feedResponsePojo.getFeedDetails();
             if (StringUtil.isNotEmptyCollection(feedDetailList)) {
                 populateFollowedMentors(feedDetailList);  //followed mentor
@@ -560,7 +556,7 @@ public class ProfileDetailsFragment extends BaseFragment implements IProfileView
 
             if (follower != null) {
                 String pluralComments = getResources().getQuantityString(R.plurals.numberOfFollowers, userSolrObj.getFollowerCount());
-                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
+                follower.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getChampionFollowerCount()) + AppConstants.SPACE + pluralComments));
             }
 
             followFollowingBtn.setVisibility(View.GONE);

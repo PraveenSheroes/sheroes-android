@@ -3,7 +3,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.PaintDrawable;
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;

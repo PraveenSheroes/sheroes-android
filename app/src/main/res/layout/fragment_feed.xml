@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swipeRefreshContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/feed_back_color">
@@ -12,14 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/feed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:id="@+id/loader_gif"
             android:visibility="gone"
             android:layout_width="match_parent"
@@ -50,7 +49,7 @@
                     android:textColor="@color/feed_article_label"
                     vernacular:customTextFontFamily="@string/regular_font" />
             </LinearLayout>
-        </android.support.v7.widget.CardView>
+        </androidx.cardview.widget.CardView>
 
         <RelativeLayout
             android:id="@+id/rl_empty"
@@ -106,8 +105,5 @@
 
         <include layout="@layout/empty_list_view" />
 
-
-
-
     </LinearLayout>
-</android.support.v4.widget.SwipeRefreshLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

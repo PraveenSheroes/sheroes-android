@@ -1,6 +1,6 @@
 package appliedlife.pvtltd.SHEROES.models.entities.post;
 
-import android.support.annotation.StringRes;
+import androidx.annotation.StringRes;
 
 import com.google.gson.annotations.SerializedName;
 

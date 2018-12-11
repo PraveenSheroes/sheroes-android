@@ -2,9 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +12,6 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import org.parceler.Parcels;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +19,9 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -36,7 +35,6 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.onboarding.LabelValue;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Winner;
 import appliedlife.pvtltd.SHEROES.presenters.ContestWinnerPresenterImpl;
@@ -115,7 +113,7 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
         }
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate)));
+        mRecyclerView.setEmptyViewWithImage(emptyView, getActivity().getResources().getString(R.string.empty_winner_text), R.drawable.vector_empty_winner, getActivity().getResources().getString(R.string.empty_winner_subtext, getDateString(mContest.winnerAnnouncementDate), prefixBeforeDate(mContest.winnerAnnouncementDate)));
         if (CommonUtil.getContestStatus(mContest.getStartAt(), mContest.getEndAt()) == ContestStatus.COMPLETED) {
             if (!mContest.hasMyPost) {
                 RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
@@ -199,7 +197,15 @@ public class ContestWinnerFragment extends BaseFragment implements IContestWinne
             return this.getResources().getString(R.string.soon);
         } else {
             Date announcementDate = DateUtil.parseDateFormat(mContest.winnerAnnouncementDate, AppConstants.DATE_FORMAT);
-            return "on" + " <b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) + "</b>";
+            return "<b>" + DateUtil.toPrettyDateWithoutTime(announcementDate) + "</b>";
+        }
+    }
+
+    private String prefixBeforeDate(String winnerAnnouncementDate) {
+        if (winnerAnnouncementDate == null) {
+            return "";
+        } else {
+            return getResources().getString(R.string.winner_date);
         }
     }
 

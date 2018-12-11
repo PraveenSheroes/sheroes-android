@@ -12,23 +12,23 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
-import android.support.v4.app.TaskStackBuilder;
-import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SimpleItemAnimator;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.GravityCompat;
+import androidx.viewpager.widget.ViewPager;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.appcompat.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -530,21 +530,24 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
             @Override
             public void onPageSelected(int position) {
-                if (mCommunityFeedSolrObj == null || mCommunityFeedSolrObj.communityTabs == null || CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)
+                if ( mCommunityFeedSolrObj == null || mCommunityFeedSolrObj.communityTabs == null || CommonUtil.isEmpty(mCommunityFeedSolrObj.communityTabs)
                         || mCommunityFeedSolrObj.communityTabs.size() <= position) {
                     return;
                 }
-                CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
-                HashMap<String, Object> properties = new EventProperty.Builder()
-                        .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                        .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
-                        .title(mCommunityFeedSolrObj.getNameOrTitle())
-                        .tabTitle(communityTab.title)
-                        .tabKey(communityTab.key)
-                        .streamType(mCommunityFeedSolrObj.getStreamType())
-                        .build();
-                AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
-                UpdateFabVisibility(communityTab);
+
+                if (StringUtil.isNotEmptyCollection(mCommunityFeedSolrObj.communityTabs)) {
+                    CommunityTab communityTab = mCommunityFeedSolrObj.communityTabs.get(position);
+                    HashMap<String, Object> properties = new EventProperty.Builder()
+                            .id(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                            .communityId(Long.toString(mCommunityFeedSolrObj.getIdOfEntityOrParticipant()))
+                            .title(mCommunityFeedSolrObj.getNameOrTitle())
+                            .tabTitle(communityTab.title)
+                            .tabKey(communityTab.key)
+                            .streamType(mCommunityFeedSolrObj.getStreamType())
+                            .build();
+                    AnalyticsManager.trackScreenView(SCREEN_LABEL, getPreviousScreenName(), properties);
+                    UpdateFabVisibility(communityTab);
+                }
             }
 
             @Override
@@ -813,9 +816,9 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
 
     private void UpdateFabVisibility(CommunityTab communityTab) {
         if (communityTab == null) return;
-        mFabButton.setVisibility(View.GONE);
+        mFabButton.hide();
         if (communityTab.showFabButton && CommonUtil.isNotEmpty(communityTab.fabUrl)) {
-            mFabButton.setVisibility(View.VISIBLE);
+            mFabButton.show();
             if (CommonUtil.isValidContextForGlide(mFabButton.getContext())) {
                 Glide.with(mFabButton.getContext())
                         .load(communityTab.fabIconUrl)

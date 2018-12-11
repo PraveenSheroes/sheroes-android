@@ -2,16 +2,14 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.graphics.drawable.PictureDrawable;
-import android.support.v7.widget.AppCompatImageView;
-import android.util.Log;
+import androidx.appcompat.widget.AppCompatImageView;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;

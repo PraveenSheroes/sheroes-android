@@ -1,13 +1,12 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.IHashTagCallBack;
 import butterknife.Bind;

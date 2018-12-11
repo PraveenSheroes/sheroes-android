@@ -1,9 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
-import android.support.v4.content.ContextCompat;
+import androidx.core.content.ContextCompat;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 
 import appliedlife.pvtltd.SHEROES.R;

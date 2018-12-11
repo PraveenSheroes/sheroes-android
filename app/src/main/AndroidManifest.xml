@@ -42,7 +42,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:label">
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="appliedlife.pvtltd.SHEROES.provider"
             android:exported="false"
             android:grantUriPermissions="true">

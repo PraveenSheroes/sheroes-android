@@ -1,6 +1,6 @@
 package appliedlife.pvtltd.SHEROES.analytics.Impression;
 
-import android.support.v4.util.Pair;
+import androidx.core.util.Pair;
 
 import com.crashlytics.android.Crashlytics;
 

@@ -1,12 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners;
 
-import android.support.annotation.StringRes;
-
-import java.util.List;
+import androidx.annotation.StringRes;
 
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseMvpView;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
-import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.models.entities.profile.UserProfileResponse;
 
 /**

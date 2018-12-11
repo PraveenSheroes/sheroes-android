@@ -1,9 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +25,6 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView;
-import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedProgressBarHolder;
 import butterknife.Bind;
 import butterknife.BindDimen;
@@ -203,12 +202,11 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 }
                 if (follower != null) {
-                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, championObj.getFollowerCount());
-                    follower.setText(String.valueOf(changeNumberToNumericSuffix(championObj.getFollowerCount()) + AppConstants.SPACE + pluralComments));
+                    String pluralComments = mContext.getResources().getQuantityString(R.plurals.numberOfFollowers, championObj.getChampionFollowerCount());
+                    follower.setText(String.valueOf(changeNumberToNumericSuffix(championObj.getChampionFollowerCount()) + AppConstants.SPACE + pluralComments));
                 }
                 if (loggedInUserId != championObj.getIdOfEntityOrParticipant()) {
                     followFollowingBtn.setVisibility(View.VISIBLE);
-
                     if (championObj.isSolrIgnoreIsMentorFollowed() || championObj.isSolrIgnoreIsUserFollowed()) {
                         showFollowing();
                     } else {
@@ -238,7 +236,6 @@ public class FollowerFollowingAdapter extends RecyclerView.Adapter<RecyclerView.
         public void onFollowFollowingClick() {
             String followFollowingBtnText = followFollowingBtn.getText().toString();
             ((FollowerFollowingCallback) mBaseHolderInterface).onFollowFollowingClick(championObj, followFollowingBtnText);
-
             if (!championObj.isSolrIgnoreIsMentorFollowed() || !championObj.isSolrIgnoreIsUserFollowed()) {
                 showFollowing();
             }

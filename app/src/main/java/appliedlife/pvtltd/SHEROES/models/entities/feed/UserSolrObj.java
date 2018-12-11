@@ -60,6 +60,17 @@ public class UserSolrObj extends FeedDetail {
     private int postCount;
     @SerializedName("solr_ignore_no_of_followers")
     private int followerCount;
+
+    public int getChampionFollowerCount() {
+        return championFollowerCount;
+    }
+
+    public void setChampionFollowerCount(int championFollowerCount) {
+        this.championFollowerCount = championFollowerCount;
+    }
+
+    @SerializedName("solr_ignore_no_of_mentor_followers")
+    private int championFollowerCount;
     @SerializedName("solr_ignore_profile_weight_count")
     private float profileCompletionWeight;
     @SerializedName("solr_ignore_profile_filled_fields_name")

@@ -18,10 +18,8 @@
 
 -keepattributes *Annotation*,EnclosingMethod,JavascriptInterface
 -keepattributes SourceFile,LineNumberTable
-
 -keep public class * extends android.app.Activity
--keep public class * extends android.support.v4.app.Fragment
--keep public class * extends android.app.Fragment
+-keep public class * extends androidx.fragment.app.Fragment
 -keep public class * extends android.app.Application
 -keep public class * extends android.app.Service
 -keep public class * extends android.content.BroadcastReceiver
@@ -202,8 +200,12 @@ public <init>(android.content.Context, android.util.AttributeSet, int);
 -keep class android.support.v4.view.ViewPager
 -keepclassmembers class android.support.v4.view.ViewPager$LayoutParams { *; }
 
+-keep public class * implements com.bumptech.glide.module.GlideModule
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
+-keep public enum com.bumptech.glide.load.ImageHeaderParser$** {
+  **[] $VALUES;
+  public *;
+}
 
 -keep class com.google.android.gms.analytics.Tracker { *; }
 -keep class com.google.analytics.tracking.android.Tracker { *; }

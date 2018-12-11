@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.basecomponents.baseresponse;
 
-import android.support.annotation.StringRes;
-
-import appliedlife.pvtltd.SHEROES.R;
+import androidx.annotation.StringRes;
 
 /**
  * Created by ravi on 12/04/18.

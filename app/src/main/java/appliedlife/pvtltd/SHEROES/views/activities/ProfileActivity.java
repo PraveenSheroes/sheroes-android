@@ -12,11 +12,34 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
+import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.Fragment;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.viewpager.widget.ViewPager;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextUtils;
+import android.text.style.ImageSpan;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -376,9 +399,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             String title = (String) mViewPagerAdapter.getPageTitle(position);
             if (StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) {
                 if (isOwnProfile) {
-                    mCreatePost.setVisibility(View.VISIBLE);
+                    mCreatePost.show();
                 } else {
-                    mCreatePost.setVisibility(View.GONE);
+                    mCreatePost.hide();
                 }
                 mStoryFooter.setVisibility(View.GONE);
             } else {
@@ -387,11 +410,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 } else {
                     mStoryFooter.setVisibility(View.GONE);
                 }
-                mCreatePost.setVisibility(View.GONE);
+                mCreatePost.hide();
             }
         } else {
             mStoryFooter.setVisibility(View.GONE);
-            mCreatePost.setVisibility(View.GONE);
+            mCreatePost.hide();
         }
     }*/
 
@@ -851,7 +874,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 mDescriptionContainer.setVisibility(View.GONE);
             }
         }
-
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getImageUrl())) { //profile pic
             if (!isFinishing()) {
                 String profilePic = CommonUtil.getThumborUri(mUserSolarObject.getImageUrl(), mProfileSize, mProfileSize);
@@ -859,7 +881,6 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                 mProfileIcon.bindImage(profilePic);
             }
         }
-
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getNameOrTitle())) { //Name
             String userNameTitle = CommonUtil.camelCaseString(mUserSolarObject.getNameOrTitle());
             mUserName.setText(userNameTitle);
@@ -939,6 +960,11 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mUserSolarObject.setSolrIgnoreIsMentorFollowed(isFollowed);
             mUserSolarObject.setSolrIgnoreIsUserFollowed(isFollowed);
             updateFollowedButton();
+            Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
+            String title = (String) mViewPagerAdapter.getPageTitle(mViewPager.getCurrentItem());
+            if (fragment instanceof FeedFragment && StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) { //refresh if current tab is post to change follow button visibility
+                ((FeedFragment) fragment).refreshList();
+            }
         }
     }
 
@@ -1003,9 +1029,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
             mViewPager.setCurrentItem(mViewPagerAdapter.getCount() - 1);
         } else {
             if (isOwnProfile) {
-                mCreatePost.setVisibility(View.VISIBLE);
+                mCreatePost.show();
             } else {
-                mCreatePost.setVisibility(View.GONE);
+                mCreatePost.hide();
             }
             if (!isChampion) { //for user make post as default tab
                 mViewPager.setCurrentItem(1);
@@ -1197,6 +1223,9 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
                                     intent.putExtra(Intent.EXTRA_STREAM, contentUri);
                                     intent.setType("image/*");
                                     startActivity(Intent.createChooser(intent, AppConstants.SHARE));
+                                }
+                                if (null != bitmap && !bitmap.isRecycled()) {
+                                    bitmap.recycle();
                                 }
                             }
                         });
@@ -1482,18 +1511,14 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         return userNameTitle;
     }
 
-    public void selectImageFrmCamera() {
+    public void selectImageFrmCamera(int viewType) {
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
-        CropImage.activity(null, AppConstants.ONE_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
-                .setRequestedSize(400, 400)
-                .setAspectRatio(1, 1)
-                .setAllowRotation(true)
-                .start(this);
+        openGalleryOrCamera(viewType);
     }
 
-    public void selectImageFrmGallery() {
-        CropImage.activity(null, AppConstants.TWO_CONSTANT).setCropShape(CropImageView.CropShape.RECTANGLE)
+    public void openGalleryOrCamera(int viewType) {
+        CropImage.activity(null, viewType).setCropShape(CropImageView.CropShape.RECTANGLE)
                 .setRequestedSize(400, 400)
                 .setAspectRatio(1, 1)
                 .setAllowRotation(true)

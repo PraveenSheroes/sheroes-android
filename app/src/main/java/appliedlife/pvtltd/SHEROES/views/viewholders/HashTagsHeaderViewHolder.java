@@ -1,9 +1,9 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import butterknife.Bind;
 import butterknife.ButterKnife;

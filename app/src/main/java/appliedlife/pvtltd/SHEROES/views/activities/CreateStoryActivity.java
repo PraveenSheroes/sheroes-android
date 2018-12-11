@@ -15,11 +15,11 @@ import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Html;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -358,10 +358,9 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showMessage(int stringID) {
-        mMyToast.setText(stringID);
-        mMyToast.show();
-        if (!isFinishing()) {
-            Toast.makeText(this, stringID, Toast.LENGTH_SHORT).show();
+        if (!isFinishing() && mMyToast != null) {
+            mMyToast.setText(stringID);
+            mMyToast.show();
         }
     }
 

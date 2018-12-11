@@ -1,7 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
+import androidx.cardview.widget.CardView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,8 +21,8 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -41,7 +41,6 @@ import butterknife.OnClick;
  */
 
 public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
-
     //region dagger injection
     @Inject
     Preference<LoginResponse> userPreference;
@@ -55,6 +54,8 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     BaseHolderInterface viewInterface;
     @Bind(R.id.iv_header_circle_icon)
     CircleImageView ivLoginUserPic;
+    @Bind(R.id.iv_feed_community_post_circle_icon_verified)
+    ImageView verifiedIcon;
     @Bind(R.id.header_msg)
     TextView headerMsg;
     @Bind(R.id.user_name)
@@ -84,7 +85,6 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
         } else {
             isToolTip = false;
         }
-
     }
     //endregion
 
@@ -92,7 +92,7 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void bindData(FeedDetail item, final Context context, int position) {
         this.dataItem = item;
-        if (null != userPreference && userPreference.isSet()  && null != userPreference.get().getUserSummary()) {
+        if (null != userPreference && userPreference.isSet() && null != userPreference.get().getUserSummary()) {
             if (StringUtil.isNotNullOrEmptyString(userPreference.get().getUserSummary().getPhotoUrl())) {
                 mPhotoUrl = userPreference.get().getUserSummary().getPhotoUrl();
             }
@@ -113,6 +113,13 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             String name = loggedInUser.substring(0, 1).toUpperCase() + loggedInUser.substring(1, loggedInUser.length());
             userName.setText(name);
         }
+
+        //champion tick
+        if (dataItem.isAuthorMentor()) {
+            verifiedIcon.setVisibility(View.VISIBLE);
+        } else {
+            verifiedIcon.setVisibility(View.GONE);
+        }
         if (mConfiguration != null && mConfiguration.isSet() && mConfiguration.get().configData != null) {
             headerMsg.setText(mConfiguration.get().configData.mFeedHeaderPostText);
         } else {
@@ -131,12 +138,12 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
             @Override
             public void onComplete(RippleView rippleView) {
                 dataItem.setEntityOrParticipantId(userId);
-                if(viewInterface instanceof FeedItemCallback){
-                        CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
-                        communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
-                        communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-                        ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
-                }else {
+                if (viewInterface instanceof FeedItemCallback) {
+                    CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
+                    communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
+                    communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
+                    ((FeedItemCallback) viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
+                } else {
                     viewInterface.handleOnClick(dataItem, ivLoginUserPic);
                 }
             }
@@ -149,13 +156,13 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     }
 
     @OnClick(R.id.header_msg)
-     void textClickForCreatePost() {
+    void textClickForCreatePost() {
         rippleView.setOnRippleCompleteListener(new RippleView.OnRippleCompleteListener() {
             @Override
             public void onComplete(RippleView rippleView) {
-                if(viewInterface instanceof FeedItemCallback){
-                    ((FeedItemCallback)viewInterface).onHeaderCreatePostClicked();
-                }else {
+                if (viewInterface instanceof FeedItemCallback) {
+                    ((FeedItemCallback) viewInterface).onHeaderCreatePostClicked();
+                } else {
                     viewInterface.handleOnClick(dataItem, headerMsg);
                 }
             }
@@ -166,12 +173,10 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
     //region BaseViewHolder override methods
     @Override
     public void viewRecycled() {
-
     }
 
     @Override
     public void onClick(View v) {
-
     }
     //endregion
 
@@ -187,12 +192,12 @@ public class HomeHeaderViewHolder extends BaseViewHolder<FeedDetail> {
 
     private void navigateToProfileActivity() {
         dataItem.setEntityOrParticipantId(userId);
-        if(viewInterface instanceof FeedItemCallback){
+        if (viewInterface instanceof FeedItemCallback) {
             CommunityFeedSolrObj communityFeedSolrObj = new CommunityFeedSolrObj();
             communityFeedSolrObj.setIdOfEntityOrParticipant(dataItem.getEntityOrParticipantId());
             communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-            ((FeedItemCallback)viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
-        }else {
+            ((FeedItemCallback) viewInterface).onUserHeaderClicked(communityFeedSolrObj, dataItem.isAuthorMentor());
+        } else {
             viewInterface.handleOnClick(dataItem, ivLoginUserPic);
         }
     }

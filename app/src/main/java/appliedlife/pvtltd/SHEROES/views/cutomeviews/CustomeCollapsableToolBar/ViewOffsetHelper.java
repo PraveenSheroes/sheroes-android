@@ -16,7 +16,7 @@
 
 package appliedlife.pvtltd.SHEROES.views.cutomeviews.CustomeCollapsableToolBar;
 
-import android.support.v4.view.ViewCompat;
+import androidx.core.view.ViewCompat;
 import android.view.View;
 
 /**
