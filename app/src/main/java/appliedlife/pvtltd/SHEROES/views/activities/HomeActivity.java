@@ -1795,18 +1795,21 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private void highlightHome(){
+        mFloatActionBtn.setVisibility(View.VISIBLE);
         mIvHome.setImageResource(R.drawable.home_red_vector);
         mIvSearch.setImageResource(R.drawable.search_grey_vector);
         mIvProfile.setImageResource(R.drawable.profile_grey_vector);
     }
 
     private void highlightSearch(){
+        mFloatActionBtn.setVisibility(View.GONE);
         mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
         mIvSearch.setImageResource(R.drawable.search_red_vector);
         mIvProfile.setImageResource(R.drawable.profile_grey_vector);
     }
 
     private void highlightProfile(){
+        mFloatActionBtn.setVisibility(View.GONE);
         mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
         mIvSearch.setImageResource(R.drawable.search_grey_vector);
         mIvProfile.setImageResource(R.drawable.profile_red_vector);

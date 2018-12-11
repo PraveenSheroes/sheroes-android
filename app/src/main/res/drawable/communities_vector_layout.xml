@@ -1,19 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:viewportWidth="82"
-    android:viewportHeight="82"
-    android:width="82dp"
-    android:height="82dp">
-    <group
-        android:translateX="1"
-        android:translateY="1">
-        <path
-            android:pathData="M80 40A40 40 0 0 1 40 80 40 40 0 0 1 0 40 40 40 0 0 1 40 0 40 40 0 0 1 80 40Z"
-            android:strokeWidth="1"
-            android:fillColor="#d2d2d2"
-            android:strokeColor="#d2d2d2" />
-        <path
-            android:pathData="M59.957 36.574c4.38 0 7.89 -3.536 7.89 -7.916 0 -4.381 -3.51 -7.917 -7.89 -7.917"
-            android:fillColor="#ffffff" />
-    </group>
+<vector android:height="24dp" android:viewportHeight="82"
+    android:viewportWidth="82" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="#D2D2D2" android:fillType="evenOdd"
+        android:pathData="M41,41m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"
+        android:strokeColor="#D2D2D2" android:strokeWidth="1"/>
+    <path android:fillColor="#FFF" android:fillType="evenOdd" android:pathData="M59.806,37.571c4.078,0 7.344,-3.254 7.344,-7.285 0,-4.032 -3.266,-7.286 -7.344,-7.286 -4.077,0 -7.369,3.254 -7.369,7.286 0,4.031 3.292,7.285 7.37,7.285zM40.156,37.571c4.078,0 7.344,-3.254 7.344,-7.285 0,-4.032 -3.266,-7.286 -7.344,-7.286 -4.077,0 -7.369,3.254 -7.369,7.286 0,4.031 3.292,7.285 7.37,7.285zM40.156,42.429c-5.723,0 -17.194,2.841 -17.194,8.5L22.962,57L57.35,57v-6.071c0,-5.659 -11.47,-8.5 -17.194,-8.5zM59.806,42.429c-0.712,0 -1.523,0.048 -2.382,0.121 2.849,2.04 4.838,4.784 4.838,8.379L62.262,57L77,57v-6.071c0,-5.659 -11.47,-8.5 -17.194,-8.5zM13.751,30.286c0,-4.032 3.267,-7.286 7.345,-7.286 4.077,0 7.368,3.254 7.368,7.286 0,4.031 -3.291,7.285 -7.368,7.285 -4.078,0 -7.345,-3.254 -7.345,-7.285zM21.194,42.429c0.712,0 1.523,0.048 2.382,0.121 -2.849,2.04 -4.838,4.784 -4.838,8.379L18.738,57L4,57v-6.071c0,-5.659 11.47,-8.5 17.194,-8.5z"/>
 </vector>
