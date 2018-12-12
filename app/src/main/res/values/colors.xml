@@ -167,5 +167,6 @@
     <color name="sheroes_red">#dc4541</color>
     <color name="sheroes_warm_grey">#878787</color>
     <color name="sheroes_greyish_brown">#3c3c3c</color>
+    <color name="sheroes_grey_with_40_opacity">#4d878787</color>
 
 </resources>

@@ -212,8 +212,15 @@ public class HomePresenter extends BasePresenter<HomeView> {
                     @Override
                     public void onNext(FeedResponsePojo feedResponsePojo) {
                         if (null != feedResponsePojo) {
-                            getMvpView().getFeedListSuccess(feedResponsePojo);
-                            mNextToken = feedResponsePojo.getNextToken();
+                            if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                                if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                    getMvpView().getFeedListSuccess(feedResponsePojo);
+                                    mNextToken = feedResponsePojo.getNextToken();
+                                }else{
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+
+                                }
+                            }
                         }
                     }
                 });

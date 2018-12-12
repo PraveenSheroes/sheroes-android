@@ -351,7 +351,13 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         }
     }
 
+    @OnClick(R.id.iv_back)
+    public void onBackClick(){
+        resetSearch();
+    }
+
     private void searchInitState() {
+        mETSearch.setCursorVisible(false);
         mETSearch.setText("");
         searchImg.setVisibility(View.VISIBLE);
         backImg.setVisibility(View.GONE);

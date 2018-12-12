@@ -10,8 +10,11 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +84,14 @@ public class ArticlesFragment extends BaseFragment {
     CardView loaderGif;
     private List<Long> categoryIdList = new ArrayList<>();
     private View view;
+    @Bind(R.id.rl_empty)
+    RelativeLayout emptyLayout;
+
+    @Bind(R.id.tv_no_results_title)TextView noResultsTitleTxt;
+
+    @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
+
+    @Bind(R.id.iv_image)ImageView noResultsImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -139,6 +150,7 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     public void categoryArticleFilter(final List<Long> categoryIds) {
+        loaderGif.setVisibility(View.VISIBLE);
         mHomePresenter.attachView(this);
         setProgressBar(mProgressBar);
         mPullRefreshList.setPullToRefresh(true);
@@ -164,6 +176,8 @@ public class ArticlesFragment extends BaseFragment {
     }
 
     public void fetchSearchedArticles(boolean isSearch, String searchText, String searchCategory) {
+        loaderGif.setVisibility(View.VISIBLE);
+
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -190,6 +204,7 @@ public class ArticlesFragment extends BaseFragment {
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
+        emptyLayout.setVisibility(View.GONE);
         List<FeedDetail> feedDetailList;
         List<FeedDetail> newFeedDetailList = new ArrayList<>();
         boolean isTrendingData = false;
@@ -313,6 +328,12 @@ public class ArticlesFragment extends BaseFragment {
 
     @Override
     public void showEmptyScreen(String s) {
-
+        loaderGif.setVisibility(View.GONE);
+        if(mIsSearch){
+            emptyLayout.setVisibility(View.VISIBLE);
+            noResultsSubTitleTxt.setText(s);
+            noResultsTitleTxt.setText("No Articles Found");
+            noResultsImage.setImageResource(R.drawable.articles_empty_vector);
+        }
     }
 }

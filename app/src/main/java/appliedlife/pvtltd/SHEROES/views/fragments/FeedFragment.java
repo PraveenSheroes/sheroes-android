@@ -434,6 +434,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     //region public methods
     @Override
     public void showFeedList(List<FeedDetail> feedDetailList) {
+        emptyLayout.setVisibility(View.GONE);
         if (CommonUtil.isEmpty(feedDetailList)) {
             mFeedRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);

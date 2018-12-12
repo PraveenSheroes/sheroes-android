@@ -48,7 +48,8 @@
                     android:visibility="gone"
                     />
 
-                <EditText
+                <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
+                    style="@style/TextView14spRegular"
                     android:id="@+id/et_search"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -59,8 +60,10 @@
                     android:singleLine="true"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/iv_search_icon"
-                    android:textColorHint="@color/sheroes_warm_grey"
-                    android:textSize="15sp"
+                    android:textColorHint="@color/sheroes_grey_with_40_opacity"
+                    android:textColor="@color/sheroes_greyish_brown"
+                    android:textSize="@dimen/sp_size_14"
+                    android:inputType="textNoSuggestions"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
                 <ImageView
@@ -80,6 +83,7 @@
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.tabs.TabLayout
+            style="@style/TextView12spRegular"
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_size_60"
@@ -90,21 +94,6 @@
             app:tabTextAppearance="@style/TabText"
             app:tabTextColor="@color/sheroes_warm_grey"
             vernacular:customTextFontFamily="@string/regular_font">
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                tools:text="hello" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="hello" />
-
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="hello" />
 
         </com.google.android.material.tabs.TabLayout>
 

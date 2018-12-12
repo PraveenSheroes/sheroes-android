@@ -38,6 +38,7 @@
                     android:layout_marginBottom="@dimen/dp_size_18" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    style="@style/TextView18spMediumBold"
                     android:id="@+id/tv_no_results_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -48,12 +49,13 @@
                     android:layout_marginBottom="@dimen/dp_size_4"
                     android:gravity="center"
                     android:textColor="@color/sheroes_greyish_brown"
-                    android:textSize="18sp"
+                    android:textSize="@dimen/sp_size_18"
                     tools:text="No communities found."
-                    vernacular:customTextFontFamily="@string/regular_font" />
+                    vernacular:customTextFontFamily="@string/medium_font" />
 
 
-                <TextView
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    style="@style/TextView14spRegular"
                     android:id="@+id/tv_no_results_subtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -62,8 +64,10 @@
                     android:layout_marginLeft="@dimen/dp_size_36"
                     android:layout_marginRight="@dimen/dp_size_36"
                     android:gravity="center"
-                    android:text="No results found. Try searching for something else."
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/sp_size_14"
+                    android:textColor="@color/sheroes_warm_grey"
+                    vernacular:customTextFontFamily="@string/regular_font" />
+
 
             </RelativeLayout>
 
