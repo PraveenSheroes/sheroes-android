@@ -519,7 +519,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         communitiesContainer.setVisibility(View.GONE);
         emptyLayout.setVisibility(View.VISIBLE);
         noResultsSubTitleTxt.setText(s);
-        noResultsTitleTxt.setText("No Communities FOund");
+        noResultsTitleTxt.setText("No Communities Found");
         noResultsImage.setImageResource(R.drawable.communities_vector_layout);
     }
 

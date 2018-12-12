@@ -1,129 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nested_scroll"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="fill_vertical"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <FrameLayout
+    <include layout="@layout/gif_loader"
+        android:visibility="gone"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/screen_background"
-        android:paddingBottom="@dimen/dp_size_40">
+        android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical"
+        android:fillViewport="true">
 
-        <RelativeLayout
-            android:id="@+id/rl_empty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:gravity="center"
-            android:visibility="gone"
-            >
-
-            <ImageView
-                android:id="@+id/iv_image"
-                android:layout_width="@dimen/dp_size_80"
-                android:layout_height="@dimen/dp_size_80"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/dp_size_18"
-                />
-
-            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                android:id="@+id/tv_no_results_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_36"
-                android:layout_marginRight="@dimen/dp_size_36"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/iv_image"
-                android:textColor="@color/sheroes_greyish_brown"
-                tools:text="No communities found."
-                android:textSize="18sp"
-                android:layout_marginBottom="@dimen/dp_size_4"
-                vernacular:customTextFontFamily="@string/regular_font"
-                />
-
-
-            <TextView
-                android:id="@+id/tv_no_results_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_size_36"
-                android:layout_marginRight="@dimen/dp_size_36"
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_below="@+id/tv_no_results_title"
-                android:text="No results found. Try searching for something else."
-                android:textSize="24sp" />
-
-        </RelativeLayout>
-
-        <include
-            layout="@layout/gif_loader"
-            android:visibility="gone"
-            />
-
-        <LinearLayout
-            android:id="@+id/container"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:background="@color/screen_background"
+            android:paddingBottom="@dimen/dp_size_40">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/community_card_view"
+            <RelativeLayout
+                android:id="@+id/rl_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/iv_image"
+                    android:layout_width="@dimen/dp_size_80"
+                    android:layout_height="@dimen/dp_size_80"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="@dimen/dp_size_18" />
+
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    android:id="@+id/tv_no_results_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_image"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/dp_size_36"
+                    android:layout_marginRight="@dimen/dp_size_36"
+                    android:layout_marginBottom="@dimen/dp_size_4"
+                    android:gravity="center"
+                    android:textColor="@color/sheroes_greyish_brown"
+                    android:textSize="18sp"
+                    tools:text="No communities found."
+                    vernacular:customTextFontFamily="@string/regular_font" />
+
+
+                <TextView
+                    android:id="@+id/tv_no_results_subtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_no_results_title"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginLeft="@dimen/dp_size_36"
+                    android:layout_marginRight="@dimen/dp_size_36"
+                    android:gravity="center"
+                    android:text="No results found. Try searching for something else."
+                    android:textSize="24sp" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_size_8"
-                android:elevation="@dimen/dp_size_5">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/community_card_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/carousel_card_bg"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/dp_size_8"
+                    android:elevation="@dimen/dp_size_5">
 
-                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                        android:id="@+id/title"
-                        style="@style/TextView14spRegular"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingEnd="@dimen/dp_size_1"
-                        android:paddingLeft="@dimen/dp_size_16"
-                        android:paddingRight="@dimen/dp_size_1"
-                        android:paddingStart="@dimen/dp_size_16"
-                        android:paddingTop="@dimen/dp_size_8"
-                        android:text="@string/my_communities"
-                        android:textColor="@color/comment_text"
-                        vernacular:customTextFontFamily="@string/regular_font" />
+                        android:layout_height="match_parent"
+                        android:background="@color/carousel_card_bg"
+                        android:orientation="vertical">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/my_communities"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/dp_size_5"
-                        android:minHeight="@dimen/dp_size_100"
-                        android:paddingLeft="@dimen/dp_size_16"
-                        android:paddingRight="@dimen/dp_size_1"
-                        android:paddingStart="@dimen/dp_size_16" />
+                        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                            android:id="@+id/title"
+                            style="@style/TextView14spRegular"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingStart="@dimen/dp_size_16"
+                            android:paddingLeft="@dimen/dp_size_16"
+                            android:paddingTop="@dimen/dp_size_8"
+                            android:paddingEnd="@dimen/dp_size_1"
+                            android:paddingRight="@dimen/dp_size_1"
+                            android:text="@string/my_communities"
+                            android:textColor="@color/comment_text"
+                            vernacular:customTextFontFamily="@string/regular_font" />
 
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/my_communities"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/dp_size_5"
+                            android:minHeight="@dimen/dp_size_100"
+                            android:paddingStart="@dimen/dp_size_16"
+                            android:paddingLeft="@dimen/dp_size_16"
+                            android:paddingRight="@dimen/dp_size_1" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/all_communities"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/dp_size_100" />
-        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-        <include
-            layout="@layout/no_internet_connection_layout"
-            android:visibility="gone" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/all_communities"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/dp_size_100" />
+            </LinearLayout>
 
-    </FrameLayout>
-</androidx.core.widget.NestedScrollView>
+            <include
+                layout="@layout/no_internet_connection_layout"
+                android:visibility="gone" />
+
+        </FrameLayout>
+    </androidx.core.widget.NestedScrollView>
+</RelativeLayout>

@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:background="@color/feed_back_color">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -18,38 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/loader_gif"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/dp_size_30"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <pl.droidsonroids.gif.GifTextView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/she" />
-
-                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    style="@style/TextView16spRegular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_size_16"
-                    android:layout_marginBottom="@dimen/dp_size_16"
-                    android:gravity="center"
-                    android:text="@string/ID_LOADER"
-                    android:textColor="@color/feed_article_label"
-                    vernacular:customTextFontFamily="@string/regular_font" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
 
         <RelativeLayout
             android:id="@+id/rl_empty"
@@ -99,11 +67,45 @@
 
         </RelativeLayout>
 
+        <androidx.cardview.widget.CardView
+            android:id="@+id/loader_gif"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/dp_size_30"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <pl.droidsonroids.gif.GifTextView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/she" />
+
+                <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                    style="@style/TextView16spRegular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_size_16"
+                    android:layout_marginBottom="@dimen/dp_size_16"
+                    android:gravity="center"
+                    android:text="@string/ID_LOADER"
+                    android:textColor="@color/feed_article_label"
+                    vernacular:customTextFontFamily="@string/regular_font" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
         <include
             layout="@layout/no_internet_connection_layout"
             android:visibility="gone" />
 
         <include layout="@layout/empty_list_view" />
 
-    </LinearLayout>
+    </RelativeLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

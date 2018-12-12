@@ -65,13 +65,14 @@
 
                 <ImageView
                     android:id="@+id/iv_search_close"
-                    android:layout_width="14dp"
-                    android:layout_height="14dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_alignParentRight="true"
                     android:src="@drawable/close_grey_vector"
+                    android:padding="@dimen/dp_size_16"
                     android:visibility="gone"
-                    android:layout_marginRight="16dp"/>
+                    />
 
 
             </RelativeLayout>

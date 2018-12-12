@@ -113,7 +113,11 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if(editable.toString().trim().length() == 0){
+                    searchImg.setVisibility(View.VISIBLE);
+                    backImg.setVisibility(View.GONE);
+                    closeImg.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -309,20 +313,22 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     @OnClick(R.id.iv_search_icon)
     public void searchProceed() {
-        searchingState();
-        CommonUtil.hideKeyboard(getActivity());
-        int index = mSearchTabsPager.getCurrentItem();
-        SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
-        Fragment fragment = adapter.getFragment(index);
-        mSearchCategory = getSearchCategory(fragment);
-        if (fragment instanceof FeedFragment) {
-            ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
-        } else if (fragment instanceof CommunitiesListFragment) {
-            ((CommunitiesListFragment) fragment).filterCommunities(false, mETSearch.getText().toString(), mSearchCategory);
-        } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString());
-        } else if (fragment instanceof ArticlesFragment) {
-            ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
+        if(mETSearch.getText().toString().trim().length()>0) {
+            searchingState();
+            CommonUtil.hideKeyboard(getActivity());
+            int index = mSearchTabsPager.getCurrentItem();
+            SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
+            Fragment fragment = adapter.getFragment(index);
+            mSearchCategory = getSearchCategory(fragment);
+            if (fragment instanceof FeedFragment) {
+                ((FeedFragment) fragment).filterFeed(true, mETSearch.getText().toString(), mSearchCategory);
+            } else if (fragment instanceof CommunitiesListFragment) {
+                ((CommunitiesListFragment) fragment).filterCommunities(false, mETSearch.getText().toString(), mSearchCategory);
+            } else if (fragment instanceof HashTagFragment) {
+                ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString());
+            } else if (fragment instanceof ArticlesFragment) {
+                ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
+            }
         }
     }
 

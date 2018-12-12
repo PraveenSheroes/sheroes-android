@@ -8,6 +8,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
+
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -595,7 +597,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mShare.setText(mContext.getString(R.string.ID_SHARE));
             mShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
         }
-        final String listDescription = mUserPostObj.getListDescription();
+        final String listDescription = Html.fromHtml(mUserPostObj.getListDescription()).toString();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);

@@ -292,6 +292,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void callFeedApi(){
+        showGifLoader();
         if(!isFilter)
             mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         else
@@ -879,12 +880,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void showEmptyScreen(String s) {
         if(isFilter) {
-            noResultsImage.setImageResource(R.drawable.hashtag_empty_vector);
             emptyLayout.setVisibility(View.VISIBLE);
-            mFeedRecyclerView.setVisibility(View.GONE);
             hideGifLoader();
-            noResultsTitleTxt.setText("No Hashtags found");
-            noResultsSubTitleTxt.setText(s);
+            mFeedRecyclerView.setVisibility(View.GONE);
+
+            if(searchCategory.equalsIgnoreCase("hashtags")) {
+                noResultsImage.setImageResource(R.drawable.hashtag_empty_vector);
+                noResultsTitleTxt.setText("No Hashtags found");
+                noResultsSubTitleTxt.setText(s);
+            }else if(searchCategory.equalsIgnoreCase("posts")){
+                noResultsImage.setImageResource(R.drawable.posts_empty_vector);
+                noResultsTitleTxt.setText("No posts found");
+                noResultsSubTitleTxt.setText(s);
+            }
         }
     }
     //endregion
@@ -1060,6 +1068,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void filterFeed(boolean isFilter,String searchText, String searchCategory) {
+        showGifLoader();
         mFeedPresenter.setmIsFeedLoading(false);
         paramsToFilterFeed(isFilter, searchText, searchCategory);
         mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);

@@ -608,7 +608,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     public void changeFragmentWithCommunities() {
         mFragmentOpen.setFeedFragment(false);
-        mFloatActionBtn.setVisibility(View.GONE);
         mFloatActionBtn.hide();
         flFeedFullView.setVisibility(View.VISIBLE);
     }
@@ -662,19 +661,13 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
 
-        //TODO check logic
-        mFloatActionBtn.show();
-        mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
-        mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
-        mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-
         if(showFab) {
-            mFloatActionBtn.setVisibility(View.VISIBLE);
+            mFloatActionBtn.show();
             mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
             mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
         }else{
-            mFloatActionBtn.setVisibility(View.GONE);
+            mFloatActionBtn.hide();
         }
     }
 
@@ -1822,7 +1815,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void highlightHome(){
         showFab = true;
-        mFloatActionBtn.setVisibility(View.VISIBLE);
+        mFloatActionBtn.show();
         mIvHome.setImageResource(R.drawable.home_red_vector);
         mIvSearch.setImageResource(R.drawable.search_grey_vector);
         mIvProfile.setImageResource(R.drawable.profile_grey_vector);
@@ -1830,7 +1823,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void highlightSearch(){
         showFab = false;
-        mFloatActionBtn.setVisibility(View.GONE);
+        mFloatActionBtn.hide();
         mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
         mIvSearch.setImageResource(R.drawable.search_red_vector);
         mIvProfile.setImageResource(R.drawable.profile_grey_vector);
@@ -1838,7 +1831,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void highlightProfile(){
         showFab = false;
-        mFloatActionBtn.setVisibility(View.GONE);
+        mFloatActionBtn.hide();
         mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
         mIvSearch.setImageResource(R.drawable.search_grey_vector);
         mIvProfile.setImageResource(R.drawable.profile_red_vector);
