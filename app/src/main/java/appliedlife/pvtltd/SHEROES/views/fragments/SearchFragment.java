@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -89,9 +90,23 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         View view = inflater.inflate(R.layout.activity_search, container, false);
         ButterKnife.bind(this, view);
 
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
+
         initializeSearchViews();
         searchListener();
         mSearchTabsPager.setOffscreenPageLimit(3);
+
+//        if(mETSearch.getHint().length()>0){
+            int len = mETSearch.getHint().length();
+//        }
+
+        mETSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mETSearch.setCursorVisible(true);
+            }
+        });
 
         mETSearch.addTextChangedListener(new TextWatcher() {
             @Override
