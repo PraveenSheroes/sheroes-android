@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.CommentCallBack;
 import appliedlife.pvtltd.SHEROES.basecomponents.PostDetailCallBack;
@@ -17,7 +17,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
-import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.viewholder.CommentLoaderViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CommentNewViewHolder;
 import appliedlife.pvtltd.SHEROES.views.viewholders.FeedPollCardHolder;
@@ -29,7 +29,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.UserPostHolder;
 
 public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final Context mContext;
-    private List<BaseResponse> mFeedDetail;
+    private List<BaseResponse> mFeedDetailList;
     private final PostDetailCallBack mPostDetailCallback;
     private final CommentCallBack mCommentCallback;
     private static final int TYPE_LOADER = 1;
@@ -43,7 +43,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     //region Constructor
     public PostDetailAdapter(Context context, PostDetailCallBack postDetailCallBack, CommentCallBack commentCallBack) {
         this.mContext = context;
-        mFeedDetail = new ArrayList<>();
+        mFeedDetailList = new ArrayList<>();
         this.mPostDetailCallback = postDetailCallBack;
         this.mCommentCallback = commentCallBack;
     }
@@ -77,17 +77,17 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         switch (holder.getItemViewType()) {
             case TYPE_USER_POST:
                 UserPostHolder userPostHolder = (UserPostHolder) holder;
-                FeedDetail feedDetail = (FeedDetail) mFeedDetail.get(position);
+                FeedDetail feedDetail = (FeedDetail) mFeedDetailList.get(position);
                 userPostHolder.bindData(feedDetail, mContext, position);
                 break;
             case TYPE_POLL:
                 FeedPollCardHolder feedPollCardHolder = (FeedPollCardHolder) holder;
-                PollSolarObj pollSolarObj = (PollSolarObj) mFeedDetail.get(position);
+                PollSolarObj pollSolarObj = (PollSolarObj) mFeedDetailList.get(position);
                 feedPollCardHolder.bindData(pollSolarObj, mContext, position);
                 break;
             case TYPE_COMMENT:
                 CommentNewViewHolder commentNewViewHolder = (CommentNewViewHolder) holder;
-                BaseResponse baseResponse = mFeedDetail.get(position);
+                BaseResponse baseResponse = mFeedDetailList.get(position);
                 commentNewViewHolder.bindData((Comment) baseResponse, mContext, position);
                 break;
             case TYPE_LOADER:
@@ -99,26 +99,26 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     @Override
     public int getItemCount() {
-        return mFeedDetail == null ? 0 : mFeedDetail.size();
+        return mFeedDetailList == null ? 0 : mFeedDetailList.size();
     }
 
     public void setData(final List<BaseResponse> feedDetails) {
-        mFeedDetail = feedDetails;
+        mFeedDetailList = feedDetails;
         notifyDataSetChanged();
     }
 
     public void setItem(BaseResponse baseResponse, int position) {
-        mFeedDetail.set(position, baseResponse);
+        mFeedDetailList.set(position, baseResponse);
         notifyItemChanged(position);
     }
 
     public List<BaseResponse> getItems() {
-        return mFeedDetail;
+        return mFeedDetailList;
     }
 
     @Override
     public int getItemViewType(int position) {
-        BaseResponse feedDetail = mFeedDetail.get(position);
+        BaseResponse feedDetail = mFeedDetailList.get(position);
         if (feedDetail instanceof UserPostSolrObj) {
             return TYPE_USER_POST;
         }
@@ -132,8 +132,8 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void addData(BaseResponse response, int indexAt) {
-        if(indexAt< mFeedDetail.size()) {
-            mFeedDetail.add(indexAt, response);
+        if (indexAt < mFeedDetailList.size()) {
+            mFeedDetailList.add(indexAt, response);
             notifyItemInserted(indexAt);
         } else {
             addData(response);
@@ -141,8 +141,8 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void addData(BaseResponse baseResponse) {
-        int size = mFeedDetail.size();
-        mFeedDetail.add(baseResponse);
+        int size = mFeedDetailList.size();
+        mFeedDetailList.add(baseResponse);
         notifyItemInserted(size);
     }
 
@@ -166,10 +166,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public int getLoaderPostion() {
         int pos = RecyclerView.NO_POSITION;
-        if(hasMoreItem){
-            if(!CommonUtil.isEmpty(mFeedDetail)){
-                BaseResponse baseResponse = mFeedDetail.get(0);
-                if(baseResponse instanceof UserPostSolrObj){
+        if (hasMoreItem) {
+            if (!StringUtil.isNotEmptyCollection(mFeedDetailList)) {
+                BaseResponse baseResponse = mFeedDetailList.get(0);
+                if (baseResponse instanceof UserPostSolrObj) {
                     pos = 1;
                 }
             }
@@ -178,10 +178,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setHasMoreComments(boolean hasMoreComments) {
-        if(!hasMoreComments){
+        if (!hasMoreComments) {
             int lodPos = getLoaderPostion();
             if (lodPos >= 0) {
-                mFeedDetail.remove(lodPos);
+                mFeedDetailList.remove(lodPos);
                 notifyItemRemoved(lodPos);
             }
         }
@@ -189,19 +189,19 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void addDatas(int startIndex, List<Comment> commentList) {
-        mFeedDetail.addAll(startIndex, commentList);
+        mFeedDetailList.addAll(startIndex, commentList);
         notifyItemRangeInserted(startIndex, commentList.size());
     }
 
     public void removeData(int index) {
-        if (index < mFeedDetail.size()) {
-            mFeedDetail.remove(index);
+        if (index < mFeedDetailList.size()) {
+            mFeedDetailList.remove(index);
             notifyItemRemoved(index);
         }
     }
 
     public void setData(int index, BaseResponse baseResponse) {
-        mFeedDetail.set(index, baseResponse);
+        mFeedDetailList.set(index, baseResponse);
         notifyItemChanged(index);
     }
 

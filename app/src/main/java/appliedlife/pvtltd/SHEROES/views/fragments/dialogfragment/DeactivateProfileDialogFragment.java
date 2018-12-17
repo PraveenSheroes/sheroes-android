@@ -3,7 +3,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Parcelable;
-import androidx.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -52,7 +52,7 @@ import butterknife.OnClick;
 
 /**
  * @author ravi
- *
+ * <p>
  * Deactive user profile. Only community mod and admin have access deactive user profile and clear its all
  * activity (if they tick checkbox i.e clear user activity)
  */
@@ -126,7 +126,7 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
             mUserSolrObj = Parcels.unwrap(parcelable);
         }
 
-        if(mUserSolrObj ==null) return null;
+        if (mUserSolrObj == null) return null;
 
         RadioGroup.LayoutParams layoutParams = new RadioGroup.LayoutParams(
                 RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT);
@@ -220,8 +220,10 @@ public class DeactivateProfileDialogFragment extends BaseDialogFragment implemen
     @Override
     public void onUserDeactivation(BaseResponse baseResponse, boolean isUserDeactivated) {
         if (mContext instanceof IProfileView) {
-            UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
-            ((IProfileView) mContext).onUserDeactivation(userSolrObj, isUserDeactivated);
+            if (baseResponse instanceof UserSolrObj) {
+                UserSolrObj userSolrObj = (UserSolrObj) baseResponse;
+                ((IProfileView) mContext).onUserDeactivation(userSolrObj, isUserDeactivated);
+            }
             mContext = null;
         }
     }
