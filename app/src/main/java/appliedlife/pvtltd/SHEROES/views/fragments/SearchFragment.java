@@ -82,6 +82,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     ImageView backImg;
     @Bind(R.id.iv_search_icon)
     ImageView searchImg;
+    private boolean searchStarted = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -151,7 +152,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             @Override
             public void onPageSelected(int position) {
-
                 if (position == 0) {
                     if (mETSearch.getText().toString().trim().length() > 0) {
                         feedFragment.filterFeed(true, mETSearch.getText().toString(), SearchEnum.TOP.toString());
@@ -244,7 +244,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 feedFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(feedFragment, getString(R.string.top));
                 mSearchTabFragments.add(feedFragment);
-            } else if (name.equalsIgnoreCase(getString(R.string.community))) {
+            }
+            else if (name.equalsIgnoreCase(getString(R.string.community))) {
                 if (communitiesListFragment == null) {
                     communitiesListFragment = new CommunitiesListFragment();
                 }
@@ -390,6 +391,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     private void searchingState() {
+        searchStarted = true;
         searchImg.setVisibility(View.INVISIBLE);
         backImg.setVisibility(View.VISIBLE);
         closeImg.setVisibility(View.VISIBLE);

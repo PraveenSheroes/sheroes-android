@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
+import android.text.Html;
 import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -1028,7 +1029,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
             communityPost.community = new Community();
             communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
-            communityPost.body = userPostObj.getListDescription();
+            communityPost.body = Html.fromHtml(userPostObj.getListDescription()).toString();
             communityPost.community.name = userPostObj.getPostCommunityName();
             communityPost.community.isOwner = userPostObj.isCommunityOwner();
             communityPost.isMyPost = userPostObj.isCommunityOwner();
