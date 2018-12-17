@@ -5,6 +5,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -44,10 +45,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ISearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.fabric.sdk.android.services.common.CommonUtils;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
@@ -97,16 +100,24 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         searchListener();
         mSearchTabsPager.setOffscreenPageLimit(3);
 
-//        if(mETSearch.getHint().length()>0){
-            int len = mETSearch.getHint().length();
-//        }
+
+        mETSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+                return false;
+
+            }
+        });
 
         mETSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mETSearch.setCursorVisible(true);
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
             }
         });
+
 
         mETSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -349,6 +360,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     @OnClick(R.id.iv_search_close)
     public void resetSearch() {
+        CommonUtil.hideKeyboard(getActivity());
         searchInitState();
         int index = mSearchTabsPager.getCurrentItem();
         SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
@@ -377,12 +389,15 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         searchImg.setVisibility(View.VISIBLE);
         backImg.setVisibility(View.GONE);
         closeImg.setVisibility(View.GONE);
+
+        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
     private void searchingState() {
         searchImg.setVisibility(View.INVISIBLE);
         backImg.setVisibility(View.VISIBLE);
         closeImg.setVisibility(View.VISIBLE);
+        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
 
