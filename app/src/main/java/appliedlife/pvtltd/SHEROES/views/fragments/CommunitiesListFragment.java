@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
@@ -36,7 +37,6 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
-import appliedlife.pvtltd.SHEROES.models.entities.Image;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
@@ -54,6 +54,7 @@ import appliedlife.pvtltd.SHEROES.presenters.CommunitiesListPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.EndlessNestedScrollViewListener;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -88,6 +89,8 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
     private boolean showMyCommunities;
+    private EndlessNestedScrollViewListener mEndlessRecyclerViewScrollListener;
+    String mSearchText, mSearchCategory;
     //endregion
 
     //region Bind view variables
@@ -129,6 +132,9 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
 
     @Bind(R.id.iv_image)ImageView noResultsImage;
+
+    @Bind(R.id.nested_scroll)
+    NestedScrollView nestedScrollView;
 
     @Inject
     AppUtils mAppUtils;
@@ -174,8 +180,29 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
 
         callCommunityApi();
+        mEndlessRecyclerViewScrollListener = new EndlessNestedScrollViewListener(linearLayoutManager) {
 
-        mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunitiesListPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                if (mCommunitiesListPresenter.isFeedLoading() || mCommunitiesListPresenter.getFeedEnded() || showMyCommunities) {
+                    return;
+                }
+
+                mAllCommunitiesListView.post(new Runnable() {
+                    public void run() {
+                        if (!showMyCommunities)
+                            mFeedAdapter.feedStartedLoading();
+                    }
+                });
+
+                if (!showMyCommunities) {
+                    mCommunitiesListPresenter.getSearchedCommunity(mSearchText, mSearchCategory);
+                }
+            }
+        };
+        nestedScrollView.setOnScrollChangeListener(mEndlessRecyclerViewScrollListener);
+
+        /*mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunitiesListPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
 
@@ -188,7 +215,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             @Override
             public void dismissReactions() {
             }
-        });
+        });*/
 
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).communityButton();
@@ -205,6 +232,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         loaderGif.setVisibility(View.VISIBLE);
         this.showMyCommunities = true;
         mCommunitiesListPresenter.fetchAllCommunities();
+        mCommunitiesListPresenter.resetState();
     }
 
     @Override
@@ -269,6 +297,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
 
     @Override
+    public void stopProgressBar() {
+        mEndlessRecyclerViewScrollListener.finishLoading();
+        mFeedAdapter.feedFinishedLoading();
+    }
+
+    @Override
     public void onCommunityJoined(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder) {
         carouselViewHolder.mAdapter.setData(communityFeedSolrObj);
     }
@@ -292,6 +326,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public void showAllCommunity(ArrayList<FeedDetail> feedDetails) {
+        mFeedAdapter.feedFinishedLoading();
         emptyLayout.setVisibility(View.GONE);
         mFeedAdapter.setData(feedDetails);
         mFeedAdapter.notifyDataSetChanged();
@@ -301,7 +336,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         if (showMyCommunities) {
             mMyCommunitiesListView.setVisibility(View.VISIBLE);
             mMyCommunitiesLabel.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             mMyCommunitiesListView.setVisibility(View.GONE);
             mMyCommunitiesLabel.setVisibility(View.GONE);
         }
@@ -469,7 +504,11 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         emptyLayout.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
         this.showMyCommunities = showMyCommunities;
+        mSearchText = searchText;
+        mSearchCategory = searchCategory;
 //        mMyCommunitiesListView.setVisibility(View.GONE);
+        mCommunitiesListPresenter.setHasFeedEnded(false);
+        mCommunitiesListPresenter.resetState();
         mCommunitiesListPresenter.getSearchedCommunity(searchText, searchCategory);
     }
 
