@@ -105,7 +105,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
-            mCommunityName.setText(Html.fromHtml(mCommunityFeedObj.getNameOrTitle()));
+            mCommunityName.setText(Html.fromHtml(mCommunityFeedObj.getNameOrTitle()).toString());
         }
 
         String pluralMember = mContext.getResources().getQuantityString(R.plurals.numberOfMembers, mCommunityFeedObj.getNoOfMembers());

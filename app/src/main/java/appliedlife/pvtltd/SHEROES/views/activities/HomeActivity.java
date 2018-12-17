@@ -25,6 +25,7 @@ import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
 import android.widget.FrameLayout;
@@ -370,6 +371,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                 mIsChampion = true;
             }
         }
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         renderHomeFragmentView();
         assignNavigationRecyclerListView();
         sheUserInit();
@@ -1838,6 +1841,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private void openSearchFragment(){
+        mCLMainLayout.setScrollContainer(false);
         SearchFragment searchFragment = new SearchFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {

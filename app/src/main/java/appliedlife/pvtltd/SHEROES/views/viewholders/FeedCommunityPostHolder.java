@@ -1255,7 +1255,7 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
         } else {
             liFeedCommunityPostUserComments.setVisibility(View.GONE);
-            tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
+//            tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
         }
 
     }

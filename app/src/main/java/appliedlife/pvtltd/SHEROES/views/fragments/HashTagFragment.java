@@ -106,6 +106,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         feedAdapter = new FeedAdapter(getContext(), this);
         hashTagDetailsView.setAdapter(feedAdapter);
 
+        callHashTagApi();
 
         return view;
 
