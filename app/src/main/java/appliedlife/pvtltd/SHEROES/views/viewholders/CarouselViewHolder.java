@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -26,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CarouselListAdapter;
+import appliedlife.pvtltd.SHEROES.views.cutomeviews.GridItemSpaceDecoration;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -115,7 +117,10 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         List<FeedDetail> list = item.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(list)) {
-            GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
+            StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+            GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
+            mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
+
             mRecyclerView.setLayoutManager(gridLayoutManager);
             mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setAdapter(mAdapter);

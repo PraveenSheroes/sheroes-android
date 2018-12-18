@@ -68,8 +68,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     private FeedAdapter feedAdapter;
     @Bind(R.id.ll_loader)
     LinearLayout loaderLayout;
-    @Bind(R.id.tv_no_results)
-    TextView noResultsTxt;
     @Bind(R.id.fl_container)
     FrameLayout containerLayout;
 
@@ -81,16 +79,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         mSearchPresenter.attachView(this);
 
         hashTagsList = new ArrayList<>();
-//
-//        hashTagsList.add("#start ups");
-//        hashTagsList.add("hello");
-//        hashTagsList.add("sheroes");
-//        hashTagsList.add("#culture");
-//        hashTagsList.add("#beauty");
-//        hashTagsList.add("#health");
-//        hashTagsList.add("#style");
-//        hashTagsList.add("#cooking");
-//        hashTagsList.add("#relationships");
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -150,37 +138,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
-    }
-
-//    @Override
-//    public void onHashTagClicked() {
-//        hashTagsView.setVisibility(View.GONE);
-//        mSearchPresenter.searchQuery(mETSearch.getText().toString(), mSearchCategory);
-//
-//        hashTagDetailsView.setVisibility(View.VISIBLE);
-//
-//        hashtagTxt.setVisibility(View.VISIBLE);
-//    }
-
-    public void showAllHashTags(ArrayList<FeedDetail> feedDetails) {
-        loaderLayout.setVisibility(View.GONE);
-        hashTagsView.setVisibility(View.GONE);
-
-        if (feedDetails != null && feedDetails.size() > 0) {
-            noResultsTxt.setVisibility(View.GONE);
-            feedAdapter.setData(feedDetails);
-            feedAdapter.notifyDataSetChanged();
-            hashTagDetailsView.setVisibility(View.VISIBLE);
-        } else {
-            noResultsTxt.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void populateTrendingHashTags() {
-        containerLayout.setVisibility(View.GONE);
-        loaderLayout.setVisibility(View.GONE);
-        noResultsTxt.setVisibility(View.GONE);
-        hashTagsView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -252,7 +209,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         hashTagsAdapter.refreshList(hashtagList);
         containerLayout.setVisibility(View.GONE);
         loaderLayout.setVisibility(View.GONE);
-        noResultsTxt.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.VISIBLE);
     }
 

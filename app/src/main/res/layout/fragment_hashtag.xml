@@ -56,16 +56,4 @@
             vernacular:customTextFontFamily="@string/regular_font" />
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_no_results"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:layout_margin="36dp"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:visibility="gone"
-        android:text="No results found. Try searching for something else."/>
-
-
 </RelativeLayout>
