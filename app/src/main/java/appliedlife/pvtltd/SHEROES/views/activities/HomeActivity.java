@@ -268,7 +268,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     CoordinatorLayout mCLMainLayout;
 
     @Bind(R.id.drawer_layout)
-    DrawerLayout mDrawer;
+    public DrawerLayout mDrawer;
 
     @Bind(R.id.nav_view_left_drawer)
     NavigationView mNavigationViewLeftDrawer;
