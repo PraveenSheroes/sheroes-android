@@ -53,6 +53,10 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
     //region private member variable
     private SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi mSheroesAppServiceApi;
+    private String mNextToken;
+    private ArrayList<FeedDetail> mCommunitiesList = new ArrayList<>();
+    private boolean mIsFeedLoading;
+    private boolean mHasFeedEnded;
     //endregion private member variable
 
     //region constructor
@@ -100,14 +104,34 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 });
     }
 
+    public void setHasFeedEnded(boolean hasFeedEnded){
+        this.mHasFeedEnded = hasFeedEnded;
+    }
+
+    public boolean isFeedLoading() {
+        return mIsFeedLoading;
+    }
+
+    public boolean getFeedEnded() {
+        return mHasFeedEnded;
+    }
+
     public void getSearchedCommunity(String searchText, String searchCategory) {
+        if (mIsFeedLoading) {
+            return;
+        }
+        String URL = "participant/search/?search_text=" +searchText +"&search_category=" +searchCategory;
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
+        if(mNextToken !=null){
+            URL = URL +"&next_token="+mNextToken;
+        }
+        mIsFeedLoading = true;
 
-        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory)
+        mSheroesAppServiceApi.getSearchResponse(URL)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
@@ -117,10 +141,12 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), null);
+                        mIsFeedLoading = false;
                     }
 
                     @Override
                     public void onComplete() {
+                        mIsFeedLoading = false;
                     }
 
                     @Override
@@ -128,8 +154,14 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                         getMvpView().stopProgressBar();
                         if (feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
                             if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                mNextToken = feedResponsePojo.getNextToken();
+                                mIsFeedLoading = false;
+                                if (mNextToken == null) {
+                                    mHasFeedEnded = true;
+                                }
                                 ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
-                                getMvpView().showAllCommunity(feedDetails);
+                                mCommunitiesList.addAll(feedDetails);
+                                getMvpView().showAllCommunity(mCommunitiesList);
                             }else{
                                 getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
                             }
@@ -138,6 +170,12 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                         }
                     }
                 });
+    }
+
+    public void resetState() {
+        mCommunitiesList.clear();
+        mNextToken = null;
+        mHasFeedEnded = false;
     }
 
     //get my communities
