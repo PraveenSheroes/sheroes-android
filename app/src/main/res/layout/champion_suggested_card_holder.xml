@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_size_1"
-        android:background="@color/carousel_card_bg">
+        android:background="@color/white">
 
         <RelativeLayout
             android:id="@+id/top_section"
@@ -82,6 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/top_section"
             android:padding="@dimen/dp_size_8"
+            android:background="@color/white"
             />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

@@ -1,5 +1,7 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -155,6 +157,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             @Override
             public void onPageSelected(int position) {
+                mSearchFragmentAdapter.setTabLabelColor();
+
                 if(searchStarted) {
                     if (position == 0) {
                         if (mETSearch.getText().toString().trim().length() > 0) {
@@ -165,7 +169,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                         }
                     } else if (position == 2) {
                         if (mETSearch.getText().toString().trim().length() > 0) {
-                            hashTagFragment.filterFeed(mETSearch.getText().toString());
+                            hashTagFragment.filterFeed(mETSearch.getText().toString().startsWith("#")?mETSearch.getText().toString().substring(1):mETSearch.getText().toString());
                         } else {
                             hashTagFragment.callHashTagApi();
                         }
@@ -225,7 +229,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         mSearchTabs.add(getString(R.string.article));
         setupViewPager(mSearchTabsPager);
         setupTabLayout();
-        setupTabIcons();
+//        setupTabIcons();
     }
 
     private void setupTabIcons() {
@@ -276,6 +280,14 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     private void setupTabLayout() {
         mSearchTabsLayout.setupWithViewPager(mSearchTabsPager);
+        for (int i = 0; i < mSearchTabsLayout.getTabCount(); i++) {
+            TabLayout.Tab tab = mSearchTabsLayout.getTabAt(i);
+            tab.setCustomView(mSearchFragmentAdapter.getTabView(i));
+        }
+        mSearchFragmentAdapter.setTabLabelColor();
+
+//        apply(mSearchTabsLayout);
+//        changeTabsFont();
     }
 
     @Override
@@ -352,7 +364,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             } else if (fragment instanceof CommunitiesListFragment) {
                 ((CommunitiesListFragment) fragment).filterCommunities(false, mETSearch.getText().toString(), mSearchCategory);
             } else if (fragment instanceof HashTagFragment) {
-                ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString());
+                ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString().startsWith("#")?mETSearch.getText().toString().substring(1):mETSearch.getText().toString());
             } else if (fragment instanceof ArticlesFragment) {
                 ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
             }
@@ -395,6 +407,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     private void searchingState() {
+        mETSearch.setCursorVisible(false);
         searchStarted = true;
         searchImg.setVisibility(View.INVISIBLE);
         backImg.setVisibility(View.VISIBLE);
@@ -461,6 +474,31 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         public CharSequence getPageTitle(int position) {
             return mSearchFragmentTitles.get(position);
 
+        }
+
+        public View getTabView(int position) {
+            View v = LayoutInflater.from(getActivity()).inflate(R.layout.search_custom_tab_layout, null);
+            TextView tv = (TextView) v.findViewById(R.id.tv_tab_title);
+            tv.setText(mSearchFragmentTitles.get(position));
+            ImageView img = (ImageView) v.findViewById(R.id.iv_tab_image);
+            img.setImageResource(tabIcons[position]);
+
+            return v;
+        }
+
+
+        public void setTabLabelColor(){
+            for (int i = 0; i < mSearchTabsLayout.getTabCount(); i++) {
+                View view = mSearchTabsLayout.getTabAt(i).getCustomView();
+
+                if(mSearchTabsLayout.getSelectedTabPosition() ==  i){
+                    TextView tv = (TextView) view.findViewById(R.id.tv_tab_title);
+                    tv.setTextColor(Color.parseColor("#dc4541"));
+                }else{
+                    TextView tv = (TextView) view.findViewById(R.id.tv_tab_title);
+                    tv.setTextColor(Color.parseColor("#3c3c3c"));
+                }
+            }
         }
     }
 }

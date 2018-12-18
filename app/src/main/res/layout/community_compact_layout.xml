@@ -30,8 +30,6 @@
             android:layout_marginTop="@dimen/dp_size_4"
             android:textSize="@dimen/sp_size_14"
             android:letterSpacing="0.01"
-            android:layout_marginRight="@dimen/dp_size_15"
-            android:layout_marginLeft="@dimen/dp_size_15"
             android:maxLines="@integer/int_value_for_line_2"
             android:textColor="@color/sheroes_greyish_brown"
             tools:text="@string/health_tips"

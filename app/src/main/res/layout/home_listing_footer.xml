@@ -14,34 +14,55 @@
         android:orientation="horizontal"
         android:weightSum="1.5">
 
-
-        <ImageView
-            android:id="@+id/iv_home"
+        <LinearLayout
+            android:id="@+id/ll_home"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:src="@drawable/home_red_vector"
-            />
+            android:gravity="center">
 
-        <ImageView
-            android:id="@+id/iv_search"
+
+            <ImageView
+                android:id="@+id/iv_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/home_red_vector" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_search"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:layout_gravity="center"
-            android:src="@drawable/search_grey_vector"
-            />
+            android:gravity="center">
 
-        <ImageView
-            android:id="@+id/iv_profile"
+            <ImageView
+                android:id="@+id/iv_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/search_grey_vector" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/ll_profile"
             android:layout_width="0dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:src="@drawable/profile_grey_vector"
-            />
+            android:gravity="center">
 
+            <ImageView
+                android:id="@+id/iv_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="0.5"
+                android:src="@drawable/profile_grey_vector" />
+
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>
 

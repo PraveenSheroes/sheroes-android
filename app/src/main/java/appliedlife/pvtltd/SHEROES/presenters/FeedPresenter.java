@@ -184,43 +184,56 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         getMvpView().hideGifLoader();
                         if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
-                            mNextToken = feedResponsePojo.getNextToken();
-                            switch (mFeedState) {
-                                case NORMAL_REQUEST:
-                                    getMvpView().stopProgressBar();
-                                    if (mIsHomeFeed) {
-                                        FeedDetail homeFeedHeader = new FeedDetail();
-                                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                                        feedList.add(0, homeFeedHeader);
-                                    } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
-                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
-                                            if (!StringUtil.isNotEmptyCollection(feedList)) {
-                                                FeedDetail noStoryFeed = new FeedDetail();
-                                                noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
-                                                noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
-                                                feedList.add(noStoryFeed);
+                            if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+                                mNextToken = feedResponsePojo.getNextToken();
+                                switch (mFeedState) {
+                                    case NORMAL_REQUEST:
+                                        getMvpView().stopProgressBar();
+                                        if (mIsHomeFeed) {
+                                            FeedDetail homeFeedHeader = new FeedDetail();
+                                            homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                            feedList.add(0, homeFeedHeader);
+                                        } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
+                                            if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
+                                                if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                                    FeedDetail noStoryFeed = new FeedDetail();
+                                                    noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
+                                                    noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
+                                                    feedList.add(noStoryFeed);
+                                                }
                                             }
                                         }
-                                    }
-                                    mFeedDetailList = feedList;
-                                    getMvpView().setFeedEnded(false);
-                                    List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
-                                    getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
-                                    getMvpView().showFeedList(feedDetails);
-                                    break;
-                                case LOAD_MORE_REQUEST:
-                                    // append in case of load more
-                                    if (!CommonUtil.isEmpty(feedList)) {
-                                        mFeedDetailList.addAll(feedList);
-                                        //getMvpView().showFeedList(mFeedDetailList);
-                                        getMvpView().addAllFeed(feedList);
-                                    } else {
-                                        getMvpView().setFeedEnded(true);
-                                    }
-                                    break;
+                                        mFeedDetailList = feedList;
+                                        getMvpView().setFeedEnded(false);
+                                        List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                                        getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                        getMvpView().showFeedList(feedDetails);
+                                        break;
+                                    case LOAD_MORE_REQUEST:
+                                        // append in case of load more
+                                        if (!CommonUtil.isEmpty(feedList)) {
+                                            mFeedDetailList.addAll(feedList);
+                                            //getMvpView().showFeedList(mFeedDetailList);
+                                            getMvpView().addAllFeed(feedList);
+                                        } else {
+                                            getMvpView().setFeedEnded(true);
+                                        }
+                                        break;
+                                }
                             }
-                        } else {
+//                            else{
+//                                if(feedResponsePojo.getFieldErrorMessageMap() != null) {
+//                                    if(feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+//                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+//                                    }else{
+//                                        getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
+//                                    }
+//                                }else{
+//                                    getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
+//                                }
+//                            }
+                        }else {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
@@ -335,7 +348,15 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                 }
                             }else{
                                 if(mFeedState == NORMAL_REQUEST) {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                    if(feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                        if(feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                            getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                        }else{
+                                            getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
+                                        }
+                                    }else{
+                                        getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
+                                    }
                                 }
                             }
                         }else {

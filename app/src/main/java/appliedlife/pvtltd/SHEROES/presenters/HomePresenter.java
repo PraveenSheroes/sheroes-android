@@ -186,6 +186,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
         }
 
         String URL = "participant/search/?search_text=" + searchText + "&search_category=" + searchCategory;
+
         if (!pullToRefresh && mNextToken != null) {
             URL = URL + "&next_token=" + mNextToken;
         }
@@ -200,17 +201,20 @@ public class HomePresenter extends BasePresenter<HomeView> {
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
                     @Override
                     public void onComplete() {
-
+                        getMvpView().stopProgressBar();
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        getMvpView().stopProgressBar();
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().showError(e.getMessage(), ERROR_TAG);
                     }
 
                     @Override
                     public void onNext(FeedResponsePojo feedResponsePojo) {
+                        getMvpView().stopProgressBar();
+
                         if (null != feedResponsePojo) {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
                                 if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
