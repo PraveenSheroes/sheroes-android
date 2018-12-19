@@ -588,6 +588,10 @@
     <string name="lang_continue">Continue</string>
     <string name="top_post">टॉप पोस्ट</string>
     <string name="my_feed">मेरी फीड</string>
+    <string name= "top"> टॉप </string>
+    <string name= "community"> समुदाय </string>
+    <string name= "hash_tag"> हैशटैग </string>
+    <string name= "article"> लेख </string>
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
     <string name="post_header_community">%1$s ने पोस्ट किया"</string>
     <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>
@@ -661,7 +665,7 @@
     <string name="not_now">नहीं देना :(</string>
     <string name="helpline_title">SHEROES हेल्पलाइन</string>
     <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
-    <string name="search_hint_text">पोस्ट, समुदायों और hashtags द्वारा खोजें</string>
+    <string name="search_hint_text">पोस्ट, समुदायों और हैशटैग द्वारा खोजें</string>
     <string name="empty_post">कोई पोस्ट नहीं</string>
     <string name="empty_stories">कोई कहानियाँ नहीं</string>
     <string name="winner_date">को</string>

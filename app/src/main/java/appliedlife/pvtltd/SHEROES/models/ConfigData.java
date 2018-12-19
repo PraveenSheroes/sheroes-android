@@ -117,6 +117,9 @@ public class ConfigData {
     @SerializedName("challengeWinnerDailogMessage")
     public String challengeWinnerDialogMassage = "You have won the Invitation to SHEROES Summit 2018. We loved your response to our Challenge.";
 
+    @SerializedName("SearchBarText")
+    public String searchBarText = "Search by posts, communities & hashtags";
+
     @SerializedName("view_visibility")
     public int visibilityPercentage = 20;
 
