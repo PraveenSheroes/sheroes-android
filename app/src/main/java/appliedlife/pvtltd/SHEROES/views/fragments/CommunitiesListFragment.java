@@ -184,7 +184,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (mCommunitiesListPresenter.isFeedLoading() || mCommunitiesListPresenter.getFeedEnded() || showMyCommunities) {
+                if (mCommunitiesListPresenter.isCommunityFeedLoading() || mCommunitiesListPresenter.getCommunityFeedEnded() || showMyCommunities) {
                     return;
                 }
 
@@ -196,7 +196,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
                 });
 
                 if (!showMyCommunities) {
-                    mCommunitiesListPresenter.getSearchedCommunity(mSearchText, mSearchCategory);
+                    mCommunitiesListPresenter.fetchSearchedCommunity(mSearchText, mSearchCategory);
                 }
             }
         };
@@ -229,7 +229,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     public void callCommunityApi(){
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-
         emptyLayout.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
         this.showMyCommunities = true;
@@ -511,7 +510,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 //        mMyCommunitiesListView.setVisibility(View.GONE);
         mCommunitiesListPresenter.setHasFeedEnded(false);
         mCommunitiesListPresenter.resetState();
-        mCommunitiesListPresenter.getSearchedCommunity(searchText, searchCategory);
+        mCommunitiesListPresenter.fetchSearchedCommunity(searchText, searchCategory);
     }
 
     public String[] getCommunityPositionInCarousel(FeedDetail updatedFeedDetail) {

@@ -131,8 +131,7 @@
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:parentActivityName=".views.activities.HomeActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"
-            />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".views.activities.LanguageSelectionActivity"
             android:clearTaskOnLaunch="true"
@@ -145,7 +144,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".views.activities.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -215,8 +213,7 @@
         <activity
             android:name=".views.activities.HomeActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
 
         <!-- Activity receive content of text, image and multiple images -->
         <activity

@@ -55,8 +55,8 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
     private SheroesAppServiceApi mSheroesAppServiceApi;
     private String mNextToken;
     private ArrayList<FeedDetail> mCommunitiesList = new ArrayList<>();
-    private boolean mIsFeedLoading;
-    private boolean mHasFeedEnded;
+    private boolean mIsCommunityFeedLoading;
+    private boolean mHasCommunityFeedEnded;
     //endregion private member variable
 
     //region constructor
@@ -105,19 +105,19 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
     }
 
     public void setHasFeedEnded(boolean hasFeedEnded){
-        this.mHasFeedEnded = hasFeedEnded;
+        this.mHasCommunityFeedEnded = hasFeedEnded;
     }
 
-    public boolean isFeedLoading() {
-        return mIsFeedLoading;
+    public boolean isCommunityFeedLoading() {
+        return mIsCommunityFeedLoading;
     }
 
-    public boolean getFeedEnded() {
-        return mHasFeedEnded;
+    public boolean getCommunityFeedEnded() {
+        return mHasCommunityFeedEnded;
     }
 
-    public void getSearchedCommunity(String searchText, String searchCategory) {
-        if (mIsFeedLoading) {
+    public void fetchSearchedCommunity(String searchText, String searchCategory) {
+        if (mIsCommunityFeedLoading) {
             return;
         }
         String URL = "participant/search/?search_text=" +searchText +"&search_category=" +searchCategory;
@@ -129,7 +129,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         if(mNextToken !=null){
             URL = URL +"&next_token="+mNextToken;
         }
-        mIsFeedLoading = true;
+        mIsCommunityFeedLoading = true;
 
         mSheroesAppServiceApi.getSearchResponse(URL)
                 .subscribeOn(Schedulers.io())
@@ -141,12 +141,12 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                         Crashlytics.getInstance().core.logException(e);
                         getMvpView().stopProgressBar();
                         getMvpView().showError(e.getMessage(), null);
-                        mIsFeedLoading = false;
+                        mIsCommunityFeedLoading = false;
                     }
 
                     @Override
                     public void onComplete() {
-                        mIsFeedLoading = false;
+                        mIsCommunityFeedLoading = false;
                     }
 
                     @Override
@@ -155,9 +155,9 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                         if (feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
                             if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
                                 mNextToken = feedResponsePojo.getNextToken();
-                                mIsFeedLoading = false;
+                                mIsCommunityFeedLoading = false;
                                 if (mNextToken == null) {
-                                    mHasFeedEnded = true;
+                                    mHasCommunityFeedEnded = true;
                                 }
                                 ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
                                 mCommunitiesList.addAll(feedDetails);
@@ -175,7 +175,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
     public void resetState() {
         mCommunitiesList.clear();
         mNextToken = null;
-        mHasFeedEnded = false;
+        mHasCommunityFeedEnded = false;
     }
 
     //get my communities
