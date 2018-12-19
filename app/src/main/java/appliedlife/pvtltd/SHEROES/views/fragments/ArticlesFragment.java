@@ -178,8 +178,8 @@ public class ArticlesFragment extends BaseFragment {
         mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, true);
     }
 
-    public void setFilterParams(boolean mIsSearch, String searchText, String searchCategory){
-        this.mIsSearch = mIsSearch;
+    public void setFilterParams(boolean isSearch, String searchText, String searchCategory){
+        this.mIsSearch = isSearch;
         this.mSearchText = searchText;
         this.mSearchCategory = searchCategory;
         mHidingScrollListener.setSearchParameter(mIsSearch, mSearchText, mSearchCategory);
