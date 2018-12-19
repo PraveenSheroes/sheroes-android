@@ -166,7 +166,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                                 getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
                             }
                         }else {
-                            getMvpView().showError(SheroesApplication.mContext.getString(R.string.ID_GENERIC_ERROR), null);
+                            getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
                         }
                     }
                 });

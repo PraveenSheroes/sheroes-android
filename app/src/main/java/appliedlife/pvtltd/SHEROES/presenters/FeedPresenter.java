@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.facebook.common.Common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -73,7 +74,6 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_CREAT
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_FEED_RESPONSE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_JOIN_INVITE;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_LIKE_UNLIKE;
-import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBER;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_COMMUNITIES;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFOLLOW;
@@ -330,19 +330,26 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                             }
                                         }
                                         mFeedDetailList = feedList;
-                                        getMvpView().setFeedEnded(false);
+                                        if(!CommonUtil.isNotEmpty(mNextToken)){
+                                            getMvpView().setFeedEnded(true);
+                                        } else {
+                                            getMvpView().setFeedEnded(false);
+                                        }
                                         List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
                                         getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
                                         getMvpView().showFeedList(feedDetails);
                                         break;
                                     case LOAD_MORE_REQUEST:
                                         // append in case of load more
+                                        if(!CommonUtil.isNotEmpty(mNextToken)) {
+                                            getMvpView().setFeedEnded(true);
+                                        } else {
+                                            getMvpView().setFeedEnded(true);
+                                        }
                                         if (!CommonUtil.isEmpty(feedList)) {
                                             mFeedDetailList.addAll(feedList);
                                             //getMvpView().showFeedList(mFeedDetailList);
                                             getMvpView().addAllFeed(feedList);
-                                        } else {
-                                            getMvpView().setFeedEnded(true);
                                         }
                                         break;
                                 }
