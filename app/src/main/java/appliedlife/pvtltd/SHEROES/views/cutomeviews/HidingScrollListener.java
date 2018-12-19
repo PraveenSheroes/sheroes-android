@@ -49,12 +49,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private LinearLayoutManager mManager;
     private int previousTotal = 0;
     private boolean loading = true;
+    private boolean mIsSearch = false;
+    private boolean mIsFeedEnded = false;
     private int visibleThreshold = 1;
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
     private OnBoardingPresenter mOnBoardingPresenter;
     private MainActivityPresenter mMainActivityPresenter;
-    private boolean mIsSearch = false;
     private String mSearchText, mSearchCategory;
 
     public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
@@ -126,6 +127,10 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         mSearchCategory = searchCategory;
     }
 
+    public void setSearchFeedEnded(boolean hasArticleFeedEnded) {
+        mIsFeedEnded = hasArticleFeedEnded;
+    }
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
@@ -180,7 +185,8 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
                         if (mIsSearch) {
-                            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, false);
+                            if (!mIsFeedEnded)
+                                mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, false);
                         } else {
                             FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
                             mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);

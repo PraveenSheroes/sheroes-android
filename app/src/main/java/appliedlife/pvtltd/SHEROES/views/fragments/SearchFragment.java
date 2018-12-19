@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
+import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
@@ -46,6 +48,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -59,6 +62,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     @Inject
     SearchPresenter mSearchPresenter;
 
+    @Inject
+    Preference<AppConfiguration> mConfiguration;
+
     @Bind(R.id.vp_search_tabs)
     ViewPager mSearchTabsPager;
     @Bind(R.id.tabLayout)
@@ -69,6 +75,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private List<Fragment> mSearchTabFragments = new ArrayList<>();
     private List<String> mSearchTabs = new ArrayList<>();
     private String mSearchCategory;
+    private String mSearchBarText;
     private int[] tabIcons = {
             R.drawable.search_tab_top,
             R.drawable.search_tab_communities,
@@ -118,6 +125,14 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         });
 
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null
+                && !StringUtil.isNotNullOrEmptyString(mConfiguration.get().configData.searchBarText)) {
+            mSearchBarText = mConfiguration.get().configData.searchBarText;
+        } else {
+            mSearchBarText = getString(R.string.search_hint_text);
+        }
+
+        mETSearch.setHint(mSearchBarText);
 
         mETSearch.addTextChangedListener(new TextWatcher() {
             @Override

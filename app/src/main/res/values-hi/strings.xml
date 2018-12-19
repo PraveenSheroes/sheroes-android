@@ -588,6 +588,10 @@
     <string name="lang_continue">Continue</string>
     <string name="top_post">टॉप पोस्ट</string>
     <string name="my_feed">मेरी फीड</string>
+    <string name= "top"> टॉप </string>
+    <string name= "community"> समुदाय </string>
+    <string name= "hash_tag"> हैशटैग </string>
+    <string name= "article"> लेख </string>
     <string name="post_header_name_community">%1$s ने  %2$s में पोस्ट किया"</string>
     <string name="post_header_community">%1$s ने पोस्ट किया"</string>
     <string name="post_header_asked_community">%1$s ने %2$s से पूछा"</string>
