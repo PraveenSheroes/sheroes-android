@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,7 +61,7 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_HEADER:
                 HashTagsHeaderViewHolder hashTagsHeaderViewHolder = (HashTagsHeaderViewHolder) holder;
 
-                hashTagsHeaderViewHolder.getHashTagHeaderTxt().setText("Trending");
+                hashTagsHeaderViewHolder.getHashTagHeaderTxt().setText(context.getString(R.string.ID_TRENDING));
                 break;
 
             case TYPE_ITEM:

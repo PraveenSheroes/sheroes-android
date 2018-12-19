@@ -62,7 +62,7 @@
                     android:singleLine="true"
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/iv_search_icon"
-                    android:textColorHint="@color/sheroes_grey_with_40_opacity"
+                    android:textColorHint="@color/sheroes_grey_with_60_opacity"
                     android:textColor="@color/sheroes_greyish_brown"
                     android:textSize="@dimen/sp_size_13"
                     android:inputType="textNoSuggestions"

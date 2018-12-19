@@ -95,6 +95,12 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 //                    .into(mFeatureImage);
 //        }
 
+        if(mCommunityFeedObj.getIdOfEntityOrParticipant() == 273){
+            mCommunityJoin.setVisibility(View.GONE);
+        }else{
+            mCommunityJoin.setVisibility(View.VISIBLE);
+        }
+
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getThumbnailImageUrl())) {
             String thumbImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
             Glide.with(context)

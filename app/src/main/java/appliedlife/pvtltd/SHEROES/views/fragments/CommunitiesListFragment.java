@@ -177,7 +177,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         loaderGif.setVisibility(View.VISIBLE);
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
-        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+//        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
 
         callCommunityApi();
         mEndlessRecyclerViewScrollListener = new EndlessNestedScrollViewListener(linearLayoutManager) {
@@ -228,6 +228,8 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
 
     public void callCommunityApi(){
+        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
+
         emptyLayout.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
         this.showMyCommunities = true;

@@ -94,7 +94,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         ButterKnife.bind(this, view);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        ((HomeActivity)getActivity()).mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        ((HomeActivity) getActivity()).mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         initializeSearchViews();
         searchListener();
@@ -159,7 +159,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onPageSelected(int position) {
                 mSearchFragmentAdapter.setTabLabelColor();
 
-                if(searchStarted) {
+                if (searchStarted) {
                     if (position == 0) {
                         if (mETSearch.getText().toString().trim().length() > 0) {
                             feedFragment.filterFeed(true, mETSearch.getText().toString(), SearchEnum.TOP.toString());
@@ -169,7 +169,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                         }
                     } else if (position == 2) {
                         if (mETSearch.getText().toString().trim().length() > 0) {
-                            hashTagFragment.filterFeed(mETSearch.getText().toString().startsWith("#")?mETSearch.getText().toString().substring(1):mETSearch.getText().toString());
+                            hashTagFragment.filterFeed(mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString());
                         } else {
                             hashTagFragment.callHashTagApi();
                         }
@@ -364,7 +364,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             } else if (fragment instanceof CommunitiesListFragment) {
                 ((CommunitiesListFragment) fragment).filterCommunities(false, mETSearch.getText().toString(), mSearchCategory);
             } else if (fragment instanceof HashTagFragment) {
-                ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString().startsWith("#")?mETSearch.getText().toString().substring(1):mETSearch.getText().toString());
+                ((HashTagFragment) fragment).filterFeed(mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString());
             } else if (fragment instanceof ArticlesFragment) {
                 ((ArticlesFragment) fragment).fetchSearchedArticles(true, mETSearch.getText().toString(), mSearchCategory);
             }
@@ -487,14 +487,14 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         }
 
 
-        public void setTabLabelColor(){
+        public void setTabLabelColor() {
             for (int i = 0; i < mSearchTabsLayout.getTabCount(); i++) {
                 View view = mSearchTabsLayout.getTabAt(i).getCustomView();
 
-                if(mSearchTabsLayout.getSelectedTabPosition() ==  i){
+                if (mSearchTabsLayout.getSelectedTabPosition() == i) {
                     TextView tv = (TextView) view.findViewById(R.id.tv_tab_title);
                     tv.setTextColor(Color.parseColor("#dc4541"));
-                }else{
+                } else {
                     TextView tv = (TextView) view.findViewById(R.id.tv_tab_title);
                     tv.setTextColor(Color.parseColor("#3c3c3c"));
                 }

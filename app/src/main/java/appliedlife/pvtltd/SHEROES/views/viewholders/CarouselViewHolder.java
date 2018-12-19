@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
+import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
@@ -116,12 +117,22 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         }
 
         List<FeedDetail> list = item.getFeedDetails();
+        String subType= item.getSubType();
+        String type= item.getType();
         if (StringUtil.isNotEmptyCollection(list)) {
-            StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-            GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
-            mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
+            if(list.get(position) instanceof CommunityFeedSolrObj){
+                StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+                GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
+                mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
 
-            mRecyclerView.setLayoutManager(gridLayoutManager);
+                mRecyclerView.setLayoutManager(gridLayoutManager);
+            }else{
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+
+                mRecyclerView.setLayoutManager(linearLayoutManager);
+            }
+
             mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setData(item.getFeedDetails());

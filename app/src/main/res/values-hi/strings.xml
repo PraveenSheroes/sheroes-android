@@ -661,9 +661,13 @@
     <string name="not_now">नहीं देना :(</string>
     <string name="helpline_title">SHEROES हेल्पलाइन</string>
     <string name="helpline_rateus_title">हम आशा करते हैं की हमारे काउंसलर से आपको सहायता मिली होगी।</string>
-    <string name="search_hint_text">पोस्ट, समुदायों और hashtags द्वारा खोजें</string>
+    <string name="search_hint_text">पोस्ट, समुदायों और हैशटैग द्वारा खोजें</string>
     <string name="empty_post">कोई पोस्ट नहीं</string>
     <string name="empty_stories">कोई कहानियाँ नहीं</string>
     <string name="winner_date">को</string>
     <string name="deleted_content">जिस विषय को आप ढूंढ रहे हैं वह मौजूद नहीं है</string>
+    <string name= "top"> टॉप </string>
+    <string name= "community"> समुदायों </string>
+    <string name= "hash_tag"> हैशटैग </string>
+    <string name= "article"> लेख </string>
 </resources>
