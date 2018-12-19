@@ -202,7 +202,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         };
         nestedScrollView.setOnScrollChangeListener(mEndlessRecyclerViewScrollListener);
 
-        /*mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunitiesListPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
+        mMyCommunitiesListView.addOnScrollListener(new HidingScrollListener(mCommunitiesListPresenter, mMyCommunitiesListView, mLayoutManager, mFragmentListRefreshData) {
             @Override
             public void onHide() {
 
@@ -215,7 +215,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
             @Override
             public void dismissReactions() {
             }
-        });*/
+        });
 
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).communityButton();
