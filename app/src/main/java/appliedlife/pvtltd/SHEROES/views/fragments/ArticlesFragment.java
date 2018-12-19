@@ -169,22 +169,35 @@ public class ArticlesFragment extends BaseFragment {
         }
     }
 
-    public void setFilterParams(boolean mIsSearch, String searchText, String searchCategory){
-        this.mIsSearch = mIsSearch;
-        this.mSearchText = searchText;
-        this.mSearchCategory = searchCategory;
-    }
-
     public void fetchSearchedArticles(boolean isSearch, String searchText, String searchCategory) {
         loaderGif.setVisibility(View.VISIBLE);
-
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
         setFilterParams(isSearch, searchText, searchCategory);
-        mHidingScrollListener.setSearchParameter(true, mSearchText, mSearchCategory);
         mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, true);
     }
+
+    public void setFilterParams(boolean mIsSearch, String searchText, String searchCategory){
+        this.mIsSearch = mIsSearch;
+        this.mSearchText = searchText;
+        this.mSearchCategory = searchCategory;
+        mHidingScrollListener.setSearchParameter(mIsSearch, mSearchText, mSearchCategory);
+    }
+
+    public List<FeedDetail> handleArticleFeedEnded(List<FeedDetail> data, FeedDetail feedProgressBar, FeedResponsePojo feedResponsePojo) {
+        if (mIsSearch) {
+            if (StringUtil.isNotNullOrEmptyString(feedResponsePojo.getNextToken())) {
+                data.add(feedProgressBar);
+            } else {
+                mHidingScrollListener.setSearchFeedEnded(true);
+            }
+        } else {
+            data.add(feedProgressBar);
+        }
+        return data;
+    }
+
 
     @Override
     public void onResume() {
@@ -272,7 +285,7 @@ public class ArticlesFragment extends BaseFragment {
                 if (position > 0) {
                     data.remove(position - 1);
                 }
-                data.add(feedProgressBar);
+                data = handleArticleFeedEnded(data, feedProgressBar, feedResponsePojo);
                 mAdapter.setSheroesGenericListData(data);
                 if (mPageNo == AppConstants.TWO_CONSTANT) {
                     mAdapter.notifyDataSetChanged();
