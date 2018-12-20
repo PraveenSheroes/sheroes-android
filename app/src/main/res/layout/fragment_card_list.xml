@@ -142,4 +142,9 @@
     </LinearLayout>
 
     <include layout="@layout/empty_list_view" />
+
+    <include
+        layout="@layout/no_internet_connection_layout"
+        android:visibility="gone"
+        />
 </FrameLayout>

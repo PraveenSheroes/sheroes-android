@@ -97,7 +97,7 @@
 
                         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                             android:id="@+id/title"
-                            style="@style/TextView16spBold"
+                            style="@style/TextView16spMediumBold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingStart="@dimen/dp_size_16"
@@ -109,7 +109,7 @@
                             android:layout_marginBottom="@dimen/dp_size_16"
                             android:text="@string/my_communities"
                             android:textColor="@color/comment_text"
-                            vernacular:customTextFontFamily="@string/bold_font" />
+                            vernacular:customTextFontFamily="@string/medium_font" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/my_communities"

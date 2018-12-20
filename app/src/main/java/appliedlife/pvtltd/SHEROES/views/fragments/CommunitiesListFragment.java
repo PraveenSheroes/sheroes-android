@@ -46,6 +46,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.home.SwipPullRefreshList;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
@@ -91,6 +92,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     private boolean showMyCommunities;
     private EndlessNestedScrollViewListener mEndlessRecyclerViewScrollListener;
     String mSearchText, mSearchCategory;
+    private FragmentOpen fragmentOpen;
     //endregion
 
     //region Bind view variables
@@ -151,6 +153,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         ButterKnife.bind(this, view);
 
         mCommunitiesListPresenter.attachView(this);
+        fragmentOpen = new FragmentOpen();
 
         mMyCommunitiesAdapter = new MyCommunitiesAdapter(getContext(), this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -159,7 +162,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mMyCommunitiesListView.setLayoutManager(mLayoutManager);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mAllCommunitiesListView.setLayoutManager(linearLayoutManager);
         mFeedAdapter = new FeedAdapter(getContext(), this);
         mAllCommunitiesListView.setAdapter(mFeedAdapter);
@@ -569,7 +572,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         communitiesContainer.setVisibility(View.VISIBLE);
         loaderGif.setVisibility(View.VISIBLE);
         if (null != getActivity() && getActivity() instanceof HomeActivity) {
+            if(fragmentOpen.isFeedFragment())
             ((HomeActivity) getActivity()).communityOnClick();
+            else
+                callCommunityApi();
         }
     }
 

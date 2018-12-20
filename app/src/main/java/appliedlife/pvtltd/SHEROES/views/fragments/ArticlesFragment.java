@@ -1,5 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -7,6 +8,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
+
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +50,7 @@ import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
 import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Praveen_Singh on 09-01-2017.
@@ -78,10 +82,13 @@ public class ArticlesFragment extends BaseFragment {
     private boolean mIsEdit = false;
     private boolean mIsSearch = false;
     private String mSearchText, mSearchCategory;
+    private FeedRequestPojo feedRequestPojo;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.loader_gif)
     CardView loaderGif;
+    @Bind(R.id.no_internet)
+    CardView noInternet;
     private List<Long> categoryIdList = new ArrayList<>();
     private View view;
     @Bind(R.id.rl_empty)
@@ -159,7 +166,7 @@ public class ArticlesFragment extends BaseFragment {
         mTrendingFeedDetail.clear();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        FeedRequestPojo feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
+        feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
         feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
 
         if (mIsSearch && mSearchText != null && mSearchCategory != null) {
@@ -347,6 +354,32 @@ public class ArticlesFragment extends BaseFragment {
             noResultsSubTitleTxt.setText(s);
             noResultsTitleTxt.setText("No Articles Found");
             noResultsImage.setImageResource(R.drawable.articles_empty_vector);
+        }
+    }
+
+    @OnClick({R.id.tv_retry_for_internet})
+    public void onRetryClick() {
+        noInternet.setVisibility(View.GONE);
+        loaderGif.setVisibility(View.VISIBLE);
+        if (mIsSearch && mSearchText != null && mSearchCategory != null) {
+            mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, true, true);
+        } else {
+            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+        }
+    }
+
+    @OnClick({R.id.tv_goto_setting})
+    public void onSettingClick() {
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            loaderGif.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
         }
     }
 }
