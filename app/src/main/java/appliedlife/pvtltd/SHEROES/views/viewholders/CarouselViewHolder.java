@@ -116,6 +116,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         }
 
         List<FeedDetail> list = item.getFeedDetails();
+        String type= item.getType();
         if (StringUtil.isNotEmptyCollection(list)) {
             if(carouselDataObj.getFeedDetails().get(0) instanceof CommunityFeedSolrObj){
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
