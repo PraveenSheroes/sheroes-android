@@ -17,9 +17,9 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/community_join"
-            style="@style/TextView14spMediumBold"
+            style="@style/TextView12spMediumBold"
             android:layout_width="@dimen/community_join_width"
-            android:layout_height="@dimen/community_join_height"
+            android:layout_height="@dimen/dp_size_36"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"

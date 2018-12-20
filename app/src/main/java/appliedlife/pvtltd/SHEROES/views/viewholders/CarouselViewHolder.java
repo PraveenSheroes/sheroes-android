@@ -64,13 +64,15 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     RecyclerView mRecyclerView;
 
     private int position;
+    private boolean isFilter;
     //endregion
 
     //region constructor
-    public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface, boolean isFilter) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
+        this.isFilter = isFilter;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -118,7 +120,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         List<FeedDetail> list = item.getFeedDetails();
         String type= item.getType();
         if (StringUtil.isNotEmptyCollection(list)) {
-            if(carouselDataObj.getFeedDetails().get(0) instanceof CommunityFeedSolrObj){
+//            if(carouselDataObj.getFeedDetails().get(0) instanceof CommunityFeedSolrObj){
+            if(isFilter){
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
                 GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
                 mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
@@ -131,7 +134,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
                 mRecyclerView.setLayoutManager(linearLayoutManager);
             }
 
-            mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
+            mAdapter = new CarouselListAdapter(context, viewInterface, item, this, isFilter);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setData(item.getFeedDetails());
             for (int i = 0; i < list.size(); i++) {

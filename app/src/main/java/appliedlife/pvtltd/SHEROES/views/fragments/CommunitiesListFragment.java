@@ -164,7 +164,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         mAllCommunitiesListView.setLayoutManager(linearLayoutManager);
-        mFeedAdapter = new FeedAdapter(getContext(), this);
+        mFeedAdapter = new FeedAdapter(getContext(), this, true);
         mAllCommunitiesListView.setAdapter(mFeedAdapter);
 
         mMyCommunitiesListView.setNestedScrollingEnabled(false);
@@ -562,7 +562,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         communitiesContainer.setVisibility(View.GONE);
         emptyLayout.setVisibility(View.VISIBLE);
         noResultsSubTitleTxt.setText(s);
-        noResultsTitleTxt.setText("No Communities Found");
+        noResultsTitleTxt.setText(getString(R.string.empty_communities));
         noResultsImage.setImageResource(R.drawable.communities_vector_layout);
     }
 

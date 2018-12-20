@@ -34,14 +34,16 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private BaseHolderInterface mBaseHolderInterface;
     private CarouselDataObj mCarouselDataObj;
     private CarouselViewHolder carouselViewHolder;
+    private boolean isFilter;
 
     //region Constructor
-    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj, CarouselViewHolder carouselViewHolder) {
+    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj, CarouselViewHolder carouselViewHolder, boolean isFilter) {
         mContext = context;
         this.mFeedDetails = new ArrayList<>();
         this.mBaseHolderInterface = baseHolderInterface;
         this.mCarouselDataObj = carouselDataObj;
         this.carouselViewHolder = carouselViewHolder;
+        this.isFilter = isFilter;
     }
     //endregion
 
@@ -50,8 +52,13 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_COMMUNITY:
-                View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_layout, parent, false);
-                return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
+                if(isFilter) {
+                    View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_layout, parent, false);
+                    return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
+                }else{
+                    View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_list_layout, parent, false);
+                    return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
+                }
             case TYPE_USER:
                 View viewUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_user_compact_item, parent, false);
                 return new UserProfileCompactViewHolder(viewUser, mContext, mBaseHolderInterface);

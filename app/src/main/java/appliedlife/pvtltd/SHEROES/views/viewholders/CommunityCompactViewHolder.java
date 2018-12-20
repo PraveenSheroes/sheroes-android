@@ -38,9 +38,14 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     private BaseHolderInterface viewInterface;
     private Context mContext;
     private CommunityFeedSolrObj mCommunityFeedObj;
+    private CarouselViewHolder mCarouselViewHolder;
+
     //endregion
 
     //region bind variables
+    @Bind(R.id.feature_image)
+    ImageView mFeatureImage;
+
     @Bind(R.id.community_icon)
     ImageView mCommunityIcon;
 
@@ -50,8 +55,17 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     @Bind(R.id.community_member_count)
     TextView mCommunityMemberCount;
 
+    @Bind(R.id.community_join)
+    TextView mCommunityJoin;
+
     @BindDimen(R.dimen.dp_size_40)
     int mCommunityIconSize;
+
+    @BindDimen(R.dimen.dp_size_150)
+    int mFeatureImageHeight;
+
+    @BindDimen(R.dimen.dp_size_300)
+    int mFeatureImageWidth;
 
     //endregion
 
@@ -60,6 +74,7 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
+        this.mCarouselViewHolder = carouselViewHolder;
     }
     //endregion
 
@@ -68,6 +83,24 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     public void bindData(FeedDetail item, final Context context, int position) {
         this.mCommunityFeedObj = (CommunityFeedSolrObj) item;
         mContext = context;
+
+        if (mCommunityFeedObj.isOwner() || mCommunityFeedObj.isMember()) {
+            mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.white));
+            mCommunityJoin.setText(mContext.getString(R.string.ID_JOINED));
+            mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
+        } else if (!mCommunityFeedObj.isMember() && !mCommunityFeedObj.isOwner()) {
+            mCommunityJoin.setTextColor(ContextCompat.getColor(mContext, R.color.footer_icon_text));
+            mCommunityJoin.setText(mContext.getString(R.string.ID_JOIN));
+            mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_commnity_join);
+        }
+
+        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
+            String featureImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), mFeatureImageWidth, mFeatureImageHeight);
+            Glide.with(context)
+                    .asBitmap()
+                    .load(featureImageUrl)
+                    .into(mFeatureImage);
+        }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getThumbnailImageUrl())) {
             String thumbImageUrl = CommonUtil.getThumborUri(mCommunityFeedObj.getThumbnailImageUrl(), mCommunityIconSize, mCommunityIconSize);
@@ -102,6 +135,29 @@ public class CommunityCompactViewHolder extends BaseViewHolder<FeedDetail> {
     @Override
     public void onClick(View view) {
 
+    }
+
+    @OnClick(R.id.community_join)
+    public void onCommunityJoinUnjoinedClicked() {
+        if(viewInterface instanceof AllCommunityItemCallback){
+            if (mCommunityFeedObj.isMember()) {
+                mCommunityFeedObj.setMember(false);
+                mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+                if(viewInterface instanceof AllCommunityItemCallback){
+                    ((AllCommunityItemCallback) viewInterface).unJoinCommunity(mCommunityFeedObj, mCarouselViewHolder);
+                }
+            } else {
+                mCommunityFeedObj.setMember(true);
+                mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+                if(viewInterface instanceof AllCommunityItemCallback){
+                    ((AllCommunityItemCallback) viewInterface).joinRequestForOpenCommunity(mCommunityFeedObj, mCarouselViewHolder);
+                }
+            }
+        }
+
+        if(viewInterface instanceof FeedItemCallback){
+            ((FeedItemCallback)viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
+        }
     }
 
     @OnClick({R.id.community_card_view})

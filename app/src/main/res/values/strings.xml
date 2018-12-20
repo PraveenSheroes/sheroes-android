@@ -671,4 +671,9 @@
     <string name="empty_stories">No stories yet</string>
     <string name="winner_date">on</string>
     <string name="deleted_content">Content your are looking for is not present</string>
+    <string name="empty_hashtag">No Hashtags found</string>
+    <string name="empty_posts">No Posts found</string>
+    <string name="empty_articles">No Articles found</string>
+    <string name="empty_communities">No Communities found</string>
+
 </resources>

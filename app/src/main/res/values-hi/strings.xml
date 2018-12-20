@@ -670,4 +670,8 @@
     <string name="empty_stories">कोई कहानियाँ नहीं</string>
     <string name="winner_date">को</string>
     <string name="deleted_content">जिस विषय को आप ढूंढ रहे हैं वह मौजूद नहीं है</string>
+    <string name="empty_hashtag">कोई हैशटैग नहीं मिला</string>
+    <string name="empty_posts">कोई पोस्ट नहीं मिला</string>
+    <string name="empty_articles">कोई लेख नहीं मिला</string>
+    <string name="empty_communities">कोई समुदाय नहीं मिला</string>
 </resources>

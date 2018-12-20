@@ -890,11 +890,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
             if(searchCategory.equalsIgnoreCase("hashtags")) {
                 noResultsImage.setImageResource(R.drawable.hashtag_empty_vector);
-                noResultsTitleTxt.setText("No Hashtags found");
+                noResultsTitleTxt.setText(getString(R.string.empty_hashtag));
                 noResultsSubTitleTxt.setText(s);
             }else if(searchCategory.equalsIgnoreCase("posts")){
                 noResultsImage.setImageResource(R.drawable.posts_empty_vector);
-                noResultsTitleTxt.setText("No posts found");
+                noResultsTitleTxt.setText(getString(R.string.empty_posts));
                 noResultsSubTitleTxt.setText(s);
             }
         }
@@ -1083,7 +1083,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(mLinearLayoutManager);
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mAdapter = new FeedAdapter(getContext(), this);
+        mAdapter = new FeedAdapter(getContext(), this, isFilter);
         mFeedRecyclerView.setAdapter(mAdapter);
     }
 

@@ -51,6 +51,7 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.http.GET;
 
 /**
  * Created by Praveen_Singh on 09-01-2017.
@@ -352,7 +353,7 @@ public class ArticlesFragment extends BaseFragment {
         if(mIsSearch){
             emptyLayout.setVisibility(View.VISIBLE);
             noResultsSubTitleTxt.setText(s);
-            noResultsTitleTxt.setText("No Articles Found");
+            noResultsTitleTxt.setText(getString(R.string.empty_articles));
             noResultsImage.setImageResource(R.drawable.articles_empty_vector);
         }
     }

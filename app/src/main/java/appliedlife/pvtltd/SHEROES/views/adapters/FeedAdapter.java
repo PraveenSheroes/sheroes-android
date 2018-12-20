@@ -59,6 +59,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     private List<FeedDetail> mFeedDetailList;
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
+    private boolean isFilter;
 
     @Inject
     Preference<AppConfiguration> mConfiguration;
@@ -66,10 +67,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     //endregion
 
     //region Constructor
-    public FeedAdapter(Context context, BaseHolderInterface baseHolderInterface) {
+    public FeedAdapter(Context context, BaseHolderInterface baseHolderInterface, boolean isFilter) {
         mContext = context;
         this.mFeedDetailList = new ArrayList<>();
         this.mBaseHolderInterface = baseHolderInterface;
+        this.isFilter = isFilter;
     }
     //endregion
 
@@ -91,7 +93,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_CAROUSEL:
-                return new CarouselViewHolder(mInflater.inflate(R.layout.champion_suggested_card_holder, parent, false), mBaseHolderInterface);
+                return new CarouselViewHolder(mInflater.inflate(R.layout.champion_suggested_card_holder, parent, false), mBaseHolderInterface, isFilter);
             case TYPE_USER_COMPACT:
                 return new UserProfileCompactViewHolder(mInflater.inflate(R.layout.list_user_flat_item, parent, false), mContext, mBaseHolderInterface);
             case TYPE_LEADERBOARD:
