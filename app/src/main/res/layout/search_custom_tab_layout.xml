@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    >
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/iv_tab_image"
-        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/search_tab_top"
         android:layout_marginBottom="@dimen/dp_size_4"
         />
+
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         style="@style/TextView10spRegular"
         android:id="@+id/tv_tab_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="New Tab"
-        android:layout_gravity="center"
+        android:layout_below="@+id/iv_tab_image"
+        android:layout_centerHorizontal="true"
         android:letterSpacing="0.01"
         android:singleLine="true"
+        android:gravity="center"
         android:ellipsize="end"
         android:textColor="@color/sheroes_warm_grey"
         vernacular:customTextFontFamily="@string/regular_font"/>
 
 
-</LinearLayout>
+</RelativeLayout>

@@ -87,7 +87,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         hashTagsList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         hashTagsView.setLayoutManager(linearLayoutManager);
 
         hashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);

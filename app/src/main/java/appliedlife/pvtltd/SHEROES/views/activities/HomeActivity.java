@@ -352,7 +352,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private ProfileFragment mProfileFragment;
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
-    private boolean showFab;
+    private boolean showFab = true;
     //endregion
 
     // region Public methods
@@ -406,6 +406,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
+
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && !mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
             if (!mInstallUpdatePreference.get().isOnBoardingSkipped()) {

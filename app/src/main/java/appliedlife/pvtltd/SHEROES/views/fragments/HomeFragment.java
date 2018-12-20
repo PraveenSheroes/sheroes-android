@@ -23,6 +23,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -55,6 +56,7 @@ public class HomeFragment extends BaseFragment {
     private String mDefaultTabKey;
     private List<String> homeTabs = new ArrayList<>();
     private String mUnSelectedFragment;
+    private FragmentOpen fragmentOpen;
     //endregion
 
 
@@ -65,6 +67,7 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        fragmentOpen = new FragmentOpen();
         mDefaultTabKey = getString(R.string.my_feed);
         initializeHomeViews();
         return view;
@@ -161,6 +164,7 @@ public class HomeFragment extends BaseFragment {
         mFragmentAdapter = new Adapter(getChildFragmentManager());
         for (String name : homeTabs) {
             if (name.equalsIgnoreCase(getString(R.string.my_feed))) {
+                fragmentOpen.setFeedFragment(true);
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, AppConstants.MY_FEED_POST_STREAM);
