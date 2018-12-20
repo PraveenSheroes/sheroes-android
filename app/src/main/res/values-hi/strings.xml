@@ -674,4 +674,5 @@
     <string name="empty_posts">कोई पोस्ट नहीं मिला</string>
     <string name="empty_articles">कोई लेख नहीं मिला</string>
     <string name="empty_communities">कोई समुदाय नहीं मिला</string>
+    <string name="empty_search_result">दोबारा कोशिश करें।</string>
 </resources>

@@ -359,10 +359,10 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         if(feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
                                             getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
                                         }else{
-                                            getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
+                                            getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                         }
                                     }else{
-                                        getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
+                                        getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                     }
                                 }
                             }
@@ -372,7 +372,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
                                 getMvpView().setFeedEnded(true);
                             }
-                            getMvpView().showFeedList(mFeedDetailList);
+                            getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+//                            getMvpView().showFeedList(null);
                         }
                     }
                 });
