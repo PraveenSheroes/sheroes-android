@@ -8,6 +8,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -261,6 +263,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
         impressionPresenter.attachView(this);
+
+//        ((HomeActivity) getActivity()).mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         fragmentOpen = new FragmentOpen();
         initialSetup();
         initializeRecyclerView();

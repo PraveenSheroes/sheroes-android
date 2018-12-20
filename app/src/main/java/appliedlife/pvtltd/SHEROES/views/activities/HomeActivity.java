@@ -434,6 +434,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         pbNavDrawer.setVisibility(View.VISIBLE);
         mCustomActionBarToggle = new CustomActionBarToggle(this, mDrawer, mToolbar, R.string.ID_NAVIGATION_DRAWER_OPEN, R.string.ID_NAVIGATION_DRAWER_CLOSE, this);
         mDrawer.addDrawerListener(mCustomActionBarToggle);
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+
         mNavigationViewLeftDrawer.setNavigationItemSelectedListener(this);
         mNavigationViewRightDrawerWithCommunities.setNavigationItemSelectedListener(this);
         mFragmentOpen = new FragmentOpen();
@@ -640,6 +642,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     //Refresh the feed after clicking the Sheroes logo and home button
     @OnClick({R.id.ll_home, R.id.ic_sheroes})
     public void homeOnClick() {
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         mFragmentOpen.setFeedFragment(true);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
@@ -698,6 +701,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.ll_profile)
     public void profileOnClick() {
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
@@ -717,6 +721,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.ll_search)
     public void searchOnClick() {
+        mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();

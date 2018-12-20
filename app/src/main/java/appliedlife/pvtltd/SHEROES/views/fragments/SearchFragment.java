@@ -101,7 +101,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         ButterKnife.bind(this, view);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        ((HomeActivity) getActivity()).mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
         initializeSearchViews();
         searchListener();
