@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.MyCommunityRequest;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
+import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunitiesListView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
@@ -120,14 +121,14 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         if (mIsCommunityFeedLoading) {
             return;
         }
-        String URL = "participant/search/?search_text=" +searchText +"&search_category=" +searchCategory;
+        String URL = "participant/search/?search_text=" + searchText + "&search_category=" + searchCategory;
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
-        if(mNextToken !=null){
-            URL = URL +"&next_token="+mNextToken;
+        if (mNextToken != null) {
+            URL = URL + "&next_token=" + mNextToken;
         }
         mIsCommunityFeedLoading = true;
 
@@ -156,18 +157,26 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                             if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
                                 mNextToken = feedResponsePojo.getNextToken();
                                 mIsCommunityFeedLoading = false;
-                                if (mNextToken == null) {
+                                if (!CommonUtil.isNotEmpty(mNextToken)) {
                                     mHasCommunityFeedEnded = true;
                                 }
                                 ArrayList<FeedDetail> feedDetails = new ArrayList<>(feedResponsePojo.getFeedDetails());
                                 mCommunitiesList.addAll(feedDetails);
                                 getMvpView().showAllCommunity(mCommunitiesList);
-                            }else{
-                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                } else {
+                                    getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                                }
                             }
-                        }else {
-                            getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
-                        }
+                        } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                } else {
+                                    getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                                }
+                            }
                     }
                 });
     }

@@ -245,7 +245,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-    public void getFeeds(final int feedState, final String streamName, String searchText, String searchCategory){
+    public void getFeeds(final int feedState, final String streamName, String searchText, String searchCategory) {
         if (mIsFeedLoading) {
             return;
         }
@@ -285,7 +285,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
 
-        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" +searchText +"&search_category=" +searchCategory +"&next_token=" +mNextToken)
+        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" + searchText + "&search_category=" + searchCategory + "&next_token=" + mNextToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
@@ -330,7 +330,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                             }
                                         }
                                         mFeedDetailList = feedList;
-                                        if(!CommonUtil.isNotEmpty(mNextToken)){
+                                        if (!CommonUtil.isNotEmpty(mNextToken)) {
                                             getMvpView().setFeedEnded(true);
                                         } else {
                                             getMvpView().setFeedEnded(false);
@@ -341,39 +341,42 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         break;
                                     case LOAD_MORE_REQUEST:
                                         // append in case of load more
-                                        if(!CommonUtil.isNotEmpty(mNextToken)) {
+                                        if (!CommonUtil.isNotEmpty(mNextToken)) {
                                             getMvpView().setFeedEnded(true);
                                         } else {
                                             getMvpView().setFeedEnded(true);
                                         }
                                         if (!CommonUtil.isEmpty(feedList)) {
                                             mFeedDetailList.addAll(feedList);
-                                            //getMvpView().showFeedList(mFeedDetailList);
                                             getMvpView().addAllFeed(feedList);
                                         }
                                         break;
                                 }
-                            }else{
-                                if(mFeedState == NORMAL_REQUEST) {
-                                    if(feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                        if(feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                            } else {
+                                if (mFeedState == NORMAL_REQUEST) {
+                                    if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                        if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
                                             getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
-                                        }else{
+                                        } else {
                                             getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                         }
-                                    }else{
+                                    } else {
                                         getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                     }
                                 }
                             }
-                        }else {
+                        } else {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
                                 getMvpView().setFeedEnded(true);
-                            } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
-                                getMvpView().setFeedEnded(true);
+                                if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                    } else {
+                                        getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                                    }
+                                }
                             }
                             getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
-//                            getMvpView().showFeedList(null);
                         }
                     }
                 });

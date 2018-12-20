@@ -7,6 +7,7 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
+import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -181,7 +182,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
     }
 
     public void getArticleFeeds(String searchText, String searchCategory, boolean pullToRefresh, boolean initialCall) {
-        if(initialCall){
+        if (initialCall) {
             mNextToken = "";
         }
 
@@ -220,12 +221,19 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                 if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
                                     getMvpView().getFeedListSuccess(feedResponsePojo);
                                     mNextToken = feedResponsePojo.getNextToken();
-                                } else {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
-
+                                } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                    } else {
+                                        getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                                    }
                                 }
-                            } else {
-                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                } else {
+                                    getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                                }
                             }
                         }
                     }

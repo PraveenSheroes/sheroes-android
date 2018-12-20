@@ -675,6 +675,6 @@
     <string name="empty_posts">No Posts found</string>
     <string name="empty_articles">No Articles found</string>
     <string name="empty_communities">No Communities found</string>
-    <string name="empty_search_result">Please check spelling or try different communities</string>
+    <string name="empty_search_result">Please check spelling or try different keywords</string>
 
 </resources>
