@@ -75,6 +75,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     FrameLayout containerLayout;
     @Bind(R.id.no_internet)
     CardView noInternet;
+    private boolean mIsSearchProcessing = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -178,6 +179,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     }
 
     public void filterFeed(String query) {
+        mIsSearchProcessing = true;
         loaderLayout.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.GONE);
         containerLayout.setVisibility(View.VISIBLE);
@@ -219,14 +221,17 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
 
     @Override
     public void onHashTagsResponse(List<String> hashtagList) {
-        noInternet.setVisibility(View.GONE);
-        hashTagsAdapter.refreshList(hashtagList);
-        containerLayout.setVisibility(View.GONE);
-        loaderLayout.setVisibility(View.GONE);
-        hashTagsView.setVisibility(View.VISIBLE);
+        if (!mIsSearchProcessing) {
+            noInternet.setVisibility(View.GONE);
+            hashTagsAdapter.refreshList(hashtagList);
+            containerLayout.setVisibility(View.GONE);
+            loaderLayout.setVisibility(View.GONE);
+            hashTagsView.setVisibility(View.VISIBLE);
+        }
     }
 
     public void callHashTagApi() {
+        mIsSearchProcessing = false;
         noInternet.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.GONE);
         loaderLayout.setVisibility(View.VISIBLE);

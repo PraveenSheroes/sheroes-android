@@ -29,10 +29,12 @@ public class HashTagsViewHolder extends RecyclerView.ViewHolder{
     }
 
     @OnClick(R.id.ll_hashtag)
-    public void onHashTagClick(){
-        String query = hashTagsList.get(getAdapterPosition() - 1).startsWith("#")
-                ? hashTagsList.get(getAdapterPosition() - 1).substring(1) : hashTagsList.get(getAdapterPosition() - 1);
-        iHashTagCallBack.onHashTagClicked(query);
+    public void onHashTagClick() {
+        if (getAdapterPosition() != RecyclerView.NO_POSITION) {
+            String query = hashTagsList.get(getAdapterPosition() - 1).startsWith("#")
+                    ? hashTagsList.get(getAdapterPosition() - 1).substring(1) : hashTagsList.get(getAdapterPosition() - 1);
+            iHashTagCallBack.onHashTagClicked(query);
+        }
     }
 
     public TextView getHashTagTxt() {
