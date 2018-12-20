@@ -1,6 +1,8 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +47,14 @@ import appliedlife.pvtltd.SHEROES.models.entities.poll.PollOptionModel;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
 import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.HashTagsAdapter;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ISearchView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
@@ -60,8 +65,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     View view;
     @Bind(R.id.rv_hashtags)
     RecyclerView hashTagsView;
-    @Bind(R.id.rv_hashtag_details)
-    RecyclerView hashTagDetailsView;
     private HashTagsAdapter hashTagsAdapter;
     private List<FeedDetail> hashTagDetails;
     private List<String> hashTagsList;
@@ -70,6 +73,8 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     LinearLayout loaderLayout;
     @Bind(R.id.fl_container)
     FrameLayout containerLayout;
+    @Bind(R.id.no_internet)
+    CardView noInternet;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,13 +91,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
 
         hashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
         hashTagsView.setAdapter(hashTagsAdapter);
-
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        manager.setOrientation(LinearLayoutManager.VERTICAL);
-        hashTagDetailsView.setLayoutManager(manager);
-
-        feedAdapter = new FeedAdapter(getContext(), this);
-        hashTagDetailsView.setAdapter(feedAdapter);
 
         callHashTagApi();
 
@@ -180,6 +178,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     }
 
     public void filterFeed(String query) {
+        loaderLayout.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.GONE);
         containerLayout.setVisibility(View.VISIBLE);
 
@@ -204,8 +203,23 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
 
     }
 
+    @OnClick({R.id.tv_retry_for_internet})
+    public void onRetryClick() {
+        noInternet.setVisibility(View.GONE);
+        hashTagsView.setVisibility(View.VISIBLE);
+        containerLayout.setVisibility(View.GONE);
+        loaderLayout.setVisibility(View.VISIBLE);
+        callHashTagApi();
+    }
+
+    @OnClick({R.id.tv_goto_setting})
+    public void onSettingClick() {
+        startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+    }
+
     @Override
     public void onHashTagsResponse(List<String> hashtagList) {
+        noInternet.setVisibility(View.GONE);
         hashTagsAdapter.refreshList(hashtagList);
         containerLayout.setVisibility(View.GONE);
         loaderLayout.setVisibility(View.GONE);
@@ -213,9 +227,22 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     }
 
     public void callHashTagApi() {
+        noInternet.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.GONE);
         loaderLayout.setVisibility(View.VISIBLE);
         containerLayout.setVisibility(View.GONE);
         mSearchPresenter.getTrendingHashtags();
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            hashTagsView.setVisibility(View.GONE);
+            containerLayout.setVisibility(View.GONE);
+            loaderLayout.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
+        }
     }
 }

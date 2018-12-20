@@ -50,7 +50,6 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public CarouselListAdapter mAdapter = null;
     //endregion
 
-
     //region bind variable
     @Bind(R.id.icon)
     TextView mIcon;
@@ -117,10 +116,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         }
 
         List<FeedDetail> list = item.getFeedDetails();
-        String subType= item.getSubType();
-        String type= item.getType();
         if (StringUtil.isNotEmptyCollection(list)) {
-            if(list.get(position) instanceof CommunityFeedSolrObj){
+            if(carouselDataObj.getFeedDetails().get(0) instanceof CommunityFeedSolrObj){
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
                 GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
                 mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);

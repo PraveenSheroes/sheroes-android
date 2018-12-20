@@ -12,15 +12,6 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_hashtag_details"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="40dp"
-        android:visibility="gone">
-
-    </androidx.recyclerview.widget.RecyclerView>
-
     <FrameLayout
         android:id="@+id/fl_container"
         android:layout_width="match_parent"
@@ -55,5 +46,10 @@
             android:textColor="@color/feed_article_label"
             vernacular:customTextFontFamily="@string/regular_font" />
     </LinearLayout>
+
+    <include
+        layout="@layout/no_internet_connection_layout"
+        android:visibility="gone"
+        />
 
 </RelativeLayout>

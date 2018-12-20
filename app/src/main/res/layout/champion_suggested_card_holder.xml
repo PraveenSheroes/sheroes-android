@@ -48,7 +48,7 @@
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/title"
-                style="@style/TextView16spBold"
+                style="@style/TextView16spMediumBold"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_size_16"
@@ -59,7 +59,7 @@
                 android:letterSpacing="0.04"
                 android:text="@string/ID_GET_EXPERT_ADVICE"
                 android:textColor="@color/sheroes_greyish_brown"
-                vernacular:customTextFontFamily="@string/bold_font" />
+                vernacular:customTextFontFamily="@string/medium_font" />
 
             <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                 android:id="@+id/body"

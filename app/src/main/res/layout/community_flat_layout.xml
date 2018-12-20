@@ -17,7 +17,7 @@
 
         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
             android:id="@+id/community_join"
-            style="@style/TextView14spBold"
+            style="@style/TextView14spMediumBold"
             android:layout_width="@dimen/community_join_width"
             android:layout_height="@dimen/community_join_height"
             android:layout_alignParentEnd="true"
@@ -30,7 +30,7 @@
             android:textAllCaps="true"
             android:textColor="@color/sheroes_red"
             tools:text="@string/ID_JOIN"
-            vernacular:customTextFontFamily="@string/bold_font" />
+            vernacular:customTextFontFamily="@string/medium_font" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/community_name"
-                    style="@style/TextView14spBold"
+                    style="@style/TextView14spMediumBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp_size_2"
@@ -62,7 +62,7 @@
                     android:letterSpacing="0.04"
                     android:maxLines="@integer/int_value_for_line_1"
                     android:textColor="@color/sheroes_greyish_brown"
-                    vernacular:customTextFontFamily="@string/bold_font" />
+                    vernacular:customTextFontFamily="@string/medium_font" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                     android:id="@+id/community_member_count"

@@ -639,6 +639,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     //Refresh the feed after clicking the Sheroes logo and home button
     @OnClick({R.id.ll_home, R.id.ic_sheroes})
     public void homeOnClick() {
+        mFragmentOpen.setFeedFragment(true);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
 
@@ -696,6 +697,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.ll_profile)
     public void profileOnClick() {
+        mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
         params.setBehavior(null);
@@ -714,6 +716,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.ll_search)
     public void searchOnClick() {
+        mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
         params.setBehavior(null);

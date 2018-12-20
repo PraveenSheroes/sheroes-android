@@ -86,6 +86,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
@@ -245,7 +246,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private CommunityTab mCommunityTab;
     private boolean isTrackingEnabled = true;
     private String searchText, searchCategory;
-    private boolean isFilter=false;
+    public boolean isFilter=false;
+    private FragmentOpen fragmentOpen;
 
     //endregion
 
@@ -259,6 +261,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
         impressionPresenter.attachView(this);
+        fragmentOpen = new FragmentOpen();
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
@@ -2197,7 +2200,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         gifLoader.setVisibility(View.VISIBLE);
         if (null != getActivity()) {
             if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).homeOnClick();
+                if(!fragmentOpen.isFeedFragment()){
+                    ((HomeActivity) getActivity()).searchOnClick();
+                }else {
+                    ((HomeActivity) getActivity()).homeOnClick();
+                }
             }
         }
     }
