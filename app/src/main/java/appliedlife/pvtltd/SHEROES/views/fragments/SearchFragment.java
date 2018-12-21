@@ -57,7 +57,7 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class SearchFragment extends BaseFragment implements BaseHolderInterface {
-    private static final String SCREEN_LABEL = "Search Screen";
+    public static final String SCREEN_LABEL = "Search Screen";
 
     @Inject
     SearchPresenter mSearchPresenter;
@@ -76,6 +76,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private List<String> mSearchTabs = new ArrayList<>();
     private String mSearchCategory;
     private String mSearchBarText;
+    private String mSearchText;
+    private String mNextToken;
     private int[] tabIcons = {
             R.drawable.search_tab_top,
             R.drawable.search_tab_communities,
@@ -94,6 +96,16 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     ImageView searchImg;
     private boolean searchStarted = false;
 
+    public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
+        SearchFragment searchFragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.SEARCH_TEXT, searchText);
+        bundle.putString(AppConstants.SEARCH_CATEGORY, searchCategory);
+        bundle.putString(AppConstants.NEXT_TOKEN, nextToken);
+        searchFragment.setArguments(bundle);
+        return searchFragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -105,7 +117,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         initializeSearchViews();
         searchListener();
         mSearchTabsPager.setOffscreenPageLimit(3);
-
+        mSearchText = getArguments().getString(AppConstants.SEARCH_TEXT);
+        mSearchCategory = getArguments().getString(AppConstants.SEARCH_CATEGORY);
+        mNextToken = getArguments().getString(AppConstants.NEXT_TOKEN);
 
         mETSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -213,6 +227,14 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             }
         });
+
+        if(!CommonUtil.isNullOrEmpty(mSearchText)) {
+            int index = mSearchTabsPager.getCurrentItem();
+            SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
+            Fragment fragment = adapter.getFragment(index);
+            String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
+            mSearchCategory = getSearchCategory(fragment);
+        }
 
         return view;
     }

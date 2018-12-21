@@ -319,6 +319,7 @@
                 <data android:pathPrefix="/invite-friends" />
                 <data android:pathPrefix="/write_story" />
                 <data android:pathPrefix="/my_story" />
+                <data android:pathPrefix="/search" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />

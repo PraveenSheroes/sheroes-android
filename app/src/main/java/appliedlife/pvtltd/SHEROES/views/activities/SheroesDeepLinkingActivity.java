@@ -25,6 +25,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INVITE_FRIEND;
 
@@ -50,6 +51,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     private int mFromNotification;
     private String mSource;
     private Intent mIntent;
+    private String mSearchText, mSearchCategory, mNextToken;
     // endregion
 
     // region public and lifecycle methods
@@ -214,6 +216,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
                         homeActivityCall(AppConstants.COMMUNITY_URL);
                     } else if (urlOfSharedCard.equals(AppConstants.CHAMPION_URL) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM) || urlOfSharedCard.equals(AppConstants.CHAMPION_URL + "/") || urlOfSharedCard.equals(AppConstants.CHAMPION_URL_COM + "/")) {
                         homeActivityCall(AppConstants.CHAMPION_URL);
+                    } else if (urlOfSharedCard.contains(AppConstants.SEARCH_URL) || urlOfSharedCard.contains(AppConstants.SEARCH_URL_COM) || urlOfSharedCard.contains(AppConstants.SEARCH_URL + "/") || urlOfSharedCard.contains(AppConstants.SEARCH_URL_COM + "/")) {
+                        mSearchText = sourceIntent.getData().getQueryParameter(AppConstants.SEARCH_TEXT);
+                        mSearchCategory = sourceIntent.getData().getQueryParameter(AppConstants.SEARCH_CATEGORY);
+                        mNextToken = sourceIntent.getData().getQueryParameter(AppConstants.NEXT_TOKEN);
+                        homeActivityCall(SearchFragment.SCREEN_LABEL);
                     } else {
                         mIndexOfBackSlaceInPostDeeplink = AppUtils.findNthIndexOf(urlOfSharedCard, AppConstants.BACK_SLASH, AppConstants.BACK_SLASH_OCCURRENCE_IN_POST_LINK);
                         if (mIndexOfBackSlaceInPostDeeplink > 0) {
@@ -256,6 +263,14 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
             destinationIntent.putExtra(AppConstants.SHARE_IMAGE, sourceIntent.getExtras().getString(AppConstants.SHARE_IMAGE));
             destinationIntent.putExtra(AppConstants.IS_SHARE_DEEP_LINK, sourceIntent.getExtras().getBoolean(AppConstants.IS_SHARE_DEEP_LINK));
             destinationIntent.putExtra(AppConstants.SHARE_CHANNEL, sourceIntent.getExtras().getString(AppConstants.SHARE_CHANNEL));
+        }
+    }
+
+    private void addSearchQuery(Intent destinationIntent, String fragmentName) {
+        if (SearchFragment.SCREEN_LABEL.equalsIgnoreCase(fragmentName)) {
+            destinationIntent.putExtra(AppConstants.SEARCH_TEXT, mSearchText);
+            destinationIntent.putExtra(AppConstants.SEARCH_CATEGORY, mSearchCategory);
+            destinationIntent.putExtra(AppConstants.NEXT_TOKEN, mNextToken);
         }
     }
 
@@ -524,6 +539,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
         into.putExtra(BaseActivity.SOURCE_SCREEN, mSource);
         into.putExtra(OPEN_FRAGMENT, fragmentName);
+        addSearchQuery(into, fragmentName);
         addShareLink(mIntent, into);
         startActivity(into);
         finish();

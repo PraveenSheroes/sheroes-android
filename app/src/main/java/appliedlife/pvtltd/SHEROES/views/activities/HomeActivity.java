@@ -353,6 +353,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
     private boolean showFab = true;
+    private String mSearchText, mSearchCategory, mNextToken;
     //endregion
 
     // region Public methods
@@ -1344,6 +1345,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     renderFAQSView();
                 } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
+                } else if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
+                    setSearchedData(intent);
+                    searchOnClick();
                 }
             } else if (CommonUtil.isNotEmpty(intent.getStringExtra(AppConstants.HELPLINE_CHAT)) && intent.getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
                 handleHelpLineFragmentFromDeepLinkAndLoading();
@@ -1386,6 +1390,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
     }
 
+    private void setSearchedData(Intent intent) {
+        mSearchText = intent.getStringExtra(AppConstants.SEARCH_TEXT);
+        mSearchCategory = intent.getStringExtra(AppConstants.SEARCH_CATEGORY);
+        mNextToken = intent.getStringExtra(AppConstants.NEXT_TOKEN);
+    }
+
     private void sheUserInit() {
         if (mIsSheUser && startedFirstTime()) {
             openHelplineFragment();
@@ -1419,6 +1429,11 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                 if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
                     showSelectLanguageOption();
                 }
+
+                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)){
+                    searchOnClick();
+                }
+
             }
         }
     }
@@ -1851,7 +1866,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void openSearchFragment(){
         mCLMainLayout.setScrollContainer(false);
-        SearchFragment searchFragment = new SearchFragment();
+        SearchFragment searchFragment = SearchFragment.createInstance(mSearchText, mSearchCategory, mNextToken);
         FragmentManager fragmentManager = getSupportFragmentManager();
         for (int i = 0; i < fragmentManager.getBackStackEntryCount(); ++i) {
             fragmentManager.popBackStack();
