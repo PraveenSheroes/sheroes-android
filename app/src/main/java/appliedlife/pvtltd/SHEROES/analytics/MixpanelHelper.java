@@ -393,7 +393,7 @@ public class MixpanelHelper {
         }
     }
 
-    public static HashMap<String, Object> getArticleOrStoryProperties(ArticleSolrObj articleSolrObj, String screenName) {
+    public static HashMap<String, Object>   getArticleOrStoryProperties(ArticleSolrObj articleSolrObj, String screenName) {
         if (articleSolrObj == null) {
             return null;
         }

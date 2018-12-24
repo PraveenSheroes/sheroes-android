@@ -20,11 +20,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -154,7 +157,12 @@ public class ArticlesFragment extends BaseFragment {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
-        return view;
+
+        if(HomeActivity.isSearchClicked){
+            trackScreenEvent();
+        }
+
+            return view;
     }
 
     public void categoryArticleFilter(final List<Long> categoryIds) {
@@ -382,5 +390,22 @@ public class ArticlesFragment extends BaseFragment {
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        if(HomeActivity.isSearchClicked)
+        return false;
+        else
+            return true;
+    }
+
+    private void trackScreenEvent(){
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
     }
 }

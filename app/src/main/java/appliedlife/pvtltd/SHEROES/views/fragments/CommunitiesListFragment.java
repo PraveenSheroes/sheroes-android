@@ -227,6 +227,9 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         SpannableString content = new SpannableString(underLineData);
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
+
+        trackScreenEvent();
+
         return view;
     }
 
@@ -492,7 +495,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     @Override
     public boolean shouldTrackScreen() {
-        return true;
+        return false;
     }
 
     public void refreshList() {
@@ -614,5 +617,14 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
     }
     //endregion
+
+    private void trackScreenEvent(){
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+    }
 }
 

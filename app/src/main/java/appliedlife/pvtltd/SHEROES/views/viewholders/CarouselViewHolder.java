@@ -123,8 +123,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 //            if(carouselDataObj.getFeedDetails().get(0) instanceof CommunityFeedSolrObj){
             if(isFilter){
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-                GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
-                mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
+//                GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
+//                mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
 
                 mRecyclerView.setLayoutManager(gridLayoutManager);
             }else{

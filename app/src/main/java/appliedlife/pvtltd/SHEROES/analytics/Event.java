@@ -133,6 +133,11 @@ public enum Event {
     },
     //endregion
 
+
+    //region search related events
+    QUERY_SEARCHED(AnalyticsEventType.SEARCH, "Queried"),
+    //endregion
+
     //region Challenge related events
     CHALLENGE_ACCEPTED(AnalyticsEventType.CHALLENGE, "Accepted"),
     CHALLENGE_SHARED(AnalyticsEventType.CHALLENGE, "Shared") {
@@ -251,6 +256,7 @@ public enum Event {
         }
     },;
     //endregion
+
 
     public final AnalyticsEventType type;
     public String name;
