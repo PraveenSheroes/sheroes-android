@@ -45,6 +45,8 @@ public class ErrorUtil {
     }
 
     public void onShowErrorDialog(Context context, String errorReason, FeedParticipationEnum feedParticipationEnum) {
+        if (context == null)
+            return;
         if (StringUtil.isNotNullOrEmptyString(errorReason)) {
             switch (errorReason) {
                 case AppConstants.CHECK_NETWORK_CONNECTION:
@@ -64,8 +66,5 @@ public class ErrorUtil {
         } else {
             showErrorDialogOnUserAction(context, true, false, context.getString(R.string.ID_GENERIC_ERROR), "");
         }
-
-
     }
-
 }
