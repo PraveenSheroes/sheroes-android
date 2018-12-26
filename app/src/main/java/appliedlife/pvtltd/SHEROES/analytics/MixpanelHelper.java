@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
 import android.content.Context;
+import android.text.Html;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
@@ -32,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import io.branch.referral.Branch;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
@@ -433,13 +436,18 @@ public class MixpanelHelper {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(communityDetails.getIdOfEntityOrParticipant()))
-                            .title(communityDetails.getNameOrTitle())
+                            .title(Html.fromHtml(communityDetails.getNameOrTitle()).toString())
                             .communityCategory(communityDetails.getCommunityType())
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
                             .streamType(CommonUtil.isNotEmpty(communityDetails.getStreamType()) ? communityDetails.getStreamType() : "")
                             .positionInList(communityDetails.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
+            properties.put(EventProperty.SEARCH_QUERY.getString(), communityDetails.getSearchText());
+
+            if (HomeActivity.isSearchClicked){
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
+            }
 
             AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
         }

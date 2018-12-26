@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -59,6 +62,8 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class HashTagFragment extends BaseFragment implements ISearchView, BaseHolderInterface, IHashTagCallBack {
+    public static final String SCREEN_LABEL = "Hashtag Screen";
+
     //region inject variables
     @Inject
     SearchPresenter mSearchPresenter;
@@ -75,7 +80,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     CardView noInternet;
     //endregion view variables
 
-    //region member variables
+    //region member variablesS
     private HashTagsAdapter mHashTagsAdapter;
     private boolean mIsSearchProcessing = false;
     //endregion member variables
@@ -252,5 +257,16 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
+    }
+
+    public void trackScreenEvent(String searchQuery){
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(searchQuery)
+                        .tabTitle(SearchFragment.searchTabName)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
     }
 }

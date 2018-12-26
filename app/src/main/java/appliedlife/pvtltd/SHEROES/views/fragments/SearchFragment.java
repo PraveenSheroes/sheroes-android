@@ -108,6 +108,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private FeedFragment mFeedFragment;
     private ArticlesFragment mArticlesFragment;
     private boolean mSearchStarted = false;
+    public static String searchText = null;
     //endregion
 
     //region fragment lifecycle methods
@@ -191,42 +192,54 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onPageSelected(int position) {
                 mSearchFragmentAdapter.setTabLabelColor();
                 searchTabName = getTabName(position);
-                if (mSearchStarted) {
-                    String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
-                    switch (position) {
-                        case 0:
+                if (mETSearch.getText().toString().trim().length() > 0) {
+                    searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
+                }
+                switch (position) {
+                    case 0:
+                        if (mSearchStarted) {
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
                             } else {
                                 mFeedFragment.paramsToFilterFeed(false, searchText, SearchEnum.TOP.toString());
                                 mFeedFragment.callFeedApi();
                             }
-                            break;
-                        case 1:
+                        }
+                        mFeedFragment.trackScreenEvent(searchText);
+                        break;
+                    case 1:
+                        if (mSearchStarted) {
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mCommunitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
                             } else {
                                 mCommunitiesListFragment.callCommunityApi();
                             }
-                            break;
-                        case 2:
+                        }
+                        mCommunitiesListFragment.trackScreenEvent(searchText);
+                        break;
+                    case 2:
+                        if (mSearchStarted) {
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mHashTagFragment.filterFeed(searchText);
                             } else {
                                 mHashTagFragment.callHashTagApi();
                             }
-                            break;
-                        case 3:
+                        }
+                        mHashTagFragment.trackScreenEvent(searchText);
+                        break;
+                    case 3:
+                        if (mSearchStarted) {
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mArticlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
                             } else {
                                 mArticlesFragment.setFilterParams(false, "", "");
                                 mArticlesFragment.categoryArticleFilter(null);
                             }
-                            break;
-                    }
+                        }
+                        mArticlesFragment.trackScreenEvent(searchText);
+                        break;
                 }
-                fireSearchOpenEvent();
+//                fireSearchOpenEvent();
             }
 
             @Override
@@ -239,11 +252,12 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             int index = mSearchTabsPager.getCurrentItem();
             SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
             Fragment fragment = adapter.getFragment(index);
-            String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
+            searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
             mSearchCategory = getSearchCategory(fragment);
         }
 
         fireSearchOpenEvent();
+        mFeedFragment.trackScreenEvent(searchText);
 
         return view;
     }
@@ -306,7 +320,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
-                bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
+                bundle.putString(AppConstants.SCREEN_NAME, getScreenName());
                 mFeedFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mFeedFragment, getString(R.string.top));
                 mSearchTabFragments.add(mFeedFragment);
@@ -343,6 +357,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     private void searchInitState() {
+        searchText = "";
         mETSearch.setCursorVisible(false);
         mETSearch.setText("");
         searchImg.setVisibility(View.VISIBLE);
@@ -489,7 +504,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     //region click methods
     @OnClick(R.id.iv_search_icon)
-    private void searchProceed() {
+    public void searchProceed() {
+        searchText = mETSearch.getText().toString().trim();
+
         if (mETSearch.getText().toString().trim().length() > 0) {
             searchingState();
             CommonUtil.hideKeyboard(getActivity());
@@ -513,7 +530,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     @OnClick(R.id.iv_search_close)
-    private void resetSearch() {
+    public void resetSearch() {
+        searchText = "";
         CommonUtil.hideKeyboard(getActivity());
         searchInitState();
         int index = mSearchTabsPager.getCurrentItem();

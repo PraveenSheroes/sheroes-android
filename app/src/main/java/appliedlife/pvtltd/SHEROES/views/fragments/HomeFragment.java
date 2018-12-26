@@ -336,4 +336,12 @@ public class HomeFragment extends BaseFragment {
         }
     }
     //endregion
+
+
+    public String getActiveTabName(){
+        if(mViewPager.getCurrentItem() == 0)
+            return FEED_SCREEN_LABEL;
+        else
+            return TRENDING_FEED_SCREEN_LABEL;
+    }
 }

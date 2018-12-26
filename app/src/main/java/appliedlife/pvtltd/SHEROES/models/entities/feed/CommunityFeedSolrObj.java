@@ -55,6 +55,8 @@ public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
         return isMutualCommunityFirstItem;
     }
 
+    public String searchText;
+
     public void setMutualCommunityFirstItem(boolean mutualCommunityFirstItem) {
         isMutualCommunityFirstItem = mutualCommunityFirstItem;
     }
@@ -105,5 +107,13 @@ public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
 
     public void setMember(boolean member) {
         isMember = member;
+    }
+
+    public String getSearchText() {
+        return searchText;
+    }
+
+    public void setSearchText(String searchText) {
+        this.searchText = searchText;
     }
 }
