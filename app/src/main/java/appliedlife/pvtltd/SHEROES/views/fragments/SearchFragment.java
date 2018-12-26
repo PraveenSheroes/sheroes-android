@@ -63,27 +63,34 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class SearchFragment extends BaseFragment implements BaseHolderInterface {
+    //region static variables
     public static final String SCREEN_LABEL = "Search Screen";
+    public static String searchTabName = "Top";
+    //endregion static variables
 
+    //region inject variables
     @Inject
     SearchPresenter mSearchPresenter;
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
+    //endregion
 
+    //region View variables
     @Bind(R.id.vp_search_tabs)
     ViewPager mSearchTabsPager;
     @Bind(R.id.tabLayout)
     TabLayout mSearchTabsLayout;
     @Bind(R.id.et_search)
     EditText mETSearch;
+    //endregion
+
+    //region member variables
     private SearchPagerAdapter mSearchFragmentAdapter;
     private List<Fragment> mSearchTabFragments = new ArrayList<>();
     private List<String> mSearchTabs = new ArrayList<>();
     private String mSearchCategory;
     private String mSearchBarText;
     private String mSearchText;
-    private String mNextToken;
     private int[] tabIcons = {
             R.drawable.search_tab_top,
             R.drawable.search_tab_communities,
@@ -101,8 +108,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     @Bind(R.id.iv_search_icon)
     ImageView searchImg;
     private boolean searchStarted = false;
-    private String previousScreen;
-    public static String searchTabName = "Top";
+    //endregion
 
     public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
         SearchFragment searchFragment = new SearchFragment();
@@ -121,14 +127,12 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         ButterKnife.bind(this, view);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        previousScreen = getActivity().getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
 
         initializeSearchViews();
         searchListener();
         mSearchTabsPager.setOffscreenPageLimit(3);
         mSearchText = getArguments().getString(AppConstants.SEARCH_TEXT);
         mSearchCategory = getArguments().getString(AppConstants.SEARCH_CATEGORY);
-        mNextToken = getArguments().getString(AppConstants.NEXT_TOKEN);
 
         mETSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
