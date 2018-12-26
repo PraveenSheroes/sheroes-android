@@ -5,12 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="13dp"
+
+        >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="13dp"
         android:background="@drawable/rectangle_grey_round_corner"
-        android:elevation="@dimen/dp_size_5"
         android:orientation="horizontal"
         android:weightSum="1.5">
 
@@ -64,6 +69,7 @@
 
         </LinearLayout>
     </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>
 
 

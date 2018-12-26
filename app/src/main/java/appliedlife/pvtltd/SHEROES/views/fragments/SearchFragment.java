@@ -20,6 +20,7 @@ import com.f2prateek.rx.preferences2.Preference;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +33,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.Event;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
+import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -54,6 +59,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class SearchFragment extends BaseFragment implements BaseHolderInterface {
@@ -95,6 +101,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     @Bind(R.id.iv_search_icon)
     ImageView searchImg;
     private boolean searchStarted = false;
+    private String previousScreen;
+    public static String searchTabName = "Top";
 
     public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
         SearchFragment searchFragment = new SearchFragment();
@@ -113,6 +121,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         ButterKnife.bind(this, view);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+        previousScreen = getActivity().getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
 
         initializeSearchViews();
         searchListener();
@@ -186,6 +195,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             @Override
             public void onPageSelected(int position) {
                 mSearchFragmentAdapter.setTabLabelColor();
+                searchTabName = getTabName(position);
                 if (searchStarted) {
                     String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
                     switch (position) {
@@ -221,6 +231,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                             break;
                     }
                 }
+                fireSearchOpenEvent();
             }
             @Override
             public void onPageScrollStateChanged(int state) {
@@ -236,8 +247,17 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             mSearchCategory = getSearchCategory(fragment);
         }
 
+        fireSearchOpenEvent();
+
         return view;
     }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+
 
     public void searchListener() {
         mETSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -306,7 +326,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         }
         viewPager.setAdapter(mSearchFragmentAdapter);
-
     }
 
 
@@ -398,6 +417,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             } else if (fragment instanceof ArticlesFragment) {
                 ((ArticlesFragment) fragment).fetchSearchedArticles(true, searchText, mSearchCategory);
             }
+            fireQuerySearchEvent();
+
         }
     }
 
@@ -530,4 +551,42 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         }
     }
+
+    private void fireQuerySearchEvent(){
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(mETSearch.getText().toString())
+                        .tabTitle(searchTabName)
+                        .build();
+
+        AnalyticsManager.trackEvent(Event.QUERY_SEARCHED, getScreenName(), properties);
+
+    }
+
+    private void fireSearchOpenEvent(){
+
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(mETSearch.getText().toString())
+                        .tabTitle(searchTabName)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+    }
+
+
+    private String getTabName(int index){
+            return mSearchTabsLayout.getTabAt(index).getText().toString();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
+    }
 }
+
+

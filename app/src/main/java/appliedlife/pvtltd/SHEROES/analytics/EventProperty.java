@@ -68,7 +68,8 @@ public enum EventProperty {
     IS_STORY("Is a Story"),
     AUTHOR_ID("Author Id"),
     AUTHOR_NAME("Author Name"),
-    IS_ACTIVE("Badge State");
+    IS_ACTIVE("Badge State"),
+    SEARCH_QUERY("Search Query");
 
     private final String string;
 
@@ -107,6 +108,12 @@ public enum EventProperty {
             put(ID, value);
             return this;
         }
+
+        public Builder source(String value){
+            put(SOURCE, value);
+            return this;
+        }
+
         public Builder postCommentId(String value){
             put(POST_COMMENT_ID, value);
             return this;
@@ -125,8 +132,14 @@ public enum EventProperty {
             return this;
         }
 
+
         public Builder title(String value){
             put(TITLE, value);
+            return this;
+        }
+
+        public Builder searchQuery(String value){
+            put(SEARCH_QUERY, value);
             return this;
         }
 

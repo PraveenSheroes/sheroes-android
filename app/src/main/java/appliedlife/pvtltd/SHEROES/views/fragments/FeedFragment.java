@@ -264,6 +264,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mFeedPresenter.attachView(this);
         impressionPresenter.attachView(this);
 
+
 //        ((HomeActivity) getActivity()).mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
         fragmentOpen = new FragmentOpen();
@@ -296,6 +297,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (isHomeFeed) {
             mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         }
+
         return view;
     }
 
@@ -1265,6 +1267,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onUserPostClicked(FeedDetail feedDetail) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        if(HomeActivity.isSearchClicked) {
+            screenProperties.put(EventProperty.SOURCE.toString(), "Search Screen");
+            screenProperties.put(EventProperty.SOURCE_TAB_TITLE.toString(), searchCategory);
+        }
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(feedDetail.getItemPosition()));
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
@@ -1468,13 +1474,19 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
+        if(!isFilter) {
+            AppConstants.PREVIOUS_SCREEN = mScreenLabel;
+        }else {
+            AppConstants.PREVIOUS_SCREEN = "Search Screen" ;
+        }
+
         if (impressionHelper != null) { //app exit cases and back-stack of activity
             impressionHelper.stopImpression();
         }
 
-        if (isActiveTabFragment) {
-            AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
-        }
+//        if (isActiveTabFragment) {
+//            AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+//        }
     }
 
     @Override
@@ -2243,4 +2255,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
     }
     //endregion
+
+
 }

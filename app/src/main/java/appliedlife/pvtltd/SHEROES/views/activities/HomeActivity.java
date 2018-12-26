@@ -353,6 +353,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
     private boolean showFab = true;
+    public static boolean isSearchClicked = false;
     private String mSearchText, mSearchCategory, mNextToken;
     //endregion
 
@@ -643,6 +644,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     //Refresh the feed after clicking the Sheroes logo and home button
     @OnClick({R.id.ll_home, R.id.ic_sheroes})
     public void homeOnClick() {
+        isSearchClicked = false;
+        AppConstants.PREVIOUS_SCREEN = getScreenName();
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         mFragmentOpen.setFeedFragment(true);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
@@ -702,6 +705,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.ll_profile)
     public void profileOnClick() {
+        isSearchClicked = false;
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
@@ -722,6 +726,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @OnClick(R.id.ll_search)
     public void searchOnClick() {
+        isSearchClicked = true;
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)

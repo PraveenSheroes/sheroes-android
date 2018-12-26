@@ -80,8 +80,10 @@ import appliedlife.pvtltd.SHEROES.analytics.MixpanelHelper;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
+import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.FeedBottomBarCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.Spam;
 import appliedlife.pvtltd.SHEROES.models.SpamReasons;
@@ -89,6 +91,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamPostRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.spam.SpamResponse;
@@ -150,7 +153,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
     public ArticleSolrObj mArticleSolrObj;
     private long mScrollPercentage = 0;
     private boolean isScrollingDown = false;
-
     public enum State {EXPANDED, COLLAPSED}
 
     private State mCurrentState = State.EXPANDED;
@@ -292,6 +294,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
         ActivityCompat.postponeEnterTransition(ArticleActivity.this);
         ButterKnife.bind(this);
         mArticlePresenter.attachView(this);
+
+//        fragmentOpen = new FragmentOpen();
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         if (getIntent() != null && getIntent().getExtras() != null) {
@@ -962,6 +966,8 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
             webViewText.addJavascriptInterface(webViewClickListener, "video");
         }
         webViewText.loadDataWithBaseURL(RELATIVE_PATH_ASSETS, htmlData, "text/html", "UTF-8", null);
+
+
 
         if (null != mArticleSolrObj && mArticleSolrObj.isUserStory()) {
             mProperties = MixpanelHelper.getArticleOrStoryProperties(mArticleSolrObj, mSourceScreen);

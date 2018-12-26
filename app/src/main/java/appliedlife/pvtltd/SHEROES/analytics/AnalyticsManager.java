@@ -11,11 +11,18 @@ import com.appsflyer.AppsFlyerLib;
 import java.util.HashMap;
 import java.util.Map;
 
+import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
+
 import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
@@ -112,6 +119,16 @@ public class AnalyticsManager {
 
         if (!TextUtils.isEmpty(previousScreenName)) {
             properties.put(EventProperty.SOURCE.getString(), previousScreenName);
+        }
+
+        if(HomeActivity.isSearchClicked) {
+            if(screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
+                properties.put(EventProperty.SOURCE.getString(), AppConstants.PREVIOUS_SCREEN);
+            }else if(screenName.equalsIgnoreCase(CommunityDetailActivity.SCREEN_LABEL)){
+                properties.put(EventProperty.TAB_TITLE.getString(), SearchFragment.searchTabName);
+                properties.put(EventProperty.TAB_KEY.getString(), null);
+            }
         }
 
         String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
