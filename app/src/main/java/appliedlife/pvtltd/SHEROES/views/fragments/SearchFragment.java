@@ -82,6 +82,12 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     TabLayout mSearchTabsLayout;
     @Bind(R.id.et_search)
     EditText mETSearch;
+    @Bind(R.id.iv_search_close)
+    ImageView closeImg;
+    @Bind(R.id.iv_back)
+    ImageView backImg;
+    @Bind(R.id.iv_search_icon)
+    ImageView searchImg;
     //endregion
 
     //region member variables
@@ -91,23 +97,17 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private String mSearchCategory;
     private String mSearchBarText;
     private String mSearchText;
-    private int[] tabIcons = {
+    private int[] mTabIcons = {
             R.drawable.search_tab_top,
             R.drawable.search_tab_communities,
             R.drawable.search_tab_hashtag,
             R.drawable.search_tab_articles
     };
-    private HashTagFragment hashTagFragment;
-    private CommunitiesListFragment communitiesListFragment;
-    private FeedFragment feedFragment;
-    private ArticlesFragment articlesFragment;
-    @Bind(R.id.iv_search_close)
-    ImageView closeImg;
-    @Bind(R.id.iv_back)
-    ImageView backImg;
-    @Bind(R.id.iv_search_icon)
-    ImageView searchImg;
-    private boolean searchStarted = false;
+    private HashTagFragment mHashTagFragment;
+    private CommunitiesListFragment mCommunitiesListFragment;
+    private FeedFragment mFeedFragment;
+    private ArticlesFragment mArticlesFragment;
+    private boolean mSearchStarted = false;
     //endregion
 
     public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
@@ -169,13 +169,13 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().length() == 0) {
-                    if (searchStarted) {
-                        hashTagFragment.callHashTagApi();
-                        communitiesListFragment.callCommunityApi();
-                        feedFragment.paramsToFilterFeed(false, "", "");
-                        feedFragment.callFeedApi();
-                        articlesFragment.setFilterParams(false, "", "");
-                        articlesFragment.categoryArticleFilter(null);
+                    if (mSearchStarted) {
+                        mHashTagFragment.callHashTagApi();
+                        mCommunitiesListFragment.callCommunityApi();
+                        mFeedFragment.paramsToFilterFeed(false, "", "");
+                        mFeedFragment.callFeedApi();
+                        mArticlesFragment.setFilterParams(false, "", "");
+                        mArticlesFragment.categoryArticleFilter(null);
                     }
                 }
             }
@@ -200,37 +200,37 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onPageSelected(int position) {
                 mSearchFragmentAdapter.setTabLabelColor();
                 searchTabName = getTabName(position);
-                if (searchStarted) {
+                if (mSearchStarted) {
                     String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
                     switch (position) {
                         case 0:
                             if (mETSearch.getText().toString().trim().length() > 0) {
-                                feedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
+                                mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
                             } else {
-                                feedFragment.paramsToFilterFeed(false, searchText, SearchEnum.TOP.toString());
-                                feedFragment.callFeedApi();
+                                mFeedFragment.paramsToFilterFeed(false, searchText, SearchEnum.TOP.toString());
+                                mFeedFragment.callFeedApi();
                             }
                             break;
                         case 1:
                             if (mETSearch.getText().toString().trim().length() > 0) {
-                                communitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
+                                mCommunitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
                             } else {
-                                communitiesListFragment.callCommunityApi();
+                                mCommunitiesListFragment.callCommunityApi();
                             }
                             break;
                         case 2:
                             if (mETSearch.getText().toString().trim().length() > 0) {
-                                hashTagFragment.filterFeed(searchText);
+                                mHashTagFragment.filterFeed(searchText);
                             } else {
-                                hashTagFragment.callHashTagApi();
+                                mHashTagFragment.callHashTagApi();
                             }
                             break;
                         case 3:
                             if (mETSearch.getText().toString().trim().length() > 0) {
-                                articlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
+                                mArticlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
                             } else {
-                                articlesFragment.setFilterParams(false, "", "");
-                                articlesFragment.categoryArticleFilter(null);
+                                mArticlesFragment.setFilterParams(false, "", "");
+                                mArticlesFragment.categoryArticleFilter(null);
                             }
                             break;
                     }
@@ -299,34 +299,34 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         mSearchFragmentAdapter = new SearchPagerAdapter(getChildFragmentManager());
         for (String name : mSearchTabs) {
             if (name.equalsIgnoreCase(getString(R.string.top))) {
-                if (feedFragment == null) {
-                    feedFragment = new FeedFragment();
+                if (mFeedFragment == null) {
+                    mFeedFragment = new FeedFragment();
                 }
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
                 bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
-                feedFragment.setArguments(bundle);
-                mSearchFragmentAdapter.addFragment(feedFragment, getString(R.string.top));
-                mSearchTabFragments.add(feedFragment);
+                mFeedFragment.setArguments(bundle);
+                mSearchFragmentAdapter.addFragment(mFeedFragment, getString(R.string.top));
+                mSearchTabFragments.add(mFeedFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.community))) {
-                if (communitiesListFragment == null) {
-                    communitiesListFragment = new CommunitiesListFragment();
+                if (mCommunitiesListFragment == null) {
+                    mCommunitiesListFragment = new CommunitiesListFragment();
                 }
-                mSearchFragmentAdapter.addFragment(communitiesListFragment, getString(R.string.community));
-                mSearchTabFragments.add(communitiesListFragment);
+                mSearchFragmentAdapter.addFragment(mCommunitiesListFragment, getString(R.string.community));
+                mSearchTabFragments.add(mCommunitiesListFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.hash_tag))) {
-                if (hashTagFragment == null) {
-                    hashTagFragment = new HashTagFragment();
+                if (mHashTagFragment == null) {
+                    mHashTagFragment = new HashTagFragment();
                 }
-                mSearchFragmentAdapter.addFragment(hashTagFragment, getString(R.string.hash_tag));
-                mSearchTabFragments.add(hashTagFragment);
+                mSearchFragmentAdapter.addFragment(mHashTagFragment, getString(R.string.hash_tag));
+                mSearchTabFragments.add(mHashTagFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.article))) {
-                if (articlesFragment == null) {
-                    articlesFragment = new ArticlesFragment();
+                if (mArticlesFragment == null) {
+                    mArticlesFragment = new ArticlesFragment();
                 }
-                mSearchFragmentAdapter.addFragment(articlesFragment, getString(R.string.article));
-                mSearchTabFragments.add(articlesFragment);
+                mSearchFragmentAdapter.addFragment(mArticlesFragment, getString(R.string.article));
+                mSearchTabFragments.add(mArticlesFragment);
             }
         }
         viewPager.setAdapter(mSearchFragmentAdapter);
@@ -463,7 +463,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     private void searchingState() {
         mETSearch.setCursorVisible(false);
-        searchStarted = true;
+        mSearchStarted = true;
         searchImg.setVisibility(View.INVISIBLE);
         backImg.setVisibility(View.VISIBLE);
         closeImg.setVisibility(View.VISIBLE);
@@ -536,7 +536,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             TextView tv = (TextView) v.findViewById(R.id.tv_tab_title);
             tv.setText(mSearchFragmentTitles.get(position));
             ImageView img = (ImageView) v.findViewById(R.id.iv_tab_image);
-            img.setImageResource(tabIcons[position]);
+            img.setImageResource(mTabIcons[position]);
             return v;
         }
 
