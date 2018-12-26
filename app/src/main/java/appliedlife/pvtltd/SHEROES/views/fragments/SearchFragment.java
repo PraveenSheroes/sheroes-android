@@ -110,16 +110,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private boolean mSearchStarted = false;
     //endregion
 
-    public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
-        SearchFragment searchFragment = new SearchFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.SEARCH_TEXT, searchText);
-        bundle.putString(AppConstants.SEARCH_CATEGORY, searchCategory);
-        bundle.putString(AppConstants.NEXT_TOKEN, nextToken);
-        searchFragment.setArguments(bundle);
-        return searchFragment;
-    }
-
+    //region fragment lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -237,13 +228,14 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 }
                 fireSearchOpenEvent();
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
 
-        if(!CommonUtil.isNullOrEmpty(mSearchText)) {
+        if (!CommonUtil.isNullOrEmpty(mSearchText)) {
             int index = mSearchTabsPager.getCurrentItem();
             SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
             Fragment fragment = adapter.getFragment(index);
@@ -257,13 +249,32 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     @Override
-    public boolean shouldTrackScreen() {
-        return false;
+    public void onPause() {
+        super.onPause();
+        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
+    }
+    //endregion activity lifecycle methods
+
+    //region public methods
+    public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
+        SearchFragment searchFragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.SEARCH_TEXT, searchText);
+        bundle.putString(AppConstants.SEARCH_CATEGORY, searchCategory);
+        bundle.putString(AppConstants.NEXT_TOKEN, nextToken);
+        searchFragment.setArguments(bundle);
+        return searchFragment;
     }
 
+    public void onHashTagClicked(String query) {
+        mETSearch.setText(query);
+        mETSearch.setSelection(mETSearch.getText().length());
+        searchProceed();
+    }
+    //endregion public methods
 
-
-    public void searchListener() {
+    //region private methods
+    private void searchListener() {
         mETSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -274,16 +285,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 return false;
             }
         });
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
     }
 
     private void initializeSearchViews() {
@@ -332,7 +333,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         viewPager.setAdapter(mSearchFragmentAdapter);
     }
 
-
     private void setupTabLayout() {
         mSearchTabsLayout.setupWithViewPager(mSearchTabsPager);
         for (int i = 0; i < mSearchTabsLayout.getTabCount(); i++) {
@@ -340,6 +340,85 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             tab.setCustomView(mSearchFragmentAdapter.getTabView(i));
         }
         mSearchFragmentAdapter.setTabLabelColor();
+    }
+
+    private void searchInitState() {
+        mETSearch.setCursorVisible(false);
+        mETSearch.setText("");
+        searchImg.setVisibility(View.VISIBLE);
+        backImg.setVisibility(View.GONE);
+        closeImg.setVisibility(View.GONE);
+
+        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+    }
+
+    private void searchingState() {
+        mETSearch.setCursorVisible(false);
+        mSearchStarted = true;
+        searchImg.setVisibility(View.INVISIBLE);
+        backImg.setVisibility(View.VISIBLE);
+        closeImg.setVisibility(View.VISIBLE);
+        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+    }
+
+    private String getSearchCategory(Fragment fragment) {
+        if (fragment instanceof FeedFragment) {
+            mSearchCategory = SearchEnum.TOP.toString();
+        } else if (fragment instanceof CommunitiesListFragment) {
+            mSearchCategory = SearchEnum.COMMUNITIES.toString();
+        } else if (fragment instanceof HashTagFragment) {
+            mSearchCategory = SearchEnum.HASHTAGS.toString();
+        } else if (fragment instanceof ArticlesFragment) {
+            mSearchCategory = SearchEnum.ARTICLES.toString();
+        }
+        return mSearchCategory;
+    }
+
+    private void fireQuerySearchEvent() {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(mETSearch.getText().toString())
+                        .tabTitle(searchTabName)
+                        .build();
+
+        AnalyticsManager.trackEvent(Event.QUERY_SEARCHED, getScreenName(), properties);
+
+    }
+
+    private void fireSearchOpenEvent() {
+
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(mETSearch.getText().toString())
+                        .tabTitle(searchTabName)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+    }
+
+
+    private String getTabName(int index) {
+        return mSearchTabsLayout.getTabAt(index).getText().toString();
+    }
+    //endregion private methods
+
+    //region inherited methods
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     @Override
@@ -402,8 +481,15 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+    //endregion inherited methods
+
+    //region click methods
     @OnClick(R.id.iv_search_icon)
-    public void searchProceed() {
+    private void searchProceed() {
         if (mETSearch.getText().toString().trim().length() > 0) {
             searchingState();
             CommonUtil.hideKeyboard(getActivity());
@@ -427,7 +513,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     }
 
     @OnClick(R.id.iv_search_close)
-    public void resetSearch() {
+    private void resetSearch() {
         CommonUtil.hideKeyboard(getActivity());
         searchInitState();
         int index = mSearchTabsPager.getCurrentItem();
@@ -450,52 +536,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     public void onBackClick() {
         resetSearch();
     }
+    //endregion click methods
 
-    private void searchInitState() {
-        mETSearch.setCursorVisible(false);
-        mETSearch.setText("");
-        searchImg.setVisibility(View.VISIBLE);
-        backImg.setVisibility(View.GONE);
-        closeImg.setVisibility(View.GONE);
-
-        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-    }
-
-    private void searchingState() {
-        mETSearch.setCursorVisible(false);
-        mSearchStarted = true;
-        searchImg.setVisibility(View.INVISIBLE);
-        backImg.setVisibility(View.VISIBLE);
-        closeImg.setVisibility(View.VISIBLE);
-        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-    }
-
-
-    public String getSearchCategory(Fragment fragment) {
-        if (fragment instanceof FeedFragment) {
-            mSearchCategory = SearchEnum.TOP.toString();
-        } else if (fragment instanceof CommunitiesListFragment) {
-            mSearchCategory = SearchEnum.COMMUNITIES.toString();
-        } else if (fragment instanceof HashTagFragment) {
-            mSearchCategory = SearchEnum.HASHTAGS.toString();
-        } else if (fragment instanceof ArticlesFragment) {
-            mSearchCategory = SearchEnum.ARTICLES.toString();
-        }
-        return mSearchCategory;
-    }
-
-    public void onHashTagClicked(String query) {
-        mETSearch.setText(query);
-        mETSearch.setSelection(mETSearch.getText().length());
-        searchProceed();
-    }
-
-    @Override
-    public void showEmptyScreen(String s) {
-
-    }
-
-
+    //region inner class
     public class SearchPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mSearchFragments = new ArrayList<>();
         private final List<String> mSearchFragmentTitles = new ArrayList<>();
@@ -555,42 +598,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         }
     }
+    //endregion inner class
 
-    private void fireQuerySearchEvent(){
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(mETSearch.getText().toString())
-                        .tabTitle(searchTabName)
-                        .build();
-
-        AnalyticsManager.trackEvent(Event.QUERY_SEARCHED, getScreenName(), properties);
-
-    }
-
-    private void fireSearchOpenEvent(){
-
-
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(mETSearch.getText().toString())
-                        .tabTitle(searchTabName)
-                        .build();
-
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
-    }
-
-
-    private String getTabName(int index){
-            return mSearchTabsLayout.getTabAt(index).getText().toString();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
-    }
 }
 
 

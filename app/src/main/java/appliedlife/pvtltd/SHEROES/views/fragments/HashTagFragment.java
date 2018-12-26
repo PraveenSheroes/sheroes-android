@@ -59,39 +59,42 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class HashTagFragment extends BaseFragment implements ISearchView, BaseHolderInterface, IHashTagCallBack {
+    //region inject variables
     @Inject
     SearchPresenter mSearchPresenter;
+    //endregion inject variables
 
-    View view;
+    //region view variables
     @Bind(R.id.rv_hashtags)
     RecyclerView hashTagsView;
-    private HashTagsAdapter hashTagsAdapter;
-    private List<FeedDetail> hashTagDetails;
-    private List<String> hashTagsList;
-    private FeedAdapter feedAdapter;
     @Bind(R.id.ll_loader)
     LinearLayout loaderLayout;
     @Bind(R.id.fl_container)
     FrameLayout containerLayout;
     @Bind(R.id.no_internet)
     CardView noInternet;
+    //endregion view variables
+
+    //region member variables
+    private HashTagsAdapter mHashTagsAdapter;
     private boolean mIsSearchProcessing = false;
+    //endregion member variables
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        view = inflater.inflate(R.layout.fragment_hashtag, container, false);
+        View view = inflater.inflate(R.layout.fragment_hashtag, container, false);
         ButterKnife.bind(this, view);
         mSearchPresenter.attachView(this);
 
-        hashTagsList = new ArrayList<>();
+        List<String> hashTagsList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         hashTagsView.setLayoutManager(linearLayoutManager);
 
-        hashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
-        hashTagsView.setAdapter(hashTagsAdapter);
+        mHashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
+        hashTagsView.setAdapter(mHashTagsAdapter);
 
         callHashTagApi();
 
@@ -223,7 +226,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     public void onHashTagsResponse(List<String> hashtagList) {
         if (!mIsSearchProcessing) {
             noInternet.setVisibility(View.GONE);
-            hashTagsAdapter.refreshList(hashtagList);
+            mHashTagsAdapter.refreshList(hashtagList);
             containerLayout.setVisibility(View.GONE);
             loaderLayout.setVisibility(View.GONE);
             hashTagsView.setVisibility(View.VISIBLE);
