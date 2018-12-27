@@ -129,6 +129,7 @@ public class AnalyticsManager {
                 properties.put(EventProperty.TAB_TITLE.getString(), SearchFragment.searchTabName);
                 properties.put(EventProperty.TAB_KEY.getString(), null);
             }
+            properties.put(EventProperty.SEARCH_QUERY.getString(), SearchFragment.searchText);
         }
 
         String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);

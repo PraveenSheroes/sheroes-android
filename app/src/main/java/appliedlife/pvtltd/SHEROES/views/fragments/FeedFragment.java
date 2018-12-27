@@ -939,7 +939,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .sourceScreenId(sourceScreenId)
                         .build();
             }
-        } else {
+        }
+        else {
             if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
                 mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
             }
@@ -1474,19 +1475,23 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
-        if(!isFilter) {
-            AppConstants.PREVIOUS_SCREEN = mScreenLabel;
-        }else {
-            AppConstants.PREVIOUS_SCREEN = "Search Screen" ;
+//        if(!isFilter) {
+//            AppConstants.PREVIOUS_SCREEN = mScreenLabel;
+//        }else {
+//            AppConstants.PREVIOUS_SCREEN = "Search Screen" ;
+//        }
+
+        if (getParentFragment() instanceof HomeFragment) {
+            AppConstants.PREVIOUS_SCREEN = ((HomeFragment) getParentFragment()).getActiveTabName();
         }
 
         if (impressionHelper != null) { //app exit cases and back-stack of activity
             impressionHelper.stopImpression();
         }
 
-//        if (isActiveTabFragment) {
-//            AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
-//        }
+        if (isActiveTabFragment) {
+            AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+        }
     }
 
     @Override
@@ -1650,6 +1655,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (mCommunityFeedObj.isMember()) {
             mCommunityFeedObj.setMember(false);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+            mCommunityFeedObj.setSearchText(SearchFragment.searchText);
             AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -1658,6 +1664,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else {
             mCommunityFeedObj.setMember(true);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+            mCommunityFeedObj.setSearchText(SearchFragment.searchText);
             AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -2256,5 +2263,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
     //endregion
 
+    public void trackScreenEvent(String searchQuery){
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(searchQuery)
+                        .tabTitle(SearchFragment.searchTabName)
+                        .build();
+
+        AnalyticsManager.trackScreenView("Top Screen", properties);
+    }
 
 }

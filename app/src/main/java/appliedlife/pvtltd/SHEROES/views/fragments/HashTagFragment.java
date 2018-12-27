@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -22,6 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
+import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -59,41 +62,47 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class HashTagFragment extends BaseFragment implements ISearchView, BaseHolderInterface, IHashTagCallBack {
+    public static final String SCREEN_LABEL = "Hashtag Screen";
+
+    //region inject variables
     @Inject
     SearchPresenter mSearchPresenter;
+    //endregion inject variables
 
-    View view;
+    //region view variables
     @Bind(R.id.rv_hashtags)
     RecyclerView hashTagsView;
-    private HashTagsAdapter hashTagsAdapter;
-    private List<FeedDetail> hashTagDetails;
-    private List<String> hashTagsList;
-    private FeedAdapter feedAdapter;
     @Bind(R.id.ll_loader)
     LinearLayout loaderLayout;
     @Bind(R.id.fl_container)
     FrameLayout containerLayout;
     @Bind(R.id.no_internet)
     CardView noInternet;
+    //endregion view variables
+
+    //region member variablesS
+    private HashTagsAdapter mHashTagsAdapter;
     private boolean mIsSearchProcessing = false;
     private boolean mIsSearch = false;
     private String mSearchText;
+    //endregion member variables
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        view = inflater.inflate(R.layout.fragment_hashtag, container, false);
+        View view = inflater.inflate(R.layout.fragment_hashtag, container, false);
         ButterKnife.bind(this, view);
         mSearchPresenter.attachView(this);
 
-        hashTagsList = new ArrayList<>();
+        List<String> hashTagsList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         hashTagsView.setLayoutManager(linearLayoutManager);
 
-        hashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
-        hashTagsView.setAdapter(hashTagsAdapter);
+        mHashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
+        hashTagsView.setAdapter(mHashTagsAdapter);
 
         if (mIsSearch) {
             filterFeed(mSearchText);
@@ -234,7 +243,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     public void onHashTagsResponse(List<String> hashtagList) {
         if (!mIsSearchProcessing) {
             noInternet.setVisibility(View.GONE);
-            hashTagsAdapter.refreshList(hashtagList);
+            mHashTagsAdapter.refreshList(hashtagList);
             containerLayout.setVisibility(View.GONE);
             loaderLayout.setVisibility(View.GONE);
             hashTagsView.setVisibility(View.VISIBLE);
@@ -260,5 +269,16 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         } else {
             super.showError(errorMsg, feedParticipationEnum);
         }
+    }
+
+    public void trackScreenEvent(String searchQuery){
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(searchQuery)
+                        .tabTitle(SearchFragment.searchTabName)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
     }
 }

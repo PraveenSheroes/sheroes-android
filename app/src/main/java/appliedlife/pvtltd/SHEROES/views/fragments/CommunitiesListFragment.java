@@ -232,7 +232,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
 
-        trackScreenEvent();
+//        trackScreenEvent();
 
         return view;
     }
@@ -395,6 +395,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         if (mCommunityFeedObj.isMember()) {
             mCommunityFeedObj.setMember(false);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+            mCommunityFeedObj.setSearchText(SearchFragment.searchText);
             AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -403,6 +404,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         } else {
             mCommunityFeedObj.setMember(true);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+            mCommunityFeedObj.setSearchText(SearchFragment.searchText);
             AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -628,10 +630,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
     //endregion
 
-    private void trackScreenEvent(){
+    public void trackScreenEvent(String searchQuery){
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(searchQuery)
+                        .tabTitle(SearchFragment.searchTabName)
                         .build();
 
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);

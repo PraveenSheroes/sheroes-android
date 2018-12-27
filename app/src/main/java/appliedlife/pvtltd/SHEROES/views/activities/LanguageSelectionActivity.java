@@ -108,7 +108,6 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
         }
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(SheroesApplication.mContext);
         appInstallationHelper.setupAndSaveInstallation(false);
-        AnalyticsManager.trackScreenView(SCREEN_LABEL);
     }
 
     private void checkAuthTokenExpireOrNot() {

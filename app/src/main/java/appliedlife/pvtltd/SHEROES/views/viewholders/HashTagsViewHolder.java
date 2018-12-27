@@ -14,29 +14,39 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class HashTagsViewHolder extends RecyclerView.ViewHolder{
+    //region view variables
     @Bind(R.id.tv_hashtag)TextView hashTagTxt;
     @Bind(R.id.ll_hashtag)LinearLayout hashTagLayout;
-    private List<String> hashTagsList;
-    private IHashTagCallBack iHashTagCallBack;
+    //endregion view variables
 
+    //region member variables
+    private List<String> mHashTagsList;
+    private IHashTagCallBack mIHashTagCallBack;
+    //endregion member variables
+
+    //region constructor
     public HashTagsViewHolder(View itemView, IHashTagCallBack iHashTagCallBack, List<String> hashTagsList) {
         super(itemView);
-        this.iHashTagCallBack = iHashTagCallBack;
-        this.hashTagsList = hashTagsList;
+        this.mIHashTagCallBack = iHashTagCallBack;
+        this.mHashTagsList = hashTagsList;
 
         ButterKnife.bind(this, itemView);
 
     }
+    //endregion constructor
 
+    //region click methods
     @OnClick(R.id.ll_hashtag)
     public void onHashTagClick() {
         if (getAdapterPosition() != RecyclerView.NO_POSITION) {
-            String query = hashTagsList.get(getAdapterPosition() - 1).startsWith("#")
-                    ? hashTagsList.get(getAdapterPosition() - 1).substring(1) : hashTagsList.get(getAdapterPosition() - 1);
-            iHashTagCallBack.onHashTagClicked(query);
+            String query = mHashTagsList.get(getAdapterPosition() - 1).startsWith("#")
+                    ? mHashTagsList.get(getAdapterPosition() - 1).substring(1) : mHashTagsList.get(getAdapterPosition() - 1);
+            mIHashTagCallBack.onHashTagClicked(query);
         }
     }
+    //endregion click methods
 
+    //region public methods
     public TextView getHashTagTxt() {
         return hashTagTxt;
     }
@@ -52,4 +62,5 @@ public class HashTagsViewHolder extends RecyclerView.ViewHolder{
     public void setHashTagLayout(LinearLayout hashTagLayout) {
         this.hashTagLayout = hashTagLayout;
     }
+    //endregion public methods
 }

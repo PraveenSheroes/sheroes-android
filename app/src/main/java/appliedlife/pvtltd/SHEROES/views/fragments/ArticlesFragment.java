@@ -2,6 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.annotation.Nullable;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.cardview.widget.CardView;
@@ -98,11 +99,14 @@ public class ArticlesFragment extends BaseFragment {
     @Bind(R.id.rl_empty)
     RelativeLayout emptyLayout;
 
-    @Bind(R.id.tv_no_results_title)TextView noResultsTitleTxt;
+    @Bind(R.id.tv_no_results_title)
+    TextView noResultsTitleTxt;
 
-    @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
+    @Bind(R.id.tv_no_results_subtitle)
+    TextView noResultsSubTitleTxt;
 
-    @Bind(R.id.iv_image)ImageView noResultsImage;
+    @Bind(R.id.iv_image)
+    ImageView noResultsImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -158,11 +162,11 @@ public class ArticlesFragment extends BaseFragment {
             ((HomeActivity) getActivity()).articleUi();
         }
 
-        if(HomeActivity.isSearchClicked){
-            trackScreenEvent();
-        }
+//        if(HomeActivity.isSearchClicked){
+//            trackScreenEvent();
+//        }
 
-            return view;
+        return view;
     }
 
     public void categoryArticleFilter(final List<Long> categoryIds) {
@@ -200,7 +204,7 @@ public class ArticlesFragment extends BaseFragment {
         mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, true);
     }
 
-    public void setFilterParams(boolean isSearch, String searchText, String searchCategory){
+    public void setFilterParams(boolean isSearch, String searchText, String searchCategory) {
         this.mIsSearch = isSearch;
         this.mSearchText = searchText;
         this.mSearchCategory = searchCategory;
@@ -364,7 +368,7 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public void showEmptyScreen(String s) {
         loaderGif.setVisibility(View.GONE);
-        if(mIsSearch){
+        if (mIsSearch) {
             emptyLayout.setVisibility(View.VISIBLE);
             noResultsSubTitleTxt.setText(s);
             noResultsTitleTxt.setText(getString(R.string.empty_articles));
@@ -400,16 +404,18 @@ public class ArticlesFragment extends BaseFragment {
 
     @Override
     public boolean shouldTrackScreen() {
-        if(HomeActivity.isSearchClicked)
-        return false;
+        if (HomeActivity.isSearchClicked)
+            return false;
         else
             return true;
     }
 
-    private void trackScreenEvent(){
+    public void trackScreenEvent(String searchQuery) {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
                         .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(searchQuery)
+                        .tabTitle(SearchFragment.searchTabName)
                         .build();
 
         AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);

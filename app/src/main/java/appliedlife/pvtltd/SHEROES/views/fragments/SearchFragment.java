@@ -63,57 +63,55 @@ import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class SearchFragment extends BaseFragment implements BaseHolderInterface {
+    //region static variables
     public static final String SCREEN_LABEL = "Search Screen";
+    public static String searchTabName = "Top";
+    //endregion static variables
 
+    //region inject variables
     @Inject
     SearchPresenter mSearchPresenter;
-
     @Inject
     Preference<AppConfiguration> mConfiguration;
+    //endregion
 
+    //region View variables
     @Bind(R.id.vp_search_tabs)
     ViewPager mSearchTabsPager;
     @Bind(R.id.tabLayout)
     TabLayout mSearchTabsLayout;
     @Bind(R.id.et_search)
     EditText mETSearch;
-    private SearchPagerAdapter mSearchFragmentAdapter;
-    private List<Fragment> mSearchTabFragments = new ArrayList<>();
-    private List<String> mSearchTabs = new ArrayList<>();
-    private String mSearchCategory;
-    private String mSearchBarText;
-    private String mSearchText;
-    private String mNextToken;
-    private int[] tabIcons = {
-            R.drawable.search_tab_top,
-            R.drawable.search_tab_communities,
-            R.drawable.search_tab_hashtag,
-            R.drawable.search_tab_articles
-    };
-    private HashTagFragment hashTagFragment;
-    private CommunitiesListFragment communitiesListFragment;
-    private FeedFragment feedFragment;
-    private ArticlesFragment articlesFragment;
     @Bind(R.id.iv_search_close)
     ImageView closeImg;
     @Bind(R.id.iv_back)
     ImageView backImg;
     @Bind(R.id.iv_search_icon)
     ImageView searchImg;
-    private boolean searchStarted = false;
-    private String previousScreen;
-    public static String searchTabName = "Top";
+    //endregion
 
-    public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
-        SearchFragment searchFragment = new SearchFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(AppConstants.SEARCH_TEXT, searchText);
-        bundle.putString(AppConstants.SEARCH_CATEGORY, searchCategory);
-        bundle.putString(AppConstants.NEXT_TOKEN, nextToken);
-        searchFragment.setArguments(bundle);
-        return searchFragment;
-    }
+    //region member variables
+    private SearchPagerAdapter mSearchFragmentAdapter;
+    private List<Fragment> mSearchTabFragments = new ArrayList<>();
+    private List<String> mSearchTabs = new ArrayList<>();
+    private String mSearchCategory;
+    private String mSearchBarText;
+    private String mSearchText;
+    private int[] mTabIcons = {
+            R.drawable.search_tab_top,
+            R.drawable.search_tab_communities,
+            R.drawable.search_tab_hashtag,
+            R.drawable.search_tab_articles
+    };
+    private HashTagFragment mHashTagFragment;
+    private CommunitiesListFragment mCommunitiesListFragment;
+    private FeedFragment mFeedFragment;
+    private ArticlesFragment mArticlesFragment;
+    private boolean mSearchStarted = false;
+    public static String searchText = null;
+    //endregion
 
+    //region fragment lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -121,14 +119,12 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         ButterKnife.bind(this, view);
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        previousScreen = getActivity().getIntent().getExtras().getString(BaseActivity.SOURCE_SCREEN);
 
         initializeSearchViews();
         searchListener();
         mSearchTabsPager.setOffscreenPageLimit(3);
         mSearchText = getArguments().getString(AppConstants.SEARCH_TEXT);
         mSearchCategory = getArguments().getString(AppConstants.SEARCH_CATEGORY);
-        mNextToken = getArguments().getString(AppConstants.NEXT_TOKEN);
 
         mETSearch.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -165,13 +161,13 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().length() == 0) {
-                    if (searchStarted) {
-                        hashTagFragment.callHashTagApi();
-                        communitiesListFragment.callCommunityApi();
-                        feedFragment.paramsToFilterFeed(false, "", "");
-                        feedFragment.callFeedApi();
-                        articlesFragment.setFilterParams(false, "", "");
-                        articlesFragment.categoryArticleFilter(null);
+                    if (mSearchStarted) {
+                        mHashTagFragment.callHashTagApi();
+                        mCommunitiesListFragment.callCommunityApi();
+                        mFeedFragment.paramsToFilterFeed(false, "", "");
+                        mFeedFragment.callFeedApi();
+                        mArticlesFragment.setFilterParams(false, "", "");
+                        mArticlesFragment.categoryArticleFilter(null);
                     }
                 }
             }
@@ -196,43 +192,56 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onPageSelected(int position) {
                 mSearchFragmentAdapter.setTabLabelColor();
                 searchTabName = getTabName(position);
-                if (searchStarted) {
-                    String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
-                    switch (position) {
-                        case 0:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                feedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
-                            } else {
-                                feedFragment.paramsToFilterFeed(false, searchText, SearchEnum.TOP.toString());
-                                feedFragment.callFeedApi();
-                            }
-                            break;
-                        case 1:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                communitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
-                            } else {
-                                communitiesListFragment.callCommunityApi();
-                            }
-                            break;
-                        case 2:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                hashTagFragment.filterFeed(searchText);
-                            } else {
-                                hashTagFragment.callHashTagApi();
-                            }
-                            break;
-                        case 3:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                articlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
-                            } else {
-                                articlesFragment.setFilterParams(false, "", "");
-                                articlesFragment.categoryArticleFilter(null);
-                            }
-                            break;
-                    }
+                if (mETSearch.getText().toString().trim().length() > 0) {
+                    searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
                 }
-                fireSearchOpenEvent();
+                switch (position) {
+                    case 0:
+                        if (mSearchStarted) {
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
+                            } else {
+                                mFeedFragment.paramsToFilterFeed(false, searchText, SearchEnum.TOP.toString());
+                                mFeedFragment.callFeedApi();
+                            }
+                        }
+                        mFeedFragment.trackScreenEvent(searchText);
+                        break;
+                    case 1:
+                        if (mSearchStarted) {
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mCommunitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
+                            } else {
+                                mCommunitiesListFragment.callCommunityApi();
+                            }
+                        }
+                        mCommunitiesListFragment.trackScreenEvent(searchText);
+                        break;
+                    case 2:
+                        if (mSearchStarted) {
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mHashTagFragment.filterFeed(searchText);
+                            } else {
+                                mHashTagFragment.callHashTagApi();
+                            }
+                        }
+                        mHashTagFragment.trackScreenEvent(searchText);
+                        break;
+                    case 3:
+                        if (mSearchStarted) {
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mArticlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
+                            } else {
+                                mArticlesFragment.setFilterParams(false, "", "");
+                                mArticlesFragment.categoryArticleFilter(null);
+                            }
+                        }
+                        mArticlesFragment.trackScreenEvent(searchText);
+                        break;
+                }
+//                fireSearchOpenEvent();
             }
+
             @Override
             public void onPageScrollStateChanged(int state) {
 
@@ -242,18 +251,38 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         deeplinkRedirection();
 
         fireSearchOpenEvent();
+        mFeedFragment.trackScreenEvent(searchText);
 
         return view;
     }
 
     @Override
-    public boolean shouldTrackScreen() {
-        return false;
+    public void onPause() {
+        super.onPause();
+        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
+    }
+    //endregion activity lifecycle methods
+
+    //region public methods
+    public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
+        SearchFragment searchFragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(AppConstants.SEARCH_TEXT, searchText);
+        bundle.putString(AppConstants.SEARCH_CATEGORY, searchCategory);
+        bundle.putString(AppConstants.NEXT_TOKEN, nextToken);
+        searchFragment.setArguments(bundle);
+        return searchFragment;
     }
 
+    public void onHashTagClicked(String query) {
+        mETSearch.setText(query);
+        mETSearch.setSelection(mETSearch.getText().length());
+        searchProceed();
+    }
+    //endregion public methods
 
-
-    public void searchListener() {
+    //region private methods
+    private void searchListener() {
         mETSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -264,16 +293,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 return false;
             }
         });
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
-    }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
     }
 
     private void initializeSearchViews() {
@@ -289,34 +308,34 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         mSearchFragmentAdapter = new SearchPagerAdapter(getChildFragmentManager());
         for (String name : mSearchTabs) {
             if (name.equalsIgnoreCase(getString(R.string.top))) {
-                if (feedFragment == null) {
-                    feedFragment = new FeedFragment();
+                if (mFeedFragment == null) {
+                    mFeedFragment = new FeedFragment();
                 }
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
-                bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
-                feedFragment.setArguments(bundle);
-                mSearchFragmentAdapter.addFragment(feedFragment, getString(R.string.top));
-                mSearchTabFragments.add(feedFragment);
+                bundle.putString(AppConstants.SCREEN_NAME, getScreenName());
+                mFeedFragment.setArguments(bundle);
+                mSearchFragmentAdapter.addFragment(mFeedFragment, getString(R.string.top));
+                mSearchTabFragments.add(mFeedFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.community))) {
-                if (communitiesListFragment == null) {
-                    communitiesListFragment = new CommunitiesListFragment();
+                if (mCommunitiesListFragment == null) {
+                    mCommunitiesListFragment = new CommunitiesListFragment();
                 }
-                mSearchFragmentAdapter.addFragment(communitiesListFragment, getString(R.string.community));
-                mSearchTabFragments.add(communitiesListFragment);
+                mSearchFragmentAdapter.addFragment(mCommunitiesListFragment, getString(R.string.community));
+                mSearchTabFragments.add(mCommunitiesListFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.hash_tag))) {
-                if (hashTagFragment == null) {
-                    hashTagFragment = new HashTagFragment();
+                if (mHashTagFragment == null) {
+                    mHashTagFragment = new HashTagFragment();
                 }
-                mSearchFragmentAdapter.addFragment(hashTagFragment, getString(R.string.hash_tag));
-                mSearchTabFragments.add(hashTagFragment);
+                mSearchFragmentAdapter.addFragment(mHashTagFragment, getString(R.string.hash_tag));
+                mSearchTabFragments.add(mHashTagFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.article))) {
-                if (articlesFragment == null) {
-                    articlesFragment = new ArticlesFragment();
+                if (mArticlesFragment == null) {
+                    mArticlesFragment = new ArticlesFragment();
                 }
-                mSearchFragmentAdapter.addFragment(articlesFragment, getString(R.string.article));
-                mSearchTabFragments.add(articlesFragment);
+                mSearchFragmentAdapter.addFragment(mArticlesFragment, getString(R.string.article));
+                mSearchTabFragments.add(mArticlesFragment);
             }
         }
         viewPager.setAdapter(mSearchFragmentAdapter);
@@ -344,7 +363,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             Fragment fragment = adapter.getFragment(index);
             mSearchCategory = getSearchCategory(fragment);
             if (fragment instanceof FeedFragment) {
-                feedFragment.paramsToFilterFeed(true, mSearchText, mSearchCategory);
+                ((FeedFragment) fragment).paramsToFilterFeed(true, mSearchText, mSearchCategory);
             } else if (fragment instanceof CommunitiesListFragment) {
                 ((CommunitiesListFragment) fragment).setSearchedDeeplinkParameters(false, mSearchText, mSearchCategory);
             } else if (fragment instanceof HashTagFragment) {
@@ -355,7 +374,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         }
     }
 
-
     private void setupTabLayout() {
         mSearchTabsLayout.setupWithViewPager(mSearchTabsPager);
         for (int i = 0; i < mSearchTabsLayout.getTabCount(); i++) {
@@ -363,6 +381,86 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             tab.setCustomView(mSearchFragmentAdapter.getTabView(i));
         }
         mSearchFragmentAdapter.setTabLabelColor();
+    }
+
+    private void searchInitState() {
+        searchText = "";
+        mETSearch.setCursorVisible(false);
+        mETSearch.setText("");
+        searchImg.setVisibility(View.VISIBLE);
+        backImg.setVisibility(View.GONE);
+        closeImg.setVisibility(View.GONE);
+
+        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+    }
+
+    private void searchingState() {
+        mETSearch.setCursorVisible(false);
+        mSearchStarted = true;
+        searchImg.setVisibility(View.INVISIBLE);
+        backImg.setVisibility(View.VISIBLE);
+        closeImg.setVisibility(View.VISIBLE);
+        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
+    }
+
+    private String getSearchCategory(Fragment fragment) {
+        if (fragment instanceof FeedFragment) {
+            mSearchCategory = SearchEnum.TOP.toString();
+        } else if (fragment instanceof CommunitiesListFragment) {
+            mSearchCategory = SearchEnum.COMMUNITIES.toString();
+        } else if (fragment instanceof HashTagFragment) {
+            mSearchCategory = SearchEnum.HASHTAGS.toString();
+        } else if (fragment instanceof ArticlesFragment) {
+            mSearchCategory = SearchEnum.ARTICLES.toString();
+        }
+        return mSearchCategory;
+    }
+
+    private void fireQuerySearchEvent() {
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(mETSearch.getText().toString())
+                        .tabTitle(searchTabName)
+                        .build();
+
+        AnalyticsManager.trackEvent(Event.QUERY_SEARCHED, getScreenName(), properties);
+
+    }
+
+    private void fireSearchOpenEvent() {
+
+
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .searchQuery(mETSearch.getText().toString())
+                        .tabTitle(searchTabName)
+                        .build();
+
+        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
+    }
+
+
+    private String getTabName(int index) {
+        return mSearchTabsLayout.getTabAt(index).getText().toString();
+    }
+    //endregion private methods
+
+    //region inherited methods
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
     }
 
     @Override
@@ -425,8 +523,17 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+    //endregion inherited methods
+
+    //region click methods
     @OnClick(R.id.iv_search_icon)
     public void searchProceed() {
+        searchText = mETSearch.getText().toString().trim();
+
         if (mETSearch.getText().toString().trim().length() > 0) {
             searchingState();
             CommonUtil.hideKeyboard(getActivity());
@@ -451,6 +558,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     @OnClick(R.id.iv_search_close)
     public void resetSearch() {
+        searchText = "";
         CommonUtil.hideKeyboard(getActivity());
         searchInitState();
         int index = mSearchTabsPager.getCurrentItem();
@@ -473,52 +581,9 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     public void onBackClick() {
         resetSearch();
     }
+    //endregion click methods
 
-    private void searchInitState() {
-        mETSearch.setCursorVisible(false);
-        mETSearch.setText("");
-        searchImg.setVisibility(View.VISIBLE);
-        backImg.setVisibility(View.GONE);
-        closeImg.setVisibility(View.GONE);
-
-        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-    }
-
-    private void searchingState() {
-        mETSearch.setCursorVisible(false);
-        searchStarted = true;
-        searchImg.setVisibility(View.INVISIBLE);
-        backImg.setVisibility(View.VISIBLE);
-        closeImg.setVisibility(View.VISIBLE);
-        ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-    }
-
-
-    public String getSearchCategory(Fragment fragment) {
-        if (fragment instanceof FeedFragment) {
-            mSearchCategory = SearchEnum.TOP.toString();
-        } else if (fragment instanceof CommunitiesListFragment) {
-            mSearchCategory = SearchEnum.COMMUNITIES.toString();
-        } else if (fragment instanceof HashTagFragment) {
-            mSearchCategory = SearchEnum.HASHTAGS.toString();
-        } else if (fragment instanceof ArticlesFragment) {
-            mSearchCategory = SearchEnum.ARTICLES.toString();
-        }
-        return mSearchCategory;
-    }
-
-    public void onHashTagClicked(String query) {
-        mETSearch.setText(query);
-        mETSearch.setSelection(mETSearch.getText().length());
-        searchProceed();
-    }
-
-    @Override
-    public void showEmptyScreen(String s) {
-
-    }
-
-
+    //region inner class
     public class SearchPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mSearchFragments = new ArrayList<>();
         private final List<String> mSearchFragmentTitles = new ArrayList<>();
@@ -559,7 +624,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             TextView tv = (TextView) v.findViewById(R.id.tv_tab_title);
             tv.setText(mSearchFragmentTitles.get(position));
             ImageView img = (ImageView) v.findViewById(R.id.iv_tab_image);
-            img.setImageResource(tabIcons[position]);
+            img.setImageResource(mTabIcons[position]);
             return v;
         }
 
@@ -578,42 +643,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         }
     }
+    //endregion inner class
 
-    private void fireQuerySearchEvent(){
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(mETSearch.getText().toString())
-                        .tabTitle(searchTabName)
-                        .build();
-
-        AnalyticsManager.trackEvent(Event.QUERY_SEARCHED, getScreenName(), properties);
-
-    }
-
-    private void fireSearchOpenEvent(){
-
-
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(mETSearch.getText().toString())
-                        .tabTitle(searchTabName)
-                        .build();
-
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
-    }
-
-
-    private String getTabName(int index){
-            return mSearchTabsLayout.getTabAt(index).getText().toString();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
-    }
 }
 
 
