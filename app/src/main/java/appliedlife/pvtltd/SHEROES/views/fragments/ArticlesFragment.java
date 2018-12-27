@@ -185,6 +185,12 @@ public class ArticlesFragment extends BaseFragment {
         }
     }
 
+    public void setSearchParamterFromDeeplink(boolean isSearch, String searchText, String searchCategory) {
+        mIsSearch = isSearch;
+        mSearchText = searchText;
+        mSearchCategory = searchCategory;
+    }
+
     public void fetchSearchedArticles(boolean isSearch, String searchText, String searchCategory) {
         loaderGif.setVisibility(View.VISIBLE);
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);

@@ -182,7 +182,11 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
 //        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
 
-        callCommunityApi();
+        if (showMyCommunities)
+            callCommunityApi();
+        else
+            filterCommunities(showMyCommunities, mSearchText, mSearchCategory);
+
         mEndlessRecyclerViewScrollListener = new EndlessNestedScrollViewListener(linearLayoutManager) {
 
             @Override
@@ -505,6 +509,12 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         mCommunitiesListPresenter.fetchAllCommunities();
+    }
+
+    public void setSearchedDeeplinkParameters(boolean showMyCommunities, String searchText, String searchCategory) {
+        this.showMyCommunities = showMyCommunities;
+        mSearchText = searchText;
+        mSearchCategory = searchCategory;
     }
 
     public void filterCommunities(boolean showMyCommunities, String searchText, String searchCategory) {

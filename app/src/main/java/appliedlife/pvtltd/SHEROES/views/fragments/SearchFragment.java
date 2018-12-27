@@ -239,13 +239,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         });
 
-        if(!CommonUtil.isNullOrEmpty(mSearchText)) {
-            int index = mSearchTabsPager.getCurrentItem();
-            SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
-            Fragment fragment = adapter.getFragment(index);
-            String searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
-            mSearchCategory = getSearchCategory(fragment);
-        }
+        deeplinkRedirection();
 
         fireSearchOpenEvent();
 
@@ -326,6 +320,39 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         }
         viewPager.setAdapter(mSearchFragmentAdapter);
+    }
+
+    private void deeplinkRedirection() {
+        if (StringUtil.isNotNullOrEmptyString(mSearchCategory)) {
+            if (mSearchCategory.equalsIgnoreCase(SearchEnum.ARTICLES.toString())) {
+                mSearchTabsPager.setCurrentItem(3);
+            } else if (mSearchCategory.equalsIgnoreCase(SearchEnum.HASHTAGS.toString())) {
+                mSearchTabsPager.setCurrentItem(2);
+            } else if (mSearchCategory.equalsIgnoreCase(SearchEnum.COMMUNITIES.toString())) {
+                mSearchTabsPager.setCurrentItem(1);
+            } else {
+                mSearchTabsPager.setCurrentItem(0);
+            }
+        }
+
+        if (!CommonUtil.isNullOrEmpty(mSearchText) && !CommonUtil.isNullOrEmpty(mSearchCategory)) {
+            searchingState();
+            mETSearch.setText(mSearchText);
+            CommonUtil.hideKeyboard(getActivity());
+            int index = mSearchTabsPager.getCurrentItem();
+            SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
+            Fragment fragment = adapter.getFragment(index);
+            mSearchCategory = getSearchCategory(fragment);
+            if (fragment instanceof FeedFragment) {
+                feedFragment.paramsToFilterFeed(true, mSearchText, mSearchCategory);
+            } else if (fragment instanceof CommunitiesListFragment) {
+                ((CommunitiesListFragment) fragment).setSearchedDeeplinkParameters(false, mSearchText, mSearchCategory);
+            } else if (fragment instanceof HashTagFragment) {
+                ((HashTagFragment) fragment).setSearchParamterFromDeeplink(true, mSearchText);
+            } else if (fragment instanceof ArticlesFragment) {
+                ((ArticlesFragment) fragment).setSearchParamterFromDeeplink(true, mSearchText, mSearchCategory);
+            }
+        }
     }
 
 
