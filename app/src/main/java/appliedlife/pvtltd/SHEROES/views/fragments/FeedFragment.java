@@ -327,6 +327,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     AnalyticsManager.trackScreenView(screenName, getExtraProperties());
                     AnalyticsManager.timeScreenView(mScreenLabel);
                 }
+            } else if(getParentFragment() instanceof SearchFragment){
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
                 AnalyticsManager.timeScreenView(mScreenLabel);
             }
@@ -1475,14 +1482,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
-//        if(!isFilter) {
-//            AppConstants.PREVIOUS_SCREEN = mScreenLabel;
-//        }else {
-//            AppConstants.PREVIOUS_SCREEN = "Search Screen" ;
-//        }
-
         if (getParentFragment() instanceof HomeFragment) {
-            AppConstants.PREVIOUS_SCREEN = ((HomeFragment) getParentFragment()).getActiveTabName();
+            AppConstants.PREVIOUS_SCREEN = getScreenName();
+            AppConstants.SOURCE_ACTIVE_TAB = ((HomeFragment) getParentFragment()).getActiveTabName();
         }
 
         if (impressionHelper != null) { //app exit cases and back-stack of activity

@@ -54,7 +54,9 @@ import appliedlife.pvtltd.SHEROES.presenters.SearchPresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -109,6 +111,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private ArticlesFragment mArticlesFragment;
     private boolean mSearchStarted = false;
     public static String searchText = null;
+    private boolean isActiveTabFragment;
+    private String mScreenLabel;
+    private String mUnSelectedFragment;
+
     //endregion
 
     //region fragment lifecycle methods
@@ -205,7 +211,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                                 mFeedFragment.callFeedApi();
                             }
                         }
-                        mFeedFragment.trackScreenEvent(searchText);
+//                        mFeedFragment.trackScreenEvent(searchText);
                         break;
                     case 1:
                         if (mSearchStarted) {
@@ -215,7 +221,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                                 mCommunitiesListFragment.callCommunityApi();
                             }
                         }
-                        mCommunitiesListFragment.trackScreenEvent(searchText);
+//                        mCommunitiesListFragment.trackScreenEvent(searchText);
                         break;
                     case 2:
                         if (mSearchStarted) {
@@ -225,7 +231,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                                 mHashTagFragment.callHashTagApi();
                             }
                         }
-                        mHashTagFragment.trackScreenEvent(searchText);
+//                        mHashTagFragment.trackScreenEvent(searchText);
                         break;
                     case 3:
                         if (mSearchStarted) {
@@ -236,7 +242,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                                 mArticlesFragment.categoryArticleFilter(null);
                             }
                         }
-                        mArticlesFragment.trackScreenEvent(searchText);
+//                        mArticlesFragment.trackScreenEvent(searchText);
                         break;
                 }
 //                fireSearchOpenEvent();
@@ -251,7 +257,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         deeplinkRedirection();
 
         fireSearchOpenEvent();
-        mFeedFragment.trackScreenEvent(searchText);
+//        mFeedFragment.trackScreenEvent(searchText);
 
         return view;
     }
@@ -278,6 +284,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         mETSearch.setText(query);
         mETSearch.setSelection(mETSearch.getText().length());
         searchProceed();
+    }
+
+    public String getInactiveTabFragmentName() {
+        return mUnSelectedFragment;
     }
     //endregion public methods
 
@@ -314,7 +324,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
-                bundle.putString(AppConstants.SCREEN_NAME, getScreenName());
+                bundle.putString(AppConstants.SCREEN_NAME, "Top Screen");
                 mFeedFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mFeedFragment, getString(R.string.top));
                 mSearchTabFragments.add(mFeedFragment);
@@ -322,18 +332,27 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 if (mCommunitiesListFragment == null) {
                     mCommunitiesListFragment = new CommunitiesListFragment();
                 }
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.SCREEN_NAME, "Communities Screen");
+                mCommunitiesListFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mCommunitiesListFragment, getString(R.string.community));
                 mSearchTabFragments.add(mCommunitiesListFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.hash_tag))) {
                 if (mHashTagFragment == null) {
                     mHashTagFragment = new HashTagFragment();
                 }
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.SCREEN_NAME, "Hashtags Screen");
+                mHashTagFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mHashTagFragment, getString(R.string.hash_tag));
                 mSearchTabFragments.add(mHashTagFragment);
             } else if (name.equalsIgnoreCase(getString(R.string.article))) {
                 if (mArticlesFragment == null) {
                     mArticlesFragment = new ArticlesFragment();
                 }
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.SCREEN_NAME, "Articles Listing Screen");
+                mArticlesFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mArticlesFragment, getString(R.string.article));
                 mSearchTabFragments.add(mArticlesFragment);
             }
@@ -381,6 +400,38 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             tab.setCustomView(mSearchFragmentAdapter.getTabView(i));
         }
         mSearchFragmentAdapter.setTabLabelColor();
+
+        mSearchTabsLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        mUnSelectedFragment = "Top Screen";
+                        break;
+                    case 1:
+                      mUnSelectedFragment = "Communities Screen";
+                        break;
+                    case 2:
+                        mUnSelectedFragment = "Hashtags Screen";
+                        break;
+                    case 3:
+                        mUnSelectedFragment = "Articles Listing Screen";
+                        break;
+
+                    default:
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     private void searchInitState() {
@@ -460,7 +511,11 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     @Override
     public String getScreenName() {
-        return SCREEN_LABEL;
+        if (CommonUtil.isNotEmpty(mScreenLabel)) {
+            return mScreenLabel;
+        } else {
+            return SCREEN_LABEL;
+        }
     }
 
     @Override

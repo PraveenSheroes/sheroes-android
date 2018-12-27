@@ -107,12 +107,20 @@ public class ArticlesFragment extends BaseFragment {
 
     @Bind(R.id.iv_image)
     ImageView noResultsImage;
+    private String mScreenLabel;
+    boolean isActiveTabFragment;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+
+        if(getArguments() != null){
+            mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
+
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -239,6 +247,32 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {  //When UI is visible to user
+
+            isActiveTabFragment = true;
+
+            if (getParentFragment() instanceof SearchFragment) {
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            }
+        } else { //When UI is not visible to user
+
+            //Capture the screen event of the tab got unselected
+            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+                AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+            }
+
+            isActiveTabFragment = false;
+        }
     }
 
     @Override

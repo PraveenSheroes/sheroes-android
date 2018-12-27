@@ -122,7 +122,11 @@ public class AnalyticsManager {
         }
 
         if(HomeActivity.isSearchClicked) {
-            if(screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
+            properties.put(EventProperty.SOURCE.getString(), AppConstants.PREVIOUS_SCREEN);
+
+            if(screenName.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)){
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), AppConstants.SOURCE_ACTIVE_TAB);
+            }else if(screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
                 properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
                 properties.put(EventProperty.SOURCE.getString(), AppConstants.PREVIOUS_SCREEN);
             }else if(screenName.equalsIgnoreCase(CommunityDetailActivity.SCREEN_LABEL)){

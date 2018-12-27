@@ -60,7 +60,9 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -144,6 +146,8 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Inject
     Preference<LoginResponse> userPreference;
     //endregion
+    private String mScreenLabel;
+    private boolean isActiveTabFragment;
 
     //region Fragment lifecycle method
     @Override
@@ -154,6 +158,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
 
         mCommunitiesListPresenter.attachView(this);
         fragmentOpen = new FragmentOpen();
+
+        if(getArguments() != null){
+            mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
 
         mMyCommunitiesAdapter = new MyCommunitiesAdapter(getContext(), this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
@@ -627,6 +635,32 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {  //When UI is visible to user
+
+            isActiveTabFragment = true;
+
+            if (getParentFragment() instanceof SearchFragment) {
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            }
+        } else { //When UI is not visible to user
+
+            //Capture the screen event of the tab got unselected
+            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+                AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+            }
+
+            isActiveTabFragment = false;
+        }
     }
     //endregion
 

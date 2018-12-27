@@ -85,6 +85,8 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     private boolean mIsSearchProcessing = false;
     private boolean mIsSearch = false;
     private String mSearchText;
+    boolean isActiveTabFragment;
+    String mScreenLabel;
     //endregion member variables
 
 
@@ -96,6 +98,10 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         mSearchPresenter.attachView(this);
 
         List<String> hashTagsList = new ArrayList<>();
+
+        if(getArguments() != null){
+            mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
@@ -184,6 +190,31 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {  //When UI is visible to user
+
+            isActiveTabFragment = true;
+
+            if (getParentFragment() instanceof SearchFragment) {
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            }
+        } else { //When UI is not visible to user
+
+            //Capture the screen event of the tab got unselected
+            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+                AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+            }
+
+            isActiveTabFragment = false;
+        }
+    }
 
     @Override
     public void onHashTagClicked(String query) {
@@ -208,7 +239,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, "");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
-        bundle.putString(AppConstants.SCREEN_NAME, TRENDING_FEED_SCREEN_LABEL);
+        bundle.putString(AppConstants.SCREEN_NAME, "Hashtag Screen");
         feedFragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getChildFragmentManager();
