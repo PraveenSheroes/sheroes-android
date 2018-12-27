@@ -83,7 +83,10 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     //region member variablesS
     private HashTagsAdapter mHashTagsAdapter;
     private boolean mIsSearchProcessing = false;
+    private boolean mIsSearch = false;
+    private String mSearchText;
     //endregion member variables
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -101,7 +104,11 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         mHashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
         hashTagsView.setAdapter(mHashTagsAdapter);
 
-        callHashTagApi();
+        if (mIsSearch) {
+            filterFeed(mSearchText);
+        } else {
+            callHashTagApi();
+        }
 
         return view;
 
@@ -184,6 +191,11 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         searchFragment.onHashTagClicked(query);
 
 //        filterFeed(query);
+    }
+
+    public void setSearchParamterFromDeeplink(boolean isSearch, String searchQuery) {
+       mIsSearch = isSearch;
+       mSearchText = searchQuery;
     }
 
     public void filterFeed(String query) {
