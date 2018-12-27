@@ -1276,7 +1276,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onUserPostClicked(FeedDetail feedDetail) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
         if(HomeActivity.isSearchClicked) {
-            screenProperties.put(EventProperty.SOURCE.toString(), "Search Screen");
+            screenProperties.put(EventProperty.SOURCE.toString(), SearchFragment.SCREEN_LABEL);
             screenProperties.put(EventProperty.SOURCE_TAB_TITLE.toString(), searchCategory);
         }
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(feedDetail.getItemPosition()));

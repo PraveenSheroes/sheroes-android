@@ -57,6 +57,7 @@ public class HomeFragment extends BaseFragment {
     private List<String> homeTabs = new ArrayList<>();
     private String mUnSelectedFragment;
     private FragmentOpen fragmentOpen;
+    private String previousScreen;
     //endregion
 
 
@@ -134,6 +135,9 @@ public class HomeFragment extends BaseFragment {
 
     // region Private methods
     private void initializeHomeViews() {
+        if(getArguments() != null){
+           previousScreen = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
         homeTabs.add(getString(R.string.my_feed));
         homeTabs.add(getString(R.string.ID_TRENDING));
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
@@ -343,5 +347,11 @@ public class HomeFragment extends BaseFragment {
             return FEED_SCREEN_LABEL;
         else
             return TRENDING_FEED_SCREEN_LABEL;
+    }
+
+    @Override
+    public void onPause() {
+        AppConstants.PREVIOUS_SCREEN = previousScreen;
+        super.onPause();
     }
 }
