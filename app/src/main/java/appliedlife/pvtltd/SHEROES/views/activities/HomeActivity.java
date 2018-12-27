@@ -94,6 +94,7 @@ import appliedlife.pvtltd.SHEROES.imageops.CropImage;
 import appliedlife.pvtltd.SHEROES.imageops.CropImageView;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.AppInstallation;
+import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.entities.comment.Comment;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -727,6 +728,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick(R.id.ll_search)
     public void searchOnClick() {
         isSearchClicked = true;
+        SearchFragment.searchTabName = "Top";
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
@@ -1577,28 +1579,22 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     private boolean shouldShowSnowFlake() {
-        boolean showSnowFlake = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW))) {
-            String snowFlakeFlag = "";
-            snowFlakeFlag = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SNOW).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(snowFlakeFlag)) {
-                if (snowFlakeFlag.equalsIgnoreCase("true")) {
-                    showSnowFlake = true;
-                }
-            }
+        boolean showSnowFlake;
+        if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+            showSnowFlake = mConfiguration.get().configData.mIsSnowFlake;
+        } else {
+            showSnowFlake = new ConfigData().mIsSnowFlake;
         }
         return showSnowFlake;
     }
 
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if (mUserPreferenceMasterData != null && mUserPreferenceMasterData.isSet() && mUserPreferenceMasterData.get().getData() != null && mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION) != null && !CommonUtil.isEmpty(mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION))) {
-            String shareText = "";
-            shareText = mUserPreferenceMasterData.get().getData().get(AppConstants.APP_CONFIGURATION).get(AppConstants.APP_SHARE_OPTION).get(0).getLabel();
-            if (CommonUtil.isNotEmpty(shareText)) {
-                if (shareText.equalsIgnoreCase("true")) {
-                    isWhatsappShare = true;
-                }
+        if(CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
+            if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
+                isWhatsappShare = mConfiguration.get().configData.mIsWhatsAppShareEnable;
+            } else {
+                isWhatsappShare = new ConfigData().mIsWhatsAppShareEnable;
             }
         }
         return isWhatsappShare;

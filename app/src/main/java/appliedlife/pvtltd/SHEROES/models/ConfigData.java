@@ -140,4 +140,10 @@ public class ConfigData {
 
     @SerializedName("isFbShareEnabled")
     public boolean isFbShareEnabled;
+
+    @SerializedName("isWhatsAppShareEnable")
+    public boolean mIsWhatsAppShareEnable=false;
+
+    @SerializedName("isSnowFlake")
+    public boolean mIsSnowFlake=false;
 }
