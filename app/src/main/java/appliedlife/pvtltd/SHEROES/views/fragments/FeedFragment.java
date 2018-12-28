@@ -1044,9 +1044,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     }
                 });
 
-                if(!isFilter){
+                if (!isFilter) {
                     mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
-                }else {
+                } else {
                     mFeedPresenter.getFeeds(FeedPresenter.LOAD_MORE_REQUEST, mStreamName, searchText, searchCategory);
                 }
             }

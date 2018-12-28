@@ -91,7 +91,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
-    private boolean showMyCommunities;
+    private boolean showMyCommunities = true;
     private EndlessNestedScrollViewListener mEndlessRecyclerViewScrollListener;
     String mSearchText, mSearchCategory;
     private FragmentOpen fragmentOpen;

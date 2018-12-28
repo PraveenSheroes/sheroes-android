@@ -344,7 +344,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         if (!CommonUtil.isNotEmpty(mNextToken)) {
                                             getMvpView().setFeedEnded(true);
                                         } else {
-                                            getMvpView().setFeedEnded(true);
+                                            getMvpView().setFeedEnded(false);
                                         }
                                         if (!CommonUtil.isEmpty(feedList)) {
                                             mFeedDetailList.addAll(feedList);
