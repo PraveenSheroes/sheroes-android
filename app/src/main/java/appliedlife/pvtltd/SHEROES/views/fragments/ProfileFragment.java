@@ -1419,7 +1419,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mUnFollowDialogFragment = new UnFollowDialogFragment();
         mUnFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mUnFollowDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mUnFollowDialogFragment.isVisible() && getActivity() != null || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1444,7 +1444,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mDeactivateProfileDialogFragment = new DeactivateProfileDialogFragment();
         mDeactivateProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mDeactivateProfileDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mDeactivateProfileDialogFragment.isVisible() && getActivity() != null|| !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(userSolrObj);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1466,7 +1466,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mReportUserProfileDialogFragment = new ReportUserProfileDialogFragment();
         mReportUserProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mReportUserProfileDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mReportUserProfileDialogFragment.isVisible() && getActivity() != null || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(userSolrObj);
             bundle.putParcelable(AppConstants.USER, parcelable);
