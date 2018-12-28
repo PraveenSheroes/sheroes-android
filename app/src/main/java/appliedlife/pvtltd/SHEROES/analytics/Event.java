@@ -125,7 +125,7 @@ public enum Event {
             return getAnalyticsProviderStatus(analyticsProvider);
         }
     },
-    HELPLINE_RATEUS_CARD_CLICKED(AnalyticsEventType.HELPLINE_RATEUS, "Clicked"){
+    HELPLINE_RATEUS_CARD_CLICKED(AnalyticsEventType.HELPLINE_RATEUS, "Clicked") {
         @Override
         public boolean trackEventToProvider(AnalyticsProvider analyticsProvider) {
             return getAnalyticsProviderStatus(analyticsProvider);
@@ -133,8 +133,7 @@ public enum Event {
     },
     //endregion
 
-
-    //region search related events
+    //region Search related events
     QUERY_SEARCHED(AnalyticsEventType.SEARCH, "Queried"),
     //endregion
 
@@ -263,7 +262,7 @@ public enum Event {
 
     Event(AnalyticsEventType eventType, String eventName) {
         this.type = eventType;
-        eventName = eventName.replaceAll(" ","_");
+        eventName = eventName.replaceAll(" ", "_");
         this.name = eventName;
     }
 

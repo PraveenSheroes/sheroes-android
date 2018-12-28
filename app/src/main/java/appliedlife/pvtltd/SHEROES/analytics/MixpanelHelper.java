@@ -91,7 +91,7 @@ public class MixpanelHelper {
 
             String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
             String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
-            String languageName= CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
             final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
@@ -268,7 +268,8 @@ public class MixpanelHelper {
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
         }
     }
-    public static void trackPollActionEvent(Event event, FeedDetail feedDetail, String screenName,long pollOptionId) {
+
+    public static void trackPollActionEvent(Event event, FeedDetail feedDetail, String screenName, long pollOptionId) {
         if (feedDetail == null) {
             return;
         }
@@ -294,6 +295,7 @@ public class MixpanelHelper {
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
         }
     }
+
     public static void trackCommentActionEvent(Event event, FeedDetail feedDetail, String screenName) {
         if (feedDetail == null) {
             return;
@@ -396,7 +398,7 @@ public class MixpanelHelper {
         }
     }
 
-    public static HashMap<String, Object>   getArticleOrStoryProperties(ArticleSolrObj articleSolrObj, String screenName) {
+    public static HashMap<String, Object> getArticleOrStoryProperties(ArticleSolrObj articleSolrObj, String screenName) {
         if (articleSolrObj == null) {
             return null;
         }
@@ -445,7 +447,7 @@ public class MixpanelHelper {
             properties.put(EventProperty.SOURCE.getString(), screenName);
             properties.put(EventProperty.SEARCH_QUERY.getString(), communityDetails.getSearchText());
 
-            if (HomeActivity.isSearchClicked){
+            if (HomeActivity.isSearchClicked) {
                 properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
             }
 

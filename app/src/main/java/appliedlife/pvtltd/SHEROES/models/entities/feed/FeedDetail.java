@@ -15,7 +15,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.home.AppIntroData;
  * Created by ujjwal on 26/11/17.
  */
 @Parcel(analyze = {FeedDetail.class, BaseResponse.class})
-public class FeedDetail extends BaseResponse implements Cloneable{
+public class FeedDetail extends BaseResponse implements Cloneable {
     public static final String FEED_DETAIL_OBJ = "FEED_DETAIL_OBJ";
     public static final String FEED_OBJ_ID = "FEED_OBJ_ID";
     public static final String FEED_COMMENTS = "FEED_COMMENTS";
@@ -210,9 +210,6 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     @SerializedName(value = "solr_ignore_stream_name")
     private String streamType;
-
-    @SerializedName(value = "solr_ignore_searchable_fields")
-    private List<String> searchableFields;
 
     //These fields are not from API response
     private int itemPosition;
@@ -818,13 +815,5 @@ public class FeedDetail extends BaseResponse implements Cloneable{
 
     public void setSharedFromExternalApp(boolean sharedFromExternalApp) {
         isSharedFromExternalApp = sharedFromExternalApp;
-    }
-
-    public List<String> getSearchableFields() {
-        return searchableFields;
-    }
-
-    public void setSearchableFields(List<String> searchableFields) {
-        this.searchableFields = searchableFields;
     }
 }
