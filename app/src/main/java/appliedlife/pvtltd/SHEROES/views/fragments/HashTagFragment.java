@@ -201,7 +201,12 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
                 String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
                 if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
                     //Send event of previous selected tab with duration, and start the time capture for current selected tab
-                    AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .tabTitle(SearchFragment.searchTabName)
+                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .build();
+                    AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);
                 }
             }
