@@ -230,7 +230,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-    public void getFeeds(final int feedState, final String streamName, String searchText, String searchCategory) {
+    public void fetchSearchedFeeds(final int feedState, final String streamName, String searchText, String searchCategory) {
         if (mIsFeedLoading) {
             return;
         }

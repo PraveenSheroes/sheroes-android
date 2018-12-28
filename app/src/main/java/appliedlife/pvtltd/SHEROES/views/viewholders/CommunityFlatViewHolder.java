@@ -2,9 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Handler;
-
 import android.text.Html;
-import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import androidx.core.content.ContextCompat;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -84,20 +83,9 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         }
 
-
-//        int imageHeight = (int) (((float) 1 / (float) 2) * CommonUtil.getWindowWidth(mContext));
-//        mFeatureImage.getLayoutParams().height = imageHeight;
-//        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
-//            String finalImageUri = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
-//            Glide.with(context)
-//                    .asBitmap()
-//                    .load(finalImageUri)
-//                    .into(mFeatureImage);
-//        }
-
-        if(mCommunityFeedObj.getIdOfEntityOrParticipant() == 273){
+        if (mCommunityFeedObj.getIdOfEntityOrParticipant() == 273) {
             mCommunityJoin.setVisibility(View.GONE);
-        }else{
+        } else {
             mCommunityJoin.setVisibility(View.VISIBLE);
         }
 
@@ -122,7 +110,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
-//endregion
+    //endregion
 
     //region onclick method
     @Override

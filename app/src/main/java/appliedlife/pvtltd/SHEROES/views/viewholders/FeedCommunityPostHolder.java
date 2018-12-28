@@ -4,23 +4,18 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
 import android.text.Html;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
-import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +38,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
@@ -1108,11 +1105,9 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
                 showUserMentionName(listDescription, mentionSpanList, false);
             } else {
                 setTextViewHTML(tvFeedCommunityPostText, listDescription);
-//                tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
             }
         } else {
             setTextViewHTML(tvFeedCommunityPostText, listDescription);
-//            tvFeedCommunityPostText.setText(hashTagColorInString(listDescription), TextView.BufferType.SPANNABLE);
         }
         linkifyURLs(tvFeedCommunityPostText);
     }
@@ -1255,7 +1250,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
             }
         } else {
             liFeedCommunityPostUserComments.setVisibility(View.GONE);
-//            tvFeedCommunityPostTotalReplies.setVisibility(View.GONE);
         }
 
     }

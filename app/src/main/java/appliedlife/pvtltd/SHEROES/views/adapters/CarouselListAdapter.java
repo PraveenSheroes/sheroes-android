@@ -1,8 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +8,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
@@ -28,22 +27,30 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.CommunityCompactViewHolder;
  * Created by ujjwal on 16/02/17.
  */
 public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    //region Constants
+    private static final int TYPE_COMMUNITY = 1;
+    private static final int TYPE_USER = 2;
+    private static final int TYPE_MENTOR = 5;
+    private static final int TYPE_USER_POST = 4;
+    //endregion Constants
 
+    //region member variables
     private final Context mContext;
     private List<FeedDetail> mFeedDetails;
     private BaseHolderInterface mBaseHolderInterface;
     private CarouselDataObj mCarouselDataObj;
-    private CarouselViewHolder carouselViewHolder;
-    private boolean isFilter;
+    private CarouselViewHolder mCarouselViewHolder;
+    private boolean mIsSearch;
+    //endregion member variables
 
     //region Constructor
-    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj, CarouselViewHolder carouselViewHolder, boolean isFilter) {
+    public CarouselListAdapter(Context context, BaseHolderInterface baseHolderInterface, CarouselDataObj carouselDataObj, CarouselViewHolder carouselViewHolder, boolean isSearch) {
         mContext = context;
         this.mFeedDetails = new ArrayList<>();
         this.mBaseHolderInterface = baseHolderInterface;
         this.mCarouselDataObj = carouselDataObj;
-        this.carouselViewHolder = carouselViewHolder;
-        this.isFilter = isFilter;
+        this.mCarouselViewHolder = carouselViewHolder;
+        this.mIsSearch = isSearch;
     }
     //endregion
 
@@ -52,12 +59,12 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType) {
             case TYPE_COMMUNITY:
-                if(isFilter) {
+                if (mIsSearch) {
                     View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_layout, parent, false);
-                    return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
-                }else{
+                    return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, mCarouselViewHolder);
+                } else {
                     View viewArticle = LayoutInflater.from(parent.getContext()).inflate(R.layout.community_compact_list_layout, parent, false);
-                    return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, carouselViewHolder);
+                    return new CommunityCompactViewHolder(viewArticle, mBaseHolderInterface, mCarouselViewHolder);
                 }
             case TYPE_USER:
                 View viewUser = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_user_compact_item, parent, false);
@@ -103,13 +110,7 @@ public class CarouselListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 break;
 
         }
-
     }
-
-    private static final int TYPE_COMMUNITY = 1;
-    private static final int TYPE_USER = 2;
-    private static final int TYPE_MENTOR = 5;
-    private static final int TYPE_USER_POST = 4;
 
     @Override
     public int getItemViewType(int position) {

@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.ArticleSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
@@ -62,7 +63,9 @@ import butterknife.OnClick;
 import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_FEED_SCREEN_LABEL;
 
 public class HashTagFragment extends BaseFragment implements ISearchView, BaseHolderInterface, IHashTagCallBack {
-    public static final String SCREEN_LABEL = "Hashtag Screen";
+    //region static variables
+    public static final String SCREEN_LABEL = "Hashtags Screen";
+    //endregion static variables
 
     //region inject variables
     @Inject
@@ -80,16 +83,17 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     CardView noInternet;
     //endregion view variables
 
-    //region member variablesS
+    //region member variables
     private HashTagsAdapter mHashTagsAdapter;
     private boolean mIsSearchProcessing = false;
     private boolean mIsSearch = false;
     private String mSearchText;
-    boolean isActiveTabFragment;
-    String mScreenLabel;
+    private boolean mIsActiveTabFragment;
+    private String mScreenLabel;
     //endregion member variables
 
 
+    //region lifecycle methods
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
@@ -119,7 +123,9 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         return view;
 
     }
+    //endregion lifecycle methods
 
+    //region inherited methods
     @Override
     protected SheroesPresenter getPresenter() {
         return null;
@@ -195,7 +201,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
 
-            isActiveTabFragment = true;
+            mIsActiveTabFragment = true;
 
             if (getParentFragment() instanceof SearchFragment) {
                 String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
@@ -213,11 +219,11 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         } else { //When UI is not visible to user
 
             //Capture the screen event of the tab got unselected
-            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+            if (mIsActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
 
-            isActiveTabFragment = false;
+            mIsActiveTabFragment = false;
         }
     }
 
@@ -225,10 +231,38 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     public void onHashTagClicked(String query) {
         SearchFragment searchFragment = (SearchFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.fl_article_card_view);
         searchFragment.onHashTagClicked(query);
-
-//        filterFeed(query);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
+    public void onHashTagsResponse(List<String> hashtagList) {
+        if (!mIsSearchProcessing) {
+            noInternet.setVisibility(View.GONE);
+            mHashTagsAdapter.refreshList(hashtagList);
+            containerLayout.setVisibility(View.GONE);
+            loaderLayout.setVisibility(View.GONE);
+            hashTagsView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
+        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
+            noInternet.setVisibility(View.VISIBLE);
+            hashTagsView.setVisibility(View.GONE);
+            containerLayout.setVisibility(View.GONE);
+            loaderLayout.setVisibility(View.GONE);
+        } else {
+            super.showError(errorMsg, feedParticipationEnum);
+        }
+    }
+    //endregion inherited methods
+
+    //region public methods
     public void setSearchParamterFromDeeplink(boolean isSearch, String searchQuery) {
        mIsSearch = isSearch;
        mSearchText = searchQuery;
@@ -244,7 +278,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.END_POINT_URL, "");
         bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
-        bundle.putString(AppConstants.SCREEN_NAME, "Hashtag Screen");
+        bundle.putString(AppConstants.SCREEN_NAME, SCREEN_LABEL);
         feedFragment.setArguments(bundle);
 
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -253,14 +287,20 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         feedFragment.setArguments(bundle);
         fragmentTransaction.replace(R.id.fl_container, feedFragment);
         fragmentTransaction.commit();
-        feedFragment.paramsToFilterFeed(true, query, "hashtags");
+        feedFragment.setSearchParams(true, query, SearchEnum.HASHTAGS.toString());
     }
 
-    @Override
-    public void showEmptyScreen(String s) {
-
+    public void callHashTagApi() {
+        mIsSearchProcessing = false;
+        noInternet.setVisibility(View.GONE);
+        hashTagsView.setVisibility(View.GONE);
+        loaderLayout.setVisibility(View.VISIBLE);
+        containerLayout.setVisibility(View.GONE);
+        mSearchPresenter.getTrendingHashtags();
     }
+    //endregion public methods
 
+    //region click methods
     @OnClick({R.id.tv_retry_for_internet})
     public void onRetryClick() {
         noInternet.setVisibility(View.GONE);
@@ -274,47 +314,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
     public void onSettingClick() {
         startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
     }
+    //endregion click methods
 
-    @Override
-    public void onHashTagsResponse(List<String> hashtagList) {
-        if (!mIsSearchProcessing) {
-            noInternet.setVisibility(View.GONE);
-            mHashTagsAdapter.refreshList(hashtagList);
-            containerLayout.setVisibility(View.GONE);
-            loaderLayout.setVisibility(View.GONE);
-            hashTagsView.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void callHashTagApi() {
-        mIsSearchProcessing = false;
-        noInternet.setVisibility(View.GONE);
-        hashTagsView.setVisibility(View.GONE);
-        loaderLayout.setVisibility(View.VISIBLE);
-        containerLayout.setVisibility(View.GONE);
-        mSearchPresenter.getTrendingHashtags();
-    }
-
-    @Override
-    public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
-        if (StringUtil.isNotNullOrEmptyString(errorMsg) && errorMsg.equalsIgnoreCase(AppConstants.CHECK_NETWORK_CONNECTION)) {
-            noInternet.setVisibility(View.VISIBLE);
-            hashTagsView.setVisibility(View.GONE);
-            containerLayout.setVisibility(View.GONE);
-            loaderLayout.setVisibility(View.GONE);
-        } else {
-            super.showError(errorMsg, feedParticipationEnum);
-        }
-    }
-
-    public void trackScreenEvent(String searchQuery){
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(searchQuery)
-                        .tabTitle(SearchFragment.searchTabName)
-                        .build();
-
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
-    }
 }

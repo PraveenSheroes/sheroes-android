@@ -1,11 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
+import javax.inject.Inject;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import javax.inject.Inject;
-
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -28,10 +27,10 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /*
-* This class is a ScrollListener for RecyclerView that allows to show/hide
-* views when list is scrolled. It assumes that you have added a header
-* to your list. @see pl.michalz.hideonscrollexample.adapter.partone.RecyclerAdapter
-* */
+ * This class is a ScrollListener for RecyclerView that allows to show/hide
+ * views when list is scrolled. It assumes that you have added a header
+ * to your list. @see pl.michalz.hideonscrollexample.adapter.partone.RecyclerAdapter
+ * */
 public abstract class HidingScrollListener extends RecyclerView.OnScrollListener {
     private final String TAG = LogUtils.makeLogTag(HidingScrollListener.class);
     private static final int HIDE_THRESHOLD = 20;
@@ -285,7 +284,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
 
                     case AppConstants.BELL_NOTIFICATION_LISTING:
-                        BellNotificationRequest bellNotificationRequest=mAppUtils.getBellNotificationRequest();
+                        BellNotificationRequest bellNotificationRequest = mAppUtils.getBellNotificationRequest();
                         bellNotificationRequest.setPageNo(mFragmentListRefreshData.getPageNo());
                         mHomePresenter.getBellNotificationFromPresenter(bellNotificationRequest);
                         break;

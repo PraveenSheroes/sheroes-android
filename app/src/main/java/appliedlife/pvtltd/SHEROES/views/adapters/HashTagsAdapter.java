@@ -45,17 +45,17 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             case TYPE_HEADER:
                 View headerView = inflater.inflate(R.layout.hashtag_header_layout, parent, false);
                 viewHolder = new HashTagsHeaderViewHolder(headerView);
-            break;
+                break;
 
             case TYPE_ITEM:
                 View itemView = inflater.inflate(R.layout.hashtag_row_element_layout, parent, false);
                 viewHolder = new HashTagsViewHolder(itemView, mIHashTagCallBack, mHashTagsList);
-            break;
+                break;
 
             default:
                 View view = inflater.inflate(R.layout.hashtag_row_element_layout, parent, false);
                 viewHolder = new HashTagsViewHolder(view, mIHashTagCallBack, mHashTagsList);
-            break;
+                break;
         }
         return viewHolder;
     }
@@ -82,7 +82,7 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        if(mHashTagsList.size() > 0) {
+        if (mHashTagsList.size() > 0) {
             if (position == 0) {
                 return TYPE_HEADER;
             } else {
@@ -99,7 +99,7 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     //endregion lifecycle methods
 
     //region public methods
-    public void refreshList(List<String> hashTagsList){
+    public void refreshList(List<String> hashTagsList) {
         this.mHashTagsList = hashTagsList;
         notifyDataSetChanged();
     }

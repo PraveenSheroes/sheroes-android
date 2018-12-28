@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
@@ -22,19 +21,26 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MEMBE
 import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_TAG;
 
 public class SearchPresenter extends BasePresenter<ISearchView> {
-
+    //region member variables
     SheroesApplication mSheroesApplication;
     private SheroesAppServiceApi mSheroesAppServiceApi;
+    //endregion member variables
+
+    //region injected variables
     @Inject
     AppUtils mAppUtils;
+    //endregion injected variables
 
+    //region constructor
     @Inject
     public SearchPresenter(AppUtils appUtils, SheroesAppServiceApi sheroesAppServiceApi, SheroesApplication sheroesApplication) {
         mAppUtils = appUtils;
         mSheroesAppServiceApi = sheroesAppServiceApi;
         mSheroesApplication = sheroesApplication;
     }
+    //endregion constructor
 
+    //region public methods
     public void getTrendingHashtags() {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
@@ -62,4 +68,5 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
                     }
                 });
     }
+    //endregion public methods
 }

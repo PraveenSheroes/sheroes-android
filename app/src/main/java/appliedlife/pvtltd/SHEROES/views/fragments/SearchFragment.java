@@ -67,6 +67,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment.TRENDING_F
 public class SearchFragment extends BaseFragment implements BaseHolderInterface {
     //region static variables
     public static final String SCREEN_LABEL = "Search Screen";
+    public static final String TOP_SCREEN_LABEL = "Top Screen";
     public static String searchTabName = "Top";
     //endregion static variables
 
@@ -111,7 +112,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private ArticlesFragment mArticlesFragment;
     private boolean mSearchStarted = false;
     public static String searchText = null;
-    private boolean isActiveTabFragment;
     private String mScreenLabel;
     private String mUnSelectedFragment;
 
@@ -128,7 +128,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
         initializeSearchViews();
         searchListener();
-        mSearchTabsPager.setOffscreenPageLimit(3);
+        mSearchTabsPager.setOffscreenPageLimit(AppConstants.THREE_CONSTANT);
         mSearchText = getArguments().getString(AppConstants.SEARCH_TEXT);
         mSearchCategory = getArguments().getString(AppConstants.SEARCH_CATEGORY);
 
@@ -170,7 +170,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                     if (mSearchStarted) {
                         mHashTagFragment.callHashTagApi();
                         mCommunitiesListFragment.callCommunityApi();
-                        mFeedFragment.paramsToFilterFeed(false, "", "");
+                        mFeedFragment.setSearchParams(false, "", "");
                         mFeedFragment.callFeedApi();
                         mArticlesFragment.setFilterParams(false, "", "");
                         mArticlesFragment.categoryArticleFilter(null);
@@ -201,51 +201,40 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 if (mETSearch.getText().toString().trim().length() > 0) {
                     searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
                 }
-                switch (position) {
-                    case 0:
-                        if (mSearchStarted) {
+                if (mSearchStarted) {
+                    switch (position) {
+                        case 0:
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
                             } else {
-                                mFeedFragment.paramsToFilterFeed(false, searchText, SearchEnum.TOP.toString());
+                                mFeedFragment.setSearchParams(false, searchText, SearchEnum.TOP.toString());
                                 mFeedFragment.callFeedApi();
                             }
-                        }
-//                        mFeedFragment.trackScreenEvent(searchText);
-                        break;
-                    case 1:
-                        if (mSearchStarted) {
+                            break;
+                        case 1:
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mCommunitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
                             } else {
                                 mCommunitiesListFragment.callCommunityApi();
                             }
-                        }
-//                        mCommunitiesListFragment.trackScreenEvent(searchText);
-                        break;
-                    case 2:
-                        if (mSearchStarted) {
+                            break;
+                        case 2:
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mHashTagFragment.filterFeed(searchText);
                             } else {
                                 mHashTagFragment.callHashTagApi();
                             }
-                        }
-//                        mHashTagFragment.trackScreenEvent(searchText);
-                        break;
-                    case 3:
-                        if (mSearchStarted) {
+                            break;
+                        case 3:
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mArticlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
                             } else {
                                 mArticlesFragment.setFilterParams(false, "", "");
                                 mArticlesFragment.categoryArticleFilter(null);
                             }
-                        }
-//                        mArticlesFragment.trackScreenEvent(searchText);
-                        break;
+                            break;
+                    }
                 }
-//                fireSearchOpenEvent();
             }
 
             @Override
@@ -255,9 +244,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         });
 
         deeplinkRedirection();
-
         fireSearchOpenEvent();
-//        mFeedFragment.trackScreenEvent(searchText);
 
         return view;
     }
@@ -270,7 +257,8 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     //endregion activity lifecycle methods
 
     //region public methods
-    public static SearchFragment createInstance(String searchText, String searchCategory, String nextToken) {
+    public static SearchFragment createInstance(String searchText, String
+            searchCategory, String nextToken) {
         SearchFragment searchFragment = new SearchFragment();
         Bundle bundle = new Bundle();
         bundle.putString(AppConstants.SEARCH_TEXT, searchText);
@@ -324,7 +312,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, "participant/feed/stream?setOrderKey=TrendingPosts");
                 bundle.putBoolean(FeedFragment.IS_HOME_FEED, false);
-                bundle.putString(AppConstants.SCREEN_NAME, "Top Screen");
+                bundle.putString(AppConstants.SCREEN_NAME, SearchFragment.TOP_SCREEN_LABEL);
                 mFeedFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mFeedFragment, getString(R.string.top));
                 mSearchTabFragments.add(mFeedFragment);
@@ -333,7 +321,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                     mCommunitiesListFragment = new CommunitiesListFragment();
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.SCREEN_NAME, "Communities Screen");
+                bundle.putString(AppConstants.SCREEN_NAME, CommunitiesListFragment.SCREEN_LABEL);
                 mCommunitiesListFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mCommunitiesListFragment, getString(R.string.community));
                 mSearchTabFragments.add(mCommunitiesListFragment);
@@ -342,7 +330,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                     mHashTagFragment = new HashTagFragment();
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.SCREEN_NAME, "Hashtags Screen");
+                bundle.putString(AppConstants.SCREEN_NAME, HashTagFragment.SCREEN_LABEL);
                 mHashTagFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mHashTagFragment, getString(R.string.hash_tag));
                 mSearchTabFragments.add(mHashTagFragment);
@@ -351,7 +339,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                     mArticlesFragment = new ArticlesFragment();
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString(AppConstants.SCREEN_NAME, "Articles Listing Screen");
+                bundle.putString(AppConstants.SCREEN_NAME, ArticlesFragment.SCREEN_LABEL);
                 mArticlesFragment.setArguments(bundle);
                 mSearchFragmentAdapter.addFragment(mArticlesFragment, getString(R.string.article));
                 mSearchTabFragments.add(mArticlesFragment);
@@ -382,7 +370,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             Fragment fragment = adapter.getFragment(index);
             mSearchCategory = getSearchCategory(fragment);
             if (fragment instanceof FeedFragment) {
-                ((FeedFragment) fragment).paramsToFilterFeed(true, mSearchText, mSearchCategory);
+                ((FeedFragment) fragment).setSearchParams(true, mSearchText, mSearchCategory);
             } else if (fragment instanceof CommunitiesListFragment) {
                 ((CommunitiesListFragment) fragment).setSearchedDeeplinkParameters(false, mSearchText, mSearchCategory);
             } else if (fragment instanceof HashTagFragment) {
@@ -411,16 +399,16 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onTabUnselected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        mUnSelectedFragment = "Top Screen";
+                        mUnSelectedFragment = SearchFragment.TOP_SCREEN_LABEL;
                         break;
                     case 1:
-                      mUnSelectedFragment = "Communities Screen";
+                        mUnSelectedFragment = CommunitiesListFragment.SCREEN_LABEL;
                         break;
                     case 2:
-                        mUnSelectedFragment = "Hashtags Screen";
+                        mUnSelectedFragment = HashTagFragment.SCREEN_LABEL;
                         break;
                     case 3:
-                        mUnSelectedFragment = "Articles Listing Screen";
+                        mUnSelectedFragment = ArticlesFragment.SCREEN_LABEL;
                         break;
 
                     default:
@@ -620,7 +608,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         SearchPagerAdapter adapter = ((SearchPagerAdapter) mSearchTabsPager.getAdapter());
         Fragment fragment = adapter.getFragment(index);
         if (fragment instanceof FeedFragment) {
-            ((FeedFragment) fragment).paramsToFilterFeed(false, "", "");
+            ((FeedFragment) fragment).setSearchParams(false, "", "");
             ((FeedFragment) fragment).callFeedApi();
         } else if (fragment instanceof CommunitiesListFragment) {
             ((CommunitiesListFragment) fragment).callCommunityApi();

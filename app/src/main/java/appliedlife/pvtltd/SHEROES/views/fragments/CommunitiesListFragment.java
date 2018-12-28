@@ -4,11 +4,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import androidx.annotation.Nullable;
-import androidx.cardview.widget.CardView;
-import androidx.core.widget.NestedScrollView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
@@ -27,6 +22,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -60,9 +60,7 @@ import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ContestActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
-import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
 import appliedlife.pvtltd.SHEROES.views.adapters.FeedAdapter;
 import appliedlife.pvtltd.SHEROES.views.adapters.MyCommunitiesAdapter;
 import appliedlife.pvtltd.SHEROES.views.cutomeviews.HidingScrollListener;
@@ -83,7 +81,7 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.removeMemberRequestBuild
 public class CommunitiesListFragment extends BaseFragment implements ICommunitiesListView, AllCommunityItemCallback {
 
     //region private variables and constants
-    private static final String SCREEN_LABEL = "Communities Screen";
+    public static final String SCREEN_LABEL = "Communities Screen";
     private final String TAG = LogUtils.makeLogTag(CommunitiesListFragment.class);
     private static final int MAX_COMMUNITIES_LIMIT = 6;
     private MyCommunitiesAdapter mMyCommunitiesAdapter;
@@ -93,8 +91,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     private SwipPullRefreshList mPullRefreshList;
     private boolean showMyCommunities = true;
     private EndlessNestedScrollViewListener mEndlessRecyclerViewScrollListener;
-    String mSearchText, mSearchCategory;
+    private String mSearchText, mSearchCategory;
     private FragmentOpen fragmentOpen;
+    private String mScreenLabel;
+    private boolean mIsActiveTabFragment;
     //endregion
 
     //region Bind view variables
@@ -131,11 +131,14 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Bind(R.id.rl_empty)
     RelativeLayout emptyLayout;
 
-    @Bind(R.id.tv_no_results_title)TextView noResultsTitleTxt;
+    @Bind(R.id.tv_no_results_title)
+    TextView noResultsTitleTxt;
 
-    @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
+    @Bind(R.id.tv_no_results_subtitle)
+    TextView noResultsSubTitleTxt;
 
-    @Bind(R.id.iv_image)ImageView noResultsImage;
+    @Bind(R.id.iv_image)
+    ImageView noResultsImage;
 
     @Bind(R.id.nested_scroll)
     NestedScrollView nestedScrollView;
@@ -146,8 +149,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     @Inject
     Preference<LoginResponse> userPreference;
     //endregion
-    private String mScreenLabel;
-    private boolean isActiveTabFragment;
 
     //region Fragment lifecycle method
     @Override
@@ -159,7 +160,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mCommunitiesListPresenter.attachView(this);
         fragmentOpen = new FragmentOpen();
 
-        if(getArguments() != null){
+        if (getArguments() != null) {
             mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
         }
 
@@ -240,12 +241,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         content.setSpan(new UnderlineSpan(), 0, underLineData.length(), 0);
         tvGoToSetting.setText(content);
 
-//        trackScreenEvent();
-
         return view;
     }
 
-    public void callCommunityApi(){
+    public void callCommunityApi() {
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         emptyLayout.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
@@ -595,8 +594,8 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         communitiesContainer.setVisibility(View.VISIBLE);
         loaderGif.setVisibility(View.VISIBLE);
         if (null != getActivity() && getActivity() instanceof HomeActivity) {
-            if(fragmentOpen.isFeedFragment())
-            ((HomeActivity) getActivity()).communityOnClick();
+            if (fragmentOpen.isFeedFragment())
+                ((HomeActivity) getActivity()).communityOnClick();
             else
                 callCommunityApi();
         }
@@ -642,7 +641,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
 
-            isActiveTabFragment = true;
+            mIsActiveTabFragment = true;
 
             if (getParentFragment() instanceof SearchFragment) {
                 String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
@@ -660,24 +659,13 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         } else { //When UI is not visible to user
 
             //Capture the screen event of the tab got unselected
-            if (isActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+            if (mIsActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
                 AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
             }
 
-            isActiveTabFragment = false;
+            mIsActiveTabFragment = false;
         }
     }
     //endregion
-
-    public void trackScreenEvent(String searchQuery){
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(searchQuery)
-                        .tabTitle(SearchFragment.searchTabName)
-                        .build();
-
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
-    }
 }
 

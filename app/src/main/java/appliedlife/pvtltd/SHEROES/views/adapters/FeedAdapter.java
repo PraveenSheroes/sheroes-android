@@ -1,7 +1,6 @@
 package appliedlife.pvtltd.SHEROES.views.adapters;
 
 import android.content.Context;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -53,13 +53,14 @@ import butterknife.OnClick;
 
 public class FeedAdapter extends HeaderRecyclerViewAdapter {
 
-    //region private variables
+    //region member variables
     public static final String TAG = "feedAdapter";
     private final Context mContext;
     private List<FeedDetail> mFeedDetailList;
     private boolean showLoader = false;
     private BaseHolderInterface mBaseHolderInterface;
-    private boolean isFilter;
+    private boolean mIsSearch;
+    //endregion member variables
 
     @Inject
     Preference<AppConfiguration> mConfiguration;
@@ -67,11 +68,11 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
     //endregion
 
     //region Constructor
-    public FeedAdapter(Context context, BaseHolderInterface baseHolderInterface, boolean isFilter) {
+    public FeedAdapter(Context context, BaseHolderInterface baseHolderInterface, boolean isSearch) {
         mContext = context;
         this.mFeedDetailList = new ArrayList<>();
         this.mBaseHolderInterface = baseHolderInterface;
-        this.isFilter = isFilter;
+        this.mIsSearch = isSearch;
     }
     //endregion
 
@@ -93,7 +94,7 @@ public class FeedAdapter extends HeaderRecyclerViewAdapter {
             case TYPE_INRO:
                 return new AppIntroCardHolder(mInflater.inflate(R.layout.app_intro_card, parent, false), mBaseHolderInterface);
             case TYPE_CAROUSEL:
-                return new CarouselViewHolder(mInflater.inflate(R.layout.champion_suggested_card_holder, parent, false), mBaseHolderInterface, isFilter);
+                return new CarouselViewHolder(mInflater.inflate(R.layout.champion_suggested_card_holder, parent, false), mBaseHolderInterface, mIsSearch);
             case TYPE_USER_COMPACT:
                 return new UserProfileCompactViewHolder(mInflater.inflate(R.layout.list_user_flat_item, parent, false), mContext, mBaseHolderInterface);
             case TYPE_LEADERBOARD:
