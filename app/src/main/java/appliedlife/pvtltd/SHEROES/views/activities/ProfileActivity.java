@@ -93,6 +93,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.DeactivateProfi
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ReportUserProfileDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.UnFollowDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -108,7 +109,7 @@ import static appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileS
  * Created by Praveen_Singh on 04-08-2017.
  */
 
-public class ProfileActivity extends BaseActivity implements BaseHolderInterface {
+public class ProfileActivity extends BaseActivity implements BaseHolderInterface, IFollowCallback {
 
     //region constants
     private final String TAG = LogUtils.makeLogTag(ProfileActivity.class);
@@ -611,17 +612,10 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
         }
     }*/
 
-   /* @Override
+    @Override
     public void onProfileFollowed(UserSolrObj userSolrObj) {
-        mFollowedUserSolrObj = userSolrObj;
-        mFollowerCount.setText(String.valueOf(changeNumberToNumericSuffix(userSolrObj.getFollowerCount())));
-        updateFollowedButton();
-        Fragment fragment = mViewPagerAdapter.getActiveFragment(mViewPager, mViewPager.getCurrentItem());
-        String title = (String) mViewPagerAdapter.getPageTitle(mViewPager.getCurrentItem());
-        if (fragment instanceof FeedFragment && StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) { //refresh if current tab is post to change follow button visibility
-            ((FeedFragment) fragment).refreshList();
-        }
-    }*/
+        mProfileFragment.onProfileFollowed(userSolrObj);
+    }
 
     @Override
     public String getScreenName() {
