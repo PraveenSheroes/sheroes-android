@@ -128,7 +128,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         }
         getMvpView().startProgressBar();
         if (mNextToken != null) {
-            URL = URL + "&next_token=" + mNextToken;
+            URL = URL + AppConstants.SEARCH_NEXT_TOKEN + mNextToken;
         }
         mIsCommunityFeedLoading = true;
 

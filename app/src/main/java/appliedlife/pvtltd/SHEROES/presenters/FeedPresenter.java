@@ -1,10 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-import android.app.Application;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.common.Common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
@@ -222,18 +218,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         break;
                                 }
                             }
-//                            else{
-//                                if(feedResponsePojo.getFieldErrorMessageMap() != null) {
-//                                    if(feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-//                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
-//                                    }else{
-//                                        getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
-//                                    }
-//                                }else{
-//                                    getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
-//                                }
-//                            }
-                        }else {
+                        } else {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
@@ -285,7 +270,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
 
-        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" + searchText + "&search_category=" + searchCategory + "&next_token=" + mNextToken)
+        mSheroesAppServiceApi.getSearchResponse(AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory + AppConstants.SEARCH_NEXT_TOKEN + mNextToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())

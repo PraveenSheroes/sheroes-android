@@ -419,6 +419,7 @@ public class AppConstants {
     public static final String SEARCH = "participant/search/";
     public static final String SEARCH_QUERY = "?search_text=";
     public static final String SEARCH_TAB = "&search_category=";
+    public static final String SEARCH_NEXT_TOKEN = "&next_token=" ;
 
     public static String PREVIOUS_SCREEN="";
     public static String SOURCE_ACTIVE_TAB = "";
