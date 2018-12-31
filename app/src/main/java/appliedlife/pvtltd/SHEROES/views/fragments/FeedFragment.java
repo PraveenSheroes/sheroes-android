@@ -8,15 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
-
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -52,6 +43,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -68,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Spam;
@@ -213,11 +212,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Bind(R.id.rl_empty)
     RelativeLayout emptyLayout;
 
-    @Bind(R.id.tv_no_results_title)TextView noResultsTitleTxt;
+    @Bind(R.id.tv_no_results_title)
+    TextView noResultsTitleTxt;
 
-    @Bind(R.id.tv_no_results_subtitle)TextView noResultsSubTitleTxt;
+    @Bind(R.id.tv_no_results_subtitle)
+    TextView noResultsSubTitleTxt;
 
-    @Bind(R.id.iv_image)ImageView noResultsImage;
+    @Bind(R.id.iv_image)
+    ImageView noResultsImage;
     // endregion
 
     //region private variables
@@ -247,10 +249,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
     private boolean isTrackingEnabled = true;
-    private String searchText, searchCategory;
-    public boolean isFilter=false;
-    private FragmentOpen fragmentOpen;
-
+    private String mSearchText, mSearchCategory;
+    private boolean mIsSearch = false;
+    private FragmentOpen mFragmentOpen;
     //endregion
 
     //region fragment lifecycle method
@@ -263,11 +264,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
         impressionPresenter.attachView(this);
-
-
-//        ((HomeActivity) getActivity()).mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-        fragmentOpen = new FragmentOpen();
+        mFragmentOpen = new FragmentOpen();
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
@@ -277,7 +274,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
         callFeedApi();
 
-      //  mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
@@ -301,12 +297,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return view;
     }
 
-    public void callFeedApi(){
+    public void callFeedApi() {
         showGifLoader();
-        if(!isFilter)
+        if (!mIsSearch)
             mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
         else
-            mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
+            mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, mSearchText, mSearchCategory);
     }
 
     @Override
@@ -325,6 +321,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
                     //Send event of previous selected tab with duration, and start the time capture for current selected tab
                     AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            } else if (getParentFragment() instanceof SearchFragment) {
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .tabTitle(SearchFragment.searchTabName)
+                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .build();
+                    AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
@@ -476,7 +484,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void invalidateItem(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
             ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, false);
-        }  if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof ProfileActivity && feedDetail instanceof UserPostSolrObj) {
+        }
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof ProfileActivity && feedDetail instanceof UserPostSolrObj) {
             UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
             if (getActivity() != null && getActivity() instanceof ProfileActivity) {
                 ((ProfileActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
@@ -856,11 +865,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void refreshList() {
-        if(!isFilter){
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-        if (getActivity() != null && getActivity() instanceof HomeActivity) {
-            ((HomeActivity) getActivity()).fetchAllCommunity();
-        }
+        if (!mIsSearch) {
+            mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+            if (getActivity() != null && getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).fetchAllCommunity();
+            }
         }
     }
 
@@ -890,16 +899,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @Override
     public void showEmptyScreen(String s) {
-        if(isFilter) {
+        if (mIsSearch) {
             emptyLayout.setVisibility(View.VISIBLE);
             hideGifLoader();
             mFeedRecyclerView.setVisibility(View.GONE);
 
-            if(searchCategory.equalsIgnoreCase("hashtags")) {
+            if (mSearchCategory.equalsIgnoreCase(SearchEnum.HASHTAGS.toString())) {
                 noResultsImage.setImageResource(R.drawable.hashtag_empty_vector);
                 noResultsTitleTxt.setText(getString(R.string.empty_hashtag));
                 noResultsSubTitleTxt.setText(s);
-            }else if(searchCategory.equalsIgnoreCase("posts")){
+            } else if (mSearchCategory.equalsIgnoreCase(SearchEnum.TOP.toString())) {
                 noResultsImage.setImageResource(R.drawable.posts_empty_vector);
                 noResultsTitleTxt.setText(getString(R.string.empty_posts));
                 noResultsSubTitleTxt.setText(s);
@@ -939,8 +948,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         .sourceScreenId(sourceScreenId)
                         .build();
             }
-        }
-        else {
+        } else {
             if (CommonUtil.isNotEmpty(mCommunityTab.dataUrl)) {
                 mFeedPresenter.setEndpointUrl(mCommunityTab.dataUrl);
             }
@@ -1037,10 +1045,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     }
                 });
 
-                if(!isFilter){
+                if (!mIsSearch) {
                     mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
-                }else {
-                    mFeedPresenter.getFeeds(FeedPresenter.LOAD_MORE_REQUEST, mStreamName, searchText, searchCategory);
+                } else {
+                    mFeedPresenter.fetchSearchedFeeds(FeedPresenter.LOAD_MORE_REQUEST, mStreamName, mSearchText, mSearchCategory);
                 }
             }
         };
@@ -1062,10 +1070,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(!isFilter) {
+                if (!mIsSearch) {
                     mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-                }else{
-                    mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
+                } else {
+                    mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, mSearchText, mSearchCategory);
                 }
             }
         });
@@ -1073,25 +1081,25 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     }
 
-    public void paramsToFilterFeed(boolean isFilter, String searchText, String searchCategory){
-        this.isFilter = isFilter;
-        this.searchText = searchText;
-        this.searchCategory = searchCategory;
+    public void setSearchParams(boolean isFilter, String searchText, String searchCategory) {
+        this.mIsSearch = isFilter;
+        this.mSearchText = searchText;
+        this.mSearchCategory = searchCategory;
     }
 
-    public void filterFeed(boolean isFilter,String searchText, String searchCategory) {
+    public void filterFeed(boolean isFilter, String searchText, String searchCategory) {
         showGifLoader();
         mFeedPresenter.setmIsFeedLoading(false);
-        paramsToFilterFeed(isFilter, searchText, searchCategory);
+        setSearchParams(isFilter, searchText, searchCategory);
         mFeedRecyclerView.scrollToPosition(0);
-        mFeedPresenter.getFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
+        mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
     }
 
     private void initializeRecyclerView() {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(mLinearLayoutManager);
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mAdapter = new FeedAdapter(getContext(), this, isFilter);
+        mAdapter = new FeedAdapter(getContext(), this, mIsSearch);
         mFeedRecyclerView.setAdapter(mAdapter);
     }
 
@@ -1268,9 +1276,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onUserPostClicked(FeedDetail feedDetail) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
-        if(HomeActivity.isSearchClicked) {
-            screenProperties.put(EventProperty.SOURCE.toString(), "Search Screen");
-            screenProperties.put(EventProperty.SOURCE_TAB_TITLE.toString(), searchCategory);
+        if (HomeActivity.isSearchClicked) {
+            screenProperties.put(EventProperty.SOURCE.toString(), SearchFragment.SCREEN_LABEL);
+            screenProperties.put(EventProperty.SOURCE_TAB_TITLE.toString(), mSearchCategory);
         }
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(feedDetail.getItemPosition()));
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
@@ -1475,14 +1483,8 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
-//        if(!isFilter) {
-//            AppConstants.PREVIOUS_SCREEN = mScreenLabel;
-//        }else {
-//            AppConstants.PREVIOUS_SCREEN = "Search Screen" ;
-//        }
-
         if (getParentFragment() instanceof HomeFragment) {
-            AppConstants.PREVIOUS_SCREEN = ((HomeFragment) getParentFragment()).getActiveTabName();
+            AppConstants.SOURCE_ACTIVE_TAB = ((HomeFragment) getParentFragment()).getActiveTabName();
         }
 
         if (impressionHelper != null) { //app exit cases and back-stack of activity
@@ -1903,10 +1905,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
 
         HashMap<String, Object> properties = new EventProperty.Builder()
-                        .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
-                        .name(userPostSolrObj.getNameOrTitle())
-                        .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
-                        .build();
+                .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                .name(userPostSolrObj.getNameOrTitle())
+                .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                .build();
         if (getExtraProperties() != null && properties != null && mCommunityTab != null) {
             properties.putAll(getExtraProperties());
         }
@@ -2113,7 +2115,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
-        if (userSolrObj != null && getActivity()!=null) {
+        if (userSolrObj != null && getActivity() != null) {
             if (mDialog != null) {
                 mDialog.dismiss();
             }
@@ -2181,7 +2183,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 Comment comment = lastComments.get(0);
                 if (comment != null && !comment.isAnonymous()) {
                     ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(),
-                    PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
+                            PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
                 }
             }
 
@@ -2224,9 +2226,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         gifLoader.setVisibility(View.VISIBLE);
         if (null != getActivity()) {
             if (getActivity() instanceof HomeActivity) {
-                if(!fragmentOpen.isFeedFragment()){
+                if (!mFragmentOpen.isFeedFragment()) {
                     ((HomeActivity) getActivity()).searchOnClick();
-                }else {
+                } else {
                     ((HomeActivity) getActivity()).homeOnClick();
                 }
             }
@@ -2262,16 +2264,5 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
     }
     //endregion
-
-    public void trackScreenEvent(String searchQuery){
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(searchQuery)
-                        .tabTitle(SearchFragment.searchTabName)
-                        .build();
-
-        AnalyticsManager.trackScreenView("Top Screen", properties);
-    }
 
 }

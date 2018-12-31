@@ -2,10 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -13,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
@@ -21,14 +19,12 @@ import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.CarouselDataObj;
-import appliedlife.pvtltd.SHEROES.models.entities.feed.CommunityFeedSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.adapters.CarouselListAdapter;
-import appliedlife.pvtltd.SHEROES.views.cutomeviews.GridItemSpaceDecoration;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -44,6 +40,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     private CarouselDataObj carouselDataObj;
     private boolean isUpdateFromProfile;
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
+    private int position;
+    private boolean mIsSearch;
     //endregion
 
     //region public variable
@@ -62,17 +60,14 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
-
-    private int position;
-    private boolean isFilter;
     //endregion
 
     //region constructor
-    public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface, boolean isFilter) {
+    public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface, boolean isSearch) {
         super(itemView);
         ButterKnife.bind(this, itemView);
         this.viewInterface = baseHolderInterface;
-        this.isFilter = isFilter;
+        this.mIsSearch = isSearch;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -118,23 +113,17 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
         }
 
         List<FeedDetail> list = item.getFeedDetails();
-        String type= item.getType();
         if (StringUtil.isNotEmptyCollection(list)) {
-//            if(carouselDataObj.getFeedDetails().get(0) instanceof CommunityFeedSolrObj){
-            if(isFilter){
+            if (mIsSearch) {
                 StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
-//                GridItemSpaceDecoration gridSpacingItemDecrationTop = new GridItemSpaceDecoration(8);
-//                mRecyclerView.addItemDecoration(gridSpacingItemDecrationTop);
-
                 mRecyclerView.setLayoutManager(gridLayoutManager);
-            }else{
+            } else {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
                 linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
-
                 mRecyclerView.setLayoutManager(linearLayoutManager);
             }
 
-            mAdapter = new CarouselListAdapter(context, viewInterface, item, this, isFilter);
+            mAdapter = new CarouselListAdapter(context, viewInterface, item, this, mIsSearch);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setData(item.getFeedDetails());
             for (int i = 0; i < list.size(); i++) {
@@ -169,29 +158,11 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region onclick method
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        /*if (carouselDataObj != null && carouselDataObj.getUserSolrObj() != null && carouselDataObj.getUserSolrObj().get(0) != null) {
-            if (carouselDataObj.getUserSolrObj().get(0) instanceof UserSolrObj) {
-                if (mViewInterface instanceof AllCommunityItemCallback) {
-                    ((AllCommunityItemCallback) mViewInterface).openChampionListingScreen(carouselDataObj);
-                } else {
-                    mViewInterface.handleOnClick(carouselDataObj, mIcon);
-                }
-            } else {
-                if (mViewInterface instanceof AllCommunityItemCallback) {
-                    ((AllCommunityItemCallback) mViewInterface).onSeeMoreClicked(carouselDataObj);
-                }else if(mViewInterface instanceof FeedItemCallback){
-                    ((FeedItemCallback)mViewInterface).onSeeMoreClicked(carouselDataObj);
-                } else {
-                    mViewInterface.handleOnClick(carouselDataObj, mIcon);
-                }
-            }
-        }*/
-
-        if(carouselDataObj!=null && carouselDataObj.getFeedDetails()!=null){
+        if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null) {
             if (viewInterface instanceof AllCommunityItemCallback) {
                 ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
-            }else if(viewInterface instanceof FeedItemCallback){
-                ((FeedItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
+            } else if (viewInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
             } else {
                 viewInterface.handleOnClick(carouselDataObj, mIcon);
             }

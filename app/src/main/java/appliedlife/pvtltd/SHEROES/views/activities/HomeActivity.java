@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -185,6 +186,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private static final int ANIMATION_DELAY_TIME = 5000;
     private static final int ANIMATION_DURATION_TIME = 10000;
     private static final String MORE_TOP_ICON = "More Top Icon";
+    public static boolean isSearchClicked = false;
     //endregion
 
     // region inject variables
@@ -316,7 +318,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @Bind(R.id.tv_drawer_navigation)
     public TextView tvDrawerNavigation;
 
-
     @Bind(R.id.tv_new_tag)
     public TextView mTvNewTag;
 
@@ -351,7 +352,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private String mEncodeImageUrl;
     private Uri mImageCaptureUri;
     private boolean showFab = true;
-    public static boolean isSearchClicked = false;
     private String mSearchText, mSearchCategory, mNextToken;
     private BellNotificationDialogFragment mBellNotificationDialogFragment;
     //endregion
@@ -650,7 +650,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mFragmentOpen.setFeedFragment(true);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
                 flFeedFullView.getLayoutParams();
-
         params.setBehavior(new AppBarLayout.ScrollingViewBehavior(flFeedFullView.getContext(), null));
         highlightHome();
         mAppBarLayout.setVisibility(View.VISIBLE);
@@ -664,13 +663,10 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     public void homeButtonUi() {
-
         DrawerViewHolder.selectedOptionName = null;
         resetHamburgerSelectedItems();
-
         mFlHomeFooterList.setVisibility(View.VISIBLE);
         mFragmentOpen.setFeedFragment(true);
-
         mliArticleSpinnerIcon.setVisibility(View.GONE);
 
         if (showFab) {
@@ -727,7 +723,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick(R.id.ll_search)
     public void searchOnClick() {
         isSearchClicked = true;
-        SearchFragment.searchTabName = "Top";
+        SearchFragment.searchTabName = getString(R.string.top);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
@@ -2010,7 +2006,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-//        ProfileFragment.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
 
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }

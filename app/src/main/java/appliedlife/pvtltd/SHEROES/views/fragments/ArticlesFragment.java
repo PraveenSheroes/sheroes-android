@@ -2,14 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +18,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -55,17 +53,44 @@ import appliedlife.pvtltd.SHEROES.views.viewholders.DrawerViewHolder;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.http.GET;
 
 /**
  * Created by Praveen_Singh on 09-01-2017.
  */
 
 public class ArticlesFragment extends BaseFragment {
+    //region constants
     public static final String SCREEN_LABEL = "Article Listing Screen";
     private final String TAG = LogUtils.makeLogTag(ArticlesFragment.class);
+    private int mPageNo = AppConstants.ONE_CONSTANT;
+    //endregion constants
+
+    //region injected variables
     @Inject
     HomePresenter mHomePresenter;
+    @Inject
+    AppUtils mAppUtils;
+    //endregion injected variables
+
+    //region member variables
+    private GenericRecyclerViewAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private SwipPullRefreshList mPullRefreshList;
+    private FragmentListRefreshData mFragmentListRefreshData;
+    private HidingScrollListener mHidingScrollListener;
+    private List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
+    private boolean mListLoad = true;
+    private boolean mIsEdit = false;
+    private boolean mIsSearch = false;
+    private String mSearchText, mSearchCategory;
+    private FeedRequestPojo feedRequestPojo;
+    private List<Long> categoryIdList = new ArrayList<>();
+    private View view;
+    private String mScreenLabel;
+    private boolean mIsActiveTabFragment;
+    //endregion member variables
+
+    //region view variables
     @Bind(R.id.rv_home_list)
     RecyclerView mRecyclerView;
     @Bind(R.id.pb_home_progress_bar)
@@ -74,45 +99,32 @@ public class ArticlesFragment extends BaseFragment {
     SwipeRefreshLayout mSwipeView;
     @Bind(R.id.li_no_result)
     LinearLayout mLiNoResult;
-    private GenericRecyclerViewAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
-    private SwipPullRefreshList mPullRefreshList;
-    @Inject
-    AppUtils mAppUtils;
-    private FragmentListRefreshData mFragmentListRefreshData;
-    private HidingScrollListener mHidingScrollListener;
-    private int mPageNo = AppConstants.ONE_CONSTANT;
-    private List<FeedDetail> mTrendingFeedDetail = new ArrayList<>();
-    private boolean mListLoad = true;
-    private boolean mIsEdit = false;
-    private boolean mIsSearch = false;
-    private String mSearchText, mSearchCategory;
-    private FeedRequestPojo feedRequestPojo;
+    @Bind(R.id.rl_empty)
+    RelativeLayout emptyLayout;
     @Bind(R.id.progress_bar_first_load)
     ProgressBar mProgressBarFirstLoad;
     @Bind(R.id.loader_gif)
     CardView loaderGif;
     @Bind(R.id.no_internet)
     CardView noInternet;
-    private List<Long> categoryIdList = new ArrayList<>();
-    private View view;
-    @Bind(R.id.rl_empty)
-    RelativeLayout emptyLayout;
-
     @Bind(R.id.tv_no_results_title)
     TextView noResultsTitleTxt;
-
     @Bind(R.id.tv_no_results_subtitle)
     TextView noResultsSubTitleTxt;
-
     @Bind(R.id.iv_image)
     ImageView noResultsImage;
+    //endregion view variables
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
         view = inflater.inflate(R.layout.fragment_card_list, container, false);
         ButterKnife.bind(this, view);
+
+        if (getArguments() != null) {
+            mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
+
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.ARTICLE_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
         mPullRefreshList = new SwipPullRefreshList();
         mPullRefreshList.setPullToRefresh(false);
@@ -161,10 +173,6 @@ public class ArticlesFragment extends BaseFragment {
             ((HomeActivity) getActivity()).changeFragmentWithCommunities();
             ((HomeActivity) getActivity()).articleUi();
         }
-
-//        if(HomeActivity.isSearchClicked){
-//            trackScreenEvent();
-//        }
 
         return view;
     }
@@ -239,6 +247,37 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {  //When UI is visible to user
+
+            mIsActiveTabFragment = true;
+
+            if (getParentFragment() instanceof SearchFragment) {
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .tabTitle(SearchFragment.searchTabName)
+                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .build();
+                    AnalyticsManager.trackScreenView(screenName, properties);
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            }
+        } else { //When UI is not visible to user
+
+            //Capture the screen event of the tab got unselected
+            if (mIsActiveTabFragment && mScreenLabel != null && !(getActivity() instanceof HomeActivity)) {
+                AnalyticsManager.trackScreenView(mScreenLabel, getExtraProperties());
+            }
+
+            mIsActiveTabFragment = false;
+        }
     }
 
     @Override
@@ -408,16 +447,5 @@ public class ArticlesFragment extends BaseFragment {
             return false;
         else
             return true;
-    }
-
-    public void trackScreenEvent(String searchQuery) {
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
-                        .searchQuery(searchQuery)
-                        .tabTitle(SearchFragment.searchTabName)
-                        .build();
-
-        AnalyticsManager.trackScreenView(SCREEN_LABEL, properties);
     }
 }

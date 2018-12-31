@@ -186,10 +186,10 @@ public class HomePresenter extends BasePresenter<HomeView> {
             mNextToken = "";
         }
 
-        String URL = "participant/search/?search_text=" + searchText + "&search_category=" + searchCategory;
+        String URL = AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory;
 
         if (!pullToRefresh && mNextToken != null) {
-            URL = URL + "&next_token=" + mNextToken;
+            URL = URL + AppConstants.SEARCH_NEXT_TOKEN + mNextToken;
         }
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {CommunityFeedSolrObj.class,FeedDetail.class})
+@Parcel(analyze = {CommunityFeedSolrObj.class, FeedDetail.class})
 public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
     public static String COMMUNITY_OBJ = "Community Object";
 
@@ -21,7 +21,7 @@ public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
 
     @SerializedName(value = "solr_ignore_is_owner")
     private boolean isOwner;
-    
+
     @SerializedName(value = "solr_ignore_is_member")
     private boolean isMember;
 
@@ -43,7 +43,7 @@ public class CommunityFeedSolrObj extends FeedDetail implements Cloneable {
     @SerializedName("title_text_color_s")
     public String titleTextColor;
 
-    private boolean isMutualCommunityFirstItem ;
+    private boolean isMutualCommunityFirstItem;
 
     private boolean isOtherCommunityFirstItem;
 

@@ -597,7 +597,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mShare.setText(mContext.getString(R.string.ID_SHARE));
             mShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
         }
-        final String listDescription = Html.fromHtml(mUserPostObj.getListDescription()).toString();
+        final String listDescription = mUserPostObj.getDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);

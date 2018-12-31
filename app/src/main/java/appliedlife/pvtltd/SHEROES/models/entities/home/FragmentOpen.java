@@ -16,7 +16,6 @@ public class FragmentOpen {
     private boolean isICCMemberListFragment;
     private boolean isFAQSFragment;
     private boolean isFeedFragment;
-    private boolean fromSearch;
 
     public FragmentOpen() {
     }
@@ -62,11 +61,4 @@ public class FragmentOpen {
         isFeedFragment = feedFragment;
     }
 
-    public boolean isFromSearch() {
-        return fromSearch;
-    }
-
-    public void setFromSearch(boolean fromSearch) {
-        this.fromSearch = fromSearch;
-    }
 }

@@ -416,7 +416,13 @@ public class AppConstants {
     public static final String USER_MY_STORIES_STREAM = "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true";
     public static final String OTHER_USER_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream&userId=";
     public static final String USER_MY_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream";
+    public static final String SEARCH = "participant/search/";
+    public static final String SEARCH_QUERY = "?search_text=";
+    public static final String SEARCH_TAB = "&search_category=";
+    public static final String SEARCH_NEXT_TOKEN = "&next_token=" ;
+
     public static String PREVIOUS_SCREEN="";
+    public static String SOURCE_ACTIVE_TAB = "";
 
     //Social A/c's
     public static final String FACEBOOK = "Facebook";

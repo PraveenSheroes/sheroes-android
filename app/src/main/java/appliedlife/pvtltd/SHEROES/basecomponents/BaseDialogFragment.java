@@ -49,7 +49,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
         manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
     }
 
-
     @Override
     public void dismiss() {
         this.dismissAllowingStateLoss();
@@ -90,7 +89,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     }
 
-
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
 
@@ -107,7 +105,7 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     }
 
     @Override
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse){
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
 }

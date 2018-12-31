@@ -105,7 +105,7 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 });
     }
 
-    public void setHasFeedEnded(boolean hasFeedEnded){
+    public void setHasFeedEnded(boolean hasFeedEnded) {
         this.mHasCommunityFeedEnded = hasFeedEnded;
     }
 
@@ -121,14 +121,14 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         if (mIsCommunityFeedLoading) {
             return;
         }
-        String URL = "participant/search/?search_text=" + searchText + "&search_category=" + searchCategory;
+        String URL = AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory;
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
         if (mNextToken != null) {
-            URL = URL + "&next_token=" + mNextToken;
+            URL = URL + AppConstants.SEARCH_NEXT_TOKEN + mNextToken;
         }
         mIsCommunityFeedLoading = true;
 
@@ -171,12 +171,12 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                                 }
                             }
                         } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
-                                } else {
-                                    getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
-                                }
+                            if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
+                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            } else {
+                                getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                             }
+                        }
                     }
                 });
     }
@@ -199,25 +199,25 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
                 .subscribe(new DisposableObserver<FeedResponsePojo>() {
-            @Override
-            public void onComplete() {
-            }
+                    @Override
+                    public void onComplete() {
+                    }
 
-            @Override
-            public void onError(Throwable e) {
-                Crashlytics.getInstance().core.logException(e);
-                getMvpView().stopProgressBar();
-                getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().stopProgressBar();
+                        getMvpView().showError(e.getMessage(), ERROR_MY_COMMUNITIES);
+                    }
 
-            @Override
-            public void onNext(FeedResponsePojo feedResponsePojo) {
-                getMvpView().stopProgressBar();
-                if (null != feedResponsePojo) {
-                    getMvpView().showMyCommunities(feedResponsePojo);
-                }
-            }
-        });
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        getMvpView().stopProgressBar();
+                        if (null != feedResponsePojo) {
+                            getMvpView().showMyCommunities(feedResponsePojo);
+                        }
+                    }
+                });
     }
 
     //Join community

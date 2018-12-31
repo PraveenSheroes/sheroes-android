@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {FeedResponsePojo.class,BaseResponse.class})
+@Parcel(analyze = {FeedResponsePojo.class, BaseResponse.class})
 public class FeedResponsePojo extends BaseResponse {
     @SerializedName("solr_ignore_featured_docs")
     @Expose
@@ -27,9 +27,6 @@ public class FeedResponsePojo extends BaseResponse {
 
     @SerializedName("set_order_key")
     private String setOrderKey;
-
-    @SerializedName("search_text")
-    private String searchText;
 
     @SerializedName("server_feed_config_version")
     private Integer serverFeedConfigVersion;
@@ -72,13 +69,5 @@ public class FeedResponsePojo extends BaseResponse {
 
     public void setServerFeedConfigVersion(Integer serverFeedConfigVersion) {
         this.serverFeedConfigVersion = serverFeedConfigVersion;
-    }
-
-    public String getSearchText() {
-        return searchText;
-    }
-
-    public void setSearchText(String searchText) {
-        this.searchText = searchText;
     }
 }

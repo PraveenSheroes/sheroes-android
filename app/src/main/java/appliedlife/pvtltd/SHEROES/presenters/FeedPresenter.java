@@ -1,10 +1,7 @@
 package appliedlife.pvtltd.SHEROES.presenters;
 
-import android.app.Application;
-
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
-import com.facebook.common.Common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +17,6 @@ import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
 import appliedlife.pvtltd.SHEROES.basecomponents.BasePresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesAppServiceApi;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
-import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.HomeModel;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.ChampionFollowedResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.ChampionUserProfile.PublicProfileListRequest;
@@ -133,7 +129,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         } else {
             mFeedState = feedState;
         }
-
         switch (mFeedState) {
             case NORMAL_REQUEST:
                 mNextToken = null;
@@ -154,10 +149,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 return;
         }
         mIsFeedLoading = true;
-
         CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
         communityFeedRequestPojo.setNextToken(mNextToken);
-
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
@@ -184,56 +177,43 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         getMvpView().hideGifLoader();
                         if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
-                                List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
-                                mNextToken = feedResponsePojo.getNextToken();
-                                switch (mFeedState) {
-                                    case NORMAL_REQUEST:
-                                        getMvpView().stopProgressBar();
-                                        if (mIsHomeFeed) {
-                                            FeedDetail homeFeedHeader = new FeedDetail();
-                                            homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                                            feedList.add(0, homeFeedHeader);
-                                        } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
-                                            if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
-                                                if (!StringUtil.isNotEmptyCollection(feedList)) {
-                                                    FeedDetail noStoryFeed = new FeedDetail();
-                                                    noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
-                                                    noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
-                                                    feedList.add(noStoryFeed);
-                                                }
+                            List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+                            mNextToken = feedResponsePojo.getNextToken();
+                            switch (mFeedState) {
+                                case NORMAL_REQUEST:
+                                    getMvpView().stopProgressBar();
+                                    if (mIsHomeFeed) {
+                                        FeedDetail homeFeedHeader = new FeedDetail();
+                                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                        feedList.add(0, homeFeedHeader);
+                                    } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
+                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
+                                            if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                                FeedDetail noStoryFeed = new FeedDetail();
+                                                noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
+                                                noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
+                                                feedList.add(noStoryFeed);
                                             }
                                         }
-                                        mFeedDetailList = feedList;
-                                        getMvpView().setFeedEnded(false);
-                                        List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
-                                        getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
-                                        getMvpView().showFeedList(feedDetails);
-                                        break;
-                                    case LOAD_MORE_REQUEST:
-                                        // append in case of load more
-                                        if (!CommonUtil.isEmpty(feedList)) {
-                                            mFeedDetailList.addAll(feedList);
-                                            //getMvpView().showFeedList(mFeedDetailList);
-                                            getMvpView().addAllFeed(feedList);
-                                        } else {
-                                            getMvpView().setFeedEnded(true);
-                                        }
-                                        break;
-                                }
+                                    }
+                                    mFeedDetailList = feedList;
+                                    getMvpView().setFeedEnded(false);
+                                    List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                                    getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                    getMvpView().showFeedList(feedDetails);
+                                    break;
+                                case LOAD_MORE_REQUEST:
+                                    // append in case of load more
+                                    if (!CommonUtil.isEmpty(feedList)) {
+                                        mFeedDetailList.addAll(feedList);
+                                        //getMvpView().showFeedList(mFeedDetailList);
+                                        getMvpView().addAllFeed(feedList);
+                                    } else {
+                                        getMvpView().setFeedEnded(true);
+                                    }
+                                    break;
                             }
-//                            else{
-//                                if(feedResponsePojo.getFieldErrorMessageMap() != null) {
-//                                    if(feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-//                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
-//                                    }else{
-//                                        getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
-//                                    }
-//                                }else{
-//                                    getMvpView().showEmptyScreen("Sorry, no documents found for this search result");
-//                                }
-//                            }
-                        }else {
+                        } else {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
                                 getMvpView().setFeedEnded(true);
                             } else if (!CommonUtil.isEmpty(mFeedDetailList) && mFeedDetailList.size() < 5) {
@@ -245,7 +225,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
-    public void getFeeds(final int feedState, final String streamName, String searchText, String searchCategory) {
+    public void fetchSearchedFeeds(final int feedState, final String streamName, String searchText, String searchCategory) {
         if (mIsFeedLoading) {
             return;
         }
@@ -285,7 +265,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
             return;
         }
 
-        mSheroesAppServiceApi.getSearchResponse("participant/search/?search_text=" + searchText + "&search_category=" + searchCategory + "&next_token=" + mNextToken)
+        mSheroesAppServiceApi.getSearchResponse(AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory + AppConstants.SEARCH_NEXT_TOKEN + mNextToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(this.<FeedResponsePojo>bindToLifecycle())
@@ -344,7 +324,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         if (!CommonUtil.isNotEmpty(mNextToken)) {
                                             getMvpView().setFeedEnded(true);
                                         } else {
-                                            getMvpView().setFeedEnded(true);
+                                            getMvpView().setFeedEnded(false);
                                         }
                                         if (!CommonUtil.isEmpty(feedList)) {
                                             mFeedDetailList.addAll(feedList);

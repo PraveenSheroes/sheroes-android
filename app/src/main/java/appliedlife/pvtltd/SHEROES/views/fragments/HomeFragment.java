@@ -2,18 +2,19 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -56,7 +57,8 @@ public class HomeFragment extends BaseFragment {
     private String mDefaultTabKey;
     private List<String> homeTabs = new ArrayList<>();
     private String mUnSelectedFragment;
-    private FragmentOpen fragmentOpen;
+    private FragmentOpen mFragmentOpen;
+    private String mPreviousScreen;
     //endregion
 
 
@@ -67,10 +69,16 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
-        fragmentOpen = new FragmentOpen();
+        mFragmentOpen = new FragmentOpen();
         mDefaultTabKey = getString(R.string.my_feed);
         initializeHomeViews();
         return view;
+    }
+
+    @Override
+    public void onPause() {
+        AppConstants.PREVIOUS_SCREEN = mPreviousScreen;
+        super.onPause();
     }
 
     @Override
@@ -134,6 +142,9 @@ public class HomeFragment extends BaseFragment {
 
     // region Private methods
     private void initializeHomeViews() {
+        if (getArguments() != null) {
+            mPreviousScreen = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
         homeTabs.add(getString(R.string.my_feed));
         homeTabs.add(getString(R.string.ID_TRENDING));
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
@@ -164,7 +175,7 @@ public class HomeFragment extends BaseFragment {
         mFragmentAdapter = new Adapter(getChildFragmentManager());
         for (String name : homeTabs) {
             if (name.equalsIgnoreCase(getString(R.string.my_feed))) {
-                fragmentOpen.setFeedFragment(true);
+                mFragmentOpen.setFeedFragment(true);
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, AppConstants.MY_FEED_POST_STREAM);
@@ -304,6 +315,13 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    public String getActiveTabName() {
+        if (mViewPager.getCurrentItem() == 0)
+            return FEED_SCREEN_LABEL;
+        else
+            return TRENDING_FEED_SCREEN_LABEL;
+    }
+
     //endregion
 
     // region Static innerclass
@@ -337,11 +355,4 @@ public class HomeFragment extends BaseFragment {
     }
     //endregion
 
-
-    public String getActiveTabName(){
-        if(mViewPager.getCurrentItem() == 0)
-            return FEED_SCREEN_LABEL;
-        else
-            return TRENDING_FEED_SCREEN_LABEL;
-    }
 }

@@ -18,19 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NavUtils;
-import androidx.core.app.TaskStackBuilder;
-import androidx.core.content.ContextCompat;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
-import androidx.appcompat.widget.SwitchCompat;
-import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.InputFilter;
@@ -70,6 +57,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.parceler.Parcels;
 
@@ -95,6 +83,18 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NavUtils;
+import androidx.core.app.TaskStackBuilder;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -732,7 +732,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             default:
                 break;
         }
-        mEtView.getEditText().setFilters(new InputFilter[] {new InputFilter.LengthFilter(mMaxLength)});
+        mEtView.getEditText().setFilters(new InputFilter[]{new InputFilter.LengthFilter(mMaxLength)});
     }
 
     @Override
@@ -987,7 +987,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
             communityPost.community = new Community();
             communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
-            communityPost.body = userPostObj.getListDescription();
+            communityPost.body = CommonUtil.isNotEmpty(userPostObj.getListDescription()) ? Html.fromHtml(userPostObj.getListDescription()).toString() : userPostObj.getListDescription();
             communityPost.community.name = userPostObj.getPostCommunityName();
             communityPost.community.isOwner = userPostObj.isCommunityOwner();
             communityPost.isMyPost = userPostObj.isCommunityOwner();
@@ -1029,7 +1029,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
             communityPost.remote_id = (int) userPostObj.getIdOfEntityOrParticipant();
             communityPost.community = new Community();
             communityPost.community.id = userPostObj.getCommunityId();//userPostObj.getCommunityTypeId();
-            communityPost.body = Html.fromHtml(userPostObj.getListDescription()).toString();
+            communityPost.body = CommonUtil.isNotEmpty(userPostObj.getListDescription()) ? Html.fromHtml(userPostObj.getListDescription()).toString() : userPostObj.getListDescription();
             communityPost.community.name = userPostObj.getPostCommunityName();
             communityPost.community.isOwner = userPostObj.isCommunityOwner();
             communityPost.isMyPost = userPostObj.isCommunityOwner();
@@ -1223,16 +1223,16 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         CommonUtil.setPrefValue(AppConstants.CREATE_FEED_POST, true);
         addMentionSpanDetail();
         if (mIsChallengePost) {
-            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
+            mCreatePostPresenter.sendChallengePost(createChallengePostRequestBuilder(getCreatorType(), mCommunityPost.challengeId, mCommunityPost.challengeType, mEtView.getEditText().getText() != null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", getImageUrls(), mLinkRenderResponse, mHasMentions, mMentionSpanList));
         } else if (!mIsEditPost) {
             String accessToken = "";
             if (AccessToken.getCurrentAccessToken() != null) {
                 accessToken = AccessToken.getCurrentAccessToken().getToken();
             }
-            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
+            mCreatePostPresenter.sendPost(createCommunityImagePostRequest(mFilePathList), createCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText() != null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) 0, mLinkRenderResponse, mHasPermission, accessToken, mHasMentions, mMentionSpanList), mIsSharedFromOtherApp);
         } else {
             if (mCommunityPost != null) {
-                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText()!=null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
+                mCreatePostPresenter.editPost(createCommunityImagePostRequest(mEditFilePathList), editCommunityPostRequestBuilder(mCommunityPost.community.id, getCreatorType(), mEtView.getEditText().getText() != null ? mEtView.getEditText().getText().toString().replaceFirst("\\s+$", "") : "", (long) mCommunityPost.remote_id, mDeletedImageIdList, mLinkRenderResponse, mHasMentions, mMentionSpanList));
             }
         }
     }
@@ -1393,7 +1393,7 @@ public class CommunityPostActivity extends BaseActivity implements ICommunityPos
         if (mCommunityPost != null) {
             mEtView.getEditText().requestFocus();
             if (!mIsChallengePost) {
-               updateFacebookShareVisibility();
+                updateFacebookShareVisibility();
             }
         }
         setSupportActionBar(mToolbar);

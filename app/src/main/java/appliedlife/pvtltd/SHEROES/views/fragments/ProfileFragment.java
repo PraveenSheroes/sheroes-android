@@ -1081,7 +1081,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
 //        supportPostponeEnterTransition();
 //        setSupportActionBar(mToolbar);
-        mViewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        mViewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
 
         if (!isChampion) {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
@@ -1419,7 +1419,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mUnFollowDialogFragment = new UnFollowDialogFragment();
         mUnFollowDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mUnFollowDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mUnFollowDialogFragment.isVisible() && getActivity() != null || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1444,7 +1444,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mDeactivateProfileDialogFragment = new DeactivateProfileDialogFragment();
         mDeactivateProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mDeactivateProfileDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mDeactivateProfileDialogFragment.isVisible() && getActivity() != null|| !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(userSolrObj);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1466,7 +1466,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mReportUserProfileDialogFragment = new ReportUserProfileDialogFragment();
         mReportUserProfileDialogFragment.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mReportUserProfileDialogFragment.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mReportUserProfileDialogFragment.isVisible() && getActivity() != null || !isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(userSolrObj);
             bundle.putParcelable(AppConstants.USER, parcelable);
@@ -1556,7 +1556,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-        //ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     public void updateProfileDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
