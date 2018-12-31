@@ -21,7 +21,6 @@ import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -321,19 +320,15 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
 
     public static ProfileFragment createInstance(UserSolrObj userSolrObj, FeedDetail feedDetail, ProfileStrengthDialog.ProfileStrengthType profileStrengthType, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
         HomeFragment.PREVIOUS_SCREEN = SCREEN_LABEL;
-
         ProfileFragment profileFragment = new ProfileFragment();
-        Bundle bundle = new Bundle();/*
-        if(isWriteAStory) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        }*/
+        Bundle bundle = new Bundle();
         if (notificationId != -1) {
             bundle.putInt(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
         }
         if (!CommonUtil.isEmpty(properties)) {
             try {
                 mapToBundle(properties, bundle);
-            } catch (Exception e){
+            } catch (Exception e) {
             }
         }
         bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, Parcels.wrap(userSolrObj));
@@ -371,8 +366,6 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mProfilePresenter.attachView(this);
         viewMoreText = getString(R.string.ID_VIEW_MORE_MENTOR);
         viewLessText = getString(R.string.ID_LESS);
-      //  setupToolbarItemsColor();
-        /*invalidateOptionsMenu();*/
 
         if(getActivity() instanceof ProfileActivity){
             backNavigationImg.setVisibility(View.VISIBLE);
@@ -386,8 +379,6 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         } else {
             backNavigationImg.setVisibility(View.GONE);
         }
-
-
 
         mLoaderGif.setVisibility(View.VISIBLE);
         mLoaderGif.bringToFront();
@@ -911,16 +902,6 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         return isWhatsAppShare;
     }
 
-    private void setupToolbarItemsColor() {
-        /*setSupportActionBar(mToolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setTitle("");
-            final Drawable upArrow = ContextCompat.getDrawable(this, R.drawable.vector_back_arrow);
-            getSupportActionBar().setHomeAsUpIndicator(upArrow);
-        }*/
-    }
-
     private void updateProfileInfo() {
         if (StringUtil.isNotNullOrEmptyString(mUserSolarObject.getCityName())) { //Location
             mTvLocation.setText(mUserSolarObject.getCityName());
@@ -1079,9 +1060,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
 
     private void setPagerAndLayouts() {
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
-//        supportPostponeEnterTransition();
-//        setSupportActionBar(mToolbar);
-        mViewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        mViewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
 
         if (!isChampion) {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
@@ -1556,7 +1535,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-        //ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     public void updateProfileDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
@@ -1787,62 +1766,6 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         }
         invalidateProfileButton();
     }
-
-    public static void navigateTo(Activity fromActivity, UserSolrObj dataItem, long userId, boolean isMentor, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        Bundle bundle = new Bundle();
-        Parcelable parcelableFeedDetail = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.MENTOR_DETAIL, parcelableFeedDetail);
-        Parcelable parcelableMentor = Parcels.wrap(dataItem);
-        intent.putExtra(AppConstants.CHAMPION_ID, userId);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, parcelableMentor);
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, CommunityFeedSolrObj dataItem, long mChampionId, boolean isMentor, int position, String sourceScreen, HashMap<String, Object> properties, int requestCode) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        Bundle bundle = new Bundle();
-        dataItem.setIdOfEntityOrParticipant(mChampionId);
-        dataItem.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
-        dataItem.setItemPosition(position);
-        Parcelable parcelable = Parcels.wrap(dataItem);
-        bundle.putParcelable(AppConstants.COMMUNITY_DETAIL, parcelable);
-        bundle.putParcelable(AppConstants.GROWTH_PUBLIC_PROFILE, null);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        intent.putExtras(bundle);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-
-    public static void navigateTo(Activity fromActivity, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
-        Intent intent = new Intent(fromActivity, ProfileActivity.class);
-        if(isWriteAStory) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        }
-        if (notificationId != -1) {
-            intent.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, notificationId);
-        }
-        if (!CommonUtil.isEmpty(properties)) {
-            intent.putExtra(BaseActivity.SOURCE_PROPERTIES, properties);
-        }
-        intent.putExtra(BaseActivity.STORIES_TAB, isWriteAStory);
-        intent.putExtra(AppConstants.CHAMPION_ID, mChampionId);
-        intent.putExtra(BaseActivity.SOURCE_SCREEN, sourceScreen);
-        intent.putExtra(AppConstants.IS_CHAMPION_ID, isMentor);
-        ActivityCompat.startActivityForResult(fromActivity, intent, requestCode, null);
-    }
-    //endregion public methods
-
 
     @Override
     public void onPause() {

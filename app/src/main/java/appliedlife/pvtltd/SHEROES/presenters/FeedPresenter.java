@@ -129,7 +129,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         } else {
             mFeedState = feedState;
         }
-
         switch (mFeedState) {
             case NORMAL_REQUEST:
                 mNextToken = null;
@@ -150,10 +149,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 return;
         }
         mIsFeedLoading = true;
-
         CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
         communityFeedRequestPojo.setNextToken(mNextToken);
-
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
@@ -180,42 +177,40 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                         getMvpView().stopProgressBar();
                         getMvpView().hideGifLoader();
                         if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                            if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
-                                List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
-                                mNextToken = feedResponsePojo.getNextToken();
-                                switch (mFeedState) {
-                                    case NORMAL_REQUEST:
-                                        getMvpView().stopProgressBar();
-                                        if (mIsHomeFeed) {
-                                            FeedDetail homeFeedHeader = new FeedDetail();
-                                            homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
-                                            feedList.add(0, homeFeedHeader);
-                                        } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
-                                            if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
-                                                if (!StringUtil.isNotEmptyCollection(feedList)) {
-                                                    FeedDetail noStoryFeed = new FeedDetail();
-                                                    noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
-                                                    noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
-                                                    feedList.add(noStoryFeed);
-                                                }
+                            List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+                            mNextToken = feedResponsePojo.getNextToken();
+                            switch (mFeedState) {
+                                case NORMAL_REQUEST:
+                                    getMvpView().stopProgressBar();
+                                    if (mIsHomeFeed) {
+                                        FeedDetail homeFeedHeader = new FeedDetail();
+                                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                                        feedList.add(0, homeFeedHeader);
+                                    } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
+                                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
+                                            if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                                FeedDetail noStoryFeed = new FeedDetail();
+                                                noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
+                                                noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
+                                                feedList.add(noStoryFeed);
                                             }
                                         }
-                                        mFeedDetailList = feedList;
-                                        getMvpView().setFeedEnded(false);
-                                        List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
-                                        getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
-                                        getMvpView().showFeedList(feedDetails);
-                                        break;
-                                    case LOAD_MORE_REQUEST:
-                                        // append in case of load more
-                                        if (!CommonUtil.isEmpty(feedList)) {
-                                            mFeedDetailList.addAll(feedList);
-                                            getMvpView().addAllFeed(feedList);
-                                        } else {
-                                            getMvpView().setFeedEnded(true);
-                                        }
-                                        break;
-                                }
+                                    }
+                                    mFeedDetailList = feedList;
+                                    getMvpView().setFeedEnded(false);
+                                    List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                                    getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                                    getMvpView().showFeedList(feedDetails);
+                                    break;
+                                case LOAD_MORE_REQUEST:
+                                    // append in case of load more
+                                    if (!CommonUtil.isEmpty(feedList)) {
+                                        mFeedDetailList.addAll(feedList);
+                                        getMvpView().addAllFeed(feedList);
+                                    } else {
+                                        getMvpView().setFeedEnded(true);
+                                    }
+                                    break;
                             }
                         } else {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
