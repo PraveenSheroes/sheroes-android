@@ -89,10 +89,10 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     int mPageNo = AppConstants.ONE_CONSTANT;
     private FragmentListRefreshData mFragmentListRefreshData;
     private SwipPullRefreshList mPullRefreshList;
-    private boolean showMyCommunities = true;
+    private boolean mShowMyCommunities = true;
     private EndlessNestedScrollViewListener mEndlessRecyclerViewScrollListener;
     private String mSearchText, mSearchCategory;
-    private FragmentOpen fragmentOpen;
+    private FragmentOpen mFragmentOpen;
     private String mScreenLabel;
     private boolean mIsActiveTabFragment;
     //endregion
@@ -158,7 +158,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         ButterKnife.bind(this, view);
 
         mCommunitiesListPresenter.attachView(this);
-        fragmentOpen = new FragmentOpen();
+        mFragmentOpen = new FragmentOpen();
 
         if (getArguments() != null) {
             mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
@@ -189,30 +189,28 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         loaderGif.setVisibility(View.VISIBLE);
 
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
-//        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
-
-        if (showMyCommunities) {
+        if (mShowMyCommunities) {
             callCommunityApi();
         } else {
-            filterCommunities(showMyCommunities, mSearchText, mSearchCategory);
+            filterCommunities(mShowMyCommunities, mSearchText, mSearchCategory);
         }
 
         mEndlessRecyclerViewScrollListener = new EndlessNestedScrollViewListener(linearLayoutManager) {
 
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                if (mCommunitiesListPresenter.isCommunityFeedLoading() || mCommunitiesListPresenter.getCommunityFeedEnded() || showMyCommunities) {
+                if (mCommunitiesListPresenter.isCommunityFeedLoading() || mCommunitiesListPresenter.getCommunityFeedEnded() || mShowMyCommunities) {
                     return;
                 }
 
                 mAllCommunitiesListView.post(new Runnable() {
                     public void run() {
-                        if (!showMyCommunities)
+                        if (!mShowMyCommunities)
                             mFeedAdapter.feedStartedLoading();
                     }
                 });
 
-                if (!showMyCommunities) {
+                if (!mShowMyCommunities) {
                     mCommunitiesListPresenter.fetchSearchedCommunity(mSearchText, mSearchCategory);
                 }
             }
@@ -249,7 +247,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
         emptyLayout.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
-        this.showMyCommunities = true;
+        this.mShowMyCommunities = true;
         mCommunitiesListPresenter.fetchAllCommunities();
         mCommunitiesListPresenter.resetState();
     }
@@ -352,7 +350,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         loaderGif.setVisibility(View.GONE);
         communitiesContainer.setVisibility(View.VISIBLE);
 
-        if (showMyCommunities) {
+        if (mShowMyCommunities) {
             mMyCommunitiesListView.setVisibility(View.VISIBLE);
             mMyCommunitiesLabel.setVisibility(View.VISIBLE);
         } else {
@@ -522,7 +520,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     }
 
     public void setSearchedDeeplinkParameters(boolean showMyCommunities, String searchText, String searchCategory) {
-        this.showMyCommunities = showMyCommunities;
+        this.mShowMyCommunities = showMyCommunities;
         mSearchText = searchText;
         mSearchCategory = searchCategory;
     }
@@ -530,7 +528,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     public void filterCommunities(boolean showMyCommunities, String searchText, String searchCategory) {
         emptyLayout.setVisibility(View.GONE);
         loaderGif.setVisibility(View.VISIBLE);
-        this.showMyCommunities = showMyCommunities;
+        this.mShowMyCommunities = showMyCommunities;
         mSearchText = searchText;
         mSearchCategory = searchCategory;
         mCommunitiesListPresenter.setHasFeedEnded(false);
@@ -594,7 +592,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         communitiesContainer.setVisibility(View.VISIBLE);
         loaderGif.setVisibility(View.VISIBLE);
         if (null != getActivity() && getActivity() instanceof HomeActivity) {
-            if (fragmentOpen.isFeedFragment())
+            if (mFragmentOpen.isFeedFragment())
                 ((HomeActivity) getActivity()).communityOnClick();
             else
                 callCommunityApi();

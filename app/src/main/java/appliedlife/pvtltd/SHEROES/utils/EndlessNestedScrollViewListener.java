@@ -56,7 +56,6 @@ public abstract class EndlessNestedScrollViewListener implements NestedScrollVie
     // but first we check if we are waiting for the previous load to finish.
     @Override
     public void onScrollChange(NestedScrollView nestedScrollView, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-        android.util.Log.i("dharmendra", "hi in scrolling");
         int totalItemCount = mLayoutManager.getItemCount();
 
         View view = nestedScrollView.getChildAt(nestedScrollView.getChildCount() - 1);

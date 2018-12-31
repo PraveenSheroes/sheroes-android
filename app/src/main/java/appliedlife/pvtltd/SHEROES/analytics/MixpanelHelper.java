@@ -411,7 +411,6 @@ public class MixpanelHelper {
                         .build();
         properties.put(EventProperty.SOURCE.getString(), screenName);
         return properties;
-
     }
 
     //TODO - Fix this with ujjwal
@@ -428,7 +427,6 @@ public class MixpanelHelper {
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
-
             AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
         }
     }
@@ -446,11 +444,9 @@ public class MixpanelHelper {
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
             properties.put(EventProperty.SEARCH_QUERY.getString(), communityDetails.getSearchText());
-
             if (HomeActivity.isSearchClicked) {
                 properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
             }
-
             AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
         }
     }

@@ -83,9 +83,9 @@ public class ArticlesFragment extends BaseFragment {
     private boolean mIsEdit = false;
     private boolean mIsSearch = false;
     private String mSearchText, mSearchCategory;
-    private FeedRequestPojo feedRequestPojo;
-    private List<Long> categoryIdList = new ArrayList<>();
-    private View view;
+    private FeedRequestPojo mFeedRequestPojo;
+    private List<Long> mCategoryIdList = new ArrayList<>();
+    private View mView;
     private String mScreenLabel;
     private boolean mIsActiveTabFragment;
     //endregion member variables
@@ -118,8 +118,8 @@ public class ArticlesFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SheroesApplication.getAppComponent(getContext()).inject(this);
-        view = inflater.inflate(R.layout.fragment_card_list, container, false);
-        ButterKnife.bind(this, view);
+        mView = inflater.inflate(R.layout.fragment_card_list, container, false);
+        ButterKnife.bind(this, mView);
 
         if (getArguments() != null) {
             mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
@@ -131,7 +131,7 @@ public class ArticlesFragment extends BaseFragment {
         mHomePresenter.attachView(this);
         loaderGif.setVisibility(View.VISIBLE);
         if (getArguments() != null) {
-            categoryIdList = (List<Long>) getArguments().getSerializable(AppConstants.ARTICLE_FRAGMENT);
+            mCategoryIdList = (List<Long>) getArguments().getSerializable(AppConstants.ARTICLE_FRAGMENT);
         }
         mLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -159,13 +159,13 @@ public class ArticlesFragment extends BaseFragment {
         mRecyclerView.addOnScrollListener(mHidingScrollListener);
         ((SimpleItemAnimator) mRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
         super.setAllInitializationForFeeds(mFragmentListRefreshData, mPullRefreshList, mAdapter, mLayoutManager, mPageNo, mSwipeView, mLiNoResult, null, mRecyclerView, 0, 0, mListLoad, mIsEdit, mHomePresenter, mAppUtils, mProgressBar);
-        mFragmentListRefreshData.setCategoryIdList(categoryIdList);
-        categoryArticleFilter(categoryIdList);
+        mFragmentListRefreshData.setCategoryIdList(mCategoryIdList);
+        categoryArticleFilter(mCategoryIdList);
 
         mSwipeView.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                categoryArticleFilter(categoryIdList);
+                categoryArticleFilter(mCategoryIdList);
             }
         });
 
@@ -174,7 +174,7 @@ public class ArticlesFragment extends BaseFragment {
             ((HomeActivity) getActivity()).articleUi();
         }
 
-        return view;
+        return mView;
     }
 
     public void categoryArticleFilter(final List<Long> categoryIds) {
@@ -187,13 +187,13 @@ public class ArticlesFragment extends BaseFragment {
         mTrendingFeedDetail.clear();
         setRefreshList(mPullRefreshList);
         mFragmentListRefreshData.setSwipeToRefresh(AppConstants.ONE_CONSTANT);
-        feedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
-        feedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
+        mFeedRequestPojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), categoryIds);
+        mFeedRequestPojo.setPageSize(AppConstants.FEED_FIRST_TIME);
 
         if (mIsSearch && mSearchText != null && mSearchCategory != null) {
             mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, true, true);
         } else {
-            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+            mHomePresenter.getFeedFromPresenter(mFeedRequestPojo);
         }
     }
 
@@ -417,7 +417,7 @@ public class ArticlesFragment extends BaseFragment {
         if (mIsSearch && mSearchText != null && mSearchCategory != null) {
             mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, true, true);
         } else {
-            mHomePresenter.getFeedFromPresenter(feedRequestPojo);
+            mHomePresenter.getFeedFromPresenter(mFeedRequestPojo);
         }
     }
 

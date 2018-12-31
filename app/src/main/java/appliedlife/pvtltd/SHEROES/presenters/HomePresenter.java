@@ -187,10 +187,20 @@ public class HomePresenter extends BasePresenter<HomeView> {
             mNextToken = "";
         }
 
-        String URL = AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory;
+        StringBuilder searchUrl = new StringBuilder();
+        searchUrl.append(AppConstants.SEARCH);
+        searchUrl.append(AppConstants.SEARCH_QUERY);
+        searchUrl.append(searchText);
+        searchUrl.append(AppConstants.SEARCH_TAB);
+        searchUrl.append(searchCategory);
+
+        String URL = searchUrl.toString();
 
         if (!pullToRefresh && mNextToken != null) {
-            URL = URL + AppConstants.SEARCH_NEXT_TOKEN + mNextToken;
+            searchUrl.append(AppConstants.SEARCH_NEXT_TOKEN);
+            searchUrl.append(mNextToken);
+
+            URL = searchUrl.toString();
         }
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
