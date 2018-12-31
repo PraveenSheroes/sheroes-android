@@ -249,7 +249,8 @@ public class AppConstants {
     public static final String USER_PROFILE_URL_COM = "https://sheroes.com/users/";
     public static final String USER_URL = "https://sheroes.in/users";
     public static final String USER_URL_COM = "https://sheroes.com/users";
-    public static final String CHALLENGE_URL = "https://sheroes.in/feed";
+    public static final String FEED_URL = "https://sheroes.in/feed";
+    public static final String FEED_URL_COM = "https://sheroes.com/feed";
     public static final String WRITE_STORY_URL = "https://sheroes.in/write_story";
     public static final String WRITE_STORY_URL_COM = "https://sheroes.com/write_story";
     public static final String MY_STORY_URL = "https://sheroes.in/my_story";
@@ -272,7 +273,6 @@ public class AppConstants {
     public static final String PREFILL_TEXT = "prefill_text";
     public static final String IS_CHALLENGE_TYPE = "is_challenge_type";
     public static final String CHALLENGE_AUTHOR_TYPE = "challenge_author_type";
-    public static final String CHALLENGE_URL_COM = "https://sheroes.com/feed";
     public static final String FAQ_URL = "https://sheroes.com/faq";
     public static final String FAQ_URL_COM = "https://sheroes.com/faq";
     public static final String ICC_MEMBERS_URL = "https://sheroes.in/icc-members";

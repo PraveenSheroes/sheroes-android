@@ -20,8 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
-
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,8 +37,8 @@ import com.appsflyer.AppsFlyerLib;
 import com.clevertap.android.sdk.CleverTapAPI;
 import com.crashlytics.android.Crashlytics;
 import com.f2prateek.rx.preferences2.Preference;
+import com.facebook.applinks.AppLinkData;
 import com.facebook.login.LoginManager;
-
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
@@ -54,7 +52,6 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,7 +65,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -149,8 +145,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FAQSFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.BellNotificationDialogFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
@@ -185,8 +181,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
-    private static final int ANIMATION_DELAY_TIME = 2000;
-    private static final int ANIMATION_DURATION_TIME = 5000;
+    private static final int FACEBOOK_DEFERRED_DEEPLINK_INDEX = 8;
+    private static final int ANIMATION_DELAY_TIME = 5000;
+    private static final int ANIMATION_DURATION_TIME = 10000;
     private static final String MORE_TOP_ICON = "More Top Icon";
     //endregion
 
@@ -356,6 +353,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private boolean showFab = true;
     public static boolean isSearchClicked = false;
     private String mSearchText, mSearchCategory, mNextToken;
+    private BellNotificationDialogFragment mBellNotificationDialogFragment;
     //endregion
 
     // region Public methods
@@ -409,7 +407,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && !mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
             if (!mInstallUpdatePreference.get().isOnBoardingSkipped()) {
@@ -429,7 +426,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             }
         }
         if (shouldShowSnowFlake()) {
-            mSantaView.setVisibility(View.GONE);
             animateSnowFlake();
         } else {
             mSnowFlakView.setVisibility(View.GONE);
@@ -567,10 +563,13 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
             BellNotification bellNotification = bellNotificationResponse.getNotification();
             if (StringUtil.isNotNullOrEmptyString(bellNotification.getDeepLinkUrl())) {
-                challengeIdHandle(bellNotification.getDeepLinkUrl());
+                handleBellNotification(bellNotification.getDeepLinkUrl());
             } else {
                 mTitleText.setText("");
                 homeOnClick();
+            }
+            if (mBellNotificationDialogFragment != null && mBellNotificationDialogFragment.isVisible()) {
+                mBellNotificationDialogFragment.dismiss();
             }
         }
     }
@@ -674,12 +673,12 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
         mliArticleSpinnerIcon.setVisibility(View.GONE);
 
-        if(showFab) {
+        if (showFab) {
             mFloatActionBtn.show();
             mFloatActionBtn.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.email)));
             mFloatActionBtn.setImageResource(R.drawable.vector_pencil);
             mFloatActionBtn.setTag(AppConstants.FEED_SUB_TYPE);
-        }else{
+        } else {
             mFloatActionBtn.hide();
         }
     }
@@ -919,7 +918,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     }
                 }, 2000);
 
-            } else if(fragment instanceof  SearchFragment || fragment instanceof ProfileFragment){
+            } else if (fragment instanceof SearchFragment || fragment instanceof ProfileFragment) {
                 homeOnClick();
             } else {
                 resetUiSelectedOptions();
@@ -940,15 +939,15 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     public void bellNotificationDialog() {
-        BellNotificationDialogFragment bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
-        if (bellNotificationDialogFragment == null) {
-            bellNotificationDialogFragment = new BellNotificationDialogFragment();
+        mBellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
+        if (mBellNotificationDialogFragment == null) {
+            mBellNotificationDialogFragment = new BellNotificationDialogFragment();
             Bundle bundle = new Bundle();
-            bellNotificationDialogFragment.setArguments(bundle);
+            mBellNotificationDialogFragment.setArguments(bundle);
             flNotificationReadCount.setVisibility(View.GONE);
         }
-        if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
+        if (!mBellNotificationDialogFragment.isVisible() && !mBellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mBellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
         }
     }
 
@@ -1247,7 +1246,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     currentFragment.refreshList();
                 }
             }
-        } else   if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
+        } else if (resultCode == REQUEST_CODE_FOR_EDIT_PROFILE) {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 mProfileFragment.updateProfileDetails(bundle.getString(EditUserProfileActivity.USER_NAME), bundle.getString(EditUserProfileActivity.LOCATION), bundle.getString(EditUserProfileActivity.USER_DESCRIPTION), bundle.getString(EditUserProfileActivity.IMAGE_URL),
@@ -1297,7 +1296,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     case AppConstants.REQUEST_CODE_FOR_GALLERY:
                         mImageCaptureUri = intent.getData();
                         if (resultCode == Activity.RESULT_OK) {
-                            if(mProfileFragment != null) {
+                            if (mProfileFragment != null) {
                                 mProfileFragment.croppingIMG();
                             }
                         }
@@ -1352,7 +1351,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     renderFAQSView();
                 } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
-                } else if(intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
+                } else if (intent.getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
                     setSearchedData(intent);
                     searchOnClick();
                 }
@@ -1437,7 +1436,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     showSelectLanguageOption();
                 }
 
-                if(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)){
+                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
                     searchOnClick();
                 }
 
@@ -1539,11 +1538,37 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                         startActivity(intent);
                     }
                 }
+            } else {
+                AppLinkData.fetchDeferredAppLinkData(this,
+                        new AppLinkData.CompletionHandler() {
+                            @Override
+                            public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
+                                // Process app link data
+                                if (appLinkData != null) {
+                                    openFacebookDeferredDeepLinkUrlScreen(appLinkData);
+                                }
+                            }
+                        }
+                );
             }
-            // }
         } catch (JSONException e) {
             Crashlytics.getInstance().core.logException(e);
         }
+    }
+
+    private void openFacebookDeferredDeepLinkUrlScreen(AppLinkData appLinkData) {
+        String urlOfDeferredLink = appLinkData.getTargetUri().toString().substring(FACEBOOK_DEFERRED_DEEPLINK_INDEX, appLinkData.getTargetUri().toString().length());
+        Uri url = Uri.parse(urlOfDeferredLink);
+        Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
+        Bundle bundle = new Bundle();
+        intent.putExtras(bundle);
+        intent.setData(url);
+        startActivity(intent);
+        HashMap<String, Object> properties =
+                new EventProperty.Builder()
+                        .url(urlOfDeferredLink)
+                        .build();
+        AnalyticsManager.trackEvent(Event.FACEBOOK_DEFERRED_DEEPLINK, getScreenName(), properties);
     }
 
     private boolean isIntentAvailable(Context ctx, Intent intent) {
@@ -1590,7 +1615,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private boolean isWhatsAppShare() {
         boolean isWhatsappShare = false;
-        if(CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
+        if (CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI)) {
             if (mConfiguration.isSet() && mConfiguration.get().configData != null) {
                 isWhatsappShare = mConfiguration.get().configData.mIsWhatsAppShareEnable;
             } else {
@@ -1655,21 +1680,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
     }
 
-    private void challengeIdHandle(String urlOfSharedCard) {
-        if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
-            try {
-                int indexOfFirstEqual = AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
-                String challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual + 1, urlOfSharedCard.length());
-                if (StringUtil.isNotNullOrEmptyString(challengeUrl)) {
-                    String ChallengeId = challengeUrl;
-                    byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
-                    String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
-                    homeOnClick();
-                }
-            } catch (UnsupportedEncodingException e) {
-                Crashlytics.getInstance().core.logException(e);
-                e.printStackTrace();
-            }
+    private void handleBellNotification(String urlOfSharedCard) {
+        if (urlOfSharedCard.contains(AppConstants.FEED_URL) || urlOfSharedCard.contains(AppConstants.FEED_URL_COM)) {
+            homeOnClick();
         } else {
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
@@ -1789,7 +1802,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void openProfileActivity(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
         //TODO - Its was added to show profile strength on Nav menu, required api changes, future task
-       // ProfileFragment.createInstance(mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
+        // ProfileFragment.createInstance(mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
         ProfileActivity.navigateTo(this, mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
@@ -1826,7 +1839,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         } else {
             ViewCompat.setElevation(mAppBarLayout, 0f);
         }
-       // mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
+        // mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
 //        mTvHome.setText(getString(R.string.home_label));
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
@@ -1841,7 +1854,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         addNewFragment(homeFragment, R.id.fl_article_card_view, HomeFragment.class.getName(), null, false);
     }
 
-    private void highlightHome(){
+    private void highlightHome() {
         showFab = true;
         mFloatActionBtn.show();
         mIvHome.setImageResource(R.drawable.home_red_vector);
@@ -1849,7 +1862,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mIvProfile.setImageResource(R.drawable.profile_grey_vector);
     }
 
-    private void highlightSearch(){
+    private void highlightSearch() {
         showFab = false;
         mFloatActionBtn.hide();
         mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
@@ -1857,7 +1870,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mIvProfile.setImageResource(R.drawable.profile_grey_vector);
     }
 
-    private void highlightProfile(){
+    private void highlightProfile() {
         showFab = false;
         mFloatActionBtn.hide();
         mIvHome.setImageResource(R.drawable.ic_home_unselected_icon);
@@ -1865,7 +1878,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         mIvProfile.setImageResource(R.drawable.profile_red_vector);
     }
 
-    private void openSearchFragment(){
+    private void openSearchFragment() {
         mCLMainLayout.setScrollContainer(false);
         SearchFragment searchFragment = SearchFragment.createInstance(mSearchText, mSearchCategory, mNextToken);
         FragmentManager fragmentManager = getSupportFragmentManager();

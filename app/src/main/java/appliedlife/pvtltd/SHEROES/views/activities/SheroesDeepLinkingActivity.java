@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFormatException;
-import androidx.core.app.ActivityCompat;
 import android.util.Base64;
 import android.widget.Toast;
 
@@ -13,6 +12,7 @@ import com.f2prateek.rx.preferences2.Preference;
 
 import javax.inject.Inject;
 
+import androidx.core.app.ActivityCompat;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseActivity;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -124,7 +124,7 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
         if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
             try {
                 if (StringUtil.isNotNullOrEmptyString(urlOfSharedCard)) {
-                    if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
+                    if (urlOfSharedCard.contains(AppConstants.FEED_URL) || urlOfSharedCard.contains(AppConstants.FEED_URL_COM)) {
                         try {
                             Intent into = new Intent(SheroesDeepLinkingActivity.this, HomeActivity.class);
                             int indexOfFirstEqual = AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
