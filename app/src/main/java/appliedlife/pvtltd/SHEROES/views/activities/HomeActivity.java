@@ -1422,10 +1422,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     showSelectLanguageOption();
                 }
 
-                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
-                    searchOnClick();
-                }
-
             }
         }
     }
