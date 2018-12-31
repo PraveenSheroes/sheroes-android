@@ -1556,7 +1556,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-        //ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
+        ProfileActivity.navigateTo(getActivity(), communityFeedSolrObj, userId, isMentor, position, source, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 
     public void updateProfileDetails(String name, String location, String userBio, String imageUrl, String filledFields, String unfilledFields, float progressPercentage) {
