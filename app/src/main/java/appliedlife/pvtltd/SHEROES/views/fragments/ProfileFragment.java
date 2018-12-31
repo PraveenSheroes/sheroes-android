@@ -1081,7 +1081,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         ViewCompat.setTransitionName(mAppBarLayout, AppConstants.COMMUNITY_DETAIL);
 //        supportPostponeEnterTransition();
 //        setSupportActionBar(mToolbar);
-        mViewPagerAdapter = new ViewPagerAdapter(getFragmentManager());
+        mViewPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
 
         if (!isChampion) {
             mViewPagerAdapter.addFragment(ProfileDetailsFragment.createInstance(mChampionId, mUserSolarObject.getNameOrTitle()), getString(R.string.ID_PROFILE));
