@@ -96,7 +96,7 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
         suggestedFriendFragment.setArguments(bundle);
         return suggestedFriendFragment;
     }
-//endregion
+    //endregion
 
     //region Public methods
     @Override
@@ -170,7 +170,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     @Override
     public void onContactClicked(UserContactDetail contactDetail, View view) {
-
     }
 
     @Override
@@ -201,7 +200,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @Override
@@ -277,7 +275,6 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     @Override
     public void showContacts(List<UserContactDetail> userContactDetailList) {
-
     }
 
     public void getAllSuggestedContacts() {
@@ -322,12 +319,10 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     @Override
     public void addAllUserContactData(List<UserContactDetail> userContactDetailList) {
-
     }
 
     @Override
     public void contactsFromServerAfterSyncFromPhoneData(AllContactListResponse allContactListResponse) {
-
     }
 
     @Override
@@ -344,31 +339,25 @@ public class SuggestedFriendFragment extends BaseFragment implements ContactDeta
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 }

@@ -253,7 +253,6 @@ public class ArticlesFragment extends BaseFragment {
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
-
             mIsActiveTabFragment = true;
 
             if (getParentFragment() instanceof SearchFragment) {
@@ -263,7 +262,7 @@ public class ArticlesFragment extends BaseFragment {
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .tabTitle(SearchFragment.searchTabName)
-                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .sourceTabTitle(HomeFragment.SOURCE_ACTIVE_TAB)
                                     .build();
                     AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);
@@ -371,22 +370,18 @@ public class ArticlesFragment extends BaseFragment {
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     public void bookMarkForCard(FeedDetail feedDetail) {

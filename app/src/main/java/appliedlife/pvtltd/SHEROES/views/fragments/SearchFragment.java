@@ -168,10 +168,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if (charSequence.toString().length() == 0) {
                     if (mSearchStarted) {
-                        mHashTagFragment.callHashTagApi();
+                        mHashTagFragment.getHashtags();
                         mCommunitiesListFragment.callCommunityApi();
                         mFeedFragment.setSearchParams(false, "", "");
-                        mFeedFragment.callFeedApi();
+                        mFeedFragment.getFeedData();
                         mArticlesFragment.setFilterParams(false, "", "");
                         mArticlesFragment.categoryArticleFilter(null);
                     }
@@ -208,7 +208,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                                 mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
                             } else {
                                 mFeedFragment.setSearchParams(false, searchText, SearchEnum.TOP.toString());
-                                mFeedFragment.callFeedApi();
+                                mFeedFragment.getFeedData();
                             }
                             break;
                         case 1:
@@ -222,7 +222,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                             if (mETSearch.getText().toString().trim().length() > 0) {
                                 mHashTagFragment.filterFeed(searchText);
                             } else {
-                                mHashTagFragment.callHashTagApi();
+                                mHashTagFragment.getHashtags();
                             }
                             break;
                         case 3:
@@ -252,7 +252,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     @Override
     public void onPause() {
         super.onPause();
-        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
+        HomeFragment.PREVIOUS_SCREEN = SCREEN_LABEL;
     }
     //endregion activity lifecycle methods
 
@@ -429,7 +429,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         searchImg.setVisibility(View.VISIBLE);
         backImg.setVisibility(View.GONE);
         closeImg.setVisibility(View.GONE);
-
         ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
     }
 
@@ -458,21 +457,18 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private void fireQuerySearchEvent() {
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .source(HomeFragment.PREVIOUS_SCREEN)
                         .searchQuery(mETSearch.getText().toString())
                         .tabTitle(searchTabName)
                         .build();
 
         AnalyticsManager.trackEvent(Event.QUERY_SEARCHED, getScreenName(), properties);
-
     }
 
     private void fireSearchOpenEvent() {
-
-
         HashMap<String, Object> properties =
                 new EventProperty.Builder()
-                        .source(AppConstants.PREVIOUS_SCREEN)
+                        .source(HomeFragment.PREVIOUS_SCREEN)
                         .searchQuery(mETSearch.getText().toString())
                         .tabTitle(searchTabName)
                         .build();
@@ -508,67 +504,54 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
     //endregion inherited methods
 
@@ -609,11 +592,11 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         Fragment fragment = adapter.getFragment(index);
         if (fragment instanceof FeedFragment) {
             ((FeedFragment) fragment).setSearchParams(false, "", "");
-            ((FeedFragment) fragment).callFeedApi();
+            ((FeedFragment) fragment).getFeedData();
         } else if (fragment instanceof CommunitiesListFragment) {
             ((CommunitiesListFragment) fragment).callCommunityApi();
         } else if (fragment instanceof HashTagFragment) {
-            ((HashTagFragment) fragment).callHashTagApi();
+            ((HashTagFragment) fragment).getHashtags();
         } else if (fragment instanceof ArticlesFragment) {
             ((ArticlesFragment) fragment).setFilterParams(false, "", "");
             ((ArticlesFragment) fragment).categoryArticleFilter(null);
@@ -654,12 +637,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             return mSearchFragments.size();
         }
 
-
         @Nullable
         @Override
         public CharSequence getPageTitle(int position) {
             return mSearchFragmentTitles.get(position);
-
         }
 
         public View getTabView(int position) {
@@ -670,7 +651,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             img.setImageResource(mTabIcons[position]);
             return v;
         }
-
 
         public void setTabLabelColor() {
             for (int i = 0; i < mSearchTabsLayout.getTabCount(); i++) {
@@ -687,7 +667,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         }
     }
     //endregion inner class
-
 }
 
 

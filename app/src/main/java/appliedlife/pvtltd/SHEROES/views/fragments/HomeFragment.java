@@ -39,8 +39,13 @@ import butterknife.ButterKnife;
  */
 
 public class HomeFragment extends BaseFragment {
+    //region static variables
     public static String TRENDING_FEED_SCREEN_LABEL = "Trending Feed Screen";
     public static String FEED_SCREEN_LABEL = "Feed Screen";
+    public static String PREVIOUS_SCREEN="";
+    public static String SOURCE_ACTIVE_TAB = "";
+    //endregion static variables
+
     // region View variables
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
@@ -77,7 +82,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onPause() {
-        AppConstants.PREVIOUS_SCREEN = mPreviousScreen;
+       PREVIOUS_SCREEN = mPreviousScreen;
         super.onPause();
     }
 
@@ -321,7 +326,6 @@ public class HomeFragment extends BaseFragment {
         else
             return TRENDING_FEED_SCREEN_LABEL;
     }
-
     //endregion
 
     // region Static innerclass
@@ -354,5 +358,4 @@ public class HomeFragment extends BaseFragment {
         }
     }
     //endregion
-
 }

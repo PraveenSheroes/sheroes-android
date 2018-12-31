@@ -210,7 +210,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                         // append in case of load more
                                         if (!CommonUtil.isEmpty(feedList)) {
                                             mFeedDetailList.addAll(feedList);
-                                            //getMvpView().showFeedList(mFeedDetailList);
                                             getMvpView().addAllFeed(feedList);
                                         } else {
                                             getMvpView().setFeedEnded(true);

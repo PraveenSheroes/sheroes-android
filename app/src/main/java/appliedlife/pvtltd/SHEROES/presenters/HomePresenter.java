@@ -74,6 +74,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATIO
 public class HomePresenter extends BasePresenter<HomeView> {
     //region constant
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
+    private final String INFO = "info";
     //endregion constant
 
     //region injected variable
@@ -222,15 +223,15 @@ public class HomePresenter extends BasePresenter<HomeView> {
                                     getMvpView().getFeedListSuccess(feedResponsePojo);
                                     mNextToken = feedResponsePojo.getNextToken();
                                 } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                                     } else {
                                         getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                     }
                                 }
                             } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                                 } else {
                                     getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                 }

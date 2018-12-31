@@ -191,10 +191,11 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         mFragmentListRefreshData = new FragmentListRefreshData(AppConstants.ONE_CONSTANT, AppConstants.MY_COMMUNITIES_FRAGMENT, AppConstants.NO_REACTION_CONSTANT);
 //        mCommunitiesListPresenter.fetchMyCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, mFragmentListRefreshData.getPageNo()));
 
-        if (showMyCommunities)
+        if (showMyCommunities) {
             callCommunityApi();
-        else
+        } else {
             filterCommunities(showMyCommunities, mSearchText, mSearchCategory);
+        }
 
         mEndlessRecyclerViewScrollListener = new EndlessNestedScrollViewListener(linearLayoutManager) {
 
@@ -532,7 +533,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
         this.showMyCommunities = showMyCommunities;
         mSearchText = searchText;
         mSearchCategory = searchCategory;
-//        mMyCommunitiesListView.setVisibility(View.GONE);
         mCommunitiesListPresenter.setHasFeedEnded(false);
         mCommunitiesListPresenter.resetState();
         mCommunitiesListPresenter.fetchSearchedCommunity(searchText, searchCategory);
@@ -640,7 +640,6 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
-
             mIsActiveTabFragment = true;
 
             if (getParentFragment() instanceof SearchFragment) {
@@ -650,7 +649,7 @@ public class CommunitiesListFragment extends BaseFragment implements ICommunitie
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .tabTitle(SearchFragment.searchTabName)
-                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .sourceTabTitle(HomeFragment.SOURCE_ACTIVE_TAB)
                                     .build();
                     AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);

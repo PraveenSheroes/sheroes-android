@@ -320,7 +320,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     //region activity lifecycle methods
 
     public static ProfileFragment createInstance(UserSolrObj userSolrObj, FeedDetail feedDetail, ProfileStrengthDialog.ProfileStrengthType profileStrengthType, long mChampionId, boolean isMentor, int notificationId, String sourceScreen, HashMap<String, Object> properties, int requestCode, boolean isWriteAStory) {
-        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
+        HomeFragment.PREVIOUS_SCREEN = SCREEN_LABEL;
 
         ProfileFragment profileFragment = new ProfileFragment();
         Bundle bundle = new Bundle();/*
@@ -1847,6 +1847,6 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
     @Override
     public void onPause() {
         super.onPause();
-        AppConstants.PREVIOUS_SCREEN = SCREEN_LABEL;
+        HomeFragment.PREVIOUS_SCREEN = SCREEN_LABEL;
     }
 }

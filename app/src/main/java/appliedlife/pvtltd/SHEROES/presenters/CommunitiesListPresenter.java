@@ -45,6 +45,9 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
  * communities presenter to perform action like join, left , fetch my/all community, fetch community details.
  */
 public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView> {
+    //region Constants
+    private final String INFO = "info";
+    //endregion Constants
 
     //region injected variable
     @Inject
@@ -164,15 +167,15 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                                 mCommunitiesList.addAll(feedDetails);
                                 getMvpView().showAllCommunity(mCommunitiesList);
                             } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                                 } else {
                                     getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                 }
                             }
                         } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                            if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                             } else {
                                 getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                             }
@@ -307,7 +310,6 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                     }
                 });
     }
-
 
     public void leaveCommunity(RemoveMemberRequest removeMemberRequest, final CommunityFeedSolrObj communityFeedSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

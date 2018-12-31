@@ -711,7 +711,6 @@ public class EditUserProfileActivity extends BaseActivity implements IEditProfil
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     private void requestFocus(View view) {

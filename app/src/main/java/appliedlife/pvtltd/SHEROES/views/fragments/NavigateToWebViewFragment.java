@@ -268,42 +268,33 @@ public class NavigateToWebViewFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         webPagesView.destroy();
-
-
     }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 }

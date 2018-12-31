@@ -53,7 +53,6 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
                 .subscribe(new DisposableObserver<List<String>>() {
                     @Override
                     public void onComplete() {
-
                     }
 
                     @Override

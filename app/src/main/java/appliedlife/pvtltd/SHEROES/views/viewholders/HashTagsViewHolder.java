@@ -31,7 +31,6 @@ public class HashTagsViewHolder extends RecyclerView.ViewHolder{
         this.mHashTagsList = hashTagsList;
 
         ButterKnife.bind(this, itemView);
-
     }
     //endregion constructor
 

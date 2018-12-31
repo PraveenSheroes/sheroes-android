@@ -642,7 +642,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick({R.id.ll_home, R.id.ic_sheroes})
     public void homeOnClick() {
         isSearchClicked = false;
-        AppConstants.PREVIOUS_SCREEN = getScreenName();
+        HomeFragment.PREVIOUS_SCREEN = getScreenName();
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         mFragmentOpen.setFeedFragment(true);
         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams)
@@ -1053,12 +1053,10 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @Override
     public void startProgressBar() {
-
     }
 
     @Override
     public void stopProgressBar() {
-
     }
 
     @Override
@@ -1068,27 +1066,22 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
@@ -1867,7 +1860,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         addNewFragment(searchFragment, R.id.fl_article_card_view, SearchFragment.class.getName(), null, false);
         mAppBarLayout.setVisibility(View.GONE);
-
     }
 
     private void initCommunityViewPagerAndTabs() {

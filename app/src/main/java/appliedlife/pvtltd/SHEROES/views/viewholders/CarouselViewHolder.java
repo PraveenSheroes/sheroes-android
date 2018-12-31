@@ -36,11 +36,11 @@ import butterknife.OnClick;
 public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region private variable
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
-    private BaseHolderInterface viewInterface;
-    private CarouselDataObj carouselDataObj;
-    private boolean isUpdateFromProfile;
+    private BaseHolderInterface mViewInterface;
+    private CarouselDataObj mCarouselDataObj;
+    private boolean mIsUpdateFromProfile;
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
-    private int position;
+    private int mPosition;
     private boolean mIsSearch;
     //endregion
 
@@ -66,7 +66,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface, boolean isSearch) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.viewInterface = baseHolderInterface;
+        this.mViewInterface = baseHolderInterface;
         this.mIsSearch = isSearch;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -75,7 +75,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    scrollStatePositionsMap.put(position, recyclerView.getLayoutManager().onSaveInstanceState());
+                    scrollStatePositionsMap.put(mPosition, recyclerView.getLayoutManager().onSaveInstanceState());
                 }
             }
         });
@@ -85,8 +85,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region public method
     @Override
     public void bindData(CarouselDataObj item, final Context context, final int position) {
-        this.carouselDataObj = item;
-        this.position = position;
+        this.mCarouselDataObj = item;
+        this.mPosition = position;
         item.setItemPosition(position);
         if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             mTitle.setVisibility(View.VISIBLE);
@@ -123,14 +123,14 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
                 mRecyclerView.setLayoutManager(linearLayoutManager);
             }
 
-            mAdapter = new CarouselListAdapter(context, viewInterface, item, this, mIsSearch);
+            mAdapter = new CarouselListAdapter(context, mViewInterface, item, this, mIsSearch);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setData(item.getFeedDetails());
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i) instanceof UserSolrObj) {
                     boolean isSuggested = ((UserSolrObj) list.get(i)).isSuggested();
                     if (isSuggested) {
-                        isUpdateFromProfile = true;
+                        mIsUpdateFromProfile = true;
                         UserSolrObj userSolrObj = ((UserSolrObj) list.get(i));
                         mAdapter.notifyItemChanged(i, userSolrObj);
                         mRecyclerView.scrollToPosition(userSolrObj.getItemPosition());
@@ -138,7 +138,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
                     }
                 }
             }
-            if (!isUpdateFromProfile) {
+            if (!mIsUpdateFromProfile) {
                 mAdapter.notifyDataSetChanged();
             }
             if (scrollStatePositionsMap.get(position) != null) {
@@ -158,13 +158,13 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region onclick method
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        if (carouselDataObj != null && carouselDataObj.getFeedDetails() != null) {
-            if (viewInterface instanceof AllCommunityItemCallback) {
-                ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
-            } else if (viewInterface instanceof FeedItemCallback) {
-                ((FeedItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
+        if (mCarouselDataObj != null && mCarouselDataObj.getFeedDetails() != null) {
+            if (mViewInterface instanceof AllCommunityItemCallback) {
+                ((AllCommunityItemCallback) mViewInterface).onSeeMoreClicked(mCarouselDataObj);
+            } else if (mViewInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) mViewInterface).onSeeMoreClicked(mCarouselDataObj);
             } else {
-                viewInterface.handleOnClick(carouselDataObj, mIcon);
+                mViewInterface.handleOnClick(mCarouselDataObj, mIcon);
             }
         }
     }

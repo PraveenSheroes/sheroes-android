@@ -256,7 +256,6 @@ public enum Event {
     },;
     //endregion
 
-
     public final AnalyticsEventType type;
     public String name;
 

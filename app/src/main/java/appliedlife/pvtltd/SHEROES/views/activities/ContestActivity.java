@@ -585,7 +585,6 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @Override

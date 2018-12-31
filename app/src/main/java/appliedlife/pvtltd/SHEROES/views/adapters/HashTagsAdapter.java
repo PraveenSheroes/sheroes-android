@@ -67,16 +67,13 @@ public class HashTagsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         switch (holder.getItemViewType()) {
             case TYPE_HEADER:
                 HashTagsHeaderViewHolder hashTagsHeaderViewHolder = (HashTagsHeaderViewHolder) holder;
-
-                hashTagsHeaderViewHolder.getHashTagHeaderTxt().setText(mContext.getString(R.string.ID_TRENDING));
+                hashTagsHeaderViewHolder.getHashTagHeaderTxt().setText( mContext.getString(R.string.ID_TRENDING));
                 break;
 
             case TYPE_ITEM:
                 HashTagsViewHolder hashTagsViewHolder = (HashTagsViewHolder) holder;
-
                 hashTagsViewHolder.getHashTagTxt().setText(mHashTagsList.get(pos));
                 break;
-
         }
     }
 

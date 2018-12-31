@@ -22,6 +22,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
@@ -120,13 +121,13 @@ public class AnalyticsManager {
         }
 
         if (HomeActivity.isSearchClicked) {
-            properties.put(EventProperty.SOURCE.getString(), AppConstants.PREVIOUS_SCREEN);
+            properties.put(EventProperty.SOURCE.getString(), HomeFragment.PREVIOUS_SCREEN);
 
             if (screenName.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
-                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), AppConstants.SOURCE_ACTIVE_TAB);
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), HomeFragment.SOURCE_ACTIVE_TAB);
             } else if (screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
                 properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
-                properties.put(EventProperty.SOURCE.getString(), AppConstants.PREVIOUS_SCREEN);
+                properties.put(EventProperty.SOURCE.getString(), HomeFragment.PREVIOUS_SCREEN);
             } else if (screenName.equalsIgnoreCase(CommunityDetailActivity.SCREEN_LABEL)) {
                 properties.put(EventProperty.TAB_TITLE.getString(), SearchFragment.searchTabName);
                 properties.put(EventProperty.TAB_KEY.getString(), null);

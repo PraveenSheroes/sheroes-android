@@ -1258,7 +1258,6 @@ public class ArticleActivity extends BaseActivity implements IArticleView, Neste
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @OnClick(R.id.like_count)

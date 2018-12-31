@@ -421,9 +421,6 @@ public class AppConstants {
     public static final String SEARCH_TAB = "&search_category=";
     public static final String SEARCH_NEXT_TOKEN = "&next_token=" ;
 
-    public static String PREVIOUS_SCREEN="";
-    public static String SOURCE_ACTIVE_TAB = "";
-
     //Social A/c's
     public static final String FACEBOOK = "Facebook";
     public static final String GOOGLE = "Google";
