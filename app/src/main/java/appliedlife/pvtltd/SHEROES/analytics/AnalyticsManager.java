@@ -129,10 +129,12 @@ public class AnalyticsManager {
         //Google Analytics
         GoogleAnalyticsHelper.sendScreenView(screenName);
 
-        //Firebase Analytics
+        /*
+         * Firebase Analytics
+         * It doesn't allow spaces
+         */
         if (getActivityFromContext(sAppContext) != null && screenName != null) {
-            screenName = screenName.replaceAll(" ", "_");
-            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName, null);
+            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName.replaceAll(" ", "_"), null);
         }
     }
 
