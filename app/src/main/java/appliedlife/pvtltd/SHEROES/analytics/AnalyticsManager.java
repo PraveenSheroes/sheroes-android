@@ -122,7 +122,6 @@ public class AnalyticsManager {
 
         if (HomeActivity.isSearchClicked) {
             properties.put(EventProperty.SOURCE.getString(), HomeFragment.PREVIOUS_SCREEN);
-
             if (screenName.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
                 properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), HomeFragment.SOURCE_ACTIVE_TAB);
             } else if (screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
@@ -132,7 +131,6 @@ public class AnalyticsManager {
                 properties.put(EventProperty.TAB_TITLE.getString(), SearchFragment.searchTabName);
                 properties.put(EventProperty.TAB_KEY.getString(), null);
             }
-
             properties.put(EventProperty.SEARCH_QUERY.getString(), SearchFragment.searchText);
         }
 
@@ -151,10 +149,12 @@ public class AnalyticsManager {
         //Google Analytics
         GoogleAnalyticsHelper.sendScreenView(screenName);
 
-        //Firebase Analytics
+        /*
+         * Firebase Analytics
+         * It doesn't allow spaces in event's names and type of events for analytics
+         */
         if (getActivityFromContext(sAppContext) != null && screenName != null) {
-            screenName = screenName.replaceAll(" ", "_");
-            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName, null);
+            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName.replaceAll(" ", "_"), null);
         }
     }
 
@@ -227,12 +227,14 @@ public class AnalyticsManager {
         if (event.trackEventToProvider(AnalyticsProvider.FIREBASE)) {
             Bundle bundle = new Bundle();
             try {
-                bundle = mapToBundle(properties, bundle, event.type.name, event.name);
+                bundle = mapToBundle(properties, bundle, (event.type.name).replaceAll(" ", "_"), (event.name).replaceAll(" ", "_"));
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
             }
-            if (bundle != null)
-                mFirebaseAnalytics.logEvent(event.type.name, bundle);
+
+            if (bundle != null) {
+                mFirebaseAnalytics.logEvent((event.type.name).replaceAll(" ", "_"), bundle);
+            }
         }
     }
 

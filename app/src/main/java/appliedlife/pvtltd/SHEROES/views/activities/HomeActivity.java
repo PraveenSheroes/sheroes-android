@@ -1764,7 +1764,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
 
     private void openProfileActivity(ProfileStrengthDialog.ProfileStrengthType profileStrengthType) {
         //TODO - Its was added to show profile strength on Nav menu, required api changes, future task
-        // ProfileFragment.createInstance(mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
         ProfileActivity.navigateTo(this, mUserId, mIsChampion, -1, AppConstants.DRAWER_NAVIGATION, null, AppConstants.REQUEST_CODE_FOR_PROFILE_DETAIL, false);
     }
 
@@ -1801,8 +1800,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         } else {
             ViewCompat.setElevation(mAppBarLayout, 0f);
         }
-        // mTvCommunities.setText(getString(R.string.ID_COMMUNITIES));
-//        mTvHome.setText(getString(R.string.home_label));
         FragmentManager fm = getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
@@ -1971,7 +1968,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         communityFeedSolrObj.setCallFromName(AppConstants.GROWTH_PUBLIC_PROFILE);
         communityFeedSolrObj.setItemPosition(position);
         mFeedDetail = communityFeedSolrObj;
-
         ProfileActivity.navigateTo(this, communityFeedSolrObj, userId, isMentor, position, source, null, REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL);
     }
 

@@ -389,7 +389,7 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         return mIsFeedLoading;
     }
 
-    public void setmIsFeedLoading(boolean mIsFeedLoading) {
+    public void setIsFeedLoading(boolean mIsFeedLoading) {
         this.mIsFeedLoading = mIsFeedLoading;
     }
 

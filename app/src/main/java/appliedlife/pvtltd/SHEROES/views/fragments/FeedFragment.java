@@ -1082,7 +1082,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     public void filterFeed(boolean isFilter, String searchText, String searchCategory) {
         showGifLoader();
-        mFeedPresenter.setmIsFeedLoading(false);
+        mFeedPresenter.setIsFeedLoading(false);
         setSearchParams(isFilter, searchText, searchCategory);
         mFeedRecyclerView.scrollToPosition(0);
         mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
