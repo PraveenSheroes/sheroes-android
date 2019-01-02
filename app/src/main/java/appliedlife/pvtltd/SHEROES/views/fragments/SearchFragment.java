@@ -244,7 +244,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             @Override
             public void onPageSelected(int position) {
-//                mSearchFragmentAdapter.setTabLabelColor();
                 searchTabName = getTabName(position);
                 if (mETSearch.getText().toString().trim().length() > 0) {
                     searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
@@ -287,7 +286,6 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
             @Override
             public void onPageScrollStateChanged(int state) {
-//                mSearchFragmentAdapter.setTabLabelColor();
 
             }
         });
