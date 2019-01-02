@@ -102,10 +102,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
     private String mSearchBarText;
     private String mSearchText;
     private int[] mTabIcons = {
-            R.drawable.search_tab_top,
-            R.drawable.search_tab_communities,
-            R.drawable.search_tab_hashtag,
-            R.drawable.search_tab_articles
+            R.drawable.vector_search_top,
+            R.drawable.vector_communities_tab,
+            R.drawable.vector_search_hashtag,
+            R.drawable.vector_search_articles
     };
     private HashTagFragment mHashTagFragment;
     private CommunitiesListFragment mCommunitiesListFragment;

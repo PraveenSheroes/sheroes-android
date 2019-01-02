@@ -52,7 +52,6 @@
                     android:gravity="center"
                     android:textColor="@color/sheroes_greyish_brown"
                     android:textSize="@dimen/sp_size_18"
-                    tools:text="No communities found."
                     vernacular:customTextFontFamily="@string/medium_font" />
 
 

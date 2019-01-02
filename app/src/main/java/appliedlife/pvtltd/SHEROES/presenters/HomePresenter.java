@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -229,7 +230,7 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
                         if (null != feedResponsePojo) {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                                if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                                     getMvpView().getFeedListSuccess(feedResponsePojo);
                                     mNextToken = feedResponsePojo.getNextToken();
                                 } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {

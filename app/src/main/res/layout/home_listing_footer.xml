@@ -23,13 +23,11 @@
                 android:layout_weight="0.5"
                 android:gravity="center">
 
-
                 <ImageView
                     android:id="@+id/iv_home"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/home_red_vector" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -45,7 +43,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:src="@drawable/search_grey_vector" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -62,7 +59,6 @@
                     android:layout_gravity="center"
                     android:layout_weight="0.5"
                     android:src="@drawable/profile_grey_vector" />
-
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
