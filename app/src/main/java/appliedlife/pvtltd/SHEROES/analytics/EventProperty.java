@@ -76,7 +76,6 @@ public enum EventProperty {
         if(TextUtils.isEmpty(string)){
             throw new IllegalStateException("EventProperty name not initialized!");
         }
-        string = string.replaceAll(" ", "_");
         this.string = string;
     }
 
