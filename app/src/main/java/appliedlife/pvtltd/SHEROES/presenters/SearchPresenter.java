@@ -12,6 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ISearchView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -63,7 +64,9 @@ public class SearchPresenter extends BasePresenter<ISearchView> {
 
                     @Override
                     public void onNext(List<String> hashTagsList) {
-                        getMvpView().onHashTagsResponse(hashTagsList);
+                        if(StringUtil.isNotEmptyCollection(hashTagsList)) {
+                            getMvpView().onHashTagsResponse(hashTagsList);
+                        }
                     }
                 });
     }

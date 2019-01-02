@@ -44,6 +44,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.activities.SheroesDeepLinkingActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 
 /**
  * Created by Ajit on 10/22/2015.
@@ -143,6 +144,8 @@ public class PushNotificationService extends FirebaseMessagingService {
     }
 
     private void handleCleverTapNotification(Bundle data) {
+        HomeFragment.PREVIOUS_SCREEN = AppConstants.FROM_PUSH_NOTIFICATION;
+
         String cleverTypeTitle = data.getString(AppConstants.CLEVER_TAP_TITLE);
         String cleverTypeBody = data.getString(AppConstants.CLEVER_TAP_BODY);
         String cleverTypeDeepLink = data.getString(AppConstants.CLEVER_TAP_DEEP_LINK_URL);

@@ -1113,7 +1113,6 @@ public class FeedCommunityPostHolder extends BaseViewHolder<FeedDetail> {
     }
 
     public void setTextViewHTML(TextView text, String html) {
-        Log.e("setTextViewHTML", html + "");
         CharSequence sequence = Html.fromHtml(html);
         text.setText(sequence);
     }

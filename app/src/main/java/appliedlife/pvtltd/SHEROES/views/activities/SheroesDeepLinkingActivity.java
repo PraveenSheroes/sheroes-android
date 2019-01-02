@@ -20,11 +20,13 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.post.Contest;
+import appliedlife.pvtltd.SHEROES.presenters.HomePresenter;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.ArticlesFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.REQUEST_CODE_FOR_INVITE_FRIEND;
@@ -534,6 +536,8 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     }
 
     private void homeActivityCall(String fragmentName) {
+        HomeFragment.PREVIOUS_SCREEN = SCREEN_LABEL;
+
         Intent into = new Intent(this, HomeActivity.class);
         into.setFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
         into.putExtra(AppConstants.FROM_PUSH_NOTIFICATION, mFromNotification);
@@ -548,5 +552,11 @@ public class SheroesDeepLinkingActivity extends BaseActivity {
     @Override
     public String getScreenName() {
         return SCREEN_LABEL;
+    }
+
+    @Override
+    protected void onPause() {
+        HomeFragment.PREVIOUS_SCREEN = SCREEN_LABEL;
+        super.onPause();
     }
 }

@@ -8,7 +8,7 @@
 
     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
         android:id="@+id/tv_hashtag"
-        style="@style/TextView16spRegular"
+        style="@style/TextView16spMediumBold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_size_16"

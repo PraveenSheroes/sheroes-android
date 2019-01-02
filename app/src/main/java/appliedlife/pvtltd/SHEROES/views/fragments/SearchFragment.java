@@ -27,6 +27,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -158,91 +159,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
         mETSearch.setHint(mSearchBarText);
 
-        mETSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().length() == 0) {
-                    if (mSearchStarted) {
-                        mHashTagFragment.getHashtags();
-                        mCommunitiesListFragment.callCommunityApi();
-                        mFeedFragment.setSearchParams(false, "", "");
-                        mFeedFragment.getFeedData();
-                        mArticlesFragment.setFilterParams(false, "", "");
-                        mArticlesFragment.categoryArticleFilter(null);
-                    }
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (editable.toString().trim().length() == 0) {
-                    searchImg.setVisibility(View.VISIBLE);
-                    backImg.setVisibility(View.GONE);
-                    closeImg.setVisibility(View.GONE);
-                }
-            }
-        });
-
-        mSearchTabsPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mSearchFragmentAdapter.setTabLabelColor();
-                searchTabName = getTabName(position);
-                if (mETSearch.getText().toString().trim().length() > 0) {
-                    searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
-                }
-                if (mSearchStarted) {
-                    switch (position) {
-                        case 0:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
-                            } else {
-                                mFeedFragment.setSearchParams(false, searchText, SearchEnum.TOP.toString());
-                                mFeedFragment.getFeedData();
-                            }
-                            break;
-                        case 1:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                mCommunitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
-                            } else {
-                                mCommunitiesListFragment.callCommunityApi();
-                            }
-                            break;
-                        case 2:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                mHashTagFragment.filterFeed(searchText);
-                            } else {
-                                mHashTagFragment.getHashtags();
-                            }
-                            break;
-                        case 3:
-                            if (mETSearch.getText().toString().trim().length() > 0) {
-                                mArticlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
-                            } else {
-                                mArticlesFragment.setFilterParams(false, "", "");
-                                mArticlesFragment.categoryArticleFilter(null);
-                            }
-                            break;
-                    }
-                }
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
+        addTextChangeListener();
         deeplinkRedirection();
         fireSearchOpenEvent();
 
@@ -346,6 +263,93 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
             }
         }
         viewPager.setAdapter(mSearchFragmentAdapter);
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mSearchFragmentAdapter.setTabLabelColor();
+                searchTabName = getTabName(position);
+                if (mETSearch.getText().toString().trim().length() > 0) {
+                    searchText = mETSearch.getText().toString().startsWith("#") ? mETSearch.getText().toString().substring(1) : mETSearch.getText().toString();
+                }
+                if (mSearchStarted) {
+                    switch (position) {
+                        case 0:
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mFeedFragment.filterFeed(true, searchText, SearchEnum.TOP.toString());
+                            } else {
+                                mFeedFragment.setSearchParams(false, searchText, SearchEnum.TOP.toString());
+                                mFeedFragment.getFeedData();
+                            }
+                            break;
+                        case 1:
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mCommunitiesListFragment.filterCommunities(false, searchText, SearchEnum.COMMUNITIES.toString());
+                            } else {
+                                mCommunitiesListFragment.callCommunityApi();
+                            }
+                            break;
+                        case 2:
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mHashTagFragment.filterFeed(searchText);
+                            } else {
+                                mHashTagFragment.getHashtags();
+                            }
+                            break;
+                        case 3:
+                            if (mETSearch.getText().toString().trim().length() > 0) {
+                                mArticlesFragment.fetchSearchedArticles(true, searchText, SearchEnum.ARTICLES.toString());
+                            } else {
+                                mArticlesFragment.setFilterParams(false, "", "");
+                                mArticlesFragment.categoryArticleFilter(null);
+                            }
+                            break;
+                    }
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+    }
+
+    private void addTextChangeListener(){
+        mETSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().length() == 0) {
+                    if (mSearchStarted) {
+                        mHashTagFragment.getHashtags();
+                        mCommunitiesListFragment.callCommunityApi();
+                        mFeedFragment.setSearchParams(false, "", "");
+                        mFeedFragment.getFeedData();
+                        mArticlesFragment.setFilterParams(false, "", "");
+                        mArticlesFragment.categoryArticleFilter(null);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().trim().length() == 0) {
+                    searchImg.setVisibility(View.VISIBLE);
+                    backImg.setVisibility(View.GONE);
+                    closeImg.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void deeplinkRedirection() {
@@ -362,6 +366,7 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         }
 
         if (!CommonUtil.isNullOrEmpty(mSearchText) && !CommonUtil.isNullOrEmpty(mSearchCategory)) {
+            searchText = mSearchText;
             searchingState();
             mETSearch.setText(mSearchText);
             CommonUtil.hideKeyboard(getActivity());
@@ -658,10 +663,10 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
 
                 if (mSearchTabsLayout.getSelectedTabPosition() == i) {
                     TextView tv = (TextView) view.findViewById(R.id.tv_tab_title);
-                    tv.setTextColor(Color.parseColor("#dc4541"));
+                    tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.sheroes_red));
                 } else {
                     TextView tv = (TextView) view.findViewById(R.id.tv_tab_title);
-                    tv.setTextColor(Color.parseColor("#3c3c3c"));
+                    tv.setTextColor(ContextCompat.getColor(getActivity(), R.color.sheroes_greyish_brown));
                 }
             }
         }

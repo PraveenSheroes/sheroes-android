@@ -1,8 +1,2 @@
 <resources>
-
-    <style name="TabText" parent="android:TextAppearance">
-        <item name="android:textSize">12sp</item>
-        <item name="android:textAllCaps">false</item>
-        <item name="android:letterSpacing">0.08</item>
-    </style>
 </resources>
