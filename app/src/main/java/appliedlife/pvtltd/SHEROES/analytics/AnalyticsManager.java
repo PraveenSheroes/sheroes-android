@@ -131,7 +131,7 @@ public class AnalyticsManager {
 
         /*
          * Firebase Analytics
-         * It doesn't allow spaces
+         * It doesn't allow spaces in event's names and type of events for analytics
          */
         if (getActivityFromContext(sAppContext) != null && screenName != null) {
             mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName.replaceAll(" ", "_"), null);
