@@ -124,31 +124,12 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         SheroesApplication.getAppComponent(getContext()).inject(this);
         View view = inflater.inflate(R.layout.activity_search, container, false);
         ButterKnife.bind(this, view);
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
         initializeSearchViews();
         searchListener();
         mSearchTabsPager.setOffscreenPageLimit(AppConstants.THREE_CONSTANT);
         mSearchText = getArguments().getString(AppConstants.SEARCH_TEXT);
         mSearchCategory = getArguments().getString(AppConstants.SEARCH_CATEGORY);
-
-        mETSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-                return false;
-
-            }
-        });
-
-        mETSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mETSearch.setCursorVisible(true);
-                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
-            }
-        });
 
         if (mConfiguration.isSet() && mConfiguration.get().configData != null
                 && !StringUtil.isNotNullOrEmptyString(mConfiguration.get().configData.searchBarText)) {
@@ -158,11 +139,11 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
         }
 
         mETSearch.setHint(mSearchBarText);
-
+        addOnTouchListener();
+        addOnClickListerner();
         addTextChangeListener();
         deeplinkRedirection();
         fireSearchOpenEvent();
-
         return view;
     }
 
@@ -348,6 +329,27 @@ public class SearchFragment extends BaseFragment implements BaseHolderInterface 
                     backImg.setVisibility(View.GONE);
                     closeImg.setVisibility(View.GONE);
                 }
+            }
+        });
+    }
+
+    private void addOnTouchListener() {
+        mETSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
+                return false;
+
+            }
+        });
+    }
+
+    private void addOnClickListerner() {
+        mETSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mETSearch.setCursorVisible(true);
+                ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.GONE);
             }
         });
     }
