@@ -24,7 +24,6 @@ public enum AnalyticsEventType {
     ON_BOARDING("Onboarding"),
     WALKTHROUGH("Walkthrough"),
     FACEBOOK_PUBLISH("Facebook Publish"),
-    FACEBOOK_DEFERRED_DEEPLINK_CLICKED("Facebook Deferred Deep Link CLICKED"),
     ALLOWED_CONTACT_SYNC("Allowed Contact Sync"),
     DENIED_CONTACT_SYNC("Denied Contact Sync"),
     ARTICLE("Article"),

@@ -234,7 +234,6 @@ public enum Event {
     FACEBOOK_PUBLISHED_CLICKED(AnalyticsEventType.FACEBOOK_PUBLISH, "Clicked"),
     FACEBOOK_PUBLISHED(AnalyticsEventType.FACEBOOK_PUBLISH, ""),
     GENDER_SELECTED(AnalyticsEventType.GENDER_SELECTED, ""),
-    FACEBOOK_DEFERRED_DEEPLINK(AnalyticsEventType.FACEBOOK_DEFERRED_DEEPLINK_CLICKED, ""),
     //endregion
 
     //region Poll events
