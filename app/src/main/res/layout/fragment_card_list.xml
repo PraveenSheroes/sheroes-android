@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="@dimen/dp_size_20"
-            android:text="@string/ID_NO_RESULT_FOUND"
+            tools:text="@string/ID_NO_RESULT_FOUND"
             android:textAlignment="center"
             android:textColor="@color/requested_btn"
             vernacular:customTextFontFamily="@string/medium_font" />

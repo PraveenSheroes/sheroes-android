@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="136dp"
-        android:background="#f8f8f8"
+        android:background="@color/search_bar_background"
         android:elevation="@dimen/search_bar_bottom_elevation"
         android:orientation="vertical">
 
@@ -77,10 +77,7 @@
                     android:padding="@dimen/search_close_icon_padding"
                     android:src="@drawable/close_grey_vector"
                     android:visibility="gone" />
-
-
             </RelativeLayout>
-
         </androidx.cardview.widget.CardView>
 
         <com.google.android.material.tabs.TabLayout
@@ -95,15 +92,12 @@
             app:tabTextAppearance="@style/TabText"
             app:tabTextColor="@color/sheroes_warm_grey"
             vernacular:customTextFontFamily="@string/regular_font">
-
         </com.google.android.material.tabs.TabLayout>
-
     </LinearLayout>
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vp_search_tabs"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
     </androidx.viewpager.widget.ViewPager>
 </LinearLayout>

@@ -112,7 +112,6 @@
                             android:maxLines="@integer/int_value_for_line_1"
                             android:textColor="@color/recent_post_comment"
                             android:textSize="@dimen/community_members"
-                            tools:text="47889 Members"
                             vernacular:customTextFontFamily="@string/regular_font" />
                     </RelativeLayout>
                 </LinearLayout>
