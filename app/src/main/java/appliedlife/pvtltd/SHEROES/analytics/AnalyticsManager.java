@@ -122,7 +122,6 @@ public class AnalyticsManager {
 
         if (HomeActivity.isSearchClicked) {
             properties.put(EventProperty.SOURCE.getString(), HomeFragment.PREVIOUS_SCREEN);
-
             if (screenName.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
                 properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), HomeFragment.SOURCE_ACTIVE_TAB);
             } else if (screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
@@ -132,7 +131,6 @@ public class AnalyticsManager {
                 properties.put(EventProperty.TAB_TITLE.getString(), SearchFragment.searchTabName);
                 properties.put(EventProperty.TAB_KEY.getString(), null);
             }
-
             properties.put(EventProperty.SEARCH_QUERY.getString(), SearchFragment.searchText);
         }
 
