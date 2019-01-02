@@ -149,10 +149,12 @@ public class AnalyticsManager {
         //Google Analytics
         GoogleAnalyticsHelper.sendScreenView(screenName);
 
-        //Firebase Analytics
+        /*
+         * Firebase Analytics
+         * It doesn't allow spaces in event's names and type of events for analytics
+         */
         if (getActivityFromContext(sAppContext) != null && screenName != null) {
-            screenName = screenName.replaceAll(" ", "_");
-            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName, null);
+            mFirebaseAnalytics.setCurrentScreen(getActivityFromContext(sAppContext), screenName.replaceAll(" ", "_"), null);
         }
     }
 
@@ -225,12 +227,14 @@ public class AnalyticsManager {
         if (event.trackEventToProvider(AnalyticsProvider.FIREBASE)) {
             Bundle bundle = new Bundle();
             try {
-                bundle = mapToBundle(properties, bundle, event.type.name, event.name);
+                bundle = mapToBundle(properties, bundle, (event.type.name).replaceAll(" ", "_"), (event.name).replaceAll(" ", "_"));
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
             }
-            if (bundle != null)
-                mFirebaseAnalytics.logEvent(event.type.name, bundle);
+
+            if (bundle != null) {
+                mFirebaseAnalytics.logEvent((event.type.name).replaceAll(" ", "_"), bundle);
+            }
         }
     }
 

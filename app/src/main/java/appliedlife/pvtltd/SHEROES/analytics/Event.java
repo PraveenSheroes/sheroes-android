@@ -261,7 +261,6 @@ public enum Event {
 
     Event(AnalyticsEventType eventType, String eventName) {
         this.type = eventType;
-        eventName = eventName.replaceAll(" ", "_");
         this.name = eventName;
     }
 
