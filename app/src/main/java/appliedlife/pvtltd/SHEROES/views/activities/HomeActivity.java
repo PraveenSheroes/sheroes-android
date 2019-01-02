@@ -180,9 +180,8 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private static final String SCREEN_LABEL = "Home Screen";
     private static final String COMMUNITY_CATEGORY_SCREEN = "Communities Category Screen";
     private final String TAG = LogUtils.makeLogTag(HomeActivity.class);
-    private static final int FACEBOOK_DEFERRED_DEEPLINK_INDEX = 8;
-    private static final int ANIMATION_DELAY_TIME = 5000;
-    private static final int ANIMATION_DURATION_TIME = 10000;
+    private static final int ANIMATION_DELAY_TIME = 2000;
+    private static final int ANIMATION_DURATION_TIME = 5000;
     private static final String MORE_TOP_ICON = "More Top Icon";
     public static boolean isSearchClicked = false;
     //endregion
