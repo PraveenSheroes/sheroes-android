@@ -21,6 +21,7 @@ import appliedlife.pvtltd.SHEROES.views.activities.AlbumActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.AllContactActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.BadgeClosetActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.BranchDeepLink;
 import appliedlife.pvtltd.SHEROES.views.activities.ChallengeGratificationActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ChampionListingActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CollectionActivity;
@@ -65,8 +66,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
-import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
@@ -358,6 +359,8 @@ public interface SheroesAppComponent {
     void inject(HashTagFragment hashTagFragment);
 
     void inject(ProfileFragment profileFragment);
+
+    void inject(BranchDeepLink branchDeepLink);
 }
 
 

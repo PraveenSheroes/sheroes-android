@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.StrictMode;
-import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,7 +51,6 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -352,6 +350,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     private Uri mImageCaptureUri;
     private boolean showFab = true;
     private String mSearchText, mSearchCategory, mNextToken;
+    private BellNotificationDialogFragment mBellNotificationDialogFragment;
     //endregion
 
     // region Public methods
@@ -405,7 +404,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     public void renderHomeFragmentView() {
         setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
-
         if (null != mInstallUpdatePreference && mInstallUpdatePreference.isSet() && !mInstallUpdatePreference.get().isAppInstallFirstTime()) {
             mIsFirstTimeOpen = true;
             if (!mInstallUpdatePreference.get().isOnBoardingSkipped()) {
@@ -425,7 +423,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             }
         }
         if (shouldShowSnowFlake()) {
-            mSantaView.setVisibility(View.GONE);
             animateSnowFlake();
         } else {
             mSnowFlakView.setVisibility(View.GONE);
@@ -563,10 +560,13 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
             BellNotificationResponse bellNotificationResponse = (BellNotificationResponse) baseResponse;
             BellNotification bellNotification = bellNotificationResponse.getNotification();
             if (StringUtil.isNotNullOrEmptyString(bellNotification.getDeepLinkUrl())) {
-                challengeIdHandle(bellNotification.getDeepLinkUrl());
+                handleBellNotification(bellNotification.getDeepLinkUrl());
             } else {
                 mTitleText.setText("");
                 homeOnClick();
+            }
+            if (mBellNotificationDialogFragment != null && mBellNotificationDialogFragment.isVisible()) {
+                mBellNotificationDialogFragment.dismiss();
             }
         }
     }
@@ -932,15 +932,15 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     }
 
     public void bellNotificationDialog() {
-        BellNotificationDialogFragment bellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
-        if (bellNotificationDialogFragment == null) {
-            bellNotificationDialogFragment = new BellNotificationDialogFragment();
+        mBellNotificationDialogFragment = (BellNotificationDialogFragment) getFragmentManager().findFragmentByTag(BellNotificationDialogFragment.class.getName());
+        if (mBellNotificationDialogFragment == null) {
+            mBellNotificationDialogFragment = new BellNotificationDialogFragment();
             Bundle bundle = new Bundle();
-            bellNotificationDialogFragment.setArguments(bundle);
+            mBellNotificationDialogFragment.setArguments(bundle);
             flNotificationReadCount.setVisibility(View.GONE);
         }
-        if (!bellNotificationDialogFragment.isVisible() && !bellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
-            bellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
+        if (!mBellNotificationDialogFragment.isVisible() && !mBellNotificationDialogFragment.isAdded() && !isFinishing() && !mIsDestroyed) {
+            mBellNotificationDialogFragment.show(getFragmentManager(), BellNotificationDialogFragment.class.getName());
         }
     }
 
@@ -1515,7 +1515,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     }
                 }
             }
-            // }
         } catch (JSONException e) {
             Crashlytics.getInstance().core.logException(e);
         }
@@ -1630,21 +1629,9 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         }
     }
 
-    private void challengeIdHandle(String urlOfSharedCard) {
-        if (urlOfSharedCard.contains(AppConstants.CHALLENGE_URL) || urlOfSharedCard.contains(AppConstants.CHALLENGE_URL_COM)) {
-            try {
-                int indexOfFirstEqual = AppUtils.findNthIndexOf(urlOfSharedCard, "=", 1);
-                String challengeUrl = urlOfSharedCard.substring(indexOfFirstEqual + 1, urlOfSharedCard.length());
-                if (StringUtil.isNotNullOrEmptyString(challengeUrl)) {
-                    String ChallengeId = challengeUrl;
-                    byte[] challengeBytes = Base64.decode(ChallengeId, Base64.DEFAULT);
-                    String newChallengeId = new String(challengeBytes, AppConstants.UTF_8);
-                    homeOnClick();
-                }
-            } catch (UnsupportedEncodingException e) {
-                Crashlytics.getInstance().core.logException(e);
-                e.printStackTrace();
-            }
+    private void handleBellNotification(String urlOfSharedCard) {
+        if (urlOfSharedCard.contains(AppConstants.FEED_URL) || urlOfSharedCard.contains(AppConstants.FEED_URL_COM)) {
+            homeOnClick();
         } else {
             Uri url = Uri.parse(urlOfSharedCard);
             Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
