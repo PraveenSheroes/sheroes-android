@@ -1534,37 +1534,10 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                         startActivity(intent);
                     }
                 }
-            } else {
-                AppLinkData.fetchDeferredAppLinkData(this,
-                        new AppLinkData.CompletionHandler() {
-                            @Override
-                            public void onDeferredAppLinkDataFetched(AppLinkData appLinkData) {
-                                // Process app link data
-                                if (appLinkData != null) {
-                                    openFacebookDeferredDeepLinkUrlScreen(appLinkData);
-                                }
-                            }
-                        }
-                );
             }
         } catch (JSONException e) {
             Crashlytics.getInstance().core.logException(e);
         }
-    }
-
-    private void openFacebookDeferredDeepLinkUrlScreen(AppLinkData appLinkData) {
-        String urlOfDeferredLink = appLinkData.getTargetUri().toString().substring(FACEBOOK_DEFERRED_DEEPLINK_INDEX, appLinkData.getTargetUri().toString().length());
-        Uri url = Uri.parse(urlOfDeferredLink);
-        Intent intent = new Intent(this, SheroesDeepLinkingActivity.class);
-        Bundle bundle = new Bundle();
-        intent.putExtras(bundle);
-        intent.setData(url);
-        startActivity(intent);
-        HashMap<String, Object> properties =
-                new EventProperty.Builder()
-                        .url(urlOfDeferredLink)
-                        .build();
-        AnalyticsManager.trackEvent(Event.FACEBOOK_DEFERRED_DEEPLINK, getScreenName(), properties);
     }
 
     private boolean isIntentAvailable(Context ctx, Intent intent) {
