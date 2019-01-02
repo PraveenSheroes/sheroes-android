@@ -1,4 +1,4 @@
-<vector android:height="14dp" android:viewportHeight="14"
-    android:viewportWidth="14" android:width="14dp" xmlns:android="http://schemas.android.com/apk/res/android">
-    <path android:fillColor="#878787" android:fillType="nonZero" android:pathData="M14,1.4L12.6,0 7,5.6 1.4,0 0,1.4 5.6,7 0,12.6 1.4,14 7,8.4l5.6,5.6 1.4,-1.4L8.4,7z"/>
-</vector>
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/ic_grey_close"/>
+</selector>
