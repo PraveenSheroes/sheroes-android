@@ -153,4 +153,9 @@ public class ArticleCategorySpinnerFragment extends BaseFragment {
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
 
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

@@ -828,6 +828,10 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
         onShowErrorDialog(s, feedParticipationEnum);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+    }
+
     //endregion
 
     //region next page view

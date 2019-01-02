@@ -1,53 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fl_home_footer_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="@dimen/dp_size_20"
-        android:background="@drawable/rectangle_grey_round_corner"
-        android:elevation="@dimen/dp_size_5"
-        android:orientation="horizontal"
-        android:weightSum="1">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/home_bottom_bar_margin_top">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-            android:id="@+id/tv_home"
-            style="@style/TextView12spRegular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight=".5"
-            android:drawablePadding="@dimen/dp_size_4"
-            android:drawableTop="@drawable/vector_home_selected_icon"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/home_label"
-            android:textColor="@color/comment_text"
-            vernacular:customTextFontFamily="@string/regular_font" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/home_bottom_bar_height"
+            android:background="@drawable/rectangle_grey_round_corner"
+            android:orientation="horizontal"
+            android:weightSum="1.5">
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/spam_dialog_divider" />
+            <LinearLayout
+                android:id="@+id/ll_home"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center">
 
-        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-            android:id="@+id/tv_communities"
-            style="@style/TextView12spRegular"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight=".5"
-            android:drawablePadding="@dimen/dp_size_5"
-            android:drawableTop="@drawable/vector_community_unselected_icon"
-            android:gravity="bottom|center_horizontal"
-            android:text="@string/ID_COMMUNITIES"
-            android:textColor="@color/feed_card_time"
-            vernacular:customTextFontFamily="@string/regular_font" />
+                <ImageView
+                    android:id="@+id/iv_home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/home_red_vector" />
+            </LinearLayout>
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@drawable/search_grey_vector" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_profile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.5"
+                    android:src="@drawable/profile_grey_vector" />
+            </LinearLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 </FrameLayout>
 
 

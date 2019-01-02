@@ -79,6 +79,10 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.FOLLOW_UNFO
  */
 
 public class FeedPresenter extends BasePresenter<IFeedView> {
+    //region Constants
+    private final String INFO = "info";
+    //endregion Constants
+
     public static final int NORMAL_REQUEST = 0;
     public static final int LOAD_MORE_REQUEST = 1;
     private static final int END_REQUEST = 2;
@@ -129,7 +133,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
         } else {
             mFeedState = feedState;
         }
-
         switch (mFeedState) {
             case NORMAL_REQUEST:
                 mNextToken = null;
@@ -150,10 +153,8 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 return;
         }
         mIsFeedLoading = true;
-
         CommunityFeedRequestPojo communityFeedRequestPojo = new CommunityFeedRequestPojo();
         communityFeedRequestPojo.setNextToken(mNextToken);
-
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
             return;
@@ -209,7 +210,6 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                                     // append in case of load more
                                     if (!CommonUtil.isEmpty(feedList)) {
                                         mFeedDetailList.addAll(feedList);
-                                        //getMvpView().showFeedList(mFeedDetailList);
                                         getMvpView().addAllFeed(feedList);
                                     } else {
                                         getMvpView().setFeedEnded(true);
@@ -228,8 +228,169 @@ public class FeedPresenter extends BasePresenter<IFeedView> {
                 });
     }
 
+    public void fetchSearchedFeeds(final int feedState, final String streamName, String searchText, String searchCategory) {
+        if (mIsFeedLoading) {
+            return;
+        }
+        // only load more requests should be disabled when end of feed is reached
+        if (feedState == LOAD_MORE_REQUEST) {
+            if (mFeedState != END_REQUEST) {
+                mFeedState = feedState;
+            }
+        } else {
+            mFeedState = feedState;
+        }
+
+        switch (mFeedState) {
+            case NORMAL_REQUEST:
+                mNextToken = "";
+                if (mIsHomeFeed) {
+                    if (CommonUtil.isEmpty(mFeedDetailList)) {
+                        List<FeedDetail> feedList = new ArrayList<>();
+                        FeedDetail homeFeedHeader = new FeedDetail();
+                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                        feedList.add(0, homeFeedHeader);
+                        getMvpView().showFeedList(feedList);
+                    }
+                }
+                break;
+            case LOAD_MORE_REQUEST:
+                break;
+            case END_REQUEST:
+                getMvpView().startProgressBar();
+                return;
+        }
+        mIsFeedLoading = true;
+
+        if (!NetworkUtil.isConnected(mSheroesApplication)) {
+            getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_FEED_RESPONSE);
+            return;
+        }
+
+        mSheroesAppServiceApi.getSearchResponse(createFeedUrl(searchText, searchCategory))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<FeedResponsePojo>bindToLifecycle())
+                .subscribe(new DisposableObserver<FeedResponsePojo>() {
+                    @Override
+                    public void onComplete() {
+                        getMvpView().stopProgressBar();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mIsFeedLoading = false;
+                        getMvpView().stopProgressBar();
+                        Crashlytics.getInstance().core.logException(e);
+                        getMvpView().showFeedList(mFeedDetailList);
+                    }
+
+                    @Override
+                    public void onNext(FeedResponsePojo feedResponsePojo) {
+                        mIsFeedLoading = false;
+                        getMvpView().stopProgressBar();
+                        getMvpView().hideGifLoader();
+                        if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            onFeedResponseSuccess(feedResponsePojo, streamName);
+                        } else {
+                            onFeedResponseFailed(feedResponsePojo);
+                        }
+                    }
+                });
+    }
+
+    private String createFeedUrl(String searchText, String searchCategory) {
+        StringBuilder searchUrl = new StringBuilder();
+        searchUrl.append(AppConstants.SEARCH);
+        searchUrl.append(AppConstants.SEARCH_QUERY);
+        searchUrl.append(searchText);
+        searchUrl.append(AppConstants.SEARCH_TAB);
+        searchUrl.append(searchCategory);
+        searchUrl.append(AppConstants.SEARCH_NEXT_TOKEN);
+        searchUrl.append(mNextToken);
+        return searchUrl.toString();
+    }
+
+    private void onFeedResponseSuccess(FeedResponsePojo feedResponsePojo, String streamName) {
+        if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
+            List<FeedDetail> feedList = feedResponsePojo.getFeedDetails();
+            mNextToken = feedResponsePojo.getNextToken();
+            switch (mFeedState) {
+                case NORMAL_REQUEST:
+                    getMvpView().stopProgressBar();
+                    if (mIsHomeFeed) {
+                        FeedDetail homeFeedHeader = new FeedDetail();
+                        homeFeedHeader.setSubType(AppConstants.HOME_FEED_HEADER);
+                        feedList.add(0, homeFeedHeader);
+                    } else if (StringUtil.isNotNullOrEmptyString(streamName)) {
+                        if (streamName.equalsIgnoreCase(AppConstants.STORY_STREAM) || streamName.equalsIgnoreCase(AppConstants.POST_STREAM)) {
+                            if (!StringUtil.isNotEmptyCollection(feedList)) {
+                                FeedDetail noStoryFeed = new FeedDetail();
+                                noStoryFeed.setNameOrTitle(streamName.equalsIgnoreCase(AppConstants.POST_STREAM) ? mSheroesApplication.getString(R.string.empty_post) : mSheroesApplication.getString(R.string.empty_stories));
+                                noStoryFeed.setSubType(AppConstants.TYPE_EMPTY_VIEW);
+                                feedList.add(noStoryFeed);
+                            }
+                        }
+                    }
+                    mFeedDetailList = feedList;
+                    if (!CommonUtil.isNotEmpty(mNextToken)) {
+                        getMvpView().setFeedEnded(true);
+                    } else {
+                        getMvpView().setFeedEnded(false);
+                    }
+                    List<FeedDetail> feedDetails = new ArrayList<>(mFeedDetailList);
+                    getMvpView().updateFeedConfigDataToMixpanel(feedResponsePojo);
+                    getMvpView().showFeedList(feedDetails);
+                    break;
+                case LOAD_MORE_REQUEST:
+                    // append in case of load more
+                    if (!CommonUtil.isNotEmpty(mNextToken)) {
+                        getMvpView().setFeedEnded(true);
+                    } else {
+                        getMvpView().setFeedEnded(false);
+                    }
+                    if (!CommonUtil.isEmpty(feedList)) {
+                        mFeedDetailList.addAll(feedList);
+                        getMvpView().addAllFeed(feedList);
+                    }
+                    break;
+            }
+        } else {
+            if (mFeedState == NORMAL_REQUEST) {
+                if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
+                    } else {
+                        getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                    }
+                } else {
+                    getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                }
+            }
+        }
+    }
+
+    private void onFeedResponseFailed(FeedResponsePojo feedResponsePojo) {
+        if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.FAILED)) { //TODO -chk with ujjwal
+            getMvpView().setFeedEnded(true);
+            if (feedResponsePojo.getFieldErrorMessageMap() != null) {
+                if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
+                } else {
+                    getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+                }
+            }
+        }
+        getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
+
+    }
+
     public boolean isFeedLoading() {
         return mIsFeedLoading;
+    }
+
+    public void setIsFeedLoading(boolean mIsFeedLoading) {
+        this.mIsFeedLoading = mIsFeedLoading;
     }
 
     public void getAllCommunities(final MyCommunityRequest myCommunityRequest) {

@@ -12,7 +12,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 /**
  * Created by ujjwal on 26/11/17.
  */
-@Parcel(analyze = {FeedResponsePojo.class,BaseResponse.class})
+@Parcel(analyze = {FeedResponsePojo.class, BaseResponse.class})
 public class FeedResponsePojo extends BaseResponse {
     @SerializedName("solr_ignore_featured_docs")
     @Expose

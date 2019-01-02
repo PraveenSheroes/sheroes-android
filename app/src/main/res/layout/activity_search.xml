@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="136dp"
+        android:background="@color/search_bar_background"
+        android:elevation="@dimen/search_bar_bottom_elevation"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_bar_height"
+            android:layout_marginLeft="@dimen/search_bar_margin"
+            android:layout_marginTop="@dimen/search_bar_margin"
+            android:layout_marginRight="@dimen/search_bar_margin"
+            android:layout_marginBottom="@dimen/search_bar_bottom_margin"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="@dimen/search_bar_corner_radius"
+            app:cardElevation="@dimen/search_bar_bottom_elevation">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/iv_search_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/search_bar_icons_margin"
+                    android:src="@drawable/search_icon_vector" />
+
+                <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/search_bar_icons_margin"
+                    android:src="@drawable/ic_back_arrow"
+                    android:visibility="gone" />
+
+                <appliedlife.pvtltd.SHEROES.vernacular.FontEditText
+                    android:id="@+id/et_search"
+                    style="@style/TextView14spRegular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/search_bar_internal_margin_right"
+                    android:layout_toRightOf="@+id/iv_search_icon"
+                    android:background="@null"
+                    android:ellipsize="end"
+                    android:hint="@string/search_hint_text"
+                    android:imeOptions="actionSearch"
+                    android:inputType="textNoSuggestions"
+                    android:singleLine="true"
+                    android:textColor="@color/sheroes_greyish_brown"
+                    android:textColorHint="@color/sheroes_grey_with_60_opacity"
+                    android:textSize="@dimen/search_text_size"
+                    vernacular:customTextFontFamily="@string/regular_font" />
+
+                <ImageView
+                    android:id="@+id/iv_search_close"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/search_close_icon_right_margin"
+                    android:padding="@dimen/search_close_icon_padding"
+                    android:src="@drawable/close_grey_vector"
+                    android:visibility="gone" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            style="@style/TextView12spRegular"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/search_tabs_height"
+            android:layout_gravity="center_vertical"
+            app:tabIndicatorHeight="@dimen/search_tabs_indicator_height"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/sheroes_red"
+            app:tabTextAppearance="@style/TabText"
+            app:tabTextColor="@color/sheroes_warm_grey"
+            vernacular:customTextFontFamily="@string/regular_font">
+        </com.google.android.material.tabs.TabLayout>
+    </LinearLayout>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vp_search_tabs"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </androidx.viewpager.widget.ViewPager>
+</LinearLayout>

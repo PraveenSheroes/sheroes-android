@@ -135,12 +135,14 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
         mViewMoreDescription = dataItem.getShortDescription();
         if (StringUtil.isNotNullOrEmptyString(mViewMoreDescription)) {
             tvArticleDescriptionText.setVisibility(View.VISIBLE);
+            tvArticleDescriptionText.setText(mViewMoreDescription);
             if (Build.VERSION.SDK_INT >= AppConstants.ANDROID_SDK_24) {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription, 0)); // for 24 api and more
             } else {
                 tvArticleDescriptionText.setText(Html.fromHtml(mViewMoreDescription));// or for older api
             }
-            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
+            //This code is used for view more and less in articles. May be needed in future.
+//            ArticleTextView.doResizeTextView(tvArticleDescriptionText, 4,mContext.getString(R.string.ID_VIEW_MORE), true);
         } else {
             tvArticleDescriptionText.setVisibility(View.GONE);
         }
@@ -182,7 +184,7 @@ public class ArticleCardHolder extends BaseViewHolder<FeedDetail> {
             tvArticleTime.setText(stringBuilder);
         }
         if (StringUtil.isNotNullOrEmptyString(dataItem.getNameOrTitle())) {
-            tvArticleDescriptionHeader.setText(dataItem.getNameOrTitle());
+            tvArticleDescriptionHeader.setText(Html.fromHtml(dataItem.getNameOrTitle()));
         }
         if (StringUtil.isNotEmptyCollection(dataItem.getTags())) {
             List<String> tags = dataItem.getTags();

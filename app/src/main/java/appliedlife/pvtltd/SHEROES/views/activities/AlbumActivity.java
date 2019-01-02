@@ -461,5 +461,9 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
         onShowErrorDialog(s, feedParticipationEnum);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+    }
+
     //endregion
 }

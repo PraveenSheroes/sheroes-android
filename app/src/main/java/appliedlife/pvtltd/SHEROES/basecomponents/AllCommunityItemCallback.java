@@ -14,6 +14,8 @@ public interface AllCommunityItemCallback extends BaseHolderInterface {
 
     void onCommunityClicked(CommunityFeedSolrObj communityFeedObj);
 
+    void onCommunityJoinOrUnjoin(CommunityFeedSolrObj communityFeedSolrObj);
+
     void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);
 
     void unJoinCommunity(CommunityFeedSolrObj communityFeedSolrObj, CarouselViewHolder carouselViewHolder);

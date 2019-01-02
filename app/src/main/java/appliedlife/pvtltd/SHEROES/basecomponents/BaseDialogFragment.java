@@ -49,7 +49,6 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
         manager.beginTransaction().add(this, tag).commitAllowingStateLoss();
     }
 
-
     @Override
     public void dismiss() {
         this.dismissAllowingStateLoss();
@@ -58,12 +57,10 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
 
     @Override
     public void startProgressBar() {
-
     }
 
     @Override
     public void stopProgressBar() {
-
     }
 
     @Override
@@ -71,38 +68,34 @@ public class BaseDialogFragment extends DialogFragment implements BaseMvpView, H
     }
 
     @Override
-    public void getLogInResponse(LoginResponse loginResponse) {
+    public void showEmptyScreen(String s) {
+    }
 
+    @Override
+    public void getLogInResponse(LoginResponse loginResponse) {
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
-
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
-    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse){
-
+    public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
     }
 }

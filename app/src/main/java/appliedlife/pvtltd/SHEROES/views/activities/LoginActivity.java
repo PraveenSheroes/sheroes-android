@@ -298,6 +298,10 @@ public class LoginActivity extends BaseActivity implements LoginView {
         onShowErrorDialog(errorMsg, feedParticipationEnum);
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+    }
+
     @OnClick(R.id.email_sign_in_button)
     public void onLogInBtnClick() {
         sheroesLogIn();

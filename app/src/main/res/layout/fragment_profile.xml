@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+     <com.google.android.material.appbar.AppBarLayout
+         android:id="@+id/app_bar_layout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:fitsSystemWindows="true"
+         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+         <com.google.android.material.appbar.CollapsingToolbarLayout
+             android:id="@+id/collapsing_toolbar_mentor"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:fitsSystemWindows="true"
+             app:contentScrim="?attr/colorPrimary"
+             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
+             app:title=" ">
+
+             <ImageView
+                 android:id="@+id/iv_public_profile_image"
+                 android:layout_width="match_parent"
+                 android:layout_height="@dimen/dp_size_250"
+                 android:layout_marginTop="?attr/actionBarSize"
+                 android:scaleType="centerCrop"
+                 android:visibility="gone"
+                 app:layout_collapseMode="parallax" />
+
+             <FrameLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 app:layout_collapseMode="parallax">
+
+                 <include
+                     android:id="@+id/rl_champion_full_view_header"
+                     layout="@layout/profile_dashboard_header_layout"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+                     android:layout_marginTop="?attr/actionBarSize"
+                     android:visibility="invisible"
+                     app:layout_collapseMode="parallax" />
+
+                 <View
+                     android:id="@+id/toolbar_shadow1"
+                     android:layout_width="match_parent"
+                     android:layout_height="4dp"
+                     android:layout_marginTop="?attr/actionBarSize"
+                     android:background="@drawable/toolbar_dropshadow"
+                     app:layout_collapseMode="parallax" />
+             </FrameLayout>
+
+             <androidx.appcompat.widget.Toolbar
+                 android:id="@+id/toolbar_mentor"
+                 android:layout_width="match_parent"
+                 android:layout_height="?attr/actionBarSize"
+                 app:layout_collapseMode="parallax"
+                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                 app:theme="@style/ToolBarStyle">
+
+               <RelativeLayout
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent">
+
+                     <TextView
+                         android:id="@+id/tv_profile_menu"
+                         android:layout_width="25dp"
+                         android:layout_height="match_parent"
+                         android:layout_alignParentEnd="true"
+                         android:layout_alignParentRight="true"
+                         android:layout_centerVertical="true"
+                         android:drawableEnd="@drawable/vector_menu_dashboard"
+                         android:drawableRight="@drawable/vector_menu_dashboard"
+                         android:padding="@dimen/dp_size_20"
+                         android:visibility="visible" />
+
+                   <ImageView
+                       android:id="@+id/tv_drawer_navigation"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_back_arrow"
+                       android:layout_centerVertical="true"
+                       android:layout_marginRight="16dp"
+                       android:visibility="gone"/>
+
+                     <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+                         android:id="@+id/tv_mentor_toolbar_name"
+                         style="@style/TextAppearance.Toolbar"
+                         android:layout_width="wrap_content"
+                         android:layout_height="wrap_content"
+                         android:layout_centerVertical="true"
+                         android:layout_marginEnd="@dimen/dp_size_20"
+                         android:layout_marginLeft="@dimen/dp_size_5"
+                         android:layout_marginRight="@dimen/dp_size_20"
+                         android:layout_marginStart="@dimen/dp_size_5"
+                         android:layout_toEndOf="@id/tv_drawer_navigation"
+                         android:layout_toRightOf="@id/tv_drawer_navigation"
+                         android:ellipsize="end"
+                         android:maxLines="@integer/int_value_for_line_1"
+                         android:textColor="@color/toolbar_title"
+                         vernacular:customTextFontFamily="@string/medium_font"/>
+
+                 </RelativeLayout>
+
+             </androidx.appcompat.widget.Toolbar>
+
+         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+         <com.google.android.material.tabs.TabLayout
+             android:id="@+id/tab_mentor"
+             style="@style/NavigationTabTextAppeareance"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_gravity="end|bottom"
+             android:background="@color/search_shortcut_icon_color"
+             app:tabIndicatorColor="@color/tab_text"
+             app:tabIndicatorHeight="@dimen/dp_size_2"
+             app:tabSelectedTextColor="@color/tab_text"
+             app:tabTextColor="@color/mentor_profession" />
+     </com.google.android.material.appbar.AppBarLayout>
+
+     <androidx.viewpager.widget.ViewPager
+         android:id="@+id/view_pager_mentor"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+     <com.google.android.material.floatingactionbutton.FloatingActionButton
+         android:id="@+id/fab_post"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_gravity="bottom|end"
+         android:layout_marginBottom="@dimen/dp_size_45"
+         android:layout_marginRight="@dimen/dp_size_16"
+         android:src="@drawable/vector_pencil"
+         android:visibility="gone"
+         app:backgroundTint="@color/email" />
+
+     <include
+         layout="@layout/gif_loader"
+         android:layout_height="match_parent"
+         android:layout_width="match_parent"
+         android:visibility="gone" />
+
+     <View
+         android:id="@+id/view_profile"
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:layout_gravity="end|bottom"
+         android:layout_marginBottom="@dimen/dp_size_150"
+         android:visibility="invisible" />
+
+     <include
+         layout="@layout/write_a_story_footer_layout"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:visibility="gone"
+         android:layout_gravity="end|bottom" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

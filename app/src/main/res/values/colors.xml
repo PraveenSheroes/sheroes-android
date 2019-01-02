@@ -164,4 +164,13 @@
     <color name="helpline_question_text">#deffffff</color>
     <color name="helpline_user_link">#deffffff</color>
 
+    <color name="sheroes_red">#dc4541</color>
+    <color name="sheroes_warm_grey">#878787</color>
+    <color name="sheroes_greyish_brown">#3c3c3c</color>
+    <color name="sheroes_white_three">#f2f2f2</color>
+    <color name="sheroes_grey_with_60_opacity">#CC878787</color>
+    <color name="search_bar_background">#f8f8f8</color>
+
+
+
 </resources>

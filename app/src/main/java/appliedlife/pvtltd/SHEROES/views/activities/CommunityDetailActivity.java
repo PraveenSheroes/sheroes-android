@@ -340,6 +340,10 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+    }
+
+    @Override
     public boolean shouldTrackScreen() {
         return true;
     }
@@ -374,6 +378,14 @@ public class CommunityDetailActivity extends BaseActivity implements BaseHolderI
             onJoinClicked();
         }
         initializeLayout();
+    }
+
+    @Override
+    public void invalidateCommunityJoin(CommunityFeedSolrObj communityFeedSolrObj) {
+    }
+
+    @Override
+    public void invalidateCommunityLeft(CommunityFeedSolrObj communityFeedSolrObj) {
     }
 
     @Override

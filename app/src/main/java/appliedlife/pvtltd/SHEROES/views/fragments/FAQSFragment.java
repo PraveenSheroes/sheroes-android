@@ -216,4 +216,8 @@ public class FAQSFragment extends BaseFragment implements SHEView {
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
 }

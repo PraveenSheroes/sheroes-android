@@ -8,6 +8,8 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.core.content.ContextCompat;
+
+import android.text.Html;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
@@ -478,11 +480,13 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             StyleSpan boldNameSpan = new StyleSpan(Typeface.BOLD);
             spanString.setSpan(boldNameSpan, 0, userName.length(), 0);
             if (StringUtil.isNotNullOrEmptyString(userNameAndCommunity)) {
-                int firstIndex = userNameAndCommunity.indexOf(communityName);
-                spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
-                spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
-                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-                spanString.setSpan(boldSpan, firstIndex, firstIndex + communityName.length(), 0);
+                if (StringUtil.isNotNullOrEmptyString(communityName)) {
+                    int firstIndex = userNameAndCommunity.indexOf(communityName);
+                    spanString.setSpan(community, firstIndex, firstIndex + communityName.length(), 0);
+                    spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(mContext, R.color.feed_title)), firstIndex, firstIndex + communityName.length(), 0);
+                    StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                    spanString.setSpan(boldSpan, firstIndex, firstIndex + communityName.length(), 0);
+                }
             }
             mTitle.setMovementMethod(LinkMovementMethod.getInstance());
             mTitle.setText(spanString, TextView.BufferType.SPANNABLE);
@@ -593,7 +597,7 @@ public class UserPostHolder extends BaseViewHolder<FeedDetail> {
             mShare.setText(mContext.getString(R.string.ID_SHARE));
             mShare.setTextColor(ContextCompat.getColor(mContext, R.color.recent_post_comment));
         }
-        final String listDescription = mUserPostObj.getListDescription();
+        final String listDescription = mUserPostObj.getDescription();
         if (!StringUtil.isNotNullOrEmptyString(listDescription)) {
             mPostDescription.setText("");
             mPostDescription.setVisibility(View.GONE);

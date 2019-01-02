@@ -1,20 +1,21 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
 import android.app.Activity;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.SimpleShowcaseEventListener;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.HashMap;
 
+import androidx.recyclerview.widget.RecyclerView;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -26,11 +27,9 @@ public class ShowcaseManager {
 
     private final Activity activity;
     private ShowcaseView showcaseView;
-    private ViewTarget target;
-    private HashMap<String, Tutorial> tutorial = new HashMap<>();
     private FloatingActionButton floatActionBtn;
-    private TextView tvHome;
-    private TextView tvCommunities;
+    private ImageView ivHome;
+    private ImageView ivCommunities;
     private TextView tvDrawerNavigation;
     private RecyclerView recyclerView;
     private String mUserName;
@@ -39,18 +38,18 @@ public class ShowcaseManager {
         this.activity = activity;
     }
 
-    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, TextView tvHome, TextView tvCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
+    public ShowcaseManager(Activity activity, FloatingActionButton floatActionBtn, ImageView ivHome, ImageView ivCommunities, TextView tvDrawerNavigation, RecyclerView recyclerView, String userName) {
         this.activity = activity;
         this.floatActionBtn = floatActionBtn;
-        this.tvHome = tvHome;
-        this.tvCommunities = tvCommunities;
+        this.ivHome = ivHome;
+        this.ivCommunities = ivCommunities;
         this.tvDrawerNavigation = tvDrawerNavigation;
         this.recyclerView = recyclerView;
         this.mUserName = userName;
         tvDrawerNavigation.setEnabled(false);
         floatActionBtn.setEnabled(false);
-        tvHome.setEnabled(false);
-        tvCommunities.setEnabled(false);
+        ivHome.setEnabled(false);
+        ivCommunities.setEnabled(false);
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -64,10 +63,10 @@ public class ShowcaseManager {
 
         if (showcaseView != null)
             ((ViewGroup) showcaseView.getParent()).removeView(showcaseView);
-        mUserName = activity.getString(R.string.ID_SHOW_CASE_FEED_TITLE,mUserName);
+        mUserName = activity.getString(R.string.ID_SHOW_CASE_FEED_TITLE, mUserName);
         showcaseView = new ShowcaseView.Builder(activity)
                 .withMaterialShowcase()
-                .setTarget(new ViewTarget(tvHome))
+                .setTarget(new ViewTarget(ivHome))
                 .setStyle(R.style.CustomShowcaseTheme)
                 .setContentTitle(mUserName)
                 .setContentText(activity.getString(R.string.ID_SHOW_CASE_FEED_DEC))
@@ -98,7 +97,7 @@ public class ShowcaseManager {
             ((ViewGroup) showcaseView.getParent()).removeView(showcaseView);
         showcaseView = new ShowcaseView.Builder(activity)
                 .withMaterialShowcase()
-                .setTarget(new ViewTarget(tvCommunities))
+                .setTarget(new ViewTarget(ivCommunities))
                 .setStyle(R.style.CustomShowcaseTheme)
                 .setContentTitle(activity.getString(R.string.ID_SHOW_CASE_COMMUNITIES_TITLE))
                 .setContentText(activity.getString(R.string.ID_SHOW_CASE_COMMUNITIES_DEC))
@@ -135,8 +134,8 @@ public class ShowcaseManager {
                             @Override
                             public void onShowcaseViewDidHide(ShowcaseView showcaseView) {
                                 floatActionBtn.setEnabled(true);
-                                tvHome.setEnabled(true);
-                                tvCommunities.setEnabled(true);
+                                ivHome.setEnabled(true);
+                                ivCommunities.setEnabled(true);
                                 tvDrawerNavigation.setEnabled(true);
                                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                                     @Override
@@ -165,11 +164,5 @@ public class ShowcaseManager {
         lps.setMargins(0, 0, 0, CommonUtil.convertDpToPixel(100, activity));
         return lps;
     }
-
-
-    //endregion
-
-    //region public helper methods
-
     //endregion
 }

@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.basecomponents;
 
 
+import java.util.List;
 import java.util.Map;
 
 import appliedlife.pvtltd.SHEROES.BuildConfig;
@@ -353,4 +354,10 @@ public interface SheroesAppServiceApi {
 
     @POST("participant/user/update_user_preference")
     Observable<BaseResponse> updateSelectedLanguage(@Body LanguageUpdateRequest languageUpdateRequest);
+
+    @GET
+    Observable<FeedResponsePojo> getSearchResponse(@Url String url);
+
+    @GET("participant/search/getHashtags")
+    Observable<List<String>> fetchTrendingHashtags();
 }

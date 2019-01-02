@@ -161,12 +161,15 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     @Override
     public void getAllDataResponse(GetAllData getAllData) {
-
     }
 
     @Override
     public void showError(String errorMsg, FeedParticipationEnum feedParticipationEnum) {
         super.showError(errorMsg, feedParticipationEnum);
+    }
+
+    @Override
+    public void showEmptyScreen(String s) {
     }
 
     @Override
@@ -236,22 +239,18 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
@@ -264,7 +263,6 @@ public class OnBoardingFragment extends BaseFragment implements OnBoardingView {
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     public void joinRequestForOpenCommunity(CommunityFeedSolrObj communityFeedSolrObj) {

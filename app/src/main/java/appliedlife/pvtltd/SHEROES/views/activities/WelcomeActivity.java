@@ -451,6 +451,11 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
             }
         }
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
     //endregion inherited methods
 
     //region public methods

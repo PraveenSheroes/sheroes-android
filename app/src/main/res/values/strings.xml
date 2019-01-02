@@ -592,6 +592,10 @@
     <string name="lang_continue">Continue</string>
     <string name="top_post">Top Post</string>
     <string name="my_feed">My Feed</string>
+    <string name= "top">Top</string>
+    <string name= "community">Communities</string>
+    <string name= "hash_tag">HashTags</string>
+    <string name= "article">Articles</string>
     <string name="post_header_name_community">%1$s posted in  %2$s"</string>
     <string name="post_header_community">%1$s posted"</string>
     <string name="post_header_asked_community">%1$s asked %2$s"</string>
@@ -665,8 +669,15 @@
     <string name="rate_us">Rate Us</string>
     <string name="not_now">Not Now</string>
     <string name="helpline_title">Ask SHEROES Helpline</string>
+    <string name="search_hint_text">Search by posts, communities &amp; hashtags</string>
     <string name="empty_post">No post yet</string>
     <string name="empty_stories">No stories yet</string>
     <string name="winner_date">on</string>
     <string name="deleted_content">Content your are looking for is not present</string>
+    <string name="empty_hashtag">No Hashtags found</string>
+    <string name="empty_posts">No Posts found</string>
+    <string name="empty_articles">No Articles found</string>
+    <string name="empty_communities">No Communities found</string>
+    <string name="empty_search_result">Please check spelling or try different keywords</string>
+
 </resources>

@@ -115,6 +115,10 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
        // mCommunityPostActivity.showError(s, feedParticipationEnum);
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+    }
     //endregion
 
     //region Public Static methods
@@ -127,7 +131,6 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
     }
-
 
     @Override
     public void showUserLikedList(List<Comment> commentList) {

@@ -13,7 +13,9 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.views.activities.CommunityPostActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.CreateStoryActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.EditUserProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
 import appliedlife.pvtltd.SHEROES.views.activities.ProfileActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -76,6 +78,10 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         if(getActivity() instanceof CommunityPostActivity){
             ((CommunityPostActivity) getActivity()).selectImageFromCamera();
         }
+
+        if(getActivity() instanceof HomeActivity){
+            ((HomeActivity) getActivity()).selectImageFrmCamera();
+        }
         dismiss();
     }
 
@@ -93,6 +99,9 @@ public class CameraBottomSheetFragment extends BottomSheetDialogFragment {
         }
         if(getActivity() instanceof CommunityPostActivity){
             ((CommunityPostActivity) getActivity()).selectImageFromGallery();
+        }
+        if(getActivity() instanceof HomeActivity){
+            ((HomeActivity) getActivity()).selectImageFrmGallery();
         }
         dismiss();
     }

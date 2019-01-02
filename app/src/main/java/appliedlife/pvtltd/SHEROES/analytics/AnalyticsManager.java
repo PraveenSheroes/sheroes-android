@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
+import com.crashlytics.android.Crashlytics;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,8 +18,12 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
-import com.crashlytics.android.Crashlytics;
-import com.google.firebase.analytics.FirebaseAnalytics;
+import appliedlife.pvtltd.SHEROES.views.activities.ArticleActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.CommunityDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.activities.PostDetailActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
 import static appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil.isNotNullOrEmptyString;
@@ -114,6 +120,20 @@ public class AnalyticsManager {
             properties.put(EventProperty.SOURCE.getString(), previousScreenName);
         }
 
+        if (HomeActivity.isSearchClicked) {
+            properties.put(EventProperty.SOURCE.getString(), HomeFragment.PREVIOUS_SCREEN);
+            if (screenName.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), HomeFragment.SOURCE_ACTIVE_TAB);
+            } else if (screenName.equalsIgnoreCase(ArticleActivity.SCREEN_LABEL) || screenName.equalsIgnoreCase(PostDetailActivity.SCREEN_LABEL)) {
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
+                properties.put(EventProperty.SOURCE.getString(), HomeFragment.PREVIOUS_SCREEN);
+            } else if (screenName.equalsIgnoreCase(CommunityDetailActivity.SCREEN_LABEL)) {
+                properties.put(EventProperty.TAB_TITLE.getString(), SearchFragment.searchTabName);
+                properties.put(EventProperty.TAB_KEY.getString(), null);
+            }
+            properties.put(EventProperty.SEARCH_QUERY.getString(), SearchFragment.searchText);
+        }
+
         String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
         if (StringUtil.isNotNullOrEmptyString(languageName)) {
             properties.put(SuperProperty.LANGUAGE.getString(), languageName);
@@ -199,7 +219,7 @@ public class AnalyticsManager {
         CleverTapHelper.trackEvent(sAppContext, event, properties);
 
         //track all event to Googel Analytics
-        if(event.trackEventToProvider(AnalyticsProvider.GOOGLE_ANALYTICS)) {
+        if (event.trackEventToProvider(AnalyticsProvider.GOOGLE_ANALYTICS)) {
             GoogleAnalyticsHelper.sendEvent(event.type.name, event.name, null);
         }
 
@@ -211,6 +231,7 @@ public class AnalyticsManager {
             } catch (Exception e) {
                 Crashlytics.getInstance().core.logException(e);
             }
+
             if (bundle != null) {
                 mFirebaseAnalytics.logEvent((event.type.name).replaceAll(" ", "_"), bundle);
             }

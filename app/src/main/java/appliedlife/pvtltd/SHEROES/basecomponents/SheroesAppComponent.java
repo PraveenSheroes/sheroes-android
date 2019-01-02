@@ -56,6 +56,7 @@ import appliedlife.pvtltd.SHEROES.views.fragments.FeedFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowedCommunitiesFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.FollowingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.GenderInputFormDialogFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.HashTagFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HelplineFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ICCMemberListFragment;
@@ -64,6 +65,8 @@ import appliedlife.pvtltd.SHEROES.views.fragments.NavigateToWebViewFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.OnBoardingFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.PostBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileDetailsFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
+import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ShareBottomSheetFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuggestedFriendFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.SuperSheroesCriteriaFragment;
@@ -349,6 +352,12 @@ public interface SheroesAppComponent {
     void inject(DeactivateProfileDialogFragment deactivateProfileDialogFragment);
 
     void inject(ReportUserProfileDialogFragment reportUserProfileDialogFragment);
+
+    void inject(SearchFragment searchFragment);
+
+    void inject(HashTagFragment hashTagFragment);
+
+    void inject(ProfileFragment profileFragment);
 }
 
 

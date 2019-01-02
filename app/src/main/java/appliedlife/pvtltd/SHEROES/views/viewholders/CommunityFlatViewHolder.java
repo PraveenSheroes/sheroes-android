@@ -2,7 +2,7 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Handler;
-import androidx.core.content.ContextCompat;
+import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,7 +10,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import androidx.core.content.ContextCompat;
 import appliedlife.pvtltd.SHEROES.R;
+import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseViewHolder;
 import appliedlife.pvtltd.SHEROES.basecomponents.FeedItemCallback;
@@ -34,14 +36,12 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 
     //region private variable and constant
     private final String TAG = LogUtils.makeLogTag(CommunityFlatViewHolder.class);
+    private final long COMMUNITY_ID = 273;
     private BaseHolderInterface viewInterface;
     private CommunityFeedSolrObj mCommunityFeedObj;
     //endregion
 
     //region bind variables
-    @Bind(R.id.feature_image)
-    ImageView mFeatureImage;
-
     @Bind(R.id.community_icon)
     ImageView mCommunityIcon;
 
@@ -84,15 +84,10 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         }
 
-
-        int imageHeight = (int) (((float) 1 / (float) 2) * CommonUtil.getWindowWidth(mContext));
-        mFeatureImage.getLayoutParams().height = imageHeight;
-        if (CommonUtil.isNotEmpty(mCommunityFeedObj.getImageUrl())) {
-            String finalImageUri = CommonUtil.getThumborUri(mCommunityFeedObj.getImageUrl(), CommonUtil.getWindowWidth(mContext), imageHeight);
-            Glide.with(context)
-                    .asBitmap()
-                    .load(finalImageUri)
-                    .into(mFeatureImage);
+        if (mCommunityFeedObj.getIdOfEntityOrParticipant() == COMMUNITY_ID) {
+            mCommunityJoin.setVisibility(View.GONE);
+        } else {
+            mCommunityJoin.setVisibility(View.VISIBLE);
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getThumbnailImageUrl())) {
@@ -105,7 +100,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
         }
 
         if (CommonUtil.isNotEmpty(mCommunityFeedObj.getNameOrTitle())) {
-            mCommunityName.setText(mCommunityFeedObj.getNameOrTitle());
+            mCommunityName.setText(Html.fromHtml(mCommunityFeedObj.getNameOrTitle()).toString());
         }
 
         String pluralMember = mContext.getResources().getQuantityString(R.plurals.numberOfMembers, mCommunityFeedObj.getNoOfMembers());
@@ -116,7 +111,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void viewRecycled() {
 
     }
-//endregion
+    //endregion
 
     //region onclick method
     @Override
@@ -128,6 +123,8 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void onCommunityJoinUnjoinedClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onCommunityJoinOrLeave(mCommunityFeedObj);
+        } else if (viewInterface instanceof AllCommunityItemCallback) {
+            ((AllCommunityItemCallback) viewInterface).onCommunityJoinOrUnjoin(mCommunityFeedObj);
         }
     }
 
@@ -135,6 +132,8 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
     public void onCardClicked() {
         if (viewInterface instanceof FeedItemCallback) {
             ((FeedItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
+        } else if (viewInterface instanceof AllCommunityItemCallback) {
+            ((AllCommunityItemCallback) viewInterface).onCommunityClicked(mCommunityFeedObj);
         }
     }
     //endregion

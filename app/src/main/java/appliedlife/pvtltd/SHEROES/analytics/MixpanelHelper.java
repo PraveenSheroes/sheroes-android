@@ -1,6 +1,7 @@
 package appliedlife.pvtltd.SHEROES.analytics;
 
 import android.content.Context;
+import android.text.Html;
 import android.text.TextUtils;
 
 import com.appsflyer.AppsFlyerLib;
@@ -32,6 +33,8 @@ import appliedlife.pvtltd.SHEROES.models.entities.login.UserSummary;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
+import appliedlife.pvtltd.SHEROES.views.activities.HomeActivity;
+import appliedlife.pvtltd.SHEROES.views.fragments.SearchFragment;
 import io.branch.referral.Branch;
 
 import static appliedlife.pvtltd.SHEROES.utils.AppConstants.LANGUAGE_KEY;
@@ -88,7 +91,7 @@ public class MixpanelHelper {
 
             String setOrderKey = CommonUtil.getPref(AppConstants.SET_ORDER_KEY);
             String feedConfigVersion = CommonUtil.getPref(AppConstants.FEED_CONFIG_VERSION);
-            String languageName= CommonUtil.getPrefStringValue(LANGUAGE_KEY);
+            String languageName = CommonUtil.getPrefStringValue(LANGUAGE_KEY);
             final SuperProperty.Builder superPropertiesBuilder = new SuperProperty.Builder()
                     .userId(Long.toString(userSummary.getUserId()))
                     .userName(userSummary.getFirstName() + " " + userSummary.getLastName())
@@ -265,7 +268,8 @@ public class MixpanelHelper {
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
         }
     }
-    public static void trackPollActionEvent(Event event, FeedDetail feedDetail, String screenName,long pollOptionId) {
+
+    public static void trackPollActionEvent(Event event, FeedDetail feedDetail, String screenName, long pollOptionId) {
         if (feedDetail == null) {
             return;
         }
@@ -291,6 +295,7 @@ public class MixpanelHelper {
             AnalyticsManager.trackEvent(event, feedDetail.getScreenName(), properties);
         }
     }
+
     public static void trackCommentActionEvent(Event event, FeedDetail feedDetail, String screenName) {
         if (feedDetail == null) {
             return;
@@ -406,7 +411,6 @@ public class MixpanelHelper {
                         .build();
         properties.put(EventProperty.SOURCE.getString(), screenName);
         return properties;
-
     }
 
     //TODO - Fix this with ujjwal
@@ -423,7 +427,6 @@ public class MixpanelHelper {
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
-
             AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
         }
     }
@@ -433,14 +436,17 @@ public class MixpanelHelper {
             final HashMap<String, Object> properties =
                     new EventProperty.Builder()
                             .id(Long.toString(communityDetails.getIdOfEntityOrParticipant()))
-                            .title(communityDetails.getNameOrTitle())
+                            .title(Html.fromHtml(communityDetails.getNameOrTitle()).toString())
                             .communityCategory(communityDetails.getCommunityType())
                             .type(getTypeFromSubtype(communityDetails.getSubType()))
                             .streamType(CommonUtil.isNotEmpty(communityDetails.getStreamType()) ? communityDetails.getStreamType() : "")
                             .positionInList(communityDetails.getItemPosition())
                             .build();
             properties.put(EventProperty.SOURCE.getString(), screenName);
-
+            properties.put(EventProperty.SEARCH_QUERY.getString(), communityDetails.getSearchText());
+            if (HomeActivity.isSearchClicked) {
+                properties.put(EventProperty.SOURCE_TAB_TITLE.getString(), SearchFragment.searchTabName);
+            }
             AnalyticsManager.trackEvent(event, communityDetails.getScreenName(), properties);
         }
     }

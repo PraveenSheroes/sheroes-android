@@ -8,13 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.SimpleItemAnimator;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -32,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -49,6 +43,13 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -65,6 +66,7 @@ import appliedlife.pvtltd.SHEROES.basecomponents.SheroesPresenter;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.BaseResponse;
 import appliedlife.pvtltd.SHEROES.basecomponents.baseresponse.SpamContentType;
 import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
+import appliedlife.pvtltd.SHEROES.enums.SearchEnum;
 import appliedlife.pvtltd.SHEROES.models.AppConfiguration;
 import appliedlife.pvtltd.SHEROES.models.ConfigData;
 import appliedlife.pvtltd.SHEROES.models.Spam;
@@ -85,6 +87,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.feed.PollSolarObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserPostSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.UserSolrObj;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.poll.CreatorType;
@@ -205,6 +208,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     @BindDimen(R.dimen.imagesize_unfollow_dialog)
     int mProfileSizeSmall;
+
+    @Bind(R.id.rl_empty)
+    RelativeLayout emptyLayout;
+
+    @Bind(R.id.tv_no_results_title)
+    TextView noResultsTitleTxt;
+
+    @Bind(R.id.tv_no_results_subtitle)
+    TextView noResultsSubTitleTxt;
+
+    @Bind(R.id.iv_image)
+    ImageView noResultsImage;
     // endregion
 
     //region private variables
@@ -234,6 +249,9 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     private EndlessRecyclerViewScrollListener mEndlessRecyclerViewScrollListener;
     private CommunityTab mCommunityTab;
     private boolean isTrackingEnabled = true;
+    private String mSearchText, mSearchCategory;
+    private boolean mIsSearch = false;
+    private FragmentOpen mFragmentOpen;
     //endregion
 
     //region fragment lifecycle method
@@ -246,13 +264,16 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         LocaleManager.setLocale(getContext());
         mFeedPresenter.attachView(this);
         impressionPresenter.attachView(this);
+        mFragmentOpen = new FragmentOpen();
         initialSetup();
         initializeRecyclerView();
         initializeSwipeRefreshView();
         setIsLoggedInUser();
         setupRecyclerScrollListener();
         showGifLoader();
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+
+        getFeedData();
+
         isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
             ((HomeActivity) getActivity()).homeButtonUi();
@@ -275,11 +296,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         return view;
     }
 
+    public void getFeedData() {
+        showGifLoader();
+        if (!mIsSearch)
+            mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+        else
+            mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, mSearchText, mSearchCategory);
+    }
+
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
-
             isActiveTabFragment = true;
 
             if (isTrackingEnabled && impressionHelper != null) {
@@ -291,6 +319,18 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
                     //Send event of previous selected tab with duration, and start the time capture for current selected tab
                     AnalyticsManager.trackScreenView(screenName, getExtraProperties());
+                    AnalyticsManager.timeScreenView(mScreenLabel);
+                }
+            } else if (getParentFragment() instanceof SearchFragment) {
+                String screenName = ((SearchFragment) getParentFragment()).getInactiveTabFragmentName();
+                if (mScreenLabel != null && screenName != null && !mScreenLabel.equalsIgnoreCase(screenName)) {
+                    //Send event of previous selected tab with duration, and start the time capture for current selected tab
+                    HashMap<String, Object> properties =
+                            new EventProperty.Builder()
+                                    .tabTitle(SearchFragment.searchTabName)
+                                    .sourceTabTitle(HomeFragment.SOURCE_ACTIVE_TAB)
+                                    .build();
+                    AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);
                 }
             } else if (getActivity() instanceof ProfileActivity || getActivity() instanceof ContestActivity) {
@@ -357,6 +397,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     private void loadEmptyView() {
+        emptyLayout.setVisibility(View.GONE);
         if (mCommunityTab != null) {
             if (CommonUtil.isNotEmpty(mCommunityTab.emptyTitle)) {
                 emptyText.setVisibility(View.VISIBLE);
@@ -409,6 +450,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     //region public methods
     @Override
     public void showFeedList(List<FeedDetail> feedDetailList) {
+        emptyLayout.setVisibility(View.GONE);
         if (CommonUtil.isEmpty(feedDetailList)) {
             mFeedRecyclerView.setVisibility(View.GONE);
             emptyView.setVisibility(View.VISIBLE);
@@ -440,9 +482,14 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void invalidateItem(FeedDetail feedDetail) {
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof CommunityDetailActivity) {
             ((CommunityDetailActivity) getActivity()).invalidateItem(feedDetail, false);
-        }  if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof ProfileActivity && feedDetail instanceof UserPostSolrObj) {
+        }
+        if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof ProfileActivity && feedDetail instanceof UserPostSolrObj) {
             UserPostSolrObj userPostSolrObj = (UserPostSolrObj) feedDetail;
-            ((ProfileActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            if (getActivity() != null && getActivity() instanceof ProfileActivity) {
+                ((ProfileActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            } else if (getActivity() != null && getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).updateFollowOnAuthorFollowed(userPostSolrObj.isSolrIgnoreIsUserFollowed());
+            }
             findPositionAndUpdateItem(userPostSolrObj, userPostSolrObj.getIdOfEntityOrParticipant());
         } else {
             updateItem(feedDetail);
@@ -816,9 +863,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void refreshList() {
-        mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-        if (getActivity() != null && getActivity() instanceof HomeActivity) {
-            ((HomeActivity) getActivity()).fetchAllCommunity();
+        if (!mIsSearch) {
+            mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+            if (getActivity() != null && getActivity() instanceof HomeActivity) {
+                ((HomeActivity) getActivity()).fetchAllCommunity();
+            }
         }
     }
 
@@ -843,6 +892,25 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             gifLoader.setVisibility(View.GONE);
         } else {
             super.showError(errorMsg, feedParticipationEnum);
+        }
+    }
+
+    @Override
+    public void showEmptyScreen(String s) {
+        if (mIsSearch) {
+            emptyLayout.setVisibility(View.VISIBLE);
+            hideGifLoader();
+            mFeedRecyclerView.setVisibility(View.GONE);
+
+            if (mSearchCategory.equalsIgnoreCase(SearchEnum.HASHTAGS.toString())) {
+                noResultsImage.setImageResource(R.drawable.hashtag_empty_vector);
+                noResultsTitleTxt.setText(getString(R.string.empty_hashtag));
+                noResultsSubTitleTxt.setText(s);
+            } else if (mSearchCategory.equalsIgnoreCase(SearchEnum.TOP.toString())) {
+                noResultsImage.setImageResource(R.drawable.posts_empty_vector);
+                noResultsTitleTxt.setText(getString(R.string.empty_posts));
+                noResultsSubTitleTxt.setText(s);
+            }
         }
     }
     //endregion
@@ -974,7 +1042,12 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                         mAdapter.feedStartedLoading();
                     }
                 });
-                mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
+
+                if (!mIsSearch) {
+                    mFeedPresenter.fetchFeed(FeedPresenter.LOAD_MORE_REQUEST, mStreamName);
+                } else {
+                    mFeedPresenter.fetchSearchedFeeds(FeedPresenter.LOAD_MORE_REQUEST, mStreamName, mSearchText, mSearchCategory);
+                }
             }
         };
         mFeedRecyclerView.addOnScrollListener(mEndlessRecyclerViewScrollListener);
@@ -995,18 +1068,31 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
+                getFeedData();
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
+    }
 
+    public void setSearchParams(boolean isFilter, String searchText, String searchCategory) {
+        this.mIsSearch = isFilter;
+        this.mSearchText = searchText;
+        this.mSearchCategory = searchCategory;
+    }
+
+    public void filterFeed(boolean isFilter, String searchText, String searchCategory) {
+        showGifLoader();
+        mFeedPresenter.setIsFeedLoading(false);
+        setSearchParams(isFilter, searchText, searchCategory);
+        mFeedRecyclerView.scrollToPosition(0);
+        mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
     }
 
     private void initializeRecyclerView() {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mFeedRecyclerView.setLayoutManager(mLinearLayoutManager);
         ((SimpleItemAnimator) mFeedRecyclerView.getItemAnimator()).setSupportsChangeAnimations(false);
-        mAdapter = new FeedAdapter(getContext(), this);
+        mAdapter = new FeedAdapter(getContext(), this, mIsSearch);
         mFeedRecyclerView.setAdapter(mAdapter);
     }
 
@@ -1183,6 +1269,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     @Override
     public void onUserPostClicked(FeedDetail feedDetail) {
         HashMap<String, Object> screenProperties = (HashMap<String, Object>) mScreenProperties.clone();
+        if (HomeActivity.isSearchClicked) {
+            screenProperties.put(EventProperty.SOURCE.toString(), SearchFragment.SCREEN_LABEL);
+            screenProperties.put(EventProperty.SOURCE_TAB_TITLE.toString(), mSearchCategory);
+        }
         screenProperties.put(EventProperty.POSITION_IN_LIST.toString(), Integer.toString(feedDetail.getItemPosition()));
         PostDetailActivity.navigateTo(getActivity(), getScreenName(), feedDetail, AppConstants.REQUEST_CODE_FOR_POST_DETAIL, screenProperties, false, mPrimaryColor, mTitleTextColor);
     }
@@ -1386,6 +1476,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void onPause() {
         super.onPause();
 
+        if (getParentFragment() instanceof HomeFragment) {
+            HomeFragment.SOURCE_ACTIVE_TAB = ((HomeFragment) getParentFragment()).getActiveTabName();
+        }
+
         if (impressionHelper != null) { //app exit cases and back-stack of activity
             impressionHelper.stopImpression();
         }
@@ -1556,6 +1650,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (mCommunityFeedObj.isMember()) {
             mCommunityFeedObj.setMember(false);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() - 1);
+            mCommunityFeedObj.setSearchText(SearchFragment.searchText);
             AnalyticsManager.trackCommunityAction(Event.COMMUNITY_LEFT, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -1564,6 +1659,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         } else {
             mCommunityFeedObj.setMember(true);
             mCommunityFeedObj.setNoOfMembers(mCommunityFeedObj.getNoOfMembers() + 1);
+            mCommunityFeedObj.setSearchText(SearchFragment.searchText);
             AnalyticsManager.trackCommunityAction(Event.COMMUNITY_JOINED, mCommunityFeedObj, getScreenName());
 
             if (null != mUserPreference && mUserPreference.isSet() && null != mUserPreference.get() && null != mUserPreference.get().getUserSummary()) {
@@ -1802,10 +1898,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         publicProfileListRequest.setIdOfEntityParticipant(userPostSolrObj.getAuthorId());
 
         HashMap<String, Object> properties = new EventProperty.Builder()
-                        .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
-                        .name(userPostSolrObj.getNameOrTitle())
-                        .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
-                        .build();
+                .id(Long.toString(userPostSolrObj.getIdOfEntityOrParticipant()))
+                .name(userPostSolrObj.getNameOrTitle())
+                .isMentor((userPostSolrObj.getUserSubType() != null && userPostSolrObj.getUserSubType().equalsIgnoreCase(AppConstants.CHAMPION_SUBTYPE)) || userPostSolrObj.isAuthorMentor())
+                .build();
         if (getExtraProperties() != null && properties != null && mCommunityTab != null) {
             properties.putAll(getExtraProperties());
         }
@@ -2012,7 +2108,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     }
 
     public void unFollowConfirmation(final PublicProfileListRequest publicProfileListRequest, final UserSolrObj userSolrObj) {
-        if (userSolrObj != null && getActivity()!=null) {
+        if (userSolrObj != null && getActivity() != null) {
             if (mDialog != null) {
                 mDialog.dismiss();
             }
@@ -2080,7 +2176,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                 Comment comment = lastComments.get(0);
                 if (comment != null && !comment.isAnonymous()) {
                     ProfileActivity.navigateTo(getActivity(), comment.getParticipantUserId(), comment.isVerifiedMentor(),
-                    PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
+                            PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
                 }
             }
 
@@ -2123,7 +2219,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         gifLoader.setVisibility(View.VISIBLE);
         if (null != getActivity()) {
             if (getActivity() instanceof HomeActivity) {
-                ((HomeActivity) getActivity()).homeOnClick();
+                if (!mFragmentOpen.isFeedFragment()) {
+                    ((HomeActivity) getActivity()).searchOnClick();
+                } else {
+                    ((HomeActivity) getActivity()).homeOnClick();
+                }
             }
         }
     }

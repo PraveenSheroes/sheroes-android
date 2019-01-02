@@ -72,7 +72,7 @@ public class ConfigData {
     public String mPromoCardUrl = "Quiz";
 
     @SerializedName("articleGuideline")
-    public String articleGuideline= AppConstants.ARTICLE_GUIDELINE;
+    public String articleGuideline = AppConstants.ARTICLE_GUIDELINE;
 
     @SerializedName("herStoryTitle")
     public String mHerStoryTitle = "Story Title";
@@ -98,7 +98,7 @@ public class ConfigData {
     @SerializedName("maleUserErrorText")
     public String mMaleErrorText = "<html>" +
             "<head>" +
-            "<meta charset=\"UTF-8\">" +"</head>" +
+            "<meta charset=\"UTF-8\">" + "</head>" +
             "<body style=\"text-align: center;font-weight:bold;margin:0px;padding:0px;\">" +
             "<div style=\"text-align: center;font-weight:bold;margin: 0px 0px 0px 0px;\"> <b >Oops, You are a gentleman!</b></div>" +
             "<div style=\"text-align: center\">" +
@@ -116,6 +116,9 @@ public class ConfigData {
 
     @SerializedName("challengeWinnerDailogMessage")
     public String challengeWinnerDialogMassage = "You have won the Invitation to SHEROES Summit 2018. We loved your response to our Challenge.";
+
+    @SerializedName("SearchBarText")
+    public String searchBarText = "Search by posts, communities & hashtags";
 
     @SerializedName("view_visibility")
     public int visibilityPercentage = 20;
@@ -137,4 +140,10 @@ public class ConfigData {
 
     @SerializedName("isFbShareEnabled")
     public boolean isFbShareEnabled;
+
+    @SerializedName("isWhatsAppShareEnable")
+    public boolean mIsWhatsAppShareEnable = false;
+
+    @SerializedName("isSnowFlake")
+    public boolean mIsSnowFlake = false;
 }

@@ -1,11 +1,10 @@
 package appliedlife.pvtltd.SHEROES.views.cutomeviews;
 
+import javax.inject.Inject;
+
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import javax.inject.Inject;
-
 import appliedlife.pvtltd.SHEROES.models.entities.community.BellNotificationRequest;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedRequestPojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentListRefreshData;
@@ -28,10 +27,10 @@ import static appliedlife.pvtltd.SHEROES.utils.AppUtils.myCommunityRequestBuilde
 import static appliedlife.pvtltd.SHEROES.utils.AppUtils.userCommunityPostRequestBuilder;
 
 /*
-* This class is a ScrollListener for RecyclerView that allows to show/hide
-* views when list is scrolled. It assumes that you have added a header
-* to your list. @see pl.michalz.hideonscrollexample.adapter.partone.RecyclerAdapter
-* */
+ * This class is a ScrollListener for RecyclerView that allows to show/hide
+ * views when list is scrolled. It assumes that you have added a header
+ * to your list. @see pl.michalz.hideonscrollexample.adapter.partone.RecyclerAdapter
+ * */
 public abstract class HidingScrollListener extends RecyclerView.OnScrollListener {
     private final String TAG = LogUtils.makeLogTag(HidingScrollListener.class);
     private static final int HIDE_THRESHOLD = 20;
@@ -49,11 +48,14 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
     private LinearLayoutManager mManager;
     private int previousTotal = 0;
     private boolean loading = true;
+    private boolean mIsSearch = false;
+    private boolean mIsFeedEnded = false;
     private int visibleThreshold = 1;
     private int firstVisibleItem, visibleItemCount, totalItemCount;
     private FragmentListRefreshData mFragmentListRefreshData;
     private OnBoardingPresenter mOnBoardingPresenter;
     private MainActivityPresenter mMainActivityPresenter;
+    private String mSearchText, mSearchCategory;
 
     public HidingScrollListener(OnBoardingPresenter onBoardingPresenter, RecyclerView recyclerView, GridLayoutManager manager, FragmentListRefreshData fragmentListRefreshData) {
         mOnBoardingPresenter = onBoardingPresenter;
@@ -118,6 +120,16 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
         this.mFragmentListRefreshData = mFragmentListRefreshData;
     }
 
+    public void setSearchParameter(boolean isSearch, String searchText, String searchCategory) {
+        mIsSearch = isSearch;
+        mSearchText = searchText;
+        mSearchCategory = searchCategory;
+    }
+
+    public void setSearchFeedEnded(boolean hasArticleFeedEnded) {
+        mIsFeedEnded = hasArticleFeedEnded;
+    }
+
     @Override
     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
         super.onScrolled(recyclerView, dx, dy);
@@ -171,8 +183,13 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                 }
                 switch (mFragmentListRefreshData.getCallFromFragment()) {
                     case AppConstants.ARTICLE_FRAGMENT:
-                        FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
-                        mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
+                        if (mIsSearch) {
+                            if (!mIsFeedEnded)
+                                mHomePresenter.getArticleFeeds(mSearchText, mSearchCategory, false, false);
+                        } else {
+                            FeedRequestPojo feedRequestArticlePojo = mAppUtils.articleCategoryRequestBuilder(AppConstants.FEED_ARTICLE, mFragmentListRefreshData.getPageNo(), mFragmentListRefreshData.getCategoryIdList());
+                            mHomePresenter.getFeedFromPresenter(feedRequestArticlePojo);
+                        }
                         break;
                     case AppConstants.COMMUNITY_POST_FRAGMENT:
                         FeedRequestPojo feedRequestCommPostFragPojo = mAppUtils.feedRequestBuilder(AppConstants.FEED_COMMUNITY_POST, pageNo);
@@ -267,7 +284,7 @@ public abstract class HidingScrollListener extends RecyclerView.OnScrollListener
                         break;
 
                     case AppConstants.BELL_NOTIFICATION_LISTING:
-                        BellNotificationRequest bellNotificationRequest=mAppUtils.getBellNotificationRequest();
+                        BellNotificationRequest bellNotificationRequest = mAppUtils.getBellNotificationRequest();
                         bellNotificationRequest.setPageNo(mFragmentListRefreshData.getPageNo());
                         mHomePresenter.getBellNotificationFromPresenter(bellNotificationRequest);
                         break;

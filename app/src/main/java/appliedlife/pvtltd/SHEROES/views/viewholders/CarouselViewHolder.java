@@ -2,8 +2,6 @@ package appliedlife.pvtltd.SHEROES.views.viewholders;
 
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -11,6 +9,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.AllCommunityItemCallback;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseHolderInterface;
@@ -35,16 +36,17 @@ import butterknife.OnClick;
 public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region private variable
     private final String TAG = LogUtils.makeLogTag(CarouselViewHolder.class);
-    private BaseHolderInterface viewInterface;
-    private CarouselDataObj carouselDataObj;
-    private boolean isUpdateFromProfile;
+    private BaseHolderInterface mViewInterface;
+    private CarouselDataObj mCarouselDataObj;
+    private boolean mIsUpdateFromProfile;
     private SparseArray<Parcelable> scrollStatePositionsMap = new SparseArray<>();
+    private int mPosition;
+    private boolean mIsSearch;
     //endregion
 
     //region public variable
     public CarouselListAdapter mAdapter = null;
     //endregion
-
 
     //region bind variable
     @Bind(R.id.icon)
@@ -58,15 +60,14 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
     @Bind(R.id.rv_suggested_mentor_list)
     RecyclerView mRecyclerView;
-
-    private int position;
     //endregion
 
     //region constructor
-    public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface) {
+    public CarouselViewHolder(View itemView, BaseHolderInterface baseHolderInterface, boolean isSearch) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-        this.viewInterface = baseHolderInterface;
+        this.mViewInterface = baseHolderInterface;
+        this.mIsSearch = isSearch;
         SheroesApplication.getAppComponent(itemView.getContext()).inject(this);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -74,7 +75,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    scrollStatePositionsMap.put(position, recyclerView.getLayoutManager().onSaveInstanceState());
+                    scrollStatePositionsMap.put(mPosition, recyclerView.getLayoutManager().onSaveInstanceState());
                 }
             }
         });
@@ -84,8 +85,8 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region public method
     @Override
     public void bindData(CarouselDataObj item, final Context context, final int position) {
-        this.carouselDataObj = item;
-        this.position = position;
+        this.mCarouselDataObj = item;
+        this.mPosition = position;
         item.setItemPosition(position);
         if (StringUtil.isNotNullOrEmptyString(item.getTitle())) {
             mTitle.setVisibility(View.VISIBLE);
@@ -113,17 +114,23 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
 
         List<FeedDetail> list = item.getFeedDetails();
         if (StringUtil.isNotEmptyCollection(list)) {
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(context, RecyclerView.HORIZONTAL, false);
-            mRecyclerView.setLayoutManager(mLayoutManager);
-            mAdapter = new CarouselListAdapter(context, viewInterface, item, this);
-            mRecyclerView.setLayoutManager(mLayoutManager);
+            if (mIsSearch) {
+                StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+                mRecyclerView.setLayoutManager(gridLayoutManager);
+            } else {
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(context);
+                linearLayoutManager.setOrientation(RecyclerView.HORIZONTAL);
+                mRecyclerView.setLayoutManager(linearLayoutManager);
+            }
+
+            mAdapter = new CarouselListAdapter(context, mViewInterface, item, this, mIsSearch);
             mRecyclerView.setAdapter(mAdapter);
             mAdapter.setData(item.getFeedDetails());
             for (int i = 0; i < list.size(); i++) {
                 if (list.get(i) instanceof UserSolrObj) {
                     boolean isSuggested = ((UserSolrObj) list.get(i)).isSuggested();
                     if (isSuggested) {
-                        isUpdateFromProfile = true;
+                        mIsUpdateFromProfile = true;
                         UserSolrObj userSolrObj = ((UserSolrObj) list.get(i));
                         mAdapter.notifyItemChanged(i, userSolrObj);
                         mRecyclerView.scrollToPosition(userSolrObj.getItemPosition());
@@ -131,7 +138,7 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
                     }
                 }
             }
-            if (!isUpdateFromProfile) {
+            if (!mIsUpdateFromProfile) {
                 mAdapter.notifyDataSetChanged();
             }
             if (scrollStatePositionsMap.get(position) != null) {
@@ -151,31 +158,13 @@ public class CarouselViewHolder extends BaseViewHolder<CarouselDataObj> {
     //region onclick method
     @OnClick(R.id.icon_container)
     public void onIconClicked() {
-        /*if (carouselDataObj != null && carouselDataObj.getUserSolrObj() != null && carouselDataObj.getUserSolrObj().get(0) != null) {
-            if (carouselDataObj.getUserSolrObj().get(0) instanceof UserSolrObj) {
-                if (mViewInterface instanceof AllCommunityItemCallback) {
-                    ((AllCommunityItemCallback) mViewInterface).openChampionListingScreen(carouselDataObj);
-                } else {
-                    mViewInterface.handleOnClick(carouselDataObj, mIcon);
-                }
+        if (mCarouselDataObj != null && mCarouselDataObj.getFeedDetails() != null) {
+            if (mViewInterface instanceof AllCommunityItemCallback) {
+                ((AllCommunityItemCallback) mViewInterface).onSeeMoreClicked(mCarouselDataObj);
+            } else if (mViewInterface instanceof FeedItemCallback) {
+                ((FeedItemCallback) mViewInterface).onSeeMoreClicked(mCarouselDataObj);
             } else {
-                if (mViewInterface instanceof AllCommunityItemCallback) {
-                    ((AllCommunityItemCallback) mViewInterface).onSeeMoreClicked(carouselDataObj);
-                }else if(mViewInterface instanceof FeedItemCallback){
-                    ((FeedItemCallback)mViewInterface).onSeeMoreClicked(carouselDataObj);
-                } else {
-                    mViewInterface.handleOnClick(carouselDataObj, mIcon);
-                }
-            }
-        }*/
-
-        if(carouselDataObj!=null && carouselDataObj.getFeedDetails()!=null){
-            if (viewInterface instanceof AllCommunityItemCallback) {
-                ((AllCommunityItemCallback) viewInterface).onSeeMoreClicked(carouselDataObj);
-            }else if(viewInterface instanceof FeedItemCallback){
-                ((FeedItemCallback)viewInterface).onSeeMoreClicked(carouselDataObj);
-            } else {
-                viewInterface.handleOnClick(carouselDataObj, mIcon);
+                mViewInterface.handleOnClick(mCarouselDataObj, mIcon);
             }
         }
     }

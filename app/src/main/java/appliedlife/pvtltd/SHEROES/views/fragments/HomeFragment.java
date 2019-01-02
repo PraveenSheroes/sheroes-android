@@ -2,18 +2,19 @@ package appliedlife.pvtltd.SHEROES.views.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.material.tabs.TabLayout;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.basecomponents.BaseFragment;
 import appliedlife.pvtltd.SHEROES.basecomponents.SheroesApplication;
@@ -23,6 +24,7 @@ import appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedDetail;
 import appliedlife.pvtltd.SHEROES.models.entities.feed.FeedResponsePojo;
 import appliedlife.pvtltd.SHEROES.models.entities.home.BelNotificationListResponse;
+import appliedlife.pvtltd.SHEROES.models.entities.home.FragmentOpen;
 import appliedlife.pvtltd.SHEROES.models.entities.login.LoginResponse;
 import appliedlife.pvtltd.SHEROES.models.entities.onboarding.BoardingDataResponse;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
@@ -37,8 +39,13 @@ import butterknife.ButterKnife;
  */
 
 public class HomeFragment extends BaseFragment {
+    //region static variables
     public static String TRENDING_FEED_SCREEN_LABEL = "Trending Feed Screen";
     public static String FEED_SCREEN_LABEL = "Feed Screen";
+    public static String PREVIOUS_SCREEN="";
+    public static String SOURCE_ACTIVE_TAB = "";
+    //endregion static variables
+
     // region View variables
     @Bind(R.id.home_view_pager)
     ViewPager mViewPager;
@@ -55,6 +62,8 @@ public class HomeFragment extends BaseFragment {
     private String mDefaultTabKey;
     private List<String> homeTabs = new ArrayList<>();
     private String mUnSelectedFragment;
+    private FragmentOpen mFragmentOpen;
+    private String mPreviousScreen;
     //endregion
 
 
@@ -65,9 +74,16 @@ public class HomeFragment extends BaseFragment {
         View view = inflater.inflate(R.layout.home_fragment, container, false);
         ButterKnife.bind(this, view);
         SheroesApplication.getAppComponent(getActivity()).inject(this);
+        mFragmentOpen = new FragmentOpen();
         mDefaultTabKey = getString(R.string.my_feed);
         initializeHomeViews();
         return view;
+    }
+
+    @Override
+    public void onPause() {
+       PREVIOUS_SCREEN = mPreviousScreen;
+        super.onPause();
     }
 
     @Override
@@ -131,6 +147,9 @@ public class HomeFragment extends BaseFragment {
 
     // region Private methods
     private void initializeHomeViews() {
+        if (getArguments() != null) {
+            mPreviousScreen = getArguments().getString(AppConstants.SCREEN_NAME);
+        }
         homeTabs.add(getString(R.string.my_feed));
         homeTabs.add(getString(R.string.ID_TRENDING));
         mTabLayout.setSelectedTabIndicatorColor(Color.parseColor(mCommunityTitleTextColor));
@@ -161,6 +180,7 @@ public class HomeFragment extends BaseFragment {
         mFragmentAdapter = new Adapter(getChildFragmentManager());
         for (String name : homeTabs) {
             if (name.equalsIgnoreCase(getString(R.string.my_feed))) {
+                mFragmentOpen.setFeedFragment(true);
                 FeedFragment feedFragment = new FeedFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(AppConstants.END_POINT_URL, AppConstants.MY_FEED_POST_STREAM);
@@ -295,6 +315,17 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    public String getActiveTabName() {
+        if (mViewPager.getCurrentItem() == 0)
+            return FEED_SCREEN_LABEL;
+        else
+            return TRENDING_FEED_SCREEN_LABEL;
+    }
     //endregion
 
     // region Static innerclass

@@ -336,5 +336,9 @@ public class AddressActivity extends BaseActivity implements IAddressView {
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
         onShowErrorDialog(s, feedParticipationEnum);
     }
+
+    @Override
+    public void showEmptyScreen(String s) {
+    }
     //endregion
 }

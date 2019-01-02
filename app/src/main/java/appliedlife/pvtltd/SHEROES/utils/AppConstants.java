@@ -109,6 +109,7 @@ public class AppConstants {
     public static final int REQUEST_CODE_CHAMPION_TITLE = 1503;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_USER_DETAIL = 1505;
     public static final int REQUEST_CODE_FOR_LAST_COMMENT_FROM_ARTICLE = 1506;
+    public static final int REQUEST_CODE_FOR_SEARCH = 1406;
     public static final String GROWTH_PUBLIC_PROFILE = "growth_public_profile";
     public static final String HELPLINE_FRAGMENT = "helpline";
 
@@ -233,6 +234,8 @@ public class AppConstants {
     public static final String CHAMPION_URL = "https://sheroes.in/champions";
     public static final String CHAMPION_URL_COM = "https://sheroes.com/champions";
     public static final String ARTICLE_URL = "https://sheroes.in/articles";
+    public static final String SEARCH_URL = "https://sheroes.in/search";
+    public static final String SEARCH_URL_COM = "https://sheroes.com/search";
     public static final String ARTICLE_URL_COM = "https://sheroes.com/articles";
     public static final String ARTICLE_CATEGORY_URL_COM = "https://sheroes.com/articles/category";
     public static final String ARTICLE_CATEGORY_URL_IN = "https://sheroes.in/articles/category";
@@ -287,6 +290,9 @@ public class AppConstants {
     public static final String GRID_VIEW_TYPE = "grid";
     public static final String TOOLBAR_TITTE = "toolbar_title";
     public static final String SCREEN_NAME = "screen_name";
+    public static final String SEARCH_TEXT = "search_text";
+    public static final String SEARCH_CATEGORY = "search_category";
+    public static final String NEXT_TOKEN = "next_token";
 
     //Clever tap notification keys
     public static final String CLEVER_TAP_IS_PRESENT = "wzrk_pn";
@@ -410,9 +416,14 @@ public class AppConstants {
     public static final String USER_MY_STORIES_STREAM = "participant/feed/stream?setOrderKey=UserStoryStream&myStory=true";
     public static final String OTHER_USER_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream&userId=";
     public static final String USER_MY_POST_STREAM = "participant/feed/stream?setOrderKey=ProfilePostStream";
+    public static final String SEARCH = "participant/search/";
+    public static final String SEARCH_QUERY = "?search_text=";
+    public static final String SEARCH_TAB = "&search_category=";
+    public static final String SEARCH_NEXT_TOKEN = "&next_token=" ;
 
     //Social A/c's
     public static final String FACEBOOK = "Facebook";
     public static final String GOOGLE = "Google";
     public static final String EMAIL_PREF = "Email";
 }
+

@@ -346,6 +346,11 @@ public class HelplineFragment extends BaseFragment implements HelplineView {
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+
+    }
+
+    @Override
     public String getScreenName() {
         return SCREEN_LABEL;
     }

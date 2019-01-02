@@ -2,7 +2,6 @@ package appliedlife.pvtltd.SHEROES.analytics;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -68,12 +67,13 @@ public enum EventProperty {
     IS_STORY("Is a Story"),
     AUTHOR_ID("Author Id"),
     AUTHOR_NAME("Author Name"),
-    IS_ACTIVE("Badge State");
+    IS_ACTIVE("Badge State"),
+    SEARCH_QUERY("Search Query");
 
     private final String string;
 
     EventProperty(String string) {
-        if(TextUtils.isEmpty(string)){
+        if (TextUtils.isEmpty(string)) {
             throw new IllegalStateException("EventProperty name not initialized!");
         }
         this.string = string;
@@ -83,97 +83,113 @@ public enum EventProperty {
         return string;
     }
 
-    public static class Builder{
+    public static class Builder {
         private HashMap<String, Object> properties = new HashMap<>();
 
-        private static<T> boolean validateData(final EventProperty property, final T value) {
+        private static <T> boolean validateData(final EventProperty property, final T value) {
             return property != null && value != null;
         }
 
-        private<T> boolean put(final EventProperty property, final T value){
-            if(validateData(property, value)){
+        private <T> boolean put(final EventProperty property, final T value) {
+            if (validateData(property, value)) {
                 properties.put(property.getString(), value);
             }
             return value != null;
         }
 
-        public Builder action(String value){
+        public Builder action(String value) {
             put(ACTION, value);
             return this;
         }
 
-        public Builder id(String value){
+        public Builder id(String value) {
             put(ID, value);
             return this;
         }
-        public Builder postCommentId(String value){
+
+        public Builder source(String value) {
+            put(SOURCE, value);
+            return this;
+        }
+
+        public Builder postCommentId(String value) {
             put(POST_COMMENT_ID, value);
             return this;
         }
-        public Builder taggedUserId(String value){
+
+        public Builder taggedUserId(String value) {
             put(TAGGED_USER_ID, value);
             return this;
         }
-        public Builder taggedIn(String value){
+
+        public Builder taggedIn(String value) {
             put(TAGGED_IN, value);
             return this;
         }
 
-        public Builder name(String value){
+        public Builder name(String value) {
             put(NAME, value);
             return this;
         }
 
-        public Builder title(String value){
+
+        public Builder title(String value) {
             put(TITLE, value);
             return this;
         }
 
-        public Builder gender(String value){
+        public Builder searchQuery(String value) {
+            put(SEARCH_QUERY, value);
+            return this;
+        }
+
+        public Builder gender(String value) {
             put(GENDER, value);
             return this;
         }
 
-        public Builder authorId(String value){
+        public Builder authorId(String value) {
             put(AUTHOR_ID, value);
             return this;
         }
 
-        public Builder authorName(String value){
+        public Builder authorName(String value) {
             put(AUTHOR_NAME, value);
             return this;
         }
 
-        public Builder postType(String value){
+        public Builder postType(String value) {
             put(POST_TYPE, value);
             return this;
         }
-        public Builder postId(String value){
+
+        public Builder postId(String value) {
             put(POST_ID, value);
             return this;
         }
-        public Builder pollId(String value){
+
+        public Builder pollId(String value) {
             put(POLL_ID, value);
             return this;
         }
 
-        public Builder body(String value){
+        public Builder body(String value) {
             put(BODY, value);
             return this;
         }
 
 
-        public Builder type(String value){
+        public Builder type(String value) {
             put(TYPE, value);
             return this;
         }
 
-        public Builder authProvider(final String source){
+        public Builder authProvider(final String source) {
             put(AUTH_PROVIDER, source);
             return this;
         }
 
-        public Builder isNewUser(boolean source){
+        public Builder isNewUser(boolean source) {
             put(IS_NEW_USER, source);
             return this;
         }
@@ -222,10 +238,12 @@ public enum EventProperty {
             put(COMMUNITY_NAME, value);
             return this;
         }
+
         public Builder optionId(String value) {
             put(OPTION_ID, value);
             return this;
         }
+
         public Builder communityCategory(String value) {
             put(COMMUNITY_CATEGORY, value);
             return this;
@@ -245,71 +263,77 @@ public enum EventProperty {
             put(PUSH_PROVIDER, value);
             return this;
         }
+
         public Builder keyword(String value) {
             put(KEYWORD, value);
             return this;
         }
 
-        public HashMap<String, Object> build(){
+        public HashMap<String, Object> build() {
             return properties;
         }
 
-        public Builder positionInList(Integer value){
+        public Builder positionInList(Integer value) {
             put(POSITION_IN_LIST, value);
             return this;
         }
 
-        public Builder sharedTo(final String sharedTo){
+        public Builder sharedTo(final String sharedTo) {
             put(SHARED_TO, sharedTo);
             return this;
         }
 
-        public Builder activityName(final String name){
+        public Builder activityName(final String name) {
             put(ACTIVITY_NAME, name);
             return this;
         }
 
-        public Builder lookingForName(final String lookingForName){
+        public Builder lookingForName(final String lookingForName) {
             put(LOOKING_FOR_NAME, lookingForName);
             return this;
         }
-        public Builder tabTitle(final String tabTitle){
+
+        public Builder tabTitle(final String tabTitle) {
             put(TAB_TITLE, tabTitle);
             return this;
         }
-        public Builder tabKey(final String tabKey){
+
+        public Builder tabKey(final String tabKey) {
             put(TAB_KEY, tabKey);
             return this;
         }
-        public Builder sourceScreenId(final String sourceScreenId){
+
+        public Builder sourceScreenId(final String sourceScreenId) {
             put(SOURCE_SCREEN_ID, sourceScreenId);
             return this;
         }
-        public Builder sourceTabKey(final String sourceTabKey){
+
+        public Builder sourceTabKey(final String sourceTabKey) {
             put(SOURCE_TAB_KEY, sourceTabKey);
             return this;
         }
-        public Builder sourceTabTitle(final String sourceTabTitle){
+
+        public Builder sourceTabTitle(final String sourceTabTitle) {
             put(SOURCE_TAB_TITLE, sourceTabTitle);
             return this;
         }
 
-        public Builder positionInSequence(final String position){
+        public Builder positionInSequence(final String position) {
             put(POSITION_IN_SEQUENCE, position);
             return this;
         }
 
-        public Builder description(final String description){
+        public Builder description(final String description) {
             put(DESCRIPTION, description);
             return this;
         }
 
-        public Builder isMentor(final boolean isMentor){
+        public Builder isMentor(final boolean isMentor) {
             put(IS_MENTOR, isMentor);
             return this;
         }
 
-        public Builder isChecked(final boolean isChecked){
+        public Builder isChecked(final boolean isChecked) {
             put(IS_CHECKED, isChecked);
             return this;
         }
@@ -319,27 +343,27 @@ public enum EventProperty {
             return this;
         }
 
-        public Builder isOwnProfile(final boolean isOwnProfile){
+        public Builder isOwnProfile(final boolean isOwnProfile) {
             put(IS_OWN_PROFILE, isOwnProfile);
             return this;
         }
 
-        public Builder collectionName(String value){
+        public Builder collectionName(String value) {
             put(COLLECTION_NAME, value);
             return this;
         }
 
-        public Builder sourceCollectionName(String value){
+        public Builder sourceCollectionName(String value) {
             put(SOURCE_COLLECTION_NAME, value);
             return this;
         }
 
-        public Builder streamType(String value){
+        public Builder streamType(String value) {
             put(STREAM_TYPE, value);
             return this;
         }
 
-        public Builder branchLink(String value){
+        public Builder branchLink(String value) {
             put(BRANCH_LINK, value);
             return this;
         }

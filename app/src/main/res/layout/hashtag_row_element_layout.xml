@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:vernacular="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_hashtag"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+        android:id="@+id/tv_hashtag"
+        style="@style/TextView16spMediumBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/hashtag_list_margin_left"
+        android:layout_marginLeft="@dimen/hashtag_list_margin_left"
+        android:layout_marginTop="@dimen/hashtag_list_margin_top"
+        android:layout_marginBottom="@dimen/hashtag_list_margin_top"
+        android:ellipsize="end"
+        android:letterSpacing="0.01"
+        android:maxLines="@integer/int_value_for_line_1"
+        android:textColor="@color/sheroes_greyish_brown"
+        tools:text="@string/ID_USER_NAME"
+        vernacular:customTextFontFamily="@string/medium_font" />
+
+</LinearLayout>

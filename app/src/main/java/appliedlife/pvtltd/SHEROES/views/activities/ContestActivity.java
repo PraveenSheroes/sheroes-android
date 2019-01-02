@@ -584,6 +584,10 @@ public class ContestActivity extends BaseActivity implements IContestView, BaseH
     }
 
     @Override
+    public void showEmptyScreen(String s) {
+    }
+
+    @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
         if (baseResponse instanceof FeedDetail) {
             mFeedDetail = (FeedDetail) baseResponse;

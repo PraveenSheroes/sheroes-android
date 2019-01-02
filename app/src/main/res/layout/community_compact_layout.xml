@@ -1,124 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/community_card_view"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/dp_size_8"
-    android:elevation="@dimen/dp_size_5"
-    card_view:cardCornerRadius="@dimen/communities_compact_card_radius">
+    android:layout_marginTop="@dimen/community_card_margin_top"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/feature_image"
+        android:layout_width="@dimen/community_image_dimensions"
+        android:layout_height="@dimen/community_image_dimensions"
+        android:layout_gravity="center"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        tools:src="@drawable/vector_empty_winner" />
 
     <LinearLayout
-        android:layout_width="@dimen/community_compact_card_width"
-        android:layout_height="@dimen/community_compact_card_height"
-        android:background="@color/carousel_card_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/feature_image"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/vector_empty_winner" />
+        <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
+            android:id="@+id/community_icon"
+            android:layout_width="@dimen/my_community_icon_width"
+            android:layout_height="@dimen/my_community_icon_height"
+            tools:src="@drawable/vector_champion_avatar" />
 
-        <RelativeLayout
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/community_name"
+            style="@style/TextView14spMediumBold"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/community_name_height"
+            android:layout_marginTop="@dimen/community_name_margin_top"
+            android:ellipsize="end"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.01"
+            android:maxLines="@integer/int_value_for_line_2"
+            android:textColor="@color/sheroes_greyish_brown"
+            android:textSize="@dimen/community_name_size"
+            tools:text="@string/health_tips"
+            vernacular:customTextFontFamily="@string/medium_font" />
+
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/community_member_count"
+            style="@style/TextView12spRegular"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingBottom="@dimen/dp_size_8"
-            android:paddingLeft="@dimen/dp_size_8"
-            android:paddingStart="@dimen/dp_size_10"
-            android:paddingTop="@dimen/dp_size_12">
+            android:layout_marginTop="@dimen/community_member_margin_top"
+            android:gravity="center"
+            android:maxLines="@integer/int_value_for_line_1"
+            android:textColor="@color/sheroes_warm_grey"
+            android:textSize="@dimen/community_members"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
-            <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                android:id="@+id/community_join"
-                style="@style/TextView14spRegular"
-                android:layout_width="@dimen/community_join_width"
-                android:layout_height="@dimen/community_join_height"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="@dimen/dp_size_16"
-                android:layout_marginLeft="@dimen/dp_size_16"
-                android:layout_marginRight="@dimen/dp_size_16"
-                android:layout_marginStart="@dimen/dp_size_16"
-                android:gravity="center"
-                android:letterSpacing="0.07"
-                android:textAllCaps="true"
-                android:textColor="@color/footer_icon_text"
-                tools:text="@string/ID_JOIN"
-                vernacular:customTextFontFamily="@string/regular_font" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_toLeftOf="@id/community_join"
-                android:layout_toStartOf="@id/community_join">
-
-                <appliedlife.pvtltd.SHEROES.views.cutomeviews.CircleImageView
-                    android:id="@+id/community_icon"
-                    android:layout_width="@dimen/dp_community_icon_width"
-                    android:layout_height="@dimen/dp_community_icon_height"
-                    android:layout_marginLeft="@dimen/dp_size_2"
-                    android:layout_marginStart="@dimen/dp_size_2"
-                    tools:src="@drawable/vector_champion_avatar" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="@dimen/dp_size_5"
-                    android:layout_marginLeft="@dimen/dp_size_5"
-                    android:layout_marginRight="@dimen/dp_size_5"
-                    android:layout_marginStart="@dimen/dp_size_5"
-                    android:orientation="vertical">
-
-                    <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                        android:id="@+id/community_name"
-                        style="@style/TextView16spRegular"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:letterSpacing="0.04"
-                        android:maxLines="@integer/int_value_for_line_1"
-                        android:textColor="@color/comment_text"
-                        tools:text="@string/health_tips"
-                        vernacular:customTextFontFamily="@string/regular_font" />
-
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <ImageView
-                            android:id="@+id/icon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:src="@drawable/vector_member_icon" />
-
-                        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                            android:id="@+id/community_member_count"
-                            style="@style/TextView14spRegular"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/dp_size_8"
-                            android:layout_marginStart="@dimen/dp_size_8"
-                            android:layout_marginTop="@dimen/dp_size_1"
-                            android:layout_toEndOf="@id/icon"
-                            android:layout_toRightOf="@id/icon"
-                            android:gravity="left"
-                            android:maxLines="@integer/int_value_for_line_1"
-                            android:textColor="@color/recent_post_comment"
-                            android:textSize="@dimen/community_members"
-                            tools:text="47889 Members" />
-                            vernacular:customTextFontFamily="@string/regular_font" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-        </RelativeLayout>
+        <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
+            android:id="@+id/community_join"
+            style="@style/TextView14spRegular"
+            android:layout_width="@dimen/community_join_width"
+            android:layout_height="@dimen/community_join_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/community_join_margin"
+            android:layout_marginLeft="@dimen/community_join_margin"
+            android:layout_marginEnd="@dimen/community_join_margin"
+            android:layout_marginRight="@dimen/community_join_margin"
+            android:gravity="center"
+            android:letterSpacing="0.07"
+            android:textAllCaps="true"
+            android:textColor="@color/footer_icon_text"
+            android:visibility="gone"
+            tools:text="@string/ID_JOIN"
+            vernacular:customTextFontFamily="@string/regular_font" />
 
     </LinearLayout>
-</androidx.cardview.widget.CardView>
+
+</LinearLayout>
