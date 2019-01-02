@@ -387,22 +387,17 @@ public class LanguageSelectionActivity extends BaseActivity implements LoginView
 
     @Override
     public void startProgressBar() {
-
     }
 
     @Override
     public void stopProgressBar() {
-
     }
 
     @Override
     public void showError(String s, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
-
 }

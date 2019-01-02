@@ -101,8 +101,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         ButterKnife.bind(this, view);
         mSearchPresenter.attachView(this);
 
-        List<String> hashTagsList = new ArrayList<>();
-
         if(getArguments() != null){
             mScreenLabel = getArguments().getString(AppConstants.SCREEN_NAME);
         }
@@ -111,17 +109,16 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         hashTagsView.setLayoutManager(linearLayoutManager);
 
-        mHashTagsAdapter = new HashTagsAdapter(getActivity(), this, hashTagsList);
+        mHashTagsAdapter = new HashTagsAdapter(getActivity(), this, new ArrayList<String>());
         hashTagsView.setAdapter(mHashTagsAdapter);
 
         if (mIsSearch) {
             filterFeed(mSearchText);
         } else {
-            callHashTagApi();
+            getHashtags();
         }
 
         return view;
-
     }
     //endregion lifecycle methods
 
@@ -138,62 +135,50 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
     public void getFeedListSuccess(FeedResponsePojo feedResponsePojo) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
 
     @Override
     public void handleOnClick(BaseResponse baseResponse, View view) {
-
     }
 
     @Override
     public void dataOperationOnClick(BaseResponse baseResponse) {
-
     }
 
     @Override
     public void setListData(BaseResponse data, boolean flag) {
-
     }
 
     @Override
     public void userCommentLikeRequest(BaseResponse baseResponse, int reactionValue, int position) {
-
     }
 
     @Override
     public void navigateToProfileView(BaseResponse baseResponse, int mValue) {
-
     }
 
     @Override
     public void contestOnClick(Contest mContest, CardView mCardChallenge) {
-
     }
 
     @Override
@@ -210,7 +195,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .tabTitle(SearchFragment.searchTabName)
-                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .sourceTabTitle(HomeFragment.SOURCE_ACTIVE_TAB)
                                     .build();
                     AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);
@@ -235,7 +220,6 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @Override
@@ -290,7 +274,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         feedFragment.setSearchParams(true, query, SearchEnum.HASHTAGS.toString());
     }
 
-    public void callHashTagApi() {
+    public void getHashtags() {
         mIsSearchProcessing = false;
         noInternet.setVisibility(View.GONE);
         hashTagsView.setVisibility(View.GONE);
@@ -307,7 +291,7 @@ public class HashTagFragment extends BaseFragment implements ISearchView, BaseHo
         hashTagsView.setVisibility(View.VISIBLE);
         containerLayout.setVisibility(View.GONE);
         loaderLayout.setVisibility(View.VISIBLE);
-        callHashTagApi();
+        getHashtags();
     }
 
     @OnClick({R.id.tv_goto_setting})

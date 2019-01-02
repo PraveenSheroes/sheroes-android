@@ -216,7 +216,6 @@ public class ContestListActivity extends BaseActivity implements IContestListVie
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @Override

@@ -272,7 +272,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         setupRecyclerScrollListener();
         showGifLoader();
 
-        callFeedApi();
+        getFeedData();
 
         isWhatsappShare = CommonUtil.isAppInstalled(SheroesApplication.mContext, AppConstants.WHATS_APP_URI);
         if (getActivity() != null && !getActivity().isFinishing() && getActivity() instanceof HomeActivity) {
@@ -293,11 +293,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         if (isHomeFeed) {
             mFeedPresenter.getAllCommunities(myCommunityRequestBuilder(AppConstants.FEED_COMMUNITY, 1));
         }
-
         return view;
     }
 
-    public void callFeedApi() {
+    public void getFeedData() {
         showGifLoader();
         if (!mIsSearch)
             mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
@@ -309,7 +308,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         if (isVisibleToUser) {  //When UI is visible to user
-
             isActiveTabFragment = true;
 
             if (isTrackingEnabled && impressionHelper != null) {
@@ -330,7 +328,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     HashMap<String, Object> properties =
                             new EventProperty.Builder()
                                     .tabTitle(SearchFragment.searchTabName)
-                                    .sourceTabTitle(AppConstants.SOURCE_ACTIVE_TAB)
+                                    .sourceTabTitle(HomeFragment.SOURCE_ACTIVE_TAB)
                                     .build();
                     AnalyticsManager.trackScreenView(screenName, properties);
                     AnalyticsManager.timeScreenView(mScreenLabel);
@@ -1070,15 +1068,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if (!mIsSearch) {
-                    mFeedPresenter.fetchFeed(FeedPresenter.NORMAL_REQUEST, mStreamName);
-                } else {
-                    mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, mSearchText, mSearchCategory);
-                }
+                getFeedData();
             }
         });
         mSwipeRefresh.setColorSchemeResources(R.color.mentor_green, R.color.link_color, R.color.email);
-
     }
 
     public void setSearchParams(boolean isFilter, String searchText, String searchCategory) {
@@ -1089,7 +1082,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
 
     public void filterFeed(boolean isFilter, String searchText, String searchCategory) {
         showGifLoader();
-        mFeedPresenter.setmIsFeedLoading(false);
+        mFeedPresenter.setIsFeedLoading(false);
         setSearchParams(isFilter, searchText, searchCategory);
         mFeedRecyclerView.scrollToPosition(0);
         mFeedPresenter.fetchSearchedFeeds(FeedPresenter.NORMAL_REQUEST, mStreamName, searchText, searchCategory);
@@ -1484,7 +1477,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         super.onPause();
 
         if (getParentFragment() instanceof HomeFragment) {
-            AppConstants.SOURCE_ACTIVE_TAB = ((HomeFragment) getParentFragment()).getActiveTabName();
+            HomeFragment.SOURCE_ACTIVE_TAB = ((HomeFragment) getParentFragment()).getActiveTabName();
         }
 
         if (impressionHelper != null) { //app exit cases and back-stack of activity
@@ -2264,5 +2257,4 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
     }
     //endregion
-
 }

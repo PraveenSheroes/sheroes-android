@@ -42,6 +42,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.HomeView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.observers.DisposableObserver;
@@ -74,6 +75,7 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.NOTIFICATIO
 public class HomePresenter extends BasePresenter<HomeView> {
     //region constant
     private final String TAG = LogUtils.makeLogTag(HomePresenter.class);
+    private final String INFO = "info";
     //endregion constant
 
     //region injected variable
@@ -186,10 +188,20 @@ public class HomePresenter extends BasePresenter<HomeView> {
             mNextToken = "";
         }
 
-        String URL = AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory;
+        StringBuilder searchUrl = new StringBuilder();
+        searchUrl.append(AppConstants.SEARCH);
+        searchUrl.append(AppConstants.SEARCH_QUERY);
+        searchUrl.append(searchText);
+        searchUrl.append(AppConstants.SEARCH_TAB);
+        searchUrl.append(searchCategory);
+
+        String URL = searchUrl.toString();
 
         if (!pullToRefresh && mNextToken != null) {
-            URL = URL + AppConstants.SEARCH_NEXT_TOKEN + mNextToken;
+            searchUrl.append(AppConstants.SEARCH_NEXT_TOKEN);
+            searchUrl.append(mNextToken);
+
+            URL = searchUrl.toString();
         }
         if (!NetworkUtil.isConnected(mSheroesApplication)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, ERROR_MEMBER);
@@ -218,19 +230,19 @@ public class HomePresenter extends BasePresenter<HomeView> {
 
                         if (null != feedResponsePojo) {
                             if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
-                                if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                                if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                                     getMvpView().getFeedListSuccess(feedResponsePojo);
                                     mNextToken = feedResponsePojo.getNextToken();
                                 } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                    if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                        getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                                     } else {
                                         getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                     }
                                 }
                             } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                                 } else {
                                     getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                 }

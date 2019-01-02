@@ -3,20 +3,19 @@
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:id="@+id/loader_gif"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/dp_size_30"
+        android:layout_marginBottom="@dimen/gif_layout_margin_bottom"
         android:gravity="center"
         android:orientation="vertical">
 
         <pl.droidsonroids.gif.GifTextView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="@dimen/gif_icon_dimensions"
+            android:layout_height="@dimen/gif_icon_dimensions"
             android:layout_gravity="center"
             android:background="@drawable/she" />
 
@@ -24,8 +23,8 @@
             style="@style/TextView16spRegular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/dp_size_16"
-            android:layout_marginTop="@dimen/dp_size_16"
+            android:layout_marginTop="@dimen/gif_text_margin"
+            android:layout_marginBottom="@dimen/gif_text_margin"
             android:gravity="center"
             android:text="@string/ID_LOADER"
             android:textColor="@color/feed_article_label"

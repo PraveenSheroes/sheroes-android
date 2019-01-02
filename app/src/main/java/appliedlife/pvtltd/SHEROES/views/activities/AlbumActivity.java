@@ -463,7 +463,6 @@ public class AlbumActivity extends BaseActivity implements IAlbumView {
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     //endregion

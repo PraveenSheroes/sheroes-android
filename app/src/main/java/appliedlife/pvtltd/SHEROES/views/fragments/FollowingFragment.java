@@ -331,7 +331,6 @@ public class FollowingFragment extends BaseFragment implements IFollowerFollowin
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
     //endregion private methods
 }

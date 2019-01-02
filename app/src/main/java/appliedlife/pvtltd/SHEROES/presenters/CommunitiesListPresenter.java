@@ -27,6 +27,7 @@ import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
 import appliedlife.pvtltd.SHEROES.utils.networkutills.NetworkUtil;
+import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.ICommunitiesListView;
 import appliedlife.pvtltd.SHEROES.views.viewholders.CarouselViewHolder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -45,6 +46,9 @@ import static appliedlife.pvtltd.SHEROES.enums.FeedParticipationEnum.ERROR_MY_CO
  * communities presenter to perform action like join, left , fetch my/all community, fetch community details.
  */
 public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView> {
+    //region Constants
+    private final String INFO = "info";
+    //endregion Constants
 
     //region injected variable
     @Inject
@@ -121,14 +125,24 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
         if (mIsCommunityFeedLoading) {
             return;
         }
-        String URL = AppConstants.SEARCH + AppConstants.SEARCH_QUERY + searchText + AppConstants.SEARCH_TAB + searchCategory;
+        StringBuilder searchUrl = new StringBuilder();
+        searchUrl.append(AppConstants.SEARCH);
+        searchUrl.append(AppConstants.SEARCH_QUERY);
+        searchUrl.append(searchText);
+        searchUrl.append(AppConstants.SEARCH_TAB);
+        searchUrl.append(searchCategory);
+
+        String URL = searchUrl.toString();
         if (!NetworkUtil.isConnected(SheroesApplication.mContext)) {
             getMvpView().showError(AppConstants.CHECK_NETWORK_CONNECTION, null);
             return;
         }
         getMvpView().startProgressBar();
         if (mNextToken != null) {
-            URL = URL + AppConstants.SEARCH_NEXT_TOKEN + mNextToken;
+            searchUrl.append(AppConstants.SEARCH_NEXT_TOKEN);
+            searchUrl.append(mNextToken);
+
+            URL = searchUrl.toString();
         }
         mIsCommunityFeedLoading = true;
 
@@ -153,8 +167,8 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                     @Override
                     public void onNext(FeedResponsePojo feedResponsePojo) {
                         getMvpView().stopProgressBar();
-                        if (feedResponsePojo.getStatus().equals(AppConstants.SUCCESS)) {
-                            if (feedResponsePojo.getFeedDetails() != null && feedResponsePojo.getFeedDetails().size() > 0) {
+                        if (feedResponsePojo.getStatus().equalsIgnoreCase(AppConstants.SUCCESS)) {
+                            if (StringUtil.isNotEmptyCollection(feedResponsePojo.getFeedDetails())) {
                                 mNextToken = feedResponsePojo.getNextToken();
                                 mIsCommunityFeedLoading = false;
                                 if (!CommonUtil.isNotEmpty(mNextToken)) {
@@ -164,15 +178,15 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                                 mCommunitiesList.addAll(feedDetails);
                                 getMvpView().showAllCommunity(mCommunitiesList);
                             } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                                if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                    getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                                 } else {
                                     getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                                 }
                             }
                         } else if (feedResponsePojo.getFieldErrorMessageMap() != null) {
-                            if (feedResponsePojo.getFieldErrorMessageMap().containsKey("info")) {
-                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get("info"));
+                            if (feedResponsePojo.getFieldErrorMessageMap().containsKey(INFO)) {
+                                getMvpView().showEmptyScreen(feedResponsePojo.getFieldErrorMessageMap().get(INFO));
                             } else {
                                 getMvpView().showEmptyScreen(mSheroesApplication.getString(R.string.empty_search_result));
                             }
@@ -307,7 +321,6 @@ public class CommunitiesListPresenter extends BasePresenter<ICommunitiesListView
                     }
                 });
     }
-
 
     public void leaveCommunity(RemoveMemberRequest removeMemberRequest, final CommunityFeedSolrObj communityFeedSolrObj) {
         if (!NetworkUtil.isConnected(mSheroesApplication)) {

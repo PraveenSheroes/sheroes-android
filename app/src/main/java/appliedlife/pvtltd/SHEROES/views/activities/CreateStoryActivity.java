@@ -830,7 +830,6 @@ public class CreateStoryActivity extends BaseActivity implements IArticleSubmiss
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     //endregion

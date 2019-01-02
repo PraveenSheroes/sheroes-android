@@ -76,7 +76,6 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @BindDimen(R.dimen.poll_type_recyler_list_margin)
     int mPollTypeRecyclerListMargin;
-
     // endregion
 
     // region Member variables
@@ -192,12 +191,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void startProgressBar() {
-
     }
 
     @Override
     public void stopProgressBar() {
-
     }
 
     @Override
@@ -213,12 +210,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @Override
     public void getLogInResponse(LoginResponse loginResponse) {
-
     }
 
     @Override
@@ -239,17 +234,14 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void getSuccessForAllResponse(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     @Override
     public void showNotificationList(BelNotificationListResponse bellNotificationResponse) {
-
     }
 
     @Override
     public void getNotificationReadCountSuccess(BaseResponse baseResponse, FeedParticipationEnum feedParticipationEnum) {
-
     }
 
     //endregion
@@ -314,12 +306,10 @@ public class PostBottomSheetFragment extends BottomSheetDialogFragment implement
 
     @Override
     public void onConfigFetched() {
-
     }
 
     @Override
     public void getUserSummaryResponse(BoardingDataResponse boardingDataResponse) {
-
     }
     //endregion
 }

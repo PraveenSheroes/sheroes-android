@@ -339,7 +339,6 @@ public class AddressActivity extends BaseActivity implements IAddressView {
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
     //endregion
 }

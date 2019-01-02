@@ -36,6 +36,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
 
     //region private variable and constant
     private final String TAG = LogUtils.makeLogTag(CommunityFlatViewHolder.class);
+    private final long COMMUNITY_ID = 273;
     private BaseHolderInterface viewInterface;
     private CommunityFeedSolrObj mCommunityFeedObj;
     //endregion
@@ -83,7 +84,7 @@ public class CommunityFlatViewHolder extends BaseViewHolder<FeedDetail> {
             mCommunityJoin.setBackgroundResource(R.drawable.rectangle_feed_community_joined_active);
         }
 
-        if (mCommunityFeedObj.getIdOfEntityOrParticipant() == 273) {
+        if (mCommunityFeedObj.getIdOfEntityOrParticipant() == COMMUNITY_ID) {
             mCommunityJoin.setVisibility(View.GONE);
         } else {
             mCommunityJoin.setVisibility(View.VISIBLE);

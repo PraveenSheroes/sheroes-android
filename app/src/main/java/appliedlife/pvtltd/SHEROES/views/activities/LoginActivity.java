@@ -300,7 +300,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
 
     @OnClick(R.id.email_sign_in_button)

@@ -256,13 +256,11 @@ public enum Event {
     },;
     //endregion
 
-
     public final AnalyticsEventType type;
     public String name;
 
     Event(AnalyticsEventType eventType, String eventName) {
         this.type = eventType;
-        eventName = eventName.replaceAll(" ", "_");
         this.name = eventName;
     }
 

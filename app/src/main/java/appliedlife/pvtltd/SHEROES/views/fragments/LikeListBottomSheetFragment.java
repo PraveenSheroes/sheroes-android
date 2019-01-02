@@ -118,7 +118,6 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
 
     @Override
     public void showEmptyScreen(String s) {
-
     }
     //endregion
 
@@ -132,7 +131,6 @@ public class LikeListBottomSheetFragment extends BottomSheetDialogFragment imple
         postBottomSheetFragment.show(activity.getSupportFragmentManager(), SCREEN_LABEL);
         return postBottomSheetFragment;
     }
-
 
     @Override
     public void showUserLikedList(List<Comment> commentList) {
