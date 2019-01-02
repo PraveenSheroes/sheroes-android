@@ -6,11 +6,11 @@
     xmlns:vernacular="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    >
+    android:background="@color/white">
 
-    <include layout="@layout/gif_loader"
-        android:visibility="gone"/>
+    <include
+        layout="@layout/gif_loader"
+        android:visibility="gone" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_scroll"
@@ -40,8 +40,8 @@
                     android:layout_marginBottom="@dimen/dp_size_18" />
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    style="@style/TextView18spMediumBold"
                     android:id="@+id/tv_no_results_title"
+                    style="@style/TextView18spMediumBold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_image"
@@ -57,8 +57,8 @@
 
 
                 <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
-                    style="@style/TextView14spRegular"
                     android:id="@+id/tv_no_results_subtitle"
+                    style="@style/TextView14spRegular"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_no_results_title"
@@ -66,8 +66,8 @@
                     android:layout_marginLeft="@dimen/dp_size_36"
                     android:layout_marginRight="@dimen/dp_size_36"
                     android:gravity="center"
-                    android:textSize="@dimen/sp_size_14"
                     android:textColor="@color/sheroes_warm_grey"
+                    android:textSize="@dimen/sp_size_14"
                     vernacular:customTextFontFamily="@string/regular_font" />
 
 
@@ -78,8 +78,8 @@
                 android:id="@+id/container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@color/sheroes_white_three">
+                android:background="@color/sheroes_white_three"
+                android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/community_card_view"
@@ -92,21 +92,20 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        >
+                        android:orientation="vertical">
 
                         <appliedlife.pvtltd.SHEROES.vernacular.FontTextView
                             android:id="@+id/title"
                             style="@style/TextView16spMediumBold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_size_8"
+                            android:layout_marginBottom="@dimen/dp_size_16"
                             android:paddingStart="@dimen/dp_size_16"
                             android:paddingLeft="@dimen/dp_size_16"
                             android:paddingTop="@dimen/dp_size_8"
                             android:paddingEnd="@dimen/dp_size_1"
                             android:paddingRight="@dimen/dp_size_1"
-                            android:layout_marginTop="@dimen/dp_size_8"
-                            android:layout_marginBottom="@dimen/dp_size_16"
                             android:text="@string/my_communities"
                             android:textColor="@color/comment_text"
                             vernacular:customTextFontFamily="@string/medium_font" />
@@ -117,8 +116,7 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="@dimen/dp_size_16"
                             android:paddingLeft="@dimen/dp_size_16"
-                            android:paddingRight="@dimen/dp_size_1"
-                            />
+                            android:paddingRight="@dimen/dp_size_1" />
 
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
@@ -127,10 +125,9 @@
                     android:id="@+id/all_communities"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:overScrollMode="never"
                     android:background="@color/white"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    />
+                    android:overScrollMode="never"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
             </LinearLayout>
 
             <include

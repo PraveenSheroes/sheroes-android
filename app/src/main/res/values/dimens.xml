@@ -142,6 +142,14 @@
     <dimen name="dialog_profile_level_width">312dp</dimen>
     <dimen name="community_join_width">78dp</dimen>
     <dimen name="community_join_height">40dp</dimen>
+    <dimen name="community_join_margin">16dp</dimen>
+    <dimen name="community_name_height">40dp</dimen>
+    <dimen name="community_name_margin_top">4dp</dimen>
+    <dimen name="community_image_dimensions">100dp</dimen>
+    <dimen name="community_name_size">14sp</dimen>
+    <dimen name="community_member_margin_top">2dp</dimen>
+    <dimen name="community_card_margin_top">16dp</dimen>
+
     <dimen name="my_community_container_width">111dp</dimen>
     <dimen name="my_community_container_height">94dp</dimen>
     <dimen name="my_community_drawer_icon_width">48dp</dimen>
@@ -713,5 +721,39 @@
     <dimen name="welcome_screen_bottom_margin">20dp</dimen>
     <dimen name="welcome_text_left_right_margin">20dp</dimen>
     <dimen name="welcome_pager_margin_bottom">20dp</dimen>
+
+    <dimen name="search_bar_bottom_elevation">4dp</dimen>
+    <dimen name="search_bar_height">48dp</dimen>
+    <dimen name="search_bar_margin">16dp</dimen>
+    <dimen name="search_bar_bottom_margin">12dp</dimen>
+    <dimen name="search_bar_corner_radius">2dp</dimen>
+    <dimen name="search_bar_icons_margin">12dp</dimen>
+    <dimen name="search_bar_internal_margin_right">36dp</dimen>
+    <dimen name="search_text_size">13sp</dimen>
+    <dimen name="search_close_icon_padding">8dp</dimen>
+    <dimen name="search_close_icon_right_margin">4dp</dimen>
+    <dimen name="search_tabs_height">50dp</dimen>
+    <dimen name="search_tabs_indicator_height">0dp</dimen>
+    <dimen name="search_tab_icons_margin_bottom">4dp</dimen>
+
+    <dimen name="empty_screen_image_dimensions">80dp</dimen>
+    <dimen name="empty_screen_image_margin_bottom">18dp</dimen>
+    <dimen name="empty_screen_title_margin">36dp</dimen>
+    <dimen name="empty_screen_title_margin_bottom">4dp</dimen>
+    <dimen name="empty_screen_title_size">18sp</dimen>
+    <dimen name="empty_screen_subtitle_margin">36dp</dimen>
+    <dimen name="empty_screen_subtitle_size">14sp</dimen>
+
+    <dimen name="gif_icon_dimensions">50dp</dimen>
+    <dimen name="gif_text_margin">50dp</dimen>
+    <dimen name="gif_layout_margin_bottom">30dp</dimen>
+
+    <dimen name="hashtag_list_margin_top">16dp</dimen>
+    <dimen name="hashtag_list_margin_left">18dp</dimen>
+
+    <dimen name="home_bottom_bar_height">48dp</dimen>
+    <dimen name="home_bottom_bar_margin_top">13dp</dimen>
+
+
 </resources>
 
