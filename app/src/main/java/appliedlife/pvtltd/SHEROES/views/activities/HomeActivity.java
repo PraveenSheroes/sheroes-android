@@ -1392,7 +1392,6 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
         if (mIsSheUser && startedFirstTime()) {
             openHelplineFragment();
         }
-
         if (StringUtil.isNotNullOrEmptyString(mHelpLineChat) && mHelpLineChat.equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
             handleHelpLineFragmentFromDeepLinkAndLoading();
         }
@@ -1404,24 +1403,19 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
                     renderFAQSView();
                 } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.ICC_MEMBERS_URL)) {
                     renderICCMemberListView();
-                }
-                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
-                        openArticleFragment(getIntent());
-                    }
+                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
+                    showSelectLanguageOption();
+                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
+                    mentorListActivity();
+                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(ArticlesFragment.SCREEN_LABEL)) {
+                    openArticleFragment(getIntent());
+                } else if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
+                    setSearchedData(getIntent());
+                    searchOnClick();
                 }
                 if (CommonUtil.isNotEmpty(getIntent().getStringExtra(AppConstants.HELPLINE_CHAT)) && getIntent().getStringExtra(AppConstants.HELPLINE_CHAT).equalsIgnoreCase(AppConstants.HELPLINE_CHAT)) {
                     handleHelpLineFragmentFromDeepLinkAndLoading();
                 }
-                if (CommonUtil.isNotEmpty(getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT))) {
-                    if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.CHAMPION_URL)) {
-                        mentorListActivity();
-                    }
-                }
-                if (getIntent().getStringExtra(SheroesDeepLinkingActivity.OPEN_FRAGMENT).equalsIgnoreCase(AppConstants.SELECT_LANGUAGE_URL_COM)) {
-                    showSelectLanguageOption();
-                }
-
             }
         }
     }
