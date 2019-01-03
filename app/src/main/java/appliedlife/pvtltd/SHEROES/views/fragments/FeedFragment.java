@@ -1389,12 +1389,10 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
-
                             String listDescription = "";
                             if(CommonUtil.isNullOrEmpty(userPostObj.getListDescription())) {
                                 listDescription = Html.fromHtml(userPostObj.getListDescription()).toString();
                             }
-
                             mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), listDescription, userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
                             return true;
                         case R.id.report_spam:
