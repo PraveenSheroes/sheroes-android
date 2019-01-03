@@ -42,7 +42,7 @@ public class HomeFragment extends BaseFragment {
     //region static variables
     public static String TRENDING_FEED_SCREEN_LABEL = "Trending Feed Screen";
     public static String FEED_SCREEN_LABEL = "Feed Screen";
-    public static String PREVIOUS_SCREEN="";
+    public static String PREVIOUS_SCREEN = "";
     public static String SOURCE_ACTIVE_TAB = "";
     //endregion static variables
 
@@ -82,7 +82,7 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     public void onPause() {
-       PREVIOUS_SCREEN = mPreviousScreen;
+        PREVIOUS_SCREEN = mPreviousScreen;
         super.onPause();
     }
 
@@ -230,21 +230,6 @@ public class HomeFragment extends BaseFragment {
                 pageChangeListener.onPageSelected(viewPager.getCurrentItem());
             }
         });
-
-//        mTabLayout.post(new Runnable() {
-//            @Override
-//            public void run() {
-//                int tabLayoutWidth = mTabLayout.getWidth();
-//                if (getActivity() != null && tabLayoutWidth < CommonUtil.getWindowWidth(getActivity().getApplicationContext())) {
-//                    mTabLayout.setTabMode(TabLayout.MODE_FIXED);
-//                    ViewGroup.LayoutParams mParams = mTabLayout.getLayoutParams();
-//                    mParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-//                    mTabLayout.setLayoutParams(mParams);
-//                } else {
-//                    mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-//                }
-//            }
-//        });
     }
 
     private void setupTabLayout() {
