@@ -132,10 +132,10 @@ public class AnalyticsManager {
                 properties.put(EventProperty.TAB_KEY.getString(), null);
             }
 
-            if(HomeFragment.PREVIOUS_SCREEN.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
+            if (HomeFragment.PREVIOUS_SCREEN.equalsIgnoreCase(SearchFragment.SCREEN_LABEL)) {
                 properties.put(EventProperty.SEARCH_QUERY.getString(), SearchFragment.searchText);
             }
-        }else{
+        } else {
             properties.remove(EventProperty.SEARCH_QUERY.getString());
         }
 

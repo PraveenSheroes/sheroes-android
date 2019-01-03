@@ -726,6 +726,7 @@
     <dimen name="search_bar_bottom_elevation">4dp</dimen>
     <dimen name="search_bar_height">44dp</dimen>
     <dimen name="search_bar_margin">16dp</dimen>
+    <dimen name="search_bar_with_tab_height">124dp</dimen>
     <dimen name="search_bar_bottom_margin">12dp</dimen>
     <dimen name="search_bar_corner_radius">2dp</dimen>
     <dimen name="search_bar_icons_margin">12dp</dimen>
@@ -754,6 +755,7 @@
 
     <dimen name="home_bottom_bar_height">48dp</dimen>
     <dimen name="home_bottom_bar_margin_top">13dp</dimen>
+    <dimen name="home_bottom_bar_elevation">8dp</dimen>
 
 
 </resources>
