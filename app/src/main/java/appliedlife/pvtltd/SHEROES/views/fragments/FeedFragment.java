@@ -2165,7 +2165,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID,
                     AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
         }
-
     }
 
     @Override
@@ -2179,7 +2178,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
                 }
             }
-
         }
     }
 
@@ -2205,9 +2203,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
             screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
         }
-
         ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleObj.isUserStory());
-
     }
     //endregion
 
@@ -2219,7 +2215,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         gifLoader.setVisibility(View.VISIBLE);
         if (null != getActivity()) {
             if (getActivity() instanceof HomeActivity) {
-                if (!mFragmentOpen.isFeedFragment()) {
+                if (!mFragmentOpen.isFeedFragment() && HomeActivity.isSearchClicked) {
                     ((HomeActivity) getActivity()).searchOnClick();
                 } else {
                     ((HomeActivity) getActivity()).homeOnClick();
