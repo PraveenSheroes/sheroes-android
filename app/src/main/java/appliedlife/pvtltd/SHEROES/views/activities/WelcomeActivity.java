@@ -696,6 +696,7 @@ public class WelcomeActivity extends BaseActivity implements FBConnectHelper.IOn
         AppInstallationHelper appInstallationHelper = new AppInstallationHelper(this);
         appInstallationHelper.setupAndSaveInstallation(true);
         openHomeScreen();
+        CommonUtil.setFalsePrefValue(AppConstants.MALE_ERROR_SHARE_PREF);
     }
 
     private void setBranchCustomEvent(long createdDate, LoginResponse loginResponse) {

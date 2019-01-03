@@ -201,6 +201,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                         AnalyticsManager.trackEvent(Event.APP_LOGIN, getScreenName(), properties);
                         setBranchCustomEvent(createdDate, loginResponse);
                         onLoginAuthToken();
+                        CommonUtil.setFalsePrefValue(AppConstants.MALE_ERROR_SHARE_PREF);
                         break;
                     case AppConstants.FAILED:
                         LoginManager.getInstance().logOut();
@@ -226,7 +227,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
                     if (!this.isFinishing()) {
                         onLoginAuthToken();
                     }
-
+                    CommonUtil.setFalsePrefValue(AppConstants.MALE_ERROR_SHARE_PREF);
                 } else {
                     LoginManager.getInstance().logOut();
                     onErrorOccurence(loginResponse.getFieldErrorMessageMap().get(AppConstants.INAVLID_DATA), loginResponse.getFieldErrorMessageMap().get(AppConstants.IS_DEACTIVATED));
