@@ -1013,24 +1013,15 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                     if (firstVisibleItem == 0) {
                         if (!mControlsVisible) {
                             ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                            RelativeLayout.LayoutParams listLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                            listLayoutParams.setMargins(0, 0, 0, 48);
-                            mFeedRecyclerView.setLayoutParams(listLayoutParams);
                             mControlsVisible = true;
                         }
                     } else {
                         if (mScrolledDistance > HIDE_THRESHOLD && mControlsVisible) {
                             ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.INVISIBLE);
-                            RelativeLayout.LayoutParams listLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                            listLayoutParams.setMargins(0, 0, 0, 0);
-                            mFeedRecyclerView.setLayoutParams(listLayoutParams);
                             mControlsVisible = false;
                             mScrolledDistance = 0;
                         } else if (mScrolledDistance < -HIDE_THRESHOLD && !mControlsVisible) {
                             ((HomeActivity) getActivity()).mFlHomeFooterList.setVisibility(View.VISIBLE);
-                            RelativeLayout.LayoutParams listLayoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-                            listLayoutParams.setMargins(0, 0, 0, 48);
-                            mFeedRecyclerView.setLayoutParams(listLayoutParams);
                             mControlsVisible = true;
                             mScrolledDistance = 0;
                         }
