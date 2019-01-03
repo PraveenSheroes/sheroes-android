@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -1388,7 +1389,11 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
-                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
+                            String listDescription = "";
+                            if(CommonUtil.isNullOrEmpty(userPostObj.getListDescription())) {
+                                listDescription = Html.fromHtml(userPostObj.getListDescription()).toString();
+                            }
+                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), listDescription, userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.POST, userPostObj);
@@ -2165,7 +2170,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             ProfileActivity.navigateTo(getActivity(), userSolrObj.getCreatedBy(), isMentor, PROFILE_NOTIFICATION_ID,
                     AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
         }
-
     }
 
     @Override
@@ -2179,7 +2183,6 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             PROFILE_NOTIFICATION_ID, AppConstants.FEED_SCREEN, null, AppConstants.REQUEST_CODE_FOR_MENTOR_PROFILE_DETAIL, false);
                 }
             }
-
         }
     }
 
@@ -2205,9 +2208,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
             screenProperties.put(EventProperty.AUTHOR_ID.toString(), articleObj.getCreatedBy());
             screenProperties.put(EventProperty.AUTHOR_NAME.toString(), articleObj.getAuthorName());
         }
-
         ArticleActivity.navigateTo(getActivity(), articleObj, getScreenName(), screenProperties, AppConstants.REQUEST_CODE_FOR_ARTICLE_DETAIL, articleObj.isUserStory());
-
     }
     //endregion
 
@@ -2219,7 +2220,7 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
         gifLoader.setVisibility(View.VISIBLE);
         if (null != getActivity()) {
             if (getActivity() instanceof HomeActivity) {
-                if (!mFragmentOpen.isFeedFragment()) {
+                if (!mFragmentOpen.isFeedFragment() && HomeActivity.isSearchClicked) {
                     ((HomeActivity) getActivity()).searchOnClick();
                 } else {
                     ((HomeActivity) getActivity()).homeOnClick();

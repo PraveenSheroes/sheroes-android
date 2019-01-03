@@ -720,6 +720,7 @@ public class HomeActivity extends BaseActivity implements BaseHolderInterface, I
     @OnClick(R.id.ll_search)
     public void searchOnClick() {
         isSearchClicked = true;
+        SearchFragment.searchText = null;
         SearchFragment.searchTabName = getString(R.string.top);
         mDrawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         mFragmentOpen.setFeedFragment(false);
