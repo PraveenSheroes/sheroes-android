@@ -1,6 +1,5 @@
 package appliedlife.pvtltd.SHEROES.views.fragments;
 
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
@@ -60,7 +59,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
 import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
@@ -473,9 +471,9 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
             String title = (String) mViewPagerAdapter.getPageTitle(position);
             if (StringUtil.isNotNullOrEmptyString(title) && title.equalsIgnoreCase(getString(R.string.ID_MENTOR_POST))) {
                 if (isOwnProfile) {
-                    mCreatePost.setVisibility(View.VISIBLE);
+                    mCreatePost.show();
                 } else {
-                    mCreatePost.setVisibility(View.GONE);
+                    mCreatePost.hide();
                 }
                 mStoryFooter.setVisibility(View.GONE);
             } else {
@@ -484,11 +482,11 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
                 } else {
                     mStoryFooter.setVisibility(View.GONE);
                 }
-                mCreatePost.setVisibility(View.GONE);
+                mCreatePost.hide();
             }
         } else {
             mStoryFooter.setVisibility(View.GONE);
-            mCreatePost.setVisibility(View.GONE);
+            mCreatePost.hide();
         }
     }
 
@@ -1101,9 +1099,9 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
             mViewPager.setCurrentItem(mViewPagerAdapter.getCount() - 1);
         } else {
             if (isOwnProfile) {
-                mCreatePost.setVisibility(View.VISIBLE);
+                mCreatePost.show();
             } else {
-                mCreatePost.setVisibility(View.GONE);
+                mCreatePost.hide();
             }
             if (!isChampion) { //for user make post as default tab
                 mViewPager.setCurrentItem(1);
