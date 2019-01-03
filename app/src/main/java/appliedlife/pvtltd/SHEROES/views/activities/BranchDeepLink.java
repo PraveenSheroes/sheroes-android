@@ -61,7 +61,7 @@ public class BranchDeepLink extends BaseActivity {
         super.onCreate(savedInstanceState);
         SheroesApplication.getAppComponent(this).inject(this);
         try {
-            if (null == mUserPreference || mUserPreference.isSet() || null == mUserPreference.get().getUserSummary()) {
+            if (null == mUserPreference || null == mUserPreference.get().getUserSummary()) {
                 mLogOutUtils.logOutUser(getScreenName(), this);
             } else {
                 if (getIntent() == null || getIntent().getData() == null) {
