@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.core.app.ActivityCompat;
 import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
@@ -21,6 +20,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.core.app.ActivityCompat;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.CleverTapHelper;
 import appliedlife.pvtltd.SHEROES.analytics.EventProperty;
@@ -33,6 +33,7 @@ import appliedlife.pvtltd.SHEROES.models.entities.post.CommunityPost;
 import appliedlife.pvtltd.SHEROES.utils.AppConstants;
 import appliedlife.pvtltd.SHEROES.utils.AppUtils;
 import appliedlife.pvtltd.SHEROES.utils.CommonUtil;
+import appliedlife.pvtltd.SHEROES.utils.LogOutUtils;
 import appliedlife.pvtltd.SHEROES.utils.stringutils.StringUtil;
 import io.branch.referral.Branch;
 import io.branch.referral.BranchError;
@@ -42,22 +43,55 @@ import io.branch.referral.BranchError;
  */
 
 public class BranchDeepLink extends BaseActivity {
+    // region constants
     public static final String TAG = "BranchDeepLinkActivity";
     public static final String SCREEN_LABEL = "Deeplink Activity";
+    // endregion
 
+    // region Inject
     @Inject
     Preference<LoginResponse> mUserPreference;
+    @Inject
+    LogOutUtils mLogOutUtils;
+    // endregion
 
+    // region Class overridden methods
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getIntent() == null || getIntent().getData() == null) {
-            startMainActivity();
-        } else {
-            routeDeepLink();
+        SheroesApplication.getAppComponent(this).inject(this);
+        try {
+            if (null == mUserPreference || null == mUserPreference.get().getUserSummary()) {
+                mLogOutUtils.logOutUser(getScreenName(), this);
+            } else {
+                if (getIntent() == null || getIntent().getData() == null) {
+                    startMainActivity();
+                } else {
+                    routeDeepLink();
+                }
+                setContentView(R.layout.activity_branch_deeplink);
+            }
+        } catch (Exception e) {
+            Crashlytics.getInstance().core.logException(e);
+            mLogOutUtils.logOutUser(getScreenName(), this);
         }
-        setContentView(R.layout.activity_branch_deeplink);
     }
+
+    @Override
+    public String getScreenName() {
+        return SCREEN_LABEL;
+    }
+
+    @Override
+    public boolean shouldTrackScreen() {
+        return false;
+    }
+
+    @Override
+    protected SheroesPresenter getPresenter() {
+        return null;
+    }
+    // endregion
 
     //region Private Helper methods
     private void routeDeepLink() {
@@ -234,19 +268,5 @@ public class BranchDeepLink extends BaseActivity {
                         PackageManager.MATCH_DEFAULT_ONLY);
         return list.size() > 0;
     }
-
-    @Override
-    public String getScreenName() {
-        return SCREEN_LABEL;
-    }
-
-    @Override
-    public boolean shouldTrackScreen() {
-        return false;
-    }
-
-    @Override
-    protected SheroesPresenter getPresenter() {
-        return null;
-    }
+    // endregion
 }
