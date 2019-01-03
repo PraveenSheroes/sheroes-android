@@ -166,10 +166,10 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
 
     public int getLoaderPostion() {
         int pos = RecyclerView.NO_POSITION;
-        if (hasMoreItem) {
-            if (!StringUtil.isNotEmptyCollection(mFeedDetailList)) {
+        if (!hasMoreItem) {
+            if (StringUtil.isNotEmptyCollection(mFeedDetailList)) {
                 BaseResponse baseResponse = mFeedDetailList.get(0);
-                if (baseResponse instanceof UserPostSolrObj) {
+                if (baseResponse instanceof UserPostSolrObj || baseResponse instanceof PollSolarObj) {
                     pos = 1;
                 }
             }
@@ -178,6 +178,7 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     }
 
     public void setHasMoreComments(boolean hasMoreComments) {
+        this.hasMoreItem = hasMoreComments;
         if (!hasMoreComments) {
             int lodPos = getLoaderPostion();
             if (lodPos >= 0) {
@@ -185,7 +186,6 @@ public class PostDetailAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 notifyItemRemoved(lodPos);
             }
         }
-        this.hasMoreItem = hasMoreComments;
     }
 
     public void addDatas(int startIndex, List<Comment> commentList) {
