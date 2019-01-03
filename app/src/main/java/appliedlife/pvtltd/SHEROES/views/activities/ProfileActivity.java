@@ -54,6 +54,7 @@ import appliedlife.pvtltd.SHEROES.utils.CompressImageUtil;
 import appliedlife.pvtltd.SHEROES.utils.ErrorUtil;
 import appliedlife.pvtltd.SHEROES.utils.FeedUtils;
 import appliedlife.pvtltd.SHEROES.utils.LogUtils;
+import appliedlife.pvtltd.SHEROES.views.fragments.HomeFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.ProfileFragment;
 import appliedlife.pvtltd.SHEROES.views.fragments.dialogfragment.ProfileStrengthDialog;
 import appliedlife.pvtltd.SHEROES.views.fragments.viewlisteners.IFollowCallback;
@@ -194,6 +195,7 @@ public class ProfileActivity extends BaseActivity implements BaseHolderInterface
 
     @Override
     public void onBackPressed() {
+        HomeFragment.PREVIOUS_SCREEN = "";
         super.onBackPressed();
     }
 

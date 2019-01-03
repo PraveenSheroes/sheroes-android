@@ -721,9 +721,10 @@
     <dimen name="welcome_screen_bottom_margin">20dp</dimen>
     <dimen name="welcome_text_left_right_margin">20dp</dimen>
     <dimen name="welcome_pager_margin_bottom">20dp</dimen>
+    <dimen name="feed_list_margin_bottom">48dp</dimen>
 
     <dimen name="search_bar_bottom_elevation">4dp</dimen>
-    <dimen name="search_bar_height">48dp</dimen>
+    <dimen name="search_bar_height">44dp</dimen>
     <dimen name="search_bar_margin">16dp</dimen>
     <dimen name="search_bar_bottom_margin">12dp</dimen>
     <dimen name="search_bar_corner_radius">2dp</dimen>
