@@ -16,8 +16,8 @@
             android:id="@+id/feed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/feed_back_color" />
-
+            android:background="@color/feed_back_color"
+            android:layout_marginBottom="@dimen/feed_list_margin_bottom" />
 
         <RelativeLayout
             android:id="@+id/rl_empty"
