@@ -1378,7 +1378,7 @@ public class ProfileFragment  extends BaseFragment implements BaseHolderInterfac
         mProfileStrengthDialog = new ProfileStrengthDialog();
         mProfileStrengthDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 
-        if (!mProfileStrengthDialog.isVisible() && getActivity() != null && isDetached() || !isAdded()) {
+        if (!mProfileStrengthDialog.isVisible() && getActivity() != null && !isDetached() || isAdded()) {
             Bundle bundle = new Bundle();
             Parcelable parcelable = Parcels.wrap(mUserSolarObject);
             bundle.putParcelable(AppConstants.USER, parcelable);
