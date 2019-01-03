@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ImageSpan;
@@ -1388,7 +1389,13 @@ public class FeedFragment extends BaseFragment implements IFeedView, FeedItemCal
                             return true;
                         case R.id.top_post:
                             AnalyticsManager.trackPostAction(Event.POST_TOP_POST, userPostObj, getScreenName());
-                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), userPostObj.getListDescription(), userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
+
+                            String listDescription = "";
+                            if(CommonUtil.isNullOrEmpty(userPostObj.getListDescription())) {
+                                listDescription = Html.fromHtml(userPostObj.getListDescription()).toString();
+                            }
+
+                            mFeedPresenter.editTopPost(AppUtils.topCommunityPostRequestBuilder(userPostObj.communityId, getCreatorType(userPostObj), listDescription, userPostObj.getIdOfEntityOrParticipant(), !userPostObj.isTopPost()));
                             return true;
                         case R.id.report_spam:
                             reportSpamDialog(SpamContentType.POST, userPostObj);
