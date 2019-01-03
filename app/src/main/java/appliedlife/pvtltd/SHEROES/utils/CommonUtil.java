@@ -18,8 +18,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Looper;
-import androidx.annotation.NonNull;
-import androidx.core.content.FileProvider;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
@@ -65,6 +63,8 @@ import java.util.Map;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import appliedlife.pvtltd.SHEROES.R;
 import appliedlife.pvtltd.SHEROES.analytics.AnalyticsManager;
 import appliedlife.pvtltd.SHEROES.analytics.Event;
@@ -212,7 +212,7 @@ public class CommonUtil {
     //Hide SoftKeyBoard From The View
     public static void hideSoftKeyboard(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if(activity.getCurrentFocus() != null) {
+        if (activity.getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
         }
     }
@@ -300,7 +300,7 @@ public class CommonUtil {
         }
         if (((url.getScheme().equalsIgnoreCase("http") || url.getScheme().equalsIgnoreCase("https")) && (url.getHost().equalsIgnoreCase("sheroes.com") || url.getHost().equalsIgnoreCase("sheroes.in")))) {
             if (url.getPath().startsWith("/jobs") || url.getPath().startsWith("/articles") || url.getPath().startsWith("/champions") || url.getPath().startsWith("/communities") || url.getPath().startsWith("/event") || url.getPath().startsWith("/helpline") || url.getPath().startsWith("/feed")
-                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories")|| url.getPath().startsWith("/language_selection") || url.getPath().startsWith("/search")) {
+                    || url.getPath().startsWith("/users/edit_profile") || url.getPath().startsWith("/users") || url.getPath().startsWith("/my-challenge") || url.getPath().startsWith("/faq") || url.getPath().startsWith("/icc-members") || url.getPath().startsWith("/invite-friends") || url.getPath().startsWith("/sheroes-challenge") || url.getPath().startsWith("/write_story") || url.getPath().startsWith("/my_story") || url.getPath().startsWith("/stories") || url.getPath().startsWith("/language_selection") || url.getPath().startsWith("/search")) {
                 return true;
             }
         }
@@ -638,7 +638,7 @@ public class CommonUtil {
         } catch (FileNotFoundException e) {
             Crashlytics.getInstance().core.logException(e);
         } finally {
-            if(null!= stream) {
+            if (null != stream) {
                 try {
                     stream.close();
                 } catch (IOException e) {
@@ -804,6 +804,17 @@ public class CommonUtil {
         }
     }
 
+    public static synchronized void setFalsePrefValue(String key) {
+        try {
+            SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
+            if (prefs != null) {
+                prefs.edit().putBoolean(key, false).apply();
+            }
+        } catch (Exception e) {
+            LogUtils.error(TAG, e.toString());
+        }
+    }
+
     public static synchronized void setPrefValue(String key, boolean value) {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
@@ -815,7 +826,7 @@ public class CommonUtil {
         }
     }
 
-    public static synchronized void setPrefStringValue(String key,String value) {
+    public static synchronized void setPrefStringValue(String key, String value) {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
             if (prefs != null) {
@@ -825,6 +836,7 @@ public class CommonUtil {
             LogUtils.error(TAG, e.toString());
         }
     }
+
     public static synchronized String getPrefStringValue(String key) {
         try {
             SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
@@ -836,6 +848,7 @@ public class CommonUtil {
         }
         return LanguageType.ENGLISH.toString();
     }
+
     public static void setTimeForContacts(String key, long contactSyncTime) {
         SharedPreferences prefs = SheroesApplication.getAppSharedPrefs();
         if (null == prefs) {
